@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Install Golang</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>Install Golang</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Install Golang</li>
+                <li>https://go.dev/dl/</li>
+                <li>go version</li>
+            </ul>
+        </p>
+        <p class="question"><strong>Setup Visual Studio Code</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Install the Go extension
+                    <ul>
+                        <li>Open VS Code → Extensions sidebar → search “Go” (by the Go Team at Google). Install it.</li>
+                        <li>Install Go tools (VS Code will prompt you the first time you open a .go file).</li>
+                        <li>gopls → Language server - Basically, gopls makes Go in VS Code feel like a full IDE instead of a text editor.
+            ✅ IntelliSense / autocompletion
+            ✅ Jump to definition (F12)
+            ✅ Find all references
+            ✅ Real-time linting & error checking
+            ✅ Code formatting & renaming
+            ✅ Inline documentation (hover tooltips)
+            ✅ Workspace-wide symbol search</li>
+                        <li>dlv → Debugger // Go uses Delve for debugging</li>
+                        <li>goimports, gofumpt → Code formatting</li>
+                        <li>staticcheck → Linting & static analysis</li>
+                    </ul>
+                </li>
+                <li>Debugging in VS Code
+                    <ul>
+                        <li>Open your main.go</li>
+                        <li>Press F5 → Select “Go” environment.</li>
+                        <li>VS Code will generate a launch.json (debug config)</li>
+                        <li>Set breakpoints, step through code, inspect variables — just like with Python or Java</li>
+                        <li>With VS Code + Go, You get autocomplete, linting, formatting, debugging, and testing out of the box</li>
+                    </ul>
+                </li>
+                <li>Format on save
+                    <ul>
+                        <li>"go.formatTool": "goimports" in settings.json</li>
+                    </ul>
+                </li>
+                <li>Install gotemplate-syntax plugin</li>
+            </ul>
+        </p>
+        <p class="question"><strong>Install Make</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Install Golang</li>
+                <li>https://go.dev/dl/</li>
+                <li>go version</li>
+            </ul>
+        </p> 
+    </body>
+</html>

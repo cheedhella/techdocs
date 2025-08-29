@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>goroutine</title>
+      <link rel="stylesheet" href="../../resources/css/styles.css" />
+      <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+   </head>
+   <body>
+      <div class="question"><strong>1. What is goroutine?</strong></div>
+      <div class="answer">
+         <ul>
+            <li>It is a function that runs concurrently(or in the background) with other functions, when invoked using go keyword;</li>
+         </ul>
+      </div>
+
+      <div class="question"><strong>2. goroutine VS OS/Java threads?</strong></div>
+      <div class="answer">
+         <ul>
+            <li>Small Initial stack and resizable
+               <ul>
+                  <li>A goroutine starts with a very small stack (about 2 KB) and it grows or shrinks dynamically as needed by the workload; Where as regular OS threads starts with a large fixed stack (often 1 MB);</li>
+               </ul>
+            </li>
+            <li>User space scheduling and M:N modeling
+               <ul>
+                  <li>goroutines are scheduled in the user space(rather than kernel space) by go runtime; <br/> So, swiching b/w goroutines is faster - as there is no need to enter kernel mode, only minimal state(like program counter, stack pointer etc) needs to be saved/restored;</li>
+                  <li>Goroutines are multiplexed onto OS threads - It means thousands of goroutines can run on just a handful of threads, thus taking less memory and CPU;</li>
+               </ul>
+            </li>
+            <li>Efficient communication via channels
+               <ul>
+                  <li>Instead of shared memory and locks, Goroutines use channels to communicate(exchange data) with each other;</li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+      
+      <div class="code-block">
+         <div class="code-block-title">Hell World</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+    for i := 0; i < 3; i++ {
+        fmt.Println(msg, i)
+        time.Sleep(500 * time.Millisecond)
+    }
+}
+
+func main() {
+    go printMessage("goroutine") // run concurrently with main goroutine
+    printMessage("main")         // run in main goroutine - It is possible main routine can finish and die before child goroutine;
+}
+
+<b>Output:</b>
+main 0
+goroutine 0
+main 1
+goroutine 1
+goroutine 2
+main 2
+
+</code></pre>
+      </div>
+
+<br/>
+      <div class="code-block">
+         <div class="code-block-title">Hell World 2</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>package main
+
+import (
+    "fmt"
+)
+
+func printMessage(msg string) {
+   fmt.Println(msg)
+}
+
+func main() {
+    go printMessage("first") 
+    printMessage("second")         // <b>It is possible main routine can finish and die before child goroutine;</b>
+}
+
+<b>Output:</b>
+second
+
+</code></pre>
+      </div>
+
+<br/>
+      <div class="code-block">
+         <div class="code-block-title">Hell World 3</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+   fmt.Println(msg)
+}
+
+func main() {
+    go printMessage("first") 
+    time.Sleep(1 * time.Millisecond) // <b>sleep for 1 second, so that child thread finishes - This is not the best way to do it; Instead use WaitGroups;</b>
+    printMessage("second")
+}
+
+<b>Output:</b>
+first
+second
+
+</code></pre>
+      </div>
+      <script src="../../resources/js/codeblock.js"></script>
+   </body>
+</html>

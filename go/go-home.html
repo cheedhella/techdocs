@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="main-grid-container">
-            <div class="main-grid-item main-grid-item-1">
+            <div class="main-grid-item main-grid-item-1 grid-wide-column">
                 <img src="../resources/imgs/gears.gif" alt="" srcset="" />
                 <h2>Golang</h2>
             </div>
@@ -17,8 +17,7 @@
                     <ol>
                         <li>Golang Concepts
                             <ul>
-                                <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
-                                <li><a href="./src/basics/deploy-aws.html">How to deploy a Microservice in AWS?</a></li>
+                                <li><a href="./basics/install.html">Install Golang</a></li>
                             </ul>
                         </li>
                     </ol>
@@ -26,128 +25,27 @@
             </div>
             <div class="main-grid-item main-grid-item-3">
                 <section>
-                    <ol>
+                    <ul>
                         <li>Concurrency
                             <ul>
-                                <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
-                                <li><a href="./src/basics/deploy-aws.html">How to deploy a Microservice in AWS?</a></li>
+                                <li><a href="./concurrency/goroutine.html">GoRoutines</a></li>
+                                <li><a href="./concurrency/waitgroups.html">WaitGroups - wait for GoRoutines to finish</a></li>
+                                <li><a href="./concurrency/mutex.html">Mutex - Manage access to shared resources</a></li>
+                                <li><a href="./concurrency/rwmutex.html">RWMutex - Manage access to shared resources</a></li>
+                                <li><a href="./concurrency/once.html">Once - run initialization only once</a></li>
+                                <li><a href="./concurrency/pool.html">Pool - manage reusable objects</a></li>
+                                <li><a href="./concurrency/channel.html">Channels</a></li>
                             </ul>
                         </li>
-                    </ol>
+                    </ul>
                 </section>
             </div>
             <div class="main-grid-item main-grid-item-4">
-                Principles Used to Design Microservice Architecture
+                The sync package gives you these main tools:
 
-The principles used to design Microservices are as follows:
 
-Independent & Autonomous Services
-Scalability
-Decentralization
-Resilient Services
-Real-Time Load Balancing
-Availability
-Continuous delivery through DevOps Integration
-Seamless API Integration and Continuous Monitoring
-Isolation from Failures
-Auto -Provisioning
+Cond → signal and wait on conditions.
 
-Design Patterns of Microservices
-
-Aggregator
-API Gateway
-Chained or Chain of Responsibility
-Asynchronous Messaging
-Database or Shared Data
-Event Sourcing
-Branch
-Command Query Responsibility Segregator
-Circuit Breaker
-
-                <section>
-                    Design Patterns
-                    <ul>
-                        <li><a href="./src/dp/communication.html">Communication</a></li>
-                        <li>
-                            <b>Multi-container or container orchestration Patterns</b>
-                            <ul>
-                                <li><a href="./src/dp/sidecar.html">Sidecar Pattern</a></li>
-                                <li><a href="./src/dp/ambassador.html">Ambassador Pattern</a></li>
-                                <li><a href="./src/dp/adapter.html">Adapter Pattern</a></li>
-                                <li><a href="./src/dp/workqueue.html">Work Queue Pattern</a></li>
-                                <li><a href="./src/dp/adapter.html">Self Awareness Pattern</a></li>
-                                <li><a href="./src/dp/adapter.html">Scatter/gather Pattern</a></li>
-                                <li><a href="./src/dp/adapter.html">Custom Controller Pattern</a></li>
-                                <li><a href="./src/dp/init-container.html">Init Container Pattern</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                    <ul>
-                        <li>
-                            <b>Event-Driven Microservices</b>
-                            <b>Service Autonomy Patterns</b>
-                            <ul>
-                                <li>If services are autonomous, then operational issues in one service should have no impact on the functionality of other services</li>
-                            </ul>
-                            <ul>
-                                <li><a href="./src/dp/db-per-svc.html">DB Per Service Pattern</a></li>
-                                <li><a href="./src/dp/saga.html">Saga Pattern</a></li>
-                                <li><a href="./src/dp/ddd.html">DDD</a></li>
-                                <li><a href="./src/dp/cqrs.html">CQRS</a></li>
-                                <li><a href="./src/dp/event-sourcing.html">Event Sourcing Pattern</a></li>
-                                <li><a href="./src/dp/competing-consumers.html">Competing Workers/Consumers Pattern</a></li>
-                                <li>how to use the Saga, API Composition, and CQRS patterns to design operations that span multiple services</li>
-
-                                Application integration patterns for microservices: Fan-out strategies
-                                <li><a href="./src/dp/fanout.html">Fan-out</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <b>Patterns</b>
-                            <ul>
-                                <li><a href="./src/dp/service-mesh.html">Service Mesh</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>Fault tolerant - Fault tolerance is the property that enables a system to continue operating properly in the event of the failure of some of its components.                        </li>
-                        <li>Resilency
-                            <ul>
-                                <li><a href="./src/dp/timeout.html">Timeout design pattern</a></li>
-                                <li><a href="./src/dp/circuit-breaker.html">Circuit Breaker design pattern</a></li>
-                                <li><a href="./src/dp/retry.html">Retry Design Pattern</a></li>
-                                <li><a href="./src/dp/bulkhead.html">Bulkheads Design Pattern</a></li>
-                                Deadlines
-                                Rate Limiters
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <li><a href="./src/dp/d-log.html">Distributed Logging</a></li>
-                            <ul>
-                                <li><a href="./src/dp/log-aggregation.html">Log Aggregation</a></li>
-                                <li><a href="./src/dp/log-correlation-id.html">Correlation ID or Tracing</a></li>
-                                <li><a href="./src/dp/log-format.html">Log Format</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <b> Misc</b>
-                            <ul>
-                                <li><a href="./src/dp/monitoring.html">Monitoring</a></li>
-                                <li><a href="./src/dp/ext-config.html">Externalize Configuration</a></li>
-                                <li><a href="./src/dp/circuit-breaker.html">Circuit Breaker</a></li>
-                                <li><a href="./src/dp/bg-canary.html">Blue-Green and Canary Deployment</a></li>
-                                <li><a href="./src/dp/serverless.html">Serverless Microservices</a></li>
-                            </ul>
-                        </li>
-                    </ul>         
-                </section>
             </div>
             <div class="main-grid-item main-grid-item-5">
                 <section>

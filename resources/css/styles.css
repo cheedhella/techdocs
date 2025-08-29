@@ -1,6 +1,7 @@
 body {
-    background-image: url("../imgs/blue.gif");
+    /* background-image: url("../imgs/blue.gif"); */
     font-family: monospace;
+    padding: 20px;
 }
 a:visited, a:link {
     color:purple;
@@ -8,9 +9,13 @@ a:visited, a:link {
 
 .main-grid-container {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
     grid-gap: 5px;
     padding: 5px;
+}
+
+.grid-wide-column {
+    grid-column: span 2; /* takes up 2 columns */
 }
 
 .main-grid-item {
@@ -33,12 +38,16 @@ a:visited, a:link {
 }
 */
 div.question {
-    font-size: 1.17em;
     margin-top: 20px;
     margin-bottom: 10px;
+    color: brown;
 }
 div.answer {
-    margin-left: 30px;
+    margin-left: 10px;
+}
+div.answer ul li {
+    font-size: 12px;
+    margin-top: 10px;
 }
 .tab1 {
     display: inline-block;

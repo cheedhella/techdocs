@@ -1,0 +1,19 @@
+.code-block { background: #f5f5f5; padding: 12px; border-radius: 6px; position: relative; font-family: monospace; }
+.copy-btn {
+position: absolute;
+top: 8px;
+right: 8px;
+background: #007BFF;
+color: white;
+border: none;
+padding: 6px 10px;
+border-radius: 4px;
+cursor: pointer;
+font-size: 0.9rem;
+}
+.copy-btn:active { transform: translateY(1px); }
+
+.code-block-title {
+    font-weight: bold;
+    color: brown;
+}

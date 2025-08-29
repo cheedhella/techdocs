@@ -1,0 +1,26 @@
+fmt package 
+    - formatted I/O - it handles printing, scaning and formatting strings;
+    - Printing functions
+      fmt.Print() → prints values (no newline)
+      fmt.Println() → prints values + newline
+      fmt.Printf() → formatted printing (like C’s printf)       Eg: fmt.Printf("Pi = %.2f\n", 3.14159) // Pi = 3.14
+    - String formatting 
+      fmt.Sprint() → returns string
+      fmt.Sprintln() → returns string + newline
+      fmt.Sprintf() → returns formatted string          Eg: fmt.Println(fmt.Sprintf("Value: %d", 42))  // "Value: 42"
+    - Error formatting 
+      fmt.Errorf() → creates an error with formatted text
+        err := fmt.Errorf("something went wrong: %v", 404)
+        fmt.Println(err)
+
+Common Format Verbs
+    %v → default format
+    %T → type of the value
+    %d → decimal integer
+    %f → floating-point
+    %s → string
+    %t → boolean
+    %p → pointer (address)
+    %+v → struct with field names
+    %#v → Go-syntax representation
+

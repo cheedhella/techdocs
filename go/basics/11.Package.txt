@@ -1,0 +1,78 @@
+Package?
+    - A package is a collection of Go source files in the same directory that are compiled together;
+    - Every Go file starts with a package declaration at the top;
+    - Each file can have only one package; First line of every go source file must declare exactly one package; 
+    - All code in that file belongs to that package; If you try to declare multiple packages, you will get an error;
+    - You can have multiple .go files in a directory, but all must declare the same package name;
+
+Type of packages: main, user-defined, standard;
+    main 
+        - Special package that creates an executable program;
+        - It must contain main() function;
+    user-defined 
+        - Used for writing reusable code; They don't have main();
+        - Eg:
+            // add.go
+            package mathutil
+            func Add(a int, b int) int {
+                return a + b
+            }
+            // p2.go 
+            package main
+            import (
+                "fmt"
+                "myproject/mathutil"
+            )
+            func main() {
+                fmt.Println(mathutil.Add(2, 3))
+            }
+    Standard libraries 
+        - fmt → formatting/printing
+        - math → math functions
+        - net/http → build web servers
+        - time → working with time
+
+Export 
+    - In Go, there are no export/import keywords; Instead, exporting is controlled entirely by capitalization;
+    - Any identifier (variable, constant, function, type, struct field, method) that begins with an uppercase letter is visible outside the package;
+    - Identifiers starting with a lowercase letter are only visible inside the same package;
+    - Eg:
+        // greetings/greetings.go
+        package greetings
+
+        // Exported function
+        func Hello(name string) string {
+            return "Hello, " + name
+        }
+
+        // Exported struct
+        type User struct {
+            Name string // Exported field
+            age  int    // Unexported field
+        }
+
+        // unexported function
+        func formatName(name string) string {
+            return "[" + name + "]"
+        }
+
+    - When another package imports greetings, it can only access exported identifiers;
+      Eg: 
+      // main.go
+      package main
+      import (
+          "fmt"
+          "example.com/mymodule/greetings"
+      )
+      func main() {
+          fmt.Println(greetings.Hello("Alice")) // ✅ works
+          // fmt.Println(greetings.formatName("Alice")) // ❌ compile error, not exported
+      }
+    - This rule also applies to struct fields; Eg: Outside the package, you can access u.Name but not u.age.
+
+
+    - 
+Visibility inside packages
+    Identifiers starting with a capital letter → Exported (public), accessible from other packages.
+    Identifiers starting with lowercase → Unexported (private), only accessible inside the same package.
+

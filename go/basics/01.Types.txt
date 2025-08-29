@@ -1,0 +1,105 @@
+Datatypes 
+    - Go is a statically typed language, so every variable has a defined type;
+    - We can classify types into basic (primitive), composite, and special types;
+
+Basic Types
+    Integers:
+        Signed Integers: int, int8, int16, int32, int64
+        Unsigned Integers: uint, uint8 (alias: byte), uint16, uint32, uint64, uintptr
+        int and uint are platform-dependent (32-bit or 64-bit).
+    Floating Point: float32, float64 (default);
+    Complex Numbers: 
+        complex64 (float32 real + imag)
+        complex128 (float64 real + imag)
+    Boolean:
+        bool → true or false
+    String:
+        string → immutable sequence of bytes (UTF-8 encoded)
+
+Composite Types
+    These are built from basic types.
+
+Array → fixed-size sequence
+
+var arr [3]int = [3]int{1, 2, 3}
+
+
+Slice → dynamic, flexible view into arrays
+
+s := []int{1, 2, 3, 4}
+
+
+Map → key-value pairs (like dictionaries in Python)
+
+m := map[string]int{"a": 1, "b": 2}
+
+
+Struct → collection of named fields
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+
+Pointer → holds the memory address of a value
+
+var p *int
+
+
+Function type → functions are first-class values
+
+func add(a int, b int) int { return a + b }
+
+
+Channel → for communication in goroutines (concurrency)
+
+ch := make(chan int)
+
+🔹 3. Special Types
+
+interface{} → empty interface (can hold any type, like any)
+
+nil → zero value for pointers, interfaces, maps, slices, channels, and functions.
+
+🔹 4. Type Aliases
+
+Go also defines aliases:
+
+byte → alias for uint8
+
+rune → alias for int32 (represents a Unicode code point)
+
+✅ Summary:
+-----------
+Basic: int, float, complex, bool, string;
+Composite: array, slice, map, struct, pointer, function, channel;
+Special: interface{}, nil, aliases (byte, rune);
+
+------------------------------------------------------------------------------------------------------------------------------
+const 
+    - It is an identifier for a immutable value that does not change during program execution;
+    - Typed constants: type is explicitly declared; Eg: const x int = 10
+    - Untyped constants: type is inferred; Eg: const y = 20  // can adapt as int, float64 etc
+    - Multiple constants 
+        Eg: 
+            const (
+                a = 1
+                b = 2
+                c = 3
+            )
+    - iota -> generates sequence of constants inside a const block; Useful for enums, flags, bitmasks;
+        Eg: 
+            const (
+                Sunday = iota   // 0
+                Monday          // 1
+                Tuesday         // 2
+            )
+            const (
+                FlagRead = 1 << iota  // 1 (0001)
+                FlagWrite             // 2 (0010)
+                FlagExecute           // 4 (0100)
+            )
+    - Constants can only be of: bool, string, numeric types.
+    - Cannot assign runtime values (e.g., const x = math.Sqrt(4) ❌)
+------------------------------------------------------------------------------------------------------------------------------

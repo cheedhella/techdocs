@@ -1,0 +1,32 @@
+Don't Communicate by sharing memory, share memory by communicating.
+don't over engineer your program by using shared memory and
+complicated synchronization primitives instead use message passing between go routines so that variables
+and data can be used in the appropriate sequence.
+
+
+Well, In go, it's remarkably easy to fire something off so that it runs in the background.
+So say you're writing a program and you have two functions and you want them to run at the same time
+to make that happen, you just type the word, go before the call to those functions and suddenly they're
+running concurrently in the background.
+But once you fire something off into the background, how do you talk to it?
+Well, there's a number of ways of talking to it.
+You can use primitives.
+
+And this comes from something called the sync package in go standard library, where you can lock something,
+you can say, I'm using this, nobody else can touch this until I'm done with it.
+You can have go routines, talk to one another using something called channels
+
+sync package: mutexes, semaphores, wait groups; channels;
+
+producer/consumer problems
+dining philospher problem 
+sleeping barber problem 
+
+
+Goroutines
+Channels
+Channel Buffering
+Channel Synchronization
+Channel Directions
+---------
+GoRoutines
