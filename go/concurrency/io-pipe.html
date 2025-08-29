@@ -11,204 +11,37 @@
       <div class="question"><strong>1. What is io.Pipe?</strong></div>
       <div class="answer">
          <ul>
-            <li>It allows a routine to wait for a collection of goroutines to finish their execution;</li>
-            <li>It's like a simple counter that you can increment and decrement to keep track of running goroutines;</li>
-         </ul>
-      </div>
-
-      <div class="question"><strong>2. How it works?</strong></div>
-      <div class="answer">
-         <ul>
-            <li>Add(delta int)
-               <ul>
-                  <li>It increases the internal counter by specified delta;</li>
-                  <li>You typically call this before you start a new goroutine, to tell the WaitGroup that you're about to launch a new task to wait for;</li>
-                  <li>For eg, if you are spawning 2 threads, call: wg.Add(2)</li>
-               </ul>
-            </li>
-            <li>Done()
-               <ul>
-                  <li>This method decreases the counter by one; Each goroutine should call this, when it completes its task;</li>
-                  <li>A common pattern is to use a defer statement for wg.Done(), which ensures the counter is decremented even if the function panics or returns early;</li>
-               </ul>
-            </li>
-            <li>Wait()
-               <ul>
-                  <li>This method blocks the execution of the calling goroutine (usually the main goroutine), until the internal counter reaches zero;</li>
-               </ul>
-            </li>
+            <li>It is a pure go implementation, no OS involvement; It returns io.Reader and io.Writer;</li>
+            <li>Used for streaming data between goroutines, especially when libraries expect io.Reader or io.Writer(Eg: gzip.NewWriter, http.Request.Body);</li>
+            <li>Not typed data — it deals with raw bytes ([]byte);</li>
          </ul>
       </div>
       
       <div class="code-block">
-         <div class="code-block-title">wg-1.go</div>
+         <div class="code-block-title">io-pipe-1.go</div>
          <button class="copy-btn">Copy</button>
          <pre><code>package main
 
 import (
-    "fmt"
-    "sync"
-    "time"
+	"fmt"
+	"io"
 )
 
-func worker(id int, wg *sync.WaitGroup) {
-    defer wg.Done()                         // Defer guarantees that wg.done() is executed at the end of function, no matter how the function exits;
-    fmt.Printf("Worker %d starting\n", id)
-    time.Sleep(time.Second)                 // simulate work
-    fmt.Printf("Worker %d done\n", id)
-}
-
 func main() {
-    var wg sync.WaitGroup
+	pr, pw := io.Pipe()
 
-    for i := 1; i <= 3; i++ {
-        wg.Add(1)                   // tell WaitGroup we have one more goroutine - always call this, before starting a new goroutine;
-        go worker(i, &wg)           // Never pass the copy of WaitGroup — always pass a pointer (&wg)
-    }
+	go func() {
+		defer pw.Close()
+		pw.Write([]byte("hello from io.Pipe"))
+	}()
 
-    wg.Wait()                       // block until all goroutines are done; If the counter hits zero, any goroutine that called wg.Wait() will unblock and continue;
-    fmt.Println("All workers finished")
+	buf := make([]byte, 64)
+	n, _ := pr.Read(buf)
+	fmt.Println(string(buf[:n]))
 }
 
-<b>Output:</b>
-Worker 1 starting
-Worker 2 starting
-Worker 3 starting
-Worker 3 done
-Worker 1 done
-Worker 2 done
-All workers finished
-
-</code></pre>
-      </div>
-
-<br/>
-            <div class="code-block">
-         <div class="code-block-title">wg-2.go</div>
-         <button class="copy-btn">Copy</button>
-         <pre><code>package main
-
-import (
-    "fmt"
-    "sync"
-)
-
-func printMessage(msg string, wg *sync.WaitGroup) {
-    defer wg.Done()        
-    fmt.Printf(msg)
-}
-
-func main() {
-    var wg sync.WaitGroup
-
-    words := []string{
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine",
-        "ten",
-    }
-
-    wg.Add(len(words))
-    for i, x := range words {
-        go printMessage(fmt.Sprintf("%d: %s \n", i, x), &wg)           // For each word, create a routine
-    }
-
-    wg.Wait()                           // block until all goroutines are done;
-    fmt.Println("All workers finished")
-}
-
-// <b>No guarantee on the order of execution of goroutines, it is decided by the scheduler;</b>
-
-<b>Output:</b>
-0: one 
-9: ten 
-1: two 
-2: three 
-3: four 
-4: five 
-5: six 
-6: seven 
-7: eight 
-8: nine 
-All workers finished
-
-</code></pre>
-      </div>
-
-
-<br/>
-            <div class="code-block">
-         <div class="code-block-title">wg-3.go - wg with 2 goroutines, but created 1 routine</div>
-         <button class="copy-btn">Copy</button>
-         <pre><code>package main
-
-import (
-    "fmt"
-    "sync"
-)
-
-func printMessage(msg string, wg *sync.WaitGroup) {
-    defer wg.Done()        
-    fmt.Printf(msg)
-}
-
-func main() {
-    var wg sync.WaitGroup
-    
-    wg.Add(2) // expecting 2 goroutines
-    go printMessage("worker 1 done", &wg) // but, creating only 1 worker
-    
-    wg.Wait()
-    fmt.Println("All workers finished")
-}
-
-<b>Output:</b>
-all goroutines are asleep - deadlock!
-
-</code></pre>
-      </div>
-
-
-      <br/>
-            <div class="code-block">
-         <div class="code-block-title">wg-4.go - wg with 1 goroutine, but created 2 routines</div>
-         <button class="copy-btn">Copy</button>
-         <pre><code>package main
-
-import (
-    "fmt"
-    "sync"
-)
-
-func printMessage(msg string, wg *sync.WaitGroup) {
-    defer wg.Done()        
-    fmt.Printf(msg)
-}
-
-func main() {
-    var wg sync.WaitGroup
-    
-    wg.Add(1) // expecting 1 goroutine, but created 2 routines
-    go printMessage("worker 1 done", &wg) 
-    go printMessage("worker 2 done", &wg)
-
-    wg.Wait()
-    fmt.Println("All workers finished")
-}
-
-<b>Output 1:</b>
-worker 2 done
-All workers finished
-worker 1 done
-
-<b>Output 2:</b>
-sync: negative WaitGroup counter
+Output:
+hello from io.Pipe
 
 </code></pre>
       </div>
