@@ -66,22 +66,17 @@ div.answer ul li {
     margin-left: 100px;
 }
 
-div.command-table {
-    margin-left: 20px;
-    table {
-        border: 2px dotted grey;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 8px;
-    }
-    /* Remove table borders */
-    table, th, td {
-      border: none;
-    }
-    th {
-      font-weight: bold;
-    }
+div.command-table > table {
+    border: 2px dotted grey;
+    border-spacing: 40px 10px; /* horizontal=40px, vertical=10px */
 }
-    
+  
+div.command-table th,
+div.command-table td {
+    text-align: left;
+    padding: 8px;
+}
+
+div.command-table th {
+    font-weight: bold;
+}
