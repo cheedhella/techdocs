@@ -53,7 +53,7 @@
       </div>
 
 	  <div class="question"><strong>5. Frequently used commands</strong></div>
-	  <div class="answer border-less-table">
+	  <div class="border-less-table">
 		<table>
 			<thead>
 			<tr>
@@ -78,6 +78,44 @@
 		</table>
 	  </div>
 	  
+	  <div class="question"><strong>4. Install NodeJS</strong></div>
+      <div class="answer">
+         <ul>
+            <li>Download & install NodeJS from: https://nodejs.org</li>
+			<li>It also installs npm and npx;</li>
+			<li>npm(node package manager) - It is used to manage shared packages/libraries;</li>
+			<li>npx(node package executor) - It is used to run packages directly without installing them globally;</li>
+			<li>It looks in: your local node_modules/.bin folder; If found, it uses it; If not, Your local node_modules/.bin folder; Eg: npx create-react-app my-app</li>
+            <li>Verify installation: node -v, npm -v, npx -v</li>
+         </ul>
+      </div>
+
+	  <div class="question"><strong>4. Setup TypeScript</strong></div>
+      <div class="answer">
+         <ul>
+            <li>Globally
+				<ul>
+					<li>Install: npm install -g typescript</li>
+					<li>Verify: tsc --version</li>
+				</ul> 
+			</li>
+			<li>Project Specific
+				<ul>
+					<li>Do this in your project folder:</li>
+					<li>npm init -y   # create a nodejs package, if package.json if missing</li>
+					<li>npm install --save-dev typescript 	# Adds typescript to your project dependencies</li>
+					<li>Verify: npx tsc --version</li>
+					<li>npx tsc --init # It creates tsconfig.json file with default settings;</li>
+					<li>npx tsc --init --rootdir src --outdir lib # You can specify the location of ts files and location of generated js files;</li>
+					<li>npx tsc --watch # If you make any changes, it recompiles the ts file on the fly;</li>
+					<li>To run generated JS: node lib/index.js</li>
+				</ul> 
+			</li>
+			<li></li>
+			<li></li>
+            <li>By default, VSC comes with Emmet plugin;</li>
+         </ul>
+      </div>
 
       <pre>
          -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -369,6 +407,6 @@ https://docs.emmet.io/actions/
       </pre>
 
 
-      <script src="../../resources/js/codeblock.js"></script>
+      <script src="../resources/js/codeblock.js"></script>
    </body>
 </html>
