@@ -65,3 +65,23 @@ div.answer ul li {
     display: inline-block;
     margin-left: 100px;
 }
+
+table.border-less-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.border-less-table {
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+    /* Remove table borders */
+    table, th, td {
+      border: none;
+    }
+    th {
+      font-weight: bold;
+    }
+}
+    
