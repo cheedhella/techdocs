@@ -1,0 +1,236 @@
+Document Object Model - tree of javascript node objects. // DOM can be HTML DOM or XML DOM.
+	Whenever you open a webpage in a browser, it parses the page and constructs a tree of nodes.
+	The purpose of DOM Tree is to provide programatic interface for scripting(add, remove, modify, replace and eventing).
+------------------------------------------------------------------------
+Node
+	Constants:
+		ELEMENT_NODE                :  1, /* console.log(Node.ELEMENT_NODE); logs 1 */
+		ATTRIBUTE_NODE              :  2,
+		TEXT_NODE                   :  3,
+		CDATA_SECTION_NODE          :  4,
+		ENTITY_REFERENCE_NODE       :  5,
+		ENTITY_NODE                 :  6,
+		PROCESSING_INSTRUCTION_NODE :  7,
+		COMMENT_NODE                :  8,
+		DOCUMENT_NODE               :  9,	// document.nodeType
+		DOCUMENT_TYPE_NODE          : 10,
+		DOCUMENT_FRAGMENT_NODE      : 11,
+		NOTATION_NODE               : 12
+			
+	Properties:
+		nodeType - type of the node. Read-only.
+		nodeName vs tagName - returns the name of the node, changes from one nodeType to another. Prefer nodeName over tagName. Read-only.
+		nodeValue vs innerHTML - Read-write.
+			innerHTML - applicable for only element nodes.
+			nodeValue - applicable for non-element nodes.
+				For attribute node, it returns value of attribute.
+				For text/comment node, it returns its content.
+				For many of other nodes, it is undefined.
+		parentNode, childNodes, firstChild, lastChild, previousSibling, nextSibling - Used for traversing(top, bottom, left, right)
+			parentNode - Returntype: Node, Read-only.
+			childNodes - Returntype: NodeList, Read-only.
+			firstChild - Returntype: Node, Read-only.
+			lastChild - Returntype: Node, Read-only.
+			previousSibling - Returntype: Node, Read-only.
+			nextSibling - Returntype: Node, Read-only.
+		attributes - returns the list of attributes of the node(suited for only element nodes). Returntype: NamedNodeMap or null. Read-only.
+		ownerDocument - return the document(Document object) which contains this node OR null if the node itself is a document or doctype node.
+		
+	Methods:
+		hasChildNodes()
+			Returns true if a node has any child nodes, otherwise it returns false.
+		appendChild()
+			var newChildNode = parentNode.appendChild(childNode) 
+			Append childNode as last child of parentNode and return the new child node. Returntype: Node
+		insertBefore()
+			var insertedNode = parentNode.insertBefore(newNode, refNode);
+			Insert newNode just before refNode as a child of parentNode. If referenceNode is null, newNode is inserted as last child of parentNode.
+			This method returns newly inserted node. Returntype: Node
+		removeChild()
+			var removedNode = parentNode.removeChild(childNode); // does this work if childNode is not a immediate child of parentNode??
+			Removes the specified childNode and returns it on success, or null on failure. Returntype: Node
+		replaceChild()
+			var removedNode = parentNode.replaceChild(newChildNode, oldChildNode);
+			Replace oldChildNode with newChildNode and returns oldChildNode on success, or null on failure. Returntype: Node
+		cloneNode()
+			var newNode = anyNode.cloneNode(bDeep);
+			Creates an exact copy of anyNode and returns it. If bDeep is true, all child nodes of anyNode are also cloned. Returntype: Node
+			When cloning an Element node, all of its attributes and their values (including in-line events) are cloned as well. Anything added with addEventListener() or node.onclick is not cloned.
+			cloneNode() may lead to duplicate element IDs in a document.
+		normalize() - removes any empty Text nodes, joins adjacent Text nodes and returns nothing.
+
+	A node can also have other standard properties depending on its type.	
+		
+NodeList
+	Represents ordered collection of nodes. NodeList objects in the DOM are live.
+	Properties:
+		length - number of nodes in the collection, Read-only.
+	Methods:
+		item(index) - returns the node at the specified 0-based index. If index < 0 OR index > length-1, returns null. Returntype: Node
+		
+NamedNodeMap
+	Represents unordered collection of nodes, indexed by name. You can also access individual nodes of the collection using an index. NamedNodeMap objects in the DOM are live.
+	Methods:
+		item(index) - returns the node at the specified 0-based index. If index < 0 OR index > length-1, returns null. Returntype: Node
+		getNamedItem(name) - get a node by its nodeName(name - nodeName of the node to retrieve). Returntype: Node
+		setNamedItem(node) - add specified node to the NamedNodeMap. If a node with that name already exists in the map, it will be replaced.
+			If the new node replaces an existing node, the previously existing node is returned; otherwise null is returned. Returntype: Node
+		removeNamedItem(name) - remove the node with the specified name from NamedNodeMap. Returns the node that's been removed or null if no such node exists in the map. Returntype: Node
+		getNamedItemNS(namespace, name), setNamedItemNS(node), removeNamedItemNS(namespaceURI, localName)
+			https://developer.mozilla.org/en-US/docs/DOM/NamedNodeMap
+			http://reference.sitepoint.com/javascript/NamedNodeMap/setNamedItemNS
+-----------------------------------------------------------------
+Element - extends Node
+	It represents an element in the HTML or XML document.
+	An element can have 0 or more attributes associated with it. attributes property in the Node object is used to access an element's attributes.
+	In case of HTML, all attribute values are simple strings. In case of XML, an attribute value can be a string or entity reference.
+	So, in case of XML, Attr object should be retrieved to examine the subtree representing the attribute value.
+	
+	Properties:
+		tagName - returns the qualified name of the node. Readonly.
+			In HTML this is returned in all uppercase regardless of the case used in the document; in XML the case used in the document is preserved. 
+		getAttribute(name), setAttribute(name, value), removeAttribute(name), hasAttribute(name)
+		getAttributeNS(namespaceURI, name), setAttributeNS(namespaceURI, name, value), removeAttributeNS(namespaceURI, name), hasAttributeNS(namespaceURI, name)
+			Preferred in case of HTML.
+		getAttributeNode(name), setAttributeNode(attrNode), removeAttributeNode(attrNode)
+		getAttributeNodeNS(namespaceURI, name), setAttributeNodeNS(attrNode)
+			Returns Attr object. Preferred in case of XML.
+		getElementsByTagName(tagname), getElementsByTagNameNS(namespaceURI, tagname) - returns an ordered list of all elements with a given tag name, that are descendants of this element; Returntype: NodeList
+-----------------------------------------------------------------
+Attr - extends Node
+	It represents an attribute of Element object.
+	It is important to note that attributes are considered as proerties of Element, they are not actually child nodes of the corresponding element node in the DOM tree(though it extends Node).
+	In XML, an attribute node can contain either Text or EntityReference nodes as children(meaning the value of an attribute can be text or entity reference).
+	
+	Properties:
+		name - returns the name of the attribute. Readonly.
+		value - get or set the value of the attribute. Readonly - looks we can't directly set this??. Need not to be a string always.
+			An attribute's effective value is determined as follows: 
+			If this attribute has been explicitly assigned any value in the document or using javascript, that value is the attribute's effective value;
+			Otherwise, if there is a declaration for this attribute in the schema, and that declaration includes a default value, then that default value is the attribute's effective value; 
+			Otherwise, the attribute is considered does not exist.
+		specified - Readonly
+			returns true if the attribute has been given a value in the original document or through the setValue method and returns false if not(value specified in the schema).
+			After the value is set to true, the only way to reset it to its original state is to delete the attribute.
+		ownerElement - Element node to which this attribute belongs to or null if this attribute is not in use. Readonly.
+		isId - returns true if it is id attribute, otherwise it returns false. Readonly.
+			
+	Few questions:
+		1. does node.attributes returns all kinds of attributes? the ones defined in the document, schema and using javascript??
+		2. what happens if you modify/remove an attribute which is not specified?
+-----------------------------------------------------------------
+CharacterData
+	This interface doesn't correspond to any type of node in the DOM tree, but extended by CDATASection, Comment and Text nodes.
+	It provides properties and methods for manipulating the text contents of a Comment, Text, CDATASection, ProcessingInstruction nodes.
+	Properties:
+		data - used to get/set textual contents of a Text, Comment, CDATASection node, or ProcessingInstruction node. Live.
+		length - returns number of characters in the text contents. Readonly.
+	Methods:
+		appendData(stringArg ), insertData(offset, stringArg), deleteData(offset, count), replaceData(offset, count, stringArg), substringData(offset, count)
+			prefer build-in string processing methods over these.
+
+Comment extends CharacterData
+	It represents the contents of an HTML or XML comment(i.e. everything between, but not including, the starting <!-- and ending -->).
+	A Comment node cannot have children.
+
+Text - extends CharacterData extends Node extends Object
+	Represents textual content of an element or an attribute. A text node can't have children.
+	Note: Size limits of Text nodes - firefox: 4k, opera: 32k, safari: 64k
+	
+	splitText(offset) - used to split a text node into 2 sibling text nodes, at the specified offset. Returnvalue: newly creaeted text node.
+		Eg:
+		Input: <p>helloworld</p>
+		JS: var tn = document.querySelector('p').firstChild; tn.splitText(5); // splits 'helloworld' into 2 text nodes: 'hello', 'world' - both are siblings
+		
+	Cases when multiple sibling text nodes occur:
+		case1:
+			Eg: <p>Hi, <strong>cody</strong> welcome!</p>
+				The content of the <p> element is not a single Text node; it is in fact three nodes: a Text node, an Element node, and another Text node.
+		case2:
+			programatically add a text nodes.
+			Eg: 
+				var pElementNode = document.createElement('p');
+				var textNodeHi = document.createTextNode('Hi ');
+				var textNodeCody = document.createTextNode('Cody');
+				pElementNode.appendChild(textNodeHi);
+				pElementNode.appendChild(textNodeCody);
+				console.log(document.querySelector('div p').childNodes.length); //logs 2
+	
+	Normalize sibling text nodes:
+		To eliminate sibling Text nodes that contain no Element nodes, we can use normalize(). This will concatenate sibling text nodes in the DOM into a single Text node.
+		Eg: 
+			var pElementNode = document.createElement('p');
+			var textNodeHi = document.createTextNode('Hi ');
+			var textNodeCody = document.createTextNode('Cody');
+			pElementNode.appendChild(textNodeHi);
+			pElementNode.appendChild(textNodeCody);
+			pElementNode.normalize(); //combine our sibling text nodes
+			console.log(document.querySelector('div p').childNodes.length); //logs 1
+
+CDATASection extends Text extends CharacterData
+	It represents a CDATA section in XML. 
+	CDATA sections are used to escape blocks of text that would otherwise be treated as markup. A CDATASection node cannot have children.
+	http://en.wikipedia.org/wiki/CDATA
+	https://developer.mozilla.org/en-US/docs/DOM/CDATASection
+-----------------------------------------------------------------
+Document extends Node
+	It represents entire HTML or XML document. Conceptually, it is the root of the DOM tree.
+	It contains factory methods for creating other type of nodes.
+	
+	Properties:
+		docType - represents document type associated with the HTML or XML page. Returntype: DocumentType
+		documentElement - represents <html> element in the page. Returntype: Element or null
+		
+	Methods:
+		createElement(tagName), createElementNS(namespace, tagName) - creates an element with the specified namespace. Returntype: Element
+		createAttribute(name), createAttributeNS(namespaceURI, name) - creates an attribute with the specified name. Returntype: Attr
+		createTextNode(text) - used to create a Text Node with the specified text. Returntype: Text
+		createCDATASection(text) - used to create a CDATASection node with the specified text. For XML DOM only. Returntype: CDATASection. 
+		createEnityReference(entityname) - used to create specified EntityRerence Object. For XML DOM only. Returntype: EntityRerence.
+		createProcessingInstruction() - Returntype: ProcessingInstruction
+		createComment(text) - creates a Comment node with the specified text. Returntype: Comment
+		createDocumentFragment() - creates a imaginary Node object, with all the properties and methods of the Node object.
+		---
+		getElementById(elementId) - Returntype: Element
+		getElementsByTagName(tagname) - Returntype: NodeList
+		getElementsByTagNameNS(namespaceURI, localName) - Returntype: NodeList
+		normalizeDocument() -
+-----------------------------------------------------------------
+DocumentFragment extends Node
+	DocumentFragment is a lightweight container that can hold DOM nodes.
+	A DocumentFragment node can have Element, ProcessingInstruction, Comment, Text, CDATASection and EntityReference nodes as children. 
+	DocumentFragment has no properties or methods of its own, but inherits from Node.
+-----------------------------------------------------------------
+DocumentType extends Node
+	Properties: all properties are read-only.
+		name -
+		entities - Returntype: NamedNodeMap
+		notations - Returntype: NamedNodeMap 
+		publicId -
+		systemId -
+		internalSubset -
+-----------------------------------------------------------------
+Entity extends Node
+	Properties: all are read-only
+		publicId -
+		systemId -
+		notationName -
+		inputEncoding -
+		xmlEncoding - 
+		xmlVersion - 
+		
+EntityReference extends Node
+-----------------------------------------------------------------
+Notation extends Node
+	It represents a notation declared in the DTD.
+	Properties: all are read-only
+		publicId -
+		systemId -
+-----------------------------------------------------------------
+ProcessingInstruction extends Node
+	data - 
+	target - Read-only
+-----------------------------------------------------------------
+Good Links:
+http://reference.sitepoint.com/javascript/domcore
+http://www.w3.org/TR/DOM-Level-3-Core/core.html

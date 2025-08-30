@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>TypeScript Design Patterns</title>
+    </head>
+    <body>
+        <!-- 
+            Parcel takes index.html as input;
+            As soon as it sees .ts file included, it will compile it to .js file and then replace the script tag;
+         -->
+        <!-- google apis should be added before index.ts file! 
+            Once browser loads it(once you see http 200 response in network tab), an object named google is available; -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzfn5lhA-TAw-mAZCU"></script>
+        <script src="./src/index.ts"></script>
+
+        <div id="mapDiv"></div>
+    </body>
+</html>

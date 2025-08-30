@@ -1,0 +1,285 @@
+What is Hook?
+    Hooks are used to maintain state and side effects, in functional components; 
+    Hooks are introduced in 16.8; 
+     the convention that the name of a Hook must start with use.
+    React currently offers 10 Hooks for us to use. 
+
+Hooks 
+    1. useState
+    2. useEffect
+    3. useContext
+    4. useReducer
+    5. useMemo
+    6. useCallback
+    7. useRef
+    8. useImperativeHandle
+    9. useLayoutEffect
+    10. useDebugValue
+    11. Custom Hooks
+
+Rules for using Hooks
+    - Only call hooks at the top level
+        -- It should called at the top level of a component; Don't call it inside if/for/nested functions;
+           React Hooks such as useState and useEffect rely on the order in which they are called to preserve the current context and to calculate for the next state or side effect accordingly;
+           If the order of hook calls is different in each render, it would break this flow in React. For this reason, the first rule is very important.
+    - Only call hooks from React functions
+        -- The second rule of React Hooks says that you should only call React Hooks from a React functional components. 
+           Hooks should not be called from plain JavaScript functions or class components.
+
+    If you break any of those 2 rules, React gives this warning: Invalid Hook Call Warning
+
+Are class components still worth it?
+    This question came up again and again shortly after the announcement and introduction of React Hooks.
+    The React team has discouraged people from rewriting their existing applications that use classes into function components using Hooks. Classes will remain part of React.
+
+------------------------------------------------------------------------------------------------------------------------------------
+1. useState
+    Function components are stateless in nature - they take input and return a value, nothing more;
+    It is used to add state to a function component; State could be of any type;
+    One component can have multiple states as well; Component is re-rendered every time state changes; 
+    State is retained across re-renrenders; State gets initialized to inital value, if you reload;
+    It takes intial state and returns a tuple/pair containing current value of state and a function to update the state;
+
+2. useEffect 
+    It is used to manage side effects(such as fetching data, subscribing to external events, manually changing DOM etc) in function components;
+    
+    Every component has 4 phases: Initialize(constructor is called), Mount(rendered to DOM), Update, Unmount;
+    When the user lands on the page, the component is mounted; As the state gets updated, component is also updated; Finally, the component is unmounted, when the user leaves the page;
+    Class components provides these methods to hook code into the lifecycle of the component: componentDidMount, componentDidUpdate and componentWillUnmount;
+
+    You can use useEffect() hook, to hook some code into the lifecycle events of function component;
+    Syntax:
+        useEffect(() => {
+            // Mounting  - For eg, fetch data from API;
+            return () => {
+                // Unmount/Cleanup code - For eg, clear event listeners when the component unmounts;
+            }
+        }, [//Update])    
+    - If updaet array is not specified, code is executed every time the component is rendered and updated;
+    - If update array is empty, mount code is executed only once, when the component is rendered/mounted first time; It is not executed, everytime component is updated;
+    - If you specify update array with state variables, mount code is executed once when the component is mounted and every time the state changes; 
+    - Clean function is called when the component is unmounted;
+
+    https://dmitripavlutin.com/react-useeffect-infinite-loop/
+
+3. useContext 
+    Props flow in one direction, from parent component to child components(and further down);
+    useContext is used to pass data to components, without using props, no matter how deep they are in the component tree;
+    Usually, it is used to hold application-wide data: such as theme, locale/language preferences, user/authentication info etc;
+    
+    You can have as many consumers as you want for a single context;
+    Any component in the component tree can change the context;
+    In case of any changes to context, all consumers are immediately notified and re-rendered;
+    If a consumer is not wrapped  inside the provider, but still tries to access the context value, then it gets the default value argument supplied to createContext();
+    
+4. useReducer
+    useReducer vs useState  
+        useReducer is used when your next state depends on the previous one; When you have complex state management code;
+        It can be used to move the state management code outside of the component, preferably to another file;
+        As a result, the component logic becomes clearer and the logic state can be tested independently;
+
+    const [state, dispatch] = useReducer(reducerFn, initialState, initFn);
+        initialState -> initial state;
+        initFn -> Responsible for creating the state lazily;
+        reducerFn -> It is a fn that takes 2 parameters: action and current state; Based on action parameter, it calculates new state and returns it;
+            reducerFn(action, state) {
+                // To avoid angering React gods, never mutate the state; Instead return a new state object, using spread operator;
+                switch(action.type) {
+                    case ONE:
+                        ....
+                    case TWO:
+                        ...
+                }
+                return updatedState;
+            }
+        state -> new state after executing the reducerFn;
+        dispatch -> You can use this to update your state; When you call dispatch, React internally calls the reducer fn, which performs a state update; when the state has been updated, the component re-renders, and the state returned by the useReducer() hook is also updated;
+            Eg: dispatch({ type: 'REFRESH', message: 'hello' }) -----> reducer(state, { type: 'REFRESH', message: 'hello' })
+
+        Do we not need Redux anymore?
+            With the introduction of the useReducer hook, we have the ability to manage a fair amount of complex state without the need for bringing in external libraries like Redux. 
+            But that doesn’t mean we may never need Redux anymore. This hook does not replace Redux or MobX.
+            https://medium.com/javascript-scene/do-react-hooks-replace-redux-210bab340672
+
+        https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
+        https://stackoverflow.com/questions/70303773/react-functional-components-change-state-of-parent-from-child-without-rendering
+        https://stackoverflow.com/questions/65731727/how-to-change-the-child-state-component-from-parent-in-functional-component
+                
+        https://codesandbox.io/s/todo-react-strikethrough-5frfz?file=/src/ToDo.js:261-276
+        https://codesandbox.io/s/todolist-usereducer-0hte3?from-embed
+
+
+5. useMemo
+    It is a function component that returns a memorized value;
+    Similar to useEffect, it takes 2 arguments - a function that computes a result and dependencies array;
+    The memo function remembers the result for a given set of inputs, so when you pass the same parameters again, it returns the stoerd result, without computing the function;
+    Syntax: 
+        const memoizedResult = useMemo(() => {
+            return expensiveFunction(propA, propB); // executed only on first render OR only when dependencies changes;
+        }, [propA, propB]);
+
+    https://refine.dev/blog/react-usememo/#resource-intensive-functions
+
+6. useCallback
+    useMemo is for arrays/objects, where as useCallback is for functions;
+    Similar to arrays and objects, functions are compared by reference, not by value:
+
+    // This:
+    React.useCallback(function helloWorld(){}, []);
+    // ...Is functionally equivalent to this:
+    React.useMemo(() => function helloWorld(){}, []);
+
+    https://www.scaler.com/topics/react/usecallback/
+    https://medium.com/@dev_one/how-to-use-usecallback-hook-35dc047aee48
+    https://kinsta.com/blog/react-usecallback/
+    https://react.dev/reference/react/useCallback - when theme is changed, we don't want to load the entire page again;
+
+    TODO: Normally, if a component re-renders all child components are re-rendered; What if you don't child to re-render, unless props changes; useCallback can be used for that?
+
+    useCallback is a hook that lets you cache a function definition between renders.
+    useCallback(function, [dependencies]);
+
+    fn : (function to memorize)
+        This is the function that you want to cache.
+        This function can take any arguments and can return any data
+        The React will return this function definition (but not call it) during the first render.
+        On the next renders:
+            If the dependencies are not changed then the react will give you the same cached function
+            Else if, dependencies have changed the react will give you the current function that you have passed it. That is if the dependencies have changed.
+        Dependencies
+            An array of reactive values that the function depends on or are referenced by the  fn
+
+    Usecases:
+        - Use-Case : Skipping Re- rendering of components for performance optimization
+        - 
+
+	const itemMovementListener: () => void = useCallback(() => {
+    actionSetlayout(GraphLayout.Custom);
+  }, [actionSetlayout]);
+
+
+7. useRef 
+    It accepts an argument as intial value and returns a reference; 
+    Reference is an object having a special property named current;
+    reference.current is used to access the current value of reference and reference.current=newValue is used to update the value of reference; 
+    There are 2 rules to remember about references:
+        - Updating a reference doesn't trigger a component re-rendering; // This is the main difference b/w useState and useRef;
+        - The value of the reference remains unchanged between component re-renderings;
+
+    Another useful application of the useRef() hook is to access DOM elements directly; 
+    For eg, you want to focus on a input field, when the component mounts; 
+
+    https://dmitripavlutin.com/react-useref/
+    https://dev.to/kirubelkinfe/mastering-useref-in-react-with-typescript-4-different-use-cases-for-useref-2a87
+
+9. useLayoutEffect
+    useEffect is very similar to useLayoutEffect;
+    In case of useEffect, whenever state changes, it triggers a re-render, which generates the markup(or virtual dom), screen is updated and useEffect code is executed asynchronously;
+    In case of useLayoutEffect, whenever state changes, it triggers a re-render, which generates the markup(or virtual dom), useLayoutEffect code is executed synchronously(meaning react waits until it is completed) and then screen is updated;
+    
+    When to use useEffect?
+        In most cases, to make our app faster and more performant, it is recommended to handle side effects with useEffect;
+    
+    When to use useLayoutEffect?
+        Use useLayoutEffect, only if you want to make changes to DOM, before actually rendering it;
+
+    https://www.memberstack.com/blog/uselayouteffect-vs-useeffect
+
+10. Custom Hook
+    It is a JavaScript function that begins with use;
+    It is not mandatory to begin the name with use, but wihtout it, react can't check for violations of the Hooks rules; 
+    So, it is important to adhere to this naming convention;
+
+    Main advantage of React Hooks is the reusability of stateful logic;
+    In addition, custom Hooks can be easily shared with other components, without changing the component hierarchy;
+
+
+
+    https://www.joshwcomeau.com/react/usememo-and-usecallback/
+
+
+
+ Custom Hooks are an excellent way to share logic between components and improve your component tree’s readability.
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+It is also easier to test components with multiple custom Hooks using the React Testing Library.
+
+UseMemo
+    Memoization is an optimization technique to store the result of an expensive calculation for a given input. 
+    The cached result is returned for the subsequent function calls as long as the same input occurs again.
+    Use useMemo hook when wanting to memoize output returned from an expensive compute function. This compute function may perform heavy calculations on each function call.
+
+    Use the useCallback hook when wanting to memoize the callback function. This callback may perform several actions when invoked.
+
+    Use memoization hooks only when there are benefits in terms of rendering performance. 
+    For example, when rendering large lists, a memoized result may speed up the actual rendering performance. For simple cases, it is not required to use memoization because the overhead may not offset the performance improvement.
+
+    useCallback hook accepts two arguments: An inline callback function and an array of dependencies. 
+    useCallback returns a memoized reference to the callback function when the dependencies do not change.
+        const memoizedCallback = useCallback(
+            () => {
+                calculateFn(input);
+            },
+            [input]
+        );
+    Similarly, useMemo hook accepts two arguments: A callback that returns the result of an expensive compute function and an array of dependencies. 
+    useMemo returns the last cached result if the dependencies do not change.
+
+
+    
+
+    https://www.educative.io/courses/a-deep-dive-into-react-hooks/usecontext-hook
+    https://www.joshwcomeau.com/react/usememo-and-usecallback/
+
+
+
+
+
+5. useContext
+    https://itnext.io/react-context-and-hooks-pass-data-and-update-it-easily-d2f659cceab
+    https://www.copycat.dev/blog/react-usecontext/
+
+6. useMemo, useCallback 
+    https://dmitripavlutin.com/react-usememo-hook/
+    https://www.joshwcomeau.com/react/usememo-and-usecallback/
+    https://refine.dev/blog/react-usememo/#example
+    https://coderpad.io/blog/development/a-guide-to-using-reacts-usememo-hook/
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+What is Class Component?
+    Class components allow you to create stateful logic in React components. 
+    It also allows you to use lifecycle methods for side effects. For example, when the component mounts, initiate an API request using componentDidMount.
+
+
+
+
+
+
+
+
+
+
+
+It is no secret that functional components are usually faster than classes in React. 
+If used properly, React Hooks can be faster than classes or faster when using HOCs.
+This is particularly exciting because functional components provide better code composition than classes.
+Hooks are a new addition in React 16.8. They let you use state and other React features without writing a class.
+
+With React Hooks, there is the freedom to create and share stateful logic in React components. 
+It is even possible to share such hooks publicly as “npm” (node package manager) packages.
+These are called “React Hooks” because they allow developers to hook into React features that were previously unexposed publicly.
+
+React Hooks allows you to use different features of React more effectively
+Hooks in React are built-in functions that allow developers to use lifecycle and state functions inside functional components.
+From rendering UI to handling state logic Hooks can do everything.\\\\\
+
+
+Why do we need React Hooks and what are they about?
+React Hooks API
+Managing application state globally with React Hooks
+Creating custom hooks and unit testing
+Utilizing custom hooks to reduce repetitive code across an application
+

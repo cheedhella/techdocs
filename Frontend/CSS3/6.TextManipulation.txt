@@ -1,0 +1,45 @@
+https://learning.oreilly.com/library/view/beginning-css-cascading/9780470096970/ch05.html
+
+Setting the line-height below the value of 1 is invalid as 0.5*12=6px which is less than the font-size. On a block container element whose content is composed of inline-level elements, 'line-height' specifies the minimal height of line boxes within the element
+
+line-height: normal|number|length|initial|inherit;
+
+Learn how to work with line height and other text styles in order to change the appearance of text on your page. Specifically, work with the line height property to add space between paragraph lines, work with font weight in order to change the boldness of the text, and work with the text transform property in order to set the text as uppercase.
+
+
+line-height 
+    The line-height CSS property sets the height of a line box. 
+    It's commonly used to set the distance between lines of text. 
+    On block-level elements, it specifies the minimum height of line boxes within the element. 
+    On non-replaced inline elements, it specifies the height that is used to calculate line box height.
+
+/* Keyword value */
+line-height: normal;
+
+/* Unitless values: use this number multiplied
+by the element's font size */
+line-height: 3.5;
+
+/* <length> values */
+line-height: 3em;
+
+/* <percentage> values */
+line-height: 34%;
+
+normal - Depends on the user agent. Desktop browsers (including Firefox) use a default value of roughly 1.2, depending on the element's font-family.
+
+<number> (unitless)
+    The used value is this unitless <number> multiplied by the element's own font size. 
+    The computed value is the same as the specified <number>. 
+    In most cases, this is the preferred way to set line-height and avoid unexpected results due to inheritance.
+
+<length>
+    The specified <length> is used in the calculation of the line box height. 
+    Values given in em units may produce unexpected results (see example below).
+
+<percentage>
+    Relative to the font size of the element itself. 
+    The computed value is this <percentage> multiplied by the element's computed font size. 
+    Percentage values may produce unexpected results.
+
+

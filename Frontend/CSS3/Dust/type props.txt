@@ -1,0 +1,78 @@
+ CSS Type properties
+Property 	CSS code
+Font 	font: [font-family] | caption | icon | menu | messagebox | smallcaption | statusbar | window | document | workspace | desktop | info | dialog | button | pull-down-menu | list | field | inherit]
+Size 	font-size: [ 9 | 10 | 12 | 14 | 16 | 18 | 24 | 36 | xx-small | x-small | small | medium | large | x-large | xx-large | smaller | larger | length | percentage | inherit]
+Style 	font-style: [normal | italic | oblique | inherit]
+Line Height 	line-height: [normal | number | length | percentage | inherit]
+Weight 	font-weight: [normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | inherit]
+Variant 	font-variant: [normal | small-caps | inherit]
+Case 	text-transform: [capitalize | uppercase | lowercase | none | inherit]
+Color 	color: [rgbvalue | colorname]
+Decoration 	text-decoration: [none | [underline || overline || line-through || blink] | inherit] 
+
+
+Background properties
+Property 	CSS code
+Background Color 	background-color: [rgbvalue | colorname]
+Background Image 	background-image: [url | none]
+Repeat 	background-repeat: [no-repeat | repeat-x | repeat-y | repeat ]
+Attachment 	background-attachment: [fixed | scroll ]
+Horizontal and Vertical Position 	background-position: [percentage | length] | [top | center | bottom] || [left | center | right] | inherit] 
+
+CSS Block properties
+Property 	CSS code
+Word Spacing 	word-spacing: [normal | length | inherit]
+Letter Spacing (kerning) 	letter-spacing: [normal | length | percentage | inherit]
+Vertical Alignment 	vertical-align: [baseline | sub | super | top | text-top | middle | bottom | text-bottom | percentage | length | inherit]
+Text Align 	text-align: [left | right | center | justify | string | inherit]
+Text Indent 	text-indent: [length | percentage | inherit]
+Whitespace 	white-space: [normal | pre | nowrap | inherit] 
+
+CSS Box properties
+Property 	CSS code
+Width 	width: [length | percentage | auto | inherit]
+Height 	height: [length | percentage | auto | inherit]
+Float 	float: [left | right | none | inherit]
+Clear 	clear: [none | left | right | both | inherit]
+Padding: Top 	padding-top: [width | inherit]
+Padding: Right 	padding-right: [width | inherit]
+Padding: Bottom 	padding-bottom: [width | inherit]
+Padding: Left 	padding-left: [width | inherit]
+Margin: Top 	margin-top: [width | inherit]
+Margin: Right 	margin-right: [width | inherit]
+Margin: Bottom 	margin-bottom: [width | inherit]
+Margin: Left 	margin-left: [width | inherit] 
+
+CSS Border properties
+Property 	CSS code
+Top Width 	Border-top-width: [medium | thin | thick | length]
+Right Width 	Border-right-width: [medium | thin | thick | length]
+Bottom Width 	Border-bottom-width: [medium | thin | thick | length]
+Left Width 	Border-left-width: [medium | thin | thick | length]
+Color 	Border-color: [color | transparent | inherit]
+Style 	Border-style: [none | hidden | dotted | dashed | solid | double | grooved | ridge | inset | outset | inherit] 
+
+CSS List properties
+Property 	CSS code
+Type 	list-style-type: [disc | circle | square | decimal | lower-roman | upper-roman | lower-alpha | upper-alpha | none | inherit]
+Bullet Image 	list-style-image: [url | none | inherit]
+Position 	list-style-position: [inside | outside | inherit] 
+
+CSS Positioning properties
+Property 	CSS code
+Type 	position: [static | relative | absolute | inherit]
+Visibility 	visibility: [inherit | visible | collapse | hidden]
+Z-Index 	z-index: [auto | integer | inherit]
+Overflow 	overflow: [visible | hidden | scroll | auto | inherit]
+Placement: Left 	left: [length | percentage]
+Placement: Top 	top: [length | percentage]
+Placement: Width 	width: [length | percentage]
+Placement: Height 	height: [length | percentage]
+Clip: Top | Right | Bottom | Left 	clip: [rect (t, r, b, l)| auto | inherit] 
+
+CSS Extensions properties
+Property 	CSS code
+Page Break: Before 	page-break-before: [auto | always | avoid | left | right | inherit]
+Page Break: After 	page-break-after: [auto | always | avoid | left | right | inherit]
+Cursor 	cursor: [auto | crosshair | default | default | e-resize | ne-resize | nw-resize | n-resize | se-resize | sw-resize | s-resize | e-resize | w-resize | text | wait | help | inherit]
+Filter 	filter: [alpha | blendtrans | blur | chroma | dropshadow | fliph | flipv | glow | gray | invert | light | mask | revealtrans | shadow | wave | xray] 

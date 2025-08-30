@@ -1,0 +1,334 @@
+What is Knockout JS?
+	- JavaScript based MVVM library;
+
+Why Knockout JS?
+	- It helps you in creating rich and responsive user interfaces with a clean data model;
+	- If you have a section of UI that needs to be updated dynamically(eg, changing on user's action or external data source changes), KO can help you
+	  in implementing it very easily and maintainbly;
+
+Knockout JS features?
+	- Declarative Bindings
+		- You can connect DOM elements to the ViewModel via data-bind
+	- Automatic UI Refresh
+		- Whenever underlying data model changes, UI gets updated automatically and vice-versa. No need of writing any extra code.
+	- Elegant Dependency Tracking
+		If you declare a ViewModel property as Observable, then each time it is updated, it gets reflected in all places where it is used.
+		You don't need to write any extra code for this, KO takes care of refreshing related dependencies.
+	- Easily Extensible
+		- Implement custom behaviours as new declarative bindings for easy reuse in just a few lines of code.
+	
+
+More features?
+	- Free and Open Source;
+	- Small and light weight(Minified version is just 66kb);
+	- Pure JS library, No dependency on any other libraries, Can be used along with any other library;
+	- Supports all mainstream browsers(IE 6+, Firefox 3.5+, Chrome, Opera, Safari (desktop/mobile));
+	- Fully documented;
+
+Download and Installation
+	There are 2 ways of doing this:
+	Approach 1:
+		- Download from https://knockoutjs.com/downloads/
+		- <script type="text/javascript" src="./knockout-3.5.1.js" ></script>
+	Approach 2: Use copy hosted in CDN by Microsoft/CDNJS
+		- <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.5.1.js"></script>
+		- <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+
+
+Table of Contents
+1. What is Knockout, Features of KO, Downloading and Installation;
+2. Observables, Computed Observables, Pure Computed Observables, Observable Arrays; ko.observable() ko.computed() ko.pureComputed() ko.observableArray();
+3. Built-in Bindings: text, html, visible, hidden, style, css, attr;
+4. Form Field Bindings: click, event, submit, enable, disable, value, textInput, hasFocus, checked, options, selectedOptions, uniqueName;
+5. Control Flow Bindings: if, ifnot, foreach($data, $parent, $parents, $root, $index), with;
+6. Custom Bindings
+7. Templates
+8. Components
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Templates 
+	Template is a set of DOM elements which can be used repetitively. It populates the associated DOM element with the results of rendering a template.
+	There are 2 ways of creating a template.
+	1. Native Templating 
+		This method doesn't require any external library. It supports control-flow bindings such as if, foreach, with;
+		<div class="col-xs-12" data-bind="template:{name:'header'}"></div> // KO uses name parameter that points to ID of a template.
+	2. String-based Templating
+		KO passes the ViewModel values to third party engine such as JQuery.tmpl/Underscore and injects the resulting markup into document.
+
+	For more examples on Templates, Visit: 
+		https://www.tutorialspoint.com/knockoutjs/knockoutjs_templating.htm
+		https://www.sitepoint.com/beginners-guide-to-knockoutjs-part-3
+		https://www.codeproject.com/Articles/1224023/KnockoutJS-Template-Tutorial
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Custom Bindings
+	Using KO, you are not limited to built-in bindings like click/value etc, you can create your own binding.
+
+To register a new binding, add a new JavaScript object with 2 callback properties(init and update), as a property of ko.bindingHandlers:
+ko.bindingHandlers.yourBindingName = {
+    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        // This will be called when the binding is first applied to an element
+        // Set up any initial state, event handlers, etc. here
+
+        // element - target DOM element that is used for binding;
+        // valueAccessor - accessor to the target property (for example, a call without parameters gives the property value for the current model).
+        // allBindings - accessor to all model values bound to a target DOM element;
+        	For eg, allBindings.has("name") and allBindings.get("name") allow to operate with the value of the name binding
+    },
+    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        // This will be called once when the binding is first applied to an element,
+        // and again whenever any observables/computeds that are accessed change
+        // Update the DOM element based on the supplied values here.
+    }
+};
+
+// data binding, binding syntax, binding context, binding life cycle events;
+You can apply above binding to any DOM element: <div data-bind="newBindingName: specificValue"></div>
+https://learning.oreilly.com/library/view/getting-started-with/9781783984008/ch05s03.html - Binding Context
+https://learning.oreilly.com/library/view/getting-started-with/9781783984008/ch05s04.html - Custom Binding
+https://www.sitepoint.com/beginners-guide-to-knockoutjs-part-3/
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+http://kojs.dan.doezema.com/examples/3 - shopping cart example; code - https://github.com/veloper/ko-js-examples
+https://learning.oreilly.com/library/view/JavaScript+Frameworks+for+Modern+Web+Development:+The+Essential+Frameworks,+Libraries,+and+Tools+to+Learn+Right+Now/9781484249956/html/333189_2_En_6_Chapter.xhtml#PC1
+https://github.com/veloper/ko-js-examples
+
+JQuery vs Knockout
+	https://knockoutjs.com/documentation/introduction.html
+	https://www.udemy.com/course/master-knockoutjs-javascript/learn/lecture/774300#overview
+
+
+MVVM Pattern
+	- It is a design pattern for building User Interfaces;
+
+	https://knockoutjs.com/documentation/observables.html
+	http://knowledgehills.com/knockoutjs/knockoutjs-application-structure.htm
+	http://knowledgehills.com/knockoutjs/model-view-viewmodel-mvvm.htm
+	https://learning.oreilly.com/videos/building-a-single/9781783284054/9781783284054-video2_3
+	https://learning.oreilly.com/library/view/mastering-arcgis-server/9781784396459/ch07s07.html - MVVM
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+using, let, component;
+
+5. Custom Bindings: 
+6. Plugins: mapping;
+7. Other Techniques: 
+Extenders
+subscribe observables - if you want to register your wfs
+ko.applyBindings(model1, doucment.getElementById()); // you can bind viewmodel to part of UI, need not to be body;
+2 data bindings at one time - <button data-bind='click: buttonClick, enable: isAccepted'>Download</button>
+class binding?
+ko.applyBindings(), ko.observable(), ko.computed();
+ko.isObservable - returns true for observables, observable arrays, and all computed observables.
+ko.isWritableObservable - returns true for observables, observable arrays, and writable computed observables (also aliased as ko.isWriteableObservable).
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+https://stackoverflow.com/questions/9589419/difference-between-knockout-view-models-declared-as-object-literals-vs-functions?rq=1
+ko.toJS(self.cartItem)
+	
+Features of Knockout JS?
+	
+
+	
+	Declarative bindings
+	Dependency tracking Templating (using a native template engine although other templating engines can be used, such as jquery.tmpl)
+DeclarativeBindings
+
+Easily associate DOM elements with model data using a concise, readable syntax
+
+
+DependencyTracking
+
+Implicitly set up chains of relationships between model data, to transform and combine it
+
+Working with ko.observable & ko.computed
+
+Declarative Binding − HTML DOM elements are connected to the model through data-bind attribute using a very simple syntax. It is made easy to achieve responsiveness using this feature.
+
+Dependency Tracking − Relationship between KO attributes and KO library functions/components is transparent. Automatically tracks data changes in KO attribute and updates respective affected areas.
+
+
+Extensible − Extends custom behaviour very easily.
+
+
+   	  	Sometimes an HTML tag does not work, so Knockout also allows you to specify data bindings with HTML comments, as shown in Example 1-1.
+<!-- ko -->
+<!-- /ko -->
+
+
+            One of the key feature of KO is that it updates the UI automatically whenever the view model changes.
+            How does KO know when part of your view model changes?
+               You need to declare your view model properties as observables.
+               Observables are special JS objects that can automatically detect objects dependant on it and notify them about changes;
+
+If this parameter is an observable value, the binding will update the element’s content whenever the value changes. If the parameter isn’t observable, it will only set the element’s content once and will not update it again later.
+<div data-bind="html: details"></div>
+<script type="text/javascript">
+    var viewModel = {
+        details: ko.observable() // Initially blank
+    };
+    viewModel.details("<em>For further details, view the report <a href='report.html'>here</a>.</em>"); // HTML content appears
+</script>
+
+
+
+
+
+https://learning.oreilly.com/library/view/knockoutjs/9781491914298/ch06.html
+https://learning.oreilly.com/videos/building-a-single/9781783284054/9781783284054-video6_3
+https://learning.oreilly.com/library/view/knockoutjs/9781491914298/ch07.html - Observables
+https://learning.oreilly.com/library/view/pro-javascript-for/9781430244615/Chapter09.html
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Components
+	- Component is a self-contained, reusable code block;
+	- Component can represent an individual control OR widget OR entire section of your application;
+	- Component contains it's own view(or template) and optionally it's own ViewModel;
+	- Component can receive parameters and optionally write back changes to them or invoke callbacks;
+	- Components can be composed together(nested) OR inherited from other components;
+	- It lets you define your own conventions/logic for configuration and loading;
+
+
+
+
+
+	ko.components.register('like-widget', {
+    viewModel: function(params) {
+        // Data: value is either null, 'like', or 'dislike'
+        this.chosenValue = params.value;
+         
+        // Behaviors
+        this.like = function() { this.chosenValue('like'); }.bind(this);
+        this.dislike = function() { this.chosenValue('dislike'); }.bind(this);
+    },
+    template:
+        '<div class="like-or-dislike" data-bind="visible: !chosenValue()">\
+            <button data-bind="click: like">Like it</button>\
+            <button data-bind="click: dislike">Dislike it</button>\
+        </div>\
+        <div class="result" data-bind="visible: chosenValue">\
+            You <strong data-bind="text: chosenValue"></strong> it\
+        </div>'
+});
+
+
+	
+
+Custom Elements
+	- They are optional but provide convinient syntax to consume components;
+	- Instead of needing placeholder <div>s into which components are injected with bindings, you can use more self-description markup with custom 
+		element names; Eg: <course-placeholder> or <product-placeholder>
+	- KO takes care of compatibility event with old browsers such as IE6;
+ 
+Components Lifecycle
+	- Component loaders are asked to supply the viewmodel and template;
+	- multiple component loaders may be consulted, and the first one that recognises the name may supply view mode or template or both; 
+	 This process takes place only once per component type as KO caches the result;
+	- Component template is cloned and injected into the container element;
+	- If the component has a viewmodel, it is instantiated;
+	- Viewmodel is bound to the view;
+	- Component is torn down adn viewmodel is disposed;
+
+Template-only components
+
+
+Define and Register components
+ko.components.register('component-name', {
+   viewModel: {...},    //function code
+   template: {....)	//function code
+});
+The component-name can be any nonempty string.
+
+viewModel is optional, and can take any of the viewModel formats listed in the next sections.
+
+template is required, and can take any of the template formats listed in the next sections.
+	- 
+Knockout custom components are quite powerful. They let you encapsulate both HTML and a Knockout ViewModel together in a standalone and reusable component. To create a component, you need three things:
+
+A unique name
+    The custom component I created is called upsert-cart-item.
+A ViewModel
+    The ViewModel can be inline or an existing ViewModel. I’ve chosen the latter for better organization.
+A template
+    The template can be inline, or it can reference a template by ID. I’ve chosen the latter once again for better organization. 
+
+To start, the component needs to be registered with Knockout.
+ko.components.register('upsert-cart-item', {
+  viewModel: CartItemViewModel,
+  template: { element: 'cart-item-form' }
+});
+
+
+
+
+Knockout can even create complete reusable HTML components (custom HTML tags with their own attributes and behaviors).
+ Knockout provides a custom component system that produces reusable HTML elements with custom tag names, markup, and behavior.
+ Knockout components are the intersection of several things:
+    A factory function that creates a view model for each instance of the custom component on a page
+    An HTML template with its own Knockout bindings that will be injected wherever the component is used
+    A custom tag registration that tells Knockout where to find the template and how to instantiate its view model when it encounters component tags on a page
+
+
+Once a component view model and template have been defined, the component itself must be registered with Knockout. This tells Knockout how to resolve component instances when it encounters the component’s custom tag in the DOM and also what template and view model to use when rendering the component’s contents.
+
+ko.components.register() function receives two arguments: the name of the new component’s custom tag, and an options hash that provides Knockout with the information it needs to construct the component.
+
+Since markup for the input list element has been defined in a <template> element, the Knockout component system only needs to know what element ID it should use to find that element in the DOM. The template object in the options hash contains this ID in its element property. For smaller components, the entire HTML template could be assigned, as a string, to the template property directly.
+
+To construct a view model for the component, a factory function is assigned to the viewModel property of the options hash. This property can also reference a regular constructor function, but using factory functions sidesteps potential problems that arise when event bindings reassign the this keyword within view models. Regardless of approach, the view model function will receive a params object populated with values from the template’s binding declarations.
+Knockout can load component templates and view model functions via RequireJS automatically.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Automatic Module Detection using RequireJS
+	- In this example, we use Require JS to load our View Model and Template;
+	- Define Template in an external file and load it using RequireJS;
+
+What is RequireJS?
+	- It is JavaScript library that is used for Automatic Module Detection and loading of JavaScript modules and references;
+	- It is a Open Source project hosted on GitHub;
+
+Installation of RequireJS>
+	- Download from https://requirejs.org/docs/release/2.3.6/minified/require.js OR https://github.com/requirejs/text
+		https://raw.githubusercontent.com/requirejs/text/latest/text.js
+	- Using NuGet package manager, if you are using Visual Studio;
+	- install-package requirejs
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+MVVM Pattern
+	The model separates the application's Model (stored data), View (UI) and View Model (JavaScript Representation of model).
+	
+	Model - Domain object/Actual data; Eg: Contact object which hold email, mobile number etc; It only holds information, It doesn's hold behaviours that manipulate information; // Business data, Business rules, Data Access;
+	View - It presents the Data to end user and end user interacts with it; It can hold behaviours that can manipulate data;
+		For eg, model might contain a date in UTC format, View can have behaviours to display it in user timezone; // User Interface;
+		View can also have behaviours for responding to user events, which ultimately manipulates the properties of model;
+		View in MVVM can container behaviours, events, data bindings that ultimately requires the knowledge of underlying model and ViewModel;
+	ViewModel - Middle man b/w Model and View;
+
+MVVM was designed to implement data binding between your ViewModel and your View. This is what KnockoutJS does for us and does very well. It is accomplished using some simple-to-implement HTML attributes
+
+https://www.udemy.com/course/master-knockoutjs-javascript/learn/lecture/760974#overview
+View	---------- UI Events ------------>   ViewModel   <--------- Model change evnets ---------   Model
+		<----- Property changed events --- 				 ---------- Update ---------------------> 
+		<----- Viewmodel data ------------ 				 <--------- Read ------------------------
+
+
+It is one of the most lightweight JavaScript libraries available today. It also doesn’t try to be an all-in-one framework. 
+It serves a single purpose: data binding your ViewModel to your user interface.
+
+
+Implementing Knockout involves three distinct things: a view that contains HTML and CSS elements that get data-bound to it, a ViewModel that contains the data to bind to the view, and telling Knockout to perform the data binding to the view with the ViewModel.
+
+	

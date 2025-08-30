@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Pure Computed Observables</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <p>First Name: <input data-bind = "value: firstName" /></p>
+   <p>Last Name: <input data-bind = "value: lastName" /></p>
+   <p>Full Name: <input data-bind = "value: fullName" /></p>
+   <script>
+      /* 
+         What is Pure Computed Observable?
+            A Computed Observable should be declared as Pure Computed Observable, if it is simply calculating and returning the value, without modifying other properties state. They help KO to manage memory efficiently.
+      */
+      function Employee(first, last) {
+         var self = this;
+         self.firstName = ko.observable(first);
+         self.lastName = ko.observable(last);
+
+         self.fullName = ko.pureComputed({
+            read: function() {
+               return self.firstName() + " " + self.lastName();
+            },
+            write: function(val) {
+               var namesArr = val.split(' ');
+               self.firstName(namesArr[0]);
+               self.lastName(namesArr[1]);
+            }
+         });
+      }
+      
+      ko.applyBindings(new Employee('Malli', 'Ch'));
+   </script>
+</body>
+</html>

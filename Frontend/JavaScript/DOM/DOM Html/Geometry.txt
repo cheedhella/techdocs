@@ -1,0 +1,260 @@
+Sometimes it is necessary to determine the precise geometry of an element.
+For eg, If you want to use CSS to dynamically position an element(such as tooltip) next to some element, you need determine the location of that element.
+
+Coordinates can be relative to document, window/viewport, or another element.
+
+If the document is smaller than the viewport, or if it has not been scrolled, the upperleft corner of the document is in the upper-left corner of the viewport and the document and viewport coordinate systems are the same.
+Document coordinates are more fundamental than viewport coordinates, and they do not change when the user scrolls. 
+Nevertheless, it is quite common to use viewport coordinates in client-side programming. 
+We use document coordinates when we specify an element position using CSS. 
+But the simplest way of querying the position of an element returns the position in viewport coordinates.
+Similarly, when we register handler functions for mouse events, the coordinates of the mouse pointer are reported in viewport coordinates.
+In some cases, document based coordinates(for positioning an element using CSS) are used  and in someother cases, window based coordinates(inside event handler, query the event object to get the coordinates of mouse pointer relative to viewport) are used.
+
+In general, however, to convert between the two coordinate systems, we must add or subtract the scroll offsets.
+
+----------------------------------------------
+offsetLeft - gives us the distance in pixels from an element's outside left border to the inside left border of offsetParent.
+offsetTop - gives us the distance in pixels from an element's outside top border to the inside top border of offsetParent.
+offsetHeight - Returns the height of an element, including borders and padding if any, but not margins
+offsetWidth - Returns the width of an element, including borders and padding if any, but not margins
+offsetParent
+	Closest ancestor element that has CSS position not equal to static
+	Closest <table>, <th>, <td> that CSS position equal to static
+	If none are found, <body> element.
+
+scrollLeft - returns the distance in pixels from the actual left edge of an element to its currently visible left edge.
+scrollTop - returns the distance in pixels from the actual top edge of an element to its currently visible top edge.
+scrollHeight, scrollWidth - returns the actual height and width of an element(when there are no scroll bars), no matter how much of it is visible currently.
+	You can use these properties with the elements that can be scrolled such as <body>, <textarea> elements.
+	When the element has been not scrolled, both scrollLeft and scrollTop are 0.
+	If you scroll the element vertically, scrollTop is greater than 0 indicating that there is content at the top that is not visible.
+	If you scroll the element horizontally, scrollLeft is greater than 0 indicating that there is content at the left that is not visible.
+
+clientLeft 
+	Returns the width of the left border of an element in pixels. It includes the width of vertical scrollbar if text direction is right-to-left and if there is an overflow causing a left vertical scrollbar to be rendered.
+	clientLeft does not include the left margin or the left padding. Read-only.
+	Example: https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft
+clientTop - Returns the width of the top border of an element in pixels. It does not include the top margin or padding. clientTop is read-only.
+clientHeight
+	Returns the height of the content area plus the width of left and right padding, without considering any horizontal scrollbar, border, margin.
+	clientHeight can be calculated as CSS height + CSS padding - height of horizontal scrollbar (if present).
+	This property will round the value to an integer. If you need a fractional value, use element.getBoundingClientRect().
+clientWidth - Returns the width of the content area plus the width of top and right padding, without considering any vertical scrollbar, border, margin.
+
+getBoundingClientRect() - returns an object with left, right, top and bottom properties. Some w3c compliant browsers also return height, width properties.
+	left, top - window coordinates of the upper left corner of the element.
+	right, bottom - window coordinates of the lower right corner of the element.
+	http://stackoverflow.com/questions/10230715/why-getboundingclientrect-gives-different-values-in-ie-and-firefox
+
+-------------------------
+Window object
+	// pageXOffset, pageYOffset are read-only, If you want to actually scroll a page using javascript, use window.scrollTo(), scroll(), scrollBy() methods.
+	pageXOffset - amount of the page content(in pixels) that has been scrolled left.
+		For eg, if you scroll down a page so that leftmost(widthwise) 100 pixels are not visible, then window.pageXOffset returns 100.
+	pageYOffset - amount of the page content(in pixels) that has been scrolled upwards.
+		For eg, if you scroll down a page so that topmost(heightwise) 100 pixels are not visible, then window.pageYOffset returns 100.
+	
+	innerHeight
+	innerWidth
+
+	
+ 
+-------------------------
+
+
+-------------------------
+
+-------------------------
+
+
+
+-------------------------
+1. Cross-browser way of calculating scroll offsets?
+	// how much of a page is scrolled horizontally n vertically?
+	function getScrollOffsets() {
+		// Works in all browsers except IE8 and before
+		if(typeof(window.pageXOffset ) == 'number') {
+			return {x:window.pageXOffset, y:window.pageYOffset};
+		}
+		// Standards mode
+		if(document.compatMode == 'CSS1Compat') {
+			return {x:document.documentElement.scrollLeft, y:document.documentElement.scrollTop};
+		}
+		// Quirks mode
+		return {x:document.body.scrollLeft, y:document.body.scrollTop};
+	}
+	
+2. Get viewport size(height, width) or window size?
+	function getViewportSize() {
+		// Works in all browsers except IE8 and before
+		if(typeof(window.innerWidth) == 'number') {
+			return {w:window.innerWidth, h:window.innerHeight};
+		}
+		// Standards mode
+		if(document.compatMode == 'CSS1Compat') {
+			return {w:document.documentElement.clientWidth, h:document.documentElement.clientHeight};
+		}
+		// Quirks mode
+		return {w:document.body.clientWidth, h:document.body.clientHeight};
+	}
+
+3. Calculating the geometry(coordinates, height n width) of an element?
+	// Top-Left coordinates of an element
+	var box = e.getBoundingClientRect(); // Get position in viewport coordinates - do the below to convert them into document coordinates
+	var offsets = getScrollOffsets(); // Utility function defined above
+	var x = box.left + offsets.x; // Convert to document coordinates
+	var y = box.top + offsets.y;
+	
+	// height n widht of an element
+	// object returned getBoundingClientRect() in w3c compliant browsers, also contain height and width properties. But, this is not the case with original IE implementaiton.
+	var box = e.getBoundingClientRect();
+	var w = box.width || (box.right - box.left);
+	var h = box.height || (box.bottom - box.top);
+
+	Note: window coordinates returned by getBoundingClientRect() include padding and border of an element, but not margin.
+	Also, the rectangle objects (and rectangle object lists) returned by getBoundingClientRect() and getClientRects() are not live.
+	For more about getClientRects(), see section 15.8.2 of Javascript definitive guide 6th ed.
+	------------------------------
+	What if a browser doesn't support getBoundingClientRect()?
+		// size of element
+		element.offsetHeight, element.offsetWidth - returns the height/width of the element including padding, border but not margin.
+		
+		// document coordinates of top-left corner
+		element.offsetLeft, element.offsetTop - In many cases, these contains the document coordinates(offsetParent is null in that case).
+			// returns the document coordinates of an element
+			function getElementPosition(e) {
+				var x = 0, y = 0;
+				while(e != null) {
+					x += e.offsetLeft;
+					y += e.offsetTop;
+					e = e.offsetParent;
+				}
+				return {x:x, y:y};
+			}
+			This is not the final word on element positioning, however—this getElementPosition() function does not always compute the correct values, and we’ll see how to fix it below.
+			When a document contains scrollable elements with overflowing content, the getElementPosition() method defined above does not work correctly because it does not take scrollbar position into account.
+				function getElementPos(elt) {
+					var x = 0, y = 0;
+					// Loop to add up offsets
+					for(var e = elt; e != null; e = e.offsetParent) {
+						x += e.offsetLeft;
+						y += e.offsetTop;
+					}
+					// Loop again, through all ancestor elements to subtract scroll offsets.
+					// This subtracts the main scrollbars, too, and converts to viewport coords.
+					for(var e=elt.parentNode; e != null && e.nodeType == 1; e=e.parentNode) {
+						x -= e.scrollLeft;
+						y -= e.scrollTop;
+					}
+					return {x:x, y:y};
+				}
+		
+4. Find the elemnt at given viewport coordinates - reverse of getBoundingClientRect()?
+	Use document.elementFromPoint(x, y);
+	elementFromPoint(x,y) was defined to return the element at the given coordinates within the view port (the visible area) of the web page, or null (if the coordinates are outside of the viewport).
+	Example:
+		document.addEventListener("click", function(event){
+			var el = document.elementFromPoint(event.clientX, event.clientY); // in case of some events, event.target already contains this information
+			console.log(el.nodeName);
+		});
+		
+		
+		
+		
+This function will return any document’s height. It’s been tested in IE6/7, FF2/3, Safari (Windows), Google Chrome and Opera 9.5. If the actual document’s body height is less than the viewport height then it will return the viewport height instead:
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        Math.max(D.body.scrollHeight, D.documentElement.scrollHeight),
+        Math.max(D.body.offsetHeight, D.documentElement.offsetHeight),
+        Math.max(D.body.clientHeight, D.documentElement.clientHeight)
+    );
+}
+-------------------------
+partial interface Window {
+  MediaQueryList matchMedia(DOMString media_query_list);
+  readonly attribute Screen screen;
+
+  // viewport
+  readonly attribute long innerWidth;
+  readonly attribute long innerHeight;
+
+  // viewport scrolling
+  readonly attribute long scrollX;
+  readonly attribute long pageXOffset;
+  readonly attribute long scrollY;
+  readonly attribute long pageYOffset;
+  void scroll(long x, long y);
+  void scrollTo(long x, long y);
+  void scrollBy(long x, long y);
+
+  // client
+  readonly attribute long screenX;
+  readonly attribute long screenY;
+  readonly attribute long outerWidth;
+  readonly attribute long outerHeight;
+};
+
+-------------------------------
+Good links:
+http://javascript.info/tutorial/coordinates
+http://www.howtocreate.co.uk/tutorials/javascript/browserwindow
+http://stackoverflow.com/questions/2506958/how-to-find-in-javascript-the-current-scroll-offset-in-mobile-safari-iphon
+http://www.javascripter.net/faq/browserw.htm
+http://www.jr.pl/www.quirksmode.org/viewport/compatibility.html
+-------------------------------
+TODO:
+quirks mode vs standards mode
+	https://developer.mozilla.org/en-US/docs/Quirks_Mode_and_Standards_Mode
+	http://en.wikipedia.org/wiki/Quirks_mode
+	http://stackoverflow.com/questions/5374099/how-do-i-force-internet-explorer-to-render-in-standards-mode-and-not-in-quirks
+	http://www.quirksmode.org/css/quirksmode.html
+	
+<doctype> 
+http://www.quirksmode.org/dom/tests/elementfrompoint.html
+ Not the scroll height, not the document height, but the actual window height.
+ zoom(ctrl+, ctrol-) - pixels, mouse click coordinates
+ 
+http://www.zehnet.de/2010/11/19/document-elementfrompoint-a-jquery-solution/
+elementFromPoint() only sees visible nodes.
+http://james.padolsey.com/
+------------------------------------------------------------------------
+http://www.icab.de/blog/2011/10/17/elementfrompoint-under-ios-5/
+function documentCoordinateToViewportCoordinate(x,y) {
+  var coord = new Object();
+  coord.x = x - window.pageXOffset;
+  coord.y = y - window.pageYOffset;
+  return coord;
+}
+
+function viewportCoordinateToDocumentCoordinate(x,y) {
+  var coord = new Object();
+  coord.x = x + window.pageXOffset;
+  coord.y = y + window.pageYOffset;
+  return coord;
+}
+----------------------- Scrolling -------------------------------------
+scrollTo() method of the Window object (and its synonym scroll()) takes the X and Y coordinates of a point (in document coordinates) and sets these as the scrollbar offsets.
+
+code scrolls the browser so that the bottom-most page of the document?
+	// Get the height of the document and viewport. offsetHeight is explained below.
+	var documentHeight = document.documentElement.offsetHeight;
+	var viewportHeight = window.innerHeight; // Or use getViewportSize() above
+	// And scroll so the last "page" shows in the viewport
+	window.scrollTo(0, documentHeight - viewportHeight);
+
+The scrollBy() method of the Window is similar to scroll() and scrollTo(), but its arguments are relative and are added to the current scrollbar offsets. 
+	Speed readers might like a bookmarklet like this one, for example:
+	// Scroll 10 pixels down every 200 ms. Note there is no way to turn this off!
+	javascript:void setInterval(function() {scrollBy(0,10)}, 200);
+
+Often, instead of scrolling to a numeric location in document, we just want to scroll so
+that a certain element in the document is visible. You could compute the position of
+the element with getBoundingClientRect(), convert that position to document coordinates,
+and then use the scrollTo() method, but it is easier to just call the scrollInto
+View() method on the desired HTML element. This method ensures that the element
+on which it is invoked is visible in the viewport. By default, it tries to put the top edge
+of the element at or near the top of the viewport. If you pass false as the only argument,
+it will try to put the bottom edge of the element at the bottom of the viewport. The
+browser will also scroll the viewport horizontally as needed to make the element visible.

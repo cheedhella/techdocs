@@ -1,0 +1,17 @@
+1. null vs undefined
+
+2. what is a loosely typed language?
+
+3. javascript datatypes?
+
+4. how to find the actual type of a variable? how to check if a variable is array?
+
+5. local vs global variables
+
+6. String methods: substr vs substring vs slice? split(" ") vs split("")
+   Convert a string to array of chars? "abcd".split(""); // returns ["a", "b", "c", "d"]
+
+
+http://stackoverflow.com/questions/245062/whats-the-difference-between-javascript-and-java
+
+

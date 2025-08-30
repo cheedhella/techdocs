@@ -1,0 +1,388 @@
+Event
+	An event is a signal from the browser that something has happened.
+	
+	There are mainly 3 categories of events:
+		1. DOM events, events that are fired by dom elements when the user does something(for eg, mouse click).
+		2. Window events, event that are fired by browser window(for eg, window resized).
+		3. events that are not related to user action(for eg, load event that is fired when a page has been loaded, readystatechange).
+		
+Event Handler
+	A function that reacts to an event or a function that is called when an event is fired.
+	
+	JavaScript event handling is single-threaded, so handlers are executed sequentially. That means, if two events happen simultanteously, for example 
+	mouseover (mouse has come over an element) and mousemove (mouse moved over an element), their handlers will be executed one after another.
+	
+How to attach a handler to an event?
+	A handler can be set directly in the markup, right into the attribute named onevent.
+	For example, to process a click event on the input button, it is possible to assign an onclick handler like this:
+	<input id="b1" value="Click me" onclick="alert('Thanks!');" type="button"/>
+	There are certain drawbacks of this method. When a handler becomes longer than one line - readability suffers greatly.
+	
+    To get an element and assign a handler to the property onevent.
+		<input id="myElement" type="button" value="Press me"/>
+		<script>
+			document.getElementById('myElement').onclick = function() {
+				alert('Thanks');
+			}
+		</script>
+
+	It is possible to use an existing function:
+	function doSomething() {
+		alert('Thanks!')
+	}
+	<input type="button" id="button" onclick="doSomething()"/> // brackets are required here
+	document.getElementById('button').onclick = doSomething; // brackets are not required here
+	
+	It has a problem: only one handler for a certain event type can be set.
+	
+	input.onclick = function() { alert(1) }
+	// ...
+	input.onclick = function() { alert(2) } // replaces the previous handler
+	
+	Of course, it’s possible to copy old handler and run it manually inside a new one. But it is better to use more advanced methods of assignment.
+	
+	----------------
+	Way3 - works only in IE8 or less.
+		Assigning a handler: element.attachEvent( "on"+event, handler)
+		Removing a handler: element.detachEvent( "on"+event, handler)
+		Eg:
+		var input = document.getElementById('button');
+		function handler() {
+			alert('Thanks!');
+		}
+		input.attachEvent("onclick" , handler) // assign the handler
+		input.detachEvent("onclick", handler) // remove the handler
+	Pros: we can attach more than one handler for a given element and an event.
+	Cons: Will work in only in IE8 or less. Also, 'this' keyword inside handler is undefined.
+	----------------
+	Way4 - works in IE9 or greater, and other browsers as well.
+		Assigning a handler: element.addEventListener(event, handler, phase); // phase, which is usually not used and set to false.
+		Removing a handler: element.removeEventListener(event, handler, phase)
+		Eg:
+		elem.addEventListener("click" , handler, false) // assign the handler
+		elem.removeEventListener( "click", handler, false) // remove the handler
+	Pros: we can attach more than one handler for a given element and an event.
+	Cons: Will not work in in IE8 or less.
+	----------------
+	Cross-browser Way:
+		Assigning a handler: addEvent(elem, type, handler);
+		Removing a handler: removeEvent(elem, type, handler);
+		if (document.addEventListener) {
+			var addEvent = function(elem, type, handler) {
+				elem.addEventListener(type, handler, false)
+			}
+			var removeEvent = function(elem, type, handler) {
+				elem.removeEventListener(type, handler, false)
+			}
+		} else {
+			var addEvent = function(elem, type, handler) {
+				elem.attachEvent("on" + type, handler)
+			}
+			var removeEvent = function(elem, type, handler) {
+				elem.detachEvent("on" + type, handler)
+			}
+		}
+	-------------------
+	OBIEE Way:
+	
+		
+
+
+order of execution of handlers
+
+...
+addEvent(elem, "click", function() { alert('hi') })
+
+	
+	
+
+		
+	
+	
+	 
+	
+Hot to get the event object inside handler?
+	Browsers which follow w3c standards always pass the event object as first argument to the handler.
+		// Works in IE9 or greater, other browsers
+		element.onclick = doSomething;
+		function doSomething(event) {
+			// we've got the event
+		}
+
+		// IE8 way - window.event, global object which references the last event.
+		function doSomething() {
+			// window.event - we've got the event
+		}
+		
+		// Cross browser solution - OBIEE way
+		element.onclick = function(event) {
+			event = event || window.event; // Now event is the event object in all browsers.
+		}
+
+All about 'this' keyword inside event handler?
+	http://www.quirksmode.org/js/this.html
+	http://helephant.com/2008/04/26/objects-event-handlers-and-this-in-javascript/
+
+	this inside event handler
+	1. Create an input button which hides itself when clicked.
+		<input type="button" onclick="this.style.display='none'" value="Click to Hide"/>
+		
+		Use JavaScript to make the button hide the element with id="hide" when clicked.
+		<input type="button" id="hider" value="Click to Hide"/>
+		<div id="hide">Text</div>
+		<script>
+			document.getElementById('hider').onclick = function() {
+				document.getElementById('hide').style.display = 'none'
+			}
+		</script>
+		
+
+	
+
+Javascrpt Events
+
+	
+	abort	Fired when the user cancels loading of an image
+	blur 	Fired when input focus is removed from a form element (when the user clicks outside a field) or focus is removed from a window
+	click 	Fired when the user clicks on a link or form element
+	change 	Fired when the value of a form field is changed by the user
+	error 	Fired when an error happens during loading of a document or image
+	focus 	Fired when input focus is given to a form element or a window
+	load 	Fired when a page is loaded into Navigator
+	reset 	Fired when the user clears a form using the Reset button
+	select 	Fired when the user selects a form element's field
+	submit 	Fired when a form is submitted (i.e., when the user clicks on a submit button)
+	unload 	Fired when the user leaves a page
+
+	
+	// Mouse Related
+	mousedown	Fired when you press the mouse button.
+	mouseup		Fired when you release the mouse button.
+	mouseover 	Fired when you place the cursor over it(such as hyperlink).
+	mouseout 	Fired when you move the cursor out of it. 
+	mousemove	Fired when you move the cursor over it.
+	click		Fired when you click. A click actually causes 3 events in sequence: mousedown, mouseup, click.
+	dblclick	Fired when you click twice within a short time. A double click actually causes 7 events in sequence: mousedown, mouseup, click, mousedown, mouseup, click, dblclick.
+	contextmenu Fired when you right click. A right click actually causes 3 events in sequence: mousedown, mouseup, contextmenu.
+	scroll 		Fired when you scroll(mouse scroll or keyboard scroll).
+	
+	
+	
+	
+	mouseenter
+	mouseleave
+	
+	drag n drop
+	ondrag, ondragend, ondragenter, ondragleave, ondragover, ondragstart, ondrop
+	http://www.codeproject.com/Articles/14418/How-to-Drag-Drop-in-javascript-Part-I
+	http://stackoverflow.com/questions/478724/browser-drag-and-drop-events-can-anyone-fill-in-the-blanks
+	https://developer.mozilla.org/en-US/docs/DragDrop/Drag_and_Drop
+	
+	http://www.eborcom.com/webmaker/tutorials/rhoque/event2.html
+	http://webaim.org/techniques/javascript/eventhandlers
+	
+
+	
+	
+
+event Object 
+	event object which is passed to the handler(in one way or other way) holds a lot of information, which varies from one event type to other, one browser to another.
+	
+	altKey, attrChange, attrName, bubbles, button, cancelable, charCode, clientX, clientY, ctrlKey, currentTarget, data, detail, 
+	eventPhase, fromElement, handler, keyCode, layerX, layerY, metaKey, newValue, offsetX, offsetY, originalTarget, pageX, pageY, 
+	prevValue, relatedNode, relatedTarget, screenX, screenY, shiftKey, srcElement, target, toElement, view, wheelDelta, which.
+	
+	event.button, event.which
+		event.button - 3-bit number. // IE8 or less
+			1st bit is set to 1, if left button is clicked.
+			2nd bit is set to 1, if right button is clicked.
+			3rd bit is set to 1, if middle button is clicked.
+		event.button - 0 for left button, 1 for middle button, 2 for right button. // w3c approach - for any browser except IE8 or less.
+		event.which - undefined. // IE8 or less
+		event.which - 1 for left button, 2 for middle button, 3 for right button. // w3c approach - for any browser except IE8 or less.
+		
+		// Identify if a mouse click is left, middle, right
+		// Better way
+		if (!e.which && e.button) {
+			if (e.button & 1) e.which = 1      // Left
+			else if (e.button & 4) e.which = 2 // Middle
+			else if (e.button & 2) e.which = 3 // Right
+		}
+
+		// Event better approach - which works in all browsers except opera 7.
+		if (event.which == null) // IE8 or less
+			button= (event.button < 2) ? "LEFT" : (event.button == 4) ? "MIDDLE" : "RIGHT");
+		else
+			button= (event.which < 2) ? "LEFT" : ((event.which == 2) ? "MIDDLE" : "RIGHT");
+
+	
+event.altKey, event.ctrlKey, event.shiftKey - boolean value indicating whether Alt, Ctrl and Shift keys were pressed at time of the event.
+
+ - 
+	# event.which in Firefox and Netscape Navigator (1 is left, 2 is middle, 3 is right)
+	# event.button in Microsoft Internet Explorer (1 is left, 4 is middle, 2 is right)
+	# event.button in Firefox and other W3C browsers (0 is left, 1 is middle, 2 is right)
+
+event.cancelBubble - you can cancel event bubbling by setting the cancelBubble property to false.
+
+event.currentTarget - element whose event handler is currently being run.
+	target vs currentTarget - http://www.qc4blog.com/?p=650
+
+event.data - 
+	$("#selector").bind("click", {name: "barney"}, function(event) { alert(event.data.name); }); // alerts "barney"
+
+event.keyCode - holds the unicode value of any key that is pressed.
+
+event.namespace - 
+	$("#selector").bind("click.mynamespace", function(event) { alert(event.namespace); }); // alerts "mynamespace"
+
+event.relatedTarget - on mouseover this indicates the node that the mouse has left. on mouseout it indicates the node the mouse has moved onto.
+
+event.result - 
+	$("p").click(function(event) { return "handler1"; });
+	$("p").click(function(event) { alert( event.result ); return "handler2"; }); // alerts "handler1"
+	$("p").click(function(event) { alert( event.result ); }); // alerts "handler2"
+
+event.returnValue - you can cancel an event by setting the returnValue property to false.
+
+event.srcElement - this/srcElement/target, HTML element that the event fired on.
+	Even if an event is captured or bubbles up, the target/srcElement always remains the element the event took place on.
+	if the we click on an image <img id="image1" src="picture1.jpg">, event.srcElement.id returns "image1", event.srcElement.src returns "picture1.jpg" and
+	event.srcElement.tagName returns 'img'.
+
+event.target - indicates the DOM element that triggered the event. In some browsers, it is event.target, in ohter browsers it is event.srcElement.
+	$("a").click(function(event) { alert(event.target.nodeName); }); // alerts "a"
+
+event.timeStamp - indicates the exact time (in milliseconds) when the event occurred.
+
+event.type - indicates the type of the event.
+	$("a").click(function(event) { alert(event.type); }); // alerts "click"
+
+	event.pageX, event.pageY
+		gives the position of the mouse relative to top, left of the entire page/document regardless of scrollbars.
+	event.clientX, event.clientY
+		gives the position of the mouse relative to top, left of the view port, regardless of scrollbars.
+	event.screenX, event.screenY
+		screenX and screenY properties are the only ones that are completely cross–browser compatible. 
+		They give the mouse position relative to the entire computer screen of the user. 
+		Unfortunately this information is completely useless: you never need to know the mouse position relative to the screen — well, maybe only if you want to place another window at the mouse position.
+	 
+	 
+    clientX,clientY
+    layerX,layerY
+    offsetX,offsetY
+    pageX,pageY
+    screenX,screenY
+    x,y
+	
+		
+		gives the mouse position relative to top, left of the entire page/document regardless of scrollbars.
+		
+		represent the coordinates on my page regardless of scrollbars
+		
+	As you can see, the clientX and clientY coordinates give me the mouse position relative to the view port, regardless of the scroll of the document. 
+	The pageX and pageY coordinates, on the other hand, give me the mouse position relative to the top, left of the entire document, again regardless of the scrolling.
+	
+	 layerX,layerY; offsetX,offsetY; screenX,screenY; and x,y
+	 
+	document.body.scrollLeft;
+	document.body.scrollTop;
+	
+	cursor coordinates - http://javascript.about.com/od/byexample/a/events-mousepos-example.htm
+	
+e.preventDefault() - prevents the default handlers from being executed.
+	For eg, used to prevent a form being submitted when the form is submitted & used to prevent page reload when the user clicks on anchor link.
+
+e.stopPropagation() - prevents all the handlers(for this event) on parent elements from running.
+	http://www.tutorialspoint.com/cgi-bin/practice.cgi?file=jquery_105
+
+e.stopImmediatePropagation() - prevents all the handlers(for this event) on parent elements and other handlers(for this event) on the same element from running.
+	http://www.tutorialspoint.com/cgi-bin/practice.cgi?file=jquery_107
+	http://jsfiddle.net/jGJRY/8/
+
+return false - "return false;" inside an event handler means both preventDefault and stopPropagation.
+	return false; takes on a different meaning inside of a jQuery each(). It is used to break out of the each. 
+
+                          prevent default handler | prevent "same element" handler | stop bubbling
+return false                 	Yes           		No             			Yes
+preventDefault               	Yes            		No             			No
+stopPropagation              	No           			No	              		Yes
+stopImmediatePropagation     	No           			Yes	              		Yes
+
+event.isDefaultPrevented()
+event.isImmediatePropagationStopped() 
+event.isPropagationStopped()
+
+ 
+function getMouseXY(e) // works on IE6,FF,Moz,Opera7
+{ 
+  if (!e) e = window.event; // works on IE, but not NS (we rely on NS passing us the event)
+ 
+  if (e)
+  { 
+    if (e.pageX || e.pageY)
+    { // this doesn't work on IE6!! (works on FF,Moz,Opera7)
+      mousex = e.pageX;
+      mousey = e.pageY;
+      algor = '[e.pageX]';
+      if (e.clientX || e.clientY) algor += ' [e.clientX] '
+    }
+    else if (e.clientX || e.clientY)
+    { // works on IE6,FF,Moz,Opera7
+      // Note: I am adding together both the "body" and "documentElement" scroll positions
+      //       this lets me cover for the quirks that happen based on the "doctype" of the html page.
+      //         (example: IE6 in compatibility mode or strict)
+      //       Based on the different ways that IE,FF,Moz,Opera use these ScrollValues for body and documentElement
+      //       it looks like they will fill EITHER ONE SCROLL VALUE OR THE OTHER, NOT BOTH 
+      //         (from info at http://www.quirksmode.org/js/doctypes.html)
+      mousex = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+      mousey = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+      algor = '[e.clientX]';
+      if (e.pageX || e.pageY) algor += ' [e.pageX] '
+    }
+  }
+}
+
+function doSomething(e) {
+	var posx = 0;
+	var posy = 0;
+	if (!e) var e = window.event;
+	if (e.pageX || e.pageY) 	{
+		posx = e.pageX;
+		posy = e.pageY;
+	}
+	else if (e.clientX || e.clientY) 	{
+		posx = e.clientX + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+		posy = e.clientY + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+	}
+	// posx and posy contain the mouse position relative to the document
+	// Do something with this information
+}
+http://www.quirksmode.org/js/events_properties.html
+http://www.javascripter.net/faq/mouseclickeventcoordinates.htm
+http://stackoverflow.com/questions/6073505/what-is-the-difference-between-screenx-y-clientx-y-and-pagex-y
+
+	
+Best Links
+http://javascript.info/tutorial/events
+
+TO-Read
+http://www.quirksmode.org/dom/w3c_cssom.html#t03
+http://unixpapa.com/js/mouse.html - Javascript Madness: Mouse Events
+http://www.htmlgoodies.com/beyond/javascript/advanced-javascript-event-handling.html
+http://www.quirksmode.org/js/events_mouse.html
+http://www.quirksmode.org/dom/events/index.html
+http://www.eborcom.com/webmaker/tutorials/rhoque/event2.html
+http://webaim.org/techniques/javascript/eventhandlers
+http://www.htmlgoodies.com/beyond/javascript/events-and-javascript-part-1-event-handling.html
+http://www.htmlgoodies.com/beyond/javascript/events-and-javascript-part-3-the-event-object.html
+http://www.quirksmode.org/js/events_properties.html
+http://coding.smashingmagazine.com/2012/08/17/javascript-events-responding-user/
+http://www.quirksmode.org/js/introevents.html
+----------------- Dust --------------------------
+How to write cross-browser scripts?
+scroll event
+	https://www.wealthfront.com/designerfound
+	http://eng.wealthfront.com/2012/03/scrolling-z-axis-with-css-3d-transforms.html

@@ -1,0 +1,169 @@
+<doctype>
+	- It is not an HTML element, but it tells the browser about the type of the HTML document; 
+	- It must be the very first thing in the HTML document, before <html> tag;
+	- It is not case-sensitive; Eg: Doctype for an HTML5 Page - <!DOCTYPE html>
+
+<html>
+	- It is the root of HTML document;
+	- It can contain <head>, <body> elements;
+	- <head> and <body>
+
+<head>
+	- It contains metadata(title, css styles, information for search engines), it is not displayed to the user;
+	- It can contain <title>, <link>, <script>
+
+<body>
+	- It contains all visible stuff; // text, images, links, etc
+	It can be text, images, lists, videos, and so much more.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+<!-- Text Elements -->
+
+<h1> to <h6>
+	- It is used to display titles OR subtitles in a page;
+	- h1 is for most important heading, h6 is for least important heading;
+	- Never use heading to make text BIG or bold;
+
+<p>
+	- It always starts on a new line and usually holds a block of text;
+
+<br/>
+	- Browser removes extra spaces and extra lines in <h1>/<h6>/<p> elements, when the page is displayed;
+	- You can put a extra space using &nbsp; character
+	- You can put a line break using <br/> element;
+
+<pre>
+	- It is used to define preformatted text; It preserves both spaces and line breaks;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+<!-- Formatting Text Elements -->
+
+<b>, <strong> - Bold Text;
+<i>, <em> - Italic Text;
+<u>, <ins> - Underline Text;
+<del> - Deleted Text;
+<sub> - Subscript Text;
+<sup> - Superscript Text;
+<small> - Small text;
+<mark> - Marked text;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+links are defined with <a> tag. href is defines where to go when the link is clicked;
+internal links, external links(link to a website that is not part of the project); links to page, image;
+What do we have to include into the opening tag of a link that should open in a new tab?
+
+target='_blank'
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+HTML Global Attributes
+	dir 
+		- It specifies the direction in which the browser should render the text within the parent element OR in the entire document;
+		- It defaults to ltr, indicating that text is presented to the user left to right;
+		- You can change it to rtl, to display text right to left, for languages like Arabic and Hebrew;
+	
+	lang 
+		- It specifies the language of the element's content or entire document; For eg, en for English, fr for French etc;
+		- Language codes: https://www.w3schools.com/tags/ref_language_codes.asp
+
+	draggable
+		- It specifies whether an element is draggable or not;
+
+	dropzone
+		- It specifies whether the dragged data is copied, moved, or linked, when dropped;
+
+	id
+	style
+	class
+	data-*
+	contenteditable	
+	tabindex
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+http-server -c-1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+h1 to h6
+p
+
+
+color, font, size
+strong - bold 
+em - italic
+u - underline
+
+style="property:value;"
+	The property is a CSS property. The value is a CSS value.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+https://randomuser.me -> It provides API for generating random user data; Like Lorem Ipsum, but for people;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+CSS
+	- It defines how HTML elements should look like;
+	- It allows us to separate styles from content;
+	- HTML is content; CSS is style;
+
+CSS code inside HTML tag
+	// index.html
+	- <p style="font-size: 120%"></p>
+
+CSS code in head section of an HTML document
+	// index.html
+	<style>
+		p {
+			font-size: 120%;
+		}
+	</style>
+ 
+CSS code in an external file
+	// style.css
+	p {
+		font-size: 120%;
+	}
+	// index.html
+	<link rel="stylesheet" href="style.css"></link>
+
+
+CSS Colors - Evey color is a combination of 3 colors: Red, Green, Blue;
+	#RRGGBB - For Each color min 0 to max 255(ff);
+
+	Color can also have transparency; Hexa decimal notation is not used for transperency, instead use rgba(29, 167, 23, 0.75);
+
+CSS Selectors
+	ID selector - It is not a good practice to use ID selector, as it is not possible to share code. 
+		We will be using a Class selector, even if it is used only once. We never know what would happen to our code down the road;
+	Class selector
+
+CSS Box Model
+	Content - text, images etc;
+	Padding - transperant area around the content, inside of the box;
+	Border - Goes around padding and content;
+	Margin - Space between boxes;
+
+	top, bottom, left, right;
+
+	Box model with box-sizing
+		In earlier box model, you set the height/width of the content, not the entire box; It means padding/border/margin are added to the height/width we specified; which is not what we want; Fortunately, we have a solution for it;
+		Using box-sizing: border-box in CSS, we can define height and width for an entire box, rather than the content;
+
+In HTML, there are inline elements and block elements;
+	Block elements use the full-width of the browser and follows a new line break; headings, paragraph are examples;
+	Inline elements don't do that; images, links, strong, em are examples; You can't set their width or height;
+
+	By default, our browsers add some margin, if you don't specify anything;
+
+
+Element Positioning (Relative vs Absolute)
+	- Elements with absolute positioning can be placed anywhere;
+
+
+CSS + emmet
+Formatting CSS
+Picking color in VBC
+
+Chrome developer tools
+Using box-sizing: border-box, the width of an element is: exactly the width we defined!
+A block element uses full available width and enforces line breaks!
+
+how to display intline elements as block elements?
+we use float prop to put block elements side-by-side;
+

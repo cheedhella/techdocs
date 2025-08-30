@@ -1,0 +1,290 @@
+If you try to print a undeclared variable(foo), you'll get an error message: "foo is not defined"
+If you try to print a variable that is declared but not initialized(foo), it prints nothing.
+typeof operator returns "undefined" in both the cases.
+
+undefined - typeof operator returns undefined if you try to access a variable that is not declared or a variable that is declared but not initialized.
+	var someVar;
+	if (typeof undeclaredVar !== "undefined"){console.log("variable doesn't exist");} // "variable doesn't exist"
+	if (typeof someVar !== "undefined"){console.log("variable doesn't exist");} // "variable doesn't exist"
+
+	how to check if a variable is not declared? declared but not initialized?
+
+
+null - 
+	var a = null; 
+	console.log(a); // prints "null"
+	console.log(typeof a); // prints "object"
+
+Any value that doesn't belong to one of the five primitive types listed above is an object. Even null is considered an object, which is a little awkward—having an object (something) that is actually nothing.
+
+
+typeof operator returns any one of the following string: "boolean", "number", "string", "undefined", "object", "function".
+	var a = true; typeof a; // returns "boolean"
+	var a = "true"; typeof a; // returns "string"
+	var a; typeof a;
+
+Infinity, -Infinity
+	var a = 6 / 0; console.log(a); // prints "Infinity"
+
+
+NaN - Not a Number
+	if you try to multiply 10 by the character "f", the result is NaN, because "f" is obviously not a valid operand for a multiplication.
+	var a = 6 * "a"; console.log(a); // prints "NaN"
+	var a = 6 * "2"; console.log(a); // prints "12", behind scenes string is converted to number.
+
+	Infinity - Infinity // prints "NaN"
+	Infinity - 2 // prints "Infinity"
+	Infinity * 2 // prints "Infinity"
+	Infinity/2 // prints "Infinity"
+	undefined + 1 // prints "NaN"
+	null + 1 // prints 1
+	null * 1 // prints 0
+
+	!!undefined // false
+	!!null // false
+
+	"" + undefined // undefined
+	"" + null // null
+
+
+	typeof NaN - returns "number" as NaN is a special value which is also a number.
+
+	NaN == NaN -> evaluates to false
+	
+
+lazy way to convert a string to number is: var a = "100"; a = a * 1; typeof a; // prints "number". Alternatively, you can use parseInt()
+
+
+
+
+
+Arrays
+------
+var a = [1, 2, 3]
+console.log(typeof a); // prints "object"
+
+
+
+
+
+
+
+Objects
+-------
+
+object - an object is very similar to an array with the exception that you can define your own keys instead of numeric keys.
+
+	var hero = {
+	breed: 'Turtle',
+	occupation: 'Ninja'
+	};
+
+	name of the properties can be optionally placed in quotes or double quotes.
+
+normal array: keys are numbers
+associate array or object: keys are strings
+
+
+accessing object properties: objectName["propertyName"], objectName.propertyName
+
+javascript is a dynamic language means you can alter the properties and methods of existing objects at any time.
+	var hero = {};
+	hero.name = "test"; // adding a new property to existing object
+	delete hero.name;
+
+this keyword
+
+
+constructor functions: another way of creating objects.
+
+	function Hero() {
+	   this.name = 'chiru';
+	}
+
+	var hero = new Hero();
+
+
+	advantage of constructor functions is they accept parameters.
+
+	function Hero(name) {
+	   this.name = name;
+	}
+
+	var hero = new Hero('chiru');
+
+this - global object - window
+var a = 1;
+a, window.a, window['a']
+
+
+
+constructor property - returns a reference to the constructor function which is used in creating this object.
+	hero.constructor - returns "Hero(name)"
+
+	var o = {};
+	o.constructor; // Object()
+
+instanceof operator - check if an object was created with a specific constructor function.
+	function Hero(){}
+	var h = new Hero();
+	var o = {};
+	h instanceof Hero; // returns true
+	h instanceof Object; // returns false
+	o instanceof Object; // returns true
+
+
+
+
+
+another way of creating objects: function that returns object.
+	function factory(name) {
+	   return {
+	      name: name
+	   };
+	}
+
+	var o = factory('one');
+
+	o.name -> "one"
+	o.constructor -> "Object()"
+
+
+comparing objects - ==, ===
+
+
+built-in objects: Object, Array, Function, Boolean, Number, String, Math, Date, RegExp, Error.
+
+
+
+
+
+
+
+
+
+prototype property of function objects
+	every function has a prototype property/object.
+	adding properties to the prototype object.
+	using prototype object properties
+	diff b/w function properties and prototype properties
+	__proto__
+	isPrototypeOf(), hasOwnProperty(), propertyIsEnumerable()
+
+
+	In javascript, every function is also an object, as it can have variabales and methods.
+
+	defining a function: function foo(a, b){return a * b;}
+		foo.length -> 2, foo.constructor -> Function(), typeof foo.prototype -> "Object"
+
+		prototype property(an empty object) gets created as soon as you define the function(like foo.prototype = {};).
+
+
+defining a constructor function(which is used to create an object) with 2 properties and 1 method.
+	// Augmenting this object is the way to add functionality to the object being created.
+	function Gadget(name, color) {
+	      this.name = name;
+	      this.color = color;
+	      this.whatAreYou = function(){
+	      return 'I am a ' + this.color + ' ' + this.name;
+	   }
+	}
+
+	// adding properties and methods to an object which is already defined
+	Gadget.prototype.price = 100;
+	Gadget.prototype.rating = 3;
+	Gadget.prototype.getInfo = function() {
+	    return 'Rating: ' + this.rating + ', price: ' + this.price;
+	};
+
+	// another way doing same thing is: overwrite prototype property completely.
+	Gadget.prototype = {
+	   price: 100,
+	   rating: 3,
+	   getInfo: function() {
+	      return 'Rating: ' + this.rating + ', price: ' + this.price;
+	   }
+	};
+
+
+In a prototype based systems there are no classes. 
+All objects are created by adding properties and methods to an empty object or by cloning an existing one. 
+Although a constructor function may look like a class, it’s really just a function that knows how to add the right properties and methods to create a particular type of object.
+
+Any property or method that’s added to the constructor’s prototype automatically becomes part of every object created by that function.
+
+Javascript objects are dynamic so they can be changed after they are created.
+
+
+
+what is DOM? 
+javascript is object based, loosely typed.
+javascript methods can't be overloaded.
+
+javascript - call by value, call by reference
+
+window object properties - frame, self, top, parent
+
+document object - onload vs onready
+Four properties (innerHTML, innerText, outerHTML, and outerText) provide
+read/write access to the actual content within the body of a document.
+
+<INPUT TYPE=”button” NAME=”clicker” VALUE=”Hit Me...”>
+<INPUT TYPE=”text” NAME=”entry” VALUE=”User Name?”>
+
+document.formName.clicker.name
+document.formName.clicker.value
+document.formName.entry.value
+
+For example, to address a text box, you assemble a reference like this: window.document.
+formName.textBoxName.
+
+
+document.orderForm.submit()
+document.orderForm.entry.select()
+The first is a scripted way of clicking a Submit button to send a form (named
+orderForm) to a server. The second selects the text inside a text field named entry
+(which is contained by a form named orderForm).
+
+document.write(“This browser is version “ + navigator.appVersion)
+
+
+
+[window.]frames[n].ObjFuncVarName
+[window.]frameName.ObjFuncVarName
+
+
+
+<script>, <noscript> tags
+
+Where do <script> tags go within a document? <head> or <body>
+
+
+command to open javascript console - to see errors etc
+
+
+
+Basic datatypes - boolean, number, string, null
+
+	null value - means no value or nothing.
+	If you try to reference a variable that isn't defined and therefore has no value, the value returned is the null value. 
+	Likewise, in a prompt dialog box, if the user selects the Cancel button, a null value is returned.
+
+
+
+
+, object, function
+	Arrays
+JavaScript is loosely coupled, meaning one variable can hold differ types of data at different times.
+
+variable declaration
+
+scope of variables
+	If you declare a variable, using "var", within a function, the variable can only be accessed within that function. When you exit the function, the variable is destroyed. These variables are called local variables. You can have local variables with the same name in different functions, because each is recognized only by the function in which it is declared.
+	If you declare a variable outside a function, all the functions on your page can access it. The lifetime of these variables starts when they are declared, and ends when the page is closed.
+
+
+casting - parseInt, parseFloat, ...
+
+String, Math, Date objects
+
+

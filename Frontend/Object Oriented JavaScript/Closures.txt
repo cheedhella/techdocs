@@ -1,0 +1,203 @@
+Lexical Scope or Static Scope
+	In JavaScript, functions have lexical scope. 
+	It means Fuctions remember the environment in which they were defined, not the environment in which they are executed.
+	Example:
+		>>> function f1(){var a = 1; f2();}
+		>>> function f2(){return a;}
+		>>> f1();
+		a is not defined
+
+		Inside the function f1() we call the function f2(). Because the local variable a is also inside f1(), one might expect that f2() will have access to a, but that's not the case. At the time when f2() was defined (as opposed to executed), there was no a in sight. f2(), just like f1(), only has access to its own scope and the global scope. f1() and f2() don't share their local scopes.
+
+Closure - local variable in a function which is kept alive even after the function has returned.
+
+	Case 1:
+	function sayHello2(name) {
+		var text = 'Hello ' + name; // local variable - closure
+		var sayAlert = function() { alert(text); }
+		return sayAlert;
+	}
+	var say2 = sayHello2('Jane'); 
+	say2(); // alerts 'Hello Jane'
+	
+	Case 2:
+	function say667() {
+		var num = 666; // local variables are not copied by value - they are kept by reference.
+		var sayAlert = function() { alert(num); }
+		num++;
+		return sayAlert;
+	}
+	var sayNamba = say667();
+	sayNamba(); // alerts 667
+		
+	Case 3:	
+	function setupSomeGlobals() {
+		var num = 666;	// 3 functions have shared access to the same closure
+		// All 3 global functions have a common reference to the same closure because 
+		// they are all declared within a single call to setupSomeGlobals()
+		gAlertNumber = function() { alert(num); }
+		gIncreaseNumber = function() { num++; }
+		gSetNumber = function(x) { num = x; }
+	}
+
+	Case 4:
+	function buildList(list) {
+		var result = [];
+		for (var i = 0; i < list.length; i++) {
+			var item = 'item' + list[i];
+			result.push( function() {alert(item + ' ' + list[i])} );
+		}
+		return result;
+	}
+	function testList() {
+		var fnlist = buildList([1,2,3]);
+		// using j only to help prevent confusion - could use i
+		for (var j = 0; j < fnlist.length; j++) {
+			fnlist[j]();
+		}
+	}
+	testList(); // alerts 'item3 undefined' 3 times, b/c i has a value of 3 because the loop had completed, and item has a value of 'item3'
+	
+	Case 5:
+	How to correct the above behavior? You need three different variables. An elegant solution is to use another closure:
+	function buildList(list) {
+		var result = [];
+		for (var i = 0; i < list.length; i++) {
+			var item = 'item' + list[i];
+			result.push( (function(x, y) { return function() {alert(x + ' ' + y)} })(item, list[i]) );
+		}
+		return result;
+	}
+	function testList() {
+		var fnlist = buildList([1,2,3]);
+		// using j only to help prevent confusion - could use i
+		for (var j = 0; j < fnlist.length; j++) {
+			fnlist[j]();
+		}
+	}
+	testList(); // alerts 'item1 1', 'item2 2', 'item3 3'
+	
+	Case 6:
+	function sayAlice() {
+		var sayAlert = function() { alert(alice); }
+		// This example shows that the closure contains any local variables that 
+		// were declared inside the outer function before it exited.
+		// Note that the variable alice is actually declared after the anonymous function.
+		var alice = 'Hello Alice';
+		return sayAlert;
+	}
+	sayAlice()(); // alerts 'Hello Alice'
+		
+	Case 7:
+		// each call to the outer function creates a closure. Its not a single closure 
+		// per function declaration, one closure per each call to a function.
+		// google for example
+
+
+Purpose of Closures:
+	Purpose1:
+		var getValue, setValue;
+		(function() {
+			var secret = 0;
+			getValue = function(){
+				return secret;
+			};
+			setValue = function(v){
+				secret = v;
+			};
+		})()
+		>>> getValue()
+		0
+		>>> setValue(123)
+		>>> getValue()
+		123
+
+	Purpose2:
+		function setup(x) {
+			var i = 0;
+			return function(){
+				return x[i++];
+			};
+		}
+		>>> var next = setup(['a', 'b', 'c']);
+		>>> next();
+		"a"
+		>>> next();
+		"b"
+		>>> next();
+		"c"
+
+----------------------------- dust ---------------------------------------
+
+Closures
+	
+	function sayHello(name) {
+	  var text = 'Hello ' + name;
+	  var sayAlert = function() { alert(text); }
+	  sayAlert();
+	}
+	sayHello("Bob"); // alerts 'Hello Bob'
+		
+		http://helephant.com/2008/10/17/javascript-closures/
+		what is lexical scope?
+
+		var n;
+		function f(){
+			var b = "b";
+			n = function(){
+				return b;
+			}
+		}
+		f();
+		n(); // alerts "b"
+		
+		function f() {
+			var a = [];
+			var i;
+			for(i = 0; i < 3; i++) {
+				a[i] = function(){
+					return i;
+				}
+			}
+		return a;
+		}
+		var a = f();
+		a[0](); // returns 3
+		a[1](); // returns 3
+		a[2](); // returns 3
+		
+		function f() {
+			var a = [];
+			var i;
+			for(i = 0; i < 3; i++) {
+				a[i] = (function(x){
+					return function(){
+						return x;
+					}
+				})(i);
+			}
+		return a;
+		}
+		var a = f();
+		a[0](); // returns 0
+		a[1](); // returns 1
+		a[2](); // returns 2
+
+		Alternatively, you can use a "normal" (as opposed to self-invoking) inner function to achieve the same result. The key is to use the middle function to "localize" the value of i at every iteration.
+		function f() {
+			function makeClosure(x) {
+				return function(){
+					return x;
+				}
+			}
+			var a = [];
+			var i;
+			for(i = 0; i < 3; i++) {
+				a[i] = makeClosure(i);
+			}
+			return a;
+		}
+		var a = f();
+		a[0](); // returns 0
+		a[1](); // returns 1
+		a[2](); // returns 2

@@ -1,0 +1,127 @@
+JavaScript is a loosely-typed language. 
+It means you need not to specify the data type of a variable during its declaration.
+It also means that a single variable can hold different data types at different times and that JavaScript can change the variable type on the fly.
+
+JavaScript arrays can contain elements of different types and also they can grow automatically as you add elements to it. indexing of elements begins with 0.
+
+Declaration & Initialization:
+	var a = [1, 2, 3];
+	var b = new Array(); // creates an empty array.
+	var c = new Array(3); // creates an empty array ([undefined, undefined, undefined]) with length set to 3.
+	var d = new Array(1,2,3); // creates an array with elements 1,2,3
+
+Adding/Updating/Deleting an element:
+	var a = ["zero", "one", "two"];
+	a[4] = "four"; // now, a = ["zero", "one", "two", undefined, "four"]
+	a[3] = "three"; // now, a = ["zero", "one", "two", "three", "four"]
+	delete a[2]; // now, a = ["zero", "one", undefined, "three", "four"]
+	delete a[4]; // now, a = ["zero", "one", undefined, "three", undefined]	
+		Note: delete operator replaces the element to be deleted with undefined. If you want to delete properly use splice() method.
+
+Iterating over elements of an array:
+	var fruits = ["Pineapple", "Lemon", "Apple", "Orange", "Peach"]
+	for(var i=0; i<fruits.length; i++) {
+	  alert(fruits[i])
+	}
+	
+	for + in - http://stackoverflow.com/questions/500504/javascript-for-in-with-arrays
+
+Properties & Methods of Array object:
+	length - length property not quite a length, it is last element's index + 1.
+			Eg: var fruits = []; fruits[99] = "Apple"; alerts(fruits.length); // alerts 100.
+	    This is NOT a read-only property, you can set it as you wish.
+		If you have 100 elements in an array and set the length to 50, Javascript will truncate the last 50 elements from the array (effectively deleting them).
+		If you have 10 elements in an array and set Array.length to 100 then the length of the array will be expanded to 100, creating 90 undefined elements after the original 10 items.
+	constructor - In general, constructor property returns the function that created the object in question. 
+		In case an Array(native javascript object), it returns "function Array() { [native code] }"
+	prototype - In general, prototype property allows you to add a property/method an object. Same is the case with Arrays.
+	
+	push(element1, element2...) - add elements to the end of an array and returns the new length of array.
+	pop() - removes the last element in the array and returns it(removed element).
+	unshift(element1, element2...) - add elements to the begining of an array and returns the new length of array.
+	shift() - removes the first element in the array and returns it(removed element).
+	sort() - sort the elements of the array. This method changes the original array!
+		lexical sorting - elements are ordered based on their first letter unless they are same in which case second letter decides the order, and so on.
+			I/P: 11, 1, 10, 2, 13, 120		O/P: 1, 10, 11, 120, 13, 2
+			I/P: Bee, ant, Ant				O/P: Ant, Bee, ant
+		
+			Eg1:
+				var arr = [ 1, 2, 15 ];
+				arr.sort();
+				alert( arr );   // 1, 15, 2
+
+			Eg2:
+				function compare(a, b) {
+				  if (a > b) return 1
+				  else if (a < b) return -1
+				  else return 0
+				}
+				var arr = [ 1, 2, 15 ];
+				arr.sort(compare);
+				alert( arr );   // 1, 2, 15
+	reverse() - reverse the order of the elements in the array (makes the last element first, and the first element last. This method changes the original array!
+	splice(index, howmany, element1, element2...) - used to add/remove elements to/from an array, returns the removed element(s). This method changes the original array!
+		index - what position to add/remove elements.
+		howmany - no. of elements to remove. if 0, no elements are removed.
+		element1, element2,... - elements to be added.
+		Eg:
+			var fruits = ["Banana", "Orange", "Apple", "Mango"];
+			fruits.splice(2, 0, "Lemon");
+			document.write(fruits); // Banana,Orange,Lemon,Apple,Mango
+	join(separator) - join all the elements of array into a string separated by a specified separator and returns it. default seprator is comma. //
+		var data = ["One", "Two", "Three"]; data.join(','); // returns "One,Two,Three"
+	String.split()
+	array1.concat(array2, array3...) - returns a new array containing the elements from all the arrays.
+	array1.slice(start, end) - returns a new array containing specified elements. Use negative numbers to select from the end of an array.
+	toString() - returns a comma separated string with the contents of array.
+		Eg: var data = ["One", "Two", "Three"]; data.toString(); // returns "One,Two,Three"
+	valueOf() - var data = ["One", "Two", "Three"]; data.valueOf(); // returns "One,Two,Three"
+	
+	join() vs toString() vs valueOf()
+	
+Checking whether a variable is an array or not:
+	arlene instanceof Array // returns true. warning: "(new Array()) instanceof Object" also returns true
+	// It does not work with array objects residing in iframes/frames.
+	// http://stackoverflow.com/questions/767486/how-do-you-check-if-a-variable-is-an-array-in-javascript
+
+	var carter = new Array(); alert( carter.constructor === Array ); // alerts "true"
+	// This will work only if you declare an array via new Array(), not with the [] shorthand.
+	// It also does not work with array objects residing in iframes/frames.
+	
+	Array.prototype.isArray = true;
+	var box = doSomething();
+	if (box.isArray) { // isArray is only available if its an array
+		// do something
+	}
+
+	function isArray(obj) {
+		return Object.prototype.toString.call(obj) === '[object Array]'; // this is what jQuery does
+	}
+
+Links:
+http://javascript.info/tutorial/array
+http://www.elated.com/articles/javascript-array-basics/
+http://www.hunlock.com/blogs/Mastering_Javascript_Arrays
+http://stackoverflow.com/questions/7901754/override-tostring-javascript-on-a-single-array-object?rq=1
+http://www.w3schools.com/jsref/jsref_obj_array.asp
+http://www.hunlock.com/blogs/Mastering_Javascript_Arrays
+http://www.roseindia.net/java/javascript-array/
+https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array
+
+-------------------
+typeof returns "object", for an array
+
+constructor property for custom objects:
+	function ScriptingLanguage(a,b) {
+		this.name = a;
+		this.syntaxType = b;
+	}
+	var js = new ScriptingLanguage("JavaScript","C");
+	alert( js.constructor.toString() ); // alerts "function ScriptingLanguage(a,b) { this.name = a; this.syntaxType = b; }"
+
+	
+	
+	
+
+	T2374197
+-------------------------------------------------------

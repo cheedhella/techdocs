@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+    <head>
+        <title>KnockoutJS: User Signup Form using Components</title>
+        <!-- In this example, we will see how to rewrite Eg 51 using KO Components! -->
+        <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+        <script type="text/javascript" src="./jquery-3.4.1.min.js"></script>
+        <script>    
+            // In Knockout, a Component is made up of Template and an optional ViewModel;
+
+            // Component Template
+            var userSignupFormTemplate = '<fieldset style="width:300px"><legend>User Sign-up Form</legend>' +
+                '<p>First Name: <input type="text" data-bind="value:firstName" /></p>' +
+                '<p>Last Name: <input type="text" data-bind="value:lastName"/></p>' +
+                '<p>Full Name: <span data-bind="html: fullName"> </span></p>' +
+                '<p>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" data-bind="value:email"/></p>' +
+                '<p>Password: <input type="password" data-bind="value:password"/></p>' + 
+                '<p><input type="button" value="Submit" value="Create Account"/></p>' +
+                '</fieldset>';
+            
+            // Component ViewModel - It can be an object or function!
+            var userSignupFormViewModel = function(params) {
+                var self = this;
+                self.firstName = ko.observable(params.firstName);
+                self.lastName = ko.observable(params.lastName);
+                self.fullName = ko.pureComputed(function () {
+                    return self.firstName() + " " + self.lastName()
+                });
+                self.email = ko.observable(params.email);
+                self.password = ko.observable();
+            };
+
+            // To create the Component, Give it a name and register it!
+            ko.components.register('userSignupFormComponent', {
+                template: userSignupFormTemplate,
+                viewModel: userSignupFormViewModel
+            });
+
+            $(document).ready(function () {
+                ko.applyBindings(); // There is no viewmodel(top-level) as such to bind, so, pass empty! 
+            });
+        </script>
+    </head>
+    <body>
+        <!-- 
+            Once Component is registered, there are 3 ways to use it! 
+                1. Using component data-bind;
+                2. Using Custom Element;
+                3. Using ko component;
+        --> 
+
+        <!-- Way1: Component binding using data-bind component; Component ViewModel is passed using params; -->
+        <div data-bind='component: { name:"userSignupFormComponent", params: {firstName: "Malli", lastName:"Ch", email:"your@email.com"} }'></div>
+    </body>
+</html>

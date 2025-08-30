@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: foreach</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- 
+            $data -> refers to the current item;
+            $index -> index of current item; starts from 0;
+        -->
+        <ul data-bind="foreach: daysOfWeek">
+            <li><span data-bind="text: $data"></span></li>
+        </ul>
+
+
+        <!-- 
+            Sometimes, you don't have any container element on which to put foreach binding. In that case, you can use below syntax:
+        -->
+        <ul>
+            <li><strong>Days of week:</strong></li>
+            <!-- ko foreach: daysOfWeek -->
+                <li><span data-bind="text: $data"></span></li>
+            <!-- /ko -->
+        </ul>
+        
+        <ul data-bind="foreach: daysOfWeek">
+            <!-- We are looping through daysOfWeek, so $parent points to parent of daysOfWeek, which is nothing but view model! -->
+            <li>No. of tweets on <span data-bind="text: $data"></span> are: <b data-bind="text: $parent.tweets[($index())]"></b></li>
+        </ul>
+
+
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                self.tweets = [101, 200, 320, 429, 533, 631, 719];
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

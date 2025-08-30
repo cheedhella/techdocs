@@ -1,0 +1,215 @@
+How to install Node.js?
+    1. Download the package from https://nodejs.org/en/
+    2. Double click the package, to open it and complete the installation;
+    3. Check node -v, npm -v
+
+What is Node.js?
+    - Node.js is not a programming language, it is a JavaScript runtime that is built on Chrome's V8 JavaScript engine;
+
+What is JS Engine?
+    - It takes JS code as input, compiles it to machine code so that the machine can execute it;
+    - There are many JS engines. Pretty much, every browser has it's own JS engine;
+
+What is V8 JS Engine?
+    - It is an open-source JS engine, written in C++;
+    - It powers Chrome Browser, Node JS and MongoDB;
+
+What is JS runtime?
+    - JS Engine doesn't know how to manipulate DOM, read/write from/to files/database etc. 
+      It is the run time which provides this custom functionality;
+    - Browser is a runtime which provides various objects(such as window, document, localstorage etc)
+      to manipulate DOM, manage events etc;
+    - Node is a runtime which provides various objects such as fs, which is used to read/write data 
+      from/to files/database;
+
+How to interact with JS runtime?
+    - To interact with Chrome runtime, open Developer Tools -> go to Console, type a command and press enter;
+    - To interact with Node runtime, type 'node' and press enter;
+        > 2 + 3
+        5
+        > global
+        > process   -> It is used to manipulate the configuration of node process that is running;
+        > exit      -> exit the node runtime;
+------------------------------------------------------------------------------------------------------------------
+require()
+    It takes path to a module, it performs synchronous lookup to locate the module and loads the file contents;
+    Order of lookup: first core modules, then the current working directory and then node_modules;
+
+require() is one of the few synchronous I/O available in Node;
+require() returns a string, object, function or nothing;
+------------------------------------------------------------------------------------------------------------------
+
+    - 
+     functionality(various tools such as window
+- It 
+     It was designed with performance in mind and is responsible for compiling JavaScript directly 
+     to native machine code that your computer can execute.
+    However, when we say that Node is built on the V8 engine, we don’t mean that Node programs are executed in a browser. They aren’t. Rather, the creator of Node (Ryan Dahl) took the V8 engine and enhanced it with various features, such as a file system API, an HTTP library, and a number of operating system–related utility methods.
+
+This means that Node.js is a program we can use to execute JavaScript on our computers. In other words, it’s a JavaScript runtime.
+
+
+
+
+
+
+
+
+Why I should learn Node.js?
+    - Prior to Node, JS is used only on client side(to manipulate DOM, to add listener to a button etc);
+    - Post Node, you can use JS on server side(to read/write data from files/database etc);
+    
+    
+    Node.js is an event-based, non-blocking, asynchronous I/O runtime that uses Google’s V8 JavaScript engine and libuv library.
+
+
+    Node.js® is a JavaScript runtime built on .
+    Prior to Node, JS is limited to browser(add event handler to a button, redirect the user to a new page);
+    There is no way to JS outside the browser to build things like webserver that connect to files/database;
+    In other words, node is used to run JS on server side;
+
+Installation
+    1. 
+    2. Install it by double clicking it;
+    3. 
+
+
+node
+globals
+process
+    process.exit()
+
+
+    File is a CommonJS module; it may be converted to an ES6 module.ts(80001)
+
+
+JSON -> all keys and values should be in double quotes!
+
+
+
+npm -> node package manager;
+    package vs modules;
+    There could be package for validating email, another package for sending email etc;
+
+If you want to use any npm package in your code, you need to do 2 things:
+    - Run 'npm init' OR 'npm init -y' in your project;
+      It creates a single file named package.json in project root;
+    - Run 'npm install' for each package you want to use in your project; // Eg: npm install validator@10.8.0
+      When you install your first dependency, it creates packages-lock.json;
+      For each dependant package, it contains package version, where to download it, SHA of it;
+      If you locally install the package, it also creates node_modules directory, if doesn't exist and 
+      downloads the package to it;
+
+If you run 'node app.js' without initializing and installing the packages, you will get MODULE_NOT_FOUND error!
+
+> node app.js
+
+Description: 
+    - validator is a standard package, which is used to validate emails, URLs, social security numbers etc;
+
+
+
+
+13 verbose Darwin 17.7.0
+14 verbose argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "validator"
+15 verbose node v13.7.0
+16 verbose npm  v6.13.6
+17 error code ENOTFOUND
+18 error errno ENOTFOUND
+19 error network request to https://artifacthub-tip.oraclecorp.com/api/npm/rsys-npmjs/validator failed, reason: getaddrinfo ENOTFOUND artifacthub-tip.oraclecorp.com
+20 error network This is a problem related to network connectivity.
+20 error network In most cases you are behind a proxy or have bad network settings.
+20 error network
+20 error network If you are behind a proxy, please make sure that the
+20 error network 'proxy' config is set properly.  See: 'npm help config'
+
+
+
+chalk package is used to customize(style/color) text before printing it to console;
+
+
+
+
+
+
+https://stackify.com/node-js-debugging-tips/ - Must read
+
+
+>npm config list 
+
+>npm config ls -l (same as above cmd but also shows all defaults)
+
+
+To get/update/edit contents in user and global npmrc files
+
+npm config command is used to update  (set) and retrive (get)  configurations in/from .npmrc file.
+
+    when we use -g flag changes are made to global .npmrc file.
+    if -g is not present then changes made to local files.
+
+npm config set and npm set both commands do the same thing.
+
+
+The npm config command can be used to update and edit the contents of the user and global npmrc files.
+
+>npm config set <key> <value> [-g|--global]
+>npm config get <key>
+>npm config delete <key>
+>npm config edit
+>npm get <key>
+>npm set <key> <value> [-g|--global]
+
+
+To remove configurations in user (local) and global npmrc files
+
+By running npm config rm proxy you remove proxy from user configuration.
+This can be easily verified by running: npm config list.
+
+If there is proxy or https-proxy setting set in global config you have to use --global in the command to remove it.
+
+So at the end this will clean-up proxies from both local and global configs:
+
+npm config rm proxy
+npm config rm https-proxy
+npm config --global rm proxy
+npm config --global rm https-proxy
+
+
+https://confluence.oraclecorp.com/confluence/display/~natalie.lo@oracle.com/NPM+Cheat+Sheet
+
+
+
+
+
+npm config set proxy http://www-proxy.us.oracle.com:80
+npm config set https-proxy http://www-proxy.us.oracle.com:80
+npm config set noproxy localhost,127.0.0.1,.oraclecorp.com,.us.oracle.com
+npm config set registry https://artifacthub-tip.oraclecorp.com/api/npm/rsys-npmjs
+
+npm config rm proxy
+npm config rm https-proxy
+npm config rm noproxy
+npm config rm registry
+
+
+ mcheedhe$ npm config list 
+; cli configs
+metrics-registry = "https://artifacthub-tip.oraclecorp.com/api/npm/rsys-npmjs"
+scope = ""
+user-agent = "npm/6.13.6 node/v13.7.0 darwin x64"
+
+; userconfig /Users/mcheedhe/.npmrc
+https-proxy = "http://www-proxy.us.oracle.com:80/"
+noproxy = "localhost,127.0.0.1,.oraclecorp.com,.us.oracle.com"
+proxy = "http://www-proxy.us.oracle.com:80/"
+registry = "https://artifacthub-tip.oraclecorp.com/api/npm/rsys-npmjs"
+
+; node bin location = /usr/local/bin/node
+; cwd = /Users/mcheedhe/dev/git-repo/webpack-tutorial
+; HOME = /Users/mcheedhe
+; "npm config ls -l" to show all defaults.
+
+
+
+https://confluence.oraclecorp.com/confluence/pages/viewpage.action?pageId=2014272051
+

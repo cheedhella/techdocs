@@ -1,0 +1,43 @@
+cookie format - document.cookie = "name=value; expires=date; path=path; domain=domain; secure";
+
+function setCookie(name, value) {
+	var expire = new Date();     // current time
+	expire.setTime(expire.getTime() + (1000 * 60 * 60 * 24 * 30));     // set it 30 days from now 
+	document.cookie = name + "=" + escape(value) + "; path=/" + ((expires == null) ? "" : "; expires=" + expire.toGMTString());
+} 
+
+deleting a cookie
+	The method used to delete a cookie is to set it's expiration data in the past. The name and path must match the name and path used when the cookie was set. 
+
+	function deletecookie ( cookie_name )
+	{
+	  var cookie_date = new Date ( );  // current date & time
+	  cookie_date.setTime ( cookie_date.getTime() - 1 );
+	  document.cookie = cookie_name += "=; expires=" + cookie_date.toGMTString();
+	}
+
+http://www.quirksmode.org/js/cookies.html
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}

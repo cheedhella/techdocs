@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: click</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <ul data-bind="foreach: fruits">
+            <!-- Specified click handler gets called, when you click on the DOM element -->
+            <li><span data-bind="text: $data"></span> <button data-bind="click: $parent.removeFruit">Delete</button></li>
+        </ul>
+
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.fruits = ko.observableArray(['Appple', 'Banana', 'Cherries', 'Dates', 'Elderberries', 'Figs', 'Guava']);
+                self.removeFruit = function(fruit) { // current item is passed as a parameter;
+                    self.fruits.remove(fruit);
+                };
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+The following rules apply to an element box:
+    By default, the background of the element box extends to the outer edge of the border, thus filling the content, padding, and border areas (though this can be changed with background-clip). If the border has any transparent portions (e.g., it is dotted or dashed), the element background will be visible in those portions. The background does not extend into the margin areas of the box. Any outlines are drawn in the margin area and do not affect layout.
+    Only the margins, height, and width of an element box may be set to auto.
+    Only margins can be given negative values.
+    The padding and border widths of the element box default to 0 (zero), and the border style defaults to none.
+
+    If box-sizing is content-box (the default value), the property width defines only the width of the content area; any padding, borders, or margins are added to it. The same is true for height with respect to the height.
+    If box-sizing is padding-box, the property width defines the total width of the content and the padding. Any borders and margins are added to it. The same is true for height with respect to the height.
+    If box-sizing is border-box, the property width defines the total width of the content, padding, and borders; any margins are added to it. The same is true for height with respect to the height.
+
+
+
+
+Box Model
+	Box Model applies to block-level elements.
+	http://reference.sitepoint.com/css/boxmodel http://reference.sitepoint.com/css/inlineformatting
+
+Viewport - a rectangular window through which we can view a part of the document.
+Pagebox - In a paged medium, such as printed paper, each page can be seen as a viewport whose dimensions are the same as the page box (the printable part of the page, excluding any page margins).
+Canvas - The browser renders the document on a canvas, which, consequently, is at least as large as the document itself. If the viewport is larger than the document, the canvas fills the viewport.

@@ -1,0 +1,259 @@
+
+
+
+JavaScript
+	Object based language, they don't support inheritance(Java supports!!).
+	javascript is interpreted(by browser) language(Java is compiled).
+	JavaScript doesn't have classes.
+	Javascript is dynamic...
+	
+ECMAScript, Netscape's JavaScript,Microsoft's JScript, and Macromedia's ActionScript. 
+HTML and JavaScript
+	You can place JavaScript either in head tag or body tag(ocasionally) or external file.
+	internal script  <SCRIPT LANGUAGE="JavaScript"> //any functions goes here </SCRIPT>
+	external script  <SCRIPT LANGUAGE="JavaScript" SRC="externalfile.js">
+
+HTML <noscript> tag - message to display if the visitor's browser doesn't support JavaScript or if JavaScript is disabled.
+	<noscript>Your browser does not support JavaScript!</noscript>
+
+JavaScript entities - piece of javascript code that is embedded in the HTML.
+	usage: &{ JavaScript-statements };
+
+	<script>
+	var myimage="day.gif"
+	var today=new Date()
+	var day_night=current.getHours()
+	//if the hour is pass 12 p.m
+	if (day_night>12)
+	myimage="night.gif"
+	</script>
+
+	<img src="&{myimage };">
+
+Comments in JavaScript
+	// one-line comments
+	/* multi-line comments */
+	<!-- this style of comments indicates the browsers that don't understand javascript to ignore it -->
+
+
+
+
+
+	
+	
+	
+		
+		
+
+
+
+window object
+	window.alert(message) - dialog box displaying the message.
+	window.confirm(message) - yes/no dialog box, returns true if you click on 'yes' button, false if you click on 'no' button.
+	window.prompt(message, [default_value_in_the_text_field]) - ok/cancel dialog, returns whatever you enter in the textfield.
+
+	opening/closing a new window, minimizing,maximizing,resizing windows
+	var mywindow = window.open(URL, windowname, attributes) - returns a reference to the new window opened.
+		attributes - height=100, width=200, resizable=yes, menubar=yes, toolbar=yes, location=yes, status=yes, scrollbar=yes
+		http://www.hscripts.com/tutorials/javascript/open-method.php
+	mywindow.close() - closing the window.
+	
+	window.setTimeout(function(), milliseconds, [functargs]) - to call a function after specified time.
+	window.setInterval(function(), milliseconds, [functargs]) - to call a function periodically.
+
+	window object properties: http://www.hscripts.com/tutorials/javascript/window-properties.php
+
+
+frame object - property of window object, refers to <frame> tag.
+	<frameset> contains multiple <frame> tags, which makes up a window. 
+
+
+navigator object - used to find the visitor's browser type, version etc.
+	http://www.javascriptkit.com/jsref/navigator.shtml
+
+
+history object - list of URLs visited during this session.
+	window.history.length - returns no. of elements in the history object.
+
+	window.history.back(), window.history.forward() - same as browser back and forward buttons
+	window.history.go(n) - if n is -ve, same as clicking back button n times. it n is +ve, same as clicking forward button n times.
+
+
+location object - property of window object, window.location
+	window.location - complete URL of the window. // var currentURL = window.location;
+
+	// <protocol>//<hostname>:<port>/<pathname><search><hash>
+	// http://www.example.com:80/example.cgi?x=3&y=4#results
+	window.location.protocol - returns http/https/ftp
+	window.location.hostname - returns www.yahoo.com
+	window.location.port - returns 80
+	window.location.pathname - reutrns the path info
+	window.location.search - returns query string
+	window.location.hash - reutrns anchor name used in the URL (#headline)
+
+	window.location.reload() - to reload the webpage. same as browser's reload button.
+	window.location.reload(true) - To force the browser to retrieve the page directly from the server, bypassing any caches, pass a true parameter.
+	window.location.replace() - clears the history(so you can't go back to the previous URL using back button) and go to specified URL.
+	window.location.href property - add an entry to history(so you can go back to the previous URL using back button) and go to specified URL.
+		<input type="button" onclick="window.location.href='http://www.google.com/'" value="Visit www.google.com" />
+
+	if(location.protocol=='http') - check if login is http or https
+
+
+
+document object - one document object per page(<head> and <body>)
+	fgcolor - color of the text
+	bgcolor - back ground color
+	title - refers to <title> tag
+	body - refers to <body> tag of webpage
+	anchors[] - array of anchors in the document
+	links[] - array of links in the document
+	forms[] - array of forms in the document
+	images[] - array of images in the document
+	
+	write(string), writeln(string)
+
+	anchors vs links
+	anchors - <A> tag with name attribute. used for moving b/w different sections of the same page.
+		<a name=first>This is first line of the page</a>
+		<a href='#first'>click here to jump to first line of the page</a>
+	links - <A> tag with href attribute. going to another page or another site. 
+		http://sis.bristol.ac.uk/~cckhrb/webdev/code/html/tag_a.htm
+
+anchor object - property of document object
+	named location in the webpage, contains no methods.
+	name - name of the anchor
+
+link object - property of document object
+	link object has all the properties of location object.
+	In adddition it has target property.
+	target - target attribute of the link, window that displays the contents of a clicked hyperlink.
+
+form object - property of document object.
+	name - name of the form
+	method - GET, POST etc
+	action - URL to which the form is submitted to.
+	elements[] - array of objects in the form object(such as button, textfield etc)	
+		use of elements array in form object
+		<textarea name="address" rows="3" cols="35"></textarea>
+		accessing above textarea from javascript: myform.elements['address'].value	
+
+	submit() - to submit a form
+	reset() - to reset a form
+
+button object - property of the form object
+	name - name of the button
+	type - type of the button(button, submit, reset etc)
+	value - text that appears on the face of button. (read-only for type 'submit' and 'reset')
+
+	click() - to click the button programmatically.	
+
+checkbox object - property of the form object
+	name - name of the checkbox
+	type - checkbox
+	value - value submitted when the form is submitted.
+	checked - contains a boolean value indicating whether checkbox is selected or not.
+
+	click() - select the checkbox if it is unselected or unselect it if it is selected.
+
+radio object - property of the form object, represents a single radio button
+	name - name of the radio button
+	type - radio
+	value - value submitted when the form is submitted.
+	checked - contains a boolean value indicating whether checkbox is selected or not.
+
+	click() - select the checkbox if it is unselected or unselect it if it is selected.
+
+	There are 2 ways to access a radio button from javascript:
+	document.myform.radiobuttonname - if there is only one radio button with the name specified.
+	document.myform.radiobuttonname[1] - if there are multiple radiobuttons with same name i.e if the radio buttons are grouped.
+	http://www.somacon.com/p143.php
+
+
+text object - property of the form object.
+	name - name of the text field.
+	type - text
+	value - content of text field.
+	disabled - to enable/disable the text field. default is enable.
+
+	focus() - set the control in the text field.
+	select() - highlights the content of text field.
+
+
+textarea 
+	name - name of the text area.
+	type - textarea
+	value - content of text area.
+	disabled - to enable/disable the text area. default is enable.
+
+	focus() - set the control in the text area.
+	select() - highlights the content of text area.
+
+
+option object - property of the select object.
+	index - index of this option in the list of options. read-only.
+	selected - boolean value indicating this option is currently selected or not. read/write.
+	text - text displayed
+	value - value submitted when you select this option.
+
+select object - property of the form object.
+	name - name of the selection list
+	type - select
+	options - array of options to be listed
+	length - no. of options in the options array.
+	selectedIndex - currently selected option in the list of options.
+
+hidden object - property of the form object.
+	name - name of the hidden object.
+	type - hidden
+	value - value of the hidden field. read/write.
+
+password object - property of the form object.
+	name - name of the password field.
+	type - password
+	value - value of the password field. read/write.
+	disabled - to enable/disable the password field. default is enable.
+
+	focus() - set the control in the text field.
+	select() - highlights the content of text field.
+
+fileupload object - property of the form object.
+	name - name of the file upload field.
+	type - file
+	value - name of the file to be uploaded.
+
+
+
+
+
+onabort - triggered when loading of an image/webpage is aborted.
+onblur - triggered when the object loses the focus.
+onchange - triggered when the user changes the contents of a field.
+onclick - triggered when a mouse click is done on the object.
+onfocus - triggered when an object gains the focus.
+onload - triggered when the browser completes loading an image/webpage.
+onmouseover - triggered when the mouse is hovered over an object.
+onmousedown - triggered when the mouse is pressed down on an object.
+onmouseup - trigged when the mouse is pressed down and released on an object.
+onreset - when you reset a form
+onselect - when a user selects some text in a text field.
+onsubmit - when you submit a form
+onunload - generated when you close or browse away from a page.
+
+
+Event Handler  	Used In
+onAbort   		image
+onBlur		select, text, textarea
+onChange		select, text, textarea
+onClick		button, checkbox, radio, link, reset, submit, area
+onError		image
+onFocus		select, text, testarea
+onLoad		windows, image
+onMouseOut		link, area
+onMouseOver		link, area
+onSelect		text, textarea
+onSubmit		form
+onUnload		window
+
+
+--------------------------------------------------

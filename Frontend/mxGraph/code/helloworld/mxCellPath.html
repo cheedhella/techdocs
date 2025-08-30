@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <title>mxCellPath</title>
+        <script type="text/javascript">
+            var rootCell, layer_a, layer_b, layer_c;
+            var g, gm, dp, a, b1, b2, b3, c, e1, e2, e3, e4, e5, e6;
+        </script>
+        <script
+            type="text/javascript"
+            src="/Users/mcheedhe/dev/git-repo/interact/workflowdesigner/framework/src/main/web/js/mxgraph/mxgraph-3_5_1_5/javascript/debug/js/mxClient.js"
+        ></script>
+
+        <script type="text/javascript">
+            function main(container) {
+                rootCell = new mxCell(); // (or default layer).
+                layer_a = rootCell.insert(new mxCell());
+                layer_b = rootCell.insert(new mxCell());
+                layer_c = rootCell.insert(new mxCell());
+                gm = new mxGraphModel(rootCell);
+                g = new mxGraph(container, gm);
+                dp = g.getDefaultParent();
+
+                gm.beginUpdate();
+                try {
+                    a = g.insertVertex(layer_a, "a", "A", 50, 100, 80, 30);
+                    b1 = g.insertVertex(layer_b, "b1", "B1", 200, 50, 80, 30);
+                    b2 = g.insertVertex(layer_b, "b2", "B2", 200, 100, 80, 30);
+                    b3 = g.insertVertex(layer_b, "b3", "B3", 200, 150, 80, 30);
+                    c = g.insertVertex(layer_c, "c", "C", 350, 100, 80, 30);
+                    e1 = g.insertEdge(layer_a, "e1", "", a, b1);
+                    e2 = g.insertEdge(layer_b, "e2", "", b1, c);
+                    e3 = g.insertEdge(layer_a, "e3", "", a, b2);
+                    e4 = g.insertEdge(layer_b, "e4", "", b2, c);
+                    e5 = g.insertEdge(layer_a, "e5", "", a, b3);
+                    e6 = g.insertEdge(layer_b, "e6", "", b3, c);
+                    i = g.insertVertex(dp, "i", "Isolated", 350, 150, 80, 30);
+                } finally {
+                    gm.endUpdate();
+                }
+
+                analyze();
+            }
+
+            function analyze() {
+                console.log(
+                    "Every graph model has a root cell, which holds all the layers."
+                );
+
+                console.log(
+                    "rootCell: isRoot() = " +
+                        gm.isRoot(rootCell) +
+                        ", isLayer() = " +
+                        gm.isLayer(rootCell)
+                );
+                console.log(
+                    "layer_a: isRoot() = " +
+                        gm.isRoot(layer_a) +
+                        ", isLayer() = " +
+                        gm.isLayer(layer_a)
+                );
+                console.log(
+                    "layer_b: isRoot() = " +
+                        gm.isRoot(layer_b) +
+                        ", isLayer() = " +
+                        gm.isLayer(layer_b)
+                );
+                console.log(
+                    "layer_c: isRoot() = " +
+                        gm.isRoot(layer_c) +
+                        ", isLayer() = " +
+                        gm.isLayer(layer_c)
+                );
+                console.log(
+                    "getDefaultParent(): isRoot() = " +
+                        gm.isRoot(dp) +
+                        ", isLayer() = " +
+                        gm.isLayer(dp)
+                );
+                console.log("layer_a and getDefaultParent() are same.");
+
+                console.log(
+                    "This graph has " + rootCell.children.length + " layers."
+                );
+                var vCount = 0,
+                    eCount = 0;
+                layer_a.children.forEach(function (cell) {
+                    if (cell.isVertex()) {
+                        vCount++;
+                    } else if (cell.isEdge()) {
+                        eCount++;
+                    }
+                });
+                console.log(
+                    "layer_a has " +
+                        layer_a.children.length +
+                        " cells: " +
+                        vCount +
+                        " vertices and " +
+                        eCount +
+                        " edges"
+                );
+
+                var vCount = 0,
+                    eCount = 0;
+                layer_b.children.forEach(function (cell) {
+                    if (cell.isVertex()) {
+                        vCount++;
+                    } else if (cell.isEdge()) {
+                        eCount++;
+                    }
+                });
+                console.log(
+                    "layer_b has " +
+                        layer_b.children.length +
+                        " cells: " +
+                        vCount +
+                        " vertices and " +
+                        eCount +
+                        " edges"
+                );
+
+                var vCount = 0,
+                    eCount = 0;
+                layer_c.children.forEach(function (cell) {
+                    if (cell.isVertex()) {
+                        vCount++;
+                    } else if (cell.isEdge()) {
+                        eCount++;
+                    }
+                });
+                console.log(
+                    "layer_c has " +
+                        layer_c.children.length +
+                        " cells: " +
+                        vCount +
+                        " vertices and " +
+                        eCount +
+                        " edges"
+                );
+            }
+        </script>
+    </head>
+    <body onload="main(document.getElementById('graphContainer'))">
+        <div id="graphContainer"></div>
+    </body>
+</html>

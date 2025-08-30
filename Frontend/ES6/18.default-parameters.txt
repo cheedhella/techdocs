@@ -1,0 +1,80 @@
+Default parameters
+    Prior to ES6, if the caller doesn't pass any value to a function parameter, you need to write extra code 
+    in the function body, to assign a default value to it;
+    Eg:
+        function add(a, b) {    // If you don't pass any value to a function parameter, it is set to undefined;
+            a = (typeof a === 'undefined') ? 0 : a;
+            b = (typeof b === 'undefined') ? 0 : b;
+            return a + b;
+        }
+        add(1, 2); // 3
+        add(1);    // 1
+        add();     // 0
+
+    Eg 2: We could also use || operator to provide a default value;
+        // Be careful: If you pass a value of 0 for length, default value 100 will override it, because 0 is evaluates as false;
+        function addReminder(date, length) {
+            date = date || new Date().getTime();
+            length = length || 100;
+            tag = tag || 'div';
+            config = config || {};
+            // ...
+        }
+        addReminder();
+
+    Eg3:
+        // ES5
+        function addOffset(style) {
+            if (!style) {
+                style = {}; 
+            }
+            style.offset = '10px';
+            return style;
+        }
+        // ES6
+        function addOffset(style = {}) {
+            style.offset = '10px';
+            return style;
+        }
+
+    From ES6, You can specify default value for each parameter, when it is undefined;
+---------------------------------------------------------------------------------------------------------
+Eg1: Simple values as default parameters;
+    function add(a = 0, b = 0) {
+        return a + b;
+    }
+    add(1, 2);          // 3
+    add(undefined, 2);  // 2
+    add(1);             // 1
+    add();              // 0
+
+Eg2: Expressions as default parameter;
+    function getCarCost(price = 0, taxRate = 0.1) {
+        return price + price * taxRate;
+    };
+    console.log(getCarCost(1000, 0.2)); // 1200
+    console.log(getCarCost(1000));      // 1100
+
+Eg3: Function as default parameter;
+    function getTaxRate(price) {
+        return (price > 500) ? 0.2 : 0.1;
+    }
+    function getCarCost(price = 0, taxRate = getTaxRate(price)) {
+        return price + price * taxRate;
+    };
+    console.log(getCarCost(1000));  // 1200
+    console.log(getCarCost(100));   // 110
+    
+Eg4: If you refer a parameter that is not yet initialized, you will get ReferenceError;
+    function subtract(x = y, y = 1) { // ReferenceError: Cannot access 'y' before initialization
+        return x - y;
+    }
+    subtract(10);
+
+Eg5: Default parameters has no bearing on the length of the arguments;
+    function add(a = 0, b = 0) {
+        console.log(arguments.length);
+    }
+    add();              // 0
+    add(1);             // 1
+    add(undefined, 2);  // 2

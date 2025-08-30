@@ -1,0 +1,104 @@
+Font Properties: font-style font-variant font-weight font-size/line-height font-family caption | icon | menu | message-box | small-caption | status-bar;
+font-family: font-1 font-2 ... font-n generic-font-family; generic-font-family: serif | sans-serif | monospace | cursive | fantasy;
+font-face 
+Font Formats: TTF, OTF, WOFF, SVG, EOT;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+font-family: font-1 font-2 ... font-n generic-font-family; 
+	Default value: depends on user-agent(may vary from element to element).
+	Eg: font-family: "Times New Roman", serif;
+	1. You can specify one or more fonts and/or a generic font family.
+	   If the browser doesn't find the first font, it will try the second font and then the third and so on.
+	2. Always end your font list (even if it's a list of one) with a generic font.
+	   If the browser can't find any of the fonts specified, it randomly picks a font from generic family specified.
+	3. If the font you want to use is more than one word or if it contains any specials chars in its name such # or $, then you should surround it with double-quote marks.
+	   If you leave off the quotation marks, there is a chance that user agents will ignore that particular font name altogether, although they’ll still process the rest of the rule.
+	   Generic font family names should not be put into quotes.
+	   If you quote a generic name, then the user agent will assume that you are asking for a specific font with that name (for example, “serif”), not a generic family.
+	------------------
+	Generic Font Families: serif, sans-serif, monospace, cursive, fantasy;
+		Serif: Garamond, Georgia, New York, Times, Times New Roman;
+		Sans-serif: Arial, Geneva, Helvetica, Lucida Sans, Trebuchet, Verdana;
+		Monospace: Courier, Courier New, Lucida Console, Monaco;
+		Cursive: Comic Sans MS, Lucida Handwriting, Zapf Chancery;
+		Fantasy: Copperplate, Desdemona, Impact, Kino;
+	------------------
+	Which font-family to choose when - some Rules-of-Thumb:
+		Don't use more than 3-4 fonts on any one page.
+		Don't change the font in mid sentence unless you have a very good reason.
+		Sans serif for online, serif for print.
+		Monospace for typewriter and code.
+		Script and fantasy for accents.
+		Fonts in each family and when to which font: http://webdesign.about.com/od/fonts/a/aa080204.htm
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What are Web-Safe Fonts?
+	Fonts that are likely to be available in almost all devices, browsers and Operating Systems. Eg: Arial, Courier New, Georgia, Times New Roman, Verdana;
+	
+font-face
+	With CSS3 font-face, You are no longer forced to use web-safe fonts, you can use any font that is not installed on the user's computer.
+	Example:
+		@font-face {
+			font-family: myFirstFont;
+			src: url(sansation_light.woff);
+		}
+		div {
+			font-family: myFirstFont;
+		} 
+
+Different Font Formats
+	TrueType Fonts (TTF), OpenType Fonts (OTF), Web Open Font Format (WOFF), SVG Fonts, Embedded OpenType Fonts (EOT);
+	
+	
+	ttf/otf, woff, svg fonts, eot fonts;
+	
+	1. font-family, font-size, font-weight, font-style, text-decoaration, color, text-transform, line-height, font-variant
+font attributes: font-family: verdana, arial, sans-serif; font-size: 120%;
+font - font-style font-variant font-weight font-size/line-height font-family
+	font-style: normal | italic | oblique;
+	font-variant: normal | small-caps;
+	font-weight: lighter | normal | bold | bolder | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900; // 400 - normal, 700 - bold
+	font-size: xx-small | x-small | small | medium | large | x-large | xx-larger | smaller | larger;
+	line-height: 
+	font-family: family-name generic-family
+		family-name: times | serif
+		generic-family: serif | sans-serif | cursive | fantasy | monospace;
+
+	http://www.impressivewebs.com/css-font-shorthand-property-cheat-sheet/
+	font-variant:
+	font-stretch:
+Thus, most of the document will use a serif font such as Times, including all paragraphs except those that have a class of signature, which will instead be rendered in a cursive font such as Author. Heading levels 1 through 4 will use a sans-serif font like Helvetica, while the elements code, pre, tt, and kbd will use a monospace font like Courier.
+-------------------------------------------------------------------------------------------------------------------- 
+
+font-style: normal | italic | oblique;
+	Specifies the style of text content of an element.
+	normal - default, upright text(text which is not italic);
+	italic - If italic is specified and there is no italic face available, the browser will look for an oblique face before it tries to mimic the italic.
+		If both italic and oblique faces are not available, browser will mimic the sloping effect.
+		To prevent the browser from mimicking italic or oblique face, use the font-synthesis property (if supported).
+	oblique - same as italic;
+	italic vs oblique: Most browsers render oblique same as italic.
+		According to the spec, "Italic faces are generally cursive in nature while oblique faces are sloped/slanted versions of the regular face."
+		However, if both italic and oblique faces are not available, browser will mimic the sloping effect, in which case they look the same.
+
+font-variant: normal | small-caps;
+	It provides an effect that that is slightly different from text-transform: uppercase;
+	The difference being, with small-caps, the lower-case characters results in slightly scaled down upper-case letters.
+	small-caps effect is best suited for chapter titles etc; Eg: <h1 font-variant="small-caps">Chapter 1: Down The Rabbit-Hole</h1>
+	
+font-weight: normal/400 | bold/700 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | lighter | bolder;
+	Specifies the weight or boldness of text contents of an element.
+	normal - To remove the bold formatting from an element that is bold by default, such as <h1> to <h6>, set the value of font-weight to normal.
+	lighter, bolder - selects a font-weight that is lighter or bolder than the font-weight inherited from the parent element;
+		Exact behavior varies from browser to browser: http://destination-code.blogspot.in/2009/01/font-weight-bolder-and-lighter.html
+
+font-size: xx-small | x-small | small | medium(default) | large | x-large | xx-large | smaller| larger | <absolute-size> | <relative-size> | <percentage>;
+	Smaller is roughly equivalent to 80% or 0.8em, and larger is roughly equivalent to 120% or 1.2em(of parent's font size).
+	Relative sizes are relative to font-size of parent element. // 1.5em = 1.5 * parent's font-size;
+	---
+	Tip: When setting font sizes, your best strategy is to set a relative-length size for the <body> tag (such as 100%), and then use absolute font sizes (such as small) or relative font sizes (such as larger) to adjust the size. 
+	Doing so ensures the most consistent and versatile page viewing regardless of the actual media used (computer screen, printed page, handheld, and so on.)
+
+
+
+ToDO:
+	What is web-safe font? embedded fonts? handling bidi text? i18 text? design a page in telugu? font-size-adjust, font-stretch;
+	For now, just ignore the caption, icon, menu, message-box, small-caption, and status-bar values — these are called system fonts, and you will rarely see them used in real-world code.

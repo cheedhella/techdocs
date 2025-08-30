@@ -1,0 +1,68 @@
+Float Property
+    During initial days, the intent behind floats was to achieve magazine layout, where text flows around an image;
+    It is never meant for layout; Their use as a layout tool was a bad hack similar to use of tables for layout;
+    So, in the past, you can float only images and tables;
+
+    With CSS float property, you can float any element, from images to paragraphs to lists;
+
+    float - left | right | none; // Defaults to none; Elements can be floated horizontally, either left or right, not up or down;
+        left - Element is taken out of its normal flow and shifted it to the left of its parent container, with text and other elements flowing around it, on it's right side;
+        right - Element is taken out of its normal flow and shifted it to the right of its parent container, with text and other elements flowing around it, on it's left side;
+        none - Element is not floated, it behaves as normal element;
+
+    Floated element is taken out of the document normal flow and shifted to left OR right of it's container;
+    If another element is already floated to that border, newly floated box will stack immediately next to its right/left margin;
+    If you float several adjacent elements, they will float next to each other, if there is sufficient space;
+    If there is not enough space for the float, it is shifted downward until either it fits or there are no more floating elements present;    
+    
+    If you float an inline element, it gets changed to block element(display: block) automatically;
+    Absolutely positioned elements ignore the float property;
+
+    When you float an element, you must set its width(not to auto), or some unpredictable results can occur;
+    However, images implicitly have width and so no need to have a width assigned to them when floated;
+
+    To Summarize, floats are used
+        - to flow text around images;
+        - to make block-level elements sit side-by-side; // navigation bar is an example
+        - to creae columns;
+        
+--------------------------------------------------------------------------------------------------------------------------------------------
+Clear Property
+    Elements after a floating element will flow around it.
+    Using clear property, you specify on which sides of an element, floated elements are not allowed;
+
+    clear - left | right | both | none; // Defaults to none;
+        left - any floated elements on it's left are shifted down sufficiently to clear it's bottom edge;
+        right - any floated elements on it's right are shifted down sufficiently to clear it's bottom edge;
+        both - floated elements are not allowed on either of the sides;
+        none - It allows floating on both sides;
+
+TODO
+    This property can clear an element only from floated boxes within the same block. 
+    It doesn't clear the element from floated child boxes within the element itself.
+--------------------------------------------------------------------------------------------------------------------------------------------
+clearfix hack
+    If you float an image and if it is taller than the element containing it, then it overflows outside of it's container;
+
+    One solution is set outflow:auto; on image: https://www.w3schools.com/css/tryit.asp?filename=trycss_layout_clearfix
+    It works well as long as you are able to keep control of your margins and padding (else you might see scrollbars);
+
+    Another solution is apply clearfix class to container:
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+--------------------------------------------------------------------------------------------------------------------------------------------
+Bottom Line
+    If you don't need to support IE9 or lower, you can use flexbox and never use floated layouts;
+--------------------------------------------------------------------------------------------------------------------------------------------
+A floated element is placed according to the following rules:The left (or right) outer edge of a floated element may not be to the left (or right) of the inner edge of its containing block.
+The left (or right) outer edge of a floated element must be to the right (or left) of the right (left) outer edge of a left-floating (or right-floating) element that occurs earlier in the document’s source, unless the top of the latter element is below the bottom of the former.
+The right outer edge of a left-floating element may not be to the right of the left outer edge of any right-floating element to its right. 
+The left outer edge of a right-floating element may not be to the left of the right outer edge of any left-floating element to its left.
+A floating element’s top may not be higher than the inner top of its containing block.
+A floating element’s top may not be higher than the top of any earlier floating or block-level element.A floating element’s top may not be higher than the top of any line box with content that precedes the floating element.
+A left (or right) floating element that has another floating element to its left (right) may not have its right (left) outer edge to the right (left) of its containing block’s right (left) edge.
+A floating element must be placed as high as possible.A left-floating element must be put as far to the left as possible, and a right-floating element as far to the right as possible. 
+A higher position is preferred to one that is farther to the right or left.

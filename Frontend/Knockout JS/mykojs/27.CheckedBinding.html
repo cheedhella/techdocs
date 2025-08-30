@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: checked</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- It binds checkable form elements such as checkboxes, radiobuttons with specified property in the view model. -->
+        <p>Do you have Landline? <input type="checkbox" data-bind="checked: hasLandline" /></p>
+        <p><span data-bind="if: hasLandline">Yes, I have!</span></p>
+        <p><span data-bind="ifnot: hasLandline">No, I don't have!</span> <p>
+
+        <script>
+            var myViewModel = {
+                hasLandline: ko.observable(false)
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

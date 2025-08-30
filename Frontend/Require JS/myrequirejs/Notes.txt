@@ -1,0 +1,185 @@
+What is AMD, Asynchronous Module Definition?
+	It is a JavaScript specification that allows you to define modules, where a module and it's dependencies are loaded asynchronously!
+	A module is loaded only when needed and it doesn't block anything else from loading!
+
+What is RequireJS?
+	RequireJS is an implementation of AMD specification. CommonJS, Dojo Toolkit are other implementations.
+
+Advantages
+	- Load only the libraries that are needed.
+	- you can also implement lazy loading of modules or create JavaScript partitions that contain more than one module.
+	- It defines API that defines modules and their dependencies, and loads them asynchronously if desired.
+	- The RequireJS syntax for modules allows them to be loaded as fast as possible, even out of order, but evaluated in the correct dependency order, and since global variables are not created, it makes it possible to load multiple versions of a module in a page.
+	
+What is a Module?
+	It could be an object, function, class OR code which is executed after loading it.
+
+	A very important actor in AMD are the modules. Modules are registered pieces of code that can be referenced and its value can be exported or its behaviour can be used. So it is possible to declare a module that takes care of performing some calculations, expecting some input values and oerations to perform and returning the result of these operations when are applied to the input values passed. This declaration can be used in differepnt places around a web application without the need to declare it globally and polluting the global name space.
+
+define() method
+	- It is used to define a module with same name as it's filename.
+	- Only one module should be defined per JavaScript file, given the nature of the module name-to-file-path lookup algorithm.
+	  You should only use the optimization tool to group multiple modules into optimized files.
+	- It takes array of dependant modules as its first argument. You can list them in any order.
+	- Example:
+		define(['module1', 'module2'], function(module1RetVal, module2RetVal) {
+			//... return value
+		});
+
+require() method
+	- It takes an array of depedant modules and a callback as input;
+	- It loads all the depedencies asynchronously(if not already loaded) and adds it to the page as a script tag using head.appendChild();
+	- Once all depedencies are loaded, it executes them and returned value is passed as a parameter to the callback specified;
+	- You can specify the dependencies in any order;
+	- Example: 
+		require([comma_separated_array_of_modules], callback);
+	- You can specify a dependant module by id OR a URL;
+	- This approach(also called module pattern) allows you to load different version of same module in the same page;
+
+requirejs() method
+	- alias to require() method;
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Setting Up RequireJS
+	 - Download latest from http://requirejs.org/docs/download.html
+	 - <script src="../lib/require.2.3.6.js"></script>
+
+data-main attribute
+	- <script src="../lib/require.2.3.6.js" data-main="config"></script>
+	- It is used to specify a file path, which contains the RequireJS application configuration.
+	- Once RequireJS is loaded, it looks for config.js in the specified path, and loads it asynchronously.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+RequireJS Configuration
+	baseUrl 
+		- If both data-main and baseUrl are not set, then baseUrl defaults to directory containing HTML page which loads RequireJS;
+		- If data-main is specified and baseUrl is not specified, then baseUrl will default to directory which contains data-main script;
+		- If data-main is not specified and baseUrl is specified, then baseUrl will be relative to directory containing HTML page which loads RequireJS;
+		  If you want to do require() calls in the HTML page, then it is best to not use data-main.
+		- If both data-main and baseUrl are set, then modules are resolved relative to baseUrl;
+
+
+
+		  default to directory which contains data-main script;
+
+
+		defaults to directory containing HTML page running RequireJS;
+
+		baseUrl is not set and data-main is set, baseUrl  
+		is the directory that contains the HTML page running RequireJS.
+		- If baseUrl is not set and data-main is set, baseUrl will default to directory which contains data-main script;
+
+
+
+	- base path appended to all modules loaded via requireJS. 
+		The exceptions are modules ending with “.js” extension, containing a protocol, starting with “/” (absolute paths) or containing query string arguments. In these baseUrl is not used. Default is the path of the HTML page that loads requireJS, in case the “data-main” attribute is used, the default is the path of this attribute.
+		Require calls use the requireJS baseUrl (prepending it) in all cases but:
+			when query strings parameters are present
+			when absolute paths are present (‘/’)
+			a protocol like http or https is contained in the url
+			when the path ends with .js (js extensions)
+		In these cases, requireJS does not modify the url and does not prepend the baseUrl.
+		It is a route path for all modules which are loaded through RequireJS. The baseUrl is indicated by a string starting with "slash (/)", containing a protocol and ending with ".js" extension. If there is no baseUrl specified, then RequireJS uses the data-main attribute path as baseUrl.
+
+	paths
+		path mapping for modules, relative to the baseUrl. At the end of this chapter an example is presented.
+		It specifies the path mappings for modules which are relative to the baseUrl. 
+		It automatically adds the .js extension to a path when mapping the module name.
+	
+	
+
+	map: 
+		For the given module, an application uses same module of different versions for different objectives by sharing their ids to make use of same code for different conditions.
+		different paths for same modules, this is very useful in case the same application needs to use different versions of the 
+		same module for different purposes and needs (or wants) to share their ids in order to use the same code for different situations.
+
+	config: 
+		a way of passing configuration to the modules. This is done by using the special module “module” and its function module.config().
+		It provides the configuration to a module by using the config option and this can be done by using the special dependency "module" and calling its module.config() function.
+
+	urlArgs: 
+		The query string arguments are used to fetch all resources that are loaded by using RequireJS. 
+		It is used for cache busting when there is improper configuration of browser or server.
+		query parameters that are added to all resources loaded via requireJS. 
+		Very useful for cache busting during development, to be used with care on production.
+
+	waitSeconds: 
+		It specifies the number of seconds to wait before throwing up on script loading. The default is "7" seconds and "0" disables the timeout.
+		number of seconds before throwing a timeout, default 7 seconds. 0 means no timeout will be thrown.
+
+	packages − It provides the CommonJS packages for configuring the loading modules.
+
+	context − It provides the name for context loading which allows the loading of different modules in a page.
+
+	deps − It is an array of dependencies that is required when Require is specified as config object before loading the RequireJS.
+
+	callback − It executes a function after loading the dependencies and is required when Require is specified as config object before loading RequireJS.
+
+	xhtml − It is used to create the script elements by using the document.createElementNS() method when this option is set to true.
+
+	scriptType − It defines the value for script type attribute used in the document. Default type is "text/javascript".
+
+	skipDataMain − It skips the data-main attribute scanning while loading the module, if this option is set to true.
+
+	shim: 
+		It provides the usage of non AMD libraries with RequireJS by configuring their dependencies and exporting their global values.
+		Mechanism to support the configuration and usage of non AMD libraries with requireJS. 
+		It defines their dependencies, exports them using their global variables or calls their no conflict functions explicitly. 
+		The explanation of this option can take longer, but is out of the scope of this tutorial. 
+		For more information please visit http://requirejs.org/docs/api.html#data-main.
+
+
+require.config({
+    baseUrl: "/web/app",
+    paths: {
+        "moduleA": "js/moduleA",
+        "jquery": "https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min"
+    },
+    urlArgs: "version=" +  (new Date()).getTime(),
+    waitSeconds: 15
+});
+
+var cssUrl = require.toUrl("./style.css");
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+This post only scraped the surface of things, there’s so much more to it.
+
+Asynchronous by nature
+	Dependencies are easy to identify
+	Avoids global variables
+	Can be lazy loaded if needed
+	Easily portable
+
+	Can load more than JavaScript files
+	Powerful plugin support
+	Support script fallbacks (OMG, CDN is down!)
+	Can be easily configured
+	Can load multiple versions of the same library
+
+https://devblogs.microsoft.com/visualstudio/using-requirejs-with-visual-studio/
+https://stackoverflow.com/questions/17341015/require-js-is-ignoring-my-config
+https://stackoverflow.com/questions/24841728/requirejs-path-with-js-extension-not-resolving
+https://stackoverflow.com/questions/27326672/requirejs-config-paths-and-shims-not-working
+https://stackoverflow.com/questions/32975133/requirejs-is-not-loading-modules-relative-to-the-baseurl
+https://stackoverflow.com/questions/12574255/require-js-ignoring-baseurl
+https://stackoverflow.com/questions/11182801/why-is-require-js-ignoring-config-baseurl-and-paths
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Compressing your code with r.js
+	RequireJS can also used to compress JS and CSS(on server side, i.e using node.js) before sending it to the client.
+
+	RequireJS is a great tool for organizing your files into modules and only loading what you need.
+	The downside is that too many JavaScript files result in poor load times, which is why RequireJS includes an optimizer to collect the data from all the files and place it in a single minimized file.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ragandhi@admin01-qa1:/usr/responsys/site/image/responsysimages/content/badge19b ~]$ pwd
+/usr/responsys/site/image/responsysimages/content/badge19b
+[ragandhi@admin01-qa1:/usr/responsys/site/image/responsysimages/content/badge19b ~]$ ls -l
+total 16
+-rw-r--r-- 1 rsvp rsvp  481 Jul  8  2019 aftmc.html
+-rw-r--r-- 1 rsvp rsvp  417 Jul  8  2019 aftmp.html
+-rw-r--r-- 1 rsvp rsvp  348 Apr  2 01:20 conversion-MB.htm_21
+-rw-r--r-- 1 rsvp rsvp 1386 Oct 11  2019 external_badge19b.html
+[ragandhi@admin01-qa1:/usr/responsys/site/image/responsysimages/content/badge19b ~]$ date
+Sat Apr 25 23:15:24 PDT 2020
+[ragandhi@admin01-qa1:/usr/responsys/site/image/responsysimages/content/badge19b ~]$

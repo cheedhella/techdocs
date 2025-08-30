@@ -1,0 +1,84 @@
+It allows us to embed expressions (expression interpolation) inside a string declaration, 
+handle multiline strings and create "tagged template literals" which is a more advanced form of template literals.
+
+// Before ES6
+let x = 'By default, we use single quotes to declare a string';
+let y = "We use double quotes, if the string contains 'single quotes' in it";
+let z = 'We use single quotes, if the string contains "double quotes" in it';
+
+let a = 'We can also use escape character, to escape \'single quotes\' in a single quoted string';
+let b = "We can also use escape character, to escape \"double quotes\" in a double quoted string";
+
+// We used + operator to concatenate Strings;
+let a = 5;
+let b = 10;
+console.log('The sum of ' + a + ' and' + b + ' is ' + (a + b)); // The sum of 5 and 10 is 15
+
+// We used \n and \t, if we want to include white spacing; However, special characters reduces the readability;
+let info = 'Name:\tJohn Doe\n'
+info = info + 'Age:\t20\n';
+info = info + 'City:\tLondon';
+console.log(info);
+
+Output:
+Name:   John Doe
+Age:    20
+City:   London
+--------------------------------------------------------------------------------------------------------------
+Template Strings or Literals are introduced in ES6, to make the strings more readable;
+
+// We use backtick character(`) to declare template strings; No need to use single/double quotes, escape characters;
+let x = `This is a new template string`;
+let y = `This is a new 'template string'`;
+let z = `This is a new "template string"`;
+
+// No need to use \n and \t for spacing; Spaces and line breaks inside the template string are preserved;
+let info = `Name:   John Doe
+Age:    20
+City:   London`;
+console.log(info);
+
+Output:
+Name:   John Doe
+Age:    20
+City:   London
+
+// String Template allows expressions;
+let a = 5;
+let b = 10;
+console.log(`The sum of ${a} and ${b} is ${a+b}`); // The sum of 5 and 10 is 15
+
+// Tagged Templates
+Tag is a function which has the ability to process the template string;
+It means we can run the template string through a function and have more control on how it is converted to a string;
+Template string is passed to the tag function as multiple parameters;
+    First argument -> It is a string array containing string literals from the template string;
+        First element -> string starting from index 0 to the first interpolated value;
+        Second element -> String after first interpolated value up-to the next interpolated value;
+        and so on 
+    Second argument -> all the expressions are evaluated and passed to the tag function from 2nd argument onwards in the order of their occurrence;
+    Return value -> tag function can process the literals and evaluated expressions to form the return value;
+
+Eg:
+const coolVariable = "Cool Value";
+const anotherCoolVariable = "Another Cool Value";
+
+function randomTagFunctionName(firstParameter, secondParameter, thirdParameter) {
+    console.log(firstParameter);    // ["", " in a tagged template literal with ", " just sitting there"]
+    console.log(secondParameter);   // "Cool Value"
+    console.log(thirdParameter);    // "Another Cool Value"
+    return "random-hi";
+}
+randomTagFunctionName`${coolVariable} in a tagged template literal with ${anotherCoolVariable} just sitting there`  // "random-hi"
+
+// Taking adavantage of ES6 Rest Operator
+function es6TagFunctionName(firstParameter, ...otherParameters) {
+    console.log(firstParameter);    // 
+    console.log(otherParameters);   // ["Cool Value", "Another Cool Value"]
+    return "random-hi-es6";
+}
+es6TagFunctionName`${coolVariable} in a tagged template literal with ${anotherCoolVariable} just sitting there`    // "random-hi-es6"
+
+Application of Tagged Templates:
+    I18N
+    https://developers.google.com/web/updates/2015/01/ES6-Template-Strings

@@ -1,0 +1,54 @@
+<!-- 
+    repeat method can take a track-list rather than a single value, it means you can repeat more complex track-list;
+    You can use minmax() in this track list, here I am making the max of my larger tracks 2fr, and the smaller ones 1fr;
+    This means that the larger tracks will have more of any leftover space assigned;
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>auto-fill with track-list</title>
+    <style>
+      body {
+        margin: 40px;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(100px, 1fr) minmax(200px, 2fr)
+        );
+        grid-gap: 10px;
+
+        background-color: #fff;
+        color: #444;
+      }
+      .item {
+        background-color: #444;
+        color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        font-size: 150%;
+      }
+      .item:nth-child(even) {
+        background-color: #ccc;
+        color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+      <div class="item">5</div>
+      <div class="item">6</div>
+      <div class="item">7</div>
+      <div class="item">8</div>
+      <div class="item">9</div>
+      <div class="item">10</div>
+      <div class="item">11</div>
+      <div class="item">12</div>
+    </div>
+  </body>
+</html>

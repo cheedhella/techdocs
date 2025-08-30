@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Different ways of Creating Grids</title>
+  </head>
+  <style>
+    .container {
+      background-color: #eee;
+      height: 210px;
+      width: 390px;
+      margin: 30px auto;
+      border: 1px solid red;
+
+      display: grid;
+
+      grid-row-gap: 10px;
+      grid-column-gap: 15px;
+    }
+
+    /* If you specify the height/width in percentage, it changes based on it's container, not based on it's content; */
+    .c1 {
+      grid-template-columns: 30% 30% 30%;
+      grid-template-rows: repeat(2, 100px);
+    }
+    .c2 {
+      grid-template-columns: repeat(2, 100px) 1fr; /* 2 columns of width 100px and 1 column with remaining space */
+    }
+    .c3 {
+      grid-template-columns: repeat(3, 1fr); /* 3 columns of equal width */
+    }
+    .c4 {
+      grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .item {
+      padding: 5px;
+      font-size: 10px;
+      font-family: sans-serif;
+      color: white;
+      background-color: green;
+    }
+  </style>
+  <body>
+    <div class="container c1">
+      <div class="item">1. Orange</div>
+      <div class="item">2. Green</div>
+      <div class="item">3. Violet</div>
+      <div class="item">4. Pink</div>
+      <div class="item">5. Brown</div>
+      <div class="item">6. Blue</div>
+    </div>
+
+    <div class="container c2">
+      <div class="item">1. Orange</div>
+      <div class="item">2. Green</div>
+      <div class="item">3. Violet</div>
+      <div class="item">4. Pink</div>
+      <div class="item">5. Brown</div>
+      <div class="item">6. Blue</div>
+    </div>
+
+    <div class="container c3">
+      <div class="item">1. Orange</div>
+      <div class="item">2. Green</div>
+      <div class="item">3. Violet</div>
+      <div class="item">4. Pink</div>
+      <div class="item">5. Brown</div>
+      <div class="item">6. Blue</div>
+    </div>
+
+    <div class="container c4">
+      <div class="item">1. Orange</div>
+      <div class="item">2. Green</div>
+      <div class="item">3. Violet</div>
+      <div class="item">4. Pink</div>
+      <div class="item">5. Brown</div>
+      <div class="item">6. Blue</div>
+    </div>
+  </body>
+</html>

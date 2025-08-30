@@ -1,0 +1,36 @@
+Advantages of using MVC - code reusability, separation of concerns(separate model from view).
+
+Model - represents data(can be one class or multiple classes). POJO.
+View - what actually user sees, such as a chart.
+Controller - application flow control logic.
+	View and Model never talk directly to each other. Controller sits in between.
+
+	User - click a button. Browser sends a command/action to the controller.
+	
+	
+application data and business rules
+View - representation of data,  such as a chart - What user sees.
+Controller - takes input and converts it commands for model or view - To whom user can talks to/commands.
+	Controller can send a command to the view(for eg, to change the view's presentation of model).
+	Controller can send a command to the model(for eg, to update it).
+	Sometimes, Controller can be split into 2 parts: controller, service layer, Data acess layer.
+
+	Controller's job is to translate incoming requests into outgoing responses. 
+	In order to do this, the controller must take request data and pass it into the Service layer. 
+	The service layer then returns data that the Controller injects into a View for rendering. 
+	This view might be HTML for a standard web request; or, it might be something like JSON (JavaScript Object Notation) for a RESTful API request.
+	
+http://en.wikipedia.org/wiki/PhoneGap
+http://www.bennadel.com/blog/2379-A-Better-Understanding-Of-MVC-Model-View-Controller-Thanks-To-Steven-Neiland.htm
+http://www.alexatnet.com/articles/model-view-controller-mvc-javascript
+http://agilewarrior.wordpress.com/2011/10/26/javascript-model-view-controller-example/
+http://joel.inpointform.net/software-development/mvvm-vs-mvp-vs-mvc-the-differences-explained/
+http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
+http://www.youtube.com/watch?v=eTdVkgF_Slo
+http://tomdalling.com/blog/software-design/model-view-controller-explained/
+
+
+Conclusion:
+	MVC design pattern inserts a controller class between the view and the model to remove the model-view dependencies. 
+	With the dependencies removed, the model, and possibly the view, can be made reusable without modification.
+	This makes implementing new features and maintenance a breeze.

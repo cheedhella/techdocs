@@ -1,0 +1,110 @@
+Array.of()
+    In ES5, if you pass just one numeric value to constructor, then it creates an array of that size; Strange!
+        let prices = Array(5000);
+        console.log(prices.length); // 5000
+    Array.of() is a new way of creating Array, introduced in ES6, which corrects above strange behaviour in ES5;
+        let prices = Array.of(5000);
+        console.log(prices.length); // 1
+
+Array.from(arrayLike [, mapFn [, thisArg]]) - It converts array-like and iterable objects(String, Array, Set and Map) into arrays;
+    arrayLike: an array-like or an iterable object
+    mapFn: a function to call on every element contained
+    thisArg: a value to use as the context (this) of the mapFn function.
+
+    // Eg0: In ES5, we use below code to convert array like object to array;
+    var arr = [].slice.call(arguments);
+
+    // Eg1: Create Array from array-like object(any object with 'length' property defined);
+    const race = {
+        0: 'first rider',
+        1: 'second rider',
+        2: 'third rider',
+        3: 'fourth rider',
+        stadium: 'Motoarena',
+        length: 5
+    };
+    // Since race.length is 5, raceAsArray will have only 5 elements;
+    // 5th element of raceAsArray is undefined, as race has only four indexed elements;
+    // Array.from() ignores the non-indexed properties in race;
+    const raceAsArray = Array.from(race);
+    console.log(raceAsArray); // ["first rider", "second rider", "third rider", "fourth rider", undefined]
+
+    // Eg2: arguments is also an array-like object!
+    function f() {
+        console.log([...arguments]); // [1, 2, 3]
+        return Array.from(arguments);
+    }
+    console.log(f(1, 2, 3)); // [1, 2, 3]
+
+    // Eg3
+    console.log(Array.from('foo')); // ["f", "o", "o"]
+    console.log(Array.from([1, 2, 3], x => x + x)); // [2, 4, 6]
+
+    // Eg4: Create Array from Set
+    const set = new Set(['foo', 'bar', 'baz', 'foo']);
+    console.log(Array.from(set)); // [ "foo", "bar", "baz" ]
+
+    // Eg5: Create Array from Map
+    const mapper = new Map([['1', 'a'], ['2', 'b']]);
+    console.log(Array.from(mapper.values())); // ['a', 'b'];
+    console.log(Array.from(mapper.keys())); // ['1', '2'];
+
+    // Eg6: Create Array on-the-fly and fill it with elements!
+    console.log(Array.from({ length: 5 })); // [undefined, undefined, undefined, undefined, undefined]
+    console.log(Array.from(new Array(5), () => 'a')); // [ 'a', 'a', 'a', 'a', 'a' ]
+    console.log(Array.from({ length: 5 }, (e, i) => i)); // [0, 1, 2, 3, 4]
+
+    // Eg7: Sequence Generator
+    const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+    // Generate numbers range 0..4
+    range(0, 4, 1); // [0, 1, 2, 3, 4]
+    // Generate numbers range 1..10 with step of 2 
+    range(1, 10, 2); // [1, 3, 5, 7, 9]
+    // Generate the alphabet using Array.from making use of it being ordered as a sequence
+    range('A'.charCodeAt(0), 'Z'.charCodeAt(0), 1).map(x => String.fromCharCode(x)); // ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+find() - It returns the first item that matches the given condition;
+    var numbers = [1, 2, 3]; 
+    var firstMatchingOddNumber = numbers.find((x) => x % 2 == 1); 
+    console.log(firstMatchingOddNumber); // 1
+    
+    ES5 filter() vs ES6 find()
+        filter() returns array of matching items; find() returns first matching item;
+
+findIndex() - It is similar to find(), but instead of returning the element that matched, it returns the index of that element;
+    var numbers = [1, 2, 3]; 
+    var indexOfFirstMatchingOddNumber = numbers.find((x) => x % 2 == 1); 
+    console.log(indexOfFirstMatchingOddNumber); // 0
+
+entries() - It returns an Iterator over array of entries, where each entry is an array of [index, value];
+keys() - It returns an Iterator over an array of indexes;
+values() - It returns an Iterator over an array of values;
+    var cIterator = ['a', 'b', 'c'].entries(); 
+    console.log(cIterator.next().value); // [0, 'a']
+    console.log(cIterator.next().value); // [1, 'b']
+    console.log(cIterator.next().value); // [2, 'c']
+
+    // You can use spread operator to convert the iterator into array of arrays;
+    console.log([...cIterator]); // [[0, 'a'], [1, 'b'], [2, 'c']]
+    console.log(Array.from(cIterator)); // [[0, 'a'], [1, 'b'], [2, 'c']]
+
+    console.log(Array.from(['a', 'b', 'c'].keys())); // [0, 1, 2] 
+    console.log(Array.from(['a', 'b', 'c'].values())); // ['a', 'b', 'c']
+    
+    Note: Array.from() converts the Iterator to array;
+
+fill(value[, start[, end]]) - It fills the array with specified value;
+    console.log(new Array(3).fill(7)); // [7, 7, 7]
+    console.log(['a', 'b', 'c'].fill(7)); // [7, 7, 7]
+    console.log(['a', 'b', 'c'].fill(7, 1, 2)); // [ 'a', 7, 'c' ]
+
+copyWithin(target[, start[, end]) - It shallow copies part of an array to another location in the same array and returns it;
+    target - copy the elements to this index;
+    start - copy the elements from this index; // Defaults to 0;
+    end - stop copying the elements from this index; // Defaults to array.length;
+
+    // Copy elements (from index 3 to index 5) to index 0;
+    [1, 2, 3, 4, 5, 6, 7].copyWithin(0, 3, 6); // [4, 5, 6, 4, 5, 6, 7]
+    
+    // Copy elements to index 3;
+    [1, 2, 3, 4, 5, 6, 7].copyWithin(3); // 1, 2, 3, 1, 2, 3, 4

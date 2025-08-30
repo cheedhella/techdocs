@@ -1,0 +1,596 @@
+What is NPM?
+    NPM stands for Node Package Manager; It is the default package manager that comes with NodeJS;
+
+Why npm?
+    - It is used install packages(fetch them from a registry) and their dependencies into your project;
+    - It is used to create and publish a package;
+
+NodeJS and NPM installation
+    - Download installer from https://nodejs.org/en/download and install it;
+    > node -v   # v18.17.1
+    > npm -v    # 9.6.7
+
+    Update NPM 
+        - npm install -g npm@latest         # npm itself is a global package; Use sudo if needed;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Commands 
+    # create pkg
+    npm init                                # It asks few questions(pkg name, version etc), creates a package and saves pkg configuration to package.json;
+    npm init -y                             # It creates a pkg, with all defaults, without asking the user anything;
+    
+    # add dependency 
+    npm install <pkg-name>@<version>        # Once you add a dependency, it gets downloaded to node_modules folder;
+    npm install -g <pkg-name>               # Global dependency
+    npm install esbuild --save-dev          # Developemnt dependency
+
+    # remove dependency
+    npm uninstall -g <pkg-name>             # Remove global dependency - sudo might be needed!
+
+    # view pkg 
+    npm view <pkg-name>                     # Use this command to find more details about a pkg, before you install it; You can also find same information on npmjs.com website;
+
+    # Find dependencies and dependency tree
+    > npm list                  # It will list all direct dependencies of current package;
+    > npm list -depth=1         # It will list all dependencies and their dependencies;
+    > npm list -g               # list all global dependencies in the system;
+
+    # Run pkgs from internet!
+    npx uuid                   # It will download a local copy of the pkg and execute it; After sometime, it will be delted;
+    npm exec <command>         # same as above 
+    
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Hello World and Scripts
+
+> mkdir npm-practice 
+> cd npm-practice
+> pwd
+/Users/mcheedhe/Data/Technical/Frontend/NodeJS/playground/npm-practice
+
+> npm init -y 
+> ls
+package.json 
+
+> cat package.json 
+{
+  "name": "npm-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+
+> npm install uuid                          # uuid is pkg with no dependencies;
+> ls
+node_modules		package-lock.json	package.json
+
+> cd node_modules                   # It hold all dependant pkgs;
+> ls 
+uuid
+
+> touch index.js 
+> cat index.js
+console.log("Hello from node package");
+
+> node index.js
+Hello from node package
+
+> edit package.json 
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hello": "node index.js"	
+  }
+
+> npm run hello
+Hello from node package
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. Dependencies
+    There are 3 ways to reuse code in NodeJS;
+    2.1 CommonJS module - old way of doing things, it uses require JS;
+        > cat index.js 
+            const uuid = require('uuid');
+            console.log("Random string: " + uuid.v4());
+        > npm run hello
+          Random string: c8afc3c9-204c-4178-b2f6-202cb19e0ea6
+        -------------
+        > cat index.js 
+            const {v4} = require('uuid');       # You can extract only v4, using destructuring;
+            console.log("Random string: " + v4());
+        > npm run hello
+          Random string: 6b3fdceb-2235-4d44-80ef-1c91af508a64
+
+    2.2 ES module - it uses import/export;
+        > cat index.js
+        import {v4} from 'uuid';
+        console.log("Random string: " + v4());
+        > npm run hello         # It throws "Cannot use import statement outside a module"; 
+
+        # As a fix, add this to package.json -> "type": "module"; type defaults to commonjs;
+        > cat package.json
+            "type": "module",
+            "scripts": {
+        
+        > npm run hello 
+            Random string: da073237-00af-4b91-9f2d-5b36e9061d20
+
+    2.3 When you install it, if the package registers itself in node_modules/.bin folder, we can execute it directly;
+        > cd /Users/mcheedhe/Data/Technical/Frontend/NodeJS/playground/npm-practice/node_modules/.bin
+        > ls 
+        uuid            # uuid can be called from anywhere in the system;
+
+        > cat index.js 
+            "scripts": {
+                "uuid" : "uuid"
+            }
+
+        > npm run uuid          # It looks for a uuid.js inside node_modules/.bin/ folder and executes it; it was created when you install that package;
+        74673546-29ee-49c3-beb7-7e320b709011
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. Development Dependencies
+    Q: we just created npm-practice pkg; Will it run inside a browser? No, both commonjs and es modules are not working in browser;
+    > cat index.html
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>This is Hello World page</title>
+            </head>
+            <body>
+                <script src="index.js"></script>
+            </body>
+        </html>
+
+    > Open index.html in a browser                  # It throws this error: Cannot use import statement outside a module
+
+    # Change it to common js module 
+    > Remove "type": "module" and fix index.js to use requie      # It throws this error: require is not defined
+    
+    
+    Q: Is there any way, we can execute a pkg using browser? yes, use a module bundler;
+
+    What is a module bundler?
+        It is a tool which takes all our dependencies and packages them in to a single file, which browser uses it;
+        Eg: webpack, npmtrends.com, rollup, parcel, esbuild etc; // I use esbuild for this project!
+
+    What is development dependency?
+        esbuild is development dependency; It is used only during development of the project; They are not used during rumtime;
+        Other eg of dev dependencies is test frameworks such as: jest, mocha, jasmie etc;
+
+    
+    > npm install esbuild --save-dev        # add a developement dependency
+    > vi package.json 
+        "scripts" : {
+            "build": "esbuild index.js --bundle --outfile=dist/out.js"
+        }
+    > npm run build         # It packages all dependant pkgs into dist/out.js file;
+
+    > vi index.html 
+        <script src="dist/out.js"></script>
+
+    > Open index.html in browser and check console: here is a rondom string: c31a4aad-0571-43a3-a9dc-55d692930f0d
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Display uuid in the browser 
+    > cat index.html 
+        <script src="dist/out.js"></script>
+        <h1 id="myid"></h1>
+    > cat index.js 
+        function displayRandomString() {
+            if (typeof document !== 'undefined') {      # If you don't have this check, you will get an error, when you run it in node env;
+                const first = document.getElementById('first');
+                first.innerHTML = v4();
+            }
+        }
+        displayRandomString();
+
+    > Open index.html in browser: here is a rondom string: c31a4aad-0571-43a3-a9dc-55d692930f0d
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+# automate budnle creation + script should work for both node and browser!
+    > cat package.json
+            "build-browser": "esbuild index.js --bundle --outfile=dist/out.js"
+            "build-node": "esbuild index.js --bundle --platform=node --outfile=dist/out.cjs"         # IF you don't specify platform=node, you will get a misleading error!
+            "build-all": "npm run build-browser && npm run build-all"
+    > cat index.html 
+        <script src="dist/out.js"></script>
+        <h1 id="myid"></h1>
+    > cat index.js 
+        function displayRandomString() {
+            if (typeof document !== 'undefined') {      # If you don't have this check, you will get an error, when you run it in node env;
+                const first = document.getElementById('first');
+                first.innerHTML = v4();
+            }
+        }
+        displayRandomString();
+        console.log("Random string: " + v4());
+
+> npm run build-node        # creates dist/out.cjs
+> node dist/out.cjs         # prints uuid 
+
+# delete dist folder 
+> npm run build-all 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Global Dependencies
+    If you run 'npm run uuid' from node-project folder, it will work; If you try to run same command, outside node-project folder, it won't work!
+
+    # Find dependencies and dependency tree
+    # npm list - it will list all direct dependencies of current package;
+    # npm list -depth=1 - it will list all dependencies and their dependencies;
+
+    What all global packages I have installed? 
+    > npm list -g           # npm itself is a package and it is a global package;
+
+    How to install a global package? 
+    > npm install uuid -g           # Run it with sudo, if you get any errors!
+
+    Now, you can run 'npm run uuid' from any folder on your system; 
+
+    Note: In windows, to run global package, you need to register environment variable: System Variable -> Path -> Path To NodeJS installation;
+
+    Where is a global package installed?
+        npm root -g
+
+    When I should install a dependency as global dependency?
+        No clear answer to this question; Usually, when I learned Typescript, I installed it as a global dependency and used it wherever I am in my computer;
+        npm install typescript -g 
+        It registers with name: tsc 
+        > tsc -version
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Versioning 
+    Let's talk about version or semantic versioning;
+    Every package should have a version; It consisted of 3 numbers: 0.0.0    major.minor_version.patch_version
+    patch_version - for every fix, 
+    minor_version -for every feature 
+    major - breaking changes; there is a change in the behaviour, if anyone changes it, some features may break;
+
+    ^8.2.3 - it installs latest major versio, which is greater than 8.2.3
+    >8.2.3 - npm install latest stable version, which is greater than 8.2.3
+    ~8.2.3 - it installs latest patch version, that is greater than 3
+
+    There are few keywords that you can use when installing a package;
+        latest - latest stable version 
+        * - very very latest, whether it is stable or not 
+        
+    install specific version of a package - npm install <package-name>@<version>
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+npx 
+    So far, to run code in external packages, we added that pkg as a dependency and configured a script and run it using 'npm run';
+    Other way is: install it as a global package and run it from anywhere in the sytem;
+    What if I want to run that code from anywhere inside my application, without installing dependency?
+
+    npx comes installed with node, like npm; It can be used to execute any pkg on the internet;
+    > npx uuid                   # It will download a local copy of the pkg and execute it; After sometime, it will be delted;
+    > npm exec <command>         # same as above 
+
+    This way we don't have install pkgs globally, the pkgs that we need to run only once can be installed using this approach;
+    Most popular command that uses npx is: npx create-react-app <app-name>      # create-react-app is a bigger npm pkg, that is used to create react application;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Peer Dependencies
+    node_modules/react-dom -> check package.json, it has peerDependencies: react: ^18.2.0
+
+    What is the difference b/w regular dependency and peer dependency?
+
+    react-dom is a plugin/exension that is build on top of react;
+
+    >cd npm-practice
+    > npm install react-dom             # After running this, if you see node_modules, it also added react as a dependency;
+
+    If you use older version of npm, npm doesn't install any peer dependencies; Instead, it throws a warning;
+    If you use newer versions of npm, npm automatically installs peer dependencies as well; But, still there is a chance of conflict b/w peer dependencies and you have to chip in manually;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Building for production 
+    Once you build your app, you will want to ship it to production;
+    Using npm install may not be the right approach; For eg, 3 months later if run it, it may bring another version of the package;
+    That's why when you run 'npm install', a package-lock.json file is created;
+    npm install vs npm clean-install 
+        clean-install will reinstall your node modules, to make sure that it comes fresh;
+        clean-install will check both package.json and package-lock.json;
+        clean-install needs package-lock.json file, it doesn't alter it; If the node_moduels is present, it overwrites it;
+
+    npm install --omit=dev          # delete node_modules folder and run this command; It creates a package, omitting development dependencies;
+    npm prune --production          # Sometime you may have build your application, with dev dependencies; This command can help you in deleting dev dependencies only, without rebuilding the pkg;
+
+    If you ship your applicaiton, along with node modules, be careful on where you keep your dependencies and developement dependencies;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+npm update 
+    How do you know that if a package is outdated?
+        Open package.json, hover on a package in the dependencies -> it will show the latest available version;
+    
+    > npm outdated      # It will list outdated pkgs in our project;
+
+    > npm update        # It updates all outdated dependencies in node_modules folder, but it will not update package.json file;
+    > npm update --save     # it updates package.json file as well;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+npm workspaces 
+    Npm workspaces are a great way to handle: mono repos, internal dependencies, multiple package.json files;
+
+
+    > mkdir npm-ws
+    > cd npm-ws 
+    > npm init -y 
+    > npm init -y -w packages/server -w package/client          # it creates 2 workspaces; Also, notice node_modules/server is sym link to packages/server; Any change to packages/server directly reflects in node_modules/server;
+
+    > cd packages/server/
+    > touch index.js 
+        module.exports = () => console.log("Hello from server");
+
+
+    # Add server as a dependency to client, edit client/package.json;
+    "dependencies": {
+        "server": "*"
+    }
+
+    > npm install 
+
+    > cd package/client 
+    > touch index.js 
+        const server = require('server');
+        console.log('inside the client');
+        server();
+
+    > pwd 
+        npm-ws 
+    
+    > node packages/client/index.js 
+
+    # Update packages/server/index.js and run client again! changes are automatically picked up!
+
+    we can reference things around using workspaces;
+
+    > npm run <command> -ws   # run <command> in script tags of all ws;
+    > npm run <command> -w <pakcages/client>   # run run <command> in script tag of packages/client/packages.json
+
+    > npm install jest      # installs in project/node_modules folder;
+
+    # If you want to use mocha in server and jest in client;
+    > npm install mocha -w packages/server 
+    > npm install jest -w packages/client 
+    
+
+    > npm outdated -w packages/client       # It checks directly in npm registries; It doesn't check lcoal packages;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Creating a package 
+    - Develop a logger package 
+    - install the package to local storage - for testing 
+    - prepare it for publication
+    - publish it to a private npm registry 
+    - create a new application and add logger as a dependency 
+    - how npm registries work?
+
+
+Develop Logger Package 
+    > mkdir my-logger
+    > cd my-logger
+    > npm init -y
+    > touch src/Logger.js 
+        function log(level, message) {
+            process.stdout.write(`${level}: ${message} \n`);
+        }
+        export class Logger {
+            debug(message) {
+                log('Debug', message);
+            }
+            info(message) {
+                log('Info', message);
+            }
+            error(message) {
+                log('Error', message);
+            }
+        }
+    > vi package.json 
+        // change "type": "module" as it is a typescript 
+
+    > vi test.js 
+    import {Logger} from './src/Logger.js'
+    new Logger().info('here is a info message');
+
+    > node test.js 
+    here is a info message
+
+Import above package directly without publishing it
+    > pwd 
+        my-logger
+    > touch index.js        # If you see package.json, it has this: "main": "index.js"  -> it is a good practice to export everything from index.js;
+      export {Logger} from './src/Logger.js'
+
+    > mkdir my-logger-c1
+    > cd my-logger-c1
+    > npm init -y 
+    > npm install /Users/mcheedhe/Data/Technical/Frontend/NodeJS/playground/my-logger          # Install a package directly from local storage;
+
+    > vi package.json 
+        // change "type": "module" as it is a typescript 
+
+    > touch test.js 
+        import {Logger} from 'my-logger';
+        new Logger().debug('here is a debug message');
+
+    > node test.js 
+    Debug: here is a debug message 
+
+Create a new private npm registry
+    > npm get registry    # https://registry.npmjs.org -> It is public registry, comes default with npm installation;
+
+    > npm install -g verdaccio@6-next       # verdaccio - a package which is used to start local registry; install it globally;
+    > verdaccio                             # Start the registry locally; It prints the endpoint and credentials;
+
+    > npm adduser --registry http://localhost:4873/
+    > npm adduser --registry http://localhost:4873/ --auth-type=legacy        # It creates a user and logs you in.
+    > npm whoami --registry http://localhost:4873/                            # Check about logged in user 
+
+Publish a package to local registry
+    > cd my-logger 
+    > npm publish --registry http://localhost:4873/                           # publish current pkg to specified registry;
+    
+    # Another way
+    > npm set registry http://localhost:4873/                                   # Change the default registry to specified one! It creates .npmrc in root folder;
+
+    # To publish a package again, you have to change the version;
+
+Consume package from a local registry
+    > mkdir my-logger-c2
+    > cd my-logger-c2
+    > npm init -y 
+    > npm install my-logger --registry http://localhost:4873/
+    > touch test.js 
+        import {Logger} from 'my-logger';
+        new Logger().debug('here is a debug message');
+    > node test.js 
+    Debug: here is a debug message 
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.geeksforgeeks.org/difference-between-package-json-and-package-lock-json-files/
+https://stackoverflow.com/questions/45052520/do-i-need-both-package-lock-json-and-package-json
+https://stackoverflow.com/questions/48456236/npm5-what-is-the-difference-of-package-lock-json-with-package-json
+
+ -> 
+
+
+
+
+
+workspaces 
+
+
+
+
+
+
+
+
+NPM Scripts 
+    "start" : "node index.js"
+    "start" : "echo \"running script....\" && node index.js"    # You can run multiple scripts, it executes them one after another; there is a package to execute them concurrently;
+
+
+node_modules                    # A folder containing all dependencies; Once you add a dependency, it gets downloaded to this folder; 
+.bin folder inside node_modules allows us to execute this package;
+
+
+---------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------
+Usage:
+
+npm install        install all the dependencies in your project
+npm install <foo>  add the <foo> dependency to your project
+npm test           run this project's tests
+npm run <foo>      run the script named <foo>
+npm <command> -h   quick help on <command>
+npm -l             display usage info for all commands
+npm help <term>    search for help on <term> (in a browser)
+npm help npm       more involved overview (in a browser)
+
+All commands:
+
+    access, adduser, audit, bin, bugs, cache, ci, completion,
+    config, dedupe, deprecate, diff, dist-tag, docs, doctor,
+    edit, exec, explain, explore, find-dupes, fund, get, help,
+    hook, init, install, install-ci-test, install-test, link,
+    ll, login, logout, ls, org, outdated, owner, pack, ping,
+    pkg, prefix, profile, prune, publish, rebuild, repo,
+    restart, root, run-script, search, set, set-script,
+    shrinkwrap, star, stars, start, stop, team, test, token,
+    uninstall, unpublish, unstar, update, version, view, whoami
+
+
+
+Type of dependencies - local, global, dev;
+bundling and running inside the browser;
+npm scripts
+
+
+
+npx 
+peer dependencies
+npm clean install - prepare code for production;
+npm workspaces 
+
+lifecycle of npm package - build a test class, test it by installing from disk, instantiate a local npm registry, migrate this to typescript;
+npm audit
+security addons 
+npm alternatives like yarn, pnpm;
+
+
+
+npm install apollo-server       # It is used to implement GraphQL API;
+npm install --save-dev nodemon  # nodemon is only a Development dependency; It automatically restarts our application, if source code changes;
+
+npm install                     # It installs a package and all its dependencies from package.json file	
+npm ci                          # clean install - is used to install all exact version dependencies or devDependencies from a package-lock.json file.
+npm update                      # 
+# Add below to package.json 
+# The only thing that we need to add manually is the start script, which will allow us to run our application.
+npm start                       # This code will allow us to run the npm start command to start our backend. That will, in turn, run the nodemon command that’ll run the src/index.js, which is an entry point for our backend server.
+
+
+package.json
+package-lock.json
+    package.json records only direct dependencies and minimum version for each dependency;
+    package-lock.json 
+        - It is created when you run npm install;
+        - It records the entire dependency tree and exact version for each dependency;
+        - This file is intended to be committed into source repositories, and serves various purposes:
+        - This means you can guarantee the dependencies for other developers or prod releases, etc. 
+        - It also has a mechanism to lock the tree but generally will regenerate if package.json changes.
+
+package.json has a property overrides which might help you not to touch package-lock.json file.
+
+ - created by npm install; you can see that a new file named “package-lock.json;
+    package-lock.json: records the exact version of each installed package which allows you to re-install them. Future installs will be able to build an identical dependency tree.
+    package.json: records the minimum version you app needs. If you update the versions of a particular package, the change is not going to be reflected here.
+
+If a node_modules is already present, This Command doesn’t change anything to it.	
+
+How to write a node package? dependencies? 
+
+
+What is Package?
+What is a Package? A package in Node.js contains all the files you need for a module. Modules are JavaScript libraries you can include in your project.
+
+npm - node package manager;
+    - It fetches packages from a registry and puts them into your local project;
+    - When you have lot of packages, it organizes them nicely;
+    - your dependencies can have more dependencies; npm handles them as well;
+    - It much more than just fetching packages and executing scripts;
+        -- generates .lock files; It means there no conflicts b/w different versions of your dependencies;
+        -- handles version, updates packages if new versions are available;
+        -- can install global packages - it means code is avialable from anywhere in your system;
+        -- assists in creating and publishing packages;
+        -- building security tools;
+
+npm installation
+    it comes with nodejs installation;
+    go to nodejs website and download installer;
+    vSC helps a lot to develop with node and npm;
+    npm --version 
+
+    sudo npm i -g npm@latest   # update your npm installation to latest!
+    create index.js         # console.log("hello from node");
+
+    node index.js 
+    npm start 
+    npm run start 
+
+This package has installed:
+	•	Node.js v18.17.1 to /usr/local/bin/node
+	•	npm v9.6.7 to /usr/local/bin/npm
+Make sure that /usr/local/bin is in your $PATH.
+
+
+---------------------------------------------------------------------------------
+
+apollo-server vs @apollo/server package?

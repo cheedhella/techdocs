@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Built-in Bindings: Attribute Binding</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+        <style>
+            .highlight {
+                color: blue;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Hello <a class="highlight" data-bind="attr: { href: myHref, title: myTitle }">Google</a></h1>
+        <script>
+            // Using attr binding, you can set the value of any attribute of any HTML element;
+            var myViewModel = {
+               myHref: "https://www.google.com/",
+               myTitle: "Random Title"
+            };
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

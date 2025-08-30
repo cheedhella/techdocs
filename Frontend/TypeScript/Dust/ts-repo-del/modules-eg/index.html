@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Modules</title>
+</head>
+<body>
+    <script src="./require.js" data-main="./eg6/_compiled/app.js"></script>
+    <p>Open your console log and view the output.</p>
+    <script>
+        // requirejs() loads the depedant modules, executes them and returned value is passed as a parameter to 
+        // the callback specified; Note that you do not need the .js extension when referencing module.
+        requirejs(["App"], function(myapp) {
+            myapp();
+        });
+    </script>
+</body>
+</html>

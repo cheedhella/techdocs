@@ -1,0 +1,1 @@
+You can't set width on body; But, you can achieve what you want by setting margin on body;

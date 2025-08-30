@@ -1,0 +1,30 @@
+
+// ---------------------------------------------------------------------------------------------------------------------------
+// Type Inference
+// One of TypeScript’s strengths is its ability to use inferred typing to determine the type of an object in certain cases, even when we don’t explicitly specify it. This is a powerful feature that allows us to write more concise and expressive code without sacrificing type safety.
+
+// ----------------
+// TODO
+// An array declaration without the data type is deemed to be of the type any. 
+// The type of such an array is inferred from the data type of the array’s first element during initialization.
+// https://www.tutorialspoint.com/typescript/typescript_functions.htm
+// http://budiirawan.com/typescript-type-inference/
+// ---------------------------------------------------------------------------------------------------------------------------
+// Type Casting
+
+// ----------------
+// 1. Angular bracket syntax
+let myAny5: any = 'hello';
+let myAny5Str: string = <string> myAny5;
+
+// ----------------
+// 2. As syntax
+let myAny5Str2: string = myAny5 as string;
+
+// ----------------
+// TODO: What type of castings are allowed? You can't cast number type to string;
+// YOu can cast string to number;
+let myAny5Num = <number> myAny5;
+console.log(myAny5Num); // 'hello'
+
+

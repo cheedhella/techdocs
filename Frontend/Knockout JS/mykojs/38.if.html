@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: if</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <label><input type="checkbox" data-bind="checked: showData"/>Show Data</label>
+        <!-- 
+            if binding causes a section of markup to appear in the document, only if the specified expression evaluates to true.
+        -->
+        <ul data-bind="if: showData"> <!-- It applies binding to it's descendant elements only if this expression evaluates to true. -->
+            <!-- ko foreach: daysOfWeek -->
+                <li><span data-bind="text: $data"></span></li>
+            <!-- /ko -->
+        </ul>
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.showData = ko.observable(false);
+                self.daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

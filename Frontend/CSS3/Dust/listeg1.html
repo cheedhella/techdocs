@@ -1,0 +1,52 @@
+<html>
+<head>
+	<style>
+	body {
+		font-family: Tahoma, Arial, Helvetica, sans-serif;
+		font-size: 11px;
+		color: #4F4F4F;
+	}
+	#nav {
+		/* For creating tabs with equal width, use display: table, display: table-cell and 
+		   table-layout: fixed, which tells the browser to respect the width wanted by 
+		   designer/developer, instead of resizing the cell width as per its contents.
+		*/
+		display: table;
+		table-layout: fixed;
+		text-align: center;
+		border-spacing: 6px;
+	}
+	
+	#nav li {
+		display: table-cell;
+		width: 25%;
+		padding: 5px;
+		height: auto;
+		vertical-align: bottom;
+		background-color: #DEE4E7;
+		border-color: #C3D0DF #C3D0DF -moz-use-text-color;
+		border-radius: 3px 3px 0 0;
+		border-style: solid solid none;
+		border-width: 1px 1px 0;
+	}
+
+	#nav a {
+		display: block;
+		min-height: 100%;
+		padding: 4px 10px;
+		background-color: #222;
+		color: white;
+		border-radius: 6px 6px 0 0;
+	}
+
+	</style>
+</head>
+<body>
+<ul id="nav">
+	<li>Criteria</li>
+	<li>Results</li>
+	<li>Prompts</li>
+	<li>Advanced</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,104 @@
+unicode-bidi - normal(default) | embed | bidi-override;
+	For the direction property to affect content reordering in inline elements, the unicode-bidi property must be set to embed or override.
+	The unicode-bidi property allows you to override Unicode's built-in directionality settings for languages.
+	
+direction - ltr | rtl | inherit;
+	Text in some languages flows from right to left, while many other languages flow from left to right.
+	When characters from both types of writing systems are present in a single document, it is known as bidirectional text: some text is to be read in one direction, and some in the other.
+	
+	There will inevitably be cases where left to right text and right to left content must be intermingled.
+	The ‘direction’ property specifies the base direction (reading order) for text content in an element. 
+	It is also meant to control the directionality of table columns, text overflow and positioning of justified text.
+
+	For the direction property to have any effect on inline-level elements, the unicode-bidi property's value must be embed or override.
+	
+	Diff b/w HTML element dir attribute and CSS direction property?
+		http://stackoverflow.com/questions/5375799/direction-ltr-rtl-whats-the-difference-between-css-direction-and-html-direct
+		
+	Hebrew or Arabic
+	
+punctuation-trim - none | start | end | allow-end | adjacent;
+	
+ 
+text-indent - length | percentage;
+	Used to indent the first line of any block level element or paragraph by specified length - most sought-after text-formatting effect.
+	length is the absolute value. percentage refers to the width of the containing block.
+	
+	In general, you can apply text-indent to any block-level element. You can't apply it to inline elements or on replaced elements such as images. 
+	However, if you have an image within the first line of a block-level element, like a paragraph, it will be shifted over with the rest of the text in the line.
+	If you want to "indent" the first line of an inline element, you can create the effect with left padding or margin.
+
+word-break - normal | keep-all | break-all;
+
+white-space - normal | pre | nowrap | pre-wrap | pre-line;
+	pre preserves multiple spaces.
+	nowrap prevents line wrapping without a <br> tag.
+		The text content of any tag that receives the nowrap value runs horizontally as far as necessary regardless of the browser window’s width. The user may be forced to scroll horizontally to read all the text, so this setting is usually avoided.
+		nowrap is great for preventing content from wrapping in table data cells.
+	normal allows the browser to determine how spaces are treated. This setting usually forces multiple spaces to collapse into a single space.
+	http://www.avajava.com/tutorials/lessons/how-do-i-control-how-text-wraps.html
+	http://www.developphp.com/view_lesson.php?v=671
+	http://code.stephenmorley.org/html-and-css/white-space-handling/
+	http://xhtml.com/en/css/reference/white-space/
+	
+white-space-collapsing
+, which controls the treatment of white space in the source code
+
+collapse
+    causes white space to collapse 
+preserve
+    prevents white space from collapsing 
+preserve-breaks
+    causes white space to collapse but preserves new lines 
+discard
+    causes all white space to be discarded 
+trim-inner
+    causes leading and trailing blank lines to be discarded 
+	http://www.cssportal.com/css-properties/white-space-collapse.htm
+
+letter-spacing - normal(default/0) | length (units);
+	Used to control the space between individual letters or characters.
+	Positive or negative length will increase or decrease the space between letters by that amount.
+	A value of 0 does not add or subtract space but prevents justification of the text.
+	The best use of this property is to emphasize particular words or phrases in your text - these words or phrases stands out from the rest of the text. 
+
+	Tracking deals with space between multiple letters in a word, line or paragraph of text.
+	Kerning refers to the adjustment of space between two specific letters.
+	---
+	Tracking is the spacing between characters in a line of text.
+	Kerning increases or decreases the spacing between certain pairs of letters, like AV, which look better if their boxes overlap slightly.
+	http://en.wikipedia.org/wiki/Kerning
+	http://www.vecpix.com/tutorials/illustrator/il006.php
+	http://ileenieweenie.com/blog/tuesdays-type-tip-tracking-vs-kerning/
+	
+text-decoration - none | underline | overline | line-through | blink;
+	none - used to remove the underline from hyperlinks.
+	blink - used to blink text. This value is deprecated in favor of CSS3 Animations.
+
+text-indent - length | %;
+	Used to indent the first line of a paragraph by specified length or by the specified percentage of the width of the parent element.
+	http://techbus.safaribooksonline.com/book/web-development/css/9780470096970/text-manipulation/indenting_paragraph_text_using_text-inde?query=%28%28css+text-indent%29%29&reader=html&imagepage=#snippet
+	
+word-spacing - normal(default/0) | length (units);
+	Used to control the space between the words. Positive values are used to add space and negative values are used to remove space.
+	The justify value to the align property may influence the effects of this property. 
+	
+word-wrap - normal(default) | break-word;
+	It allows long words to break and wrap onto the next line. In other words, it breaks a long word overflowing from a box.
+	This property should only apply if the element has a visual rendering, is an inline element with explicit height/width, is absolutely positioned and/or is a block element.
+	It works in a cross-browser way only on block-level elements with width or max-width specified, but not on table cells.
+	----
+	normal - default, long words are not broken.
+	break-word - allows the browser to break long words. broken words are not hyphencated.
+	----
+	What’s a Practical Use For It?
+		As the owner of a blog post, we generally allow users to post comments.
+		If any comment contains long words(such as URL) and if you don't wrap, it can cause layout problems.
+		Sometimes users post long strings of text.
+	
+TODO:
+	word-wrap vs clip vs overflow
+	letter-spacing, text-align, text-decoration, text-decoration-color, text-decoration-line, text-decoration-style, text-rendering, text-shadow, text-transform, text-indent, white-space, word-spacing
+	one em is equal to the height of the current font.
+	IE 6 and IE 7 support white-space: pre; only in standards rendering mode. For more information on rendering modes, see Chapter 7, "The Box Model." Beginning CSS: Cascading Style Sheets for Web Design, Second Edition
+	http://techbus.safaribooksonline.com/9780470891520/chapter_13_create_a_complete_l

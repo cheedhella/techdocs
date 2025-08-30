@@ -1,0 +1,498 @@
+
+	
+	
+		
+	
+		
+
+
+
+http://www.javascriptkit.com/jsref/form.shtml
+http://www.elated.com/articles/working-with-dates/
+	
+
+	
+	document.body - refers to <body> tag of webpage
+	document.styleSheets[] - array of stylesheets in the current page.
+	document.onreadystatechange
+	document.documentElement
+	document.documentElement.scrollTop
+	document.documentElement.scrollLeft
+	document.body.scrollTop
+	document.body.scrollLeft
+	document.referer - document.referer simply contains the URL of the page that brought you to the current page. So if you clicked on a link to get to this page, document.referer will contain the URL of the page that link was on. If you came directly to this page by pasting it into your address bar, document.referer will be undefined.
+	
+	
+	
+	
+	
+frame object - property of window object, refers to <frame> tag.
+	<frameset> contains multiple <frame> tags, which makes up a window. 
+	If a page contains frames, each frame has its own window object and is stored in the frames collection.
+	Within the frames collection, the window objects are indexed both by number (starting at 0, going from
+	left to right and then row by row) and by the name of the frame. Each window object has a name
+	property containing the name of the frame.
+	window.frames[0] or window.frames[ “ topFrame “ ] ;
+	
+     unnamed frame (main.html)
+   ____________|____________
+  |                         |
+left (links.html)         right (inner.html)
+                  __________|______________
+                 |                         |
+              banner (upper.html)      mainpart (lower.html)
+
+if there are no frames in your page, window, top, parent, self and this all are same.
+
+
+
+http://www.javascriptkit.com/jsref/event.shtml
+
+If someone is loading your page into their frameset and you don't want them to, you 
+can use the self-top relationship to remove your page from their frameset and replace 
+their frameset page with your page using:
+if( self != top ) { top.location.replace(self.location.href); }
+if( self != top ) { top.location.href = self.location.href; }
+ 
+
+
+opener  = this is the window that opens or launches the current popup window.
+
+
+
+	
+
+Number object
+	Number n = new Number(val); // val must be numeric
+	Number.MAX_VALUE - represents maximum positive value that javascript can handle.
+	Number.MIN_VALUE - represents smallest positive value that javascript can handle.
+	Number.POSITIVE_INFINITY - represents infinity, returned on overflow. (add 1 to Number.MAX_VALUE)
+	Number.NEGATIVE_INFINITY - represents negative infinity, returned on overflow. (subtract 1 from Number.MAX_VALUE)
+	Number.NaN - Not-a-Number.
+		document.write(isNaN("I am String")); // returns true
+		document.write(isNaN(0/0)); // returns true
+		document.write(isNaN("348")); // returns false
+		document.write(isNaN(348)); // returns false
+
+String object
+	length property - no. of chars in the string
+	
+	charAt() - returns the char at the specified location. 
+		"abcdef".charAt(3); // returns "d"
+	indexOf(pattern) - returns the index of first matching or -1 if not found.
+		"abc@def".indexOf("@"); // returns 3
+	lastindexOf(pattern) - returns the index of last matching or -1 if not found.
+		"abc@def".indexOf("@"); // returns 3
+	substr(start, end) - returns a substring
+	toLowerCase()
+	toUpperCase()
+
+
+navigator object - used to find the visitor's browser type, version etc.
+	http://www.javascriptkit.com/jsref/navigator.shtml
+
+changing an element's style using javascript:
+	document.styleSheets[0].rules[0].style.color="red"
+
+regexp object
+
+object methods
+JSON object
+
+JavaScript Object Notation is a lightweight data format, used for exchaning data between browser and server.
+
+
+
+
+---------------------------------------------------------------------
+	
+anchors vs links
+	anchors - <a> tag with name attribute. Jump to a different section in the same page.
+		<a name=first>This is first line of the page</a>
+		<a href='#first'>click here to jump to first line of the page</a>
+		
+	links - <a> tag with href attribute. Jump to another page or another site.
+		http://sis.bristol.ac.uk/~cckhrb/webdev/code/html/tag_a.htm
+	
+anchor object - property of document object, which represents <a> tag with name attribute(named location in a page).
+	name - name of the anchor. // document.anchors - returns an array of anchors present in the current page.
+
+link object - property of document object, which represents <a> tag with href attribute.
+	document.links - returns an array of links present in the current page.
+	
+	It has all the properties of a location object. In addition, it has target property.
+	target - specifies the window that displays the contents of a clicked hyperlink.
+
+	
+Boolean object - is a wrapper for boolean value(true or false).
+	// set to true
+	var myBoolean=new Boolean(true);
+	var myBoolean=new Boolean("true");
+	var myBoolean=new Boolean("false");
+	var myBoolean=new Boolean("Richard");
+	// set to false
+	var myBoolean=new Boolean(); // no value
+	var myBoolean=new Boolean(0);
+	var myBoolean=new Boolean(null);
+	var myBoolean=new Boolean("");
+	var myBoolean=new Boolean(false);
+	var myBoolean=new Boolean(NaN);
+
+	
+Date object
+	var d1 = new Date(); // current date and time.
+	var d2 = new Date(milliseconds); // no. of milliseconds since midnight January 1, 1970 GMT
+		new Date(0); // Jan 01 1970 05:30:00 GMT+0530
+		new Date((365*30 + 7)*24*60*60*1000); // Sat Jan 01 2000 05:30:00 GMT+0530, +7 is for the leap days.
+	var d3 = new Date(dateString); // format of dateString: "Month dd, yyyy" or "Month dd, yyyy hh:mm:ss"
+	var d4 = new Date(year, month, day[, hours, minutes, seconds, milliseconds]);
+	
+	getDate() - returns an integer(between 1 and 31) representing the day of the month.
+	getDay() - returns an integer(between 0 and 6) representing the day of the week. 0 for sunday, 6 for saturday.
+	getMonth() - returns an integer(between 0 and 11) representing the month of the year.
+	getFullYear() - returns the year as a four digit number.
+	getYear() - returns the year as a two digit number.
+	getHours() - returns an integer between 0 and 23.
+	getMinutes() - returns an integer between 0 and 59.
+	getSeconds() - returns an integer between 0 and 59.
+	getMilliseconds()) - returns an integer between 0 and 999.
+	getTime() - returns no. of milliseconds from Midnight January 1, 1970 to the date represented by the object.
+	getTimezoneOffset() - returns the time difference, in minutes, between the computer's local time and GMT.
+	
+	UTC is a timezone-independent way of storing time values, based on milliseconds since midnight, January 1, 1970 in the GMT timezone.
+	All dates and times are stored internally in JavaScript using UTC. 
+	When you use the above, non-UTC functions to get dates and times, JavaScript converts the time into the local computer's time locale first.
+	However, the UTC functions below will return times and dates in UTC format instead.
+	Following methods are similar to above methods, but they work with UTC or GMT, rather than computer's local time.
+	
+	getUTCDate() - 
+	getUTCDay()
+	getUTCMonth()
+	getUTCFullYear()
+	getUTCHours()
+	getUTCMinutes()
+	getUTCSeconds()
+	getUTCMilliseconds()
+	
+	setDate()
+	setMonth()
+	setFullYear()
+	setHours()
+	setMinutes()
+	setSeconds()
+	setMilliseconds()
+	setTime()
+	setUTCDate()
+	setUTCMonth()
+	setUTCFullYear()
+	setUTCHours()
+	setUTCMinutes()
+	setUTCSeconds()
+	setUTCMilliseconds()
+	
+	toSource()
+	toString() - 
+
+	d.toString() - "Sun Oct 30 2011 22:51:22 GMT+0530 (India Standard Time)"
+	d.toDateString() - "Sun Oct 30 2011"
+	d.toTimeString() - "22:51:22 GMT+0530 (India Standard Time)"
+	d.toLocaleString() - "Sun Oct 30 2011 22:51:22 GMT+0530 (India Standard Time)"
+	d.toLocaleDateString() - "Sunday, October 30, 2011"
+	d.toLocaleTimeString() - "22:51:22"
+	d.toUTCString() - "Sun, 30 Oct 2011 17:21:22 GMT"
+	
+	Date.parse(dateString) - static method, returns no. of seconds from midnight jan 1, 1970 to the date represented by dateString.
+	Date.UTC(y, m, d, h, m, s) - static method, returns no. of seconds from midnight jan 1, 1970 to the date specified.
+	
+	// comparing two dates
+	http://javascript.about.com/library/bldate1.htm
+
+	
+document object - one document object per page(<head> and <body>)
+	document.alinkColor - color of the activated links.
+	document.all[] - returns an array of all elements in the document, not supported by all the browsers. Instead, use document.getElementsByTagName(*).
+	document.anchors[] - array of anchors in the current page.
+	document.applets[] - array of applets in the current page.
+	document.bgcolor - back ground color.
+	document.cookie - 
+	document.fgcolor - color of the text.
+	document.forms[] - array of forms in the current page.
+	document.images[] - array of images in the current page.
+	document.linkColor - color of unvisited links in the document.
+	document.links[] - array of links in the current page.
+	document.readyState - 
+	document.title - title of the page.
+	document.vlinkColor - color of visited links in the document.
+	
+	document.write(string), document.writeln(string) – document.write(“hello”);
+	document.getElementById()
+	document.getElementsByName()
+	document.getElementsByTagName()
+
+
+Event object
+
+	Whenever some event occurs, browser creates an event object and stores appropriate information about the event into the event object(for example, where the mouse pointer was on the screen at the time of the event, which mouse buttons were being pressed at the time of the event etc).
+	Since, event object is created and initialized by the browser, its contents varies from browser to browser. Also, IE stores the newly created event object into window.event. Firefox passes the newly created event object to the event handler.
+
+	Normalization:
+	document.onclick=function(e) {
+		var evt=window.event || e;
+	}
+
+	--------------------------------------------------------------------------------------------
+	propertyName				|					IE					|		Firefox			|
+	--------------------------------------------------------------------------------------------
+	altKey, ctrlKey, shiftKey	| Boolean value which indicates whether |						|
+								| Alt, Ctrl and Shift keys were pressed |		Same as IE		|
+								| at time of the event.					|						|
+	--------------------------------------------------------------------------------------------
+	button						| IE<9: Left - 1, Middle - 4, Right - 2 |		undefined		|
+								| IE>=9: Left - 0, Middle - 1, Right - 2|		undefined		|
+	------------------------------------------------------------------------------------------------------
+	which						| IE<9:  undefined						| Left - 1, Middle - 2, Right - 3 |
+								| IE>=9: Left - 1, Middle - 2, Right - 3|								  |
+	------------------------------------------------------------------------------------------------------
+	clientX, clientY			| Position of mouse relative to upper 	|								  |
+								| left corner of the browser window or  |		Same as IE				  |
+								| viewport.								|								  |
+	------------------------------------------------------------------------------------------------------
+	screenX, screenY			| Position of mouse relative to upper 	|								  |
+								| left corner of the screen at			|		Same as IE				  |
+								| the time when the event fired.		|								  |
+	----------------------------------------------------------------------------------------------------------
+	pageX, pageY				| 										| Position of mouse relative to upper |
+								| 			undefined					| left corner of the page/document at |
+								| 										| the time when the event fired.	  |
+	----------------------------------------------------------------------------------------------------------
+	type						| type of event:'click', 'mouseover' etc|			Same as IE				  |
+	----------------------------------------------------------------------------------------------------------
+	srcElement(IE)				| Element that the event is originated from may differ from the element to 	  |
+	target(Firefox)				| which corresponding handler was attached due to event bubbling. For eg, if  |
+								| you attach a click handler to divA that contains a child divB. If you click |
+								| on divB, event.srcElement returns divB, element that the event is originated| 
+								| from, not divA, element to which handler was attached.	 				  |
+								| Normalization: if(evt.target) evt.target = evt.srcElement;				  |		
+	----------------------------------------------------------------------------------------------------------
+	currentTarget(Firefox)		| returns divA, element to which handler was attached to.					  |
+	this(IE & Firefox)			| "this" inside handler also points to the same element.					  |
+	----------------------------------------------------------------------------------------------------------
+	returnValue=false; (IE)		| prevents the default handlers from being executed. For eg, used to prevent  |
+	preventDefault(); (Firefox)	| a form being submitted when the form is submitted & used to prevent page 	  |
+								| reload when the user clicks on anchor link.								  |
+	---------------------------------------------------------------------------------------------------------- 
+	cancelBubble=false; (IE)	| prevents all the handlers(for this event) on parent elements from running.  |
+	stopPropagation(); (Firefox)| http://www.tutorialspoint.com/cgi-bin/practice.cgi?file=jquery_105	 	  |
+	---------------------------------------------------------------------------------------------------------- 
+
+	key code - If you press a key 'a', actual character can be 'a', 'A' or 'a from another language', but the keyCode is same.
+		It depends only on key, not on the resulting character.
+		http://aspdotnetfaq.com/Faq/What-is-the-list-of-KeyCodes-for-JavaScript-KeyDown-KeyPress-and-KeyUp-events.aspx
+		
+	character code - ASCII value of resulting character.
+
+		IE < 9 -> keypress -> event.keyCode = character code, event.which = undefined, event.charCode = undefined.
+			No key press event for special keys.
+			keyup/down -> event.keyCode = key code, event.which = undefined, event.charCode = undefined.
+		IE >= 9 -> keypress -> event.keyCode = character code, event.which = character code, event.charCode = character code.
+			No key press event for special keys.
+			keyup/down -> event.keyCode = key code, event.which = key code, event.charCode = 0.
+		FF - keypress -> event.keyCode = 0, event.which = character code, event.charCode = character code.
+				event.keyCode = key code, event.which = 0, event.charCode = 0.
+		   keyup/down -> event.keyCode = key code, event.which = key code, event.charCode = 0.
+		
+	// event.type must be keypress
+	function getChar(event) {
+		if (event.which == null) {
+			return String.fromCharCode(event.keyCode); // IE
+		} else if (event.which != 0 && event.charCode != 0) {
+			return String.fromCharCode(event.which);   // the rest
+		} else {
+			return null; // special key
+		}
+	}
+
+	http://unixpapa.com/js/key.html
+
+
+form object - property of document object.
+	name - name of the form
+	method - GET, POST etc
+	action - URL to which the form is submitted to.
+	elements[] - array of objects inside the form(such as button, textfield etc)	
+
+	submit() - to submit a form
+	reset() - to reset a form
+
+	Accessing a form using javascript:
+		document.form.yourformname
+		document.forms["yourformname"]
+
+button object - property of the form object, each <input type="button">, <input type="submit">, <input type="reset"> element inside the form is represented by a button/submit/reset object.
+	name - name of the button
+	type - returns "button", "submit" or "reset".
+	value - text that appears on the face of button. (read-only for type 'submit' and 'reset')
+	disabled - [true | false], used to enable or disable a button.
+	
+	click() - to click the button programmatically.	
+
+	Accessing the button using javascript:
+		document.myform.myButton
+		document.myform.elements[i] // where i is the position of the button within form
+
+checkbox object - property of the form object, each <input type="checkbox"> element inside the form is represented by a checkbox object.
+	name - name of the checkbox
+	type - checkbox
+	value - value submitted when the form is submitted.
+	checked - contains a boolean value indicating whether checkbox is selected or not.
+	disabled - [true | false], used to enable or disable a checkbox.
+	
+	click() - select the checkbox if it is unselected or unselect it if it is selected.
+	
+	Accessing the checkbox using javascript:
+		document.myform.mycheck
+		document.myform.elements[i]
+
+element object - used to any element inside a form generically(for eg, using a for loop).
+	document.myform.elements.length - returns the total no. of form elements inside the specified form.
+	document.myform.elements[i] - used to access ith element inside the form.
+	document.myform.elements[i].type - returns the type of ith element inside the form(button, checkbox, file, hidden, image, password, radio, reset, select-one, select-multiple, submit, text, textarea).
+	document.myform.elements[i].anyotherproperty - Apart from "type", all properties available to the accessed form element is also available when accessed via the elements object, such as "name", "value" etc.
+
+fileupload object - property of the form object, each <input type="file"> element inside the form is represented by a fileupload object.
+	name - name of the file upload field.
+	type - returns "file", in this case.
+	value - name of the file to be uploaded.
+	
+hidden object - property of the form object, each <input type="hidden"> element inside the form is represented by a hidden object.
+	name - name of the hidden object.
+	type - returns "hidden", in this case.
+	value - value of the hidden field. read/write.
+
+option object - property of the select object, each <option> element inside <select> is represented by a option object.
+	index - index of this option in the list of options. read-only.
+	selected - boolean value indicating this option is currently selected or not. read/write.
+	text - text displayed
+	value - value submitted when you select this option.
+	
+password object - property of the form object, each <input type="password"> element inside the form is represented by a password object.
+	name - name of the password field.
+	type - returns "password"
+	value - value of the password field. read/write.
+	disabled - to enable/disable the password field. default is enable.
+
+	focus() - set the control in the text field.
+	select() - highlights the content of text field.
+
+radio object - property of the form object, each <input type="radio"> element inside the form is represented by a radio object.
+	name - name of the radio button
+	type - returns "radio"
+	value - value submitted when the form is submitted.
+	checked - contains a boolean value indicating whether radio button is selected or not.
+	disabled - [true | false], used to enable or disable a radio button.
+	
+	click() - select the radio button if it is unselected or unselect it if it is selected.
+
+	Accessing the radiobutton using javascript:
+		document.myform.myRadio/document.myform.myRadio[i]
+		document.myform.elements[i]
+
+select object - property of the form object, each <select> element inside the form is represented by a select object.
+	name - name of the selection list
+	type - returns "select-one" or "select-multiple" depending on the type of the dropdown.
+	options - array of options to be displayed inside the dropdown.
+	multiple - boolean value which enables/disables the selection of multiple options.
+	length - no. of options in the options array.
+	selectedIndex - currently selected option in the list of options.
+	
+	add(newoption, index) - new option is added at the specified index. if index is null, new option is added at the end.
+	remove(index) - remove the option at specified index.
+
+text object - property of the form object, each <input type="text"> element inside the form is represented by a text object.
+	name - name of the text field.
+	type - return "text"
+	value - content of text field.
+	disabled - to enable/disable the text field. default is enable.
+
+	focus() - set the control in the text field.
+	select() - highlights the content of text field.
+
+textarea - property of the form object, each <textarea> element inside the form is represented by a textarea object.
+	name - name of the text area.
+	type - returns "textarea".
+	value - content of text area.
+	disabled - to enable/disable the text area. default is enable.
+
+	focus() - set the control in the text area.
+	select() - highlights the content of text area.
+
+
+history object - property of window object, which contains list of URLs visited during this session.
+	window.history.length - returns no. of elements in the history object.
+	window.history.back(), window.history.forward() - same as browser back and forward buttons
+	window.history.go(n) - if n is -ve, same as clicking back button n times. it n is +ve, same as clicking forward button n times.
+
+location object - property of window object, which contains complete URL of current window.
+	window.location.href property - add an entry to history(so you can go back to the previous URL using back button) and go to specified URL.
+		<input type="button" onclick="window.location.href='http://www.google.com/'" value="Visit www.google.com" />
+
+	// <protocol>://<hostname>:<port>/<pathname><search><hash>
+	// http://www.example.com:80/example.cgi?x=3&y=4#results
+	window.location.protocol - returns http/https/ftp	// if(location.protocol=='http') - check if login is http or https
+	window.location.hostname - returns www.yahoo.com
+	window.location.port - returns 80
+	window.location.pathname - reutrns the path info
+	window.location.search - returns query string
+	window.location.hash - reutrns anchor name used in the URL (#headline)
+	
+	window.location.reload() - to reload the webpage (same as browser's reload button).
+	window.location.reload(true) - to force the browser to retrieve the page directly from the server, bypassing any caches, pass a true parameter.
+	window.location.replace() - remove the most recent entry in the history (so you can't go back to the previous URL using back button) and go to specified URL.
+
+window object - represents an instance of the browser.
+	window is at the root of the object hierarchy. It acts as a global object.
+	Every web browser window and every frame within every window is represented by a Window object.
+	
+	window.closed - boolean value which indicates whether the window is still open or not.
+	window.document
+	window.frames[]
+	window.history
+	window.location
+	window.navigator
+	window.parent - if your page contains frames, it refers to the window object of current frame's immediate parent frame. if you page contains no frames, it is same as window or self.
+	window.self - self is a property of window object which points back at window object i.e. window.self === window should be true(though it is not the case with IE). window and self can be used interchangeably. 
+	window.top - if your page contains frames, it refers to window object of very top (outermost) frame, by using this you can access other frames. window inside a frame points to the frame itself. if your page contains no frames, it is same as window or self.
+
+	window.alert(message) - it displays a alert dialog box with OK button and specified message.
+	window.clearTimeout(value_returned_by_setTimeout) - value returned by setTimeout() is used as the parameter for the clearTimeout() method.
+	window.close() - used to close the current/specified window. Firefox ignores the call and IE8 asks for confirmation.
+	window.confirm(message) - yes/no dialog box.
+		returns true if you click on 'yes' button, false if you click on 'no' button.
+	window.open(URL, windowname, attributes) - used to open a new browser window.
+		attributes - height=100, width=200, resizable=yes, menubar=yes, toolbar=yes, location=yes, status=yes, scrollbars=yes
+			height - used to set the height of the new window.
+			width - used to set the width of the new window.
+			screenX - position of the new window in pixels from the left of the screen.
+			screenY - position of the new window in pixels from the left of the screen.
+			location - used to show/hide location bar in the new window.
+			resizable - used to enable/disable resizing by the users.
+			menubar - used to show/hide menubar in the new window.
+			scrollbars - used to show/hide scroll bars in the new window.
+			status - used to show/hide status bar in the new window.
+			toolbar - used to show/hide toolbar in the new window.
+	window.prompt(message, [default_value_in_the_text_field]) - ok/cancel dialog.
+		returns whatever you enter in the textfield or null if the user clicks on cancel.
+	
+	window.moveBy(x, y) - Move the window relatively x pixels right and y pixels down. Negative values are accepted.
+	window.moveTo(x, y) - Move the window to the given coordinates on the screen.
+	window.resizeBy(width, height) - Resize the window by the given width/height. Negative parameters are accepted.
+	window.resizeTo(width,height) - Resize the window to the given size.
+	window.scrollBy(x,y) - Scroll the window by the given number of pixels right and down. Negative values are accepted.
+	window.scrollTo(x,y) - Scrolls the window to the given coordinates.	
+
+	window.setTimeout(callback, msec), window.setTimeout(callback, msec, arg1, arg2, ..., argN) - used to to call a function after specified time. returns an ID which is used as a parameter to window.cancelTimeout() method.
+	window.setInterval(callback, milliseconds), window.setInterval(callback, milliseconds, arg1, arg2, ..., argN) - used to call a function periodically.
+	window.clearTimeout(id_returned_by_setTimeout_method) - 
+	window.clearInterval(id_returned_by_setInterval_method) - 
+	
+	

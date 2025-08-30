@@ -1,0 +1,58 @@
+<article>
+<aside>
+<details>
+<figcaption>
+<figure>
+<footer>
+<header>
+<main>
+<mark>
+<nav>
+<section>
+<summary>
+<time>
+
+
+<article>
+    It contains independent content which doesnt require any other context.
+    Example: Blog Post, Newspaper Article etc;
+
+<aside>
+    It is used to place content in a sidebar i.e. aside the existing content. It is related to surrounding content.
+
+<details> and <summary>
+    details defines additional details that the user can hide or view. 
+    summary defines a visible heading for a details element.
+
+<figure> and <figcaption>
+    These are used to add an image in a web page with small description.
+
+<header>
+    As the name suggests, it is for the header of a section introductory of a page. 
+    There can be multiple headers on a page.
+
+<footer>
+    Footer located at the bottom of any article or document, they can contain contact details, copyright information etc. 
+    There can be multiple footers on a page.
+
+<main>
+    It defines the main content of the document. The content inside main tag should be unique.
+
+<section>
+    A page can be split into sections like Introduction, Contact Information, Details etc and each of these sections can be in a different section tag.
+
+<nav>
+    It is used to define a set of navigation links in the form of navigation bar or nav menu.
+
+<mark>
+    It is used to highlight the text.
+
+Important Links:
+https://www.geeksforgeeks.org/html5-semantics/ - Examples
+
+
+
+
+
+
+

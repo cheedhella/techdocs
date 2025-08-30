@@ -1,0 +1,333 @@
+background-size
+	http://tutorialzine.com/2012/06/quick-tip-fullscreen-backgrounds/
+	auto - default, sets the image to its normal size.
+		The default size of a background image is the actual size of the image. 
+		Sometimes the image is just a bit smaller or larger than its container. 
+		You can define the size of your background image in pixels (as shown above) or percentages, or you can use the contain or cover key terms.
+	width, height 
+		set of numeric values - A value of 50px 100px sets the background image to a size of 50 pixels in width by 100 pixels in height. 
+			a value of 50px sets the image to a square 50 pixels on a side
+		set of percentage values - 
+			A setting of 100% stretches the image to fit the height and width of the box it is contained within. 
+			A setting of 50% ensures that two background images fill the space, a setting of 25% gives you four background images and so on.
+	contain - scale the background-image to maximum possible size such that it fits entirely in its container.
+		It uses the full image, but it doesn't necessarily fill the entire background.
+		this may leave uncovered space.
+		scale to the largest size such that both its width and its height can fit inside the available background area. This means that the image will be scaled so that its longest dimension fits.
+	cover - scale the background-image to minimum possible size to cover its container completely. such that it fits entirely in its container.
+		It fills the entire background, but it doesn't necessarily use the entire image.
+		This can result in clipping the image 
+		it covers the available area by scaling the image so that the shortest dimension fits in the view, which likely means the image will become partially clipped from view along its other dimension.
+		
+		background-size: contain; /* contain the image in both dimensions */
+		background-size: cover; /* cover the image in both dimensions */
+		background-size: contain cover; /* contain the width and cover the height */
+		background-size: cover 100px; /* cover the width and set the height to 100-pixels */
+
+background-clip - content-box| padding-box | border-box(default) | no-clip;
+	Defines how far the background of the element should visibly extend (i.e. where it's "clipped").
+	----
+	specifies the painting area of the background.
+	--
+	specifies whether an element's background, either the color or image, extends underneath its border.
+	---
+	This property is used to determine whether the background image extends into the border or not.
+	----
+	This property is designed to control whether a background extends into the border area or not.
+	meaning the natural “padding” value that most browsers by default will indent the content of a Web page.
+		border-box clips the image to the outer edge of the border. The background fills the border box.
+		padding-box clips the image to the outer edge of the padding. The background fills the padding box.
+		content-box clips the image to the outer edge of the content. The background fills the content box.
+		-----
+		border-box: The background painting area/positioning area extends to the outer edge of the border. The border will run over the top of the image, but it can be semitransparent.
+		padding-box: The background painting area/positioning area extends to the inner edge of the border. This is the default value.
+		content-box: The background painting area/positioning area extends only to edge of the content area, which is the area before any padding is applied.
+	In essence, padding-box clips the background image to the padding box while border-box clips the background image to the border. 
+	----
+	When border-box is used, the background image will extend to the border and will therefore show up behind the border.
+	The other option is padding-box which means the background image won’t stretch to the border. The image will simply appear until the edge of the padding.
+	
+background-origin
+	The default value is padding, telling background-position that any background image will begin within the padding zone (i.e., the top-left, or coordinates 0,0 of a given element). 
+	When border is used, the browser is supposed to start tiling an image within the border zone. 
+	Finally, the content value tells the browser to position the background image so that it starts at the top-left of the content contained within an element, which is typically indented slightly from the outside edges of the “box” it is contained within.
+	border-box - placing it behind the border.
+	----
+	with padding the image begins tiling within the area of the border; with content the background only begins to tile at the beginning of the text content of the table, and with border the background image begins to tile within the border of the table.
+	----
+	When you position a background image, background-origin allows you to specify your starting point. 
+	The default padding-box positions the background image relative to the outer edge of the padding (inner edge of the border), whereas 
+	border-box positions the background image relative to the outer edge of the border. 
+	There is also the value content-box which, not surprisingly, positions the background image relative to the outer edge of the content (inner edge of the padding).
+
+background-clip vs background-origin	
+	https://coderwall.com/p/h7dwaq
+	
+background-break - bounding-box | each-box | continuous;
+	background-break allows you to control the display of split elements (such as inline boxes that go across multiple lines).
+	
+Multiple Background Images
+	
+-----------------------------	
+html * {
+    -moz-box-sizing: border-box;
+}
+http://css-tricks.com/perfect-full-page-background-image/
+<code>background-size</code>
+<abbr lang="la" title="nota bene, note well">NB</abbr>
+
+http://css3clickchart.com/
+http://nimbupani.com/using-background-clip-for-text-with-css-fallback.html
+http://techbus.safaribooksonline.com/book/web-development/css/9780071496292/css3-proprietary-and-emerging-features-reference/ch06lev1sec2?query=%28%28background-clip%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODAwNzE0OTYyOTIlMkZjaDA2JnF1ZXJ5PSgoYmFja2dyb3VuZC1jbGlwKSk=
+Setting the width and height properties on an element and then setting overflow:auto will cause a scrollbar to appear so the user can get to any overflowing text.
+http://techbus.safaribooksonline.com/book/web-development/html/9781430238614/chapter-6-css3/backgrounds_and_borders?query=%28%28background-clip%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE0MzAyMzg2MTQlMkZjaGFwdGVyXzZfY3NzMyZxdWVyeT0oKGJhY2tncm91bmQtY2xpcCkp
+http://dev.opera.com/articles/view/css3-border-background-boxshadow/
+http://people.opera.com/pepelsbey/experiments/bga/
+http://www.css3.info/
+http://css3d.blogspot.in/
+http://www.impressivewebs.com/css3-browser-support/
+http://css-tricks.com/transparent-borders-with-background-clip/
+
+
+
+-----------------------------	
+border - border-width border-style border-color;
+	Same width, style, color are applied to all four borders.
+	
+border-width - thin | medium(default) | thick | length;
+border-style - none(default) | hidden | dotted | dashed | solid | double | groove | ridge | inset | outset;
+    none: No border drawn
+    dotted: A series of “round” dots; roundness varies by browser and border width
+    dashed: A series of dashes
+    solid: A solid line
+    double: Two solid lines separated by a space
+    groove: Looks like a groove has been carved by the border
+    ridge: Gives the look of a ridge coming out of the canvas
+    inset: Gives the appearance that the content was inset into the page
+    outset: Gives the appearance that the content was raised from the page
+	http://www.htmldog.com/reference/cssproperties/border-style/
+	http://reference.sitepoint.com/css/border-style
+	
+border-color: value; // value can be color name, hexadecimal number, RGB color code, transparent.
+	When one color is provided, it applies to all sides. With two, the first value applies to the top and bottom, and the second applies to the right and left. With three, the first applies to the first top; the second applies to the left and right; and the third applies to the bottom. With four values, it applies to each side clockwise from the top.
+
+border-radius - border-bottom-left-radius, border-bottom-right-radius, border-top-left-radius, border-top-right-radius;
+	
+border-collapse - collapse | separate(default);
+	By default, the table and each cell have independent borders. Borders are merged by setting the value of this property to collapse.
+	---
+	to collapse the borders so that there is no border spacing at all. When you do this, your browser will ignore any border spacing you have set on the table. 
+	It will also combine two borders that are right next to each other into one border. This “collapses” two borders into one.
+	---
+	each cell has its own border with a space between the borders of its neighboring cells. 
+	--
+	If the borders being collapsed do not share the same border thickness, the thicker border will be shown and its style used.
+	If borders have the same thickness but different styles, the border style for the data cell to the left is used.
+	
+border-spacing - hspace vspace; // default: 0 0;
+	Controls the spacing between table cells in a similar way to the HTML cellspacing attribute. Horizontal and vertical spacing can be controlled independently.
+	---
+	Specifies the distance between the borders of adjacent cells in px, cm, etc. Negative values are not allowed
+	---
+	The border-spacing property sets the distance between the borders of adjacent cells (only for the "separated borders" model).
+	
+    If one length value is specified, it specifies both the horizontal and vertical spacing
+    If two length values are specified, the first sets the horizontal spacing and the second sets the vertical spacing
+
+caption-side - top | bottom | left | right;
+	Determines whether the table caption is displayed above or below the table.
+	The caption-side property specifies the placement of a table caption.
+	top 	Puts the caption above the table. This is default
+	bottom 	Puts the caption below the table
+	--
+	This property sets the vertical position of a table caption box (an element whose display property has the value table-caption).
+	
+empty-cells - show | hide | inherit;
+	show, which displays a full border around the empty cell; hide, which does not draw a border around the cell; and inherit, which takes whatever parent value has been set for empty-cells.
+	 specifies how user agent should render borders and backgrounds around cells that have no visible content.
+	      Is a keyword indicating that borders and backgrounds should be drawn like in a normal cells.
+	      Is a keyword indicating that no border or backgrounds should be drawn.
+    
+    The property applies only to elements whose display property has the value table-cell, but since it’s inherited, it can also be set on the whole table, a row group, or a row.
+	A cell is considered to have no visible content if any of the following cases apply:
+		It has no content at all.
+		It contains only carriage returns, line feeds, tab characters, or blank spaces.
+		Its visibility property is set to hidden.
+		
+table-layout - auto(default) | fixed;
+	By default, a table expands and contracts to accommodate the data contained inside. 
+	As data fills the table, it continues to expand as long as there is space. When you look at them this way, tables are inherently fluid.
+	Sometimes, however, it is necessary to force a table into a fixed width for both the table and the cells. 
+	--
+	Determines whether a table automatically expands to accommodate oversized content. If set to fixed, the width of each column is set in the column definitions or the first row.
+	--
+	The table is forced to maintain its width of 100 pixels, regardless of how much data is contained in its table cells. If the content inside the cells results in a width larger than 100 pixels, the content overflows.
+	 
+	
+
+http://techbus.safaribooksonline.com/book/web-development/css/0957921829
+http://techbus.safaribooksonline.com/book/web-design-and-development/9781449324469/13dot-tables-and-more-lists-getting-tabular/tables_dissected_html?query=%28%28border-collapse%29%29&reader=html&imagepage=#snippet - All about HTML tables
+http://techbus.safaribooksonline.com/book/web-development/css/9780470891520/chapter-12-styling-tables/collapsing_borders?query=%28%28border-collapse%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA0NzA4OTE1MjAlMkZjaGFwdGVyXzEzX2NyZWF0ZV9hX2NvbXBsZXRlX2wmcXVlcnk9KChib3JkZXItY29sbGFwc2UpKQ== - creating a layout
+http://techbus.safaribooksonline.com/0-13-009278-9/ch19lev1sec5 - table like layout using CSS
+http://techbus.safaribooksonline.com/book/web-development/9781457172489/11dot-the-future/the_future_of_css_html?query=%28%28css+overflow-style%29%29#snippet
+http://techbus.safaribooksonline.com/book/web-development/9781457172489/11dot-the-future/the_future_of_css_html?query=%28%28css+overflow-style%29%29#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE0NTcxNzI0ODklMkZjaDA0X2h0bWwmcXVlcnk9KChjc3MlMjBvdmVyZmxvdy1zdHlsZSkp
+
+
+Marquee
+	http://techbus.safaribooksonline.com/book/web-design-and-development/9781430230908/css3-styling/css_basic_properties?query=%28%28css+overflow-style%29%29&reader=html&imagepage=#snippet
+	overflow-style
+	
+	
+	
+Layouts - to read
+	http://blog.html.it/layoutgala/
+	http://www.noupe.com/css/9-timeless-3-column-layout-techniques.html
+	http://techbus.safaribooksonline.com/9780596510435/types_of_web_page_layouts
+	http://techbus.safaribooksonline.com/9780596510435/dreamweavers_css_layouts
+	http://techbus.safaribooksonline.com/book/web-development/css/9780470186275/building-floating-page-layouts/building_a_three-column_design?query=%28%28css+text-align%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA0NzAxODYyNzUlMkZ1c2luZ19wb3NpdGlvbmFsX2Nzc19mb3JfbGF5b3V0JnF1ZXJ5PSgoY3NzJTIwdGV4dC1hbGlnbikp
+	
+	
+	
+	
+
+	
+HTML marquee
+	http://www.tutorialspoint.com/html/html_marquees.htm
+	http://www.htmlmarquee.com/colorful2.php
+	https://developer.mozilla.org/en-US/docs/Web/HTML/Element/marquee
+	http://www.tutorialehtml.com/en/extras/marquee.php
+	
+CSS3 Transforms, Transitions, and Animation - http://caniuse.com/
+	http://techbus.safaribooksonline.com/book/animation-and-3d/9781430247227
+	http://techbus.safaribooksonline.com/book/web-development/css/9780133064452
+	
+http://css3maker.com/
+http://www.hotdesign.com/seybold/ - why tables for layout is stupid?
+http://www.gtalbot.org/NvuSection/NvuWebDesignTips/WebDesignResources.html - layout related
+http://www.sitepoint.com/tables-vs-css/ - Designing a page
+Without a valid DTD the browser might be prone to slipping into quirks mode, For more information on quirks mode, see www.quirksmode.org.
+http://techbus.safaribooksonline.com/9780980846904/chap_fonts - Embedded fonts and custom layouts
+http://techbus.safaribooksonline.com/book/web-development/html/9781430239604/chapter-22-styling-text/navpoint-177?query=%28%28text-justify%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE0MzAyMzk2MDQlMkZuYXZwb2ludC0xNjEmcXVlcnk9KCh0ZXh0LWp1c3RpZnkpKQ== - box model
+text-align - left | right | center | justify;
+	This property specifies how the inline content(text and images) of a block is aligned horizontally, when the sum of the widths of the inline boxes is less than the width of the line box.
+	Used to set the horizontal alignment of text and other inline elements present in a block-level element.
+	If you want to set the horizontal alignment of a block level element, you should instead use margin-left, margin-right, width properties to achieve the desired effects.
+	For eg, to center a block horizontally set its left margin and right margin to auto. Also set a width, otherwise, it will take up the full width of the parent.
+	---
+	left - default value, content is aligned along the left side.
+	right - content is aligned along the right side.
+	center - content is centered between left and right edges. For each line, white space on left side is equal to that of on right side.
+	justify - as many blocks as possible are fit into a line and content is spaced out such that first word in each line is aligned along the left edge and last word is aligned along the right edge.
+	inherit - whatever value the parent element is having.
+	---
+	There are two new values in CSS3 as well, start and end. These values make multiple language support easier.
+	For example, English is a left-to-right (ltr) language and Arabic is a left-to-right (rtl) language. 
+	Using "right" and "left" for values is too rigid and doesn't adapt as the direction changes. These new values do adapt:
+	start - Same as "left" in ltr, same as "right" in rtl.
+	end - Same as "right" in ltr, same as "left" in rtl.
+	---
+	TODO: table contents + text-align, BIDI + text-align
+		Controls the horizontal alignment of content in table cells.
+		----
+		CSS has the text-align which applies to inline content of block-level elements, and vertical-align property which applies to inline level and table cells.
+		---
+		justified – Lines are aligned on both the left and right margins; text is spread out between the margins as evenly as possible. Sometimes called fully justified.
+		--
+		In languages that are written from left to right, the default value is left.
+		----
+		text-align property specifies the alignment of inline content (text and images) for block elements such as paragraphs and headings, as well as tables cells.
+		---
+		Default value: left if text direction is ltr; right if direction is rtl
+		----
+		Applies to: Block-level elements, table cells (th and td) and elements with display property set to inline-block.
+		http://webdesign.about.com/od/styleproperties/p/blsptextalign.htm
+		http://www.granneman.com/webdev/coding/css/centertables/
+		http://deeson-online.co.uk/labs/how-centre-align-text-or-content-vertically-css
+		
+text-align-last - left | right | center | justify;
+	If you want the last line of a paragraph to be treated differently from the rest of the text, use text-align-last property.
+	
+vertical-align - 
+	Controls the vertical alignment of content in table cells.
+
+text-shadow - none | color | length;
+	text-shadow is used to add shadow to individual characters in text nodes, where as box-shadow is used to add shadow to boxes.
+	In case of multiple shadows, they are painted from front to back with first shadow being the topmost. All shadows appear behind the text itself.
+	If a shadow is so large such that it touches another character, then it will continue behind that character.
+	
+	text-shadow: 3px 3px 1px rgba(0, 0, 0, 0.5); // This states that the shadow extends three pixels below the text, three pixels to the right of the text, is slightly blurred (one pixel), and has a base color of black at 50% opacity.
+	p {text-shadow: 2px 2px 0 #333;}
+	h1 { text-shadow: 3px 3px #BBB; } <h1>Shadows</h1>
+	.one { text-shadow: −3px −3px #BBB; } <h1 class="one">Quick</h1>
+	.two { text-shadow: −5px 3px #BBB; } <h1 class="two">Brown</h1>
+	.three { text-shadow: −5px 0 #BBB; } <h1 class="three">Fax</h1>
+	.one { text-shadow: 3px 3px 3px #BBB; } <h1 class="one">CSS3</h1>
+	.two { text-shadow: 0 0 3px #000; } <h1 class="two">CSS3</h1>
+	Syntax:
+		The syntax of the text-shadow property is very similar to box-shadow, including prefixes, offsets, and the ability to add multiple shadows; 
+		The exceptions are that there’s no spread, and inset shadows aren’t permitted.
+		// Single shadow 
+		text-shadow: offset-x offset-y blurRadius color;
+			offset-x - defines the movement of the shadow on the horizontal axis.
+			offset-y - defines the movement of the shadow on the vertical axis
+			blurRadius - amount of blur. Higher the value is, blurrier the shadow appears. If 0 is used, you get a sharp shadow without blurring. Setting the blur value to 0 or not setting it at all creates a solid shadow.  higher the value, the wider (and lighter) the blur. 
+			color - color of the shadow. It is even possible to specify the value of the color in RGBa or HSLa. Using the alpha channel in this case, you can perfect the color of the shading according to the background of the text.
+			
+		// multiple shadows
+		text-shadow: offset-x1 offset-y1 blurRadius1 color1, offset-x2 offset-y2 blurRadius2 color2;
+		
+	Notice anything strange? There is no indication of a blur. It rather than highlighting the text, it gives it the effect of appearing split, compromising its legibility.
+		
+	Like box-shadow, when multiple shadows are declared, they’re painted from front to back with the first shadow being the topmost. Text shadows appear behind the text itself. If a shadow is so large that it touches another letter, it will continue behind that character.
+	
+	A subtle shadow enhances readability and a strong shadow makes text harder to read.
+	Avoid using shadows to create special effects (such as an eclipse) where color and background-color are the same, because this makes for invisible text in browsers that do not support shadows.
+	A shadow effect around text makes the text bolder and stand out from its background. Shadows work best for headings and for text overlaying background images. A subtle shadow enhances readability and a strong shadow makes text harder to read.
+	
+	TOREAD:
+		http://markdotto.com/playground/3d-text/ - Create 3D effect using only CSS.
+		http://techbus.safaribooksonline.com/book/web-development/css/9781430243359/chapter-3-fonts-text-and-color/navpoint-31?query=%28%28css+text-shadow%29%29#snippet - How to create a letterpress effect, Glow text, Embossed text, 3D effects, Stroke text, Blur effects.
+		http://techbus.safaribooksonline.com/book/web-development/css/9781593272869/text-effects-and-typographic-styles/applying_dimensional_effects_colon_text-?query=%28%28css+text-shadow%29%29&reader=html&imagepage=#snippet - 6.2.2. Letterpress Effect
+		http://techbus.safaribooksonline.com/book/web-development/html/9781430228745/chapter-11-putting-css3-properties-to-work/s001_311_html?query=%28%28css+text-shadow%29%29#snippet - Letterpress typography and Faux 3D anaglyph.
+		http://techbus.safaribooksonline.com/book/web-development/9780321647559/new-properties-in-css3/ch13lev1sec1?query=%28%28css+text-shadow%29%29&reader=html&imagepage=#snippet - Hot effect using 5 shadows.
+		http://stackoverflow.com/questions/4919076/outline-effect-to-text - stroked text effect 
+		
+text-transform - capitalize | uppercase | lowercase | none(default) | inherit;
+	none - default, renders the text as it is. Sometime this value is used to remove inheritance.
+	capitalize - transform the first character of each word to uppercase.
+	uppercase - transform all characters to uppercase.
+	lowercase - transform all characters to lowercase.
+	
+
+http://techbus.safaribooksonline.com/9780131382022/ch11#ch11 - Layout
+Note that relative URLs are relative to the location of the style sheet, not the Web page.
+
+
+	
+
+	
+	
+	
+width 
+	The actual width of a non-floating block-level element is: margin-left + border-left + padding-left + width + padding-right + border-right + margin-right;
+
+
+line-height - normal(default) | <number> | <length> | <percentage>;
+	On replaced inline elements, like buttons or input elements, it has no effect.
+	On non-replaced inline elements, it is used in calculation of the line box height.
+	On block-level elements, it specifies the minimum height of the line boxes within that element.
+	
+	This property is used to control the vertical space between lines.
+	The terms leading and half-leading are used in association with line-height.
+	normal - 
+	percentage - refer to the font size of the element itself.
+	
+	----
+	The height of the line can be controlled separately from the size of the font in CSS by the aptly named line-height property.
+	The default setting for line-height in browsers is typically 120 percent of the font size, which gives a bit of white space above and below the text.
+	You can adjust the line-height either by a percentage or, as in this example, a fixed value.
+	
+	
+	<p>This paragraph solely consists of text. This paragraph is rendered as a rectangular box composed of a stack of imaginary boxes called line boxes. Each line box contains one line of text. The default value of line-height is normal, which sets the height of line-box to 1.5em, 15% greater than the computed font-size of each character cell.</p>
+<p>Character cells representing the text are placed side by side in the topmost line-box until it contains as many words as possible; When the first line-box can hold no more words, the process continues with the second line-box, and so on until all of text in p element has been added to the line-boxes.</p> 
+<p>So, height of the box representing p element will be number of line boxes multiplied by the height of a character cell.</p>

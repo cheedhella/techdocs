@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html />
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+   		<title>Knockout Like Or Unlike Component - AMD</title>
+		<script src="conf/config.js"></script> <!-- RequireJS Configuration -->
+		<script data-main="js/bakery" src="lib/require.2.3.6.js"></script>
+		<script>
+			
+            $(document).ready(function () {
+                ko.applyBindings(new MyViewModel());
+            });
+		</script>
+	</head>
+	<body>
+		<usersignupform params='firstname: "Kunwar",lastname:"Last Name",email:"you@email.com"'></usersignupform>
+	</body>
+</html>

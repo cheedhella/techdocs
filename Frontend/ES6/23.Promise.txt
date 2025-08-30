@@ -1,0 +1,323 @@
+https://www.educative.io/courses/rediscovering-javascript
+https://www.educative.io/courses/javascript-promises
+https://www.geeksforgeeks.org/es6-promises/
+https://www.tutorialspoint.com/es6/es7_newfeatures.htm
+https://www.freecodecamp.org/news/async-await-in-javascript/ - Event loops
+https://www.sitepoint.com/javascript-async-await/
+https://codeburst.io/javascript-es-2017-learn-async-await-by-example-48acc58bad65
+
+What is a Promise?
+    It is a container for a future value;
+
+Purpose of Promise?
+    For supporting asynchronous programs, JavaScript uses callbacks(among other things);
+    However, callbacks suffer from problems like callback hell/pyramid of doom;
+    
+    It greatly simplifies the asynchronous programming and avoids the problems associated with callbacks;
+
+States of a Promise
+    A Promise can be in any of these 3 states: Pending/Processing, Fulfilled, Rejected;
+        Pending: Operation is yet to be resolved; // Default
+        Fulfilled: Operation is resolved and it is successful;
+        Rejected: Operation is resolved and it is failed;
+
+    A promise starts in the Pending state and ends in either Resolved(successful) or Rejected(failed) state;
+    Once it is Resolved, it can't be Rejected and vice-versa;
+    Once it is in Fulfilled or Rejected, it can't go back to Pending state;
+------------------------------------------------------------------------------------------------------------
+Example 1: Creating a Promise;
+    It is easier to understand the concept of Promises through an anology;
+    Let's say you promise to complete learning JavaScript in one month;
+    You don't know if you really find enough time to learn JavaScript in next month;
+    You either be completing learning JavaScript or not;
+
+    let learnJsPromise = new Promise(function (fullfill, reject) {
+        let completed = Math.random() < 0.5;
+        setTimeout(() => {
+            if (completed) {
+                fullfill("I have completed learning JS.");
+            } else {
+                reject("I haven't completed learning JS yet.");
+            }
+        }, 6 * 10000);
+    });
+    console.log(learnJsPromise); // [[PromiseState]]: "pending", [[PromiseResult]]: undefined
+
+    // Promise takes a callback function and it starts executing callback as soon as Promise object is created;
+    // Note: There is no start() method on Promise;
+    
+    // A newly created Promise is Pending in state, with value undefined;
+    // Inside the callback fn, you can manually call fulfill() function, if the promise is fulfilled OR call reject(), if the promise is rejected;
+    
+    // After 1 min, log promise object again:
+    console.log(learnJsPromise); // [[PromiseState]]: "fulfilled", [[PromiseResult]]: "I have completed learning JS."
+    console.log(learnJsPromise); // [[PromiseState]]: "rejected", [[PromiseResult]]: "I haven't completed learning JS yet."
+------------------------------------------------------------------------------------------------------------
+Promise methods: then(), catch(), finally();
+
+then(callbackFn);
+    It is used to schedule a callback to be executed, when the Promise is fulfilled;
+
+then(onFulfilled, onRejected)
+    It is used to schedule a callback to be executed, when the Promise is resolved;
+    It calls onFulfilled, if the promise is fulfilled; It calls onRejected, if the promise is rejected;
+
+catch(callbackFn);
+    It is used to schedule a callback to be executed, when the Promise is rejected;
+    
+finally(callbackFn);
+    It is used to schedule a callback to be executed, when the Promise is resolved(either fulfilled OR rejected);
+------------------------------------------------------------------------------------------------------------
+Example 2: then() and catch();
+    let learnJsPromise = new Promise(function (fullfill, reject) {
+        let completed = Math.random() < 0.5;
+        setTimeout(() => {
+            if (completed) {
+                fullfill();
+            } else {
+                reject();
+            }
+        }, 6 * 10000);
+    });
+    learnJsPromise.then(() => console.log("I have completed learning JS."));
+    learnJsPromise.catch(() => console.log("I haven't completed learning JS yet."));
+
+    console.log(learnJsPromise); // [[PromiseState]]: "pending", [[PromiseResult]]: undefined
+ 
+    // After 1 min, you could see either of below msg in console: 
+    // I have completed learning JS.
+    console.log(learnJsPromise); // [[PromiseState]]: "fulfilled", [[PromiseResult]]: undefined
+    // I haven't completed learning JS yet.
+    console.log(learnJsPromise); // [[PromiseState]]: "rejected", [[PromiseResult]]: undefined
+------------------------------------------------------------------------------------------------------------
+Example 3:
+    You can call then() method multiple times on a Promise(Note that, it is not promise chaining);
+    Those handlers have no relationship, they execute independently and also don’t pass the result from one to another like the promise chaining;
+
+    let p = new Promise(function (fullfill, reject) {
+        setTimeout(() => {
+            fullfill(10);
+        }, 3 * 10000);
+    });
+    p.then(result => { console.log(result); return result * 2; });  // 10
+    p.then(result => { console.log(result); return result * 3; });  // 10
+    p.then(result => { console.log(result); return result * 4; });  // 10
+------------------------------------------------------------------------------------------------------------ 
+Example 4: Promise chaining;
+    You can chain Promise methods such as then(), catch(), finally() as each of them returns a new Promise;
+    When you return a value in the then() method, the then() method returns a new Promise that immediately resolves to the return value;
+    
+    let p = new Promise(function (fullfill, reject) {
+        setTimeout(() => {
+            fullfill(10);
+        }, 3 * 10000);
+    });
+    p.then(result => { console.log(result); return result * 2; })   // 10
+     .then(result => { console.log(result); return result * 3; })   // 20
+     .then(result => { console.log(result); return result * 4; });  // 60
+------------------------------------------------------------------------------------------------------------
+Example 5: You can also return a new Promise in then();
+    let p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(10);
+        }, 3 * 100);
+    });
+
+    p.then((result) => {
+        console.log(result);                            // 10
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(result * 2);
+            }, 3 * 1000);
+        });
+    }).then((result) => {
+        console.log(result);                            // 20
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(result * 3);
+            }, 3 * 1000);
+        });
+    }).then(result => console.log(result));             // 60
+------------------------------------------------------------------------------------------------------------
+Example 6: Refactor Example 5!
+    function generateNumber(num) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(num);
+            }, 3 * 1000);
+        });
+    }
+
+    generateNumber(10)
+        .then(result => {
+            console.log(result);                    // 10
+            return generateNumber(result * 2);
+        })
+        .then((result) => {
+            console.log(result);                    // 20
+            return generateNumber(result * 3);
+        })
+        .then(result => console.log(result));       // 60
+------------------------------------------------------------------------------------------------------------
+Sometimes, you have multiple asynchronous tasks that you want to execute in sequence;
+In addition, you need to pass the result of the previous step to the next one;
+In this case, you can use the following syntax:
+    step1()
+    .then(result => step2(result))
+    .then(result => step3(result))
+    ...
+
+If you need to pass the result from the previous task to the next one without passing the result, use this syntax:
+    step1()
+    .then(step2)
+    .then(step3)
+    ...
+------------------------------------------------------------------------------------------------------------
+Example 7: 
+    You want to perform the following asynchronous operations in sequence:
+        Get the user from the database.
+        Get the services of the selected user.
+        Calculate the service cost from the user’s services.
+
+    function getUser(userId) {
+        return new Promise((resolve, reject) => {
+            console.log('Get the user from the database.');
+            setTimeout(() => {
+                resolve({
+                    userId: userId,
+                    username: 'admin'
+                });
+            }, 1000);
+        })
+    }
+    function getServices(user) {
+        return new Promise((resolve, reject) => {
+            console.log(`Get the services of ${user.username} from the API.`);
+            setTimeout(() => {
+                resolve(['Email', 'VPN', 'CDN']);
+            }, 3 * 1000);
+        });
+    }
+    function getServiceCost(services) {
+        return new Promise((resolve, reject) => {
+            console.log(`Calculate the service cost of ${services}.`);
+            setTimeout(() => {
+                resolve(services.length * 100);
+            }, 2 * 1000);
+        });
+    }
+
+    getUser(100)                                      // Get the user from the database.  
+    .then(result => getServices(result))              // Get the services of admin from the API.
+    .then(result => getServiceCost(result))           // Calculate the service cost of Email,VPN,CDN.
+    .then(result => console.log(result));             // 300
+
+    getUser(100)                    // Get the user from the database.
+    .then(getServices)              // Get the services of admin from the API.
+    .then(getServiceCost)           // Calculate the service cost of Email,VPN,CDN.
+    .then(console.log);             // 300
+------------------------------------------------------------------------------------------------------------
+Promise.all(iterable)
+    It is a static method, which accepts a list of Promises and returns a Promise that:
+        - resolves to an array of resolved values, in an iterator order, when every input Promise has resolved;
+        - rejects when any of the input Promise has rejected, with the rejection reason from the first rejected promise;
+          The subsequent rejections will not affect the rejection reason;
+
+    It is useful when you want to aggregate the results from multiple asynchronous operations;
+------------------------------------------------------------------------------------------------------------
+Example 8: 
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The first promise has resolved');
+            resolve(10);
+        }, 1 * 1000);
+    });
+    const p2 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The second promise has resolved');
+            resolve(20);
+        }, 2 * 1000);
+    });
+    const p3 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The third promise has resolved');
+            resolve(30);
+        }, 3 * 1000);
+    });
+
+    // When all promises have resolved, the values from these promises are passed into the callback of the then() method as an array;
+    Promise.all([p1, p2, p3]).then(results => {
+        const total = results.reduce((p, c) => p + c);
+        console.log(`Results: ${results}`);             // Results: 10,20,30
+        console.log(`Total: ${total}`);                 // Total: 60
+    });
+------------------------------------------------------------------------------------------------------------
+Example 9: 
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The first promise has resolved');
+            resolve(10);
+        }, 1 * 1000);
+    });
+    const p2 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The second promise has resolved');
+            reject('Failed');
+        }, 2 * 1000);
+    });
+    const p3 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The third promise has resolved');
+            resolve(30);
+        }, 3 * 1000);
+    });
+
+    // In this example, we have three promises: the first one is resolved after 1 second, the second is 
+    // rejected after 2 seconds, and the third one is resolved after 3 seconds;
+    // As a result, the return promise is rejected because the second promise is rejected. 
+    // The catch() method is executed to display the reason for the rejected promise.
+    Promise.all([p1, p2, p3])
+    .then(results => {          // Never called!
+        const total = results.reduce((p, c) => p + c);
+        console.log(`Results: ${results}`);             // Results: 10,20,30
+        console.log(`Total: ${total}`);                 // Total: 60
+    })
+    .catch(console.log);
+------------------------------------------------------------------------------------------------------------
+Promise.race()
+    It takes a list of promises and returns a promise that fulfills or rejects as soon as there is one promise
+    that fulfills or rejects, with the value or reason from that promise;
+
+Promise.race() vs. Promise.all()
+    Promise.all() returns a promise that resolves to an array of values from the input promises;
+    Promise.race() returns a promise that resolves to the value from the first settled promise;
+------------------------------------------------------------------------------------------------------------
+Example 10:
+    const p1 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The first promise has resolved');
+            resolve(10);
+        }, 1 * 1000);
+    });
+    const p2 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            console.log('The second promise has resolved');
+            resolve(20);
+        }, 2 * 1000);
+    });
+    
+    // The first one resolves in 1 second while the second one rejects in 2 seconds;
+    // Because the first promise is faster than the second one, the return promise resolves to 
+    // the value from the first promise:
+    Promise.race([p1, p2])
+        .then(value => console.log(`Resolved: ${value}`))           // 10
+        .catch(reason => console.log(`Rejected: ${reason}`));
+
+------------------------------------------------------------------------------------------------------------
+Example 11: Practical use of Promise.race();
+    Suppose that you have to show a loading indicator if the data loading process from the server is 
+    taking longer than some seconds; To achieve this, you can use the Promise.race() static method. 
+    If a timeout occurs, you show the loading indicator, otherwise, you show the message;
+
+    https://www.javascripttutorial.net/es6/javascript-promise-race/
+------------------------------------------------------------------------------------------------------------

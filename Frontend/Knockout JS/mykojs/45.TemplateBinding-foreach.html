@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Bindings: Template</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <h2>Friends List</h2>
+        Here are the Friends from your contact page:
+        <div data-bind = "template: { name: 'friend-template', foreach: friends }"></div>
+        
+        <script type = "text/html" id = "friend-template">
+            <h3 data-bind = "text: name"></h3>
+            <p>Contact Number: <span data-bind = "text: contactNumber"></span></p>
+            <p>Email-id: <span data-bind = "text: email"></span></p>
+        </script>
+        
+        <script type = "text/javascript">
+            function MyViewModel() {
+               this.friends = [{ 
+                  name: 'Smith', 
+                  contactNumber: 4556750345, 
+                  email: 'smith123@gmail.com' 
+               }, { 
+                  name: 'Jack', 
+                  contactNumber: 6789358001, 
+                  email: 'jack123@yahoo.com' 
+               }];
+            }    
+            var vm = new MyViewModel();
+            ko.applyBindings(vm);
+        </script>
+    </body>
+</html>

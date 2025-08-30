@@ -1,0 +1,50 @@
+<a href=”#” onClick=”functionName()”>Link text</a>
+2. Use a javascript: URL in the href attribute of the a tag to call
+the function:
+<a href=”javascript:functionName()”>Link text</a>
+
+
+
+addressed by their index positions, window.frames[0] and window.frames[1], or by their name attributes, window.frame1 and window.frame2. 
+
+window, self - similar to 'this' keyword in object oriented programming, self refers to the window you are in.
+window.parent, self.parent, parent - 
+window.top - 
+window.frames[nameOrNumberOfFrame] - refers to frame held by the current page.
+	In case of single-frame windows, all window, self, top, parent are equal.
+	In case of multi-frame windows, top refers to the topmost window that defines the first <frameset>.
+
+
+
+javascript local vs global variables
+	var myVar = 10; 
+	newVar = 20;
+
+
+
+ null value is special in that it is automatically converted to initial values
+of other data types. When used as a number it becomes 0, when used as a
+string it becomes "", and when used as a Boolean value it becomes false.
+
+
+typeof event.nextStepIndex !== "undefined"
+ui.currentStepIndex
+ui.wizard.jWizard("changeStep", event.nextStepIndex);
+ui.type
+
+_updateButtons - need to customize for showing/hiding prev/next/finish buttons
+
+
+$('#jWizard').find(".jw-button-cancel").addClass("ui-helper-hidden");
+$('#jWizard').find(".jw-button-cancel").removeClass("ui-helper-hidden");
+
+$("#jWizard").data("jWizard")._setOption("buttons.cancelHide", false)
+$("#jWizard").data("jWizard")._setOption("buttons.cancelHide", true)
+
+_updateButtons - show/hide next/prev/cancel/finish buttons
+
+
+
+page n - after loading(show/hide sth, update the content), next handler(may be static html or dyanmic html), prev handler(may be static html or dyanmic html)
+
+

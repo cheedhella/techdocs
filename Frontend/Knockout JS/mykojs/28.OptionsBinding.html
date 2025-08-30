@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS Form Field Bindings: options</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+</head>
+<body>
+    <form data-bind="submit: addItem">
+        New Item: <input type="text" data-bind="value: itemToAdd, valueUpdate: 'afterkeydown'" />
+        <input type="submit" value="Add Item" data-bind="enable: itemToAdd().length > 0" />
+        <p>Items Added</p>
+
+        <!-- It is used to bind options in a dropdown with an array OR observable array in the view model. -->
+        <select multiple width='80px' data-bind="options: items"></select>
+    </form>
+
+    <script>
+      var listModel = function(items) {
+         this.items = ko.observableArray(items);
+         this.itemToAdd = ko.observable("");
+         this.addItem = function() {
+            if(this.itemToAdd() != '') {
+               this.items.push(this.itemToAdd());
+               this.itemToAdd('');
+            }
+         }
+      };
+
+      ko.applyBindings(new listModel(["Master Javascript", "Master Typescript"]));
+    </script>
+</body>
+</html>
+

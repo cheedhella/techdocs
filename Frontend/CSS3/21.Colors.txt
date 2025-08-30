@@ -1,0 +1,30 @@
+
+	
+Colors in CSS are specified using following methods: http://www.color-hex.com
+	1. Predefined color names
+		HTML and CSS color specification defines 141 color names (17 standard colors plus 124 more).
+		The 17 standard colors are: aqua, black, blue, fuchsia, gray, green, lime, maroon, navy, olive, orange, purple, red, silver, teal, white, and yellow.
+	2. Hexadecimal colors
+		Sytnax: #RRGGBB; Example: Black - #000000; Red - #FF0000; Green - #008000; Blue - #0000FF; White - #FFFFFF;
+	3. RGB colors
+		Sytnax: rgb(red, green, blue); Each parameter (red, green, blue) defines the intensity of the color and can be an integer between 0 and 255 or a percentage value from 0% to 100%.
+		Examples: Black - rgb(0, 0, 0); Red - rgb(255, 0, 0); Green - rgb(0, 128, 0); Blue - rgb(0, 0, 255); White - rgb(255, 255, 255);
+	4. RGBA colors
+		RGBA color values are an extension of RGB color values with an alpha channel - which specifies the opacity of the object.
+		Syntax: rgba(red, green, blue, alpha);  The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (fully opaque).
+	5. HSL colors
+		Syntax: hsl(hue, saturation, lightness);
+		Hue - degree on the color wheel; 0/360 is red, 120 is green, 240 is blue;
+		Saturation - a percentage value; 100% is the full colour; saturation measures the intensity of a color;
+			A saturation of 0% always yields a shade of gray, no matter what hue angle you have set, and a saturation of 100% creates the most vivid shade of that hue for a given lightness.
+		Lightness - Lightness is also a percentage; 0% is dark (black), 100% is light (white), and 50% is the average;
+			lightness defines how dark or light the color appears. A lightness of 0% is always black, regardless of the other hue and saturation values, just as a lightness of 100% always yields white.
+	6. HSLA colors
+		HSLA color values are an extension of HSL color values with an alpha channel - which specifies the opacity of the object.
+		Syntax: hsla(hue, saturation, lightness, alpha); The alpha parameter is a number between 0.0 (fully transparent) and 1.0 (fully opaque).
+		
+color: color | transparent | currentColor | inherit;
+opacity: alphaValue | inherit; // can be any value b/w 0.0(fully transparent) and 1.0 (fully opaque). default value: 1;
+To make a color completely transparent, you simply set the alpha value to 0; to be completely opaque, the correct value is 1. 
+Thus, rgb(0,0,0) and rgba(0,0,0,1) will yield precisely the same result (black).
+

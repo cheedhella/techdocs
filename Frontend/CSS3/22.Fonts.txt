@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Bowlby+One+SC');
+
+h1 {
+  text-align: center;
+  font-family: 'Bowlby One SC', cursive;
+  font-size: 25.5vw;
+}
+------------------------------------------------------
+
+text-wrap - normal | unrestricted | none | suppress
+
+text-decoration - line-through | underline | overline | none
+text-indent - npx | n%;	// used to indent paragraphs
+text-align - right | justify;
+text-transform - capitalize | uppercase | lowercase
+
+word-wrap: break-word; // you can force long text to wrap in a new line by specifying break-word with the word-wrap property. 
+word-spacing - npx;	// space b/w words
+letter-spacing - npx;	// space b/w letters
+line-height -	// space b/w lines, default value is about 20px.
+
+
+outline - outline is a line around an element. displayed around the margin of the element and is different from border property.
+	outline: outline-color, outline-style, outline-width
+
+	outline-color - 
+	outline-style - none | dotted | dashed | solid | double | groove | ridge | inset | outset
+	outline-width - thin | medium | thick
+
+white-space - http://xahlee.org/js/css_text-wrap.html
+
+	normal - sequence of white spaces collapse into a single white space. text will wrap when necessary. (default)
+	nowrap - 
+	pre -
+	pre-line -
+	pre-wrap - 
+  
+font - font-style font-variant font-weight font-size/line-height font-family
+	font-style: normal | italic | oblique;
+	font-variant: normal | small-caps;
+	font-weight: lighter | normal | bold | bolder | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900; // 400 - normal, 700 - bold
+	font-size: xx-small | x-small | small | medium | large | x-large | xx-larger | smaller | larger;
+	line-height: 
+	font-family: family-name generic-family
+		family-name: times | serif
+		generic-family: serif | sans-serif | cursive | fantasy | monospace;
+
+	http://www.impressivewebs.com/css-font-shorthand-property-cheat-sheet/
+	font-variant:
+	font-stretch:
+		
+	1. font-family, font-size, font-weight, font-style, text-decoaration, color, text-transform, line-height, font-variant
+	3. word-spacing, letter-spacing, text-align, text-indent, text-shadow, white-space;
+
+  white-space
+	http://www.w3schools.com/cssref/pr_text_white-space.asp
+	http://www.impressivewebs.com/css-white-space/	
+	http://reference.sitepoint.com/css/text-shadow

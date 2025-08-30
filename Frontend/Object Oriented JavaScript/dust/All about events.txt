@@ -1,0 +1,126 @@
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------
+
+
+In case of keypress event, IE stores the character code in event.keyCode, while other browsers store it in event.which.
+	Some(but not all) browsers also store it in event.keyCode and/or event.charCode.
+	function(evt) {
+		evt = window.event || evt;
+		var charCode = evt.which || evt.keyCode;
+		alert(String.fromCharCode(charCode));
+	}
+
+	onkeydown/up keyCode always holds the key code. 
+	
+
+
+
+
+
+    The only event you can reliably obtain character information (as opposed to key code information) is the keypress event.
+    In the keypress event, all browsers except IE store the character code in the event's which property. Most but not all of these browsers also store the character code in the charCode property.
+    In the keypress event, IE stores the character code in the keyCode property.
+
+    This means to get the character code corresponding to the keypress, the following will work everywhere, assuming a keypress event object is stored in a variable called e:
+
+    
+    
+    var keyCode = (window.event) ? e.which : e.keyCode;
+
+    document.onkeypress = function(evt) {
+    evt = evt || window.event;
+    var charCode = evt.which || evt.keyCode;
+    
+};
+
+
+
+jQuery, Prototype, Dojo or MooTools.
+http://stackoverflow.com/questions/1444477/keycode-and-charcode
+http://www.quirksmode.org/js/keys.html
+http://www.javascriptkit.com/javatutors/javascriptkey2.shtml
+http://alexdweb.com/blog/2009/11/19/javascript-event-which-keycode-charcode/
+http://stackoverflow.com/questions/4285627/javascript-keycode-vs-charcode-utter-confusion
+http://javascript.info/tutorial/keyboard-events
+http://www.cryer.co.uk/resources/javascript/script20_respond_to_keypress.htm
+
+
+keyCode maps to the Unicode character of the keyboard key - that is,
+the actual key that was pressed. e.g. pressing 'u' gives a charCode of
+117 (lower case u) and a keyCode of 85 (the U key).
+
+Hold down the shift key, and you get 85 for both, which is the code for
+an upper case U character and the U key.
+
+charCode takes into account the whether modifier keys (shift, control,
+etc.) are pressed, keyCode doesn't.
+
+
+
+
+relatedTarget -  returns the element related to the element that triggered the event.
+
+srcElement - srcElement property returns the element that fired the event.
+	if the we click on an image with an id attribute of 'Image1', and a src attribute of 'picture1.jpg', then event.srcElement.id will return 'Image1', and event.srcElement.src will return 'picture1.jpg', although this will be extended because the computer internally converts relative URLs into absolute URLs.
+	Similarly, the srcElement has a tagName property:
+	event.srcElement.tagName will return 'IMG'. And we can also read styles, so if the image has a style height of 100px, then event.srcElement.style.height will return '100px'.
+
+ 
+
+Good eg: http://www.javascripter.net/faq/mouseclickeventcoordinates.htm
+event.x, event.y, 
+event.offsetX, event.offsetY(IE)
+event.layerX, event.layerY(Firefox)
+
+
+Incase of IE, pageX and pageY can calculated as follows:
+	pageX = event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft
+	pageY = event.clientY + document.documentElement.scrollTop + document.body.scrollTop
+	
+	in Internet Explorer (backward-compatibility mode) 
+		event.clientX+document.body.scrollLeft, 
+		event.clientY+document.body.scrollTop
+	in Internet Explorer (standards mode, document.compatMode=='CSS1Compat') 
+		event.clientX+document.documentElement.scrollLeft, 
+		event.clientY+document.documentElement.scrollTop
+
+IE<9: Left - 1, Middle - 4, Right - 2 |		undefined		|
+							| IE>=9: Left - 0, Middle - 1, Right - 2|		undefined		|
+				IE					|		Firefox			|
+							|					IE					|		Firefox			|
+--------------------------------------------------------------------------------------------
+							|					IE					|		Firefox			|
+--------------------------------------------------------------------------------------------
+
+event.type - click, dbclick etc
+cancelBubble
+stopPropagation()
+
+	
+is created and initialized by the browser. 
+
+an event fires, the computer places appropriate data about the event into the event object - 
+
+
+
+SrcElement	The element that fired the event
+type	Type of event
+returnValue	Determines whether the event is cancelled
+cancelBubble	Can cancel an event bubble
+clientX	Mouse pointer X coordinate relative to window
+clientY	Mouse pointer Y coordinate relative to window
+offsetX	Mouse pointer X coordinate relative to element that fired the event
+offsetY	Mouse pointer Y coordinate relative to element that fired the event
+button	Any mouse buttons that are pressed
+altKey	True if the alt key was also pressed
+ctrlKey	True if the ctrl key was also pressed
+shiftKey	True if the shift key was also pressed
+keyCode	Returns UniCode value of key pressed

@@ -1,0 +1,12 @@
+What is Z-Index?
+    It is used to define stacking order for overlapping elements in a Page;
+    Elements with a z-index of 3 is stacked on top of elements with z-index 1 and 2;
+    By default, z-index is 0 for all elements and element that appears after another element in the HTML source is stacked above it;
+    Layers below 0 are hidden beneath the body, the don't show up at all;
+    
+    It can be applied to absolute OR relative positioned elements only;
+    Static positioned elements always appear below the absolute or relative positioned elements;
+    If you have a static positioned element, but you want to control it's stacking layer, assign it relative position 
+    without specifying offset; That way, it will appear on the page normally but you will be able to apply z-index to it;
+
+

@@ -1,0 +1,128 @@
+JavaScript datatypes
+	Primitive datatypes: boolean, number, string.
+	Composite datatypes: array, function, object.
+	Special datatypes(which defines only a value): null, undefined.
+	
+	undefined - A variable declared using var keyword with no initial value specified has the value undefined.
+		If you don't pass an argument to a function parameter, it contains undefined.
+		If you don't return any value inside a function, it returns undefined.
+			Have you ever wondered why sometimes when you execute a function in the FireBug console, you see “undefined” in the console? 
+			That is because while your function may actually do something wonderful, if it does not explicitly return a value, then it returns “undefined”.
+		If you attempt access a property of an object that you've never set, it returns undefined. Eg: var foo = {}; alert(foo.bar); // undefined
+
+		How to check if a variable is undefined(initialized or not)?
+			var x;
+			if(x === undefined) {
+				console.log("undefined");
+			}
+		
+		undefined behaves as false, when used in a boolean context.
+			var a;
+			if(!a) {
+				console.log("undefined");
+			}
+		
+		undefined behaves as NaN, when used in a numeric context.
+			var a; console.log(a + 2); // prints NaN
+			
+		x == undefined // throws a ReferenceError - x is not declared in this case.
+		x === undefined // throws a ReferenceError - x is not declared in this case.
+		var x; x == undefined	// returns true. Caution: var x = null; x == undefined; also returns true.
+		var x; x === undefined // returns true
+		typeof x === 'undefined' // returns true - x is not declared in this case.
+		var x; typeof x === 'undefined' // returns true
+
+	null - null is a special value (just like true, false, NaN, Infinity) which means "no value".
+		For eg, with the prompt() dialog box, if the user selects the Cancel button, a null is returned.
+		
+		console.log(typeof null); // "object"
+		
+		null behaves as false, when used in a boolean context.
+			var a = null;
+			if(!a) {
+				console.log("null");
+			}
+		
+		null behaves as 0, when used in a numeric context.
+			var a = null; console.log(a + 2); // prints 2
+			
+		If you want to strip a variable of any value, assign it to “null”.
+	 
+	== thinks that both null and undefined are equal. So, if you want differentiate b/w null and undefined, use ===.
+	Although null and undefined are different, equality(==) operator considers them equal. 
+	null == undefined returns true. If you need to distinguish between them, use the === operator.
+	if(sVal) // evaluates to true if sVal is not null/undefined/uninitialized/emptystring/NaN/0/false.
+
+	How to check if a variable is strictly null or not? 
+		var var11 = null; var11 === null; // returns true
+	
+	How to check if a variable is strictly undefined(uninitialized) or not? 
+		var var12; typeof var12 === "undefined"; // returns true
+	
+	How to check if a variable is intialized and not null?
+		var var13; if(var13) { /* do sth if var13 is initialized, not null/NaN/empty string/0/false */ }
+
+Scope of variables 
+	local - local to the function in which it is declared. global - can be referenced from anywhere in the current document.
+	within the body of a function, a local variable takes precedence over a global variable with the same name.
+
+	local variables must be declared using var keyword. what happens if you skip var keyword?
+
+	scope = "global"; // We can declare a global variable, even without var 
+	function checkscope() { 
+		scope = "local"; // Oops! We just changed the global variable 
+		document.write(scope); // Uses the global variable 
+		myscope = "local"; // This implicitly declares a new global variable 
+		document.write(myscope); // Uses the new global variable 
+	} 
+	checkscope(); // Prints "locallocal" 
+	document.write(scope); // This prints "local" 
+	document.write(myscope); // This prints "local"
+	
+typeof - returns the datatype of an operand.
+	var var1 = true; typeof(var1); // returns "boolean"
+	var var2 = 10; typeof(var2); // returns "number"
+	var var3 = "Hello World"; typeof(var3); // returns "string"
+	var var4 = new String("Hello World"); typeof(var4); // returns "object"
+	var var5 = [1, 2, 3]; typeof(var5); // returns "object"
+	var var6 = new Array(1, 2, 3); typeof(var6); // returns "object"
+	var var7 = document.getElementById; typeof(var7); // returns "function"
+	var var8 = new Date(); typeof(var8); // returns "object"
+	typeof(undeclaredVariable); // returns "undefined"
+	var var9; typeof(var9); // returns "undefined"
+	var var10 = null; typeof(var10); // returns "object"
+	typeof(typeof(anything)); // returns "string"
+	
+	typeof Math.LN2; // returns "number"
+	typeof Infinity; // returns "number"
+	typeof NaN; // returns "number"
+	typeof {a:1}; // returns "object"
+	typeof new Boolean(true); // returns "object"
+	typeof new Number(1); // returns "object"
+	typeof new String("abc"); // returns "object"
+	typeof function(){}; // returns "function"
+	typeof anyObject.constructor; // returns "function"
+	
+instanceof - used to test if an object is created using a specific constructor function or not.
+	Syntax: var result = object instanceof constructorFunction; // returns true if constructorFunction.prototype is in the prototype chain of object.
+
+	The logic behind obj instanceof F is:
+		1. return false if obj is null.
+		2. Get obj.__proto__
+		3. Compare obj.__proto__ against F.prototype
+		4. If doesn't match, then temporarily set obj=obj.__proto__ and repeat step 2 until a match is found or the chain ends.
+
+	Eg: function Rabbit() {}
+		var rabbit = new Rabbit();
+		alert(rabbit instanceof Rabbit); // true
+		alert(rabbit instanceof Object); // true
+
+	instanceof operator lies when the value comes from another frame or iframe, as every frame or iframe 
+	has its own window object and hierarchy. For example, an array which came from an iframe is instanceof Array in that iframe.
+	
+	var color1 = new String("green"); color1 instanceof String; // returns true
+	var color2 = "coral"; color2 instanceof String; // returns false (color2 is not a String object)
+	var a1 = [1, 2, 3]; Eg: a1 instanceof Array; // returns true
+	var a1 = new Array(1, 2, 3); Eg: a1 instanceof Array; // returns true
+	
+	

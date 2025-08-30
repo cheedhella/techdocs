@@ -1,0 +1,22 @@
+expect() - is a global function, provided by react test library; So, no need to impor it;
+    It always takes value as input parameter and a matcher;
+
+    toHaveLength(2) - a matcher, it looks the data passed to expect() and make sure that some property or atttribute of it matches with what we provide;
+
+There are many matchers available to us;
+Matchers from JEST 
+    expect(5).toEqual(5) -> It makes sure that value is equal to another value;
+    expect(['a', 'b']).toHaveLength(2) -> It makes sure that value is an array with a particular length;
+    expect(['a', 'b']).toContain('a') -> It makes sure that array contains a value OR string contains another string;
+    expect(fn).toThrow() -> It makes sure that the function throws an error, when called;
+    expect(mock).toHaveBeenCalled() -> make sure a mock function has been called;
+
+Matchers from React Testing Library (jest-dom)
+    expect(element).toBeInTheDocument() -> make sure that element is present on the page;
+    expect(element).toBeEnabled() -> make sure that element is not disabled;
+    expect(element).toHaveClass() -> make sure that element has a class;
+    expect(element).toHaveValue() -> make sure that input,select,textarea has specified value; 
+    expect(element).toHaveTextContent() -> make sure that element has particular content;
+
+    
+10.255.96.1-50

@@ -1,0 +1,186 @@
+
+
+
+
+			
+	Singleton = function() {
+// private vars and functions
+return {
+// public vars and functions
+ 
+}();
+
+
+Singleton Public & Private Members, using Closures
+
+By using closures, we can create Private and Public Members and Functions. This pattern is more commonly called the Module Pattern.
+
+	
+var myCart = function(){
+    // Private
+    var self = this;
+    var totalCost = 0;
+    var totalQty = 0;
+    var cart = {};
+ 
+    return {
+        // Public
+        getCart: function(){ },
+        updateCart: function(){ }
+    };
+}();
+
+		
+
+			
+			http://www.arashkarimzadeh.com/component/content/article/16.html
+			http://www.godlikemouse.com/2007/05/15/singleton-pattern/
+	
+		
+		
+		
+http://blog.anselmbradford.com/2009/04/21/object-oriented-javascript-tip-the-quintessential-singleton/
+http://kaijaeger.com/articles/the-singleton-design-pattern-in-javascript.html
+http://www.joezimjs.com/javascript/javascript-design-patterns-singleton/
+http://addyosmani.com/resources/essentialjsdesignpatterns/book/
+http://www.hardcode.nl/subcategory_1/article_526-singleton-examples-in-javascript.htm
+http://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern
+http://stackoverflow.com/questions/1479319/simplest-cleanest-way-to-implement-singleton-in-javascript
+
+
+
+Module Pattern
+	By using closures, we can create Private and Public Members and Functions. This pattern is more commonly called the Module Pattern.
+	var myCart = function(){
+		// Private
+		var self = this;
+		var totalCost = 0;
+		var totalQty = 0;
+		var cart = {};
+	 
+		return {
+			// Public
+			getCart: function(){ },
+			updateCart: function(){ }
+		};
+	}();
+http://macwright.org/2012/06/04/the-module-pattern.html
+http://briancray.com/posts/javascript-module-pattern
+http://css-tricks.com/how-do-you-structure-javascript-the-module-pattern-edition/
+
+
+    Constructor Pattern
+    Module Pattern
+    Revealing Module Pattern
+    Singleton Pattern
+    Observer Pattern
+    Mediator Pattern
+    Prototype Pattern
+    Command Pattern
+    Facade Pattern
+    Factory Pattern
+    Mixin Pattern
+    Decorator Pattern
+    Flyweight Pattern 
+http://www.adobe.com/devnet/html5/articles/javascript-design-patterns-pt1-singleton-composite-facade.html
+http://addyosmani.com/resources/essentialjsdesignpatterns/book/
+
+
+
+
+data object, i.e. the Observable is changed
+
+obips.Observable {
+listeners - array of listeners // listener is an instance of obips.Observable.EventListener
+addEventListener(listener)
+removeEventListener(listener)
+notify(event) - used to execute all the listeners for a particular event. // event is an instance of obips.Observable.Event
+
+}
+
+obips.Observable.Event {
+type - type of event raised by observable
+context - object which contains necessary information for the listener to act on  the event.
+}
+
+obips.Observable.EventListener {
+event - type of event, the listener is interested in, Event types are defined by the Observable subclasses.
+callback - instance of obips.Callback,  which holds object and method to notify when an event of the type identified by eventType is raised.
+}
+----------------------------------------------------------
+/**
+Observable - publisher. publisers sends/delivers the data.
+Observer - subscriber. subscibers receives the data.
+
+publishers creates the event, triggers the event.
+subscriber basically subscribe/listen, once they are notified their callback functions are executed.
+
+every publisher maintains a array of subscribers/listeners.
+A subscriber/listener can subscribe/unscribe to a  publisher.
+
+obips.Observable = function()
+{
+    this.listeners = new Array();
+};
+
+obips.Observable.prototype.addEventListener = function(oEventListener)
+{
+   if (typeof(obips)=='undefined')
+      return;
+   obips.Array.append(this.listeners, oEventListener, true); // bCheckNoDuplicates = true means add the listener only if it is not already added.
+};
+
+obips.Observable.prototype.removeEventListener = function(oEventListener)
+{
+    obips.Array.remove(this.listeners, oEventListener);
+};
+
+obips.Observable.prototype.hasListenerForEvent = function(eventType)
+{
+   var a = this.listeners;
+   var len = a.length;
+    for (var i=0; i != len; ++i)
+    {
+       if (a[i].eventType == eventType)
+          return true;
+    }
+    return false;
+};
+
+obips.Observable.prototype.notify = function(oEvent)
+{
+    for (var i=0; i < this.listeners.length; i++)
+    {
+        var listener = this.listeners[i];
+        if (listener && listener.eventType && listener.eventType == oEvent.type)
+        {
+            if (listener.callback) listener.callback.functionPointer.call(listener.callback.thisContext, oEvent);
+        }
+    }
+};
+
+
+obips.Observable.Event = function(eventType, context)
+{
+    this.type = eventType; // type of the event
+    this.context = context; // data that is passed to the listener
+};
+
+event handler vs event listener
+obips.Observable.EventListener = function(eventType, oCallback)
+{
+    this.eventType = eventType;
+    this.callback = oCallback;
+};
+
+obips.Callback = function(thisContext, functionPointer)
+{
+this.thisContext = thisContext; // a reference to the instance of the class providing the callback method or null if the callback is a function
+this.functionPointer = functionPointer; // a pointer to a method of a class or a function
+};
+
+obips.Callback.prototype.exec = function()
+{
+return this.functionPointer.apply(this.thisContext ? this.thisContext : null, arguments);
+};
+*/

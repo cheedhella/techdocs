@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Built-in Bindings: Style Binding</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        Enter Marks: <input type="text" data-bind="value: marks"/> 
+        <div data-bind="style: { color: marks() < 35 ? 'red' : 'green'}">Result</div>
+        <script>
+            var myViewModel = {
+                marks: ko.observable(100)
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

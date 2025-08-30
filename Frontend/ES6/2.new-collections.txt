@@ -1,0 +1,4 @@
+Prior to ES6, Array is the only collection type available in JS;
+ES6 introduced 4 new type of collections: Map, Set, WeakSet, WeakMap;
+
+https://learning.oreilly.com/library/view/practical-es6/9781492067184/Text/webant1_split_006.html

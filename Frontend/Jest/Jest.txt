@@ -1,0 +1,81 @@
+Installation 
+    - If you use 'npx create-react-app', it automatically installs jest; Just use 'npm run test' to run tests;
+        "scripts": {
+            "test": "jest"
+        }
+    - If you want to setup on your own, use: npm install -g jest;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test Runner
+    - Jest offers a test runner, which gives you the ability to find and run tests from command line;
+    - How just finds all tests?
+        -- It finds all test files with suffix .test.js, .spec.ts, .spec.tsx etc in pwd;
+        -- You could configure this matching pattern and others things in a custom Jest configuration file;
+    - Tests are executed in parallel and each test runs in it's own process;
+    - All tests are run in isolation, meaning they can't interfere with each other;
+    - Jest acts as the orchestrator that collects the results from all the test processes;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+describe, it, test 
+    - Jest offers these functions to write test suite and test cases;
+    - describe() is for writing test suite, where as it()/test() is for writing a test case;
+    - Eg: describe('testsuite-eg', () => {
+            it('testcase-1', () => {
+                // asserts like expect()
+            });
+          });
+    - Test suite can have multiple test cases and a test case doesn't have to be in a test suite;
+    - Each test case can have multiple assertions, like expect();
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Assertion Library 
+    - Jest comes with lot of assertion APIs, which you can use in your test code, to check if a piece of code behave like it's expected;
+
+    - expect()
+        -- It takes actual value as input parameter and matches it with specified matcher;
+        -- Eg: expect(true).toBe(true); // toBe() is a matcher; expect() takes true as input, and a matcher; It checks if input value matches with the matcher;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Matchers 
+    expect(5).toEqual(5)                        -> It makes sure that value is equal to another value;
+    expect(['a', 'b']).toHaveLength(2)          -> It makes sure that value is an array with a particular length;
+    expect(['a', 'b']).toContain('a')           -> It makes sure that array contains a value OR string contains another string;
+    expect(fn).toThrow()                        -> It makes sure that the function throws an error, when called;
+    expect(mock).toHaveBeenCalled()             -> make sure a mock function has been called;
+
+    Jest provides lot of general purpose matchers, nothing specific to components;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Mocking Library 
+    - Spies, Mocks, Stubs etc;
+
+    - Mock
+        -- Mock function erases actual implementation of a function; It helps in capturing calls to the function and the parameters passed to it;
+           Eg:
+            const mockFn = jest.fn();
+            mockFn();
+            expect(mockFn).toHaveBeenCalled();
+        -- You can use mock function to return whatever you want; It can also throw an error;
+            Eg:
+            const returnsTrue = jest.fn(() => false);
+            console.log(returnsTrue()); // false;
+
+    - Spy 
+        -- Spying is to observe calls made to a method without changing the method itself;
+        -- jest.spyOn(object, methodName)
+           Eg:
+            const spy = jest.spyOn(calculationService, 'calculate');
+            calculationService.calculate(3);
+            calculationService.calculate(2);
+            expect(spy).toHaveBeenCalledTimes(2);
+
+        -- https://dev.to/zsevic/spies-and-mocking-with-jest-21op
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Snapshot Testing
+    - It is a way of capturing a large object and storing it in memory, so you can later on compare it with something else;
+    - This means you don’t have to write large tests full of assertions to check if every property is present on an object and has the right type; 
+    - You can simply create a snapshot and Jest will do the magic;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Globals 
+    - https://jestjs.io/docs/api
+    - Jest puts lot of above methods in global environment, so, you can you use them in your test code without importing them;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Some well known alternatives to Jest are Mocha, Jasmine, and Karma;
+
+
+

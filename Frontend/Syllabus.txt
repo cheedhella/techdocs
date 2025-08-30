@@ -1,0 +1,174 @@
+
+
+
+
+
+
+
+
+HTML - HTML vs XHTML, HTML/XHTML versions, Doctype, Pages without doctype, Inline vs Block-level elements;
+Attributes: Core - id, class, style, title; i18n - dir, lang; Events - onclick, ondblclick, onmouseup, onmousedown, onmouseover, onmousemove, onmouseout, onkeypress, onkeydown, onkeyup;
+Elements:
+Primary Structure and Sections - Some elements are essential(for eg, html), some are used sparingly(for eg, hr) and some have seen their usage decline in HTML5(for eg, div).
+
+
+WYSIWYG editor - Adobe Dreamweaver;
+Tags: <html>, <head>, <body>, <frame>, <frameset>
+head tags: <base>, <link>, <meta>, <object>, <script>, <style>, <title>;
+Universal Attributes: lang, dir; <bdo>
+
+
+Versions of HTML, XHTML, Doctypes, 
+Tags: Types of tags, html, head and body tags, Input controls and attributes, How to divide web page with div tag, Formating Tags, Link Tags,
+	How to create order list and unordered list, Table tag, Form tag, Frame Tag, How to provide Meta key words, What is Meta Description?
+	Comments
+Tags: html, head, body, title, h1, h2, h3, h4, h5, h6, cite, em, code, kbd, samp, dfn, var, i, b, tt, div, p, br, hr, pre, a, img, image map, 
+Unordered, Ordered, and Definition Lists
+form tags: 
+table tags: table, caption, tr, td
+frames: frame, frameset
+
+Entity Character: Not all text characters available to you for display by a browser can be typed from the keyboard.  some characters have special meanings, such as the brackets around tags, which if not somehow differentiated when used for plain textthe less-than sign.
+	character entities are the greater-than (&gt;), less-than (&lt;), and ampersand (&amp;) characters
+	
+
+
+
+Inline vs Block-level elements
+	A block-level element may contain both block-level elements and inline elements, where as Inline elements can contain text OR other inline elements.
+	Block-level elements occupy at least one full line when rendering, while inline elements take up only as much space as their content requires.
+	http://www.impressivewebs.com/difference-block-inline-css/
+
+Core Attributes
+	id - unique identifier with in the page, used for styling and scripting purposes.
+	class - one or more space separated class names, used for styling and scripting purposes.
+	style - contains inline css; it is best practice not to mix html and css, so avoid using this attribute.
+	title - most browsers render it as a tooltip when you hover the mouse on the element.
+
+i18n Attributes
+	dir='ltr|rtl';
+		Specifies the directionality of an element's text content and tables. default is ltr.
+		If the page is completely in Hebrew, then set <html dir="rtl" lang="he"></html>
+		If the part of a page is Hebrew(rest is in English), then set dir and lang on that element.
+	lang='language_code';
+		Specifies the language of a page or an element.
+
+Event Attributes
+
+Global Attributes(HTML5 Specific) - ;
+	http://techbus.safaribooksonline.com/book/web-development/html/9780321703491/html-basics/ch01lev1sec7#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODAzMjE3MDM0OTElMkZjaDAxbGV2MXNlYzkmcXVlcnk9
+
+Other Attributes	
+	In addition, the attributes listed by name (accesskey, alt, href, nohref*, shape, hreflang, media, and ping) are custom attributes that the element supports, depending on the version of HTML.
+
+
+Address Element
+	http://techbus.safaribooksonline.com/book/web-development/html/9780321703491/html-basics/ch01lev1sec7#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODAzMjE3MDM0OTElMkZjaDAybGV2MXNlYzEmcXVlcnk9
+	http://html5doctor.com/the-address-element/
+	http://reference.sitepoint.com/html/address
+	https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
+-----------------------------------
+HTML 5
+Introduction to HTML 5
+Whats New in HTML 5
+HTML5 VS HTML4
+Structural Tags
+Content Tags
+Application Focussed Tags
+Deprecated Elements
+API Overview
+HTML5 Documents
+Content Models
+Outline Algorithm
+Role of Div Tags
+Using ID ans CLASS Attributes
+Doctype Declaration
+Character Encoding
+Structuring HTML5
+Basic Page Structure
+Top Level Elements
+Interior Content
+Building Headers
+Checking Document Outlines
+Ensuring Cross-Browser Structure
+Forms
+Input Type
+Autofocus
+Placeholder
+Marking Require Fields
+Working with Number and Inputs
+Date Picker
+HTML 5 API Support
+Canvas Overview
+Adding Canvas Content
+Drawing In The Canvas Environment
+Complex Canvas Drawing Techniques
+Advanced Canvas Drawing Techniques
+Building Practical Examples
+Video and Audio
+Video and Audio Basics
+Embedding Video and Audio
+Falling Back to Alternative Playback Methods
+Encoding Audio and Video Files
+Building your own Controls with Javascript
+Known Issues and Workarounds
+Drag and Drop API Overview
+Offline Applications Overview
+Geolocation
+Web Workers
+Overview of Web Workers
+Detecting Web Workers
+Reviewing the Application
+Setting Up the Worker
+Communicating with the Worker
+Handling Errors
+Shared Workers
+Understanding API Differences in Shared Workers
+Reviewing a Shared Workers Example
+Exploring the Details
+File API
+Accessing File Information
+Reading File Content
+Messaging and Communications
+Overview
+Event Listeners
+Cross-Document Messaging
+Web Storage
+Local Storage
+Session Storage
+Conclusion
+-----------------------------------
+CSS 3.0
+CSS 2.0 vs CSS 3.0
+Introduction to css3
+whats new in css3.0
+border radius
+box shadow
+text shadow
+background
+RGBA
+@FONT Face
+Multiple Columns
+Box Resize
+Box Sizing
+Outline
+Transitions
+Transform
+Selectors
+Gradients
+Multiple Columns
+Overview of CSS 3.0 compatabilities for Internet Explorer
+CSS Frameworks
+Introduction to CSS Frameworks
+Blueprint CSS Framework
+Compass CSS Framework
+SASS CSS Framework
+Converting Layout to HTML 5 & CSS 3
+PROJECTS INFO
+STATIC WEBSITE
+HTML 5 AND CSS 3.0 LAYOUT CONVERSION.
+-----------------------------------
+http://www.impressivewebs.com/tutorials/
+
+Good Practice:
+	You may place attributes in any order you like, but I encourage you to be consistent in your approach in order to make your code easier to read and manage.

@@ -1,0 +1,64 @@
+What are all those import statements?
+    @testing-library/react -> Uses reactdom to render a component for testing;
+    @testing-library/user-event -> Helps in simulating user input like typing and clicking, focusing; 
+    @testing-library/dom -> Helps in finding elements that are rendered by our components; // automatically included by @testing-library/react;
+    jest -> Runs our tests, reports the results; // Jest will collect all different test files, execute them and run all the tests inside, report the results;
+    jsdom -> simulates browser when running in a node environment;
+
+How were our tests found?
+    Jest finds all files that end with spec.ts, test.ts and all files in in __test__ folder;
+
+what did all the test code does?
+    test() -> used to create a test; 1st argument -> name/description, purpose of test; 2nd argument -> fn containg actual test code;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Mock Functions 
+    Fake function that doesn't do anything;
+    All it does is record howmany times it got called and also record the arguments passed to it;
+    Often used, when we need to pass callback to a component and check if gets called;
+
+JEST library -> default
+React testing library, jest-dom -> has lot of matchers;ss
+
+
+jest.useFakeTimers();
+jest.advanceTimersByTime(1000);
+
+
+await waitFor
+waitFor is an API provided by React testing library to wait for the wrapped assertions to pass within a certain timeout window
+
+    
+    
+    Discord Server 
+
+
+In the upcoming lecture will be running through a quick testing demo using CodeSandbox in the browser. 
+
+https://codesandbox.io/s/rtl-starter-sq54b4
+How are we going to setup testing? 
+What we are going to test?
+App.test.js 
+
+
+
+
+React Testing Library (RTL) just saw a major v14 update a few weeks ago. Create React App (CRA) has not updated its versions of RTL, so, there are currently some major conflicts with the dependencies that are being installed.
+
+Most importantly, user events are now async:
+
+https://testing-library.com/docs/user-event/intro/#writing-tests-with-userevent
+
+To resolve the testing errors in this project and anywhere else in the course that shows user events like user.click, user.keyboard, etc, you'll need to make the test function async:
+
+test("it calls onUserAdd when the form is submitted", async () => {
+
+Then, add the await keyword wherever there is a user action:
+
+await user.click(nameInput);
+
+
+
+There are tons of query f
+
+npx rtl-book serve roles-notes.js -> 

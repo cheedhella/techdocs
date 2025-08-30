@@ -1,0 +1,55 @@
+CSS Positioning: position, top, right, bottom, left, width, height, 
+z-index, overflow, visibility; clip: top, right, bottom, left;
+	
+
+	CSS positioning is useful for the proper placement of tooltip boxes, asides and drop menus that are made to appear in response to a user’s actions.
+
+	
+Absolute positioning vs float
+	The contents of an absolutely positioned element do not flow around any other boxes. 
+	They may obscure the contents of another box (or be obscured themselves), depending on the stack levels of the overlapping boxes. 
+	 The second interesting fact is that absolutely positioned elements overlap the existing content without any regard for it. If I want the text in the paragraphs to flow around the positioned elements, I have to use float rather than position.
+	 
+
+   
+   clip: clip-source|basic-shape|margin-box|border-box|padding-box|content-box|fill-box|stroke-box|view-box|none;
+clip-source	Defines a URL to an SVG <clipPath> element	
+basic-shape	Clips an element to a basic shape: circle, ellipse, polygon or inset	
+margin-box	Uses the margin box as the reference box	 
+border-box	Uses the border box as the reference box	 
+padding-box	Uses the padding box as the reference box	 
+content-box	Uses the content box as the reference box	 
+fill-box	Uses the object bounding box as reference box	 
+stroke-box	Uses the stroke bounding box as reference box	 
+view-box	Uses the SVG viewport as reference box	 
+none	This is default. No clipping is done
+clip
+	Using the clip property, it is possible to define what portion of the content contained within the box is actually visible to the viewer.
+	What happens if an image is larger than its containing element? - The clip property lets you specify the dimensions of an absolutely positioned element that should be visible, and the element is clipped into this shape, and displayed.
+	The clip property does not work if "overflow:visible".
+	
+
+Placement (Figures 14.9 and 14.10) of a layer is determined by its distance from the Left and Top of the parent unit. The Width and Height measurements are related to placement in that they determine the position of the lower-right corner of the layer.
+
+Clip refers to the clipping area of the layer: the area of the layer in which content shows through (Figure 14.12). You could give a layer an area of 200 pixels by 200 pixels, and then allow only a 100x100 pixel area to show through. You set a clipping area as a rectangular area comprised of four measurements (Top, Right, Bottom, and Left).
+    The clipping area is unrelated to overflow. Overflow is simply related to the layer's dimensions, regardless of whether a clipping region is defined.
+   
+
+Position—values include absolute, relative, fixed, inherit
+•  Width—the width of the layer
+•  Height—the height of the layer
+•  Left—where from the left margin the layer starts
+•  Top—where from the top margin the layer starts
+
+
+ 
+The idea of fixed positioning is that the element "floats" in the same position no matter how much the user scrolls the page.
+Think of this like having a fixed background image on a web page. When you move the scrollbar the image stays in one place.
+	
+	•  Overflow—how to present content that goes beyond the scope of the layer
+
+	
+	
+
+http://techbus.safaribooksonline.com/9780980285840/i_section6_d1e10694#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA5ODAyODU4NDAlMkZjaGFwX21hemUmcXVlcnk9KChjc3MlMkJjbGlwKSk=
+http://techbus.safaribooksonline.com/book/web-development/9781118416518/chapter-7-cascading-style-sheets/h1_340189c07_0003_html?query=%28%28css+clip%29%29#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODExMTg0MTY1MTglMkZoMV8zNDAxODljMDdfMDAwM19odG1sJnF1ZXJ5PSgoY3NzJTIwY2xpcCkp

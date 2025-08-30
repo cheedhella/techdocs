@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: value</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- It binds value of Form field(particularly textfield) with specified property in the view model. -->
+
+        <!-- Two-way binding: populates textbox; syncs textbox to model, model to textbox -->
+        <p>First Name: <input data-bind="value: firstName, valueUpdate: 'afterkeydown'" /></p>
+
+        <p>Last Name: <input data-bind="value: lastName" /></p>
+        <p>No Binding:  <input data-bind="value: lastName.length > 8" /></p>
+
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.firstName = ko.observable('Malli');
+                self.lastName = 'ch';   // Not observable!
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

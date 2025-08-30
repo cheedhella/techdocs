@@ -1,0 +1,196 @@
+What is Visual Studio Code?
+	It is the best text editor for Web Development;
+
+Features of Visual Studio Code?
+	- Open Source;
+	- Cross Platform(VS can be run on widnows/linux/mac etc);
+	- Light and Fast;
+	- Customizable and Extensible;
+	- Language Support -> HTML, CSS, JavaScript, SASS, SCSS, LESS, C, C++, Java, Ruby, JSON, XML, YAML, Angular, React, Vue;
+	- GIT Integration -> You can do any thing using editor such as clone, commit, pull, push;
+	- Debugging -> Breakpoints, step through, watches etc;
+	- Live Share -> 
+
+Visual Studio VS Visual Studio Code
+	Visual Studio Code is an editor while Visual Studio is an IDE;
+	Visual Studio Code is cross-platform and fast, while Visual Studio is Windows/Mac only and not fast;
+
+Download and Install
+	- Download from https://code.visualstudio.com/
+	- Extract and Run it;
+
+Install Emmet plugin
+	- By default, VSC comes with Emmet plugin;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Side panel has 5 options: Explorer, Search, Source Control, Run and Debug, Extensions;
+Cmd + B 					-> Show/Hide Side Panel
+Cmd + Shift + E 			-> Open Explorer 			
+Cmd + Shift + F 			-> Open Find/Search 		// Used to search for a keyword in all the files in the workspace;
+Cmd + Shift + X 			-> Extensions;
+
+There is a Mini-map on right-hand side; This is really helpful, if the file is very very long;
+
+Title Bar
+	- By default, it shows the file name which you have opened and project to which it belongs to;
+
+File Explorer
+	- It is all about working with files;
+	- Soft/Hard opening of a file;
+		-- Single click a file, to open a file softly;
+		-- Double click a file, to open it permanently;
+	- Cmd + P 				-> Quickly open a file by its name;
+	- Cmd + W 				-> Close current file;
+	- CRUD operations on a File/Folder;
+
+Workspace
+	Once you create workspace, it creates a file, which contains all settings;
+	You can add many folders to the workspace; This allows you to have multiple projects in a workspace;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Shortcuts Quick Reference
+Cmd + B 					-> Show/Hide Side Panel;
+Cmd + Shift + P 			-> Command Pallette;
+
+// Files
+Cmd + P 					-> Quickly open a file by its name;
+Cmd + W 					-> Close current file;
+Ctrl + tab 					-> Switch b/w open files;
+Ctrl + Shift + tab 			-> Switch b/w open files in reverse direction;
+
+// Navigating
+Cmd + Up arrow 				-> Jump to file beginning;
+Cmd + Down arrow 			-> Jump to file ending;
+Cmd + Left Arrow 			-> Go to line beginning;
+Cmd + Right Arrow 			-> Go to line ending;
+fn + Up 					-> Page up;
+fn + down 					-> Page down;
+jump to line number 		-> bottom bar -> click on line number -> enter desired line number;
+
+// cut, copy, paste
+Cmd + X 					-> Cut current line, no need to select;	
+Cmd + C 					-> Copy current line, no need to select;
+Cmd + V 					-> Paste;
+
+// find & replace in current file/entire workspace
+Cmd + F 					-> Find in Current File
+Cmd + H 					-> Replace in Current File; // Cmd + Opt + F
+Cmd + Shift + F 			-> Search all files in the workspace;
+Cmd + Shift + H 			-> Search and Replace all files in the workspace;
+
+// Format
+
+
+
+// Terminal
+Ctrl + ` 			-> Open/Close Integrated Terminal and cd to workspace home; // It allows you to run all your commands from VSC itself!
+Cmd + Shift + C 	-> Open External Terminal and cd to workspace home;
+code . 				-> Open pwd using VSC;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Terminal
+	- This plugin allows you to open terminal from VSC editor;
+	- Ctrl + ` 			-> Open Integrated Terminal and cd to workspace home; // It allows you to run all your commands from VSC itself!
+	- Cmd + Shift + C 	-> Open External Terminal and cd to workspace home;
+
+Code
+	- Install code plugin, to open pwd using VSC;
+	- cd <whichever-folder> from CLI;
+	- code . 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Intellisense
+	Intellisense helps you by listing members of a class/object and function parameters, that makes writing code faster and easier;
+	You can also hover on a variable/function to see a pop-up telling you more info about it(like variable type, function signature etc).
+	
+	You can trigger Intellisense by hitting Ctrl+Space OR dot(.);
+	By default, this is supported for JavaScript, TypeScript, JSON, HTML, CSS, Less, Sass out of the box;
+	You can laso install language specific plugins;
+	For Eg, Sencha's VS Code plugin extends VS Code to provide Ext JS IntelliSense, code inspection, documentation lookup;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Extensions
+	Once you install an extension, no need to restart VSC;
+	You can also list all installed extensions, by clicking on Extension -> Menu -> List all installed extensions;
+	You can disable any installed extension;
+
+0. Emmet
+	It is installed by default; It is used for generating HTML/CSS code;
+
+1. Rainbow Brackets
+	It uses rainbow colored brackets, thus helping you in matching brackets;
+
+2. Quokka.js
+	Goto CP -> type quokka -> select new file -> select javascript; 
+	Write some JS code, Quokka shows output as you type; Instead of you running it in firebug console, you can use this;
+
+3. Polacode
+	If you want to send a good looking snapshot of a piece of code to your friend, this extension will help you;
+
+4. Advanced New File by Dominik Kundel
+	Press Ctrl + N or run Files: Advanced New File; // It defaults to Cmd + Alt + N; Change it to Cmd + N in Keyboard Settings;
+	It creates a new file with extension based on the currently opened file;
+
+5. Live Server
+	Open the Project and 
+		- Click on 'Go Live' on status bar to turn the server on/off;
+		- Goto Command Palette and run 'Live Server: Open with Live Server' to start, 'Live Server: Stop Live Server' to stop;
+	Right click on HTML file and click on 'Open with Live Server';
+
+6. Open In Browser
+	This helps you in opening the current file using default browser;
+
+7. VSCode-Icons
+	It uses intuitive Icons for your files;
+
+8. Import Cost
+	While importing OR requiring a file, it will tell you how big the file is;
+
+9. DotENV
+	It is used for syntax highlighting in property files;
+
+10. Better Comments
+	It hightlights different type of comments based on their type, thus making it more user-friendly;
+	* for important information;
+	! for Deprecated methods, do not use;
+	? Should this method be exposed to public API?
+	TODO Refactor this method so that it conforms to the API?
+
+11. JavaScript ES6 Code Snippets
+	It provides JavaScript, TypeScript, Vue, React and HTML code snippets.
+	TODO: https://marketplace.visualstudio.com/items?itemName=jmsv.JavaScriptSnippetsStandard
+
+12. Search node_modules
+	TODO: It is used for searching files in node_modules folder in your project;
+
+13. Intellisense for CSS Classes in HTML
+	
+14. Bookmarks
+	It helps in navigating b/w bookmarks very easy;
+
+15. Markdown AllInOne
+	If you look at any GitHub project, you will find Readme.md(mark down file);
+	Using this extension, you can preview the markdown file;
+
+16. ES7 React/Redux/React-native snippets by dsznajder;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Themes: Material, Material Icon, Night owl, cobalt 2 theme official, darkpro;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Snippets: You can add your own snippets;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Customizing Shortcuts
+	Settings -> Keyboard Shortcuts
+		- By default, Cmd + Opt + F is shortcut for Replace in a file and Cmd + H is the shortcut for Replace in all files.
+		  If you want, you can change Cmd + Opt + F to Cmd + H;
+
+Keymap extensions
+	If you are coming from Sublime, you can install Sublime Keymap extension and use shortcuts same as that of Sublime;
+
+User and workspace Settings
+	Settings like text editor font size, tab size, word wrap, cursor width, cursor style, auto save, window title, turn on/off mini map etc;
+	User settings are for every instance of VSC; Workspace settings are specific to the current workspace;
+
+Font Ligatures
+	Download https://github.com/tonsky/FiraCode and install on your computer;
+	To enable it in VSC: https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions
+
+TODO Highlight
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

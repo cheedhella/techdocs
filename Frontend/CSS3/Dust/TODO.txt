@@ -1,0 +1,57 @@
+TODO
+	Font-related CSS properties: 
+		font, font-family, font-size, font-size-adjust, font-stretch, font-style, font-variant, font-weight, @font-face
+		css3: font-size-adjust, font-stretch, font-effect, font-smooth, font-emphaisize-style, font-emphasize-position, font-emphasize
+	What is web-safe font?
+	embedded/dynamic fonts: http://webdesign.about.com/od/beginningcss/p/aacss4fonts.htm
+	http://www.echoecho.com/csscolors.htm
+	http://stackoverflow.com/questions/11807286/how-to-make-div-background-color-transparent-in-css
+	http://xahlee.info/js/css_color_opacity.html
+	color: transparent;
+	http://webdesign.about.com/od/css/f/blfaqhidden.htm display: none vs visibility: hidden?
+	http://www.quirksmode.org/dom/w3c_cssom.html#t03
+	http://stackoverflow.com/questions/8407622/set-type-for-function-parameters
+	http://www.quackit.com/css/properties/ - Alphabetical listing of css properties
+	http://careers.stackoverflow.com/jobs/30128/web-frontend-developer-with-expertise-in-qliktech-international-ab?a=zAWF7t6&searchTerm=%22web%20frontend%22
+	http://careers.stackoverflow.com/jobs/22511/sr-javascript-software-engineer-application-numberfour-ag?a=qAYXneo&searchTerm=%22web%20frontend%22
+	http://stackoverflow.com/questions/8593024/can-the-same-function-argument-accept-different-data-types
+	http://www.vnykmshr.com/resume/?utm_source=feedburner&utm_medium=twitter&utm_campaign=Feed%3A+vnykmshr+%28Vinayak+Mishra+%28www.vnykmshr.com%29%29&utm_content=FaceBook
+	http://javascript.info/tutorial/arguments
+	http://www.ifadey.com/2010/11/javascript-funciton-arguments/
+	http://www.quirksmode.org/dom/w3c_core.html#attributes - process html using javascript
+	http://www.javascriptkit.com/dhtmltutors/domattribute.shtml
+	http://stackoverflow.com/questions/7230851/set-get-dynamically-custom-attribute
+	http://narendravaghela.com/javascript/setget-attribute-of-element-using-javascript/
+	http://stackoverflow.com/questions/710275/how-to-add-update-an-attribute-to-an-html-element-using-javascript
+	http://www.boogdesign.com/examples/svg/load-svg.html
+	
+	table formatting - http://stackoverflow.com/questions/1720343/html-table-set-width-for-second-column-onwards-using-css
+	
+	Add overflow:scroll to the style of the body element. This will force the browser to display scrollbars whether the content overflows or not.
+	
+	
+inline, internal, external styles - priorities???
+<style> tag, <link> tag
+
+<style> 
+	HTML style element can only be inserted in the document's head
+	Attributes:
+		type - text/css
+		media - http://www.htmlquick.com/reference/types.html#media-descriptor
+			Specifies the media for which the element's content has been designed. It can be a single media or a comma-separated list of medias. The default value is "screen".
+		scoped - new in HTML5, http://www.w3schools.com/tags/att_style_scoped.asp , http://updates.html5rocks.com/2012/03/A-New-Experimental-Feature-style-scoped
+		disabled - http://www.whatwg.org/specs/web-apps/current-work/multipage/semantics.html#the-style-element
+		https://developer.mozilla.org/en-US/docs/HTML/Element/style
+	Eg:
+		<style type="text/css">
+			p {font-size: 8pt; font-family: arial,helvetica}
+			p.big {font-size: 12pt; font-family: arial,helvetica}
+		</style>
+	
+		
+	
+<link>
+	Another alternative for inserting style sheet information, and maybe more convenient because of the possibility of sharing it among many documents, is to place a reference to an external file using the HTML link tag.
+
+------------------------------------------------------
+font-family, font-weight, font-style, font-size, color, text-decoration - font-format.txt

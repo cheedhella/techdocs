@@ -1,0 +1,161 @@
+What is Destructuring?
+    It allows us to extract properties from an object or items from an array directly into individual variables;
+    
+Eg1: Destructuring arrays;
+    const companies = ['Google', 'Facebook', 'Uber'];
+    const [c1] = companies; // c1 -> 'Google'
+    const [c1, c2, c3] = companies; // c1 -> 'Google'; c2 -> 'Facebook'; c3 -> 'Uber';
+    const [c1, c2, c3, c4] = companies; // c1 -> 'Google'; c2 -> 'Facebook'; c3 -> 'Uber'; c4 -> undefined;
+
+    // You can also pull other properties of an array like length(not just elements), using curly braces;
+    const {length} = companies; // length -> 3; 
+------------------------------------------------------------------------------------------------------------------
+Eg2: Destructuring arrays and Spread operator(...);
+    const [c1, ...rest] = companies; // c1 -> 'Google'; rest -> ['Facebook', 'Uber'];
+------------------------------------------------------------------------------------------------------------------
+Eg3: Destructuring objects;
+    var savedFile = {
+        name: 'repost',
+        extension: 'jpg',
+        size: 1020
+    };
+    // ES6 - Without using Destructuring;
+    function fileSummaryEs5(file) {
+        return `File ${file.name}.${file.extension} is of size ${file.size}`;
+    }
+    console.log(fileSummaryEs5(savedFile));
+
+    // ES6 - using Destructuring;
+    function fileSummaryEs6({name, extension, size}) {
+        return `File ${name}.${extension} is of size ${size}`;
+    }
+    console.log(fileSummaryEs6(savedFile));
+------------------------------------------------------------------------------------------------------------------
+Eg4: Destructuring arrays and objects together;
+    const companies = [
+        { name: 'Google', clocation: 'Mountain View' },
+        { name: 'Facebook', clocation: 'Menlo Park' },
+        { name: 'Uber', clocation: 'San Franscisco' }
+    ];
+    // How to get Google's location?
+    // ES5
+    console.log(companies[0].clocation); // Mountain View
+    // ES6
+    const [ googleObj ] = companies; 
+    console.log(googleObj); // { name: 'Google', location: 'Mountain View' }
+    const [{clocation}] = companies; // First pull 1st element of companies array and then pull location property of it;
+    console.log(clocation); // Mountain View
+------------------------------------------------------------------------------------------------------------------
+Eg5: Destructuring arrays and objects together;
+    const google = {
+        locations: ['Mountain View', 'New York', 'London']
+    };
+    // How to use Destructuring to access 1st location?
+    const {locations} = google;
+    console.log(locations); ["Mountain View", "New York", "London"]
+
+    // It is hard to digest this syntax;
+    const {locations: [glocation]} = google; // First pull locations property and then pull 1st element of it to glocation;
+    console.log(glocation);
+------------------------------------------------------------------------------------------------------------------
+Eg6: When to use Destructuring?
+    If a function is having too many arguments, you can use destructuring, so that caller don't have to worry about the order of arguments;
+
+    function signup(username, password, email, dateOfBirth, city) {
+        // create new user
+    }
+    signup('myusername', 'mypassword', 'myemail@eg.com', 1/1/1990, 'New York');
+    // When there are too many arguments, it is possible that you can pass them in wrong order;
+    signup('myusername', 'mypassword', 1/1/1990, 'myemail@eg.com', 'New York');
+    
+    // You can use Destructuring to avoid this situation;
+    function signup({username, password, email, dateOfBirth, city}) {
+        // create new user
+    }
+    const user = {
+        username: 'myusername',
+        password: 'mypassword',
+        email: 'myemail@eg.com',
+        dateOfBirth: 1/1/1990,
+        city: 'New York'
+    }
+    signup(user); // Caller don't have to worry about the order of arguments;
+------------------------------------------------------------------------------------------------------------------
+Eg7: convert array of arrays to array of objects;
+    I've this data:
+        const points = [
+            [1, 2],
+            [3, 4],
+            [5, 6]
+        ];
+    But, my charting library expects data in a different format:
+        [
+            {x: 1, y: 2},
+            {x: 3, y: 4},
+            {x: 5, y: 6}
+        ]
+    So, how to convert?
+        points.map(pair => {
+            // const x = pair[0];
+            // const y = pair[1];
+            const [x, y] = pair;
+            return {x: x, y: y};
+        });
+        // Use Destructuring in function arguments;
+        points.map(([x, y]) => {
+            return { x: x, y: y};
+        });
+        // Use improved object literal syntax; 
+        points.map(([x, y]) => {
+            return { x, y};
+        });
+------------------------------------------------------------------------------------------------------------------
+Eg8: Destructuring in function arguments;
+    const profile = {
+        title: 'Engineer',
+        department: 'Engineering'
+    };
+
+    function isEngineer(profile) {
+        var title = profile.title;
+        var department = profile.department;
+        return title === 'Engineer' && department === 'Engineering';
+    }
+
+    function isEngineer({title, department}) {
+        return title === 'Engineer' && department === 'Engineering';
+    }
+------------------------------------------------------------------------------------------------------------------
+Eg9:
+    Input: array of arrays, where each array represents a subject that the student enrolled in;
+    Output: array of objects, where each object having 3 properties: subject, time, teacher;
+
+    const classes = [
+        [ 'Chemistry', '9AM', 'Mr. Darnick' ],
+        [ 'Physics', '10:15AM', 'Mrs. Lithun'],
+        [ 'Math', '11:30AM', 'Mrs. Vitalis' ]
+    ];
+    const classesAsObject = classes.map(([subject, time, teacher]) => { return { subject, time, teacher }; })
+    console.log(classesAsObject); 
+        /* 
+        [
+            {subject: "Chemistry", time: "9AM", teacher: "Mr. Darnick"},
+            {subject: "Physics", time: "10:15AM", teacher: "Mrs. Lithun"}
+            {subject: "Math", time: "11:30AM", teacher: "Mrs. Vitalis"}
+        ]
+        */
+------------------------------------------------------------------------------------------------------------------
+Eg10: Recursion without destructuring
+    Input: [1, 2, 3]
+    Output: [2, 4, 6] without using array's foreach, map helpers; use only recursion, destructuring, rest/spread operators;
+
+    const numbers = [1, 2, 3];
+    function double(number, ...rest) {
+        const doubledNumber = number * 2;
+        if(rest.length === 0) {
+            return;
+        }
+        return [doubledNumber, double(rest)];
+    }
+    TODO: It's not working;
+------------------------------------------------------------------------------------------------------------------

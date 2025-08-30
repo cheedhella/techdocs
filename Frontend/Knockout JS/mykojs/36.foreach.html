@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: foreach</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr><th>Book</th><th>Author</th></tr>
+            </thead>
+            <!-- 
+                foreach: binding-array -> it duplicates markup for each element in the array;
+            -->
+            <tbody data-bind="foreach: books">
+                <tr><td data-bind="text: title"></td><td data-bind="text: author"></td></tr>
+            </tbody>
+        </table>
+        <script>
+            var myViewModel = {
+                books: [
+                    { title: 'Let us C', author: 'Y Kanethkar' },
+                    { title: 'Core Java', author: 'Bala' },
+                    { title: 'HTML', author: 'Tom' }
+                ]
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

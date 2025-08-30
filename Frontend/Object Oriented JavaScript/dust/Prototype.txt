@@ -1,0 +1,299 @@
+prototype
+	Every function/constructor function will have a property named prototype.
+	By default, it holds an object with one property named constructor which points to the constructor function itself.
+	That is, for any function f, f.prototype.constructor is always equal to f (unless we set it to something else).
+
+	Javascript objects are dynamic, which means you can add/modify/delete properties of an object even after it is created.
+	Anything you can do to a normal object you can also do to a function’s prototype property.
+	This includes adding a new property, removing a property, accessing a property, iterating through all the properties.
+
+	Specality of prototype object:
+	Any property or method that is added to the prototype object automatically becomes part of every object that this constructor function produces.
+
+Class/Constructor Function Properties vs Object Properties vs prototype Properties
+	Class/Constructor Function Properties - These are the properties of underlying Constructor Function. They are not available on the instances of the Constructor Function.
+		Eg:
+			function FOO() {}
+			FOO.x = 10; // FOO acts as a namespace
+			var f = new FOO();
+			alert(f.x); // alerts undefined
+			alert(f.constructor.x); // alerts 10
+	Object Properties - Every object has its own copy.
+		Eg:
+			function FOO(x) {
+				this.x = x;
+				this.getX("x="+this.x);
+			}
+			var f1 = new FOO(10);
+			var f2 = new FOO(20);
+			alert(f1.getX() + " "+ f2.getX()); // x=10 x=20
+	ConstructorFunction.prototype Properties - one copy per ConstructorFunction.
+		Shared b/w all objects created using this ConstructorFunction.
+		Good Practice: make all methods as properties of prototype object.
+		Eg:
+			function FOO() {}
+			FOO.prototype.x = 10;
+			var f1 = new FOO();
+			var f2 = new FOO();
+			alert(f1.constructor.prototype.x); // alerts 10
+			alert(f2.constructor.prototype.x); // alerts 10
+			f1.constructor.prototype.x = 20;
+			alert(f2.constructor.prototype.x); // alerts 20
+
+			FOO.prototype.y = 12;
+			f1.y = 13; // overwriting prototype's property with own properties
+			alert(f1.y); // alerts 13
+			delete f1.y;
+			alert(f1.y); // alerts 12
+			alert(f2.y); // alerts 12
+
+-------------------------------------------------------------------------------			
+
+Augmenting Built-in Objects
+	You can augment built-in constructor functions such as Array, String, Function, Object etc like below.
+	Eg1:
+		Array.prototype.inArray = function(needle) {
+			for (var i = 0, len = this.length; i < len; i++) {
+				if (this[i] === needle) {
+					return true;
+				}
+			}
+			return false;
+		}
+		>>> var a = ['red', 'green', 'blue'];
+		>>> a.inArray('red');
+		true
+		>>> a.inArray('yellow');
+		false
+	Eg2:
+		String.prototype.reverse = function() {
+			 return this.split('').reverse().join('');
+			// return Array.prototype.reverse.apply(this.split('')).join('');
+		}
+		>>> "hello".reverse();
+		"olleh"
+	
+	Take the popular JavaScript library called Prototype. Its creator liked this approach so much that he even named the library after it.
+	
+	YUI (Yahoo! User Interface) library is another popular JavaScript library. Its creators are on the exact opposite side of the spectrum: they won't modify the built-in objects in any way.
+	The fact is that JavaScript changes and browsers come up with new versions that support more features. What you consider a missing feature today and decide to augment a prototype for, might be a built-in method tomorrow. 
+	In this case, your method is no longer needed. However, what if you have already written a lot of code that uses the method and your method is slightly different from the new built-in implementation?
+	
+	The very least you can do is check if the method exists before implementing it. Our last example should read something like:
+		if (!String.prototype.reverse) {
+			String.prototype.reverse = function() {
+				return Array.prototype.reverse.apply(this.split('')).join('');
+			}
+		}
+	
+	Best Practice: If you decide to augment the prototype of built-in objects with a new property, do check for existence of the new property first.
+	
+Prototype gotchas
+	1. prototype chain is live except when the prototype is completely overwritten.
+	2. prototype.constructor is not reliable.
+		function Dog() { this.tail = true;} 
+		var d1 = new Dog();
+		Dog.prototype.say = function() {return "woof!";}
+		d1.say(); // "woof!"
+		d1.constructor; // Dog()
+		d1.constructor.prototype.constructor; // Dog() - not correct, prototype is just a normal object created with Object()
+		typeof d1.constructor.prototype.tail; // "undefined" - It doesn't have any of the properties of an object constructed with Dog().
+		
+		Dog.prototype = {paws: 4, hair: true};
+		typeof d1.paws; // "undefined" - old objects keeps a secret link to the old prototype object. They don't have access to the new prototype's properties.
+		d1.say(); // "woof!"
+		var d2 = new Dog();
+		d2.say(); // TypeError: d2.say is not a function
+		d2.paws; // 4
+		d2.constructor; // Object() - constructor property of the new objects no longer reports correctly.
+		// MOST CONFUSING PART
+		typeof d1.constructor.prototype.paws; // "number"
+		typeof d2.constructor.prototype.paws; // "undefined"
+		
+		Dog.prototype = {paws: 4, hair: true};
+		Dog.prototype.constructor = Dog; // When you overwrite the prototype, it is a good idea to reset the constructor property.
+		d2.constructor; // Dog()
+		typeof d1.constructor.prototype.paws; // "number"
+		typeof d2.constructor.prototype.paws; // "number"
+
+
+
+
+		
+		
+		var d2 = new Dog();
+		 
+		
+		d2.say(); // "woof!"
+		
+		d2.constructor; // Dog()
+		
+		
+		
+		
+
+
+	
+	
+
+			
+
+
+
+
+
+			http://stackoverflow.com/questions/1355561/difference-between-class-properties-and-function-prototype-in-javascript
+	http://stackoverflow.com/questions/7807385/function-declarations-with-prototype
+	http://www.jslint.com/
+	http://en.wikipedia.org/wiki/JSLint
+	http://www.javascriptlint.com/
+	http://jslint4vs2010.codeplex.com/
+	http://sourceforge.net/projects/jslintnpp/
+	http://webster.cs.washington.edu/jslint/
+	
+	When you invoke a function using new keyword, this keyword inside that function refers to the object returned by that constructor.
+		function Gadget(name, color) {
+			this.name = name;
+			this.color = color;
+			this.whatAreYou = function(){
+				return 'I am a ' + this.color + ' ' + this.name;
+			}
+		}
+		
+		
+	
+	
+	The main idea was that inside a function invoked with new you have access to the value this,
+	which contains the object to be returned by the constructor. Augmenting (adding methods and properties to) this object is the way to add functionality to the object being created.
+
+	Adding properties and methods to prototype object:
+	Gadget.prototype.price = 100;
+	Gadget.prototype.rating = 3;
+	Gadget.prototype.getInfo = function() {
+		return 'Rating: ' + this.rating + ', price: ' + this.price;
+	};
+
+	
+
+
+	Objects are passed by reference in JavaScript, and therefore the prototype is not copied with every new object instance. What does this mean in practice? It means that you can modify the prototype at any time and all objects (even those created before the modification) will inherit the changes.
+
+
+
+Every function object in javascript contains the following properties and methods: 
+	length, constructor, apply(), call(). Another such property is prototype.
+	>>> function foo(a, b){return a * b;}
+	>>> foo.length
+	2
+	>>> foo.constructor
+	Function()
+	>>> typeof foo.prototype
+	"object"
+	
+constructor function's prototype object automatically becomes part of every object created by that function.
+
+Whenever a function object is created, its prototype property is set to an empty object, exactly as if we said Pet.prototype = new Object().
+
+we can override the default empty object with a new one instead:
+	Pet.prototype = {
+		sayHello : function()
+		{
+			alert(this.hello);
+		}
+	};
+
+Prototype Chaining - we can set the prototype property to a new object created by using another constructor. this is called prototype chaining.
+	function Cat()
+	{
+		…
+	}
+	Cat.prototype = new Pet();
+
+	This is how javascript supports inheritance(one class inheriting the properties of another class).
+	
+
+	
+
+	
+
+what exactly is an Object in JavaScript?
+It is really just an unordered collection of key-value pairs.
+Anything that is not a primitive - undefined, null, boolean, number, or string - is an Object in JavaScript.
+
+
+function MyObject() {}
+var myObject = new MyObject();
+
+//this creates a singleton
+var myObject = new function MyObject() {};
+
+http://www.htmlgoodies.com/html5/tutorials/javascript-prototypical-inheritance-explained.html#fbid=FhaJRdi7-5s
+http://mckoss.com/jscript/object.htm
+http://www.ailis.de/~k/archives/20-OOP-with-JavaScript.html
+
+ 
+It includes adding and removing properties, accessing the properties through 
+substring (Pet.prototype["property"]) or dot (Pet.prototype.property) notation and 
+iterating through the properties using a for loop.
+
+Objects are passed by reference in JavaScript, and therefore the prototype is not copied with every new object instance. What does this mean in practice? 
+It means that you can modify the prototype at any time and all objects (even those created before the modification) will inherit the changes.
+	
+
+
+override the prototype 
+
+
+adding properties to prototype object
+diff b/w properties of an object & properties of prototype object.
+__proto__ - secret link b/w every object and its prototype.
+isPrototypeOf(), hasOwnProperty(), propertyIsEnumerable()
+
+
+
+ -------------------------------------------------
+Is it possible to call prototype methods directly?
+
+ http://www.javascriptkit.com/jsref/object.shtml
+ 
+ function MyObject(name, value) {
+    this.name = name;
+    this.value = value;
+}
+
+
+function add(x, y) {  return x + y; }
+add.length -> 2
+add.constructor -> Function()
+typeof add.prototype -> "object"
+
+
+
+
+length
+constructor
+prototype
+
+ 
+ function Sub(x, y) {
+  result = x-y
+  return result
+}
+js> Sub.prototype.toString = function() { return 'I am a walrus' }
+js> Sub(9,5)
+4
+js> result
+4
+js> new Sub(100,1)
+I am a walrus
+js> result
+99
+
+
+
+
+
+
+
+
+http://stackoverflow.com/questions/245062/whats-the-difference-between-javascript-and-java

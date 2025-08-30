@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MVVM using KnockoutJS</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+        <style>
+            .highlight {
+                color: green;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Hello <span class="highlight" data-bind="text: name"></span></h1>
+        <script>
+             var myViewModel = function() { 
+                 this.name = 'CMR';
+             };
+
+             ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+What is ECMAScript?
+    ECMAScript is standard for scripting languages such as JavaScript, ActionScript;
+    Different versions of ECMAScript: ES6/ES 2015, ES7/ES 2016, ES8/ES 2017, ES9/ES 2018;
+
+
+------------------------------------------------------------------------------------------------------------
+
+
+
+ES6 for-of loop;
+
+Functions
+    
+
+Note that ES2017 introduced the async/await keywords that help you write cleaner code than using this promise chain technique.
+------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+https://www.valentinog.com/blog/es-modules/
+
+Support for constants
+Block Scope
+Arrow Functions
+
+Extended Parameter Handling
+Template Literals
+Extended Literals
+Enhanced Object Properties
+De-structuring Assignment
+Modules
+Classes
+Iterators
+Generators
+Collections
+New built in methods for various classes
+Promises
+
+
+Function Scope, Block Scope, Constants
+Arrow Functions
+Default Arguments
+Destructuring
+Spread Operator and Rest Parameters
+Objects in ES6
+Tail Call Optimization and Other Function Features in ES6
+Symbols
+The for-of loop
+String and Template Literals
+Sets, Maps, and their Weak Versions
+Iterators and Generators in Depth
+ES6 Promises
+Configuring ES6 with Webpack
+The Reflect API
+Proxies in Practice
+Math and Number Extensions
+ES2016
+ES2017
+
+Learn the purpose of Babel and why ES6 was created
+Master the process of refactoring your current ES5 code into super-charged ES6
+Grasp the difference between the ‘rest’ and ‘spread’ operators
+Develop complex applications that scale in complexity by mastering advanced ES6 design patterns
+Dive deeper into iteration using generators. No fancy terms required!
+
+closures - https://vegibit.com/es6-let-vs-var-vs-const/

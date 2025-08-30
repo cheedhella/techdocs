@@ -1,0 +1,178 @@
+What is flex OR flexbox layout?
+    It is ideal for one-dimensional layouts;
+
+    Are you tired of using floats then clearing these floats?
+    Are you tired of using positioning to achieve the layout you want and then finding out that the everything collapses when you view it on different screen sizes?
+    Do you want an efficient way to create complex layouts easily and quickly?
+    Do you want to create advanced responsive layouts using css only with just simple lines of code ? 
+    Then, flexbox is for you!
+
+    Before using Flex layout, 
+        - Identify the group of elements you want to control with flexbox;
+        - Wrap all of them in a container;
+        - Set the display property of the container to flex;
+
+Why to use Flexbox?
+    It can grow and shrink the items(along main axis), as per the dynamic width of the container;
+    It can adjust the size of items automatically, when you add more items dynamically;
+    You can easily change the direction of items, just by changing one property;
+    You can change the order of items, as you want;
+    96% of the browsers support flexbox;
+
+New Terms
+    There are 2 type of elements: Flex Container and Flex Item;
+        Flex Container
+            An element or container that contains all the flex items; // display property set to flex or flex-inline;
+        Flex Item
+            Any direct child of the flex container is considered as a flex item;
+        Flex Line
+            Each row or column of flex items in a flex container is a flex line;
+
+    There are 2 type of containers: Block flexbox and Inline flexbox;
+        They are very much like block and inline elements;
+            Block flexbox -> display: flex;
+            Inline flexbox -> display: inline-flex;
+
+    There are 2 type of axes: Main axis and Cross axis;
+        Main axis -> axis on which items are placed;
+        Cross axis -> axis perpendicular to the main axis;
+
+        If flex-direction is row OR row-reverse, main axis is horizontal and cross axis is vertical;
+        If flex-direction is column OR column-reverse, main axis is vertical and cross axis is horizontal;
+        
+        Why is the Axis important?
+            There are some flexbox properties which affect elements only along the main axis;
+            There are other flexbox properties which affect eleemnts only along the cross axis;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+Flex Container Properties: flex-direction, flex-wrap, flex-flow, justify-content, align-items, align-content;
+
+flex-direction: row | row-reverse | column | column-reverse; // Defaults to row;
+    Everytime you define a flex container, you can also define the flow direction of items inside it using flex-flow property;
+        row -> items are placed from left to right; 
+        row-reverse -> items are placed from right to left;
+        column -> items are placed from top to bottom; 
+        column-reverse -> items are placed from bottom to top;
+
+flex-wrap: nowrap | wrap | wrap-reverse; // Defaults to nowrap;
+    nowrap -> all flex items are laid out on a single line, even if items are overflowed out of the container;
+    wrap -> wrap into multi-lines, wraps in the direction of cross axis;
+    wrap-reverse -> wrap into multi-lines, wraps in the opposite direction of cross axis;
+        In other words, It doesn't affect items, it only reverses the lines;
+    
+flex-flow: flex-direction flex-wrap;
+    Shorthand for specifying flex-direction and flex-wrap;
+
+justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly; // Defaults to flex-start;
+    If there is any free space in the container along the main axis, It specifies what to do with free space;
+    Free space can result in 2 cases: either all flex items are inflexible OR they reached their maximum size;
+
+    flex-start -> all items are packed towards the beginning of the main axis;
+    flex-end -> all items are packed towards the end of the main axis;
+    center -> all items are packed at the center of the main axis; // free space at beginning and ending of main axis;
+    space-between -> Free space is evenly distributed among the flex items along the main axis;
+        First item is at the beginning of main axis and last item is at the end of the main axis;
+    space-around -> free space / no of items; 1/2 slice at begining and 1/2 slice at end;
+    space-evenly -> free space / no of items + 1; 1 slice at begining and 1 slice at end;
+
+align-items: flex-start | flex-end | center | baseline | stretch; // Defaults to stretch;
+    If there is any free space in the container along the cross axis, It specifies what to do with it;
+
+    flex-start -> all items are aligned to the begining of the cross axis;
+    flex-end -> all items are aligned to the end of the cross axis;
+    center -> all items are aligned to the center of the cross axis, leaving equal space around;
+    baseline -> TODO;
+    stretch -> all items are stretched along the cross axis to fill the free space(Still respect min-width/max-width);
+
+align-content: flex-start | flex-end | center | space-between | space-around | stretch; // Defaults to stretch;
+    It specifies the alignment of flex lines along the cross axis;
+    This property has no affect, when the flexbox has only a single line; 
+    It is used only when there are multiple lines of elements;
+    
+    align-items VS align-content
+        align-items -> alignment of each item within flex line, along cross axis; 
+        align-content -> alignment of flex lines along cross axis;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+Flex Item Properties: align-self, flex-grow, flex-shrink, flex-basis, flex, order;
+
+align-self - flex-start | flex-end | center | baseline | stretch;
+    It specifies how to align a single item along the cross axis;
+    Similar to align-items,
+        - It accepts same values as that of align-items;
+        - It works on cross axis;
+    Unlike align-items,
+        - align-items is applied to all items in all flex lines, align-self is applied on flex item;
+        - It affects only single item;
+
+flex-grow: number; // Defaults to 0;
+    If there is any free space in the container along the main axis, this property specifies how to increase
+    the size of items along main axis(row -> width; column -> height), so that there is no free space!
+
+    In other words, it tells the flex items to grow along main axis, to occupy free space;
+    If flex-direction is row, it controls width; If flex-direction is column, it controls height;
+
+    How to distribute the free space? All elements take equal space OR one of them takes more space than other? It depends!
+        If you don't specify the width of an item, it's width depends on it's content;
+        If you set an item's flex-grow to 0, it won't grow even if there is free space!
+        If all items are set to flex-grow:1, free space is distributed equally among items;
+        If all items are set to flex-grow:0 and one item is set to flex-grow:1, item with flex-grow:1 expands along main axis to occupy all free space;
+        If all items are set to flex-grow:1 and one item is set to flex-grow:2, item with flex-grow:2 would take up twice as much space as the others;
+
+flex-shrink: number; // Defaults to 1;
+    If there is not enough space in the container along the main axis, this property specifies how to shrink
+    the size of items along main axis(row -> width; column -> height), so that there is no overflow!
+
+    By default, all flex items are set to flex-shrink:1
+    If all items are set to flex-shrink:1, they shrink equally, when there is not enough space!
+    If all items are set to flex-shrink:0, they don't shrink and can overflow the container!
+
+    What will happen if all items have flex-shrink:1 and flex-wrap:wrap? will items shrink or wrap? 
+        It will shrink, wrapping comes into picture only when there is overflow;
+
+flex-basis: takes same values as that of width; // Defaults to auto;
+    Using this, you can specify the initial size(width/height) of the flex item along the main axis, before distributing the free space;
+    It is very similar to width, accepts values in px, %, em, rem etc;
+    If set to auto, inital size of the item along the main axis depends on it's content;
+    
+    If all items are set to flex-basis:auto, their intial size depends on their content and they expand equally to occupy free space;
+    If all items are set to flex-basis:0, all items are equal in size, regardless of their content;
+    If you want a particular item to start with 100px, as long as there is enough space, set it's flex-basis: 100;
+
+    flex-grow:1 vs flex-basis:0
+        When all items have different content sizes along main axis,
+            If you set flex-grow:1 to all items and flex-basis:auto, then 
+                initial size of element depends of it's content and flex-grow distributes free space equally, so final items are not of the same size;
+            If you set flex-grow:1 to all items and flex-basis:0, then 
+                initial size of all items is 0 and flex-grow distributes free space equally, so final items are of equal size, despite their content;
+
+flex: flex-grow flex-shrink flex-basis;
+
+order: number; // Defaults to 0;
+    By default, all flex items are displayed in the same order as they appear in the source document;
+    This property gives us the power to reorder items in any way we want, without changing source code;
+    It also accepts -ve values;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+The process of calculating flex sizes is fairly complex; 
+Here’s a simplified version of the algorithm:
+    - Add together all the hypothetical outer main sizes of the flex items in a flex container;
+    - If the sum is smaller than the container size, the flex factor is to grow; otherwise, the flex factor is to shrink;
+    - Any items that are inflexible are frozen in size. These are:
+        Any item with a flex factor of zero
+        Any item whose hypothetical main size is greater (if growing) or smaller (if shrinking) than its base size
+        Any item with a growth factor (if growing) or shrink factor (if shrinking) of zero
+
+    - Calculate the initial free space by finding the difference between the outer sizes of all flex items and the size of the flex container;
+    - Distribute the available free space to the flex items. The amount given to each flex item is initially determined by the ratio of its flex factor to the sum of all the item's flex factors. 
+    - If an item will be grown past its maximum allowed size, or shrunk below its minimum allowed size, set the size to be the allowed maximum (if growing) or minimum (if shrinking).
+
+Again, this is a simplified version of the actual flex sizing algorithm given in the W3C documentation. 
+Consult section 9.7 of the CSS Flexible Box Layout Module Level 1 for full details if you want to know more.
+--------------------------------------------------------------------------------------------------------------------------------------------
+Important Links
+https://learning.oreilly.com/library/view/css-pocket-reference/9781492033387/ch01.html
+https://medium.com/better-programming/flexbox-align-items-and-align-content-a60b6f8451e3
+https://stackoverflow.com/questions/27539262/whats-the-difference-between-align-content-and-align-items
+https://www.cssmine.com/ebook/flexbox-container
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/

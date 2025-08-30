@@ -1,0 +1,125 @@
+What is Zustand? 
+    - It is a state management library for React Applications;
+
+    - In earlier times, states are managed by passing data down to various components;
+    - But, this method became inefficient, as the complexity of applications grew;
+    - To solve this, various state management libraries came into picture;
+
+    - There are many state managers for React Applications: Redux, Redux Toolkit, Context API etc;
+    - Zustnad is small, fast, easy to use(even with complex state structures); 
+    - It is built on top Context API and utilizes the power of modern JS features such as proxies and generators;
+    - Additionally, it gives developers the freedom to expand its capabilities using plugins and middleware;
+
+Why Zustand?
+    - State is centralized and shared between components; // Eg: CounterStore is shared b/w CounterDisplay and CounterButtons components;
+    - State is immutable -> When updating the state, you create a new state object rather than modifying the existing state directly;
+        TODO: What happens if it is not immutable? 
+    - Actions can be async;
+        Actions in zustand also support asynchronicity. In fact, according to Zustand docs, zustand does not care if your action is asynchronous or not.
+        We can perform an asynchronous function in an action. For example, we can make an HTTP request to an endpoint from our action and update the state with
+         the result from the HTTP call.
+         const useCounter = create((set) => {
+            return {
+                counter: 0,
+                incrCounter: async () => {
+                    const { data } = await axios.get("/counter");
+                    set({
+                        counter: data.counter,
+                    });
+                },
+            };
+        });
+
+
+
+
+    - Small, fast, scalable, immutable, transient updates for often occurring state changes, memorized selectors, integration with immer;
+    - Create and update complex state structures, handle asynchronous actions, share state between components;
+    
+    - Zustand renders components only on changes to the value of the state. Changes in the state can often be handled without having to re-render a component.
+    - State management is centralized and updated via simple defined actions.
+
+Zustand VS Redux
+    - You can create a state with less boilerplate code;
+    - Components can access or update the state without the need for complex providers and context setup;
+    - Components can access state without wrapping it in hooks and props;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Zustand is a state management library for React applications, that allows you to manage state in a simple and intuitive way;
+It is built on top of the Context API and uses the concept of stores to manage state;
+A store is a container for a specific piece of state and any functions that modify that state;
+You can create as many stores as you need, and they can be used throughout your application;
+
+
+
+npm install zustand
+
+
+
+It isolates the state from component lifecycle;
+The store will share the state wherever used, which means if the same state has been accessed in two different components and one component updates the state, the second component will also re-render.
+
+
+
+Zustand unit testing - https://blog.peslostudios.com/blog/zustand-writing-tests-for-your-data-store/
+https://learnersbucket.com/tutorials/react/micro-state-management-with-zustand-in-react/
+https://tsh.io/blog/zustand-react/ - set vs get
+
+
+
+
+
+store function exposes few methods like getState(), setState(), and subscribe().
+getState() is used to get the state in the store and setState() is used to update the state in the store.
+The state objects are immutable, updating the state properties directly won’t update the state and thus will not trigger the re-render.
+const state1 = store.getState();
+state1.count = 2; // invalid, won't work;
+store.setState(state1);
+
+The store must be always updated with the new object, store.setState({count: 2}), it also accepts a callback function, which 
+has the prevState as the argument, which can be used to create the new state, known as functional update.
+store.setState((prev) => ({ count: prev.count + 1 }));
+
+State can have more than 1 property;
+However, it is not necessary to update all the properties every time, setState merges the old state with the new state, thus we can specify the only property which we want to update.
+
+
+The last piece of the puzzle is the store.subscribe() method, it registers a callback function which is triggered every time the state is updated in store.
+
+store.subscribe(() => {
+  console.log("state is updated");
+});
+
+store.setState({ message: 'Bye World!' });
+//"state is updated"
+
+
+
+Optimizing re-rendering.
+
+
+
+
+
+import {create} from "zustand";
+export const useCounterStore = create((set, get) => (
+   {
+       pokemon: [],
+       number: 123,
+       increaseCounterNumber: () => set((state) => ({number: state.number + 1})),
+       decreaseCounterNumber: () => set((state) => ({number: state.number - 1})),
+       logNumber: () => {
+           console.log(` Current number value equals ${get().number}`)
+       },
+       fetchPokemon: async () => {
+           await fetch('https://pokeapi.co/api/v2/pokemon')
+               .then(response => response.json())
+               .then(data => set({pokemon: data.results}))
+       }
+   }
+))
+
+
+You can easily use async/await inside the hook and simply call set() whenever the data is ready. Check out here:

@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>XML to Graph</title>
+
+        <script type="text/javascript" src="./lib/mxClient.js"></script>
+        <script type="text/javascript">
+            var xml =
+                '<root><mxCell id="2" value="World!Vishal" vertex="1"><mxGeometry x="200" y="150" width="80" height="30" as="geometry"/></mxCell><mxCell id="3" edge="1" source="2"><mxGeometry relative="1" as="geometry"><mxPoint x="440" y="90" as="targetPoint"/></mxGeometry></mxCell></root>';
+
+            var xml2 =
+                '<root><flow xmlns:ri="http://responsys.com/interact/programs" version="1.1"><ri:config rev="1"><ri:list id="8000941" comment=""/><ri:filter id="" comment=""/><ri:cost value=""/><ri:purpose type="" objective="" objectiveType=""/><ri:invalidAddress terminate="none"/><ri:unsubscribe terminate="none"/><ri:conversionRate enabled="false" value="5"/><ri:openRate enabled="false" value="5"/><ri:clickThroughRate enabled="false" value="5"/><ri:rsysVersion id="1.0"/><ri:autoclose scheduledCloseOption="90" scheduledCloseDate="" closeNofiticationEmails=""/></ri:config><steps><mxCell id="0"/><mxCell id="1" parent="0"/><start apptype="eventCustomerJoin" rev="1" id="s_1611146531971 1"><label>Customer activated</label><description/><ri:startRule rule="alwaysNew"/><ri:eventCustomerJoin channel="email"/><ri:monitor audienceChoice="programCreated" audienceName="Customer activated"/><mxCell style="customerActivated" parent="1" vertex="1"><mxGeometry x="257" y="170" width="60" height="60" as="geometry"/></mxCell><path rev="1" to="a_1611146535868 1" id="path_1611146797999 1"><label/><mxCell style="edge;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" parent="1" source="s_1611146531971 1" target="a_1611146535868 1" edge="1"><mxGeometry relative="1" as="geometry"/></mxCell></path></start><activity apptype="campaign" campaignType="" rev="1" id="a_1611146535868 1"><label>Send email campaign</label><description/><ri:campaign id="" comment="" seedLaunchEnabled="" throttlingEnabled="" sendProgressAlerts="" progressAlertsRecipient="" progressAlertsInterval="10000" launchFailureNotifyRecipient=""/><ri:mvtTest totalDistribution=""><ri:testVersion versionId="" distribution=""/><ri:email/><ri:selection mode="auto" selectionType="significance"><ri:metric/></ri:selection><ri:testStartTimer startNewTest="true" startdate="" at="" onpublish="true"/><ri:testDuration days="" hours="" minutes=""/></ri:mvtTest><mxCell style="sendEmail" parent="1" vertex="1"><mxGeometry x="572" y="170" width="60" height="60" as="geometry"/></mxCell></activity></steps><notes/><uiVersion>2.0</uiVersion><meta><name>p2</name><id>8001121</id><folder>8000921</folder><folderName>mvt</folderName><description>desc</description><active>0</active><blocked>0</blocked><saveas-name>p2[1]</saveas-name><lastModified>1611146802000</lastModified><lastModified-display>2021-01-20 04:46 AM PST</lastModified-display><deact-date></deact-date><GMTOffset>-28800000</GMTOffset><timer-granularity>D</timer-granularity><saveas-folder></saveas-folder><saveas-list></saveas-list><saveas-description></saveas-description><enactmentSchema active="0"/></meta><programETV/></flow></root>';
+
+            var cells = [];
+            var doc = mxUtils.parseXml(xml2);
+            var codec = new mxCodec(doc);
+            var nextEl = doc.documentElement.firstChild;
+
+            function getMxCells(currentEl) {
+                var currentCell = codec.decodeCell(currentEl);
+                if (currentCell.edge == 1 || currentCell.vertex == 1) {
+                    cells.push(currentCell);
+                } else {
+                    var childrenEl = currentEl.children;
+                    for (var i = 0; i < childrenEl.length; i++) {
+                        getMxCells(childrenEl[i]);
+                    }
+                }
+            }
+            function main(container) {
+                while (nextEl != null) {
+                    getMxCells(nextEl);
+                    nextEl = nextEl.nextSibling;
+                }
+
+                // Creates the graph inside the given container
+                graph = new mxGraph(container);
+                graph.addCells(cells);
+                /*
+                var doc = mxUtils.parseXml(xml);
+                var codec = new mxCodec(doc);
+                var nextCell = doc.documentElement.firstChild;
+                var cells = [];
+                while (nextCell != null) {
+                    cells.push(codec.decodeCell(nextCell));
+                    nextCell = nextCell.nextSibling;
+                }
+
+                // Creates the graph inside the given container
+                graph = new mxGraph(container);
+                graph.addCells(cells);
+                */
+            }
+        </script>
+    </head>
+    <body onload="main(document.getElementById('graphContainer'))">
+        <div id="graphContainer"></div>
+    </body>
+</html>

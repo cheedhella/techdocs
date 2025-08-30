@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Bindings: Template</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <div>
+            <h1>My favourite albums</h1>
+            <div data-bind="foreach: albums">
+                <div data-bind="template: { name: 'album-template', data: $data}"></div>
+            </div>
+        </div>
+ 
+        <!-- This is our template -->
+        <script type="text/html" id="album-template">
+            <h2 data-bind="text: name"></h2>
+            <p>Artist: <span data-bind="text: artist"></span><br>
+            Genre: <span data-bind="text: genre"><span></p>
+        </script>
+    </body>
+</html>

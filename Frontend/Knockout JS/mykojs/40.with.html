@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: with</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- 
+            with binding changes the data context to whichever object you specify.
+            This is useful when dealing with nested objects.
+        -->
+        
+        <!-- ko foreach: myViewModel -->
+            <p data-bind="text: name"></p> 
+            <ul data-bind="with: parents">
+                <li>Father: <span data-bind="text: father"> </span></li>
+                <li>Mother: <span data-bind="text: mother"> </span></li>
+            </ul>
+        <!-- /ko -->
+
+        <script>
+            var myViewModel = [
+                    {
+                        'name': 'Matt',
+                        'parents': {
+                            'father': 'John',
+                            'mother': 'Kimberly'
+                        }
+                    },
+                    {
+                        'name': 'Jay',
+                        'parents': {
+                            'father': 'Tom',
+                            'mother': 'Meccy'
+                        }
+                    }
+                ];
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

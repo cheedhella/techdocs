@@ -1,0 +1,95 @@
+HTMLElement - Element extends Node extends Object
+	Properties: innerHTML, outerHTML, textContent vs innerText, outerText, firstElementChild, lastElementChild, nextElementChild, previousElementChild, children,
+		offsetLeft, offsetTop, offsetHeight, offsetWidth, offsetParent, scrollLeft, scrollTop, scrollHeight, scrollWidth, clientLeft, clientTop, clientHeight, clientWidth,
+		id, className, classList, style, dir, tagName, dataset
+	Methods: createElement(), getAttribute(), setAttribute(), removeAttribute(), hasAttribute(), querySelector(), querySelectorAll()
+
+	1. innerHTML, outerHTML, textContent vs innerText, outerText
+		Example: <p id="p1">Here is some <b>interesting</b> text</p>
+		var el = document.getElementById('p1');
+		alert(el.innerHTML); // Here is some <b>interesting</b> text
+		alert(el.outerHTML); // <p id="p1">Here is some <b>interesting</b> text</p>
+		alert(el.innerText); // Here is some interesting text
+		alert(el.outerText); // Here is some interesting text
+		---
+		innerText vs outerText
+			When you read, innerText is identical to outerText. 
+			But, when you set them, innerText property replaces the content between the opening and closing tags of an element with the specified text, while the outerText property removes an element and inserts the specified text in place of it.
+			see section 7.9 of DOM englihtment
+		textContent vs innerText
+			Just that some browsers call it as 'innerText' where many others(especially firefox family) call it as 'textContent'
+
+	2. firstElementChild, lastElementChild, nextElementChild, previousElementChild, children
+		element.children vs node.childNodes
+			element.children - returns a list of first level child nodes that are elements. Returntype: HTMLCollections, live.
+			
+	3. className, classList, style - CSS related
+		className - Used to get/set class attribute of an elemnt. Returntype: String
+		classList - Used to manipulate individual classes(get/set/remove) of an elemnt. IE9 doesn't support this property. Returntype: DOMTokenList, is this live?
+			Eg: <div id='d1' class='one two three'></div>
+			var el = document.getElementById('d1');
+			el.classList.add('four'); // Add a class
+			el.classList.remove('three'); // Remove a class
+			el.classList.toggle('three'); // Toggle a class
+			el.classList.contains('one'); // Check if a specific class is present or not
+		style - Used to manipulate(get/set/remove a individual property OR all properties) inline CSS properties of an element. Return type: CSSStyleDeclaration(read/write)
+			Example:
+				HTML: <div id="blue" style="height:100px;width:100px;background-color:blue;border:10px solid gray;padding:25px;"></div>
+				Javascript:
+					var divStyle = document.getElementById('blue').style;
+					// get/set/remove individual css style properties
+					divStyle.width; // '100px'
+					divStyle.getPropertyValue('width'); // '100px'
+					divStyle.setProperty('width', '110px'); // '100px'
+					divStyle.removeProperty('width'); // sets it to empty??
+					// get/set/remove all css style properties
+					divStyle.cssText; // returns style attribute contents as a string
+					divStyle.cssText = "height: 100px; width: 100px; background-color: red;";
+					divStyle.cssText = ''; // remove
+					// get/set/remove all css style properties - using getAttribute(), setAttribute(), removeAttribute() methods
+					document.getElementById('blue').getAttribute('style')
+					document.getElementById('blue').setAttribute('style', 'height: 100px; width: 100px; background-color: red;');
+					document.getElementById('blue').removeAttribute('style')
+
+	4. getAttribute(), setAttribute(), removeAttribute(), hasAttribute()
+		Some attributes of an element are available as element object properties(document.body.id), but it is advised to avoid accessing these properties, instead use these methods.
+
+	5. Misc
+		tagName vs nodeName
+			tagName is meanningful only element nodes, whereas nodeName is valid for all type of nodes.
+			For element nodes, both the return the same, name of the tag in uppercase.
+		dataset
+			Property of an element node, which is an object containing all the attributes of an element that start with 'data-'. Returntype: DOMStringMap
+			Eg: <div data-foo-foo="foo" data-bar-bar="bar"></div>
+			console.log(divEl.dataset.fooFoo); // get
+			elm.dataset.gooGoo = 'goo'; // set
+		querySelector(), querySelectorAll(), getElementsByTagName(), getElementsByClassName()
+
+-------------------------------
+TO Review
+HTML element properties
+	innerHTML, outerHTML, textContent, and insertAdjacentHTML() properties and methods provide the functionality to create and add nodes to the DOM using JavaScript strings.
+	Exactly the same properties (innerHTML, outerHTML, textContent) can also be used to extract parts of the DOM (or really, the entire DOM) as a JavaScript string.
+		http://www.yourwebskills.com/innerhtml.php
+		http://www.irt.org/script/1370.htm
+		http://stackoverflow.com/questions/2483429/how-to-use-outerhtml-in-javascript
+		http://www.webreference.com/js/tips/000812.html
+		http://www.quirksmode.org/dom/w3c_html.html - for browser compatibiltiy
+		
+HTML element method - insertAdjacentHTML()
+	https://developer.mozilla.org/en-US/docs/DOM/element.insertAdjacentHTML
+	http://ejohn.org/blog/dom-insertadjacenthtml/ - faster than innerHTML, but older browsers don't support
+	http://hacks.mozilla.org/2011/11/insertadjacenthtml-enables-faster-html-snippet-injection/
+	http://stackoverflow.com/questions/7342055/how-well-is-insertadjacenthtml-supported
+		
+Custom Properties vs Attributes. Attribute Manipulation: attributes(), hasAttribute(), getAttribute(), setAttribute(), removeAttribute().
+DOM Nodes Traversing(top, bottom, left, right): parentNode, childNodes, children, firstChild, lastChild, previousSibling, previousElementSibling, nextSibling, nextElementSibling.
+	
+	insertAdjacentElement() and insertAdjacentText().
+-------------------------------
+Good links:
+https://developer.mozilla.org/en-US/docs/DOM/element - complete HTMLElement object properties n methods
+http://www.quirksmode.org/dom/w3c_html.html - Browser support of element attributes
+http://aleembawany.com/2009/02/11/tagname-vs-nodename/ - tagName vs nodeName
+https://developer.mozilla.org/en-US/docs/DOM/element.classList - classList is not avaiable in till IE9, source for impelemnting it in a cross-browser way.
+http://coursesweb.net/javascript/queryselector-queryselectorall - querySelector(), querySelectorAll()

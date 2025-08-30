@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <title>RequireJS - Why?</title>
+	    <script async src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	</head>
+	<body>
+		Welcome <b></b>!
+		<!-- 
+			As a solution, you can delay execution of below script by 3sec or 3000ms using setTimeout, though it is not an ideal solution!
+			Ideal solution is use RequireJS!
+		-->
+		<script>
+			setTimeout(function() { 
+				$("b").text("Malli");
+			}, 3000);			
+	    </script>
+	</body>
+</html>

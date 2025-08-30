@@ -1,0 +1,764 @@
+What is an Object?
+
+How to create an Object?
+	1. Using literal notation
+		var person = { firstName: "John", lastName: "Doe", age: 50 };
+		Note: keys can be optionally placed in single or double quotes.
+		
+	2. var person = new Object();
+		person.firstName = "John";
+		person.lastName = "Doe";
+		person.age = 50;
+		
+	3. Using Constructor function
+		function person(firstName, lastName, age) {
+			this.firstName = "John";
+			this.lastName = "Doe";
+			this.age = 50;
+		}
+		var father = new person("John", "Doe", 50);
+		var mother = new person("Sally", "Rally", 48);
+		
+var book = {
+	name: 'Catch-22',
+	published: 1961,
+	author: {
+		firstname: 'Joseph',
+		lastname: 'Heller'
+	}
+};
+
+Adding a property:
+	book.name1 = "value";
+	book['name1'] = "value";
+	book["name1"] = "value";
+	
+Accessing a property:
+	>>> book.author.firstname
+	"Joseph"
+	>>> book['author']['lastname']
+	"Heller"
+	>>> book["author"]["lastname"]
+	"Heller"
+
+Delete a property:
+	delete book.name
+	delete book['name']
+	delete book["name"]
+	
+	ToDO: read these later
+		http://perfectionkills.com/understanding-delete/
+		https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Operators/delete
+
+Iterating over properties of an array or object:
+	var arr = ['a', 'b', 'c'];
+	for (var prop in arr)
+		console.log(prop + ":"+ arr[prop]);
+	output:
+	0:a
+	1:b
+	2:c 
+
+	var o = {p1:1, p2:2};
+	for(var i in o) {
+		console.log(i + "=" + o[i]);
+	}
+	Output: 
+	p1=1 
+	p2=2
+	
+	1. Not all properties are enumerable(those show up in for-in loop). 
+	   For eg, length and constructor properties.
+	2. Properties that are inherited will also show up, provided they are enumerable.
+	   You can check if a property is own property or inherited using hasOwnProperty().
+	3. propertyIsEnumerable() will return false for all of the inherited properties, even if they are enumerable.
+
+	
+
+constructor property 
+	When an object is created, a special property named constructor is assigned a reference to the constructor function used to create this object.
+	
+	Eg1:
+		function person(firstName, lastName, age) {
+				this.firstName = "John";
+				this.lastName = "Doe";
+				this.age = 50;
+			}
+		var father = new person("John", "Doe", 50);
+		>>> father.constructor
+		person(firstName, lastName, age)
+		
+	Eg2: 
+		When the object is created using literal notation, its constructor is built-in Object() constructor function.
+		>>> var o = {};
+		>>> o.constructor;
+		Object()
+	
+	>>> typeof father.constructor;
+	"function"
+	>>> typeof o.constructor;
+	"function"
+
+	
+	
+	
+	
+-----------------------------------------------------------------------------------------------------------------------------
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	http://stackoverflow.com/questions/8870684/javascript-enumerating-a-nested-object-structure
+	http://stackoverflow.com/questions/85992/how-do-i-enumerate-the-properties-of-a-javascript-object
+
+
+
+
+
+	
+Is there any diff b/w literal notation and construction function?
+	var a = { x: 10, y: 12};
+	var b() {
+		this.x = 10;
+		this.y = 12;
+	}
+	
+	
+
+
+how to pass variable no. of arguments to a function? using inbuild arguments array.
+how to clone or create an exact copy of an object(non-enumerable properties and subobjects as well..)?
+
+hashes or associate arrays
+	normal array - keys are numbers
+	associate array - keys are strings.
+		objects are used to represent a hash.
+
+
+http://www.webmonkey.com/2010/02/javascript_events/
+
+
+
+
+Altering properties of an object:
+
+Accessing methods of an object:
+	var hero = {
+		breed: 'Turtle',
+		occupation: 'Ninja',
+		say: function() {
+			return 'I am ' + hero.occupation;
+		}
+	}
+	>>> hero.say();
+	"I am Ninja"
+	
+
+If you call a function that is designed to be a constructor, but you omit the new operator, this is not an error, but it may not behave as you could expect.
+	>>> var h = Hero('Leonardo');
+	>>> typeof h
+	"undefined"
+	What happened here? As there was no new operator, we didn't create a new object. The function was called like any other function, so h contains the value that the function returns. The function does not return anything (there's no return), so it actually returns undefined, which gets assigned to h.
+	
+global object - page 100 or 118
+
+
+passing an object to a function:
+	When you copy an object or pass it to a function, you only pass a reference to that object. Consequently, if you make a change to the reference, you are actually modifying the original object.
+	Eg1:
+		>>> var original = {howmany: 1};
+		>>> var copy = original;
+		>>> copy.howmany
+		1
+		>>> copy.howmany = 100;
+		100
+		>>> original.howmany
+		100
+	Eg2:
+		>>> var original = {howmany: 100};
+		>>> var nullify = function(o) {o.howmany = 0;}
+		>>> nullify(original);
+		>>> original.howmany
+		0
+
+functions returning objects:
+	function factory(name) {
+		return {
+			name: name
+		};
+	}
+	>>> var o = factory('one');
+	>>> o.name
+	"one"
+	>>> o.constructor
+	Object()
+
+	Here's the normal constructor scenario:
+		>>> function C() {this.a = 1;}
+		>>> var c = new C();
+		>>> c.a
+		1
+	But now look at this scenario:
+		>>> function C2() {this.a = 1; return {b: 2};}
+		>>> var c2 = new C2();
+		>>> typeof c2.a
+		"undefined"
+		>>> c2.b
+		2
+	What happened here? Instead of returning the object this, which contains the property a, the constructor returned another object that contains the property b. This is possible only if the return value is an object. Otherwise, if you try to return anything that is not an object, the constructor will proceed with its usual behavior and return this.
+
+Comparing objects:
+	When you compare objects, you'll get true only if you compare two references to the same object.
+	Let's create two objects that look the same:
+		>>> var fido = {breed: 'dog'};
+		>>> var benji = {breed: 'dog'};
+	Comparing them will return false:
+		>>> benji == fido
+		false
+		>>> benji === fido
+		false
+		>>> var mydog = benji;
+		>>> mydog === benji
+		true
+		>>> mydog === fido
+		false
+		
+		
+creating objects, constructor functions, built-in objects
+
+
+Object - an object is similar to an array, but keys are need not to be numeric, you can use user-friendly names.
+
+JavaScript uses arrays to represent indexed arrays and objects to represent associative arrays.
+
+JavaScript is a dynamic language; it allows you to alter properties and methods of existing objects at any time. This includes adding new properties or deleting them.
+	An empty object:
+	>>> var hero = {};
+	Accessing a non-existing property:
+	>>> typeof hero.breed
+	"undefined"
+	Adding some properties and a method:
+	>>> hero.breed = 'turtle';
+	>>> hero.name = 'Leonardo';
+	>>> hero.sayName = function() {return hero.name;};
+	Calling the method:
+	>>> hero.sayName();
+	"Leonardo"
+	Deleting a property:
+	>>> delete hero.name;
+	true
+	Calling the method again will no longer work:
+	>>> hero.sayName();
+	reference to undefined property hero.name
+	
+// Create a new empty object
+var o = {};
+console.log( typeof o.name == "undefined" );
+ 
+// Add a name property
+o.name = "Foo";
+console.log( typeof o.name == "string" );
+ 
+// Delete the name property
+delete o.name;
+console.log( typeof o.name == "undefined" );
+
+
+
+
+
+
+
+instanceof operator = you can test if an object was created with a specific constructor function.
+>>> function Hero(){}
+>>> var h = new Hero();
+>>> var o = {};
+>>> h instanceof Hero;
+true
+>>> h instanceof Object;
+false
+>>> o instanceof Object;
+true
+
+
+
+
+var hero = {
+name: 'Rafaelo',
+sayName: function() {
+return this.name;
+}
+}
+>>> hero.sayName();
+"Rafaelo"
+
+
+function Hero() {
+this.occupation = 'Ninja';
+}
+>>> var hero = new Hero();
+>>> hero.occupation;
+"Ninja"
+
+
+
+passing objects to another function
+	When you pass an object to a function or assign an object to another object, you only pass a reference to that object. 
+	Consequently, if you make a change to the reference, you are actually modifying the original object.
+		>>> var original = {howmany: 1};
+		>>> var copy = original;
+		>>> copy.howmany
+		1
+		>>> copy.howmany = 100;
+		100
+		>>> original.howmany
+		100
+
+functions that returns objects:
+	function factory(name) {
+	return {
+	name: name
+	};
+	}
+	>>> var o = factory('one');
+	>>> o.name
+	"one"
+	>>> o.constructor
+	Object()
+
+	>>> function C() {this.a = 1;}
+	>>> var c = new C();
+	>>> c.a
+	1
+	>>> function C2() {this.a = 1; return {b: 2};}
+	>>> var c2 = new C2();
+	>>> typeof c2.a
+	"undefined"
+	>>> c2.b
+	2
+
+comparing objects:
+	>>> var fido = {breed: 'dog'};
+	>>> var benji = {breed: 'dog'};
+
+	Comparing them will return false:
+	>>> benji === fido
+	false
+	>>> benji == fido
+	false
+	
+	
+	>>> var mydog = benji;
+	>>> mydog === benji
+	true
+	
+	>>> mydog === fido
+	false
+	
+Singleton in JavaScript?
+
+object creation - To define a new class, start by writing a constructor function. 
+	A constructor is like any other function, except it is invoked with the new operator and 
+	it uses the this keyword to refer to and initialize the newly created object.
+
+
+	
+Built-in objects: Object, Array, Function, Boolean, Number, String, Math, Date, RegExp, Error.
+
+Object - Object is parent of all JavaScript objects, meaning every object we created is inherited from it.
+
+	// Both are same.
+	var o1 = {}; // creating an empty object using literal notation
+	var o2 = new Object(); // creating an empty object using Object() constructor function
+	
+	An empty object is not completely useless as it contains some useful properties and methods.
+	
+	prototype - all objects inherit methods and properties from Object.prototype. 
+		some object may override them as well.
+	constructor
+	__proto__
+	toString()
+	valueOf()
+	propertyIsEnumerable()
+	
+	conveting an array of strings to a string - javascript??
+
+
+
+properties of an object
+	constructor
+		Every object has a constructor property that refers to the constructor function used to initialize the object.
+		Eg: var o = new Object(); o.constructor == Object; // Evaluates to true 
+			var o = new Object(); o.constructor.toString();  // "function Object() { [native code] }"
+		
+		The existence of the constructor property is not always guaranteed, however. Eg: var o = new Array(1, 2, 3); o.constructor; // [undefined]
+		The author of a class might replace the prototype object of a constructor with an entirely new object, for example, and the new object might not have a valid constructor property. 
+		
+		http://javascript.info/tutorial/constructor
+		
+		>>> function Rabbit() {} var r = new Rabbit(); r.hasOwnProperty('constructor');
+		false
+		>>> function Rabbit() {} var r = new Rabbit(); r.__proto__.hasOwnProperty('constructor');
+		true
+		>>> function Object() {} var o = new Object(); o.hasOwnProperty('constructor');
+		false
+		>>> function Object() {} var o = new Object(); o.__proto__.hasOwnProperty('constructor');
+		true
+		>>> function Rabbit() {} Rabbit.prototype = {}; var r = new Rabbit(); r.__proto__.hasOwnProperty('constructor');
+		false
+		>>> function Rabbit() {} Rabbit.prototype = {}; var r = new Rabbit(); r.__proto__.__proto__.hasOwnProperty('constructor');
+		true
+		>>> function Rabbit() {} Rabbit.prototype = {}; var r = new Rabbit(); alert(r.constructor == Rabbit);
+		alerts false
+		>>> function Rabbit() {} Rabbit.prototype = {constructor: Rabbit}; var r = new Rabbit(); alert(r.constructor == Rabbit);
+		alerts true
+		
+	toString() - it returns a string that somehow represents the type and/or value of the object on which it is invoked. 
+		JavaScript invokes this method of an object whenever it needs to convert the object to a string. 
+		For example, when you use the + operator to concatenate a string with an object or when you pass an object to a method such as alert( ) or document.write( ). 
+		This default toString( ) method always returns a string of the form: [object class] 
+		var o = new Object(); alert(o); // alerts "[object Object]"
+		var o = new Array(1, 2, 3); alert(o); // alerts "1,2,3"
+		var o = new Date(); alert(o); // alerts "Fri Jul 27 2012 15:53:36 GMT+0530 (India Standard Time)"
+		
+		For example, Array objects have a class of "Array", Function objects have a class of "Function", and Date objects have a class of "Date". The built-in Math object has a class of "Math",
+		
+		Note that this class value provides useful information that is not supplied by the typeof operator (which returns either "Object" or "Function" for all objects). 
+		The only way to obtain this class value, however, is through the default toString( ) method defined by Object. 
+		Because classes often define their own versions of this method, we cannot simply invoke the toString( ) method of an object:
+			o.toString()  // May invoke a customized toString( ) method for the object 
+			Instead, we have to refer explicitly to the default toString( ) function as the Object.prototype.toString object and use the apply( ) method of the function to invoke it on the desired object:
+			Object.prototype.toString.apply(o);  // Always invokes the default toString( ) 
+			
+			// An enhanced "type of" function. Returns a string that describes the
+			// type of x. Note that it returns "Object" for any user-defined object types.
+			function Typeof(x) {
+				// Start with the typeof operator
+				var t = typeof x;
+				// If the result is not vague, return it
+				if (t != "object")  return t;
+				// Otherwise, x is an object. Get its class value to try to
+				// find out what kind of object it is.
+				var c = Object.prototype.toString.apply(x);  // Returns "[object class]"
+				c = c.substring(8, c.length-1);              // Strip off "[object" and "]"
+				return c;
+			} 
+
+	valueOf() - is called when JavaScript needs to convert an object to some primitive type other than a string -- typically, a number. 
+		Where possible, the function should return a primitive value that somehow represents the value of the object referred to by the this keyword. 
+		
+		By definition, objects are not primitive values, so most objects do not have a primitive equivalent. Thus, the default valueOf( ) method defined by the Object class performs no conversion and simply returns the object on which it is invoked. Classes such as Number and Boolean have obvious primitive equivalents, so they override the valueOf( ) method to return appropriate primitive values.
+		
+		Occasionally, you may define a class that has some reasonable primitive equivalent. In this case, you may want to define a custom valueOf( ) method for the class.
+		
+		var a = new Complex(5,4);
+		var b = new Complex(2,1);
+		var c = Complex.subtract(a,b);  // c is the complex number {3,3}
+		var d = a - b;                  // d is the number 3 
+		alert("c = " + c);             // Uses valueOf( ); displays "c = 3"
+		alert("c = " + c.toString( ));  // Displays "c = {3,3}"
+
+	hasOwnProperty() - returns a boolean indicating whether the specified property is object's own property or inherited.
+	hasOwnProperty() -  returns true if the object locally defines a noninherited property with the name specified by the single string argument. Otherwise, it returns false.
+	 hasOwnProperty() which returns true if the property belongs to the object itself (not considering the prototype)
+	 Use the hasOwnProperty() method to differentiate between own properties and prototype properties.
+	 
+	propertyIsEnumerable() - returns true if the object defines a property with the name specified  and if that property would be enumerated by a for/in loop.
+		var o = { x:1 };
+		o.propertyIsEnumerable("x");        // true: property exists and is enumerable
+		o.propertyIsEnumerable("y");        // false: property doesn't exist
+		o.propertyIsEnumerable("valueOf");  // false: property isn't enumerable 
+
+		Note that the ECMAScript specification states that propertyIsEnumerable( ) considers only properties defined directly by the object, not inherited properties. This unfortunate restriction makes the function less useful, because a return value of false may mean either that the property is not enumerable or that it is enumerable but is an inherited property. 
+		http://stackoverflow.com/questions/10968962/hasownproperty-vs-propertyisenumerable
+		http://stackoverflow.com/questions/11701441/javascript-propertyisenumerable-is-there-any-method-that-is-enumerable
+		https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/PropertyIsEnumerable
+		http://stackoverflow.com/questions/11701441/javascript-propertyisenumerable-is-there-any-method-that-is-enumerable
+		https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/PropertyIsEnumerable
+		https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/defineProperty
+		http://www.javascriptkit.com/jsref/object.shtml
+		
+	isPrototypeOf() - returns true if an object is in another (function)object's prototype chain. Syntax: prototype.isPrototypeOf(object);
+	
+	
+	
+	
+	
+	returns true if the object is the prototype object of the argument. Otherwise, it returns false.
+	
+	isPrototypeOf allows you to check whether or not an object exists within another object's prototype chain.
+	
+	isPrototypeOf() - returns a boolean indicating whether the specified object is in the prototype chain of 
+	of the object this method is called upon.
+	test if an object is another object's prototype chain.
+	isPrototypeOf allows you to check whether or not an object exists within another object's prototype chain.
+	http://stackoverflow.com/questions/5972991/why-do-we-need-the-isprototypeof-at-all
+	Eg:
+		function F1() {
+		}
+		function F2() {
+		}
+		F2.prototype = new F1();
+		function F3() {
+		}
+		F3.prototype = new F2();
+		
+		var f3 = new F3();
+		if(F1.prototype.isPrototypeOf(f3)) {
+			// do sth
+		}
+		
+		
+		function F1() {
+		}
+		function F2() {
+		}
+		F2.prototype = new F1();
+		function F3() {
+		}
+		F3.prototype = new F2();
+		var f1 = new F1();
+		var f2 = new F2();
+		var f3 = new F3();
+
+		alert(F3.prototype.isPrototypeOf(f3));
+		alert(F2.prototype.isPrototypeOf(f3));
+		alert(F1.prototype.isPrototypeOf(f3));
+		alert(Object.prototype.isPrototypeOf(f3));
+		//alert(F2.prototype.isPrototypeOf(f1));
+		//alert(F3.prototype.isPrototypeOf(f2));
+		//alert(F2.prototype.isPrototypeOf(f1));
+
+		var monkey = {
+		hair: true,
+		feeds: 'bananas',
+		breathes: 'air'
+		};
+		function Human(name) {
+		this.name = name;
+		}
+		Human.prototype = monkey;
+		>>> var george = new Human('George');
+		>>> monkey.isPrototypeOf(george)
+		true
+
+
+http://phrogz.net/JS/Classes/OOPinJS.html
+http://phrogz.net/JS/Classes/OOPinJS2.html
+http://javascriptweblog.wordpress.com/2011/02/28/javascript-object-keys-finally/
+
+		
+instanceOf vs isPrototypeOf
+	http://ejohn.org/blog/objectgetprototypeof/
+	https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/isPrototypeOf
+	http://stackoverflow.com/questions/2464426/whats-the-difference-between-isprototypeof-and-intanceof-in-javascript
+	http://stackoverflow.com/questions/5972991/why-do-we-need-the-isprototypeof-at-all
+	
+http://stackoverflow.com/questions/4676617/javascript-inheritance-constructor-property-is-not-correct	
+var data = new Array(1, 2, 3); var type = Object.prototype.toString.apply(data); type.substring(8, type.length-1);
+var data = new Array(a, 2, 3); alert(data.constructor == Array); // alerts true
+		
+properties of constructor function
+	JavaScript creates a prototype object for each constructor function you define and assigns that object to the prototype property of the constructor.
+	That prototype object is not initially empty. When created, it includes a constructor property that refers to the constructor function. 
+	That is, for any function f, f.prototype.constructor is always equal to f (unless we set it to something else). 
+
+	Since the constructor function defines the class of an object, the constructor property can be a powerful tool for determining the type of any given object.
+	For example, you might use code like the following to determine the type of an unknown object:
+    if ((typeof o == "object") && (o.constructor == Date))
+        // Then do something with the Date object... 
+		
+calling super class constructor.
+
+http://docstore.mik.ua/orelly/webprog/jscript/ch07_01.htm
+http://docstore.mik.ua/orelly/webprog/jscript/ch08_01.htm - objects
+http://docstore.mik.ua/orelly/webprog/jscript/ch08_05.htm - instance vs class properties
+http://docstore.mik.ua/orelly/webprog/jscript/ch08_02.htm - constructor functions
+http://docstore.mik.ua/orelly/webprog/jscript/ch08_07.htm - Object Properties and Methods
+
+
+Iterate over all properties of an object??
+
+
+What happens when you create an object?
+What happens when you try to access an object's property??
+	There is a prototype chain: if your object foo doesn't have a property bar, when you do foo.bar, JavaScript will look for a bar property of the prototype. If none is found, it will keep searching in the prototype's prototype, then the prototype of the prototype's prototype and keep going all the way up to the highest-level parent Object.
+
+
+	
+	
+	
+	
+	Creating an empty object using l
+	https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object
+	https://developer.mozilla.org/en/JavaScript/New_in_JavaScript/1.8.5
+	
+
+
+
+
+	
+	
+Boolean - an object representing a boolean value(true or false).
+	var b1 = new Boolean(); b1.valueOf(); // returns false
+	var b2 = new Boolean(undefined); b2.valueOf(); // returns false
+	var b3 = new Boolean(null); b3.valueOf(); // returns false
+	var b4 = new Boolean(false); b4.valueOf(); // returns false
+	var b5 = new Boolean(NaN); b5.valueOf(); // returns false
+	var b6 = new Boolean(""); b6.valueOf(); // returns false
+	var b7 = new Boolean(true); b7.valueOf(); // returns true
+	var b8 = new Boolean("true"); b8.valueOf(); // returns true
+	var b9 = new Boolean("false"); b9.valueOf(); // returns true
+	var b10 = new Boolean("Richard"); b10.valueOf(); // returns true
+
+	// We can also call Boolean() without new keyword - used to perform type conversion.
+	var b1 = Boolean(); alert(b1); // alerts false
+	var b2 = Boolean(undefined); alert(b2); // returns false
+	var b3 = Boolean(null); alert(b3); // returns false
+	var b4 = Boolean(false); alert(b4); // returns false
+	var b5 = Boolean(NaN); alert(b5); // returns false
+	var b6 = Boolean(""); alert(b6); // returns false
+	var b7 = Boolean(true); alert(b7); // returns true
+	var b8 = Boolean("true"); alert(b8); // returns true
+	var b9 = Boolean("false"); alert(b9); // returns true
+	var b10 = Boolean("Richard"); alert(b10); // returns true
+	
+	Any object whose value is not undefined or null, including a Boolean object whose value is false, evaluates to true when passed to a conditional statement.
+		Eg1:
+			x = new Boolean(false);
+			if (x) {
+				// this code is executed
+			}  
+		Eg2: var o = new Object(); var b = new Boolean(o); alert(b.valueOf()); // alerts true
+
+	Boolean Constructor Function:
+		Properties:
+			Own -> prototype - property shared by all Boolean objects.
+			Inherited(from Function) -> constructor, length, name, caller
+		Methods
+			It doesn't define any methods on its own.
+			Inherited(from Function) -> apply, call, toString, toSource
+			
+	Boolean Object
+		Properties:
+			Own -> constructor - function that is used to create Boolean object.
+			Inherited(from Object) -> __proto__
+		Methods
+			It doesn't define any methods on its own.
+			Inherited(from Object) -> hasOwnProperty, propertyIsEnumerable
+				toString() - returns "true" or "false" depending upon the value of the object. 			Overrides Object.prototype.toString().
+				valueOf() - returns true or false depending upon the value of the object. 			Overrides Object.prototype.valueOf().
+	
+	https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean/prototype
+			
+
+Number object
+	var n1 = new Number(); alert(n1.valueOf()); // alerts 0
+	var n2 = new Number(undefined); alert(n2.valueOf()); // alerts NaN
+	var n3 = new Number(null); alert(n3.valueOf()); // alerts 0
+	var n4 = new Number(true); alert(n4.valueOf()); // alerts 1
+	var n5 = new Number(false); alert(n5.valueOf()); // alerts 0
+	var n6 = new Number(""); alert(n6.valueOf()); // alerts 0
+	var n7 = new Number("abc"); alert(n7.valueOf()); // alerts NaN
+	
+	// We can also call Number() without new keyword - used to perform type conversion.
+	var n1 = Number(); alert(n1); // alerts 0
+	var n2 = Number(undefined); alert(n2); // alerts NaN
+	var n3 = Number(null); alert(n3); // alerts 0
+	var n4 = Number(true); alert(n4); // alerts 1
+	var n5 = Number(false); alert(n5); // alerts 0
+	var n6 = Number(""); alert(n6); // alerts 0
+	var n7 = Number("abc"); alert(n7); // alerts NaN
+
+	Number Constructor Function:
+		Properties:
+			Own -> 
+				MAX_VALUE - represents maximum positive value that javascript can handle.
+				MIN_VALUE - represents smallest positive value that javascript can handle.
+				-MAX_VALUE - represents maximum negative value that javascript can handle.
+				-MIN_VALUE - represents smallest negative value that javascript can handle.
+				POSITIVE_INFINITY - represents infinity, returned on overflow. (add 1 to Number.MAX_VALUE)
+				NEGATIVE_INFINITY - represents negative infinity, returned on overflow. (subtract 1 from Number.MAX_VALUE)
+				NaN - Not-a-Number.
+				prototype - property shared by all Number objects.
+			Inherited(from Function) -> constructor, length, name, caller
+		Methods
+			Own -> It doesn't define any methods on its own.
+			Inherited(from Function) ->	apply, call, toString, toSource
+
+	Number Object
+		Properties:
+			Own -> constructor - function that is used to create Number object.
+			Inherited(from Object) -> __proto__
+		Methods
+			Own ->
+				toFixed(n) - used to round a number to specified number of digits.
+				toPrecision() - 
+				toExponential(n) - n is optional. An integer between 0 and 20 representing the number of digits after decimal point. 
+					If omitted, it is set as many digits as necessary to represent the value.
+					Eg: 
+						var num = 5.56789; num.toExponential(3); // "5.568e+0"
+						var num = 5.56789; num.toExponential(); // "5.56789e+0"
+				http://stackoverflow.com/questions/566564/javascript-functions-math-roundnum-vs-num-tofixed0-and-browser-inconsistenci
+				http://www.diveintojavascript.com/core-javascript-reference/the-number-object
+				http://www.javascripter.net/faq/tofixed.htm	
+				http://www.javascriptkit.com/jsref/number.shtml
+				http://www.hunlock.com/blogs/The_Complete_Javascript_Number_Reference
+				http://css.dzone.com/articles/displaying-numbers-javascript // Fixed notation vs Exponential notation
+			Inherited(from Object) -> hasOwnProperty, propertyIsEnumerable
+				toString([radix]) - returns a string representation of the Number object in the specified radix or base. Overrides Object.prototype.toString().
+				valueOf() - returns the primitive value of the number. Overrides Object.prototype.valueOf().
+	
+
+
+
+String object
+	length property - no. of chars in the string.
+	
+	charAt() - returns the char at the specified location. Eg: "abcdef".charAt(3); // returns "d"
+	charCodeAt() - returns unicode of the char at the specified location. Eg: "abcdef".charCodeAt(3); 	// returns 100
+	fromCharCode() - converts the decimal unicode value into actual character. Eg: String.fromCharCode(100); // returns "d"
+	indexOf(pattern) - returns the index of first matching or -1 if not found. Eg: "abc@def".indexOf("@"); // returns 3
+	lastIndexOf(pattern) - returns the index of last matching or -1 if not found. Eg: "abc@def@ghi".lastIndexOf("@"); // returns 7
+	toLowerCase() - used to convert a string to lowercase letters. Eg: "aBc".toLowerCase(); // returns "abc"
+	toUpperCase() - used to convert a string to uppercase letters. Eg: "aBc".toLowerCase(); // returns "ABC"
+	concat() - used to concatenate 2 strings. Eg: "abc".concat("def"); // returns "abcdef". Same as "abc" + "def"
+	split() - used to split a string into an array of substrings.
+		"123456789".split("5"); // returns ["1234", "6789"]
+		"How are you doing today?".split(" "); // returns ["How", "are", "you", "doing", "today?"]
+		"abcd".split(""); // returns ["a", "b", "c", "d"]. If you pass an empty string to split(), string is split between each character.
+	slice(start[, end]) - used to extract a substring from a string.
+		If start is negative, it is treated as length + start where length is the length of the string.
+		If end is negative, it is treated as length + end where length is the length of the string.
+		If end is omitted, extraction continues to the end of string.
+		If end occurs before start, no characters are copied to the new string.
+		"abcdef".slice(2); // returns "cdef".
+		"abcdef".slice(-2); // returns "ef".
+		"abcdef".slice(2, 4); // returns "cd".
+		"abcdef".slice(-5, -1); // returns "bcde".
+	substr(start[, length]) - used to extract a substring from a string.
+		If length is zero or negative, an empty string is returned. 
+		If length is not specified, substring continues to the end of string.
+		"abcdef".substr(2); // returns "cdef".
+		"abcdef".substr(-2); // returns "ef".
+		"abcdef".substr(2, 3); // returns "cde".
+		"abcdef".substr(-4, 3); // returns "cde".
+	substring(beginIndex, endIndex) - used to extract a substring from a string.
+		"abcdef".substring(2); // returns "cdef"
+		"abcdef".substring(2,4); // returns "cd"
+		http://stackoverflow.com/questions/2243824/what-is-the-difference-between-string-slice-and-string-substring-in-javascript
+	trim() - used to remove leading and trailing spaces in a string. Eg: " abc ".trim(); // returns "abc"
+	TODO: other methods: match(), search(), replace()
+
+
+
+String(true) == "true"     //returns true`
+String(false) == "true"    //returns false
+String("true") == "true"   //returns true
+String("false") == "true"  //returns false

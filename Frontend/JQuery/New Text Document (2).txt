@@ -1,0 +1,13 @@
+http://jsperf.com
+
+$(':file').val() - file name   // "C:\fakepath\test.txt.txt"
+$(':file')[0].files - some file inputs allows the user to select more than one file. files property of input type=file gives the list of files uploaded by user.
+
+$(':file')[0].files[0].name - returns first file name // "test.txt.txt"
+
+$(':file')[0].files[0].size - size of first file
+
+
+
+The soft hyphen (character code 173 decimal) should be discarded by all applications unless they automatically format text, in which case it indicates a suitable point to break a line and display a hyphen
+

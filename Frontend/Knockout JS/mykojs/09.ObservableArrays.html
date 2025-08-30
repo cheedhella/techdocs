@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Observable Arrays</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <form data-bind="submit: addItem">
+      New Item: <input type="text" data-bind="value: itemToAdd, valueUpdate: 'afterkeydown'" />
+      <input type="submit" value="Add Item" data-bind="enable: itemToAdd().length > 0" />
+      <p>Items Added</p>
+      <select multiple width='80px' data-bind="options: items"></select>
+   </form>
+
+   <script>
+      /* 
+         What is Observable Array?
+            It helps you in detecting changes to a collection of objects and respond to the changes;
+            
+            In other words, Observable is used to monitor changes to a single object, where as Observable Array is used to monitor changes to a 
+            collection of objects. Observable array notifies only if any of the objects are added or removed. It does not notify if the individual
+            object's properties are modified.
+
+            They are useful when you want repeated section of UI to appear or disappear as items are added or removed.
+
+         Observable Array Functions
+            You can also use native JS array functions, but these KO Array functions works on all browsers;
+            For eg, native indexOf() doesn't work in IE8, where as KO indexOf() works in all browsers;
+            In addition to that, methods that modify the array such as push() notifies all listeners, so that UI gets updated automatically;
+            
+            Calling native JS method: myObsrevableArray().indexOf(); Calling KO method: myObservableArray.indexOf();
+
+            push(value) - insert the item at the end of the array;
+            pop() - removes last item from the array and returns it;
+            unshift(value) - insert the item at the beginning of the array;
+            shift() - removes first item from the array and returns it;
+            reverse() - reverses the order of the array;
+            sort() - sort the items in ascending order;
+            slice(startIndex, endIndex) - returns items from startIndex to endIndex as an array;
+            splice(startIndex, endIndex) - removes items from startIndex to endIndex and returns them as an array;
+            indexOf(item) - returns the index of first occurrence of given item;
+            remove(item) - removes the specified item and returns it as an array;
+            remvoe([items]) - removes the items that match with the set of specified items; 
+            remove(function(item) { condition }) - removes items matching the specified condition and returns them as an array;
+            removeAll() - removes all items and returns them as an array;
+
+            // All destroy() methods are mostly for Ruby on Rails developers only.
+            // Items that are destroyed are not really deleted immediately, but are hidden for the moment by setting _destroy property to true;
+            destroy(item) - searches for the specified item and sets it's _destroy property to true;
+            destroy([items]) - searches for the specified items and marks their _destroy property to true;
+            destroy(function(item) { condition }) - Finds all items matching the specified condition and marks their _destroy property to true;
+            destroyAll() - sets _destroy property to true for all the items;
+      */
+
+      var listModel = function(items) {
+         this.items = ko.observableArray(items);
+         this.itemToAdd = ko.observable("");
+         this.addItem = function() {
+            if(this.itemToAdd() != '') {
+               this.items.push(this.itemToAdd());
+               this.itemToAdd('');
+            }
+         }
+      };
+
+      ko.applyBindings(new listModel(["Master Javascript", "Master Typescript"]));
+   </script>
+</body>
+</html>

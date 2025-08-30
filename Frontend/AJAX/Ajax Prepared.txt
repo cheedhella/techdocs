@@ -1,0 +1,279 @@
+AJAX - Asynchronous JavaScript and XML, a technology used to create dynamic web pages.
+	Used to send data to and/or retrieve data from a web server, update parts of a webpage asynchronously(in the background, without reloading whole page).
+	Despite the name, request need not to be asynchronous and response need not to be XML.
+	AJAX is a combination of technologies:
+		HTML/XHTML/CSS - presentation
+		Javascript/DOM - for dynamic display and interaction of data
+		XML - format for interchanging data
+		XMLHttpRequest - object used to exchange data asynchronously with a server
+		
+	It is also possible to build AJAX applications with no server side scripting at all, simply by having a XMLHTTPRequest object calling a static server resouce such as XML or text file.
+	AJAX can not perform a request to a document from another domain.
+	
+AJAX - Making an http/https request, calling a webservice using protocols such as SOAP and REST.
+
+Tradition Way - Form submit or click on an URL -> send a request to the server and get the new page -> load the new page into browser - while all this is happening, UI is effectively frozen.
+AJAX Way - Create XMLHTTPRequest object(http request) and asynchronusly send that request to the server, monitor the request and get the response -> update only part of the page with the response.
+
+1. Create XMLHTTPRequest Object
+	The purpose of XMLHTTPRequest object is to create an asynchronous HTTP request.
+	Supported by wide variety of browsers(IE5+, FF, Opera, Safari) across wide range of platforms(windows, unix/linux, mac).
+	
+	function createXMLHTTPObject() {
+		var xhr;
+		if(window.XMLHttpRequest)
+			xhr = new XMLHttpRequest();  // IE7+, Firefox, Chrome, Opera
+		else if(window.ActiveXObject)
+			xhr = new ActiveXObject("Microsoft.XMLHTTP");  // IE5, IE6
+		return xhr;
+	}
+
+	function createXMLHTTPObject_using_exceptions() {
+		var xhr;
+		try {
+			xhr = new XMLHttpRequest();
+		}catch(e1) {
+			try {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			}catch(e2) {
+				try {
+					xhr = new ActiveXObject("Msxml2.XMLHTTP");
+				}catch(e3) {
+					return false;
+				}
+			}
+		}
+		return xhr;
+	}
+
+	function createXMLHttp() {
+		if (typeof XMLHttpRequest != 'undefined')
+			return new XMLHttpRequest();
+		else if (window.ActiveXObject) {
+			var avers = ["Microsoft.XmlHttp", "MSXML2.XmlHttp", "MSXML2.XmlHttp.3.0", "MSXML2.XmlHttp.4.0", "MSXML2.XmlHttp.5.0"];
+			for (var i = avers.length -1; i >= 0; i--) {
+				try {
+					httpObj = new ActiveXObject(avers[i]);
+					return httpObj;
+				} catch(e) {}
+			}
+		}
+		throw new Error('XMLHttp (AJAX) not supported');
+	}
+	
+	Properties of XMLHTTPRequest Object
+	-----------------------------------
+    onreadystatechange - contains a function that is called every time the value of readyState is changed, which is used to process the response from the server.
+		// don't use this with synchronous requests?? https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest
+		
+	readyState - status of the request(browser dependant)
+		0 - Uninitialized Request, request object created but open() is not called yet
+		1 - Connection established, open() is called but send() is not called yet
+		2 - Request was sent and is being processed(you can usually get content headers from the response at this point).
+		3 - Request is being processed(often some partial data is available from the response, but the server isn't finished with its response).
+		4 - Request complete, responseText/responseXML contains the complete response(response could be an error).
+		
+    responseText - response from the server in the form of plain text or string
+	responseXml - response from the server in the form of XML
+	
+	status - 200(everything is good), 401(unauthorized), 402(forbidden), 402(not found) etc
+	statusText - text that came with the status, contains an empty string in case of error or if the request readyState is 0 or 1.
+	
+	// readyState=4 means response is ready, status=200 means response is good, status=404 means page not found.
+	
+
+	Methods of XMLHTTPRequest Object
+	--------------------------------
+	open(Request_method, URL+getData, asynch, username, password) - initialize the request object
+	 	Request_method - GET, POST, HEAD, PUT, DELETE etc. // ignored for https requests
+			GET - is used for only retrieving data from the server without changing data on the server. Otherwise, use POST.
+			POST - is used to send some data to the server.
+		URL - In case of GET, request parameters are part of URL. In case of POST, request parameters are the arguments to the send() method.
+		async - true (asynchronous) or false (synchronous)
+			if async is true, user's browser continues executing the next statement after send() method without waiting for a response. // default
+			if async is false, user's browser will wait after calling send() method until it receives the response, which is not what we want.
+		username, password - optional, used for authentication.
+		
+	send(postData) - hand over the request to the server. pass null if you've no data to pass.
+		If the request is asynchronous, this method returns as soon as the request is sent. // default
+		If the request is synchronous, this method doesn't return until the response has arrived.
+
+	setRequestHeader(x, y), getResponseHeader(x), getAllResponseHeaders(), abort();
+
+2. Sending AJAX GET Request
+	void sendAjaxRequest() { // async, get
+		var ajaxRequest = new createXMLHTTPObject();
+		// set the callback method for asynchronous requests
+		ajaxRequest.onreadystatechange = function() { 
+			if(ajaxRequest.readyState == 4 && ajaxRequest.status==200) {
+				// process the response
+			}
+		}
+		ajaxRequest.open('GET', '/servlet/testServlet?x=10&y=12', true); // initialize the request
+		// ajaxRequest.setRequestHeader('User-Agent','XMLHTTP/1.0'); // set request headers, optional
+		ajaxRequest.send(null); // to send GET request, request parameters are part of URL
+	}
+	
+2. Sending AJAX POST Request
+	void sendAjaxRequest() { // async, post
+		var ajaxRequest = new createXMLHTTPObject();
+		// set the callback method for asynchronous requests
+		ajaxRequest.onreadystatechange = function() { 
+			if(ajaxRequest.readyState == 4 && ajaxRequest.status==200) {
+				// process the response
+			}
+		}
+		ajaxRequest.open('POST', '/servlet/uploadFile', true);
+		ajaxRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); // set request headers, optional
+		ajaxRequest.send('filename=test.doc'); // to send POST request, request parameters are passed as arguments to send() method
+	}
+	
+3. Processing Response
+	Response from the Server can be plain text/HTML/XML/JSON/Javascript(executable js or js file)/Mix of HTML and JS/Error.
+	
+	How to find the type of ajax response?
+		if (ajaxReq.readyState == 4 && ajaxReq.status == 200) {
+			var cType = this.getResponseHeader("Content-Type");
+			if (cType == 'text/plain') {
+				// plain text response
+			} else if (cType == 'text/xml') {
+				// XML response
+			} else {
+				// unknown content type
+				// TODO: is it possible to differentiate b/w HTML/JSON types?
+				// If the response is JSON, a properly behaving application would set the Content-Type to 'application/json'.
+			}			
+		}
+	
+	void processText() {
+		document.getElementById("myDiv").innerHTML = ajaxRequest.responseText;
+	}
+	
+	// { 'name': 'Ajax', 'cost': 200}
+	void processJSON() {
+		var book = eval(ajaxReq.responseText); // retrieve result as an JavaScript object - Not sure if this browser independant way of parsing JSON
+		document.getElementById("myDiv").innerHTML = "Cost of Book: " + book.name + " is: " + book.cost;
+	}
+	
+	// <book><name>Ajax</name><cost>200</cost></book>
+	void processXML() {
+		var response = ajaxReq.responseXML;
+		var book = response.getElementsByTagName('book')[0];
+		var bookName = book.getElementsByTagName('name')[0].firstChild.data;
+		var bookCost = book.getElementsByTagName('cost')[0].firstChild.data;
+		document.getElementById("myDiv").innerHTML = "Cost of Book: " + bookName + " is: " + bookCost;
+	}
+	
+	void processHTML() {
+		var e = document.createElement('div');
+		e.innerHTML = ajaxReq.responseText;
+		document.body.appendChild(e);
+	}
+	
+	void processJS() {
+		// JS can be block of executable JS or JS file.
+	}
+	
+	void processHTMLJSMix() {
+		http://blogger.ziesemer.com/2009/10/executing-javascript-from-html-ajax.html
+		http://blog.sivavaka.com/2010/11/evaluating-javascript-code-returned-by.html
+	}
+
+5. Canceling a request - abort()
+	The XMLHttpRequest has a abort method, which is used to cancel the request.
+	Note: If the request has already been sent to the server then the server will process the request even if we abort the request but the client will not wait for/handle the response.
+	How to let the server know about cancelling?
+		In conjunction with using abort, you can send another http request when canceling the request. This will set a session variable flag indicating the request is canceled.
+		This flag should be checked in the server-side before performing extensive function calls. If canceled, the function call will not be performed. 
+	// Another good problem/application worth reading
+		http://www.bennadel.com/blog/1002-XMLHttpRequest-Object-Has-An-Abort-Method.htm
+		http://stackoverflow.com/questions/446594/abort-ajax-requests-using-jquery
+	Cancelling a ajax request incase if a request takes long - http://www.ajaxprojects.com/ajax/tutorialdetails.php?itemid=484
+
+6. Handling timeouts
+	http://stackoverflow.com/questions/1018705/how-to-detect-timeout-on-an-ajax-xmlhttprequest-call-in-the-browser
+	http://geekswithblogs.net/lorint/archive/2006/03/07/71625.aspx
+	
+7. Handling errors or server side exceptions
+
+8. Ajax design patterns
+	http://www.ibm.com/developerworks/library/x-ajaxxml2/
+	http://www.slideshare.net/ehsane/ajax-design-patterns
+	http://www.ajaxprojects.com/ajax/tutorialdetails.php?itemid=14
+---------------------------------------------------------------------------------------------
+http://www.yaldex.com/wAjax/AjaxTutorial.html 
+http://www.yaldex.com/wAjax/DiggingdeeperintoHTTPreadystates.html - Browser dependant ready states
+http://www.aaronpeters.nl/blog/prevent-double-callback-execution-in-IE9
+http://www.krishnababug.com/2011/10/java-script-to-use-xmlhttprequest.html - text in telugu???
+http://monsur.hossa.in/2007/12/28/XmlHttpRequest-status-and-statusText.html - browser dependant statusText 
+ajax synchronous vs asynchronous
+which parts of a webpage are cached by the browser? behaviour of browser cache???
+How to handle timeouts when you make a ajax request?
+How to handle errors/exceptions from server when you make a ajax request?
+Be more organized
+how to process xml using javascript
+javascript + xml - http://www.w3schools.com/dom/dom_http.asp
+http://stackoverflow.com/questions/4935632/how-to-parse-json-in-javascript
+http://stackoverflow.com/questions/978740/javascript-how-to-detect-if-document-has-loaded-ie-7-firefox-3
+http://vertstudios.com/blog/avoiding-ajax-newline-pitfall/
+	responseText - response from the server as a string.
+	responseXML - response from the server as XML.  responseXML returns an XML doc, that can be accessed and parsed using normal DOM methods. 
+
+http://gauravwrites.blogspot.in/2011/06/updating-dom-with-ajax-response-having.html
+http://coursesweb.net/ajax/execute-javascript-code-ajax-response_t
+	String vs JSON vs XML - how to parse the response
+		The benefit of using JSON over XML with JavaScript is speed; by nature, JSON requires a lot less parsing code than XML, which ultimately makes JSON faster when parsing large amounts of data. The downside is that XML has much greater support and more server-side development options. The choice depends on the situation and purpose of the request.
+	comeup with a good ajax f/w?? take ur own time??
+		
+		http://www.java4s.com/ajax/ajax-server-response-responsetext-and-responsexml/
+		http://www.ajaxprojects.com/ajax/tutorialdetails.php?itemid=382
+		JSON format and its parser??
+
+		better error handling
+cancelling a request, error handling
+	http://www.w3schools.com/ajax/default.ASP
+	http://en.wikipedia.org/wiki/Ajax_%28programming%29
+	http://www.adaptivepath.com/ideas/ajax-new-approach-web-applications
+	http://www.xul.fr/en-xml-ajax.html
+http://www.slideshare.net/nzakas/enterprise-javascript-error-handling-presentation
+It is possible to build simple Ajax applications with no server-side scripting at all, simply by having the XMLHTTPRequest object call a static server resource such as an XML or text file.
+		http://javascript.about.com/library/blajax07.htm
+		http://javascript.about.com/library/blajax06.htm
+
+http://www.w3.org/TR/XMLHttpRequest/
+http://www.sitepoint.com/xmlhttprequest-and-javascript-closures/
+
+http://tuftsdev.github.com/WebProgramming/lecture_notes/ajax.html
+http://www.ibm.com/developerworks/web/library/wa-ajaxintro1/index.html
+http://www.ibm.com/developerworks/library/wa-ajaxintro2/
+http://www.gointerviews.com/top-50-ajax-interview-questions-answers/
+http://www.htmlgoodies.com/primers/jsp/article.php/3608046/Javascript-Basics-Part-10.htm
+
+Is it possible to return XML from server as a string? how to do that?
+Is it possible to mimic back button?
+	JavaScript has its own equivalent of the Back button written into the language. 
+	The statements onClick = “history.back()” and onClick = “history.go(-1)” both mimic the action of clicking the Back button once.
+
+
+XSLT is a transformation language used to convert XML documents into other formats—forexample, into HTML suitable for a browser to display.
+Node Properties
+	childNodes Array of child nodes
+	firstChild The first Child node
+	lastChild The last Child node
+	nodeName Name of the node
+	nodeType Type of node
+	nodeValue Value contained in the node
+	nextSibling Next node sharing the same parent
+	previousSibling Previous node sharing same parent
+	parentNode Parent of this node
+Node Methods
+	AppendChild Add a new child node
+	HasChildNodes True if this node has children
+	RemoveChild Deletes a child node
+Document Methods
+	CreateAttribute Make a new attribute for an element
+	CreateElement Make a new document element
+	CreateTextNode Make a text item
+	GetElementsByTagName Create an array of tagnames
+	GetElementsById Find an element by its ID
+

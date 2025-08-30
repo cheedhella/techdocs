@@ -1,0 +1,35 @@
+{
+  "name": "yfiles-for-html",
+  "description": "yFiles for HTML 2.6.0.2 Complete ",
+  "version": "26.0.2",
+  "author": "yWorks GmbH <yfileshtml@yworks.com>",
+  "license": "https://www.yworks.com/products/yfiles-for-html/sla",
+  "private": true,
+  "yFilesDevSuiteCompatibility": "3.1.0",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "vite --config vite.config.ts --host"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 16",
+    "npm": ">=7"
+  },
+  "devDependencies": {
+    "@types/node": ">= 18",
+    "kolorist": "~1.8.0",
+    "prettier": "2.8.8",
+    "source-map": "~0.7.4",
+    "typescript": "~5.1.6",
+    "vite": "~4.3.9"
+  },
+  "type": "module",
+  "dependencies": {
+    "yfiles": "./lib-dev/yfiles-26.0.2+dev.tgz",
+    "yfiles-umd": "./lib-dev/yfiles-umd-26.0.2+dev.tgz"
+  },
+  "workspaces": [
+    "demos-js",
+    "demos-ts"
+  ]
+}

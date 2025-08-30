@@ -1,0 +1,64 @@
+What is CSS(Cascading Style Sheets)?
+    Every WebPage consists of 3 parts: Content(HTML), Presentation(CSS), Behavior(Javascript);
+    CSS is used to style the HTML, based on screen, paper, other media;
+
+------------------------------------------------------------------------------------------------------------------------------
+CSS Syntax
+    There are 3 ways to specify CSS Style Rules;
+
+    Inline Styles
+        Place all the rules in style attribute; Useful if you are applying style to a single element in the page;
+        Eg: <p style="font-size: 10pt; color: green">Hello</p>
+
+    Internal Styles
+        Place all the CSS rules inside <style> tag and place it inside <head> tag;
+        This approach is good if you want different pages to have different styles;
+        Eg: 
+        <style>
+            p {
+              font-size: 10pt; 
+              color: green;  
+            }
+        </style>
+
+    External Style Sheets
+        Place all the CSS rules in a separate file with .css extension;
+        Include it inside html using <link> tag or using @import rule in a <style> element; 
+	    
+        Eg1: <link rel="stylesheet" type="text/css" href="style/style.css" media="screen"/>
+	    Eg2: @import 'custom.css';
+		    <link> vs @import - http://stackoverflow.com/questions/10036977/best-way-to-include-css-why-use-import
+	    Eg3: Processing Instruction is used to link a CSS document to XML document.
+
+------------------------------------------------------------------------------------------------------------------------------
+Building blocks of a Style Sheet
+	1. Statements
+		Every style sheet consist of a list of statements. A statment can be either an at-rule or a ruleset.
+	2. At-rules
+		http://reference.sitepoint.com/css/atrules
+		http://reference.sitepoint.com/css/atrulesref
+	3. Rules or Rulesets
+		A rule set (also called a rule) comprises a selector followed by a declaration block.
+		A rule or ruleset tells the browser that how to render particular elements in an HTML page.
+		Each CSS Rule consist of 3 parts: 
+        selector                    // Selector
+        {                           // Declaration Block
+            property1: value1;      // Declaration 1
+            property2: value2;      // Declaration 2
+        }
+	4. Selectors - Selector is used to select particular elements in an HTML page.
+	5. Declaration Blocks - { property1: value1; property2: value2;}
+        Multiple CSS declarations are separated with semicolons;
+	6. Declarations - property1: value1; // Each declaration consists of a CSS property and value separated by colon;
+	   Properties - property1, property2
+	   Values - value1, value2
+       Eg: margin-left: 20px; // Do not add a space between the property value and the unit (such as margin-left: 20 px;)
+	7. Comments- A CSS comment starts with /* and ends with */;
+        Eg: /* This is a CSS comment */ 
+	8. Identifiers
+	CSS identifiers are the labels used in property names, keyword values, and at-rule names, as well as in element type names, classes, and IDs within selectors.
+	9. Escape notation
+	10. Syntax errors
+		http://reference.sitepoint.com/css/syntaxerrors
+
+------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+    <head>
+        <title>KnockoutJS: User Signup Form without using Components</title>
+        <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+        <script type="text/javascript" src="./jquery-3.4.1.min.js"></script>
+        
+        <script>
+            var myViewModel = function() {
+                this.firstName = ko.observable('');
+                this.lastName = ko.observable('');
+                this.fullName = ko.pureComputed(function () {
+                    return this.firstName() + " " + this.lastName()
+                });
+                this.email = ko.observable('');
+                this.password = ko.observable();
+            };
+
+            $(document).ready(function () {
+                ko.applyBindings(myViewModel);
+            });
+        </script>
+    </head>
+
+    <body>
+        <fieldset style='width:300px'>
+            <legend>User Sign-up Form</legend>
+            <p>First Name: <input type="text" data-bind="value:firstName" /></p>
+            <p>Last Name: <input type="text" data-bind="value:lastName"/></p>
+            <p>Full Name: <span data-bind="html: fullName"> </span></p>
+            <p>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" data-bind="value:email"/></p>
+            <p>Password: <input type="password" data-bind="value:password"/></p>
+            <p><input type="button" value="Submit" value="Create Account"/></p>
+        </fieldset>
+    </body>
+</html>

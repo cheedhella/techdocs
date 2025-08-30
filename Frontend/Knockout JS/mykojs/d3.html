@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Observables</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <p>First Name: <input data-bind = "value: firstName" /></p>
+   <p>Last Name: <input data-bind = "value: lastName" /></p>
+   <p>Hello, <strong class="highlight" data-bind = "text: fullName"></strong></p>
+   <script>
+      function Employee(first, last) {
+         /*
+         What is Observables?
+            If you declare a ViewModel property as Observable, then each time it is updated, it gets reflected in all places where it is used.
+            You don't need to write any extra code for this, KO takes care of refreshing related dependencies.
+       */
+         this.firstName = ko.observable(first);
+         this.lastName = ko.observable(last);
+         // Knockout tracks dependencies automatically. 
+         // It knows that fullName depends on firstName and lastName, because these get called when evaluating fullName.
+
+         this.fullName = ko.computed(function() {
+            return this.firstName() + " " + this.lastName();
+         }, this);
+      }
+      
+      /*
+         The previous example is a perfect scenario of a ViewModel that might not correlate 100% to a data model. Frequently, a data model separates the first and last name into two separate fields to make editing the data easier. However, in a view, it makes more sense to concatenate them into a single field for display.
+      */
+      ko.applyBindings(new Employee("Malli", "Ch"));
+   </script>
+</body>
+</html>

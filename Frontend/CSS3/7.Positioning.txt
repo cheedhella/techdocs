@@ -1,0 +1,40 @@
+What is Positioning?
+    Using Positioning, you can tell the browser, where to place an element in a document;
+    It is also used layer elements one on top of another;
+
+CSS Position Property
+    postition: static | relative | absolute | fixed; // Defaults to static;
+    Other Offset Properties: top, right, bottom, left;
+        They accept a length or percentage value, and are used to fine tune the element's position;
+
+Static Positioning
+    - Elements are placed one after another another;
+    - It means all block elements are placed from top to bottom and all inline elements are placed from left to right;
+    - Offset properties don't apply;
+
+Fixed Positioning
+    - It allows you to place element at specified position relative to the ViewPort;
+    - It causes the element to leave normal flow of the document and layered along an invisible z-axis;
+    - Because they are positioned relative to the ViewPort, even if you scroll the main page, they don't move;
+    - You can use the Offset properties to specify their position;
+    - It is very useful for things such as header, footer, side columns and watermarks that remain in place as the document is scrolled;
+
+Absolute Positioning
+    - It allows you to place element at specified position relative to the positioned parent OR initial visible area of the document body;
+    - A positioned element is one whose position is anything except static;
+    - It causes the element to leave normal flow of the document and layered along an invisible z-axis;
+    - Because they are positioned relative to positioned element or document body, if you scroll the main page, they move;
+    - You can use the Offset properties to specify their position;
+    - Concept of stretching elements via absolute positioning is an essential ingredient in creating multi-column layouts;
+
+Relative Positioning
+    - Similar to Static Positioning,
+        -- Relative positioned elements don't leave the normal document flow(placed one after another);
+    - As opposed to Static Positioning,
+        -- You can adjust it's position using Offset properties;
+        -- It can be used to change the point of reference for absolutely positioned elements;
+        -- A relatively positioned element can have a position on the (invisible) z-axis (more on this later in this chapter);
+
+Imp Links
+https://learning.oreilly.com/library/view/beginning-css-cascading/9780470096970/ch11.html
+http://techbus.safaribooksonline.com/9781449311179/positioning

@@ -1,0 +1,457 @@
+Grid Layout 
+    It is ideal for any 2-dimensional layout;
+    It replaces float layouts, it uses less code and more reliable code;
+    It works very well with flex layout;
+
+
+CSS Grid introduces a series of properties that allow us to create grid structures and control the placement and sizing of grid items using CSS. 
+This means that we are able to use media queries to adapt our grids to different contexts. 
+We can rearrange the layout of grid items independent of their source order, which allows us to shift grid items 
+around to cater for these varying contexts without having to change the underlying markup.
+
+Grid also comes with a powerful auto-placement algorithm, which makes it easier to fill up available space 
+without having to do a lot of complicated calculations. 
+To a certain extent, Grid even allows some flexibility on the z-axis, in that you can overlap grid items if you need to.
+
+
+Grid vs Table Layout
+    Grids are far more powerful than Tables:
+    - Grid allows pieces of the design to be laid out independently of their document source order;
+    - It even allows overlap pieces of the layout;
+    -  There arepowerfully flexible methods for defining repeating patterns of gridlines, attaching elements to those grid lines, and more. 
+    - You can nestgrids inside grids, or for that matter, attach tables or flexboxcontainers to a grid.
+    - And much, much more.
+
+Grid vs Flex Layout
+--------------------------------------------------------------------------------------------------------------------------------------------
+New Terms
+
+There are 2 types of elements in a Grid: 
+    Grid Container  -> an element that hold all the grid items; // display: grid | inline-grid;
+    Grid Items      -> all the direct children of grid container are grid items;
+
+There are 2 types of Grid Containers:
+    Block Grid      -> display: grid;
+    Inline Grid     -> display: inline-grid;
+
+There are 2 axes in every Grid:
+    Row Axis        -> X Axis;
+    Column Axis     -> Y Axis;
+
+Grid Line 
+    It is horizontal or vertical line in the grid container, which separates the grid container into rows, columns and cells;
+    By default, each horizontal line in the grid is numbered, starting from 1;
+    Also, each vertical line in the grid is numbered, starting from 1;
+
+    You can also name the grid lines as you wish;
+    You can also mix them together; // For eg, it is valid to say 'a grid item stretches from column line 3 to line steve;
+    You can also give more than one name to a grid line. You can use any of them to refer to that line;
+
+Grid Track 
+    Space between 2 adjacent grid lines is called a Track; 
+    It goes from one edge of the cotainer to another; It could be a horizontal OR vertical;
+    
+Row -> A track that is horizontal;
+Column -> A track that is vertical;
+
+Gutter
+    Space between 2 Rows and Columns; Row gutter can be different from Column gutter;
+
+Grid Cell
+    It is the smallest unit of area in the grid, that is bounded by 4 grid lines, with no other grid lines running through it; // Similar to table cell;
+    There is no property to associate a grid item with a grid cell directly;
+    
+Grid Area 
+    Any rectangular area in the grid, that is bounded by 4 grid lines;
+    It can be as small as a single cell OR as large as all the cells in the grid;
+    CSS allows you to associate grid items to a grid area;
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+display: grid;
+    It converts the container to grid and all it's children into grid items;
+    By default, it will create an implicit grid(without explicit grid) with 1 column. 
+    So, the following code look the same as normal flow of the document;
+    Eg: 
+        .container {
+            display: grid;
+        }
+        .box {
+            border: 1px solid pink;
+            background-color: pink;
+            padding: 2px;
+        }
+        <div class="container">
+            <div class="box">One</div>
+            <div class="box">Two</div>
+        </div>
+--------------------------------------------------------------------------------------------------------------------------------------------
+Grid can be defined either implicitly or explicitly;
+
+Explicit Grid
+    A grid is explicit, if the number of rows and columns are defined explicitly using grid-template-rows, grid-template-columns, grid-template-areas;
+    
+Implicit Grid    
+    If there are more grid items than cells in the grid OR when a grid item is placed outside of the 
+    explicit grid, the grid container automatically generates grid tracks by adding grid lines to the grid;
+    These automatically added grid tracks and lines are together called Implicit Grid;
+
+    Also, If you don't specify the number of rows and columns, display:grid creates only an implicit grid 
+    (without explicit grid) with 1 column;
+
+grid-auto-flow: row | column | row dense | column dense; // Defaults to row;
+    row
+        By default, this algorithm places grid items column by column, row by row, according to the order of 
+        the items in the markup. When an item doesn’t fit in one row(maybe because it spans too many grid tracks),
+        the algorithm moves it to the next row, looking for the space large enough to accommodate it;
+        If there are no tracks suited for a grid item, it adds new row tracks implicitly;
+
+    column -> It places the items column by column and adds new columns if needed;
+    row dense -> It places the items row by row, filling any holes and adding new rows if needed; // grid-auto-flow: dense, which is equivalent to grid-auto-flow: row dense;
+    column dense -> It places the items column by column, filling any holes and adding new columns if needed;
+
+grid-auto-columns: auto | min-content | max-content | length; // Defaults to auto;
+    It is used to set the width of an implicit column track;
+
+grid-auto-rows: auto | length | min-content | max-content | minmax() | fit-content(); // Defaults to auto;
+    It is used to set the height of an implicit row track;
+
+    Eg: grid-auto-rows: 60px; 
+        grid-auto-columns: 200px;
+            With this, implicit tracks will have a height of 200px and width of 60px, no matter 
+            if the grid item fits or not;
+    Eg: grid-auto-rows: minmax(60px, auto); 
+        grid-auto-columns: minmax(200px, auto);
+            With this, implicit tracks are now at least 200px wide and 60px high, but
+            will expand if the content demands it;
+
+TODO: default size of implicit tracks;
+--------------------------------------------------------------------------------------------------------------------------------------------
+Grid Container Properties
+    grid-template-rows, grid-template-columns, grid-template, grid-template-areas;
+    grid-auto-flow, grid-auto-rows, grid-auto-columns; grid-row-gap, grid-column-gap, grid-gap;
+
+grid-template-rows: none | <track-list> | <auto-track-list>;
+grid-template-columns: none | <track-list> | <auto-track-list>;
+    Using this, 
+        - You can define the number of grid lines(both horizontally and vertically);
+        - You also give custom name to each grid line;
+        - You can also specify the width/height of each track;
+
+grid-template: none | grid-template-rows / grid-template-columns | grid-template-areas; // Shorthand, defaults to none;
+    Eg: grid-template: 200px / auto auto; // Creates grid with two columns and one row with a 200px height;
+
+grid-template-areas: none | <string>+; // Defaults to none, meaning no grid areas;
+    It allows us to define named rectangular grid areas in the container;
+
+grid-column-gap: <length> | <percentage>;
+grid-row-gap: <length> | <percentage>;
+    It specifies the gutter size OR gap b/w two consecutive grid columns and rows, respectively;
+    Gutters do not appear on the edges of the grid, which means there is no gutter before the first track and after the last track;
+    
+justify-items: center | start | end | stretch; // Defaults to stretch;
+    Used to justify the content within grid items horizontally;
+
+    stretch -> Fills up the width of the grid area;
+    start -> Justifies content of grid items with the starting edge of the grid area along the row-axis
+    center -> Justifies content of grid items in the center of the grid area along the row-axis
+    end -> Justifies content of grid items with the ending edge of the grid area along the row-axis
+
+align-items: auto | start | center | end | stretch | baseline | first baseline | last baseline; // Defaults to stretch;
+    It is used to align all items on Y-Axis;
+    
+
+
+
+
+    Used to justify the content within grid items vertically;
+
+    stretch -> Fills up the height of the grid area;
+    start -> Aligns content of grid items with the starting edge of the grid area along the column-axis
+    center -> Aligns content of grid items in the center of the grid area along the column-axis
+    end -> Aligns content of grid items with the ending edge of the grid area along the column-axis
+
+
+justify-content: center | start | end | space-between | space-around | space-evenly;
+    Sometimes the edges of the grid do not correspond to the edges of the grid container, which could happen if the grid tracks are sized with fixed units.
+    For such cases, we can justify the grid within the grid container along the row-axis, by applying the justify-content property to the grid container.
+
+    center -> Centers the grid within the grid container along the row-axis;
+    start -> Aligns the grid to be flush with the starting edge of the grid container along the row-axis
+    end -> Aligns the grid to be flush with the ending edge of the grid container along the row-axis
+    space-around -> Distributes the grid tracks evenly within the grid container along the row-axis such that each grid track has equal space on either side of it, with a half-size space on either end.
+    space-between -> Distributes the grid tracks evenly within the grid container along the row-axis with the first grid track flush with the starting edge of the grid container, and the last grid track flush with the ending edge of the grid container.
+    space-evenly -> Distributes the grid tracks evenly within the grid container along the row-axis such that the space between any 2 adjacent grid tracks are the same.
+
+align-content: center | start | end | space-between | space-around | space-evenly
+    Sometimes the edges of the grid do not correspond to the edges of the grid container, which could happen if the grid tracks are sized with fixed units. 
+    For such cases, we can align the grid within the grid container along the column-axis, by applying the align-content property to the grid container. 
+
+    center -> Centers the grid within the grid container along the column-axis
+    start -> Aligns the grid to be flush with the starting edge of the grid container along the column-axis
+    end -> Aligns the grid to be flush with the ending edge of the grid container along the column-axis
+    space-around -> Distributes the grid tracks evenly within the grid container along the column-axis such that each grid track has equal space on either side of it, with a half-size space on either end.
+    space-between -> Distributes the grid tracks evenly within the grid container along the column-axis with the first grid track flush with the starting edge of the grid container, and the last grid track flush with the ending edge of the grid container.
+    space-evenly -> Distributes the grid tracks evenly within the grid container along the column-axis such that the space between any 2 adjacent grid tracks are the same.
+
+grid 
+    grid: <�grid-template�> | <�grid-template-rows�> / [ auto-flow && dense? ] <�grid-auto-columns�>? | [ auto-flow && dense? ] <�grid-auto-rows�>? / <�grid-template-columns�>
+    This is a shorthand that sets all the explicit grid properties and all the implicit grid properties in a single declaration. It also resets any gutter properties set earlier in the cascade. It will impact the following 8 sub-properties:
+    /* Initial values of each sub-property */
+    grid-template-rows: none
+    grid-template-columns: none
+    grid-template-areas: none
+    grid-auto-rows: auto
+    grid-auto-columns: auto
+    grid-auto-flow: row
+    grid-column-gap: 0
+    grid-row-gap: 0
+--------------------------------------------------------------------------------------------------------------------------------------------
+Grid Item Properties
+    grid-row-start, grid-row-end, grid-column-start, grid-column-end, grid-row, grid-column, grid-area;
+
+grid-row-start, grid-row-end, grid-column-start, grid-column-end, grid-row, grid-column;
+    These properties are used to define the position and size of a grid item;
+
+    grid-row-start -> specifies the row line where the grid item starts;
+    grid-row-end -> specifies the row line where the grid item ends;
+    grid-column-start -> specifies the column line where the grid item starts;
+    grid-column-end -> specifies the column line where the grid item starts;
+    
+    // Shorthand Proerpties
+    grid-row: grid-row-start / grid-row-end;
+    grid-column: grid-column-start / grid-column-end;
+    grid-area: grid-row-start / grid-column-start / grid-row-end / grid-column-end;
+
+    grid-area can also be used to position a grid item to one of the grid areas defined using grid-template-areas;
+    
+
+
+
+    Eg:
+        grid-row: 1 / 2;
+        grid-row: 1 / 3;
+        grid-column: 1 / span 2;
+        grid-column: 1 / -1;
+
+justify-self: center | start | end | stretch;
+align-self: center | start | end | stretch;
+
+
+justify-self 
+align-self - Overwrite the align-items value of conatainer for this particular cell;
+order 
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+grid-template-rows: none | <track-list> | <auto-track-list>;
+grid-template-columns: none | <track-list> | <auto-track-list>;
+    track-list      -> [<line-names>? [<track-size> | <track-repeat>]]+ <line-names>? 
+    auto-track-list -> [<line-names>? [<fixed-size> | <fixed-repeat>]]* <line-names>? <auto-repeat>
+    track-repeat    -> repeat([<positive-integer>], [<line-names>? <track-size>]+ <line-names>?)
+    fixed-repeat    -> repeat([<positive-integer>], [<line-names>? <fixed-size>]+ <line-names>?)
+    auto-repeat     -> repeat([auto-fill | auto-fit], [<line-names>? <fixed-size>]+ <line-names>?)
+
+    These properties are used specify the size of each grid track and optionally grid line names;
+    Examples:
+        // <track-list> values
+        grid-template-rows: 100px 1fr;
+        grid-template-rows: [linename] 100px;
+        grid-template-rows: [linename1] 100px [linename2 linename3];
+        grid-template-rows: minmax(100px, 1fr);
+        grid-template-rows: fit-content(40%);
+        grid-template-rows: repeat(3, 200px);
+        grid-template-rows: subgrid;
+
+        // <auto-track-list> values
+        grid-template-rows: 200px repeat(auto-fill, 100px) 300px;
+        grid-template-rows: minmax(100px, max-content) repeat(auto-fill, 200px) 20%;
+        grid-template-rows: [linename1] 100px [linename2] repeat(auto-fit, [linename3 linename4] 300px) 100px;
+        grid-template-rows: [linename1 linename2] 100px repeat(auto-fit, [linename1] 300px) [linename3];
+
+There are 3 ways to define <track-size>:
+    1. <track-breadth>
+        - It can be any valid length(px, em) or percentage;
+        - It can be a Fractional Unit;
+        - It can be auto, min-content, max-content;
+    2. minmax(<min>, <max>);
+    3. fit-content(<length>);
+
+What is none?
+    It means that there is no explicit grid;
+    Rows are implicitly generated and their size is determined by grid-auto-rows property;
+
+What is auto?
+    Grid items behave like block elements;
+    If you don't specify their size, auto keyword adjusts the width of those items to the max width of it's content;
+    Their height is determined by their content, if it is not explicitly declared;
+    
+    It means that the element shrinks and expands based on its content, never having a need to overflow;
+    It will fill up all the remaining space available;
+
+What is Fractional Unit?
+    It takes up a share of the remaining space propotion to its flex factor;
+    For eg, given a grid container of 750px width with 3 columns of 150px, 1fr and 2fr respectively.
+        First column takes up 150px and the other 2 flex columns will take up the remaining 600px in the 1:2 ratio;
+        So that second column takes up 200px and the third column takes up 400px;
+
+What is min-content?
+    If you set a column track that contains only text to min-content, it will become as narrow as the 
+    longest run of the text that can't be line-broken within the track;
+    If you set a row track to min-content, it will never overflow, it will expand to fit-in the content!
+
+What is max-content?
+    If you set a column track that contains only text to max-content, it will become as widest as the 
+    longest run of the text, without any line-wrapping of the text;
+    
+What is minmax()?
+    Using this, you can specify the minimum and maximum size of a grid track. Grid track will not grow OR shrink outside the specified range;
+
+    minmax(<min>, <max>);
+        min - It can be <length> | <percentage> | min-content | max-content | auto;
+        max - It can be <length> | <percentage> | min-content | max-content | auto | <flex>;
+        If min is larger than max, then max is ignored and min is used as a minimum;
+
+    Examples:
+        minmax(200px, 1fr)
+        minmax(400px, 50%)
+        minmax(30%, 300px)
+        minmax(50%, min-content)
+        minmax(min-content, 400px)
+
+        minmax(100px, max-content)
+        minmax(max-content, 200px)
+
+        minmax(200px, auto)
+        minmax(auto, 300px)
+        minmax(min-content, auto)
+        minmax(max-content, auto)
+
+    grid-template-columns: minmax(200px, 400px)         -> minimum of 200px and maximum of 400px;
+    grid-template-columns: minmax(200px, auto)          -> minimum of 200px and as maximum is set to auto, it will expand to fit it's content, when content is more than 200px;
+    grid-template-columns: minmax(200px, 400px) 1fr          -> First track takes up minimum of 200px and maximum of 400px; Second track takes up all remaining space;
+    grid-template-columns: minmax(200px, 1fr) 200px          -> minimum of 200px and as maximum is set to 1fr, it will expands to take up it's share of free space;
+    grid-template-columns: repeat(3, minmax(200px, 400px))   -> 3 column tracks that are minimum of 200 pixels wide and a maximum of 400 pixels;
+    grid-template-rows: repeat(2, minmax(300px, auto));      -> 2 row tracks which are at least 300 pixels tall but have a maximum set of auto so they will expand to fit their content;
+    grid-template-columns: minmax(20px, auto) 1fr 1fr;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+
+
+What is fit-content([<length> | <percentage>])?
+    It accepts one parameter(maximum value);
+    A grid column/row with this property set will still take up as little space as necessary, according to 
+    its content, but no more than the specified maximum value;
+    
+    It is similar to using the minmax() function, with a minimum value of 0;
+    One key difference is: 
+        minmax() is more likely to occupy more space than it's content;
+        fit-content() does not occupy more space than necessary;
+        
+What is repeat([<integer> | auto-fill | auto-fit], <track-list>)?
+    If you want to create a number of tracks with same size, then you can use the repeat function;
+    It takes 2 params: 
+        First param can be a
+            - a positive number -> specifies number of tracks;
+            - auto-fill, auto-fit -> calculation of number of tracks is delegated to the browser;
+        Second param specifies  
+            - size of each track;
+    Eg: grid-template-columns: repeat(3, 1fr); // grid-template-columns: 1fr 1fr 1fr;
+
+    ---------------------
+    By using auto-fill and auto-fit, we can create a responsive grid container without using media queries;
+
+    auto-fill
+        It creates as many tracks as fit into the grid container without causing the grid to overflow;
+        Eg: grid-template-columns: repeat(auto-fill, 100px);
+            grid-template-columns: repeat(auto-fill, 1fr); // creates 1 column with all available space;
+
+    auto-fit 
+        It also creates as many tracks as fit into the grid container without causing the grid to overflow;
+    
+    auto-fill VS auto-fit
+        Only difference is, auto-fit will collapse any empty tracks(tracks whose size is 0px);
+        Eg:
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); // creates as many tracks of 150px size as possible and any remaining space is equally distributed;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); // creates as many tracks of 150px size as possible, any unoccupied tracks are collapsed and remaining space is equally distributed;
+--------------------------------------------------------------------------------------------------------------------------------------------
+There are three kinds of track sizing. These are:
+
+Fixed
+    Tracks are given a size in absolute lengths (such as px or em), or sized with %. 
+    Percentage values count as fixed track sizes because they are always the same for a given grid container size.
+    The tracks’ sizing does not depend on their contents.
+
+Flexible
+    Tracks are given a flex or fractional sizing via the fr unit. 
+    Their sizing does not depend on their contents.
+
+Intrinsic
+    The tracks’ size is dependent on the things found within them; i.e., with min-content, max-content, fit-content(), and auto. 
+    These tracks may always be the same size for a given container size and set of content, but they 
+    are not regarded as fixed for layout purposes because their contents directly affect their sizing.
+
+The process of actually determining the size of grid tracks, including what to do when track sizes 
+are overconstrained or could lead to circular dependencies, is too long to go into here. 
+In broad strokes, this is the process to find the track sizes:
+    1. Initialize track sizes, including determining the minimum and maximum sizes for each track. 
+       Resolve fixed track sizes to absolute length values. 
+       Set intrinsically sized tracks’ minimum size to zero and maximum size to unlimited. 
+       Flexible tracks are left flexible, with an initial minimum size of zero.
+    2. Determine the size of intrinsic (e.g., auto) tracks, resolving each to an absolute length. 
+       First find sizes based on the items within the track, and then gradually add space to encompass items that span multiple tracks.
+    3. Maximize tracks up to their growth limit (this is determined automatically).
+    4. Expand flexible (fr) tracks by adding space according to the ratio of each track’s flex factor to 
+       the total of all flex factors in the grid track.
+    5. Expand any auto-sized tracks by dividing the remaining free space (if any) by the number of 
+       auto tracks and expanding them equally.
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+There is no requirement that all grid areasbe filled with an item; 
+It is perfectly possible to have some or evenmost of a grid’s cells be empty of any content. 
+It’s also possible tohave grid items overlap each other, either by defining overlapping gridareas or by using 
+grid-line references that create overlapping situations.
+
+Another thing to keep in mind is that you can define as many or as fewgrid lines as you wish. 
+You could literally define just a set ofvertical grid lines, thus creating a bunch of columns and only one row.
+Or you could go the other way, creating a bunch of row tracks and nocolumn tracks (though there would be 
+one, stretching from one side ofthe grid container to the other).
+
+The flip side to that is if you create a condition where a grid itemcan’t be placed within the column and 
+row tracks you define, or if youexplicitly place a grid item outside those tracks, new grid lines andtracks 
+will be automatically added to the grid to accommodate.
+
+
+
+firefox quantum -> It has best dev tools to work with grid layout;
+
+fr unit
+    It occupies all remaining space like flex-grow; It works on row height as well;
+    If there is any free space in the container, you can tell a track to occupy all of it using fr unit;
+    is it possible to distribute free space equally to all tracks? Yes;
+
+    1fr -> one fraction of available space;
+
+By default, all grid items are laid out in the grid as per their order in the source code; You can change it;
+Positioning grid items:
+
+
+
+
+
+https://stackoverflow.com/questions/40740553/what-is-the-difference-between-align-items-vs-align-content-in-grid-layout
+
+TODO
+    There are differences b/w grid block container and regular block container:
+        https://learning.oreilly.com/library/view/grid-layout-in/9781491930205/ch01.html#grid-layout
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+Important Links
+http://grid.malven.co - Quick Reference
+https://tympanus.net/codrops/css_reference/grid/
+https://learning.oreilly.com/library/view/css-pocket-reference/9781492033387/ch01.html
+https://www.joomlashack.com/blog/tutorials/auto-fill-and-auto-fit-keywords-in-css-grid - auto-fill vs auto-fit
+https://mdn.mozillademos.org/en-US/docs/Web/CSS/align-items$samples/Example?revision=1585974 - align-items example;
+
+https://learning.oreilly.com/library/view/css-in-depth/9781617293450/kindle_split_015.html
+https://learning.oreilly.com/library/view/css-the-definitive/9781449325053/ch13.html
+https://learning.oreilly.com/library/view/the-new-css/9781492017943/NewCSSLayout_ebook-9.xhtml
+https://learning.oreilly.com/library/view/css-mastery-third/9781430258643/A314884_3_En_7_Chapter.html
+https://learning.oreilly.com/library/view/the-new-css/9781492017943/NewCSSLayout_ebook-7.xhtml

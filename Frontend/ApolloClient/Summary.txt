@@ -1,0 +1,12 @@
+ how to integrate Apollo Client, to consume a GraphQL API, from your React app.
+
+
+ Apollo Client is UI framework agnostic, which is super beneficial. You could use it with Angular, Vue, React or even native iOS and Android applications. The frontend application sends the GraphQL query to the Apollo Client, which processes the query and requests data from the GraphQL server. Note that the Apollo Client is agnostic of your GraphQL server’s technology. It is compatible across any build setup and GraphQL API.
+
+The GraphQL server then sends the data response back to the Apollo Client. Which then normalizes and stores the data. The frontend application receives the UI updates. Apollo Client basically does some of the hard lifting work for the frontend application. It also provides intelligent caching out of the box.
+
+
+Apollo Client is a framework-agnostic GraphQL client that helps you fetch data and keep your client state in sync with the server.
+
+
+https://codepen.io/abovino/details/xYVYGO - t0d0 material ui

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Observables</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <p>First Name: <input data-bind = "value: firstName" /></p>
+   <p>Last Name: <input data-bind = "value: lastName" /></p>
+   <p>First Name: <strong class="highlight" data-bind="text: firstName"></strong></p>
+   <p>Last Name: <strong class="highlight" data-bind="text: lastName"></strong></p>
+   <script>
+      /*
+         What is Observables?
+            If you declare a ViewModel property as Observable, then each time it is updated, it gets reflected in all places where it is used.
+            You don't need to write any extra code for this, KO takes care of refreshing related dependencies.
+      */
+      var myEmployee = {
+         "firstName": ko.observable("Malli"),
+         "lastName": ko.observable("Ch")
+      };
+      ko.applyBindings(myEmployee);
+      /*
+      // Reading Observable values
+      myEmployee.firstName();
+      myEmployee.lastName();
+
+      // Writing Observable values
+      myEmployee.firstName('Matt');
+      myEmployee.lastName('Daemon');
+      // OR
+      myEmployee.firstName('Matt').lastName('Daemon');
+      */
+      /*
+      var myEmployeeNotObservable = {
+         "firstName": "Malli",
+         "lastName": "Ch"
+      };
+      ko.applyBindings(myEmployeeNotObservable);
+      
+      function Employee(first, last) {   
+         this.firstName = ko.observable(first);
+         this.lastName = ko.observable(last);
+      }
+      ko.applyBindings(new Employee("Malli", "Ch"));
+      */
+   </script>
+</body>
+</html>

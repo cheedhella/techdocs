@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+    <head>
+        <title>KnockoutJS: Like or Unlike Component</title>
+        <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+        <script type="text/javascript" src="./jquery-3.4.1.min.js"></script>
+        <style type="text/css">
+            ul { 
+                margin: 0; 
+            }
+            .liveExample {
+                width: 400px;
+            }
+            .liveExample .product {
+                list-style-type: none;
+                background-color: rgba(0,0,0,0.1);
+                padding: 1em; 
+                border-radius: 1em;
+                min-height: 3.5em;
+            }
+            .liveExample .product + .product { 
+                margin-top: 1em;  
+            }
+            .liveExample > button { 
+                margin: 0.5em 0; 
+            }
+        </style>
+    </head>
+    <body class="liveExample">
+        <script>
+            ko.components.register('like-widget', {
+                // Component ViewModel
+                viewModel: function(params) {
+                    this.chosenValue = params.value; // can be either null, 'like', or 'dislike'
+                    this.like = function() { this.chosenValue('like'); }.bind(this);
+                    this.dislike = function() { this.chosenValue('dislike'); }.bind(this);
+                },
+                // Component template or view
+                template:
+                    '<div class="like-or-dislike" data-bind="visible: !chosenValue()">\
+                    <button data-bind="click: like">Like it</button>\
+                    <button data-bind="click: dislike">Dislike it</button>\
+                    </div>\
+                    <div class="result" data-bind="visible: chosenValue">\
+                    You <strong data-bind="text: chosenValue"></strong> it\
+                    </div>'
+            });
+            
+            function Product(name, rating) {
+                this.name = name;
+                this.userRating = ko.observable(rating || null);
+            }
+            
+            // Application ViewModel
+            function MyViewModel() {
+                this.products = [
+                    new Product('Garlic bread'),
+                    new Product('Pain au chocolat'),
+                    new Product('Seagull spaghetti', 'like') // This one was already 'liked'
+                ];
+            }
+            
+            $(document).ready(function () {
+                ko.applyBindings(new MyViewModel());
+            });
+        </script>
+        <!-- View -->
+        <ul data-bind="foreach: products">
+            <li class="product">
+                <strong data-bind="text: name"></strong>
+                <like-widget params="value: userRating"></like-widget>
+            </li>
+        </ul>
+    </body>
+</html>

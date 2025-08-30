@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS Form Field Bindings: options</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+</head>
+<body>
+    <!-- It is same as options binding, but you can specify which option(s) to select by default. -->
+    <p>Destination Country: <select width='80px' data-bind="options: availableCountries, selectedOptions: choosenCountries" multiple="true"></select></p>
+    <input type="button" value="Add Country" data-bind="click: addCountry" />
+
+    <script>
+      var myViewModel = {
+          availableCountries: ko.observableArray(['Australia', 'USA', 'Sri Lanka']),
+          choosenCountries: ko.observableArray(['Australia', 'Sri Lanka']),
+          addCountry: function() {
+            this.availableCountries.push("Bangladesh");
+          }
+      };
+
+      ko.applyBindings(myViewModel);
+    </script>
+</body>
+</html>

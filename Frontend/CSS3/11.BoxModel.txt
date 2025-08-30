@@ -1,0 +1,54 @@
+https://learning.oreilly.com/library/view/beginning-css-cascading/9780470096970/ch07.html
+
+
+CSS padding - space between an element's border and its content, applies to both inline and block level elements.
+
+CSS border - space between margin on the outside and padding on the inside.
+	border: thickness border-style color; // border: 5px solid yellow; Notice that there are no commas separating the properties.
+
+	border-style - none, hidden, dotted, dashed, solid, double
+		http://www.w3schools.com/css/tryit.asp?filename=trycss_border-style
+		border-top-style, border-right-style, border-bottom-style, border-left-style
+
+	border-width - length, thin, medium, thick
+
+	border-color
+
+CSS margin - space surrounding an element, applies to only block level elements.
+	p { margin-top: 10px; margin-right: 20px; margin-bottom: 30px; margin-left: 40px; }
+
+	// short-hand notation
+	p { margin: 10px 20px 30px 40px; } // sequence is clockwise from the top â€” top, right, bottom, left.
+
+
+
+Browser-specific properties - 
+
+        padding between an element's edges and its content. It can be applied to both block and inline elements.
+is just like a margin, except it's the white space between the margin (and border) and the actual content. 
+Unlike margin, which inherits the background color of whatever is around the margin, padding uses the background-color 
+specified for whatever it is padding (e.g. the "content content"). 
+
+
+
+A border can be a visual separator between the margin on the outside, and the padding on the inside. 
+You can set the width, color, and style of the entire border, or you can set each of these properties individually for each side. 
+
+  border: thickness  border-style  color
+  
+	http://www.squidoo.com/borders-and-more
+
+
+
+
+border-style, border-color, border-width
+display: inline; // You can make an inline element display like a block-level element or vice-versa.
+display: list-item; // To make an <li> look like a normal bulleted item, change it to display: list-item.
+text-align: justify
+
+Always remember to add in px, or em, or whatever.
+
+css width of an element does not include padding, borders, or margin.
+Inherited: No
+
+

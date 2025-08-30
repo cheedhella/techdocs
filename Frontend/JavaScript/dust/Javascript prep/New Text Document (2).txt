@@ -1,0 +1,148 @@
+Scope of variables 
+	local - local to the function in which it is declared. global - can be referenced from anywhere in the current document.
+	within the body of a function, a local variable takes precedence over a global variable with the same name.
+
+	local variables must be declared using var keyword. what happens if you skip var keyword?
+
+	scope = "global"; // We can declare a global variable, even without var 
+	function checkscope() { 
+		scope = "local"; // Oops! We just changed the global variable 
+		document.write(scope); // Uses the global variable 
+		myscope = "local"; // This implicitly declares a new global variable 
+		document.write(myscope); // Uses the new global variable 
+	} 
+	checkscope(); // Prints "locallocal" 
+	document.write(scope); // This prints "local" 
+	document.write(myscope); // This prints "local"
+
+
+typeof - returns the datatype of an operand.
+
+	var var1 = true;
+	var var2 = 10;
+	var var3 = "Hello World";
+	var var4 = new String("Hello World");
+	var var5 = new Date();
+	var var6 = [1, 2, 3];
+
+	typeof(var1); // returns boolean
+	typeof(var2); // returns number
+	typeof(var3); // returns string
+	typeof(var4); // returns object
+	typeof(var5); // returns object
+	typeof(var6); // returns object, not array. 
+		how to check if a variable is an array or not? http://www.guyfromchennai.com/?p=27
+		obj.constructor.toString().indexOf(”Array”) != -1
+		obj instanceof Array
+
+	typeof(Math.PI); // returns number
+	typeof(var6.splice); // returns function
+
+	typeof(undeclaredVariable); // returns undefined
+	typeof(null); // returns object
+	typeof(typeof(anything)); // returns string
+	typeof {} // "object"
+	typeof [] // "object"
+
+instanceof - returns a boolean value indicating whether an object is an instance of a particular class.
+	var result = objectName instanceof className;
+
+	You can use instanceof operator to determine whether an object is an array or not, as typeof operator returns object for an array.
+
+body.onload vs document.ready
+	onload is triggered only after all the resources(DOM/HTML, CSS, images) are loaded. only one onload event handler per page.
+	document.ready is jquery specific and is triggered once HTML is loaded. there can be multiple document.ready event handlers per page.
+
+
+http://blog.alexanderdickson.com/manipulating-classes-with-javascript
+
+document.getElementById('answer-15040335').classList.add(), remove(), toggle(), contains()
+http://nostrongbeliefs.com/notes-on-the-classlist-api/
+
+primitive data types: boolean, number, string
+composite data types: array, function, object
+special data types: undefined, null
+
+
+Javascript also has builtin objects known as Boolean, Number, String. These builtin objects are very different from primitive data types. 
+They have their own properties and methods.
+
+string data type - sequence of characters enclosed between single or double quotes.
+	var strString = "This is a string";
+	var anotherString= 'But this is also a string';
+
+
+
+
+
+
+NaN
+Infinity
+Number.MAX_VALUE
+Number.MIN_VALUE
+
+
+You can convert other data types, such as numbers and booleans, to a string; typically, the scripting engine will do the conversion automatically, based on the context. As an example, if a numeric or boolean variable is passed to a function that expects a string, the value is implicitly converted to a string first, before the value is processed:
+
+var strValue = "4" + 3 + 1; // becomes "431"
+var strValueTwo = 4 + 3 + "1"; // becomes 71
+
+However, if you use operators other than +, the opposite type of conversion is applied—the string is converted to a number:
+var firstResult = "35" - 3; // subtraction is applied, resulting in 32
+var secondResult = 30 / "3"; // division is applied, resulting in 10
+var thirdResult = "3" * 3; // multiplication is applied, resulting in 9
+
+
+
+document.formName.elements.length - returns no. of elements in the form.
+document.formName.elements[0].type - returns type of the 1st element in the form.
+	Possible values: button | checkbox | file | hidden | image | password | radio | reset | select-one | select-multiple | submit | text | textarea
+document.formName.elements[0].<attribute-name> - returns the value of specified attribute such as name, value etc.
+
+
+
+
+document.formName.buttonName.disabled = true; // to disable the button
+document.formName.buttonName.disabled = false; // to enable the button
+
+document.formName.checkBoxName.disabled = false; // to enable the checkbox
+document.formName.checkBoxName.disabled = true; // to disable the checkbox
+document.formName.checkBoxName.checked = true; // to check the checkbox
+document.formName.checkBoxName.checked = false; // to uncheck the checkbox
+
+
+document.formName.hiddenFieldName.value - returns the value of specified hidden field
+
+
+
+
+
+function checkall()
+{
+for(i=0; i<document.FormName.elements.length; i++)
+{
+if(document.FormName.elements[i].type=="checkbox")
+{
+document.FormName.elements[i].checked=true;
+}
+}
+}
+
+function uncheckall()
+{
+for(i=0; i<document.FormName.elements.length; i++)
+{
+if(document.FormName.elements[i].type=="checkbox")
+{
+document.FormName.elements[i].checked=false;
+}
+}
+}
+
+
+
+
+
+http://api.jquery.com/jQuery.isArray/
+
+

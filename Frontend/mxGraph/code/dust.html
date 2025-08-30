@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <title>mxGraph - Hello World</title>
+        <!-- 
+            mxBasePath - It defines base path for all JS libraries/files; It must be defined before loading the mxClient library;
+            imageBasePath - It defines base path for all images;
+        -->
+        <script type="text/javascript">
+            var graph, a, b1, b2, b3, c, e1, e2, e3, e4, e5, e6;
+            mxBasePath =
+                "/Users/mcheedhe/Data-new/Technical/UI Tech/mxGraph/code";
+        </script>
+        <!-- Load and initialize the library -->
+        <script type="text/javascript" src="lib/mxClient.js"></script>
+
+        <script type="text/javascript">
+            // Program starts here. Creates a sample graph in the
+            // DOM node with the specified ID. This function is invoked
+            // from the onLoad event handler of the document (see below).
+            function main(container) {
+                // Check if the browser is supported
+                if (!mxClient.isBrowserSupported()) {
+                    // Displays an error message if the browser is not supported.
+                    mxUtils.error("Browser is not supported!", 200, false);
+                } else {
+                    // Disables the built-in context menu
+                    mxEvent.disableContextMenu(container);
+
+                    // Creates the graph inside the given container
+                    graph = new mxGraph(container);
+
+                    // Enables rubberband selection
+                    new mxRubberband(graph);
+
+                    // Gets the default parent for inserting new cells. This
+                    // is normally the first child of the root (ie. layer 0).
+                    var parent = graph.getDefaultParent();
+
+                    // Adds cells to the model in a single step
+                    graph.getModel().beginUpdate();
+                    try {
+                        a = graph.insertVertex(
+                            parent,
+                            "a",
+                            "A",
+                            50,
+                            100,
+                            80,
+                            30
+                        );
+                        b1 = graph.insertVertex(
+                            parent,
+                            "b1",
+                            "B1",
+                            200,
+                            50,
+                            80,
+                            30
+                        );
+                        b2 = graph.insertVertex(
+                            parent,
+                            "b2",
+                            "B2",
+                            200,
+                            100,
+                            80,
+                            30
+                        );
+                        b3 = graph.insertVertex(
+                            parent,
+                            "b3",
+                            "B3",
+                            200,
+                            150,
+                            80,
+                            30
+                        );
+                        c = graph.insertVertex(
+                            parent,
+                            "c",
+                            "C",
+                            350,
+                            100,
+                            80,
+                            30
+                        );
+                        e1 = graph.insertEdge(parent, "e1", "", a, b1);
+                        e2 = graph.insertEdge(parent, "e2", "", b1, c);
+                        e3 = graph.insertEdge(parent, "e3", "", a, b2);
+                        e4 = graph.insertEdge(parent, "e4", "", b2, c);
+                        e5 = graph.insertEdge(parent, "e5", "", a, b3);
+                        e6 = graph.insertEdge(parent, "e6", "", b3, c);
+                        i = graph.insertVertex(
+                            parent,
+                            "i",
+                            "Isolated",
+                            350,
+                            150,
+                            80,
+                            30
+                        );
+                    } finally {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+                    graph.doResizeContainer();
+                }
+            }
+        </script>
+    </head>
+    <!-- Page passes the container for the graph to the program -->
+
+    <body onload="main(document.getElementById('graphContainer'))">
+        <!-- Creates a container for the graph with a grid wallpaper -->
+        <div
+            id="graphContainer"
+            style="
+                position: relative;
+                overflow: hidden;
+                width: 450px;
+                height: 250px;
+                background: url('editors/images/grid.gif');
+                cursor: default;
+            "
+        ></div>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MVVM using KnockoutJS</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+        <style>
+            .highlight {
+                color: green;
+            }
+        </style>
+    </head>
+    <body>
+        <!--
+            Data binding is accomplished by adding an HTML attribute called data-bind to any HTML element;
+            In this example, span tag is data-bound to 'name' property of the ViewModel.
+        -->
+        <h1>Hello <span class="highlight" data-bind="text: name"></span></h1>
+        <script>
+            // ViewModel - It contains data that needs to be bind to the View; It can be any simple/complex JS object;
+            var myViewModel = { 
+                name: 'CMR'
+            };
+              
+            /*
+              	ko.applyBindings() - It takes a ViewModel object and replaces all data bindings in the view with the data from given ViewModel;
+            	Note: You can also bind multiple ViewModels to a view. KnockoutJS doesn't limit a single ViewModel per view.
+            */
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

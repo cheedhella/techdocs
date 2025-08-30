@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Grid</title>
+  </head>
+  <style>
+    .container {
+      background-color: #eee;
+      margin-bottom: 30px;
+      border: 1px solid red;
+
+      display: grid;
+      /* 3 Columns: Each column width 120px */
+      grid-template-columns: repeat(3, 120px);
+      /* 2 Rows: Each row height 100px */
+      grid-template-rows: 100px 100px;
+
+      grid-row-gap: 10px;
+      grid-column-gap: 15px;
+    }
+
+    .item {
+      padding: 5px;
+      font-size: 20px;
+      font-family: sans-serif;
+      color: white;
+      background-color: green;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="item">1. Orange</div>
+      <div class="item">2. Green</div>
+      <div class="item">3. Violet</div>
+      <div class="item">4. Pink</div>
+      <div class="item">5. Brown</div>
+      <div class="item">6. Blue</div>
+    </div>
+  </body>
+</html>

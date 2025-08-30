@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>mxGraph - Hello World</title>
+        <style>
+            #graphContainer {
+                position: relative;
+                overflow: hidden;
+                width: 450px;
+                height: 250px;
+                background: url("images/grid.png");
+                cursor: default;
+            }
+        </style>
+        <!-- 
+            mxBasePath - It defines base path for all JS libraries/files; It must be defined before loading the mxClient library;
+            imageBasePath - It defines base path for all images;
+        -->
+        <script type="text/javascript">
+            var graph, helloVertex, wolrdVertex, e;
+            mxBasePath =
+                "/Users/mcheedhe/Data-new/Technical/UI Tech/mxGraph/code";
+        </script>
+        <!-- Load and initialize the library -->
+        <script type="text/javascript" src="lib/mxClient.js"></script>
+
+        <script type="text/javascript">
+            // Program starts here. Creates a sample graph in the
+            // DOM node with the specified ID. This function is invoked
+            // from the onLoad event handler of the document (see below).
+            function renderGraph(container) {
+                // Check if the browser is supported
+                if (!mxClient.isBrowserSupported()) {
+                    // Displays an error message if the browser is not supported.
+                    mxUtils.error("Browser is not supported!", 200, false);
+                } else {
+                    // Disables the built-in context menu
+                    mxEvent.disableContextMenu(container);
+
+                    // Creates the graph inside the given container
+                    graph = new mxGraph(container);
+
+                    // Enables rubberband selection
+                    new mxRubberband(graph);
+
+                    // Gets the default parent for inserting new cells. This
+                    // is normally the first child of the root (ie. layer 0).
+                    var parent = graph.getDefaultParent();
+
+                    // Adds cells to the model in a single step
+                    graph.getModel().beginUpdate();
+                    try {
+                        helloVertex = graph.insertVertex(
+                            parent,
+                            "h",
+                            "Hello",
+                            50,
+                            100,
+                            80,
+                            30
+                        );
+                        wolrdVertex = graph.insertVertex(
+                            parent,
+                            "world",
+                            "World",
+                            300,
+                            100,
+                            80,
+                            30
+                        );
+
+                        e = graph.insertEdge(
+                            parent,
+                            "e",
+                            "Welcome to mxGraph!",
+                            helloVertex,
+                            wolrdVertex
+                        );
+                    } finally {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+                    graph.doResizeContainer();
+
+                    var encoder = new mxCodec();
+                    var node = encoder.encode(graph.getModel()); // It will hold graph XML;
+                    mxUtils.popup(mxUtils.getPrettyXml(node), true); // Shows XML instantly in a popup
+                }
+            }
+        </script>
+    </head>
+
+    <!-- Page passes the container for the graph to the program -->
+    <body onload="renderGraph(document.getElementById('graphContainer'))">
+        <!-- Creates a container for the graph with a grid wallpaper -->
+        <div id="graphContainer"></div>
+    </body>
+</html>

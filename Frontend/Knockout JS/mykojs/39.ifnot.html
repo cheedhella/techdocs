@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: ifnot</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <label><input type="checkbox" data-bind="checked: isMale" />Is Male?</label>
+        <div data-bind="ifnot: isMale">Student is not a Male.</div>
+
+        <script>
+            var myViewModel = {
+                'isMale': ko.observable(false)
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

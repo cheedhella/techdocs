@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Built-in Bindings: Text Binding</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+        <style>
+            .highlight {
+                color: blue;
+            }
+        </style>
+    </head>
+    <body>
+        Plain Text: <span class="highlight" data-bind="text: plainName"></span><br/> 
+        Html Text: <span class="highlight" data-bind="text: htmlName"></span>
+        <script>
+            // If you use text binding with HTML content, HTML will be escaped and is displayed as text.
+            var myViewModel = {
+                plainName: 'CMR',
+                htmlName: '<i>CMR</i>'
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

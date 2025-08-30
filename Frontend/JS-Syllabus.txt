@@ -1,0 +1,50 @@
+ES6
+
+Part 1
+    var VS let VS const; Template Strings, Tagged Templates;
+    Arrow Functions, Default function arguments;
+    New Array Methods: Array.of(), Array.from(), find(), findIndex(), entries(), keys(), values(), fill(), copyWithin();
+    New Collections: Map, Set, WeakSet, WeakMap;
+    New String Methods: 
+    New Number Methods: Number.isInteger(), Number.isNaN(), Number.isFinite(), Number.isSafeInteger(), Number.parseInt(), Number.parseFloat();
+    
+Part 2:
+    for-off loop; 
+
+Part 3:
+    class, constructor, getters and setters, new, this, static, instanceof;
+    extends, super, method overriding, method overloading; 
+    // ES6 doesn't support multiple inheritance;
+    // ES6 doesn't support private members, though it is possible to mimic this feature;
+
+1.
+let vs const vs var; Default function parameters; Object literal syntax;
+rest vs spread operator; for..of; binary and octal literals; Template literals;
+
+2. Destructuring: Array and object Destructuring;
+
+3. Modules
+4. Classes: class, extends, super, new.target;
+5. Arrow Functions;
+6. Symbol;
+7. Generators;
+8. Promises;
+9. Collections: Map, WeakMap, Set, WeakSet;
+10. Array Extensions;
+11. Object Extensions;
+12. String Extensions: startsWith, endsWith, includes;
+13. Proxy and Reflection;
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+Typescript
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+npm
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+React
+
+------------------------------------------------------------------------------------------------------------------------------------------------

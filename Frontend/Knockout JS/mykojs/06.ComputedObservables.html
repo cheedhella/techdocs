@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Observables</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <p>First Name: <input data-bind = "value: firstName" /></p>
+   <p>Last Name: <input data-bind = "value: lastName" /></p>
+   <p>Hello: <strong class="highlight" data-bind="text: fullName"></strong></p>
+   <script>
+      /*
+         What is Computed Observable?
+            It is a function which is dependent on one or more Observables and automatically gets updated when underlying observables change;
+            Computed Observables can be chained.
+      */
+      function Employee(first, last) {
+         var self = this;
+         self.firstName = ko.observable(first);
+         self.lastName = ko.observable(last);
+
+         // KO tracks dependencies automatically. It knows that fullName depends on firstName and lastName;
+         self.fullName = ko.computed(function() {
+            return self.firstName() + " " + self.lastName();
+         });
+      }
+      
+      ko.applyBindings(new Employee('Malli', 'Ch'));
+   </script>
+</body>
+</html>

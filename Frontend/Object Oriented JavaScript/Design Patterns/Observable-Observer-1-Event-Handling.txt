@@ -1,0 +1,42 @@
+function Observer() {
+    this.fns = [];
+}
+
+Observer.prototype = {
+
+    subscribe : function(fn) {
+        this.fns.push(fn);
+    },
+
+    unsubscribe : function(fn) {
+        this.fns = this.fns.filter(
+            function(el) {
+                if ( el !== fn ) {
+                    return el;
+                }
+            }
+        );
+    },
+
+    fire : function(o, thisObj) {
+        var scope = thisObj || window;
+        this.fns.forEach(
+            function(el) {
+                el.call(scope, o);
+            }
+        );
+    }
+};
+
+// Publishers are in charge of publishing(creating the event) and notifying(firing the event).
+var o = new Observer(); 
+o.fire('here is my data');
+
+// Subscriber basically subscribe or listen. Once they are notified, their callback functions are invoked.
+var fn = function() {
+    // my callback stuff
+};
+o.subscribe(fn);
+o.unsubscribe(fn);
+
+http://www.dustindiaz.com/javascript-observer-class/

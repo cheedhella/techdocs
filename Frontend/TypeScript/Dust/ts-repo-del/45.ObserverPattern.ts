@@ -1,0 +1,1 @@
+https://medium.com/@pagalvin/looking-at-abstract-classes-and-methods-in-typescript-9769de98f65b

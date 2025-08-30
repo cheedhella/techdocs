@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>minmax</title>
+  </head>
+  <style>
+    .container {
+      background-color: #eee;
+      margin: 30px auto;
+      border: 1px solid red;
+
+      display: grid;
+
+      grid-row-gap: 10px;
+      grid-column-gap: 15px;
+    }
+
+    .item {
+      padding: 5px;
+      font-size: 10px;
+      font-family: sans-serif;
+      color: white;
+    }
+    .item-1 {
+      background-color: orange;
+    }
+    .item-2 {
+      background-color: green;
+    }
+    .item-3 {
+      background-color: violet;
+    }
+    .item-4 {
+      background-color: pink;
+    }
+    .item-5 {
+      background-color: brown;
+    }
+    .item-6 {
+      background-color: blue;
+    }
+    .item-7 {
+      background-color: crimson;
+    }
+    .item-8 {
+      background-color: sienna;
+    }
+
+    .c1,
+    .c2 {
+      grid-template-rows: min-content min-content;
+      grid-template-columns: min-content 1fr 1fr 1fr;
+    }
+
+    .c3,
+    .c4 {
+      grid-template-rows: minmax(80px, max-content) max-content; /* atleast 80px and atmost max-content height */
+      grid-template-columns: min-content 1fr 1fr 1fr;
+    }
+
+    .c5,
+    .c6 {
+      grid-template-rows: minmax(80px, max-content) max-content; /* atleast 80px and atmost max-content height */
+      grid-template-columns: minmax(80px, max-content) 1fr 1fr 1fr;
+    }
+  </style>
+  <body>
+    <div class="container c1">
+      <div class="item item-1">1. Orange</div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+
+    <div class="container c2">
+      <div class="item item-1">
+        1. Orange - Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Quam dolor sequi quisquam explicabo atque vero?
+      </div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+
+    <div class="container c3">
+      <div class="item item-1">1. Orange</div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+
+    <div class="container c4">
+      <div class="item item-1">
+        1. Orange - Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Quam dolor sequi quisquam explicabo atque vero?
+      </div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+
+    <div class="container c5">
+      <div class="item item-1">1. Orange</div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+
+    <div class="container c6">
+      <div class="item item-1">
+        1. Orange - Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+        Quam dolor sequi quisquam explicabo atque vero?
+      </div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+      <div class="item item-4">4. Pink</div>
+      <div class="item item-5">5. Brown</div>
+      <div class="item item-6">6. Blue</div>
+      <div class="item item-7">7. Crimson</div>
+      <div class="item item-8">8. Sienna</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../English/IELTS"
+		},
+		{
+			"path": "../../../Alogrithms"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "UI Tech",
+		"prettier.tabWidth": 4,
+		"editor.formatOnSave": true
+	}
+}

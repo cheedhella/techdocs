@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Sorter_1 = require("./Sorter");
+var NumbersCollection_1 = require("./NumbersCollection");
+var CharactersCollection_1 = require("./CharactersCollection");
+var LinkedList_1 = require("./LinkedList");
+var numbersCollection = new NumbersCollection_1.NumbersCollection([10, 5, 18, -3]);
+var sorter = new Sorter_1.Sorter(numbersCollection);
+sorter.sort();
+console.log(numbersCollection.data); // Print sorted collection;
+var charsCollection = new CharactersCollection_1.CharactersCollection('Xaayb');
+var sorter2 = new Sorter_1.Sorter(charsCollection);
+sorter2.sort();
+console.log(charsCollection.data);
+var linkedList1 = new LinkedList_1.LinkedList();
+linkedList1.add(500);
+linkedList1.add(-10);
+linkedList1.add(-3);
+linkedList1.add(4);
+var sorter3 = new Sorter_1.Sorter(linkedList1);
+sorter3.sort();
+linkedList1.print();
+// Problem: Instead of creating Sorter for each collection, why can't each collection support sort() directly?
+// One way of achieving it is: Every collection should extend Sorter;

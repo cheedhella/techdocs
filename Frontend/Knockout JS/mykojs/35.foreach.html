@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: foreach</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- 
+            Sometimes, you don't have any container element on which to put foreach binding. In that case, you can use below syntax:
+        -->
+        <ul>
+            <!-- ko foreach: daysOfWeek -->
+                <li><span data-bind="text: $data"></span></li>
+            <!-- /ko -->
+        </ul>
+       
+        <script>
+            var daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            ko.applyBindings(daysOfWeek);
+        </script>
+    </body>
+</html>

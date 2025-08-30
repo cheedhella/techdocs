@@ -1,0 +1,96 @@
+Universal Selector
+		* {margin:0; padding:0;} - * is used to select every single element in the dom. Many developers will use this trick to zero out the margins and padding.
+		#container * {border: 1px solid black;} - select every single element that is a child of the #container div.
+		
+	ID Selector - begins with #
+		#id1 {color: red;} - select the element with specified ID.
+
+	Class Selector - begins with .
+		.big {color:red;} - select all the elements with specified class.
+
+	Type Selector
+		h1 {color:red;} - select all <h1> elements.
+
+	Attribute Selectors
+		el[att] - select all <el> elements with specified attribute.
+		el[att1][att2] - select all <el> elements with all specified attributes, att1 and att2.
+		el[att="val"] - select all <el> elements which contains an attribute named 'att' with value exactly equal to 'val'
+		el[att~="val"] - select all <el> elements which contains an attribute named 'att' with one or more space separated values, one of them exactly equal to 'val'
+			Eg: p[class~="one"] ---> <p class="one two three">hi</p>
+		el[att|="val"] - select all <el> elements which contains an attribute named 'att' with value exactly equal to 'val' OR begins with 'val', immediately followed by a dash and continuing with any other characters.
+			Eg: p[lang~="en"] ---> <p lang="en">hi</p>, <p lang="en-US">hi</p>
+		// --- new in css3
+		el[att^="val"] - select all <el> elements which contains an attribute named 'att' whose value begins with 'val'
+		el[att$="val"] - select all <el> elements which contains an attribute named 'att' whose value ends with 'val'
+		el[att*="val"] - select all <el> elements which contains an attribute named 'att' whose value contains with 'val'
+		
+	Descendant Selectors
+		E F - select all elements matching F that are descendants(immediate or non-immediate child) of E.
+		p div {color: blue; } // select all div tags that are descendants of p tag
+		p.big li a { blah } // select all <a> tags that are descendants of li tag which are descendants of p tag with class "big"
+		
+	Child Selector
+		E > F - select all elements matching F that are the immediate children of E.
+
+	Adjacent Sibling Selector
+		E + F - select all elements matching F that are the adajacent siblings of E.
+
+	General Sibling Selector
+		E ~ F - select all elements matching F that are the siblings of E.
+
+	Grouping Selectors
+		E, F - select all elements matching either E or F.
+		Eg: p, h1 {color : green;} // to style all <p>, <h1> tags
+		
+	Psuedo Element Selectors
+		Psuedo elements are fragments of other HTML elements, not individual elements themselves.
+		They’re not part of the document tree, so the only way to target them is with pseudo-element selectors.
+		-----
+		::first-line - select the first line(not first sentence) in a block of text.
+		::first-letter - select the first letter in a block of text.
+		::before - generate content and place it before the element's content.
+		::after - generate content and place it before the element's content.
+			http://techbus.safaribooksonline.com/0130092789/ch15lev1sec6#ch15lev1sec6
+		::selection - used to style user-selected text in textfield or textarea element.
+
+	Psuedo Class Selectors
+		Psuedo class is similar to a class in HTML, but it's not specified explicitly in the markup.
+		Some pseduo classes are dynamic - they are applied and removed as the user interacts with the document.
+
+		:active - an active element; A link is active, from the point when the mouse is pressed down until it is released.
+		:link - unvisited link
+		:visited - visited link
+		:hover - time during which the cursor is hovered over an element.
+		:focus - any element that has keyboard input focus and ready to receive user input.
+		:first-child - select all elements that are first child of their parent.
+		:lang(C) -
+			For a japanese page, do we need set lang attribute on body to japanese? How to write pages in multiple languages?
+		// new in css3
+		:last-child - select all elements that are last child of their parent.
+		:nth-child(n | odd | even) - select all elements that are n th child of their parent.
+			el:nth-child(-n+3) - select first 3 children of all elements matching el.
+		:nth-last-child(n) - select all elements that have n-1 siblings following it.
+			el:nth-last-child(-n+3) - select last 3 children of all elements matching el.
+		:nth-of-type(n) 
+			http://css-tricks.com/the-difference-between-nth-child-and-nth-of-type/
+		:nth-last-of-type(n)
+			select all elements that are having n-1 siblings of same type followed by.
+		:first-of-type
+		:last-of-type
+		:only-child - select all elements that are only child for its parent.
+		:only-of-type - select all elements that are only child of its type for its parent.
+		:empty - select all elements that are having no children.
+			A text node is considered empty if it has a data length of zero; so, for example, a text node with a single space isn’t empty.
+			The selector p:empty will match the first paragraph, but not the second or third, in this example: <p></p>, <p> </p>, <p>Hello, World!</p>
+		:root - root element of the document
+		
+		:target - http://reference.sitepoint.com/css/pseudoclass-target
+			A:target	Element "A" being the target of the referring URI
+		:enabled - all elements that are enabled.
+		:disabled - all elements that are disabled.
+		:checked - all elements that are checked.		
+		:not(selector) 
+	----------
+	a {}, a:link {}, a:visited {}, a:hover {}, a:active {}
+	http://css.maxdesign.com.au/selectutorial/advanced_conflict.htm#specificity
+	What is cascade in CSS? http://reference.sitepoint.com/css/inheritancecascade

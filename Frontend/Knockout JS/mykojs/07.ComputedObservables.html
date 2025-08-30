@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS: Observables</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+      <style>
+         .highlight {
+            color: red;
+         }
+        </style>
+   </head>
+<body>
+   <p>First Name: <input data-bind = "value: firstName" /></p>
+   <p>Last Name: <input data-bind = "value: lastName" /></p>
+   <p>Full Name: <input data-bind = "value: fullName" /></p>
+   <script>
+      // It is also possible to update firstName and lastName, when fullName is updated;
+      // To achieve that, we need to change our computed observable to writable;
+      function Employee(first, last) {
+         var self = this;
+         self.firstName = ko.observable(first);
+         self.lastName = ko.observable(last);
+
+         self.fullName = ko.computed({
+            read: function() {
+               return self.firstName() + " " + self.lastName();
+            },
+            write: function(val) {
+               var namesArr = val.split(' ');
+               self.firstName(namesArr[0]);
+               self.lastName(namesArr[1]);
+            }
+         });
+      }
+      
+      ko.applyBindings(new Employee('Malli', 'Ch'));
+   </script>
+</body>
+</html>

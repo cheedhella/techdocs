@@ -1,0 +1,82 @@
+What is a Link?
+    As you know, a website consists of several pages; How do you go from one page to another? Answer is links of course!
+
+    Every link has 2 parts: label and desination;
+    Label
+        It can be text or image or combination of many other allowed elements;
+        It is something the visitor sees in a webpage or hears in a screen reader and interacts with it to reach the desination;
+        Browsers typically show label text as underlined and in blue by default; It shows hand cursor, when you hover on it;
+        You can customize it with CSS;
+        
+    Destination
+        It specifies where to go when the visitor clicks on the label;
+        You can create links that go to another page OR website, jump within a page, download files etc;
+
+How to create links?
+    <a> tag is used create links;
+    Attributes:
+        href
+            href stands for hypertext reference; 
+            As a general rule, use relative URLs for links to webpages on your site, and use absolute URLs for links to webpages on other sites;
+            If you omit the file name from the path, it defaults to index.html;
+            If you omit the entire path, it defaults to site home page;
+        target
+            Using this, you can specify the window name; 
+            Users don't see the window name, but it helps the browser to differentiate one window or tab from another;
+            If you target several links to the same name, the links will all open in that same window or tab.
+            If you always want a link to open in a different window or tab, use _blank, as in target="_blank";
+            If you want a link to open in an iframe, make sure it's value should matche with id of the iframe;
+    Eg:
+        <a href="cats.html">Cookies</a>  // Label -> Cookies, Destination -> cats.html;
+        <a href="giraffe-escapes.html">
+            <p>A giraffe escaped from the zoo today, and animals rejoiced worldwide.</p>
+            <p>Read more</p>
+        </a>
+        <a href="pioneer-valley.html">
+            <h1>Cookie and Woody</h1>
+            <img src="img/cookiefora.jpg" width="143" height="131" alt="Cookie" />
+        </a>
+
+Creating Links to webpage in another Site
+    Eg: <a href="http://en.wikipedia.org/wiki/Cat" rel="external" title="Cat entry on Wikipedia">Cats</a>
+    rel attribute is optional, link works the same with or without it;
+    For external links, it is recommended to specify it;
+    You can use that attribute to style external links differently from internal links;
+
+Creating Links to a specific section of the webpage
+    <li><a href="#question-01">Can an id have more than word?</a></li>  // When clicked, it jumps to an element with id question-01;
+
+    <h2 id="question-01">Can an id have more than word?</h2>   // creating anchor, just give unique id;
+    <p>Yes, your ids can have more than one word as long as there are no spaces. Separate each word with a dash instead.</p>
+    --------------------
+    Anchor can be in another page in the same site, use <a href="page.html#anchor-name"> 
+    Anchor can be in another site, use <a href="http://www.site.com/directory/page.html#anchor-name"> 
+
+    Note: If an anchor is near the bottom of the page and the content below it isn’t at least as tall as 
+        the viewable area in the browser, then the anchor may not display at the top of the window, but 
+        rather toward the middle.
+
+Creating other kind of Links
+    You are not limited to creating links to other webpages;
+    You can create a link to any URL: RSS feeds, images, files that you want visitors to be able to download, email addresses, phone numbers, and more;
+    
+    I recommend you avoid linking email addresses, because spambots grab them from webpages and bombard them with spam.
+    
+    A smartphone that understands tel: links will ask if you want to call the number when you trigger a link. 
+    Some non-phone devices, like the iPad, will ask if you’d like to add the number to one of your contacts. 
+    Finally, some desktop browsers may initiate Google Voice or Skype, but others won’t know what to do with a tel: link when it’s triggered.
+
+    Eg:
+        <a href="img/blueflax.jpg">a photo</a>
+        <a href="media/piano.mp3">Listen to tickling of the ivories</a> 
+        <a href="myfile.zip">Download the file</a>
+        <p>Send feedback to <a href="mailto:someone@somedomain.com">someone@somedomain.com</a>.</p>
+        <p>Call now for free things! <a href="tel:+18001234567">1 (800) 123-4567</a></p>
+    
+    If you create a link to a file that a browser doesn’t know how to handle (an Excel file, for example), the browser will either try to open a helper program to view the file or try to download it to the visitor’s drive.
+---------------------------------------------------------------
+
+By default, links will appear as follow in most of the browsers:
+An unvisited link is underlined and blue.
+A visited link is underlined and purple.
+An active link is underlined and red.

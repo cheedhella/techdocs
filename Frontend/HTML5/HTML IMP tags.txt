@@ -1,0 +1,1116 @@
+HTML - Hyper Text Markup Language;
+XHTML - EXtensible Hypertext Markup Language, XHTML is HTML written as XML.
+DHTML - HTML + CSS + Javascript
+
+HTML vs XHTML
+	Document Structure
+		XHTML DOCTYPE is mandatory
+		Must have one root element(one and only one, no more and no less)
+		<html>, <head>, <title>, and <body> are mandatory
+		XML namespace attribute in <html> is mandatory. Eg: <html xmlns="http://www.w3.org/1999/xhtml">
+	XHTML Elements
+		Must be properly nested
+		Must always be closed
+		Element name must be in lowercase
+		Element prohibitions:
+			The following elements have prohibitions on which elements they can contain.
+				<a>		Must not contain other <a> elements.
+				<pre>	Must not contain the <img>, <object>, <big>, <small>, <sub>, or <sup> elements.
+				<button>	Must not contain the <input>, <select>, <textarea>, <label>, <button>, <form>, <fieldset>, <iframe> or <isindex> elements.
+				<label>	Must not contain other <label> elements.
+				<form>	Must not contain other <form> elements.
+	XHTML Attributes
+		Attribute names must be in lowercase
+		Attribute values must be closed
+		Attribute minimization is forbidden. Eg: <input checked> should be <input checked="checked"/>
+			http://www.leakbali.com/T-xhtml/syntax/69/293/attribute-minimization-is-forbidden/
+	Other
+		Prefer to use id attribute over name attribute.
+		language attribute of the script tag is deprecated.
+		If you use the lang attribute in an element, you must also add the xml:lang attribute, like this:  <div lang="it" xml:lang="it">Ciao Shinta!</div>. http://www.leakbali.com//T-xhtml/syntax/69/295/the-lang-attribute/
+		http://reference.sitepoint.com/html/html-vs-xhtml
+		http://www.sitepoint.com/forums/showthread.php?393445-XHTML-vs-HTML-FAQ
+
+---------------------------------------------
+
+-------------------------------
+
+http://validator.w3.org/ - HTML/XHTML validator
+http://validator.w3.org/checklink - checks for broken links in HTML/XHTML page
+http://jigsaw.w3.org/css-validator/ - CSS validator
+http://webdesign.about.com/od/validators/l/bl_validation.htm - HTML/XHTML/CSS validator
+https://addons.mozilla.org/en-us/firefox/addon/html-validator/
+
+
+http://www.learn-xml-schema-tutorial.com/
+http://www.oracle.com/technetwork/articles/srivastava-namespaces-092580.html
+    
+
+
+XHTML Attributes
+
+    Attribute names must be in lower case
+    Attribute values must be quoted
+    
+
+	
+	
+	elements must be closed, properly nested, in lower case
+	xhmtl docs must have one root element.
+
+
+
+
+http://vancouver-webpages.com/META/metatags.detail.html
+http://www.i18nguy.com/markup/metatags.html
+ 
+<font> - deprecated but works in 4.0, won't work in 5.
+<header>, <nav>, <article> - new tags which will help search engines analyze web pages better.
+<video> tag -
+
+html view source - ctrl + u(works in Firefox only)
+
+<doctype> - <!DOCTYPE html> at the top of a page indicates that everything inside <html> and </html> tags conforms to the standards specified in the <doctype> declaration - in this case it is HTML 5.
+
+
+<strong> vs <b>
+
+<div> vs header, nav, article, section, aside, footer.
+	http://www.alistapart.com/articles/previewofhtml5
+	
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>HTML 5 tutorial</title> // choose title carefully
+		<meta name="description" content="!DOCTYPE html - the doctype declaration tells the browser that this page is written in HTML5">
+	</head>
+	<body>
+		<h1></h1><h2></h2><h3></h3><h4></h4><h5></h5><h6></h6>
+		<p></p>
+		<ul><li></li><li></li></ul>
+		<ol><li></li><li></li></ol>
+		<dl><dt></dt><dd></dd><dt></dt><dd></dd></dl> 
+		/* dl - def list, dt - term being defined, dd - def  - good way to organize FAQs */
+		<a></a>
+		
+		// table can have only border attribute with values "", 1.
+		// table element can have below elements in the same order:
+		// 0 or 1 <caption> element, 
+		// 0 or 1 <colgroup> element, 
+		// 0 or 1 <thead> element,
+		// 0 or 1 <tfoot> element, 
+		// either 0 or more <tbody> elemnts, 1 or more <tr> elements, 
+		// 0 or 1 <tfoot> element.
+		
+		// todo: <col>, <colgroup> elements
+		
+		<table>
+			<caption>table-caption</caption>
+			<thead>
+				<tr><td colspan="2">Table Header</td></tr>
+			</thead>
+			<tfoot>
+				<tr><td colspan="2">Table Footer</td></tr>
+			</tfoot>
+			<tbody>
+				<tr><td>R1-C1</td><td>R1-C2</td></tr>
+				<tr><td>R2-C1</td><td>R2-C2</td></tr>
+			</tbody>
+		</table>
+		
+	</body>
+</html>
+
+2 types of meta tags:
+	chartset meta tag - <meta charset="utf-8">
+	It tells the browser what type of letters the page is written in. 
+	If your web site is in a language other than English be careful to use the correct charset. If your page is in plain old vanilla English just copy and paste <meta charset="UTF-8"> just above the title.
+	
+	description meta tag: description which shows up in search results.
+	<meta name="description" content="!DOCTYPE html - the doctype declaration tells the browser that this page is written in HTML5">
+	
+	google search result:
+		title
+		URL
+		content of meta description tag.
+
+		
+http://www.html-5-tutorial.com/
+
+http://www.thehtml5tutorials.com/index.html
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+Web Designing
+
+Responsive Web Design
+	It's all about making sure that your web page looks good on all screen sizes;
+
+Typography
+
+Colors
+
+Images, Icons, Layout, User Experience;
+
+
+
+
+7-Step process to build an optimized site from scratch;
+Optimize your site for Search Engines?
+Images, Fonts, Icons;
+
+
+Page Layout - test the page in diff screen resolutions and diff window sizes(min, max, custom sizes).
+
+How to work with Brackets?
+
+
+Heading Paragraph elements;
+
+submit ||  "submits the form when clicked (default)"
+reset  ||  "resets the fields in the form when clicked"
+button ||  "clickable, but without any event handler until one is assigned"
+
+Without a type, input implicitly receives type of submit. 
+It does not matter how many submit buttons or inputs there are in the form, any one of them which is explicitly or implicitly typed as submit, when clicked, will submit the form.
+
+HTML 5 gives forms the ability to have improved functionality. 
+For example, a form element can contain the form attribute to bind itself to a form. HTML 5 also introduces the <datalist> element.
+
+get (the form data is appended to the URL when submitted)
+post (the form data is not appended to the URL)
+
+
+     application/xhtml+xml, application/xml, or text/xml text/html
+
+
+"XHTML is XSL ready" -> http://www.webstandards.org/learn/articles/askw3c/oct2003/
+
+
+1. get vs post
+2. <button> vs <input type="button"> vs buttons created with <a> tag
+	Which one to choose, <button> vs <input type="button">? http://stackoverflow.com/questions/469059/button-vs-input-type-button-which-to-use
+	Use links, that's the normal way to point at other pages. Use buttons only when you need to submit some user-entered data to the next page.
+3. create a button that looks same across all browsers? 
+4. Manipulating Form elements with Javascript and JQuery
+
+-------------------------------------------------------------------	
+
+	
+
+	
+1. purpose of <table>?
+2. <th> vs <td>
+3. implementing a fixed header table scrolling OR fixed size table scrolling - header position fixed, you can scroll table body.
+
+
+click on submit button? onclick event OR onsubmit event, which is triggered?
+
+
+
+	<table> tag can contain the following child elements:
+		an optional <caption> element,
+		zero or more <colgroup> elements,
+		an optional <thead> element,
+		one of the two alternatives:
+		one <tfoot> element, followed by:
+            zero or more <tbody> elements,
+            or one or more <tr> elements,
+        a second alternative followed by an optional <tfoot> element:
+            either zero or more <tbody> elements,
+            or one or more <tr> elements
+	The TR tag is valid within the following tags: table, tbody, tfoot, thead
+	The <tr> element can only be used in the following contexts:
+		As a child of a <thead> element
+		As a child of a <tbody> element
+		As a child of a <tfoot> element
+		As a child of a <table> element, after any <caption>, <colgroup>, and <thead> elements, but only if there are no <tbody> elements that are children of the <table> element
+	Also, the <tr> tag must contain one of the following tags:
+		When the parent node is a <thead> element: Zero or more <th> elements
+		Otherwise: Zero or more <td> or <th> elements
+		---
+		It contains one or more <td> and/or <th> elements.
+	
+	
+	
+
+
+You can only have one thead in a table.
+<tfoot> is only allowed once in a table. TFOOT must follow the THEAD commands, and must precede the TBODY commands (if any are used).
+
+Whenever you have a <table> you are always using at least a <tbody>. 
+A <tbody> element is required in every table, but the opening and closing tags are optional (they can be inferred from the presence of a <tr>). 
+This will be apparent if you ask a <tr> for its .parentNode or a <table> for its .childNodes even when you left the <tbody></tbody> out of the document.
+
+
+
+
+<thead> - defines header of a table. It contains one or more <tr> tags.
+<tfoot> - defines footer of a table. It contains one or more <tr> tags.
+tfoot element is coded before the tbody element. 
+http://www.boogiejack.com/html/tfoot.html
+http://www.quackit.com/html_5/tags/html_tfoot_tag.cfm
+https://developer.mozilla.org/en-US/docs/HTML/Element/table
+
+<th> vs <td>
+	http://www.w3schools.com/tags/tag_th.asp
+	
+http://www.pdprogrammeur.com/tables-and-html5-table/
+
+
+
+
+Basic Elements
+
+
+
+
+<CODE></CODE> 
+ 	<SAMP></SAMP> 	
+  	Keyboard Input 	<KBD></KBD> 
+
+
+
+HTML - how to show tooltips?
+
+<style> - Use style tag (instead of the <font> tag) to define the font face, font size, and font color of text. goes in the head section.
+------------------------------
+<a href="mailto:webmaster@example.com">Jon Doe</a>
+<address> tag - http://www.w3schools.com/tags/tag_address.asp
+<applet> tag - not supported in HTML5. Use the <object> tag instead.
+<article> tag is new in HTML5.
+<aside> tag is new in HTML5.
+<audio> tag is new in HTML5.
+
+According to the HTML 5 specification, the <b> tag should be used as a LAST resort when no other tag is more appropriate. 
+The HTML 5 specification states that headings should be denoted with the <h1> to <h6> tags, emphasized text should be denoted with the <em> tag, 
+important text should be denoted with the <strong> tag, and marked/highlighted text should use the <mark> tag.
+
+<basefont> tag is not supported in HTML5. Use CSS instead.
+<bdi> tag is new in HTML5.
+<big> tag is not supported in HTML5. Use CSS instead.
+
+<blockquote> - other ways of indentation
+
+<button> vs <input type="button">
+	Inside a <button> element you can put content, like text or images. 
+	This is the difference between this element and buttons created with the <input> element.
+
+<canvas> tag is new in HTML5.
+<center> tag is not supported in HTML5. Use CSS instead.
+<cite> Tag
+<em> <strong> <dfn> <code> <samp> <kbd> <var> Tags - http://www.w3schools.com/tags/tag_phrase_elements.asp
+
+<datalist> tag is new in HTML5.
+
+<embed> tag is new in HTML5. Used to embed a flash animation.
+
+ <figcaption> tag is new in HTML5.
+ <figure> tag is new in HTML5.
+ <font> tag is not supported in HTML5. Use CSS instead.
+ <footer> tag is new in HTML5.
+
+	<frame> tag is not supported in HTML5.
+	<frameset> tag is not supported in HTML5.
+	<header> tag is new in HTML5.
+<hgroup> tag is new in HTML5.
+
+
+
+<keygen> element is new in HTML5.
+<mark> tag is new in HTML5.
+<meter> tag is new in HTML5.
+<nav> tag is new in HTML5.
+<noframes> tag is not Supported in HTML5
+<output> tag is new in HTML5.
+<progress> tag is new in HTML5.
+<rp> tag is new in HTML5.
+<rt> tag is new in HTML5.
+<ruby> tag is new in HTML5.
+<section> tag is new in HTML5.
+<source> tag is new in HTML5.
+<strike> tag is not supported in HTML5. Use the <del> tag instead.
+<summary> tag is new in HTML5.	
+<time> tag is new in HTML5.
+<track> tag is new in HTML5.
+<tt> tag is not supported in HTML5. Use CSS instead.
+<video> tag is new in HTML5.
+------------- to do later --------------
+<iframe>
+<ins> tag
+<meta> Tag
+<menu>
+<applet>, <param>, <object> - http://www.w3schools.com/tags/tag_object.asp
+<q> Tag vs <blockquote>
+The <head> element is a container for all the head elements.
+The <head> element must include a title for the document, and can include scripts, styles, meta information, and more.
+The following elements can go inside the <head> element:
+    <title> (this element is required in the head section)
+    <style> - http://www.w3schools.com/tags/tag_style.asp
+    <base>
+    <link>
+    <meta>
+    <script>
+    <noscript>
+ <s> 
+<noscript>
+<script> tag - what is asynchronous javascript? http://www.w3schools.com/tags/tag_script.asp
+<html> - http://www.w3schools.com/tags/tag_html.asp, html vs xhtml vs html5
+<i> - http://www.w3schools.com/tags/tag_i.asp
+<style> tag
+<title> - http://www.w3schools.com/tags/tag_title.asp, no. of title tags in a page.
+---------------- table related ------------
+
+<caption> tag defines a table caption. 
+	<caption> tag must be inserted immediately after the <table> tag.
+	You can specify only one caption per table.
+	
+<table>
+<tr> - http://www.w3schools.com/tags/tag_tr.asp
+<th>
+<td>
+<col>, <colgroup> tags
+<thead> - http://www.w3schools.com/tags/tag_thead.asp
+<tfoot>
+<tbody>
+<th> - http://www.w3schools.com/tags/tag_th.asp
+<caption> 
+<col>
+<colgroup>
+---------------- form related --------------
+The <form> tag is used to create an HTML form for user input.
+The <form> element can contain one or more of the following form elements:
+    <input>
+    <textarea>
+    <button>
+    <select>
+    <option>
+    <optgroup>
+    <fieldset>
+    <label>
+	
+<legend>
+	
+<form>
+  <label for="fullname">Full Name:</label>
+  <input type="text" name="fullname" id="fullname">
+  <label for="email">Email Address:</label>
+  <input type="text" name="email" id="email">
+</form>
+The "for" attribute in the <label> tag should reference the "id" attribute of a <input> tag. Note that when labels are associated with fields, clicking the label will put the associated field in focus.
+You can also use tags like <fieldset> to cluster sections of a form together and <legend> to caption a fieldset.
+
+  <fieldset>
+        <legend>Form header</legend>
+
+<fieldset> tag is used to group related elements in a form. The <fieldset> tag draws a box around the related elements.
+<legend> tag defines a caption for the <fieldset> element.
+--------------------------
+Why <dl>, <dt>, <dd> tags?
+	If you think that just humans are viewing your page you would be mistaken. 
+	An example of an application that would be interested in DL elements is the google glossary. 
+	This is currently a product of the google labs and as such is in development and may move around from time to time. 
+	What the glossary search engine does do though is provide a concrete example of how using definition lists can give added value to a page. 
+	By semantically marking up your content you enable it to be processed by automatic methods much more easily.
+
+miniature effect?? - Tilt-shift photography (that ‘miniature effect’) is still a relatively new concept
+
+
+http://www.w3schools.com/html/html_quick.asp
+http://www.w3schools.com/tags/tag_i.asp
+http://www.devx.com/projectcool/Article/19816
+http://werbach.com/barebones/barebones.html
+http://www.devguru.com/technologies/html/6149.asp
+http://jonahellison.com/style-perfect-html-lists-ul-li-ol-li
+
+http://www.w3resource.com/html/attributes/HTML-attributes.php - AlL HTML Attributes list
+http://famfamfam.com/ - ICON Arsenal
+
+http://www.w3schools.com/html/default.asp
+------------------------------------------
+
+------------------------------------------
+table, thead, tfoot, tbody, tr, th, td - used for creating a table.
+col - used to apply a style to an entire column, instead of repeating the style for each cell in that column in each row.
+colgroup - used to group a set of continuous columns and apply styles to it.
+
+	table tag attributes - http://www.jegsworks.com/Lessons/web/reference/tabletagattributes.htm
+	align - http://www.ironspider.ca/tables/widthalign.htm
+	border - indicates how thick the table's border will be. A zero value indicates no border.
+	cellspacing - space between cell walls in pixels. default value is 2.
+	cellpadding - space between a cell wall and its contents in pixels. default value is 1.
+	height - http://www.htmlcodetutorial.com/tables/_TABLE_HEIGHT.html
+	width - 
+	rowspan - how many columns a cell should take up
+	colspan - how many rows a cell should take up
+
+	rules=group 
+		used to apply border to each group of rows(such as thead, tbody, tfoot) instead of each cell.
+		http://www.faqs.org/docs/htmltut/tables/index_famsupp_152.html	
+		used to apply border to each group of columns.
+		http://www.faqs.org/docs/htmltut/tables/index_famsupp_180.html
+
+	Example:
+	<table border="2" cellspacing="2" cellpadding="3" width="200%">
+	  <col style="background-color: blue;"/>
+	  <colgroup span="2" style="background-color: red;"/>
+	  <thead><tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr></thead>
+	  <tfoot><tr><td>Footer 1</td><td>Footer 2</td><td>Footer 3</td></tr></tfoot>
+	  <tbody>
+	     <tr><td>1 x 1</td><td>1 x 2</td><td>1 x 3</td></tr>
+	     <tr><td colspan="2">2 x 1, 2 x 2</td><td>2 x 3</td></tr>
+	     <tr><td rowspan="2">3 x 1, 4 x 1</td><td>3 x 2</td><td>3 x 3</td></tr>
+	     <tr><td>4 x 2</td><td>4 x 3</td></tr>
+	  </tbody>
+	</table>
+
+	References:
+	http://www.faqs.org/docs/htmltut/tables/index.html
+	http://www.idocs.com/tags/tables/
+	http://www.htmlcodetutorial.com/tables/index_famsupp_152.html
+	http://www.w3schools.com/tags/tryit.asp?filename=tryhtml_table_rules
+	http://www.jegsworks.com/Lessons/web/reference/tabletagattributes.htm
+	http://www.autumnweb.com/Roxys/2WebPageHelp/4Tables.html
+	http://www.helpwithpcs.com/courses/html/html_tags_table.htm
+
+
+------------------------------------------
+
+applet tag - 
+	<applet code="Bubbles.class" width="350" height="350"> Java applet that draws animated bubbles. </applet>
+
+<area> tag defines an area inside an image-map (an image-map is an image with clickable areas).
+	area element is always nested inside a <map> tag.
+
+b, i - renders as bold/italic text
+
+base tag - The <base> tag specifies a default address or a default target for all links on a page.
+	The <base> tag goes inside the head element.
+	http://www.htmlcodetutorial.com/linking/_BASE.html
+
+body tag - 
+
+br tag - inserts a single line break, no closing tag.
+
+
+caption tag - <caption> tag defines a table caption.
+	The <caption> tag must be inserted immediately after the <table> tag. 
+	You can specify only one caption per table. Usually the caption will be centered above the table.
+
+<center> tag is used to center text.
+
+dd, dl, dt tags - 
+
+<embed> - http://download.oracle.com/javase/1.5.0/docs/guide/plugin/developer_guide/using_tags.html#embed
+
+
+<font> tag specifies the font face, font size, and font color of text.
+
+
+<frame>,  <frameset>, <noframes> tags
+	<frame> tag defines one particular window (frame) within a frameset.
+	Each frame in a frameset can have different attributes, such as border, scrolling, the ability to resize, etc.
+
+<h1> to <h6> tags are used to define HTML headings.
+	<h1> defines the largest heading and <h6> defines the smallest heading.
+
+head tag -
+	The following tags can be added to the head section: <base>, <link>, <meta>, <script>, <style>,  and <title>.
+	<title> tag defines the title of the document, and is the only required element in the head section!
+
+
+
+
+
+<html> tag tells the browser that this is an HTML document.
+
+
+meta tag - http://www.i18nguy.com/markup/metatags.html
+	http://wdvl.com/Authoring/HTML/Head/Meta/
+
+
+link tag - defined in head section.
+	http://www.brighthub.com/internet/web-development/articles/67083.aspx
+	used to link external style sheets to a webpage. <link rel="stylesheet" type="text/css" href="getAllDocuments_files/main.css">
+	<link rel="icon" href="http://enfold-staging.clearsenses.com:8080/dev_enfold/images/favicon.ico">
+	<link rel=”shortcut icon” href=”/favicon.ico” type=”image/x-icon”> - second tag seems to be for Internet Explorer.
+
+noscript tag 
+
+<object> - used to include objects such as audio, video, images, applets, PDF and Flash.
+	This element was intended to replace the <img> and <applet> tags. However, because of bugs and lack of browser support this has not happened.
+	
+	<object id="ThePDF" height=100% width=100% type="application/pdf" data="pdf1.pdf"></object>
+
+ol, ul, li, menu
+
+p tag
+
+<param> tag is used to define parameters or variables for an object or applet element.
+
+<pre> tag defines preformatted text.
+
+<s> and <strike> tags defines strikethrough text.
+
+<style> 
+	<style> tag is used to define style information for an HTML document.
+	style element always goes inside the head section.
+
+<sub> tag defines subscript text. Subscript text appears half a character below the baseline. 
+
+<sup> tag defines superscript text. Superscript text appears half a character above the baseline. 
+
+title
+
+u
+
+<select>, <option>, <menu> - http://www.xul.fr/en/html5/select.php, http://www.xul.fr/en/html5/option.php, http://www.xul.fr/en/html5/menu.php
+-----------------------------------------
+<body> - all attributes of body tag are depricated. use style tag instead.
+	   attributes include color of link, active link, visited link, background image, background color, text color.
+
+-----------------------------------------
+
+<frameset> tag - used in place of body tag, used to split the web page into frames. it may contain <frame>, <noframes> tags.
+	Frames are very popular because they are one of the few ways to keep part of the page stationary while other parts change.
+
+	<FRAMESET ROWS="40%,15%,45%"> // breaks the browser window into three rows, height of first row is equal to 40 percent of the browser screen height.
+	<FRAMESET COLS="150,100,3*,*"> // breaks the window into four columns, width of the first column is 150 pixels.
+	Don't use ROWS and a COLS attribute in the same <FRAMESET> tag. The values can be a number of pixels, a percentage of a browser window's dimensions, or 
+	an asterisk (*), which acts as a wildcard character and tells the browser to use whatever space it has left.
+
+	Nesting of Framesets
+		<FRAMESET ROWS="33%,33%,33%">
+		<FRAMESET COLS="50%,50%"> <!-- Split Row 1 into two columns -->
+		...
+		</FRAMESET>
+		<FRAMESET COLS="50%,50%"> <!-- Split Row 2 into two columns -->
+		...
+		</FRAMESET>
+		<FRAMESET COLS="50%,50%"> <!-- Split Row 3 into two columns -->
+		...
+		</FRAMESET>
+		</FRAMESET>
+
+<frame> tag - once web page is divided into frames, you can fill each frame with content using <FRAME> tag and its many attributes. 
+	<frame src="abc.html" name="unique name for each frame"> </frame> 
+
+<noframes> - message to display if the browser doesn't support <frame>, <frameset> tags. one must place <noframes> tag inside <frameset> tag.
+
+
+function refreshApp(url) {
+   frames['app'].window.location = url;
+}
+
+<FRAMESET rows="48,*,120" frameSpacing=0 frameborder=1 onload="refreshApp('/servlet/ReconEmail?emailNo=1')">
+<FRAME SRC='/servlet/AppHdr' NAME='title'>
+<FRAME SRC='/html/blank.html' NAME="app" >
+<FRAME SRC='/tcpReassem/c2xki95bc1/app/MAIL1/MAIL1.txt' NAME="header" >
+</FRAMESET>
+
+---------------------------------------------------------------------------
+
+---------------------------------------------
+
+---------------------------------------------------
+
+link 
+	The HTML link tag is used for defining a link to an external document. 
+	It is placed in in the <head> section of the document.
+	The HTML link tag is commonly used for linking to an external style sheet.
+	HTML 5 <link> Tag for a Favorites Icon
+Favorites / Shortcut Icon
+A square-shaped (ex: 16-pixel by 16-pixel) color bitmapped image displayed in the browser address bar or in the
+favorites or bookmarks.
+Examples
+<link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico" sizes="16x16 32x32 64x64"/>
+<HEAD>
+<TITLE>Login to Niksun Appliance</TITLE>
+<link rel="shortcut icon" href="/images/favicon.ico">
+</HEAD>
+
+
+======================================================
+
+
+<meta> - used in 2 ways
+	http://www.i18nguy.com/markup/metatags.html
+	http://www.build-your-website.co.uk/meta-tags-explained.htm
+    * <META HTTP-EQUIV="name" CONTENT="content">
+    * <META NAME="name" CONTENT="content"> 
+	META tags should be placed in the head of the HTML document.
+
+	<meta name="keywords" content="antivirus Norton AntiVirus Enterprise edition nav AV"> - Keywords are used by search engines to make the page more easily searchable.
+	<meta name="description" content="Norton AntiVirus Enterprise Edition is the most comprehensive antivirus solution available for businesses"> - The description is used by search engines to provide a short synopsis of the page.
+	used to identify the creator of the page
+	what HTML specs the page follows
+
+	To refresh/reload a webpage(perhaps to get new information from a spreadsheet or CGI) - <meta http-equiv="refresh" content="600">
+	To redirect to a webpage after some time - <meta http-equiv="refresh" content="2;url=http://webdesign.about.com">
+    * http-equiv="charset" content="iso-8859-1"
+      This defines the language used on the page
+    * http-equiv="expires" content="31 Dec 2000"
+      This defines the day the page will be out of date
+    * http-equiv="refresh" content="12"
+      The page will reload every 12 seconds (see below)
+
+	generally those who ran adult-orientated websites, began to abuse the use of Keyword Meta tags. Many unrelated keywords were placed on their sites in the Meta tag section, causing their pornographic sites to begin appearing in search results unrelated to topics such as "Smithsonian".
+	Eventually the major search engines began discontinuing the use of Meta tags as major criteria for listing sites.
+
+
+--------------------------------------------------------------------
+
+-----------------------------------------
+<script>
+	language - can be javascript, vbscript etc
+	src - URL of file containg script. If the src attribute is not present, then the content text between the <script> and the </script> is compiled and executed
+	
+	self-closed script tag doesn't work in most browsers.
+	so, use <script></script> rather than <script/>
+
+
+
+
+
+
+// check if a checkbox is selected or not
+$("input[name='male']").is(":checked");
+$("input[name='female']").attr('checked');
+
+// set the checkbox selected
+$("input[name='male']").attr("checked", true);
+$("input[name='male']").attr("checked", "checked");
+
+// set the checkbox unselected
+$("input[name='male']").attr("checked", false);
+$("input[name='male']").removeAttr("checked");
+
+// get or set the contents of text field
+$("input[name=email]").val();
+$("input[name=email]").val("test@gmail.com");
+
+
+
+// check if a radio button is selected or not
+$("input[name='male']").is(":checked");
+$("input[name='female']").attr('checked');
+
+// get the value of the selected radio button
+$("input[name='gender']:checked").val();
+
+// set the male radio button as selected
+$("input[name='gender']")[0].attr("checked", true); 
+$("input[name='gender']:nth(0)").attr("checked", "checked");
+
+// set the female radio button as selected
+$("input[name='gender']")[1].attr("checked", true);
+$("input[name='gender']:nth(1)").attr("checked", "checked");
+
+// reset the radio button selected (after this all radio buttons are unselected)
+$("input[name='gender']").attr("checked", false);
+$("input[name='gender']").removeAttr("checked");
+
+
+Javascript + select
+	document.formName.selectName.selectedIndex - get the index of selected option
+	document.formName.selectName.selectedIndex = 2; // changing the selected option using javascript
+
+	document.formName.selectName.options - returns an array of options in the select box
+	document.formName.selectName.options[document.formName.selectName.selectedIndex].value - returns the contents of the selected option.
+	document.formName.selectName.options[document.formName.selectName.selectedIndex].text - returns the contents of the value attribute of selected option.
+
+	add an option to drop downdocument.formName. list
+		function addOption(text, value)
+		{
+		var optn = document.createElement("option");
+		optn.text = text;
+		optn.value = value;
+		document.formName.selectBoxName.options.add(optn);
+		}
+
+	remove an option from drop down list - http://www.w3schools.com/js/tryit.asp?filename=try_dom_select_remove
+		function removeOption(index)
+		{
+		document.formName.selectBoxName.options[index].remove();
+		}
+
+
+JQuery + select
+
+	// get the value of the selected option. 
+	// If it's a multi-select dropdown, all the selected values will be in the form of an array.
+	$("#myselect").val();
+	$("#myselect option:selected").val();
+
+	$("#myselect option:selected").text(); get the text/contents of the selected option.
+	$("#myselect option:eq(3)").text('3rd option'); - Set the text of a matched option 
+
+	$(â€œ#elementid option:eq(2)â€).val(â€œ7â€) - Set the value of a matched option 
+
+	$("#elementid").val("Oranges").attr("selected","selected") - set an option selected based on its value.
+	$("#elementid option:selected").prevAll().size() - get the index of the selected option
+
+	$("#elementid").serialize()
+
+	$("#myselect option[value='optionvalue']").text(); - get the text/contents of an option that is not selected.
+	$("#myselect option:first").text()
+	$("#myselect option:eq(3)").text()
+
+	$("#target").val($("#target option:first").val());
+	$("#target option:first").attr('selected','selected');
+	$("#myselect").val(2); - programmatically set the selected item.
+	$("#multiselect").val(["0","3"]); - 
+	$(â€œ#myselectâ€).html(â€œâ€); - programmatically clear the list.
+	// Set the selected element by text
+	$("#myselect").val("Some oranges").attr("selected", "selected");
+
+	$("#myselect").prepend("<option value='0'>Before Apples</option>"); - programmatically add an option at the beginning of the list.
+	$(â€œ#myselectâ€).append(â€œ<option value=â€™9â€™>Value 9</option>â€); - programmatically add an option at the end of the list.
+	$("#myselect option:eq(0)").after("<option value='4'>Some pears</option>"); // Insert an item in after a particular position
+	$("#myselect option:eq(3)").before("<option value='5'>Some apricots</option>"); // Insert an item in before a particular position
+
+	$("#myselect option:eq(1)").replaceWith("<option value='2'>Some apples</option>"); - replace an option at specified index with another option.
+
+	$("#myselect option:first").remove(); // remove first item
+	$("#myselect option:eq(0)").remove(); // remove an item at a particular index
+	$("#myselect option:last").remove(); // remove last item
+
+	$("#myselect option").index($("#myselect option:selected")); // get the index of the selected option
+
+	$(â€œselect[name=elementname]â€) - select tag with specified name
+	$(â€œselect.classnameâ€) - select tag with specified class
+
+	$("#myselect option:eq(2)").attr("selected", "selected"); - set the option with index 2 as selected.
+
+	$("#dropdown").prepend("<option value=â€™defaultâ€™>default</option>"); // create a default option as first option in the list
+	$("#dropdown option:first-child").attr("selected","selected"); // mark it as selected
+	
+	$("#mySelect").val(3); $("#mySelect option[value='3']").attr('selected', 'selected'); // mark option with value '3' as selected
+	$("#mySelect option:selected").length - check if there is any option selected or not??
+
+https://www.google.co.in/search?q=html5+svg+vs+svg&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a
+http://www.w3.org/TR/REC-html40/sgml/dtd.html - HTML4 DTD
+www.instantshift.com/2012/03/27/html5-best-practices-for-designers/ - Must Read
+http://www.instantshift.com/2009/11/16/css-box-model-the-foundation-for-improving-your-css/ - Must Read
+
+
+
+
+Target
+Specifies the window to be used to load the response of the form submission. You can use the name of a window or any of the following reserved keywords:
+Without the target attribute, clicking the hyperlink will cause the "target" of the link to open in the same window.
+
+_blank 	Opens in a new window of default size.
+_self 	The target="_self" attribute causes the "target" of the hyperlink to open in the current frame. This is the behavior that is used if the target attribute was not used at all. 
+		If you are using CSS instead of frames, most browsers will just display this as a full page, replacing the current content.
+
+
+_parent 	The target="_parent" attribute causes the "target" of the hyperlink to display in the entire area of the current frameset. For instance using the above conventions and structures, say the content.html frame contains a frameset of 3 files such as; leftpane.html, maincontent.html, and rightpane.html.
+		If you create a hyperlink in the maincontent.html frame area that uses the target="_parent", once clicked, instead of displaying just in the current maincontent.html frame area, it displays in the entire content.html frameset area. That is, it takes up the area of leftpane.html, maincontent.html, and rightpane.html.
+		If you are not familiar with frames then this is probably as clear as mud. See the related links section for a link to W3C's comprehensive article on frames.
+		If you are using CSS instead of frames, most browsers will just display this as a full page, replacing the current content.
+
+_top 		The target="_top" attribute causes the "target" of the hyperlink to display at the top level of all currently defined framesets.  For instance, Say you have 2 framesets defining a page. One called header.html defining the page header and a second named content.html that defines the rest of the page. If you create a hyperlink in the content area that uses target="_top", once clicked, it makes it self the top level frame replacing the header.html and content.html frameset structures. In short..fills the entire page! If you are using CSS instead of frames, most browsers will also display this as a full page, replacing the current content.
+
+
+TARGET="_blank" loads a new, empty window.
+TARGET="_self" loads the same window the anchor was clicked in.
+TARGET="_parent" loads the <FRAMESET> (parent) document.
+TARGET="_top" loads the full body of the browser window.
+
+
+name of a frame
+		The value of the target attribute can also be the name of a frame or window. For example, using the above example where we have a leftpane, maincontent, and rightpane.html frames and the maincontent.html is defined with a name
+		of mainwindow. Say we put a link in the leftpane frame and use target="mainwindow", then once clicked, instead of displaying in the current leftpane.html frame area it displays in the maincontent.html frame area.
+		http://xahlee.org/js/frame/0.html
+
+If the Target field is not mentioned, the response is loaded in the current window itself. 
+
+http://webdesign.about.com/od/forms/a/aa070699.htm - form tag attributes
+http://webdesign.about.com/od/forms/f/bl_faq6_2a.htm - How do I get form data emailed to me?
+http://webdesign.about.com/cs/forms/a/aamailtobroke.htm - When Mailto Forms Don't Work
+http://webdesign.about.com/od/forms/f/blfaqformpopmai.htm - works if the person sending the email has a pop 3 server. (like Outlook)?
+
+
+<select id="sel">
+<option>0</option>
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+</select>
+<script type="text/javascript">
+document.getElementById('sel').options[3].selected=true
+</script>
+
+------------------------------------ 
+<input>
+
+
+
+style attribute - inline styles
+	<element-name style="cssproperty: value;">
+	All HTML elements (except script) that are normally used in the body of a web page may employ the style attribute.
+	style attribute will override any style set globally (in the <style> tag or in a linked stylesheet
+	http://www.ironspider.ca/adv/cssproperties/index.htm - best info abt style attributes
+
+	Font Styles
+	font-family		(Any font name)		Sets the text typeface
+	font-size		15px | 12pt | 0.5em	Sets the text size
+	font-weight		bold | normal		Set bold typeface?
+	font-style		italic | normal		Set italics typeface?
+	background		(Any color) | url('example.jpg')	Sets background
+	color			(Any color)			Sets the text color
+	line-height		17px | normal		Sets line spacing
+
+
+
+
+Dimensions, Padding and Margin
+	content - main text
+	Padding - defines space between element content and border
+	Border - 
+	Margin - defines space between border and other outer elements
+	http://www.webhostmonkeys.com/2008/02/css-padding-border-margin - gives a clear view
+
+width	400px | 70%	Sets width
+height	400px | 70%	Sets height
+padding	10px | 5%	Set padding on all 4 sides
+padding-top	10px | 5%	Set padding on top
+padding-bottom	10px | 5%	Set padding on bottom
+padding-left	10px | 5%	Set padding on left side
+padding-right	10px | 5%	Set padding on right side
+margin	10px | 5%	Set margin on all 4 sides
+margin-top	10px | 5%	Set margin on top
+margin-bottom	10px | 5%	Set margin on bottom
+margin-left	10px | 5%	Set margin on left side
+margin-right	10px | 5%	Set margin on right side
+
+Borders
+
+border	1px solid black	Defines all borders
+border-top	1px solid black	Defines top border
+border-bottom	1px solid black	Defines bottom border
+border-left	1px solid black	Defines left border
+border-right	1px solid black	Defines right border
+
+Backgrounds
+
+background	(All background properties at once)	Sets background
+background-color	(Any color)	Background color
+background-image	url('example.jpg')	Background image
+background-repeat	repeat-x | repeat-y | no-repeat	Tile background?
+background-position	top left | 50% 100%	Position?
+background-attachment	fixed | scroll	Fixed or scroll?
+
+
+Position
+
+position	relative | absolute | fixed	Sets type of positioning
+top	20px | 10%	Offsets element from top
+left	20px | 10%	Offsets element from left
+bottom	20px | 10%	Offsets element from bottom
+right	20px | 10%	Offsets element from right
+
+
+Float & Alignment
+
+float		left | right				Aligns block element. used for image alignments
+text-align	left | center | right | justify	Aligns text
+
+
+
+text-decoration	underline | overline | none	Is the link text underlined?
+cursor	crosshair | default | help	Sets the mouse pointer style
+background	(Any color)	Rollover background color
+display	block | inline	Set link as block element?
+
+---------------------------------------------------	
+	
+    out.print("<tr><td width=\"40%\" height=\"21\">");
+                out.print(securityQuestion);
+                out.print("</td>");
+                out.print("<td width=\"60%\" height=\"21\"><input type=\"textfield\" name=\"answer\" size=\"25\"></td></tr>");
+                out.print("<td width=\"60%\" height=\"21\"><input type=hidden name=\"username\" value=" + user +"></td></tr>");
+                out.print("<tr><td width=\"40%\" height=\"21\"><input type=\"submit\"></td>");
+                out.print("<td width=\"40%\" height=\"21\"><input type=\"button\" value=\"cancel\"></td></tr>");
+
+
+You can use the following style attributes to format the layout of the content of a <div>, <p> or <span>. All attributes should be declared as follows: style= attr1:value1;attr2:value2; ... . 
+width  	 Width of this <div>, <p> or <span> tag
+height 	Height of this <div>, <p> or <span> tag
+align 	Alignment of the content of the element that has this attribute. Values: left, right, center
+margin (-left, -right,
+-top, -bottom) 	Forced distance between this and its parent or neighbour element
+padding (-left, -right,
+-top, -bottom) 	Forced distance between the border of this element and its own content
+color 	Font color
+background-color 	Background color of this <div>, <p> or <span> tag, specified in hexadecimal code
+background:url(http://myURL/test.gif) 	Background image
+opacity 	Opacity of the background color of the corresponding <div>, <p> or <span>. For example, 10 percent opacity is specified by opacity:0.1 and 50 percent by opacity:0.5
+border 	The width of the border in pixel (e.g. border=0px, border=1px, ..., border=10px
+border-color 	The color of the border
+border-style 	The style of the border. Possible values: dotted, dashed, solid
+font-familiy 	The text font that is used (e.g. arial, verdana, tahoma, times new roman, courier)
+font-style 	Style of the font. Possible values: italic, oblique, normal
+font-size 	Size of the font.
+font-weight 	Weight of the font. Possible values: bold, bolder, lighter, normal, 100, 200, 300,... , 900
+text-decoration 	An additional text decoration. Possible values: line-through, underline, none
+line-height 	Height of the line, e.g. line-height:5. 
+
+http://www.w3schools.com/TAGS/ref_standardattributes.asp
+http://www.tutorialspoint.com/html/html_attributes.htm
+http://vietsciences.free.fr/khaocuu/nghiemphongtuan/HTML/Main/HTMLDataTypes.html
+http://www.tizag.com/htmlT/htmlattributes.php
+http://htmlhelp.com/reference/html40/attrs.html
+http://www.w3.org/TR/REC-html40/struct/global.html - must read
+
+The tags added to HTML to allow for HTML forms
+are: 
+
+
+
+CSS font property is a shorthand property for setting font-family, font-size, font-variant, font-style, font-weight, and line-height. 
+font: <value1> <value2> ...
+    *  font-style
+    * font-variant
+    * font-weight
+    * font-size/line-height
+    * font-family
+
+<style type="text/css">
+  p { font: 14pt/16pt fantasy, cursive, Serif }
+</style>
+<p>CSS font</p>
+
+
+CSS Font Family
+Font families can be divided into two groups: serif and sans-serif. A sans-serif font does not include the small lines at the end of characters, while a serif font does include these small lines. When choosing which kind you prefer, remember that studies have shown that sans-serif fonts are much easier to read on a computer monitor than serif fonts.
+CSS Code:
+h4 { font-family: sans-serif; }
+h5 { font-family: serif; } 
+h6 { font-family: arial; } 
+
+CSS Font Size
+You can manipulate the size of your fonts by using values, percentages, or key terms. Using values are useful if you do not want the user to be able to increase the size of the font because your site will look incorrect if they did so. Percentages are great when you want to change the default font, but do not want to set a static value.
+CSS Code:
+p { font-size: 120%; } 
+ol{ font-size: 10px; } 
+ul{ font-size: x-large; }
+Though key terms are not very useful, the common terms are: xx-large, x-large, large, medium, small, x-small, and xx-small.
+
+CSS Font Style
+
+CSS Font-Style is where you define if your font will be italic or not. Possible key terms are the following: italic, oblique, and normal.
+CSS Code:
+
+p { font-style: italic; }
+
+h4{ font-style: oblique; }
+
+
+
+
+CSS Properties:
+
+    * font-size:
+    * font-family:
+    * color:Color Picker
+    * background-color:Color Picker
+    * text-align: Left Center Right Justify
+    * line-height:
+    * font-weight:
+    * font-style:
+    * font-variant:
+    * text-decoration:
+    * text-indent:
+    * text-transform:
+    * letter-spacing:
+    * word-spacing:
+    * font-stretch:
+    * font-size-adjust:
+    * white-space:
+    * unicode-bidi:
+    * direction:
+
+
+font-family  	 serif sans-serif cursive fantasy monospace custom:
+font-style 	normal italic oblique
+font-variant 	normal small-caps
+font-weight 	normal bold bolder lighter 100 200 500 600 900
+font-size 	medium small large smaller larger custom:
+Text
+line-height 	100% 200% 80% 2em 1em 0.8em custom:
+word-spacing 	normal 1ex 1.5ex 2ex 5ex
+letter-spacing 	normal 0.1ex 0.3ex 0.75ex 1ex
+text-decoration 	none underline overline line-through blink
+text-transform 	none capitalize uppercase lowercase
+text-align 	left right center justify
+text-indent 	0ex 1ex 2ex 5ex 10ex 10% 20%
+
+
+<style type="text/css">
+p.sample {
+	font-family: serif;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	font-size: medium;
+	line-height: 100%;
+	word-spacing: normal;
+	letter-spacing: normal;
+	text-decoration: none;
+	text-transform: none;
+	text-align: left;
+	text-indent: 0ex;
+}
+</style>
+
+<p class="sample">
+You are old, Father William, ...
+</p>
+
+------------------------------------------
+------------------------------------------
+deprecated tags - center, font, b, u
+deprecated attrs - align, background, bgcolor, hspace, vspace, size
+
+deprecated tags
+<applet> - use <object>
+<basefont>
+<center>
+<dir> - use <ul>
+<font>
+<isindex> - use <input>
+<listing> - use <pre>
+<menu> - use <ul>
+<plaintext> - use <pre>
+<s> - use <del>
+<strike> - use <del>
+<u>
+<xmp> - use <pre>
+
+deprecated Attributes
+align=
+alink=
+background=
+bgcolor=
+color=
+hspace=
+link=
+size=
+text=
+type=
+vlink=
+vspace=
+
+
+Horizontal Rules
+The <hr> tag defines a thematic break in an HTML page, and is most often displayed as a horizontal rule.
+
+The <hr> element is used to separate content (or define a change) in an HTML page:
+
+Example

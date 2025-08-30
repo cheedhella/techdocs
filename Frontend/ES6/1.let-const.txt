@@ -1,0 +1,88 @@
+var VS let VS const
+    ES5 -> var; ES6 -> let and const;
+
+    A variable declared using var is function-scoped when declared inside a function, but global-scoped when declared outside of a function;
+    Also, var does not stop you from redefining the same variable, which overrides the initial declaration or initialization.
+
+    Eg 1: var variables can be re-declared OR updated;
+        var width = 100;
+        console.log(width); // 100
+        var width = 200;    // Re-declare, no error!
+        console.log(width); // 200
+        width = 300;        // Just update, no error!
+        console.log(width); // 300
+
+    Eg 2: var variables can be either function scoped OR global scoped;
+        If the var variable is declared inside a function, it is function scoped;
+        If the var variable declared is not inside a function, it is global scoped and available in the whole window;
+
+        var x = 100;
+        function setX() {
+            var x = 200;        // function scoped
+            console.log(x);     // 200
+        }
+        setX();
+        console.log(x);         // 100
+    
+    Eg 3: vars are not block scoped;
+        var x = 100;
+        function printX(){     
+            var x = 200;    
+            if(true){             
+                var x = 300;
+                console.log(x);   // 300
+            }     
+            console.log(x);       // 300
+        }
+        printX();
+        console.log(x);          // 100
+
+    Eg 4: let and const are block-scoped;
+        let x = 100;
+        function printX(){     
+            let x = 200;    
+            if(true){             
+                let x = 300;
+                console.log(x);   // 300
+            }     
+            console.log(x);       // 200
+        }
+        printX();
+        console.log(x);           // 100
+
+    Eg 5: let and const variables can't be redeclared in the same scope;
+        let x = 100;
+        let x  = 200;           // SyntaxError: Identifier 'x' has already been declared
+        function printX() {
+            let x = 300;
+            console.log(x);
+        }
+        printX();
+        console.log(x);
+
+    Eg 6: You can update let variables, but not const variables;
+        let x = 100;
+        x = 200;
+        const y = 1000;
+        y = 2000;               // TypeError: Assignment to constant variable
+        console.log(x);
+        console.log(y);
+
+    Eg 7: const object is not immutable object; 
+          It only means that, if you try to assign it new object, it will not allow; 
+          It doesn't mean that entire object is immutable; You can modify the object;
+        const person = {
+            name: 'Wes',
+            age: 28
+        };
+        person = { name: 'Wesley' };        // TypeError: Assignment to constant variable
+        person.age = 29;                    // allowed!
+
+        Note: Use Object.freeze(), if you want to create a immutable object;
+
+    Eg 8: const array is also not immutable;
+        const myList = [1, 2, 3];
+        myList.push(4);             // allowed!
+        myList = [1, 2, 3, 4];      // not allowed!
+
+Bottom Line: Never use 'var'; Use const, if you think the value of the variable won't change; Otherwise, use let;

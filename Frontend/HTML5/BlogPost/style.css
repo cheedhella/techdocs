@@ -1,0 +1,101 @@
+/*
+By default, browser adds some margin and padding, if you don't set anything!
+*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 
+    Everything <p>, <a> are in the same font and font-size;
+    All child elements inherit parent's style, and can override it;    
+*/
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+}
+
+h1,
+h2 {
+  /* Styles common to both h1 and h2 */
+  color: green;
+}
+
+h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.main-text {
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+#author-text {
+  font-size: 22px;
+  float: left;
+  margin-top: 30px;
+  margin-left: 10px;
+}
+
+.container {
+  width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.blog-post {
+  /* background-color: blue; */
+  width: 75%; /* 75% of the container */
+  float: left;
+  padding-right: 30px; /* Space inside box */
+  position: relative;
+}
+
+.other-posts {
+  /* background-color: green; */
+  width: 25%; /* 25% of the container */
+  float: left;
+}
+
+.other-post {
+  margin-bottom: 40px;
+}
+
+.author-box {
+  /* background-color: lightpink; */
+  border: 1px solid grey;
+  padding-top: 20px;
+}
+
+.author-box img {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%; /* Awesome! Use this for round images! */
+  float: left; /* Float both img and name left, so that they appear next to each other! */
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.blog-post img {
+  height: 150px;
+  width: auto;
+}
+
+.date {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+}

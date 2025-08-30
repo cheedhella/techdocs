@@ -1,0 +1,116 @@
+// ES5 Class
+function Animal(options) {                              // Constructor function is used to create a class;
+    this.name = options.name;                           // Properties of the class;
+}
+Animal.prototype.sayHi = function() {                   // Adding a method to the class;
+    return 'I am an animal named: ' + this.name;
+}
+var a1 = new Animal({name: 'Snoopy'});                  // new is used to create instance of the class;
+console.log(a1.sayHi()); // I am an animal named: Snoopy
+---------------------------------------------------------------------------------------------------------
+// ES5 Inheritance
+function Dog(options) {
+    Animal.call(this, options);                         // Calling super class constructor;
+    this.color = options.color;
+}
+Dog.prototype = Object.create(Animal.prototype);        // Setting up Inheritance b/c Dog and Animal classes;
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function() {
+    return 'bow, bow';
+}
+var d1 = new Dog({ name: 'Ric', color: 'white'});
+console.log(d1.sayHi());                                // I am a animal named: Ric
+console.log(d1.bark());                                 // bow, bow
+---------------------------------------------------------------------------------------------------------
+// ES6 Class
+class Animal {
+    constructor(options) {
+        this.name = options.name;
+    }
+    sayHi() {
+        return 'I am an animal named: ' + this.name;
+    }
+}
+/* 
+Constructor
+    - Every class will have a default constructor;
+    - Constructor gets called, everytime you create an instance/object of a class using new keyword;
+    - Constructor is used to initialize the members of the object;
+    - this refers to object itself;
+*/
+var a1 = new Animal({name: 'Snoopy'});                  // new is used to create instance of the class;
+console.log(a1.sayHi()); // I am an animal named: Snoopy
+---------------------------------------------------------------------------------------------------------
+// ES6 Inheritance
+class Dog extends Animal {
+    constructor(options) {
+        super(options);                // ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor;
+        this.color = options.color;
+    }
+    bark() {
+        return 'bow, bow';
+    }
+}
+
+var d1 = new Dog({ name: 'Ric', color: 'white'});
+console.log(d1.sayHi());                                // I am a animal named: Ric
+console.log(d1.bark());                                 // bow, bow
+---------------------------------------------------------------------------------------------------------
+// Getters and Setters
+class User {
+    constructor({uid, name}) {
+        this.id = uid;
+        this.name = name;
+    }
+    get uid() {
+        return this.id;
+    }
+    set uid(newUid) {
+        this.id = newUid;
+    }
+}
+const u1 = new User({uid: 101, name: 'u101'});
+console.log(u1);                        // {id: 101, name: 'u101'}
+u1.uid = 102;                           // There is no property 'uid' as such; Internally, it calls setter method;
+u1.name = 'u102';
+console.log(u1);                        // {id: 102, name: 'u102'}
+---------------------------------------------------------------------------------------------------------
+// Static members are bound to the class, not object;
+// They can be called only by class name. They can't called using instance of the class;
+// Child class can inherit static members of the parent class;
+class MathUtil {
+    static add(x, y) {
+        return x + y;
+    }
+}
+console.log(MathUtil.add(2, 3));            // 5
+---------------------------------------------------------------------------------------------------------
+// Method overriding
+// Child class can redefine the super class method;
+class Base {
+    sayHi() {
+        console.log('Hi from Base..');
+    }
+}
+class Derived extends Base {
+    sayHi() {
+        console.log('Hi from Derived..');
+    }
+}
+const d2 = new Derived();
+d2.sayHi();                     // Hi from Derived..
+---------------------------------------------------------------------------------------------------------
+// Method overloading
+// JS doesn't have any native support for method overloading;
+// So, if it sees/parses two or more functions with a same names it’ll just consider the last defined function and overwrite the previous ones;
+
+// One way to achieve this behaviour is:
+function foo(x) {
+    if(arguments.length == 2) {
+        return fooNew(arguments[0], arguments[1]);
+    }
+}
+fooNew(x, y, z) {
+}
+---------------------------------------------------------------------------------------------------------

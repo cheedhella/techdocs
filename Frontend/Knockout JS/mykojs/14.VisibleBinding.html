@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Built-in Bindings: Visible Binding</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <div data-bind="visible: shouldShowMessage">
+            You will see this message only when 'shouldShowMessage' holds a true value.
+        </div>
+        <div data-bind="visible: myValues().length > 0">
+            You will see this message only when 'myValues' has atleast one member.
+        </div>
+
+        <input type="button" data-bind="click: showDiv" value="Show Div" />
+        <input type="button" data-bind="click: showDivWithFunction" value="Show Div With Function" />
+
+        <script>
+            var myViewModel = function(name) {
+                this.shouldShowMessage = ko.observable(false);
+                this.myValues = ko.observableArray([]);
+                this.showDiv = function() {
+                    this.shouldShowMessage(true);
+                };
+                this.showDivWithFunction = function() {
+                    myValues.push('Test Data');
+                }.bind(this); // bind(this) makes sure that 'this' inside that function refers to myViewModel
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>RequireJS - Hello World</title>
+		<!--
+			If both data-main and explicit config is not specified, then 
+			baseUrl defaults to directory containing HTML page which loads RequireJS;
+		-->
+	    <script type="text/javascript" src="../lib/require.2.3.6.js"></script>
+	    <script>
+			// requirejs() takes an array of depedant modules and a callback;
+			// It loads all the depedencies asynchronously and adds it to the page as a script tag using head.appendChild().
+			// Once all depedencies are loaded, it executes them and returned value is passed as a parameter to the callback specified;
+			// You can specify the dependencies in any order. Note that there is no need of .js extension when specifying a module.
+	        require(["hello-1", "hello-2"], function(h1, h2) { 
+				console.log('Module Name: ' + h1.modulename + ', message: ' + h1.message);
+				console.log('Module Name: ' + h2.modulename + ', message: ' + h2.sayHi());
+	        });
+	    </script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+<img> tag
+    
+
+<img> tag embeds an image in an HTML page.
+
+<img> 
+	<img src="name.type" alt="alternate text, if image not found" height="pixels%" width="pixels%>
+	src can be absolute or relative. type of img can be JPET, GIF. 
+	use <style> tag to define alignment, border, hspace, vspace.
+	other attributes are: ismap, usemap, longdesc
+<map>
+<area>
+	Eg of creating clickable areas in a image: http://www.htmlcodetutorial.com/images/images_famsupp_220.html

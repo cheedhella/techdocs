@@ -1,0 +1,18 @@
+element.childNodes - returns an array of element's children.
+	childNodes property returns an array containing all types of nodes, not just element nodes.
+	It will bring back all the attribute nodes and text nodes as well.
+	Even spaces and line breaks are interpreted as nodes and are included in the childNodes array.
+
+document.body
+	// same as document.getElementsByTagName("body")[0]
+	document object - one document object per page(<head> and <body>)
+	fgcolor - color of the text
+	bgcolor - back ground color
+	title - refers to <title> tag
+	body - refers to <body> tag of webpage
+	anchors[] - array of anchors in the document
+	links[] - array of links in the document
+	forms[] - array of forms in the document
+	images[] - array of images in the document
+	
+	write(string), writeln(string) – document.write(“hello”);

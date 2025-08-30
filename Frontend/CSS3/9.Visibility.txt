@@ -1,0 +1,18 @@
+
+	
+visibility - hidden | visible(default) | collapse;
+	hidden - used to hide an element without removing it, i.e element still occupies space in the document, an empty rectangle appears where it is located.
+	visible - used to show an element.
+	collapse - it works much like hidden except that for table rows and columns it collapses the row or column so that it doesn't take up space otherwise it would.
+
+display:none vs visibility:hidden
+	element with display:none doesn't take any space in the document layout.
+	element with visibility:hidden takes up some space in the document layout.
+
+	Example: http://www.rainbodesign.com/pub/css/css-visibility.html
+	<div id="block">Now you see me, now you don't</div>
+	<input onclick="document.getElementById('block').style.visibility='visible'" value="Show me" type="button">
+	<input onclick="document.getElementById('block').style.visibility='hidden'" value="Hide me" type="button">
+	Execute the above and observe that the position of the buttons won't change whether the text above is visible or not.
+	http://www.w3schools.com/css/css_display_visibility.asp
+When display is set to none, the element is scrubbed from the document, and no space is reserved for it. Visibility reserves and displays the empty space like the invisible man in his bandages.

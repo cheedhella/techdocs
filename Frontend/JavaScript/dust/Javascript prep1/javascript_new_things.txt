@@ -1,0 +1,237 @@
+var url = "http://www.packtpub.com/scr ipt.php?q=this and that";
+encodeURI(url) - "http://www.packtpub.com/scr%20ipt.php?q=this%20and%20that"
+encodeURIComponent(url) - "http%3A%2F%2Fwww.packtpub.com%2Fscr%20ipt.php%3Fq%3Dthis%20and%20that"
+The opposites of encodeURI() and encodeURIComponent() are decodeURI() and decodeURIComponent() respectively.
+escape() and unescape() functions have been deprecated and should not be used.
+
+eval() function - If you don't trust the source of the input you pass to eval(), just don't use it.
+
+implicit return value from a function: undefined
+	if it doesn't do it explicitly with return, then it it does so implicitly by returning undefined.
+	
+defining functions:
+	function f(){return 1;}
+	var f = function(){return 1;} // literal notation
+	
+anonymous functions:
+		function(a){return a;}
+		
+		You can pass an anonymous function as a parameter to another function. The receiving function can do something useful with the function that you pass.
+		You can define an anonymous function and execute it right away.
+
+callback functions:
+	When you pass a function A to another function B and B executes A, it's often said that A is a callback function. 
+	If A doesn't have a name, then you can say that it's an anonymous callback function.
+	
+	function one() {
+	return 1;
+	}
+
+	function two() {
+	return 2;
+	}
+
+	function invoke_and_add(a, b){
+	return a() + b();
+	}
+
+	invoke_and_add(one, two); // output: 3
+
+
+
+self-invoking functions: calling a function right after it is defined. can be called only once unless you put it inside a loop. useful for one-off or initialization tasks.
+
+	(
+		function(name){
+		alert('Hello ' + name + '!');
+		}
+	)('dude')
+
+
+inner or private functions:
+
+	var a = function(param) {
+		var b = function(theinput) {
+		return theinput * 2;
+		};
+		return 'The result is ' + b(param);
+	};
+	
+	a(2); // output: 4
+	b(2); // output: b is not defined
+
+	
+function returning another function:
+	function a() {
+		alert('A!');
+		return function(){
+			alert('B!');
+		};
+	}
+
+	var newFunc = a(); // alerts "A!"
+	newFunc(); // alerts "B!"
+	
+	a()(); // same as above, alerts "A!" and then alerts "B!"
+	
+	
+rewriting a function definition:
+	
+	function a() {
+		alert('A!');
+		return function(){
+			alert('B!');
+		};
+	}
+	
+	a = a(); // alerts "A!"
+	a(); // alerts "B!"
+
+	
+	
+	
+closure - is a local variable of a function which is kept alive in the stack even though the function has completed its execution.
+	In JavaScript, if you use the function keyword inside another function, you are creating a closure. 
+
+	function sayHello2(name) {
+	  var text = 'Hello ' + name; // local variable
+	  var sayAlert = function() { alert(text); }
+	  return sayAlert;
+	}
+
+	var say2 = sayHello2('Jane');
+	say2();
+	
+	
+	scope chain - every inner function will have access to local variables in parent function and parent's parent function and so on until all global variables.
+	lexical scope - functions create their environment/scope when they are defined, not when they are executed.
+		function f1(){var a = 1; f2();}
+		function f2(){return a;}
+		f1();
+		a is not defined
+
+
+		we can also add/remove/update the variables/methods in the scope of a function(after it is defined).
+		
+		var n;
+		function f(){
+			var b = "b";
+			n = function(){
+				return b;
+			}
+		}
+
+		During definition time, n() was inside f(), so it had access to f()'s scope. even though n() becomes part of the global space.
+		
+		
+function f(){return 1;}
+typeof f
+"function"
+	
+
+http://www.jameswiseman.com/blog/2011/04/28/javascript-scoping-using-closures/
+http://helephant.com/2008/10/17/javascript-closures/
+http://yehudakatz.com/2011/08/12/understanding-prototypes-in-javascript/
+http://www.kevlindev.com/tutorials/javascript/inheritance/index.htm
+http://phrogz.net/js/classes/ExtendingJavaScriptObjectsAndClasses.html
+http://www.zachleat.com/web/selecting-xml-with-javascript/
+http://www.w3schools.com/XPath/xpath_examples.asp
+
+
+Closures are created when a function that’s nested inside another function accesses a variable from its parent’s scope.
+
+function sayHello(name) {
+  var text = 'Hello ' + name;
+  var sayAlert = function() { alert(text); }
+  sayAlert();
+}
+
+JavaScript prototype Property??
+	The prototype object is here to help when you wish to quickly add a custom property/method to an object that is reflected on all instances of it. 
+
+	http://corydorning.com/blog/first-encounter-w-javascripts-prototype-property
+	
+	// Create a new function for strings
+	function displayNumberOfChars() {
+		alert( this.length );
+	}
+
+	// Give String objects a new method
+	String.prototype.showLength = displayNumberOfChars;
+
+	var carter = new String("I learn JavaScript.");
+	carter.showLength();
+	
+	
+
+	
+	
+	
+there are no classes in JavaScript, although you can fake them with constructor functions.
+
+	
+	
+	
+	
+	
+this.element
+javascript getelementsbyname - revise all methods in document object?? - http://www.w3schools.com/js/js_ex_dom.asp
+javascript + XML = javascript selectnodes selectsinglenode
+
+what is XUIEditor? XUIDialog?
+where is the file DVTChartUtils?
+
+when u click on ok where are the settings are stored?
+when u click on properties, how the dialog box/form is populated with values?
+
+
+
+document.bgColor - background color of the web page.
+document.fgColor - color of the text in the web page.
+document.linkColor - color of the links in the web page.
+document.alinkColor - color of the active links in the web page.
+document.vlinkColor - color of the visted links in the web page. 
+document.title - title of the web page.
+
+document.getElementById()
+document.getElementsByName()
+document.getElementsByTagName()
+document.write()
+document.writeln()
+
+document.anchors[]
+document.links[]
+document.forms[]
+document.images[]
+
+
+
+
+
+
+If you look up a property via obj.propName or obj['propName'] and the object does not have such a property - which can be checked via obj.hasOwnProperty('propName')
+
+
+http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_doc_anchors
+http://www.w3schools.com/js/js_ex_dom.asp
+
+I'm All Ears - 
+	If you have any comments or if you know a better way of doing this, I’m all ears.
+	Would you like to hear what I did today? Reply: I'm all ears.
+	Bill: I guess I owe you an apology. Jane: I'm all ears.
+	
+A picture is worth a thousand words.
+
+on earth - normally used at the beginning of a sentence to make it intense or stronger
+	What on earth is Suman trying to do?
+	What on earth is that terrible smell?
+	What on earth could Rohan possibly want? 
+	why on earth 
+	
+
+form.elements
+	[input#idDVTCPropCanvasWidth, input#idDVTCPropCanvasHeight, select#idDVTCPropLegendLoc, input#idDVTCPropxAxisLiveScrolling, input#idDVTCPropyAxisLiveScrolling, input#idDVTCPropclientEventEnabled, input#idDVTCPropclientEventChannels, input#idDVTCPropanimateOnDisplay
+	
+form.elements[0].type - to check if an element is radio box, text field or somethig else.
+
+

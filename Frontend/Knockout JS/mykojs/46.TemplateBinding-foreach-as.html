@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Bindings: Template</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <ul data-bind="template: { name: 'seasonTemplate', foreach: seasons, as: 'season' }"></ul>
+        <script type="text/html" id="seasonTemplate">
+            <li>
+                <strong data-bind="text: name"></strong>
+                <ul data-bind="template: { name: 'monthTemplate', foreach: months, as: 'month' }"></ul>
+            </li>
+        </script>
+
+        <script type="text/html" id="monthTemplate">
+            <li>
+                <span data-bind="text: month"></span>
+                is in
+                <span data-bind="text: season.name"></span>
+            </li>
+        </script>
+         
+        <script>
+            var viewModel = {
+                seasons: ko.observableArray([
+                    { name: 'Spring', months: [ 'March', 'April', 'May' ] },
+                    { name: 'Summer', months: [ 'June', 'July', 'August' ] },
+                    { name: 'Autumn', months: [ 'September', 'October', 'November' ] },
+                    { name: 'Winter', months: [ 'December', 'January', 'February' ] }
+                ])
+            };
+            ko.applyBindings(viewModel);
+        </script>
+    </body>
+</html>

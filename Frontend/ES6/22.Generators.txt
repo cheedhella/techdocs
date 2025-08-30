@@ -1,0 +1,152 @@
+What is a Generator?
+    Generator is a function that can stop midway and then continue from where it stopped;
+    In other words, a generator appears to be a function but it behaves like an iterator;
+
+Normal function VS Generator function
+    - The only way to exit the normalFunc is by returning from it OR throwing an error; 
+    - If you call the function again, it will begin the execution from the top again;
+    - In contrast, a generator is a function that can stop midway(by calling yield()) and then continue from where it stopped(when next() is called);
+------------------------------------------------------------------------------------------------------------
+Eg1: 
+    // Generator function syntax: function* funcName() OR function *funcName();
+    // Nothing can pause a generator from outside; It pauses itself, when it comes across a yield;
+    // However, once it is paused, it can't resume on it's own;
+    function* generatorFn() {
+        console.log('one');             // one
+        yield;                          // returns {value: undefined, done: false} to caller and pauses;
+        console.log('two');             // two
+        yield;                          // returns {value: undefined, done: false} to caller and pauses;
+        console.log('three');           // three
+    }                                   // returns {value: undefined, done: true} to caller;
+    // Calling the generator function won't execute it; 
+    // It returns an Iterator object, which has one method next();
+    const generatorObj = generatorFn();
+    // You can pass the Iterator object to for-of loop OR any API accepting iterator object as input;
+    // Every invocation of next() will return an object: { value: <value>, done: true/false };
+    // Once end of function is reached, done is set to true; Once done is true, it won't generate any more values;
+    console.log(generatorObj.next());         // executes the generator fn until next yield OR end of function;
+    console.log(generatorObj.next());         // executes from last yield to next yield OR end of function;
+    console.log(generatorObj.next());         // 
+------------------------------------------------------------------------------------------------------------
+Eg2: generator function can return multiple values to the caller, using yield;
+    function* generatorFn() {
+        console.log('one');             // one
+        yield 'one';                    // returns {value: 'one', done: false} to caller and pauses;
+        console.log('two');             // two
+        yield 'two';                    // returns {value: 'two', done: false} to caller and pauses;
+        console.log('three');           // three
+    }                                   // returns {value: undefined, done: true} to caller;
+    const generatorObj = generatorFn();
+    console.log(generatorObj.next());
+    console.log(generatorObj.next());
+    console.log(generatorObj.next());
+------------------------------------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------------------------------------------
+Eg: There is a possibility that a generator may never finish;
+    It’s possible to create generators that never end.
+unction * naturalNumbers() {
+  let num = 1;
+  while (true) {
+    yield num;
+    num = num + 1
+  }
+}
+const numbers = naturalNumbers();
+console.log(numbers.next().value)
+console.log(numbers.next().value)
+// 1
+// 2
+------------------------------------------------------------------------------------------------------------
+Eg: Generator VS Iterator
+function *colors() {
+    yield 'red';
+    yield 'green';
+    yield 'blue';
+}
+const c = colors();
+cosole.log(c.next());   // {value: 'red', done: false}
+cosole.log(c.next());   // {value: 'green', done: false}
+cosole.log(c.next());   // {value: 'blue', done: false}
+cosole.log(c.next());   // {value: 'undefined', done: true}
+
+const mycolors = [];
+for(let color of colors()) {
+    mycolors.push(color);
+}
+console.log(mycolors); // ['red', 'green', 'blue']
+------------------------------------------------------------------------------------------------------------
+We can also return from a generator. However, return sets the done property to true after which the generator cannot generate any more values.
+function *  generatorFunc() {
+  yield 'a';
+  return 'b'; // Generator ends here.
+  yield 'a'; // Will never be executed. 
+}
+------------------------------------------------------------------------------------------------------------
+// Better Async functionality
+function fetchJson(url) {
+    return fetch(url)
+    .then(request => request.text())
+    .then(text => {
+        return JSON.parse(text);
+    })
+    .catch(error => {
+        console.log(`ERROR: ${error.stack}`);
+    });
+}
+
+const fetchJson = co.wrap(function * (url) {
+    try {
+        let request = yield fetch(url);
+        let text = yield request.text();
+        return JSON.parse(text);
+    }
+    catch (error) {
+        console.log(`ERROR: ${error.stack}`);
+    }
+});
+
+------------------------------------------------------------------------------------------------------------
+Generators as observers
+Generators can also receive values using the next(val) function. 
+Then the generator is called an observer since it wakes up when it receives new values. 
+In a sense, it keeps observing for values and acts when it gets one.
+
+------------------------------------------------------------------------------------------------------------
+// Combinators
+function * take(n, iter) {
+  let index = 0;
+  for (const val of iter) {
+    if (index >= n) {
+      return;
+    }
+    index = index + 1;
+    yield val;
+  }
+}
+take(3, ['a', 'b', 'c', 'd', 'e'])
+// a b c
+take(7, naturalNumbers());
+// 1 2 3 4 5 6 7
+take(5, powerSeries(3, 2));
+// 9 16 25 36 49
+------------------------------------------------------------------------------------------------------------
+                                              Note that there is  
+
+
+
+
+Imagine you are reading a nail-biting techno-thriller. 
+All engrossed in the pages of the book, you barely hear your doorbell ring. 
+It’s the pizza delivery guy. You get up to open the door. 
+However, before doing that, you set a bookmark at the last page you read. 
+You mentally save the events of the plot. Then, you go and get your pizza. 
+Once you return back to your room, you begin the book from the page that you set the bookmark on; 
+You don’t begin it from the first page again. In a sense, you acted as a generator function.
+
+
+Any number of spaces can exist between the function keyword, the *, and the function name. 
+Since it is just a function, you can use it anywhere that a function can be used i.e inside objects, and class methods.;
+

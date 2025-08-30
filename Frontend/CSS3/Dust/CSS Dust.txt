@@ -1,0 +1,687 @@
+CSS Properties
+	1. Box Model: height, min-height, max-height, width, min-width, max-width.
+		Padding related: padding, padding-top, padding-right, padding-bottom, padding-left
+		Border related: 
+			border, border-width, border-style, border-color,
+			border-top, border-top-width, border-top-style, border-top-color, border-right, 
+			border-right-width, border-right-style, border-right-color,
+			border-bottom, border-bottom-width, border-bottom-style, border-bottom-color, 
+			border-left, border-left-width, border-left-style, border-left-color,
+			outline, outline-width, outline-style, outline-color
+		Margin related: margin, margin-top, margin-right, margin-bottom, margin-left
+	2. Layout Properties: display, position, float, clear, visibility, top, right, bottom, left, z-index, overflow, clip
+	3. List Properties: list-style, list-style-type, list-style-position, list-style-image
+	4. Table Properties: table-layout, border-collapse, border-spacing, empty-cells, caption-side
+		
+		
+
+	3. word-spacing, letter-spacing, text-align, text-indent, text-shadow, white-space,
+	
+----------------------------------------------------------------------------------------------
+A web browser typically reads and renders HTML documents. This happens in two phases: the parsing phase and the rendering phase.
+During the parsing phase, the browser reads the markup in the document, breaks it down into components, and builds a document object model (DOM) tree.
+When the DOM tree has been constructed, and any CSS style sheets have been loaded and parsed, the browser starts the rendering phase. 
+Each node in the DOM tree will be rendered as zero or more boxes.
+Just as there are block-level elements and inline elements in HTML, there are block boxes and inline boxes in CSS.
+In fact, there are several other box types, but they can be seen as subtypes of the block and inline boxes.
+block-level HTML elements generate block boxes, while inline-level HTML elements generate inline boxes. 
+We can, of course, use the display property to change the type of the box generated for any element.
+
+----------------------------------------------------------------------------------------------
+Box Model
+	Box Model applies to block-level elements.
+	http://reference.sitepoint.com/css/boxmodel http://reference.sitepoint.com/css/inlineformatting
+
+Viewport - a rectangular window through which we can view a part of the document.
+Pagebox - In a paged medium, such as printed paper, each page can be seen as a viewport whose dimensions are the same as the page box (the printable part of the page, excluding any page margins).
+Canvas - The browser renders the document on a canvas, which, consequently, is at least as large as the document itself. If the viewport is larger than the document, the canvas fills the viewport.
+----------------------------------------------------------------------------------------------
+white-space
+	http://www.w3schools.com/cssref/pr_text_white-space.asp
+	http://www.impressivewebs.com/css-white-space/
+	
+	
+	http://reference.sitepoint.com/css/text-shadow
+
+
+CSS + BIDI
+
+
+http://www.hypergurl.com/csstutorial7.html - see how to overlap 2 lines
+
+References:
+http://www.cssbasics.com/
+http://blog.femtoo.com/2010/03/css-selectors-cheat-sheet.html
+http://lesliefranke.com/files/reference/csscheatsheet.html - nice
+http://www.pageresource.com/dhtml/cssprops.htm
+http://snipplr.com/view/16716/css-selectors-cheat-sheet/ - css selectors
+http://www.wpdfd.com/issues/70/css_from_the_ground_up/ - css selectors
+http://net.tutsplus.com/tutorials/html-css-techniques/the-30-css-selectors-you-must-memorize/ - css selectors
+http://www.yourhtmlsource.com/stylesheets/advancedselectors.html
+http://www.westciv.com/style_master/academy/css_tutorial/
+http://www.w3schools.com/css/css_reference.asp
+http://line25.com/articles/15-must-read-articles-for-css-beginners
+http://www.hongkiat.com/blog/20-useful-css-tips-for-beginners/
+http://www.pageresource.com/dhtml/cssprops.htm - css properties
+http://www.pserie.psu.edu/compcntr/webhints/styles/styles-properties.htm
+
+css padding border margin
+http://sustainablewebdesign.com/resources/601/
+http://www.rtbwizards.com/helpcenter/cssmarginborderpadding.htm
+
+
+------------------------------------------
+
+CSS padding - space between an element's border and its content, applies to both inline and block level elements.
+
+CSS border - space between margin on the outside and padding on the inside.
+	border: thickness border-style color; // border: 5px solid yellow; Notice that there are no commas separating the properties.
+
+	border-style - none, hidden, dotted, dashed, solid, double
+		http://www.w3schools.com/css/tryit.asp?filename=trycss_border-style
+		border-top-style, border-right-style, border-bottom-style, border-left-style
+
+	border-width - length, thin, medium, thick
+
+	border-color
+
+CSS margin - space surrounding an element, applies to only block level elements.
+	p { margin-top: 10px; margin-right: 20px; margin-bottom: 30px; margin-left: 40px; }
+
+	// short-hand notation
+	p { margin: 10px 20px 30px 40px; } // sequence is clockwise from the top â€” top, right, bottom, left.
+
+
+
+Browser-specific properties - 
+
+        padding between an element's edges and its content. It can be applied to both block and inline elements.
+is just like a margin, except it's the white space between the margin (and border) and the actual content. 
+Unlike margin, which inherits the background color of whatever is around the margin, padding uses the background-color 
+specified for whatever it is padding (e.g. the "content content"). 
+
+
+
+A border can be a visual separator between the margin on the outside, and the padding on the inside. 
+You can set the width, color, and style of the entire border, or you can set each of these properties individually for each side. 
+
+  border: thickness  border-style  color
+  
+	http://www.squidoo.com/borders-and-more
+
+
+
+
+border-style, border-color, border-width
+display: inline; // You can make an inline element display like a block-level element or vice-versa.
+display: list-item; // To make an <li> look like a normal bulleted item, change it to display: list-item.
+text-align: justify
+
+Always remember to add in px, or em, or whatever.
+
+css width of an element does not include padding, borders, or margin.
+Inherited: No
+
+
+
+Tip: it is a common error to leave out the units in a spacing declaration, like div {margin: 3; }. Not defining any units means your browser won't know what to do and will ignore the rule. Always remember to add in px, or em, or whatever.
+The only time it's ok to leave out a unit is when you're setting something to zero. padding: 0; is a valid declaration, as zero is zero no matter which way you slice it.
+
+Total element height = height + top padding + bottom padding + top border + bottom border + top margin + bottom margin
+Total element width = width + left padding + right padding + left border + right border + left margin + right margin
+http://www.learn-css-tutorial.com/BordersMarginPadding.cfm
+
+CSS display types - none, block, inline
+
+CSS text - http://www.rtbwizards.com/helpcenter/csstext.htm
+
+CSS font - http://www.rtbwizards.com/helpcenter/cssfonts.htm
+
+-------------------------------------------
+
+block level elements - images, paragraphs, div's, span's, lists
+
+
+If you use an incomplete DOCTYPE or none at all, Internet Explorer 8 and earlier switch to quirks mode, which uses an incorrect version of the box model.
+If a DOCTYPE is not defined, Internet Explorer manipulates the height and width of your elements in a way you did not intend. 
+This causes browser incompatibility issues with your layout, so just remember to include a DOCTYPE.
+	
+CSS properties: color, text-decoration,  padding-left, margin-left, margin , padding, border
+
+<input type="radio" value="male" name="sex" class="radioinput"> 
+.radioinput { color: green; background-color: #ccc; } 
+
+HTML text link act like submit button: <a href="javascript:document.msgform.submit(  );">Submit</a>
+
+
+absolute, relative positioning
+
+
+viewport - viewing area on the screen
+
+Basically, absolute positioning allows you to type in coordinates for your div, coordinates from the top-left of the screen.
+
+
+
+Media Queries
+http://reference.sitepoint.com/css/doctypesniffing
+
+
+
+
+
+
+	
+	
+
+
+
+
+	
+
+		
+
+	
+In CSS, URLs must be surrounded by the url() wrapper, not quotes.
+
+	
+	
+background - shorthand property which is used to set all background related properties for an element in one declaration.
+	background: background-color, background-image, background-repeat, background-attachment, background-position;
+	
+
+	background-color
+	background-image - image to be used as background of an element. By default, image is repeated horizontally and vertically to cover the entire element.
+	background-repeat: repeat(default) | repeat-x | repeat-y | norepeat; // http://www.w3schools.com/css/tryit.asp?filename=trycss_background-repeaty
+	background-attachment: fixed | scroll; // scroll means background-image scrolls along with the page, fixed means background-image is fixed and content scrolls over it.
+	background-position: [%|px|left|center|right] [%|px|top|center|bottom];
+		Used to set starting position of background-image for an element. // default is 0% 0%
+		It is used along with background-image.
+		With a value pair of '0% 0%', the upper left corner of the image is aligned with the upper left corner of the box's padding edge. 
+		A value pair of '100% 100%' places the lower right corner of the image in the lower right corner of padding area. 
+		With a value pair of '14% 84%', the point 14% across and 84% down the image is to be placed at the point 14% across and 84% down the padding area.
+	background-size - used to change the size of background-image to better fit your page.
+	background-break -
+	background-clip - 
+	background-origin - content-box | padding-box | border-box;
+		
+		
+http://techbus.safaribooksonline.com/book/web-development/css/9780470684160/tools/firebug?query=%28%28css+background-clip%29%29&reader=html&imagepage=#snippet
+
+
+
+
+border - used to style/format of an element's border.
+	border: border-width, border-style, border-color;
+	border-style: none | dotted | dashed | solid | double | groove | ridge | inset | outset
+
+	border-top, border-bottom, border-left, border-right - used to style/format different sides of an element differently.
+
+	border-top: border-width, border-style, border-color;
+	border-bottom: border-width, border-style, border-color;
+	border-left: border-width, border-style, border-color;
+	border-right: border-width, border-style, border-color;
+
+
+	border-break - border-width, border-style, border-color | none(default);
+		It is used to tell the browser how to break a box(inline or block-level) with a border when it is spread more than one page or line.
+		none - default, it doesn't add any padding or border at the break.
+		border-width, border-style, border-color - padding is added as wide as specified in the corresponding side of the padding property and border is added with the specified width, style, color.
+
+	 
+	border-collapse - http://www.htmlref.com/reference/appb/css_borders.htm
+	border-color - 
+	border-image - 
+	border-radius - border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius, border-top-left-radius
+	border-spacing - similar to the cellspacing attribute on the table element in HTML/XHTML and defines the space between cells in a table. Its value can be an arbitrary length, but not negative. If one length is specified, it gives both the horizontal and vertical spacing. If two are specified, the first gives the horizontal spacing and the second the vertical spacing between cells.
+	box-shadow - 
+http://techbus.safaribooksonline.com/book/web-development/css/9780470096970/tables/removing_cell_spacing_with_the_border-co?query=%28%28border-collapse%29%29&reader=html&imagepage=#snippet
+
+
+http://www.cssportal.com/
+
+http://css3test.com/ - Open this URL in your browser to find what percentage of CSS3 features your browser supports.
+
+
+
+block vs inline elements
+
+http://dustwell.com/div-span-inline-block.html
+http://stackoverflow.com/questions/8969381/what-is-the-difference-between-display-inline-and-display-inline-block
+http://webdesign.about.com/od/styleproperties/p/blspdisplay.htm
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/
+http://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/
+
+
+
+http://techbus.safaribooksonline.com/book/web-development/css/9780133088359/chapter-5dot-page-layouts/ch05lev1sec3?query=%28%28css+display%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODAxMzMwODgzNTklMkZjaDA1JnF1ZXJ5PSgoY3NzJTIwZGlzcGxheSkp - CSS Layouts
+
+
+
+
+
+
+
+
+
+
+
+white-space - http://xahlee.org/js/css_text-wrap.html
+
+	normal - sequence of white spaces collapse into a single white space. text will wrap when necessary. (default)
+	nowrap - 
+	pre -
+	pre-line -
+	pre-wrap - 
+
+
+text-wrap - normal | unrestricted | none | suppress
+
+
+
+
+text-decoration - line-through | underline | overline | none
+text-indent - npx | n%	// used to indent paragraphs
+text-align - right | justify
+text-transform - capitalize | uppercase | lowercase
+
+word-wrap: break-word; // you can force long text to wrap in a new line by specifying break-word with the word-wrap property. 
+word-spacing - npx;	// space b/w words
+letter-spacing - npx;	// space b/w letters
+
+
+
+a:hover, a:active, a:focus {
+
+Page Layout
+http://techbus.safaribooksonline.com/book/web-development/css/0957921829/building-the-skeleton/sp0957921829-chp-5-sect-4?query=%28%28css+positioning%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTA5NTc5MjE4MjklMkZzcDA5NTc5MjE4MjktY2hwLTUtc2VjdC01JnF1ZXJ5PSgoY3NzJTIwcG9zaXRpb25pbmcpKQ==
+
+http://www.1keydata.com/css-tutorial/
+http://www.csstextwrap.com/examples.php
+http://www.quackit.com/css/properties/ - list of css properties
+
+	Nth element selector:
+		p:eq(0) - select only the first paragraph.
+		a:eq(4) - select the fifth 'anchor' tag on the page.
+		.menu-item:eq(3) - select only the forth element that contains the 'menu-item' class.
+HTML vs XHTML - http://reference.sitepoint.com/css/htmlxhtml
+http://webdesign.about.com/cs/css/qt/tipcssatimport.htm - @import
+http://www.cssnewbie.com/css-import-rule/#.UeJj_awyhRQ - @import
+
+	-----
+	External style sheets can be specified as alternative, which means that they’re not applied by default, but can be enabled by users in browsers that support alternative style sheets.
+	-----
+	Media types - <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+	Media Type	Description
+	"all" 		applies to all media
+	"Braille" 	Braille/tactile feedback devices
+	"embossed" 	paged Braille printers
+	"handheld" 	handheld devices
+	"print" 	paged media and print preview mode on the screen
+	"projection" 	projected presentation (used by Opera in full-screen mode)
+	"screen" 	color computer screens
+	"speech" 	speech synthesizers (see the note below)
+	"tty" 	media with a fixed-pitch character grid
+	"tv" 	television-type devices
+	
+http://techbus.safaribooksonline.com/book/web-development/css/9781590599075/working-with-type/styling_text_using_css?query=%28%28css+background-position%29%29&reader=html&imagepage=#snippet
+http://books.google.co.in/books?id=DeUOMZwzjwsC&pg=PT129&dq=css+border-break&hl=en&sa=X&ei=6abyUbuUPMmPrgfrmIH4Dw&ved=0CGUQ6AEwCQ#v=onepage&q=css%20border-break&f=false
+http://techbus.safaribooksonline.com/book/web-development/css/9780980455229/css-table-layout/chap-csstables?query=%28%28css+display%29%29&reader=html&imagepage=#snippet - CSS Table Layout
+http://alistapart.com/article/taminglists/
+http://css-tricks.com/centering-list-items-horizontally-slightly-trickier-than-you-might-think/
+http://reference.sitepoint.com/css/demos
+http://css-tricks.com/fighting-the-space-between-inline-block-elements/
+http://learnlayout.com/toc.html
+http://techbus.safaribooksonline.com/book/web-development/css/9780470096970/xml/the_display_property?query=%28%28css+display%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA0NzAwOTY5NzAlMkZ0aGVfZGlzcGxheV9wcm9wZXJ0eSZxdWVyeT0oKGNzcyUyMGRpc3BsYXkpKQ== - styling xml documents
+http://techbus.safaribooksonline.com/book/-/9781430244738/chapter-12-cross-browser-layout-techniques/navpoint-80?query=%28%28css+display%29%29#snippet - cross browser layouts
+http://techbus.safaribooksonline.com/book/web-development/css/9781430225430/are-there-any-guidelines-for-basic-page-layout/table-related_displaymthe_future_of_layo?query=%28%28display+inline-table+table%29%29&reader=html&imagepage=#snippet
+
+
+
+display - none | inline | block | list-item | inline-block | table | inline-table | table-header-group | table-row | table-row-group | table-column | table-column-group | table-cell | table-footer-group | table-caption | run-in;
+	none - Don't display the element at all.
+	inline - Display the element as inline element.
+	block - Display the element as block-level element.
+	list-item - Display the element as a list-item, which means it has a bullet in front of it.
+	inline-block - Display the element inline but allow the element to have values for width, height, margin, padding and so on.
+	table - Treats the element as HTML table, child elements are treated as table rows and/or cells. HTML equivalent: <table>
+	table-caption - Treats the element as table caption. HTML equivalent: <caption>
+	table-header-group - Treats the element as a table header. HTML equivalent: <thead>
+	table-footer-group - Treats the element as a table footer. HTML equivalent: <tfoot>
+	table-row-group - Treats the element as a group of one or more rows. HTML equivalent: <tbody>
+	table-row - Treats the element as a table row, child elements are treated as table cells. HTML equivalent: <tr>
+	table-cell - Treats the element as a table cell. HTML equivalent: <td>
+	table-column - Specifies that the element is a column. HTML equivalent: <col>
+	table-column-group - Specifies that the element is a group of columns. HTML equivalent: <colgroup>
+	inline-table - 
+	---
+	This property is used to change the behavior of an element from inline to block and vice versa. 
+	---
+	Table display values
+		CSS was designed to work with all XML document languages, not just XHTML. 
+		It's likely that other languages may have the need for tabular layouts, but will not have elements like table, td, or tr in their vocabularies.
+		CSS 2.1 specification allows authors to assign table element roles to any element using the display property.
+		----------
+		Using the table-related display values , the elements from any markup language can be "mapped" to table elements. A simple example should make this clear. Consider this markup written in a hypothetical XML language.
+			<platter>
+			  <cheese>
+				<name>Brie</name>
+				<origin>France</origin>
+			  </cheese>
+			  <cheese>
+				<name>Manchego</name>
+				<origin>Spain</origin>
+			  </cheese>
+			</platter>
+		By attaching these style rules:
+			platter { display: table; }
+			cheese { display: table-row; }
+			name, origin { display: table-cell; }
+		The example would display in the user agent as though it were marked up like this:
+			 <table>
+			  <tr>
+				<td>Brie</td>
+				<td>France</td>
+			  </tr>
+			  <tr>
+				<td>Manchego</td>
+				<td>Spain</td>
+			  </td>
+			</table>
+		----------
+	For exmaple, the code below would act just like a regular table.
+		<div style="display: table;">
+			<div style="display: table-row;">
+				<div style="display: table-cell;">
+					Cell #1
+				</div>
+				<div style="display: table-cell;">
+					Cell #2
+				</div>
+			</div>
+			<div style="display: table-row;">
+				<div style="display: table-cell;">
+					Cell #3
+				</div>
+				<div style="display: table-cell;">
+					Cell #4
+				</div>khaninfo123@
+			</div>
+		</div>
+	Although it seems pointless to emulate a table with other elements when there already exists such tags; <table>, <tr>, <td>. 
+	In my opinion, tables should not be totally taboo as they seem to be today. They still serve a purpose and should be used when appropriate.
+	---
+	Horizontal list menus - Lists are block-level elements, but if you want your menu to display horizontally, you need to convert the list to an inline element, so that newlines aren't added between each list item.
+	---
+	
+visibility - hidden | visible(default) | collapse;
+	hidden - used to hide an element without removing it, i.e element still occupies space in the document, an empty rectangle appears where it is located.
+	visible - used to show an element.
+	collapse - it works much like hidden except that for table rows and columns it collapses the row or column so that it doesn't take up space otherwise it would.
+
+
+
+display:none vs visibility:hidden
+	element with display:none doesn't take any space in the document layout.
+	element with visibility:hidden takes up some space in the document layout.
+
+	Example: http://www.rainbodesign.com/pub/css/css-visibility.html
+	<div id="block">Now you see me, now you don't</div>
+	<input onclick="document.getElementById('block').style.visibility='visible'" value="Show me" type="button">
+	<input onclick="document.getElementById('block').style.visibility='hidden'" value="Hide me" type="button">
+	Execute the above and observe that the position of the buttons won't change whether the text above is visible or not.
+	http://www.w3schools.com/css/css_display_visibility.asp
+When display is set to none, the element is scrubbed from the document, and no space is reserved for it. Visibility reserves and displays the empty space like the invisible man in his bandages.
+
+float - left | right | none(default);
+	Floats an element to the left or right of its parent element.
+	-----
+	An element with a float value of left or right is taken out of the normal flow of a document and shifted to left or right of the parent element.
+	Float can be applied any element which is not positioned as absolute. Applying float for an inline element turns it into a block-level element.
+	Also, you must specify width for the element, if you specify float for it.
+	----
+	When you float an element, you must also set its width, or some unpredictable results can occur. However, images implicitly have width and so don’t need to have a width assigned to them when floated.
+	-----
+	A floated box moves to the left/right border of its container. 
+	If another box is already present adjacent to that border the newly floated box will stack immediately next to its right/left margin. 
+	Floated boxes will continue to stack in this manner until there is insufficient space at which point the stacking process will restart from the appropriate border of the container box.
+	The floated element will then move as in that direction as far as it can within its containing element.
+	-----
+	Elements that follow a floated element will move up next to the floated element if there is room for them to do so.
+	clear property enables you to stop such elements from moving up next to a floated element. 
+	---
+	none - element is not floated, behaves as normal element.
+	left - take the element out of its normal flow and shift it to the left of its parent container, with text and other elements flowing around its right side.
+	right - take the element out of its normal flow and shift it to the right of its parent container, with text and other elements flowing around its left side.
+	---
+	A technique that you use not only for its intended purpose of flowing text around images, but also for creating columns and making block-level elements sit side-by-side.
+	---
+	Float is very often used for images, but it is also useful when working with layouts.
+	Float is also used to create navigation bars and building CSS columns.
+	The use of float: left is critical to creating columns using CSS layouts. In this case, the <div> box is 540 pixels wide and floats to the left. The float forces other content to flow to its right, starting at the top.
+	
+clear - left | right | both | none;
+	none - doesn't clear any floats.
+	left - The element is shifted down sufficiently to clear the bottom edge of any previous left floated elements.
+	right - The element is shifted down sufficiently to clear the bottom edge of any previous right floated elements.
+	both - The element is shifted down sufficiently to clear the bottom edge of any previous left and right floated elements both.
+	
+used to cancel the effect of float property.
+	Prevents block-level elements from flowing alongside a floated element, and pushes them down below the floated element.
+	clear: 
+	left - keep the left side clear
+	http://techbus.safaribooksonline.com/book/web-development/css/9780132345385/positioning-and-floats/ch06lev1sec8?query=%28%28css+clear%29%29&reader=html&imagepage=#snippet
+	http://techbus.safaribooksonline.com/book/web-development/css/9780133088359/chapter-3dot-positioning-elements/ch03lev1sec3?query=%28%28css+clear%29%29&reader=html&imagepage=#snippet
+	http://techbus.safaribooksonline.com/book/web-development/css/9780470274361/laying-out-your-page/clear_floats?query=%28%28css+clear%29%29&reader=html&imagepage=#snippet
+	http://techbus.safaribooksonline.com/book/web-development/css/9780133132762/10dot-box-properties/ch10lev1sec5_html?query=%28%28css+clear%29%29&reader=html&imagepage=#snippet
+
+Eric Meyer css books
+
+ You can goto kanipakam form palamaner/bangaruplayam itself and then from there go to tpt via putalapattu. no need to go via chittoor
+
+ 
+
+
+line-height - normal | <length> | <percentage> | <number> | inherit;
+	For inline elements, this property defines the space between adjacent lines of text.
+	In general, every block-level element generates one or more inline boxes. The default line-height of each inline box is 1.2 times the font-size of its contents.
+	Leading is the difference between computed value of font-size and computed value of line-height. It can be negative.
+	Half the leading is applied to top and another half to the bottom of the inline box. This generates a inine box.
+	For example, let's say the font-size is 14 pixels and the line-height is computed to 18 pixels. 
+	The difference (4 pixels) is divided in half and each half is applied to the top and bottom of the content area. 
+	This creates an inline box that is 18 pixels tall, with 2 extra pixels above and below the content area.
+	Once all of the inline boxes have been generated for a given line of content, they are then considered in the construction of the line box. 
+	A line box is exactly as tall as needed to enclose the top of the tallest inline box and the bottom of the lowest inline box.
+	-----
+	normal - default, 1.2 times the computed font-size, varies from user-agent to user-agent;
+	length - If the font-size of a paragraph is 14px and line-height is 1.5em, then computed value of line-height is 14 * 1.5 = 21px;
+	percentage - If the font-size of a paragraph is 14px and line-height is 150%, then computed value of line-height is 14 * 150 / 100 = 21px;
+		When you specify the line-height using length or perentae, all descendants inherit the computed value of line-height;
+		If you use a percentage or em value, only the computed value is inherited. 
+		For example, given a parent at 16 pixels with a line height of 150%, the parent’s line height will still be 24 pixels; 
+		However, all child elements will also inherit a line height of 24 pixels, regardless of their font size.
+	number - If you use a number to determine the line height, this factor is inherited by all child items.
+		For example, if a parent’s font size is set to 16px and the line height is 1.5, the parent’s line height will be 24px (16 × 1.5). 
+		If the child’s font size is 10, its line height will be 15 (10 × 1.5).
+		--
+		The declaration line-height: 2; will make child elements double-spaced even if their font sizes are different from the parent’s. 
+		http://techbus.safaribooksonline.com/book/web-development/css/0596527330/text-properties/csstdg3-chp-6-sect-2?query=%28%28css+vertical-align%29%29&reader=html&imagepage=#snippet - see 6.2.1.3. Line height and inheritance
+	----
+	If this property is set for a block-level element box that contains in-line elements, the value specifies the minimal height of each of the in-line boxes.
+	For in-line element boxed, this property specifies the height of the boxes generated by the element.
+	For in-line replaced elements the height of the element box is given by the ‘height’ property instead of the ‘line-height’ property.
+	If an element box contains text in more than one font-size, the ‘line-height’ property should be determined using the largest font-size. This helps to create consistent baselines between adjacent line boxes. 
+	---
+	When applied to a block-level element, line-height defines the minimum distance between text baselines within that element. 
+	Note that it defines a minimum, not an absolute value, and baselines of text can wind up being pushed further apart than the value of line-height. 
+	line-height does not affect layout for replaced elements, but it still applies to them.
+	---
+	When it’s set on a block-level element, a table cell, a table caption, or an inline block that consists solely of inline boxes, this property specifies the minimal height of descendant line boxes.
+	When set on a non-replaced inline element, it specifies the height used to calculate the height of the surrounding line box.
+	---
+	http://jsfiddle.net/joshnh/Lucsf/
+	---
+	
+
+
+vertical-align: baseline(default) | sub | super | top | text-top | middle | bottom | text-bottom | <length> | <negative-length> | <percentage> | <negative-percentage>;
+	This property is used to adjust the vertical alignment of inline boxes in a line-box OR table cells in a table row.
+	This property is applicable only for inline elements(includes replaced elements such as images and form inputs) and table cells.
+	If you have a small div inside a larger div and want to vertically center the smaller one within, vertical-align will not help you.
+	Read this for vertical-align of block-level elements: http://blog.themeforest.net/tutorials/vertical-centering-with-css/
+	vertical-align is not an inherited property.
+	---
+	It is most useful for creating superscripts and subscripts. 
+	Superscripts are bits of text with the baseline above the surrounding text; Subscripts have baselines lower than the surrounding text.
+	Example:
+		.atoms { vertical-align: -0.4em; font-size: smaller; }
+		.power { vertical-align: super; font-size: smaller; }
+		H<span class="atoms">2</span>0
+		x<span class="power">2</span> - 1 = 63
+	Example2:
+		span.raise {vertical-align: super;}
+		span.lower {vertical-align: sub;}
+		<p>This paragraph contains <span class="raise">superscripted</span> and <span class="lower">subscripted</span> text.</P>
+	---
+	The middle value aligns the middle of the text with a height that's 0.5ex above the baseline of the surrounding text. 
+	An ex is a unit of measure equal to the height of a lowercase letter, usually about half the font-size. 
+	Percentages are based on the value of the line-height, which is usually equal to the font-size. 
+	The top and bottom values align with the highest and lowest parts of the line, whereas text-top and text-bottom are based only on the containing box's font-size values.
+	---
+	Browser implementation of vertical-align is highly variable and is dependent upon factors such as font-size, ex calculation, and others. 
+	The safest values for consistency's sake are sub, super, measurements, and percentages; fortunately, the others are not particularly useful most of the time, anyway.
+	---
+	baseline - aligns the baseline of the box with the baseline of the parent box; 
+		If the box doesn’t have a baseline (for instance, an image or form input etc) the bottom margin edge is aligned with the parent’s baseline.
+	super - It raises the element's baseline (or bottom margin edge of a replaced element) with respect to the parent's baseline. The distance raised depends on the user agent.
+	sub - It lowers the element's baseline (or bottom margin edge of a replaced element) with respect to the parent's baseline. The distance lowered depends on the user agent.
+		Note that, by default, font-size of subscripted or superscripted text is same as the size of text in the parent element. That is, by default, subscripted or superscripted text will not appear smaller or larger.
+	bottom - aligns the bottom of inline box with the bottom of the line-box.
+	middle - align with the middle of the surrounding text.
+	
+	
+	
+	
+	
+	text-top - align with the top of surrounding text.
+	text-bottom - align with the bottom of surrounding text.
+	top - align the top with top of line.
+	length - raise above surrounding text.
+	negative-length - lower below surrounding text.
+	percentage - raise as a percentage of the line-height.
+		Setting a percentage value for vertical-align raises or lowers the baseline of the element (or the bottom edge of a replaced element) by the amount declared, with respect to the parent's baseline. 
+		The percentage you specify is calculated as a percentage of line-height for the element, not its parent.
+	negative percentage - lower as a percentage of the line-height.
+	---
+	When applied to table cells, only the values baseline, top, middle, and bottom are recognized.
+	baseline - For example, let's say you have an image in a table cell all by itself. The image may actually be on a baseline, but in some browsers, the space below the baseline causes a gap to appear beneath the image. Other browsers will "shrink-wrap" the image with the table cell, and no gap will appear. The gap behavior is correct, according to the CSS Working Group, despite its lack of appeal to most authors.
+	A baseline is the imaginary line upon which the bottoms of characters sit.
+	
+	http://techbus.safaribooksonline.com/book/web-development/css/0596527330/text-properties/csstdg3-chp-6-sect-2?query=%28%28css+vertical-align%29%29&reader=html&imagepage=#snippet
+	http://techbus.safaribooksonline.com/book/web-development/css/9780672331398/adding-images-color-and-backgrounds/ch09lev1sec4?query=%28%28css+vertical-align%29%29&reader=html&imagepage=#snippet
+	http://phrogz.net/css/vertical-align/
+	http://css-tricks.com/what-is-vertical-align/
+	http://reference.sitepoint.com/css/vertical-align
+	http://www.impressivewebs.com/css-vertical-align/
+	http://www.vertical-align.com/
+
+	
+
+
+clip - rect(top, right, bottom, left) | auto;
+	This property applies to the elements whose position is either absolute or fixed. It won’t work with relative or static positioning.
+	
+	
+	
+overflow - visible(default) | hidden | scroll | auto;
+	This property specifies what to when a box is too small for its contents.
+	visible - content flows out of the box.
+	hidden - hide the overflowing content.
+	scroll - show scrollbars(horizontal and vertical) regardless of whether they are necessary or not.
+	auto - show scrollbars only when required.
+	
+	If you don't set the height or width of a box, the height or width of that box will grow as large as it needs to accommodate its content.
+	But what happens when you set both height and/or width on a box and the content inside cannot fit?
+	That is where the CSS overflow property comes in, allowing you to specify how you would like that handled.
+	The overflow declaration tells the browser what to do with content that doesn't fit in a box.
+	It is useless to specify overflow property, if the height of box is not specified explicitly.
+
+overflow-x, overflow-y - 
+	Overflow-x specifies whether or not to clip the left and right edges of the content.
+	Overflow-y specifies whether or not to clip the top and bottom edges of the content.
+	
+	
+http://stackoverflow.com/questions/10083765/css-overflow-y-scroll-overflow-x-visible?lq=1
+http://css-tricks.com/the-css-overflow-property/
+http://www.w3schools.com/cssref/css_websafe_fonts.asp - websafe fonts
+http://thesimpleseo.com/seo-blog/
+http://www.vogella.com/articles/CSS/article.html
+http://htmlref.com/
+http://www.cssdog.com/index.html
+http://techbus.safaribooksonline.com/book/web-design-and-development/0201734303/layers-and-positioning/ch14lev1sec1?query=%28%28css+positioning%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTAtMjAxLTczNDMwLTMlMkZjaDE0bGV2MXNlYzQmcXVlcnk9KChjc3MlMjBwb3NpdGlvbmluZykp - CSS Positioning
+3-d push button effect - http://www.webcredible.co.uk/user-friendly-resources/css/more-css-tricks.shtml
+Can scroll bars be styled with CSS?
+	No, If you need a scrolling solution that is able to be styled, you may want to look to JavaScript.
+	
+		
+Analyse the js corresponding to this page?
+	http://www.impressivewebs.com/demo-files/css-clip-gallery/
+	
+lengths - measurements 
+	absolute lengths: cm, in, mm, pc, pt, 
+	relative lengths: em, ex, px
+	
+	
+	
+
+		
+color
+	It specifies the foreground color of an element's text content.
+	Eg: color: red; color: #FF0000; color: rgb(255, 0, 0); CSS3 => color: HSL(240, 80%, 50%); color: transparent;
+
+	For example, you can say glass is transparent,
+	Syntax: <color> | attr(<identifier>,color)
+
+	The color property defines the foreground color (usually the text) of the element.
+	foreground color of an element’s text content.
+
+	Colors can be defined as hexadecimal (#ff0000), RGB (rgb(255,0,0)), HSL (hsl(240,80%,50%)) in CSS 3, or color names (red).
+	Transparent (color: transparent;) is a valid keyword and lets any color below the current foreground show through. This keyword was added in CSS 3 to the color property.
+
+	http://webdesign.about.com/od/color/a/aa012703a.htm
+	http://www.impressivewebs.com/css-color-property/
+
+
+
+
+
+
+   
+text-decoration
+	Specifies the decoration that will be applied to text content of an element.
+	Syntax: text-decoration: none | underline | overline | line-through | blink;
+	
+----------------------------------
+line-height - is used to control the space b/w 2 lines of text. lead vs half-lead
+
+text-indent property specifies the indentation of the first line in a text-block. Whether the text is indented from the left or from the right depends on the element’s direction property.
+	http://www.dennisplucinik.com/blog/2007/09/01/css-hack-text-indent-10000px/
+	http://www.thesitewizard.com/css/hanging-indents.shtml
+	
+http://techbus.safaribooksonline.com/book/web-design-and-development/9780132979382/chapter-2dot-fluid-layouts/ch02?query=%28%28css+font-size%29%29&reader=html&imagepage=#snippet - Fluid Layouts
+http://techbus.safaribooksonline.com/book/-/9780240813288/controlling-font-display-with-css/78?query=%28%28css+font-size%29%29#X2ludGVybmFsX0J2ZGVwRmxhc2hSZWFkZXI/eG1saWQ9OTc4MDI0MDgxMzI4OC84Mw==  - working with multiple columns in CSS3
+These style rules set the font size for paragraphs to be 80% of the parent element’s font size for screen output, and to be ten points for print output:
+	@media screen {
+	  p {
+		font-size: 80%;
+	  }
+	}
+	@media print {
+	  p {
+		font-size: 10pt;
+	  }
+	}
+	
+http://techbus.safaribooksonline.com/book/web-development/css/9781430237808/chapter-1-design-patterns-making-css-easy/css_properties_and_values_cont?query=%28%28icon+|+menu+|+message-box+|+small-caption+|+status-bar%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODE0MzAyMzc4MDglMkZtZWRpYV9xdWVyaWVzJnF1ZXJ5PSgoaWNvbiUyMCU3QyUyMG1lbnUlMjAlN0MlMjBtZXNzYWdlLWJveCUyMCU3QyUyMHNtYWxsLWNhcHRpb24lMjAlN0MlMjBzdGF0dXMtYmFyKSk= - Media Queries
+	

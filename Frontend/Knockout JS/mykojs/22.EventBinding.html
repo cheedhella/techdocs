@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: event</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- event is used to attach event handlers for specified events -->
+        <!-- For example, you may want to execute a specific function when user hover mouse over a DOM element or leaves a DOM element -->
+        <div data-bind="event: { mouseover: showDetails, mouseout: hideDetails }">Mouse over me for additional details..</div>
+        <div data-bind="visible: isShowDetails">Additional Details..</div>
+
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.isShowDetails = ko.observable(false);
+                self.showDetails = function() {
+                    self.isShowDetails(true);
+                };
+                self.hideDetails = function() {
+                    self.isShowDetails(false);
+                };
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

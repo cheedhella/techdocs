@@ -1,0 +1,19 @@
+Pattern - is a good solution to a common problem.
+
+1. Singleton Pattern
+2. Module Pattern
+3. Observable, Observer OR publisher, subscriber
+	- What if you have to attach multiple click handlers for an element?
+	- publisher, subscriber concept.
+4. Model-View-Controller
+5. Proxy
+6. Decorator
+7. Adaptor
+
+
+static vs instance members
+private vs public members
+getters n setters - http://ejohn.org/blog/javascript-getters-and-setters/
+inheritance in javascript 
+this keyword in javascript
+dvt xml + html 5 rendering engine - local

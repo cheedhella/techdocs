@@ -1,0 +1,115 @@
+display values that create inline boxes are: inline, inline-block, inline-table, and ruby
+
+As of early 2018, the display values that create block boxes are block, list-item, table, table-row-group, table-header-group, table-footer-group, table-column-group,  table-row, table-column, table-cell, table-caption, flex, and grid.
+
+
+Is there any difference b/w build-in block level elements and elements that are display:block?
+		See the example in http://techbus.safaribooksonline.com/9780470891520/floating_content?
+	<div> vs <p>
+
+
+block vs inline elements
+
+http://dustwell.com/div-span-inline-block.html
+http://stackoverflow.com/questions/8969381/what-is-the-difference-between-display-inline-and-display-inline-block
+http://webdesign.about.com/od/styleproperties/p/blspdisplay.htm
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/
+http://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/
+
+inline vs block-level elements
+	inline - default, no line break either before or after the element.
+		The inline property tells the element to take up just as much width as necessary and doesn't force line breaks.
+		These HTML elements have a display: inline; by default: <a>, <span>
+		Takes up only as much width as it needs, and does not force new lines (display:inline;)
+		 Treats the element as though it were an inline chunk of text. width and height are meaningless
+	block - element is preceded and succeeded by a line break.
+		The block property tells the element to take up the full width available and forces line breaks in text.
+		These HTML elements have a display: block; by default: <p>, <h1>...<h4>, <div>
+		Takes up the full width available, with a new line before and after (display:block;)
+		A block has some whitespace above and below it and tolerates no HTML elements next to it, except when ordered otherwise (by adding a float declaration to another element, for instance).
+		Treats the element as as rectangle. width and height can be specified
+	http://www.webdesignfromscratch.com/html-css/css-block-and-inline/
+	http://dustwell.com/div-span-inline-block.html
+	inline-block - inline-block elements are like inline elements but they can have a width and height.
+		Flows a element inline with the text, but allows width and height to be specified.
+		Images are Inline-Block
+	---
+	block-level elements - These are the elements that take up a block of space on the page, like images (<img/>), paragraphs (<p></p>), divisions (<div></div>), and lists (<ul></ul>). 
+	Inline elements - These are elements like span (<span></span>), line breaks (<br/>), strong emphasis (<strong></strong>), or italics (<i></i>).
+	
+display - none | inline | block | list-item | inline-block | table | inline-table | table-header-group | table-row | table-row-group | table-column | table-column-group | table-cell | table-footer-group | table-caption | run-in;
+	none - Don't display the element at all.
+	inline - Display the element as inline element.
+	block - Display the element as block-level element.
+	list-item - Display the element as a list-item, which means it has a bullet in front of it.
+	inline-block - Display the element inline but allow the element to have values for width, height, margin, padding and so on.
+	table - Treats the element as HTML table, child elements are treated as table rows and/or cells. HTML equivalent: <table>
+	table-caption - Treats the element as table caption. HTML equivalent: <caption>
+	table-header-group - Treats the element as a table header. HTML equivalent: <thead>
+	table-footer-group - Treats the element as a table footer. HTML equivalent: <tfoot>
+	table-row-group - Treats the element as a group of one or more rows. HTML equivalent: <tbody>
+	table-row - Treats the element as a table row, child elements are treated as table cells. HTML equivalent: <tr>
+	table-cell - Treats the element as a table cell. HTML equivalent: <td>
+	table-column - Specifies that the element is a column. HTML equivalent: <col>
+	table-column-group - Specifies that the element is a group of columns. HTML equivalent: <colgroup>
+	inline-table - 
+	---
+	This property is used to change the behavior of an element from inline to block and vice versa. 
+	---
+	Table display values
+		CSS was designed to work with all XML document languages, not just XHTML. 
+		It's likely that other languages may have the need for tabular layouts, but will not have elements like table, td, or tr in their vocabularies.
+		CSS 2.1 specification allows authors to assign table element roles to any element using the display property.
+		----------
+		Using the table-related display values , the elements from any markup language can be "mapped" to table elements. A simple example should make this clear. Consider this markup written in a hypothetical XML language.
+			<platter>
+			  <cheese>
+				<name>Brie</name>
+				<origin>France</origin>
+			  </cheese>
+			  <cheese>
+				<name>Manchego</name>
+				<origin>Spain</origin>
+			  </cheese>
+			</platter>
+		By attaching these style rules:
+			platter { display: table; }
+			cheese { display: table-row; }
+			name, origin { display: table-cell; }
+		The example would display in the user agent as though it were marked up like this:
+			 <table>
+			  <tr>
+				<td>Brie</td>
+				<td>France</td>
+			  </tr>
+			  <tr>
+				<td>Manchego</td>
+				<td>Spain</td>
+			  </td>
+			</table>
+		----------
+	For exmaple, the code below would act just like a regular table.
+		<div style="display: table;">
+			<div style="display: table-row;">
+				<div style="display: table-cell;">
+					Cell #1
+				</div>
+				<div style="display: table-cell;">
+					Cell #2
+				</div>
+			</div>
+			<div style="display: table-row;">
+				<div style="display: table-cell;">
+					Cell #3
+				</div>
+				<div style="display: table-cell;">
+					Cell #4
+				</div>khaninfo123@
+			</div>
+		</div>
+	Although it seems pointless to emulate a table with other elements when there already exists such tags; <table>, <tr>, <td>. 
+	In my opinion, tables should not be totally taboo as they seem to be today. They still serve a purpose and should be used when appropriate.
+	---
+	Horizontal list menus - Lists are block-level elements, but if you want your menu to display horizontally, you need to convert the list to an inline element, so that newlines aren't added between each list item.
+	---

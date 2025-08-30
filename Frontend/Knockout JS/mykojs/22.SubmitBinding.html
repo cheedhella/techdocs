@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: submit</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- It binds the submit event of the HTML Form with specified functions in the view model. -->
+        <!-- Note: In case of submit event, KO makes sure that form is submitted to the server, only if you return true from handler. -->
+        <form data-bind="submit: doAdd">
+            <p>Enter number 1: <input data-bind="value: num1" /></p>
+            <p>Enter number 2: <input data-bind="value: num2" /></p>
+            <p><button type="submit" >Calculate Sum</button></p>
+            <p>Total: <span data-bind="text: sum"></span></p>
+        </form>
+
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.num1 = ko.observable(0);
+                self.num2 = ko.observable(0);
+                self.sum = ko.observable(0);
+
+                self.doAdd = function() {
+                    self.sum(Number(self.num1()) + Number(self.num2()));
+                };
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

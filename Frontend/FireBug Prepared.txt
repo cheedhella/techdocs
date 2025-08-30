@@ -1,0 +1,132 @@
+F12 - opening/closing firebug(dock view)
+Ctrl + F12 - opening/closing firebug in new window(window mode)
+
+To DO:
+Firebug console??
+
+References:
+http://michaelsync.net/2007/09/08/firebug-tutorial-overview-of-firebug
+http://michaelsync.net/2007/09/09/firebug-tutorial-logging-profiling-and-commandline-part-i
+http://michaelsync.net/2007/09/10/firebug-tutorial-logging-profiling-and-commandline-part-ii
+http://michaelsync.net/2007/09/15/firebug-tutorial-commandline-api
+http://michaelsync.net/2007/09/23/firebug-tutorial-html-tab-examples
+http://michaelsync.net/2007/09/30/firebug-tutorial-script-tab-javascript-debugging
+http://michaelsync.net/2007/10/15/firebug-tutorial-section-4-net-css-and-dom-tabs
+
+http://www.evotech.net/blog/2007/06/introduction-to-firebug/
+http://www.tutorial9.net/tutorials/web-tutorials/quick-easy-css-development-with-firebug/
+http://thecodecentral.com/2007/08/01/debug-javascript-with-firebug
+
+
+
+------------------------------------- Dust ------------------------
+Console tab - used to view debug/log/warning/error messages.
+	command line javascript - used to execute commands and javascript files on the fly, without reloading the page
+	we can enter javascript commands after >>> at the bottom.
+HTML tab - left panel shows HTML as hierarchy of DOM nodes.
+	right panel contains 4 tabs: style, computed, layout, DOM.
+	explore full HTML DOM of the document
+	edit any existing html and css on the fly
+	inspect an HTML element
+	explore the css of an element
+	search the html instead of the content
+	set breakpoints in the html, triggered when the element is changed by adding/changing/removing an attribute or adding/changing/removing an inner element.
+
+	
+CSS tab - list of all loaded css file, modify styles on the fly.
+Script tab - list of all included javascript files along with the html of webpage.
+	javascript debugging, profiling, testing
+	command line API
+	$('id') - similar to document.getElementById(), it returns 
+		the element with the specified id.
+
+	$$('selector') - returns an array of elements that matches 
+		the given css selector.
+
+	$x('xpath') - returns an array of elements that match the 
+		given xpath expression.
+
+	dir(object) - display the list of all properties of object.
+
+	dirxml(node) - prints the xml source tree of an html or xml 
+		element.
+	clear() - clears the console
+
+	inspect(object[,tabName]) - used to inspect an element in 
+	most suitable tab or tab specified(HTML/CSS/SCRIPT/DOM).
+	keys(object) - array of names of all properties of the object.
+
+	values(object) - array of values of all properties of the object.
+
+	debug(fn), undebug(fn) - add/remove a break point on the 
+		first line of the function.
+
+	monitor(fn),unmonitor(fn) - turn on/off logging all calls to 
+		a function.
+
+	monitorEvents(object[,types]), unmonitorEvents(object
+	[,types]) - turn on/off logging for all events dispatched to 
+	an object.
+
+	profile([title]), profileEnd() - turn on/off javascript 
+	profiler.
+
+	google starting the profiler in console tab
+
+	console API
+	debug, error, info, warning
+
+	debugging javascript
+		inserting break points
+		continue, F8 - continue the execution until it finds a breakpoint.
+		step over, F10 - step over a function call(if current statment is a function call, execute it and go to next stmt in the calling function).
+		step into, F11 - step into the body of another function.
+		step out - complete executing current function and resume debugging after returning from the current function.
+
+		watch window - displays the values of all javascript variables in the current scope.
+	
+
+ to next line of java script in the current function.
+
+step over a function call		
+
+script execution once it has 			been stopped at a break point.
+
+		step into F11 - step into body of the another func
+
+		step out - resume the script execution and will stop 
+		at next break point.
+		    * Continue This button resumes execution. The script will only pause again if and when the script reaches a breakpoint.
+    * Step Over This button executes the current line, including any functions that are invoked along the way, and moves to the next line.
+    * Step Into This button ordinarily moves to the next line, as with Step Over. However, if the debugger happens to be paused at a line that invokes a function, the script will instead jump to the first line of the function.
+    * Step Out This button causes the script to jump out of the current function, returning to the method from which it was called.
+
+
+	break points and conditional break points for debugging for loops.
+
+
+DOM tab - shows all the javascript variables along with their values
+Net tab - shows how long each resource(html/css/images etc) took to download
+
+javascript console
+javascript command line
+performance analysis of a website
+
+debugger,
+error console
+commnad line
+
+edit htm/css/javascript on the fly
+in-browser editor for html/css
+inspect/edit html
+inspect/edit css
+debug javascript
+analyze ajax calls
+explore the DOM
+
+
+How to use html and css panel? How to debug css code of the webpage? How to save firebug debugging? How to edit css or html code of web page? This firebug tutorial also deals about how fire options works? How to disable or enable firebug panels or options? How to use firebug?
+
+
+we can make changes to the webpages generated by the server
+

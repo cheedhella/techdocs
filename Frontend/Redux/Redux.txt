@@ -1,0 +1,163 @@
+What is Flux?
+	It is a predictable state container for JavaScript apps;
+	In other words, as the application grows, it becomes difficult to keep the state organized and maintain data flow;
+	Redux solves this problem by managing application’s state with a single global object called Store;
+
+	With the entire state of your application centralized in one location, each component has direct access to the state (at least without sending props to child components, or callback functions to parent components);
+
+What is Redux?
+	Redux is an excellent Flux implementation, first released in 2015; In less than half a year, the library became the go-to framework for React developers;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Redux introduces actions, action creators, reducers, and stores. 
+Ultimately, these concepts are used to create a simple state management architecture.
+
+Store is an immutable object which stores the application state;
+To change the state, like when a button is clicked, an action will be dispatched, which has a name like an event and payload like with the data that it wants to change;
+Remember the store is immutable, so to change the state of the application, an entirely new object is created, by passing current state and the action payload into a reducer fn;
+Reducer returns a new object with the entire application state, the end result;
+It also offers awesome dev tools to allow you to time travel through your application's state, but it comes at additional cost of boilerplate code;
+
+The whole state of your app is stored in an object tree inside a single store.
+The only way to change the state tree is to emit an action, an object describing what happened.
+To specify how the actions transform the state tree, you write pure reducers.
+That's it!
+
+There are three parts to Redux: Actions, Reducers and the Store;
+
+Actions
+	Are a list of things it can do.
+	It doesn't know how to do the action.
+	It doesn't know anything about the store.
+	It knows what data it's been passed (action name & any other information you sent it).
+	It will say to the Reducer 'Hey I wanna do this and here's the data to do it'.
+
+Reducers
+	Is a list of things it knows how to do.
+	Is always listening for actions and will act on ones it recognises.
+	Has access to the state in the store.
+	A reducer should run in this format:
+	Get a copy of the current state.
+	Do whatever it was asked to do.
+	Return a new version of the state.
+	Redux is immutable, meaning you should always return a new version of the state, instead of modifying the state.
+
+Store
+	The store holds the current state.
+	There is one state for the whole application.
+	When the state changes, subscribed React components will update automatically.
+
+
+
+Redux — An open source predictable state container
+State Tree — A plain JavaScript object which contains whole application state
+Three ways to interact with a state (the only ways):
+Store — A single unit which contains state tree & methods to interact with the state tree
+Actions — Plan Javascript objects to describe the action taking place
+Reducers — Pure Javascript functions to take current state and an action to return a new state
+
+
+Install Redux
+	npm install @reduxjs/toolkit react-redux
+	npm install redux react-redux
+	yarn add redux react-redux
+
+	react-redux lets us connect redux with our react application easily.
+
+
+
+	By the end, you’ll build skypey, a modern messaging app to bring your JS, React, and Redux skills altogether.
+
+
+
+
+
+
+
+
+Step 3: Setup Redux Store in your index.js
+
+
+
+
+we use the createStore() function from redux, to create a store! 
+
+
+combineReducers() as the name suggests combines various reducers into a single reducer. In redux, we can create as many reducers as we want. It is ideal to create a new reducer for every operation that doesn't depend on any other action. Since the createStore() in store.js can take only one reducer, hence combineReducer() is used to convert multiple reducers into one.
+
+
+
+packing = 2 * 2000 = 4000
+trasn   = 40 * 700 = 28000
+manpower = 4 * 900 = 3600
+tax + insrance = 10% of bill
+
+unpacking is extra?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gosh! Does the learning streak ever end?
+As an Engineer committed to my personal development, I wanted to be in the know. I didn’t want to be left out. So, I began to learn Redux.
+The real problem with teaching Redux — especially for beginners — isn’t the complexity of the Redux library itself.
+No. I don’t think that is it. It is just a tiny 2kb library — including dependencies.
+Take a look at the Redux community as a beginner, and you’re going to lose your mind fast. 
+There’s not just Redux, but a whole lot of other supposed “associated libraries” needed to build real world apps.
+There’s Redux, React-Redux, Redux-thunk, Redux-saga, Redux-promise, Reselect, Recompose and many more!
+As if that’s not enough, there’s also some Routing, Authentication, Server side rendering, Testing, and Bundling sprinkled on it — all at once.
+Gosh! That is overwhelming.
+
+How did you learn to walk?
+Did you begin to run in one day? No!
+
+A rising tide lifts All boats.
+Once you get the hang of how the basics of Redux works (the rising tide), everything else will be easier to reason about (it lifts all boats).
+You did fall a few times, but that was okay. Someone was always around to hold you up, and help you get on your feet.
+
+First off, I’ll teach you the fundamentals of Redux in plain, easy to approach language.
+
+This is where we wrap things up by building Skypey, a sweet messaging app kinda like a Skype clone.
+Skypey’s got features such as editing messages, deleting messages, and sending messages to multiple contacts.
+If that didn’t get you excited, I don’t know what will. I’m super excited to show you these!
+
+
+Don’t get me wrong. It is important to make money, and I love to make money as well. But what’s the point of making money if you can’t offer help to people in dire need?
+
+
+
+
+https://ohansemmanuel.gumroad.com/
+https://thereduxjsbooks.com/#buy_redux_trio
+
+https://www.educative.io/blog/understanding-redux
+https://www.educative.io/courses/understanding-redux-a-beginners-guide-to-state-management
+https://www.educative.io/blog/react-router-tutorial - React Router Tutorial: Adding Navigation to your React App
+https://www.educative.io/blog/react-bootstrap-tutorial - React Bootstrap Tutorial: upgrade React apps with a CSS framework
+https://tkssharma.gitbook.io/react-training/state-management/managing-react-state/hello-world-redux
+
+There are lots of good tutorials on Redux. Wes Bos has a free tutorial series on Redux here(http://learnredux.com/) and the creator of Redux, Dan Abramov has tutorials on Egghead.io.
+
+
+https://www.digitalocean.com/community/tutorials/how-to-manage-state-on-react-class-components - shopping cart, good example
+
+https://www.digitalocean.com/community/tutorials/7-ways-to-implement-conditional-rendering-in-react-applications
+
+
+One awesome feature Redux has is it's time travelling dev tools. It let's you jump forward and back to view your applications state at any one time.
+
+Redux vs Context API
+	With the hooks functionality and Context API incorporated into React, some have questioned whether Redux is still necessary to build a larger react application. The answer is yes. Though you may not need it for a simple React application, you will need it when your applications become more complex. 
+	Problems with the Context API arise when your app expands. In a larger application, the order in which data moves can be important. With Redux, you can keep a record of the changes in your state and time travel back to these changes.
+	Redux is decoupled from the UI layer and is a state management system, while Context is not.
+	Redux makes it easy to test and debug your code since it offers powerful tools such as Redux DevTools in which you can time travel to debug, track your changes

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>min-content and max-content - 2</title>
+    <style>
+      .container {
+        display: grid;
+        grid-gap: 10px;
+        margin-bottom: 10px;
+      }
+      .min-content {
+        grid-template-columns: auto min-content auto;
+      }
+      .max-content {
+        grid-template-columns: auto max-content auto;
+      }
+      .aside {
+        background: yellow;
+      }
+      .main-content {
+        background: red;
+        padding: 10px;
+        color: white;
+        font-family: arial;
+      }
+      h2 {
+        font-family: arial;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>min-content example</h2>
+    <div class="container min-content">
+      <aside class="aside aside-1"></aside>
+      <section class="main-content">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti,
+        harum?
+      </section>
+      <aside class="aside aside-2"></aside>
+    </div>
+
+    <div class="container min-content">
+      <aside class="aside aside-1"></aside>
+      <section class="main-content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde natus cum
+        at qui quis repellendus dolore, dignissimos illo architecto vero?
+      </section>
+      <aside class="aside aside-2"></aside>
+    </div>
+
+    <h2>max-content example</h2>
+    <div class="container max-content">
+      <aside class="aside aside-1"></aside>
+      <section class="main-content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, suscipit!
+      </section>
+      <aside class="aside aside-2"></aside>
+    </div>
+
+    <div class="container max-content">
+      <aside class="aside aside-1"></aside>
+      <section class="main-content">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolore
+        architecto laboriosam qui molestias exercitationem fugit nam iste
+        corporis dolor fugiat?
+      </section>
+      <aside class="aside aside-2"></aside>
+    </div>
+  </body>
+</html>

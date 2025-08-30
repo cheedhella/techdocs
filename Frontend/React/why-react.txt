@@ -1,0 +1,20 @@
+Why React JS?
+    It is a component based library to build Single Page Applications;
+
+    Why SPA?
+        Prior to SPA, whenever user visits the website using URL, HTML and all it's associated CSS, JS files are downloaded from server;
+        After some network delay, user sees the rendered HTML in browser and starts to interact with it;
+        Every additional page transition would initiate this chain of events again;
+        Essentially, everything was done on the server side; Client just renders it;
+
+        With SPA, whenever user visits the website using URL, every application is delivered to the client over the network;
+        Once downloaded, it makes a separate request to server, to get page specific data and it renders the page;
+        During every additional page transition, it only requests the server for data; Once it gets data, everything else happens on client side;
+
+        Eg of SPA: React, Angular etc;
+
+    Why React?
+        It is based on components;
+        A React component can be anything in your web application like a Button, Text, Label, or Grid;
+        Every component defines its look and feel with HTML, CSS and JavaScript;
+        Once a component is defined, it can be used in a hierarchy of components for creating an entire application;

@@ -1,0 +1,8 @@
+https://docs.yworks.com/yfiles/doc/developers-guide/incremental_hierarchical_layouter.html
+
+https://yed.yworks.com/support/manual/layout_hierarchic_incremental.html
+
+
+/Users/mcheedhe/Downloads/yFiles-for-HTML-Complete-2.5.0.3-Evaluation
+npm install 
+npm run start

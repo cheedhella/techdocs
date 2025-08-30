@@ -1,0 +1,59 @@
+<!-- 
+    Apart from the default number assigned to each grid line, you can also assign a name to it;
+    Infact, you can assign more than 1 name to it;
+    
+    Assigned names can be used, while positioning/spanning a grid item;
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Layout using named grid lines</title>
+    <style>
+      .container {
+        height: 500px;
+        width: 400px;
+        background-color: white;
+
+        display: grid;
+        grid-template-rows: [row-start row-1] 1fr [row-2] 1fr [row-3] 1fr [row-4] 1fr [row-5] 1fr [row-6] 1fr [row-7] 1fr [row-8 row-end];
+        grid-template-columns: [col-start col-1] 1fr [col-2] 1fr [col-3] 1fr [col-4] 1fr [col-5 col-end];
+
+        grid-row-gap: 10px;
+        grid-column-gap: 12px;
+      }
+
+      .grid-item {
+        background-color: salmon;
+        padding: 2px;
+      }
+
+      .header {
+        grid-column: col-start / col-end;
+      }
+      .smallbox {
+        grid-row: row-2 / span 2;
+      }
+      .sidebar {
+        grid-row: row-2 / span 5;
+      }
+      .maincontent {
+        grid-row: row-4 / span 3;
+        grid-column: col-1 / span 3;
+      }
+      .footer {
+        grid-column: col-start / -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="grid-item header">Header</div>
+      <div class="grid-item smallbox">Small box 1</div>
+      <div class="grid-item smallbox">Small box 2</div>
+      <div class="grid-item smallbox">Small box 3</div>
+      <div class="grid-item sidebar">Sidebar</div>
+      <div class="grid-item maincontent">Main content</div>
+      <div class="grid-item footer">Footer</div>
+    </div>
+  </body>
+</html>

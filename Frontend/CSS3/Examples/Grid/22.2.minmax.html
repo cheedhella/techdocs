@@ -1,0 +1,70 @@
+<!-- 
+    If you set the height of a track to some fixed value,
+        If the content is small, fine!
+        If the content is large, it could overflow!    
+    If you set the height of a track to min-content,
+        Whether content is small OR large, row height changes according to it!
+        But, when the content is small, row height is small!
+        In some cases, you may want the row to have some minimum height;
+        So, the solution to that problem is use minmax();
+
+    minmax(min, max);
+        It makes sure that track size is always b/w specified limits!
+        min can be length, percentage, min-content, max-content; min can't be a fractional value;
+        max can be length, percentage, min-content, max-content; max can be a fractional value;
+
+        If the minimum value computes to be larger than the maximum computed value, the maximum sizing is ignored and the minimum size is used as a minimum;
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>minmax</title>
+  </head>
+  <style>
+    .container {
+      background-color: #eee;
+      margin: 30px auto;
+      border: 1px solid red;
+
+      display: grid;
+
+      grid-row-gap: 10px;
+      grid-column-gap: 15px;
+    }
+
+    .item {
+      padding: 5px;
+      font-size: 10px;
+      font-family: sans-serif;
+      color: white;
+    }
+    .item-1 {
+      background-color: orange;
+    }
+    .item-2 {
+      background-color: green;
+    }
+    .item-3 {
+      background-color: violet;
+    }
+
+    .c1 {
+      grid-template-columns: 200px 200px minmax(200px, 1fr);
+    }
+    .c2 {
+      grid-template-columns: 200px 200px auto;
+    }
+  </style>
+  <body>
+    <div class="container c1">
+      <div class="item item-1">1. Orange</div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+    </div>
+    <div class="container c2">
+      <div class="item item-1">1. Orange</div>
+      <div class="item item-2">2. Green</div>
+      <div class="item item-3">3. Violet</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+Singleton Pattern
+	Use it when you when you want to have only one instance of a class.
+
+	Eg1:
+		// All object literals are always singletons.
+		var singleton = {
+			value : 500
+		};
+		var ex1 t= singleton;
+		var ex2 = singleton;
+		ex1.value = 100;
+		console.log (ex2.value); // 100
+
+	Eg2:
+		var singleton = function(id, name){
+			if(typeof singleton.instance !== 'undefined')
+				return singleton.instance;
+			this.id = id;
+			this.name = name;
+			singleton.instance = this;
+		}
+		var firstInstance = new singleton(1,'Bob');
+		var secondInstance = new singleton(2,'Glen'); // secondInstance is just an alias to firstInstance
+		alert(secondInstance.name); // Bob - it shows both refer to same instance
+		secondInstance.name = 'Adam';
+		alert(firstInstance.name); // Adam
+	
+	Eg-obiee:
+		saw.ajax.Manager = function() {
+			if(saw.ajax._manager)
+				return saw.ajax._manager;
+			this.queues = {};
+			saw.ajax._manager = this;
+			this.defaultProgressIndicator = null;
+			this.globalBusyIndicator = new saw.ajax.GlobalBusyIndicator();
+		}
+
+		saw.ajax.Manager.getInstance = function() {
+			return new saw.ajax.Manager();
+		}
+
+	Problem: In Eg2, what if someone intentionally overrides singleton.instance to anything else?
+	Solution: use a closure and self executing function.
+		Eg3:
+			var singleton = (function() {
+					var instance; // closure
+					return function(id, name) {
+						if(typeof instance !== 'undefined')
+							return instance;
+						instance = this;
+						this.id = id;
+						this.name = name;
+					}
+				}
+			)();
+			var firstInstance = new singleton(1,'Bob'); // when first time called, instance is created and stored in the closure.
+			var secondInstance = new singleton(2,'Glen'); 
+			alert(firstInstance.name); // Glen - it shows both refer to same instance
+			secondInstance.name = 'Adam';
+			alert(firstInstance.name); // Adam
+
+http://stackoverflow.com/questions/1635800/javascript-best-singleton-pattern
+http://www.hardcode.nl/subcategory_1/article_526-singleton-examples-in-javascript.htm
+http://yiyujia.blogspot.in/2011/05/implementing-javascript-singleton.html
+http://css.dzone.com/articles/singleton-pattern-javascript
+http://robdodson.me/blog/2012/08/08/javascript-design-patterns-singleton/
+http://stackoverflow.com/questions/1895635/javascript-singleton-question
+
+One of the uses of the singleton pattern in JavaScript is namespacing.
+In JavaScript, the singleton is used mostly for namespacing and reducing the number of global variables that your application creates. 
+This pattern is probably more useful in JavaScript than in any other language due to the high risk of using global variables in your code and the singleton’s ability to namespace those variables.

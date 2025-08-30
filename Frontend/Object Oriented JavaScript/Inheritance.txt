@@ -1,0 +1,330 @@
+Inheritance - There are many ways to implement inheritance using JavaScript.
+	1. Prototype Chaining
+	2. Move shared properties to prototype and Inherit only the prototype
+	3. Using a Temporary Constructor
+
+	In JavaScript, inheritance is defined using objects rather than classes/constructor functions.
+
+1. Prototype Chaining
+---------------------
+	As you already know, every function has a prototype property, which holds an object with one property named constructor.
+	When this function is invoked using the new operator, an object is created and that object has a secret link to the prototype object.
+	That secret link(called __proto__ in some browsers) allows properties of the prototype object to be used as if they belong to the newly created object.
+	Since prototype object is also an object, it also contains a secret link to its prototype. And so a chain is created, called a Prototype Chain.
+	
+	Example:
+		function Shape(){
+			this.name = 'shape';
+			this.toString = function() {return this.name;};
+		}
+
+		function TwoDShape(){
+			this.name = '2D shape';
+		}
+			
+		function Triangle(side, height) {
+			this.name = 'Triangle';
+			this.side = side;
+			this.height = height;
+			this.getArea = function(){return this.side * this.height / 2;};
+		}
+			
+		// implementing inheritance
+		TwoDShape.prototype = new Shape();
+		Triangle.prototype = new TwoDShape();
+		
+		// Instead of augmenting prototype object, we are completely overwriting it with another object.
+		TwoDShape.prototype.constructor = TwoDShape;
+		Triangle.prototype.constructor = Triangle;
+		
+		var two = new TwoDShape();
+		var tri = new Triangle(10, 5);
+		alert(two.toString() + "," + tri.toString() + "," + tri.getArea()); // alerts "2D shape,Triangle,25"
+	
+	Description:
+		When you call tri.toString(), JavaScript loops through all the properties of tri object, toString() not found!
+		Now, loop through all the properties of tri.__proto__ which is an instance of TwoDShape, toString() not found!
+		Now, loop through all the properties of tri.__proto__.__proto__ which is an instance of Shape, toString() found!
+		Once toString() is found, it is invoked and this inside the methods refers to tri object.
+		
+	Problem:
+		Child object inherits all the properties of parent object. Parent can't have its own properties.
+
+2. Move shared properties to prototype and Inherit only the prototype
+---------------------------------------------------------------------
+
+	Example:
+		function Shape(){}
+		Shape.prototype.name = 'shape';
+		Shape.prototype.toString = function() {return this.name;};
+
+		function TwoDShape(){}
+
+		// take care of inheritance
+		TwoDShape.prototype = Shape.prototype;
+		TwoDShape.prototype.constructor = TwoDShape;
+		// augment prototype
+		TwoDShape.prototype.name = '2D shape';
+
+		function Triangle(side, height) {
+			this.side = side;
+			this.height = height;
+		}
+
+		// take care of inheritance
+		Triangle.prototype = TwoDShape.prototype;
+		Triangle.prototype.constructor = Triangle;
+		// augment prototype
+		Triangle.prototype.name = 'Triangle';
+		Triangle.prototype.getArea = function(){return this.side * this.height / 2;}
+			
+		var two = new TwoDShape();
+		var tri = new Triangle(10, 5);
+		alert(two.toString() + "," + tri.toString() + "," + tri.getArea()); // alerts "Triangle,Triangle,25"
+		
+	Description:
+		What happens when you call tri.toString()?
+		Remember that objects are not copied by value, but only by reference. So the lookup is only a two-step process.
+		First, as usual, the JavaScript engine looks for a method toString() in tri object, toString() not found! So, it inspects its prototype.
+		The prototype turns out to be pointing to the same object that TwoDShape's prototype points to and also the same object that Shape.prototype points to.
+
+	Problem:
+		When a child modifies the prototype, the parents get the changes, and so do the siblings.
+		
+3. Using a Temporary Constructor
+--------------------------------
+
+	Example:
+		function Shape(){}
+		// augment prototype
+		Shape.prototype.name = 'shape';
+		Shape.prototype.toString = function() {return this.name;};
+
+		function TwoDShape(){}
+
+		// take care of inheritance
+		var F = function(){};
+		F.prototype = Shape.prototype;
+		TwoDShape.prototype = new F();
+		TwoDShape.prototype.constructor = TwoDShape;
+		// augment prototype
+		TwoDShape.prototype.name = '2D shape';
+
+		function Triangle(side, height) {
+			this.side = side;
+			this.height = height;
+		}
+
+		// take care of inheritance
+		var F = function(){};
+		F.prototype = TwoDShape.prototype;
+		Triangle.prototype = new F();
+		Triangle.prototype.constructor = Triangle;
+		// augment prototype
+		Triangle.prototype.name = 'Triangle';
+		Triangle.prototype.getArea = function(){return this.side * this.height / 2;};
+
+		var two = new TwoDShape();
+		var tri = new Triangle(10, 5);
+		alert(two.toString() + "," + tri.toString() + "," + tri.getArea()); // alerts "2D shape,Triangle,25"
+
+	--------------------------------------------------------
+		// child class method calling super class method, which calls its super class method and so on.... - using uber property
+		
+		function Shape(){}
+		// augment prototype
+		Shape.prototype.name = 'shape';
+		Shape.prototype.toString = function(){
+			var result = [];
+			if (this.constructor.uber) {
+				result[result.length] = this.constructor.uber.toString();
+			}
+			result[result.length] = this.name;
+			return result.join(', ');
+		};
+
+		function TwoDShape(){}
+
+		// take care of inheritance
+		var F = function(){};
+		F.prototype = Shape.prototype;
+		TwoDShape.prototype = new F();
+		TwoDShape.prototype.constructor = TwoDShape;
+		TwoDShape.uber = Shape.prototype;
+		// augment prototype
+		TwoDShape.prototype.name = '2D shape';
+
+		function Triangle(side, height) {
+			this.side = side;
+			this.height = height;
+		}
+		// take care of inheritance
+		var F = function(){};
+		F.prototype = TwoDShape.prototype;
+		Triangle.prototype = new F();
+		Triangle.prototype.constructor = Triangle;
+		Triangle.uber = TwoDShape.prototype;
+		// augment prototype
+		Triangle.prototype.name = 'Triangle';
+		Triangle.prototype.getArea = function(){return this.side * this.height / 2;}
+
+		var sh = new Shape();
+		alert(sh.toString()); // shape
+		var twod = new TwoDShape();
+		alert(twod.toString()); // shape, 2D shape
+		var tri = new Triangle();
+		alert(tri.toString()); // shape, 2D shape, Triangle
+
+	Description:
+		Using this approach, we keep the prototype chain in place and the parents' properties are not overwritten by the children:
+		At the same time, this approach supports the idea that only properties and methods added to the prototype should be inherited, and own properties should not be inherited.
+		
+		This approach is used by YUI and Ext.js
+		function extend(Child, Parent) {
+			var F = function() {};
+			F.prototype = Parent.prototype;
+			Child.prototype = new F();
+			Child.prototype.constructor = child;
+			Child.uber = Parent.prototype; // uber points to the parent's prototype
+		}
+		extend(TwoDShape, Shape);
+		extend(Triangle, TwoDShape);
+
+4. Copying the prototype properties
+-----------------------------------
+	Since inheritance is about reusing code, you can simply copy properties from the parent to the child.
+	Bear in mind that only primitive types are copied by value. 
+	All objects (including functions and arrays) are not duplicated, because these are passed by reference only.
+	
+	function extend2(Child, Parent) {
+		var p = Parent.prototype;
+		var c = Child.prototype;
+		for(var i in p) {
+			c[i] = p[i];
+		}
+		c.uber = p; // As with the previous example, you can set an uber property if you want to have easy access to parent's methods from the child.
+	}
+	
+5. Copy all properties - Shallow Copy
+-------------------------------------
+	Don't use prototypes. Used by Firebug, older versions of JQuery and Prototype.js.
+	
+	function extendCopy(p) {
+		var c = {};
+		for(var i in p) {
+			c[i] = p[i];
+		}
+		c.uber = p;
+		return c;
+	}
+	
+	var shape = {
+		name: 'shape',
+		toString: function() {return this.name;}
+	}
+	
+	var twoDee = extendCopy(shape);
+	twoDee.name = '2D shape';
+	twoDee.toString = function(){return this.uber.toString() + ', ' + this.name;};
+	
+	var triangle = extendCopy(twoDee);
+	triangle.name = 'Triangle';
+	triangle.getArea = function(){return this.side * this.height / 2;}
+
+	>>> triangle.side = 5; triangle.height = 10; triangle.getArea();
+	25
+	>>> triangle.toString();
+	"shape, 2D shape, Triangle"
+	
+	Disadvantage:
+		If you observe how triangle object is initialized, you are manually setting side and height, as opposed to passing them as values to a constructor.
+		Also, If you modify an object in the copy, you also modify the original. Deep copy avoids this problem.
+		
+6. Deep Copy
+------------
+	Used in recent versions of JQuery.
+	
+	function deepCopy(p, c) {
+		var c = c || {};
+		for (var i in p) {
+			if (typeof p[i] === 'object') {
+				c[i] = (p[i].constructor === Array) ? ? ?? [] : {};
+				deepCopy(p[i], c[i]);
+			} else {
+				c[i] = p[i];
+			}
+		}
+		return c;
+	}
+
+	var parent = {
+		numbers: [1, 2, 3],
+		letters: ['a', 'b', 'c'],
+		obj: {
+			prop: 1
+		},
+		bool: true
+	};
+
+	>>> var mydeep = deepCopy(parent);
+	>>> mydeep.numbers.push(4,5,6);
+		6
+	>>> mydeep.numbers
+		[1, 2, 3, 4, 5, 6]
+	>>> parent.numbers
+		[1, 2, 3]
+	>>> myshallow.numbers.push(10)
+	4	
+
+7. Prototypal Inheritance
+-------------------------
+	function object(o) {
+		function F() {}
+		F.prototype = o;
+		return new F();
+	}
+	
+8. Extend and augment
+---------------------
+	function objectPlus(o, stuff) {
+		var n = object(o);
+		n.uber = o;
+		for(var i in stuff) {
+			n[i] = stuff[i];
+		}
+		return n;
+	}
+
+9. Multiple Inheritance
+-----------------------
+	function multi() {
+		var n = {}, stuff, j = 0, len = arguments.length;
+		for(j=0;j<len;j++) {
+			stuff = arguments[j];
+			for(var i in stuff) {
+				n[i] = stuff[i];
+			}
+		}
+		return n;
+	}
+	
+10. Parasitic Inheritance
+-------------------------
+	function parasite(victim) {
+		var that = object(victim);
+		that.more = 1;
+		return that;
+	}
+	
+11. Borrowing Constructors
+--------------------------
+	function Child() {
+		Parent.apply(this, arguments);
+	}
+
+12. Borrowing a Constructor and copy the prototype
+--------------------------------------------------
+	function Child() {
+		Parent.apply(this, arguments);
+	}
+	extend2(Child, Parent);

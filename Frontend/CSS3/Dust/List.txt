@@ -1,0 +1,60 @@
+list-style - list-style-type list-style-position list-style-image;
+	
+list-style-type - disc(default) | circle | square | decimal | decimal-leading-zero | lower-roman | upper-roman | lower-greek | lower-latin | upper-latin | armenian | georgian | none;
+	This property is used to change the marker before list items, list can ordered list or unordered list.
+	You can apply any marker style to both ol and ul by using list-style-type. In other words, an ol could have square markers and a ul decimal markers.
+	By default, unordered lists use discs for the first level, circles for the first nested level and squares for the third and subsequent level lists.
+	
+list-style-image - none(default) | url;
+	Using this property you can use any image as list marker.
+
+list-style-position - inside | outside(default);
+	This property is used to control the placement of list markers.
+	inside - marker is placed inside the list item itself.
+	outside - marker is placed outside the list item.
+	
+	
+	
+	property and how it's used to present different types of lists through a variety of marker styles for bulleted lists and numbered lists
+	
+	
+
+The  property and how it's used to provide a custom marker for each list item
+
+The list-style-position property and how it's used to control the positioning of list item markers
+
+TODO:
+	Creating Ordered and Unordered Lists
+	Nested lists, behaviour - http://techbus.safaribooksonline.com/book/web-development/css/9780470096970/list-properties/the_list-style_shorthand_property?query=%28%28list-style%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA0NzAwOTY5NzAlMkZ0aGVfbGlzdC1zdHlsZS10eXBlX3Byb3BlcnR5JnF1ZXJ5PSgobGlzdC1zdHlsZSkp
+	hebrew | armenian | georgian | cjk-ideographic | hiragana | katakana | hiragana-iroha | katakana-iroha — (CSS2) Traditional numbering based upon the language type selected.
+	Type of lists: <ul>  for unordered list, <ol> for ordered list, <dl> for description list, known as a definition list before HTML5
+	Type of list items: <li> for a list item in an <ol> or <ul>, and <dt> for the term with <dd> for the description in a <dl>
+	For an ordered list, you can include any of the optional attributes start, type, and reversed. (See “Choosing Where to Start List Numbering” regarding start, “Choosing Your Markers” regarding type, and the last tip to learn about reversed, which is not yet supported and so has no visible effect.)
+	You can also specify an ordered list’s marker type with the type attribute(-------- inside markup -----), although I recommend defining the list style type in CSS instead whenever possible. The acceptable values for type are A, a, I, i, and 1, which indicate the kind of numeration to be used (1 is the default). For example, <ol type="I"> specifies uppercase Roman numerals.
+	Unless you specify otherwise with CSS, items in ordered lists will be numbered with Arabic numerals (1, 2, 3, and so on).
+	Items in unordered lists have solid round bullets by default. You can choose different bullets (see “Choosing Your Markers”) or even create your own (see “Using Custom Markers”).
+	Be sure to place list content only within li elements. For instance, you aren’t allowed to put content between the start ol or ul tag and the first li element.
+	Indentation of list items:
+		Lists are indented from the left margin by default, though you can remove the indentation (or add more) with CSS. Depending on how much you reduce the left margin, your bullets might stick outside your content or disappear beyond the left edge of the window.
+	If you specify your content direction as right-to-left, as you would if the page’s base language were Hebrew, for instance, the lists are indented from the right margin instead of the left. To achieve this, set the dir attribute on your page’s html element: <html dir="rtl" lang="he">. In this case, lang is set to he for Hebrew. You also can set dir and lang on elements within the body to override the settings on the html element. The dir attribute defaults to ltr.
+	---
+	Ordered List
+		The ordered list is perfect for providing step-by-step instructions on how to complete a particular task or for creating an outline (complete with links to corresponding sections, if desired) of a larger document. 
+		It is also the proper choice for marking up breadcrumb navigation. In short, any list of items for which the order is meaningful.
+	---
+	Breadcom navigation
+		Breadcrumb navigation is often displayed horizontally above the main content area to indicate where the current page exists in the site’s navigation path. 
+		For instance, on a page providing the details of a particular mobile phone, it could be: Home > Products > Phones > The Fone 3.0. 
+		Each item in the list except the last would be a link, since the visitor is on the page for The Fone 3.0.
+	----
+		The completed sample Web page in Chapter 11 demonstrates lists used and presented in a variety of ways. It includes an unordered list for the navigation (styled horizontally and with bullets), an unordered list for a list of images (styled horizontally with no markers), and an ordered list for a list of chronological monthly archive links (styled with bullets). Chapter 3 also has examples that include a ul as navigation.
+		
+	Nesting Lists
+		You may create one list inside another — known as nesting lists — even mixing and matching ordered and unordered lists. 
+		Be sure to nest each list properly, using all the required start and end tags.
+		
+		
+http://www.youtube.com/watch?v=TmQm-p3wCSU
+http://www.youtube.com/watch?v=T7ayE5AtRUA
+http://speckyboy.com/2012/04/18/css3-menu-and-navigation-tutorials/
+http://apexplained.wordpress.com/2013/03/10/creating-a-multi-level-navigation-menu/

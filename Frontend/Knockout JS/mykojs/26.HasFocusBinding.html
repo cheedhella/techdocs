@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: hasFocus</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <!-- 
+            It binds focusable HTML element such as textfield or button with specified property in the view model.
+            The binding is 2-way. If the HTML element is focused, then corresponding view model parameter is assigned true.
+            Similarly, if the view model parameter is set to false, then associated element gets de-focused.
+
+            It is extremely useful when form elements are dynamically generated and you want to set default focus to one of them.
+        -->
+        <input data-bind="hasFocus: isSelected" />
+        <button data-bind="click: setIsSelected">Set Focus</button>
+        <span data-bind="visible: isSelected">Textbox has focus</span>
+
+        <script>
+            var myViewModel = {
+                isSelected: ko.observable(false),
+                setIsSelected: function() {
+                    this.isSelected(true);
+                }
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

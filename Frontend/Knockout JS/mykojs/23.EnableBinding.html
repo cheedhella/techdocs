@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Form Field Bindings: enable</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <p><input type="checkbox" data-bind="checked: hasTelephone" /> I've a Telephone</p>
+        <p>Your Telephone Number: <input type="text" data-bind="value: telephoneNumber, enable: hasTelephone"></p>
+
+        <script>
+            var myViewModel = {
+                hasTelephone: ko.observable(false),
+                telephoneNumber: ''
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

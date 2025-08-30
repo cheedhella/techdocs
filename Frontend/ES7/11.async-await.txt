@@ -1,0 +1,2 @@
+Axios is a prominent HTTP client, based on promises, which is used to make API calls;
+All axios.get(), axios.post(), axios.put() return promises;

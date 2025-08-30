@@ -1,0 +1,20 @@
+{
+  "name": "1-gql-server",
+  "version": "1.0.0",
+  "description": "> mkdir 1-gql-server  > cd 1-gql-server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon ./server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.8.0",
+    "nodemon": "^3.0.1"
+  }
+}

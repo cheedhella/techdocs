@@ -1,0 +1,9 @@
+1. Nature of the data?
+4. Input to yFiles? data format? xml? json? sample data?
+2. Is yFile a single file library?
+3. How can we supply configuration to yFiles?
+
+1. Hierarchi
+Radial
+Organic
+

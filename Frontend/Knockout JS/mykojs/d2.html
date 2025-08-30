@@ -1,0 +1,46 @@
+  Knockout can bind almost any HTML attribute, CSS class, or CSS style. These are done quite similarly to the text and html bindings with the exception that you can specify more than one property at a time. This is accomplished by wrapping the properties in curly brackets like in Examples 2-2 and 2-3.
+
+
+
+  ko.isComputed(fullName)
+  ko.isObservable(firstName); // returns true for all observables, observable arrays, computed observables;
+  ko.isWritableObservable(firstName) // 
+  ko.isWritableObservable(fullName); // returns true for all observable, observable arrays, writable computed observables;
+
+Photoshop and Illustrator, CDN working; type of CDNs;
+clickBubble, mouseOverBubble
+
+      // Creating Observable Array which is empty initially
+      var myObservableArray = ko.observableArray();
+      // Adding items to it
+      myObservableArray.push('Matt');
+
+      // Creating Observable Array with 2 items initially
+      var myObservableArray2 = ko.observableArray([
+            {name: 'Matt', job: 'software engineer'},
+            {name: 'John', job: 'web developer'}
+      ]);
+
+      // Reading from Observable Array
+      console.log('Length of Observable Array: ' + myObservableArray2().Length);
+      console.log('First element: ' + myObservableArray2()[0].name);
+      
+      function Employee(first, last) {
+         var self = this;
+         self.firstName = ko.observable(first);
+         self.lastName = ko.observable(last);
+
+         self.fullName = ko.pureComputed({
+            read: function() {
+               return self.firstName() + " " + self.lastName();
+            },
+            write: function(val) {
+               var namesArr = val.split(' ');
+               self.firstName(namesArr[0]);
+               self.lastName(namesArr[1]);
+            }
+         });
+      }
+      
+      ko.applyBindings(new Employee('Malli', 'Ch'));
+

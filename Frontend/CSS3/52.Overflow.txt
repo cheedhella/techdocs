@@ -1,0 +1,34 @@
+What is Overflow Property?
+    If you don't specify height and width for block elements such as <h1>, <div>, <p> etc, they expand to fill the space 
+    available to them horizontally and expand vertically in the shrink-to-fit fashion, that is, only enough to accommodate 
+    the content contained within them.
+
+    In other words, 
+    If you don't define the width of an element, then it is determined by the width of it's parent;
+    If it doesn't have any parent, it assumes 100% width of the browser;
+    If you don't define the height of an element, then it will grow as large as it needs to be, to accomidate the content;
+
+    But, what if you set height OR width of a container and content inside cannot fit in?
+    This is where CSS overflow property comes in, it allows you to specify how you would like handle it;
+    It is useless to specify overflow property, if the height and width of box are not specified explicitly;
+
+Syntax:
+    overflow: visible, hidden, scroll, auto; // Defaults to visible;
+
+    // Overflowed content is always rendered outside the box;
+    visible - Content that extends beyond the box is visible;
+    hidden - Content that extends beyond the box is hidden; Bear in mind that it makes overflowed content inaccessible;
+    scroll - It gives you scrollbars both horizontally and vertically(even if they are not needed or if you need only one);
+    auto - It is same as scroll, except that it shows scrollbars only when needed;
+    
+Can scroll bars be styled with CSS?
+    TODO: https://css-tricks.com/the-css-overflow-property
+
+------------------------------------------------------------------------------------------------------------------------------
+overflow-x
+    It specifies what to do with the left/right edges of the content; 
+    Eg: overflow-x: hidden; /* Hide horizontal scrollbar */
+
+overflow-y
+    It specifies what to do with the top/bottom edges of the content;
+    Eg: overflow-y: scroll; /* Add vertical scrollbar */

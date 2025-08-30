@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Clearfix Hack</title>
+    <style>
+      #one > img {
+        float: left;
+        margin-right: 10px;
+      }
+      #two > img {
+        float: right;
+        margin-left: 10px;
+      }
+      p {
+        border: 1px solid pink;
+      }
+      .clearfix {
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CSS Float Property</h1>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos neque at
+      optio ratione nesciunt quibusdam repellat officia rerum eaque veniam!
+    </p>
+    <p id="one">
+      <img src="../images/pineapple.jpeg" alt="Pineapple" />
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate vitae
+      molestias suscipit quibusdam, voluptas, quia veniam consequatur soluta,
+      qui commodi officiis repellendus voluptatibus delectus sapiente corrupti
+      sint vero similique ipsam!
+    </p>
+    <hr />
+    <p id="two" class="clearfix">
+      <img src="../images/pineapple.jpeg" alt="Pineapple" />
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cupiditate vitae
+      molestias suscipit quibusdam, voluptas, quia veniam consequatur soluta,
+      qui commodi officiis repellendus voluptatibus delectus sapiente corrupti
+      sint vero similique ipsam!
+    </p>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+    <head>
+        <title>KnockoutJS: User Signup Form using Components</title>
+        <!-- In this example, we will another way of creating template: by using <template id='tid'> -->
+        <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+        <script type="text/javascript" src="./jquery-3.4.1.min.js"></script>
+        <script>    
+            // It's not good putting template markup in script. So, let's move the component template to body!
+
+            var userSignupFormViewModel = function(params) {
+                var self = this;
+                self.firstName = ko.observable(params.firstName);
+                self.lastName = ko.observable(params.lastName);
+                self.fullName = ko.pureComputed(function () {
+                    return self.firstName() + " " + self.lastName()
+                });
+                self.email = ko.observable(params.email);
+                self.password = ko.observable();
+            };
+
+            ko.components.register('usersignupformcomponent', {
+                template: { element: 'userSignupFormTemplate' }, // Gets template element with specified ID and uses it as component template!
+                viewModel: userSignupFormViewModel
+            });
+
+            $(document).ready(function () {
+                ko.applyBindings(); // There is no viewmodel(top-level) as such to bind, so, pass empty! 
+            });
+        </script>
+    </head>
+    <body>
+        <template id='userSignupFormTemplate'>
+            <fieldset style="width:300px">
+                <legend>User Sign-up Form</legend>
+                <p>First Name: <input type="text" data-bind="value:firstName" /></p>
+                <p>Last Name: <input type="text" data-bind="value:lastName"/></p>
+                <p>Full Name: <span data-bind="html: fullName"> </span></p>
+                <p>Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="email" data-bind="value:email"/></p>
+                <p>Password: <input type="password" data-bind="value:password"/></p>
+                <p><input type="button" value="Submit" value="Create Account"/></p>
+            </fieldset>
+        </template>
+
+        <usersignupformcomponent params='{firstName: "55.Malli", lastName:"55.Ch", email:"55.your@email.com"}'></usersignupformcomponent>
+    </body>
+</html>

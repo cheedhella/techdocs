@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS Form Field Bindings: options</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+</head>
+<body>
+    <!-- It is used to bind options in a dropdown with an array OR observable array in the view model. -->
+    <p>Destination Country: <select width='80px' data-bind="options: availableCountries, optionsText: 'name', optionsValue: 'id'"></select></p>
+
+    <input type="button" value="Add Country" data-bind="click: addCountry" />
+
+    <script>
+      var myViewModel = {
+          availableCountries: ko.observableArray([{name: 'Australia', id: 1}, {name: 'USA', id: 2}, {name: 'Sri Lanka', id: 3}]),
+          addCountry: function() {
+            this.availableCountries.push({name: "Bangladesh", id: 4});
+          }
+      };
+
+      ko.applyBindings(myViewModel);
+    </script>
+</body>
+</html>
+

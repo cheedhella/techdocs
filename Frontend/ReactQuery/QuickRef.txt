@@ -1,0 +1,257 @@
+React Query
+    Basics: What, Why, Installation;
+    Setup: QueryClient, QueryClientProvider;
+    Hooks: useQuery, useMutation; Query Key, Pagination, Prefetching, Mutation; 
+    Config: staleTime vs cacheTime; Return values: isLoading, isFetching, isError, error, onError;
+
+Developer Tools: Installation;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is React Query?
+    It is server state management library for React applications;
+    React Query is one of the best libraries for managing server state. It helps us fetch, cache, synchronize and update data without touching any global state.
+
+Client state vs Server state 
+    client state -> language or theme choosen by user; 
+    server state -> information stored on server;
+            It’s used for storing data that must be maintained between browsing sessions.
+            As multiple clients can access the same server and change the server state, it’s essential to carefully consider how the server state is stored on the client. 
+            As the server state is stored remotely and can be modified by any user, data from the server could quickly become outdated. 
+            Therefore, we need to handle it with caution.
+
+What problem React Query solves?
+    It maintains a cache of server data on the client;
+    So, when your react code needs data from server, it doesn't go straight to the server(using async/fetch or axios);
+    Instead, it asks React Query cache, which is source of truth for server data;
+    React queries job is to maintain the data in the cache based on how you've configured the react query client;
+    So, react query manages the data, and it is your job to indicate when you want to update the cache with new data from the server;
+
+    When to update the cache with new data from the server?
+        imperatively -> invalidate data;
+        declaratively -> configure when to retrigger a fetch(time or window focus etc);
+    
+        key:
+        data:
+        staleTime:
+
+    But, wait! there is lot more!! 
+    React Query comes with lot of tools to help you with server state managment;
+        - Loading and Error states -> It maintains loading and error states for every query to the server so that you don't have to do that;
+        - Pagingnation/Infinite scroll -> It gives you tools to fetch data in pieces;
+        - Prefetcing -> You can prefetch data and put it in the cache, if you anticipate that user needs it; 
+        - Mutations -> It can also handle mutations or updates to data on the server;
+        - De-duplication of requests -> since queries are identified by a key, react query can manage your requests, so that if you load a page and 
+                if several components on that page request the same data, react query sends the data only once; 
+                If another component requests the data, while original query is going out, then react query can deduplicate the requests;
+        - Retry on error
+        - Callbacks -> it supports success, failure or either case callbacks;
+
+        - React query also automatically refetches data when an app regains focus, which is nice. This, of course, can be disabled, but I think this is nice default behavior.
+        - The other thing we get with React query is that it will automatically retry a fetching function up to 3 times if an error occurs. 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+React Query Dev tools
+    - Show queries(by key);
+        -- status of queries - what's going on with your queries;
+        -- last updated timestamp;
+    - Data explorer
+    - Query explorer
+    
+    - Actions: You can Refetch(to update the data), Invalidate(which further refetches the data), Reset, Remove;
+
+
+Note: By default, devtools is not available in production bundles; process.env.NODE_ENV = 'production'; // This is set production only when you build using 'npm run build'; Otherwise it is a developement or test build;
+
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'; // devtools needs to be imported from another package;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Hooks
+
+useQuery 
+    It is used to fetch data from your API;
+    It returns an object that contains the status of the query (loading, error, or success), the data returned from the query, and functions to refetch the data;
+    By default, retries 3 times, configurable;
+useMutation
+    Mutation: making a network call that changes the data on the server;
+    // add a blog post, delete a post, update title of a post etc;
+    // jsonplaceholder API allows us to send mutations, but it doesn't change the server, as everyone is sharing the same data;
+    optimistic updates - assume that everything goes fine with n/w call and rollback, if that is not true;
+    another way is - take the data returned from mutation and update the cache;
+    invalidate the data and that will trigger re-fetch of the data;
+
+    It is similar to useQuery, but It returns mutate function - we are going to use mutate function to actually call the server with the change;
+    It doesn't need a query key, b/c we are not storing any data; It is not a query, it is a mutation;
+    isLoading, but no isFetching; isFetching doesn't make sense, as there is no cache associated with a mutation;
+    By default, there are no retries; configurable;
+
+
+useInfiniteQuery
+
+ Each one returns an object packed with super handy properties.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Query Key
+    - Data for same query key is fetched, only when it is triggered:
+        -- component remount 
+        -- window refocus 
+        -- running refetch function 
+        -- automated refetch 
+        -- query invalidation after a mutation
+    - Otherwise, data is not fetched from server, rather data is served from cache, even though it is stale;
+
+React Query will try to serve a response as fast as possible.
+For that, it'll look for a cached value. If it doesn't find a valid (non-expired) cache, then it will trigger a call to the back-end.
+
+staleTime
+    -That is what staleTime is doing. staleTime tells you how fresh you data is. It is very similar to Cache-Control: max-age=120.
+    - So if you set staleTime: 120000, in your example, you're guaranteed to not get another network request for two minutes after the first successful one.
+    - Defaults to 
+        -- data refetch only triggers for stale data; For eg, component remount, window refocus etc;
+        -- stale time translates to 'max age';
+        -- How to tolerate data potentially being out of date?
+            -- If you think it is ok for the data to be 10secs old when displaying on page, you can set it to 10sec; It all depends on nature of data;
+        -- Why the staletime default to 0?
+            We are always assuming that data is out of date and that it needs to be refetched from server;
+            That makes it less likely that you are going to accidentally have out of date data on the client;
+        -- staleTime is for refetching;
+        -- When staleTime elapses, your data is marked as stale - but that doesn't mean it will be instantly refetched. 
+        If the query is stale (which per default is: instantly), you will still get data from the cache, but a background refetch can happen under certain conditions.
+        It means that, by default, React Query will always cache your request responses for up to 5 minutes after they've been done. The advantage is that, when the user tries to fetch from the back-end a second time, React Query will serve the last value almost instantly.
+        However, as our default for staleTime is set to zero, React Query will consider our request as stale (or not fresh) and trigger the second call in the background. And, once the call is finished, it will update our state with the freshly new data coming from the back-end.
+        The advantage of using this strategy is the responsiveness provided to our users. We first optimistically provide them with the values…
+
+    - cacheTime
+        -- Cache is for the data that might be reused later;
+        -- Query goes into cold storage, if there is no active useQuery;
+        -- cache data expires after cacheTime, defaults to 5 mins;
+        how long since it's been since last active useQuery;
+        == after cache expires, the data is garbage collected and no longer available to the client;
+        -- Cache is for backup data to display, while fetching;
+        cacheTime is something totally different. Think about it as a garbage-collect time. It basically describes how long data should be kept in the cache before it can be garbage collected. This is only relevant for unused queries, because active queries can per definition not be garbage collected.
+        
+        cacheTime relates to the expiration of a specific value, while staleTime will be expiring the validity of a certain query.
+        React Query comes out of the box with a cacheTime of 5 minutes and a staleTime set to zero.
+
+https://www.codemzy.com/blog/react-query-cachetime-staletime
+https://stackoverflow.com/questions/72828361/what-are-staletime-and-cachetime-in-react-query
+
+    - refetchInterval
+        If you want to fetch every 2 minutes, set a refetchInterval:refetchInterval: 120000
+
+    - keepPreviousData 
+        even when the query key changes, I want to keep the past data around, so that if someone goes back to previous page, we still have that data in the cache;
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+isLoading vs isFetching
+isFetching 
+    - If it is true, it means async query fn is not yet resolved;
+isLoading
+    - It is set to true, only if there is no data in cache and it is being fetched from server;
+    - isFetching is true + no data in cache;
+    if isLoading is true, then isFetching is true;
+    isLoading is a subset of isFetching, where you actually don't have any cached data and you are actually fetching;
+isRefetching: This state is only true when we’re deliberately refetching with the refetch() function.
+
+isLoading or `status === ‘loading’`
+Is true when the query has no data yet and is fetching for the first time.
+
+
+
+isFetching
+Is true whenever a request is in-flight – includes the initial request and subsequent refetches.
+
+isRefetching
+Is true whenever a request is in-flight, but doesn’t include the initial request. Equivalent to isFetching && !isLoading.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To simulate slow network: Developer tools -> Network -> Change 'No Throttling' to 'slow 3g'
+
+// you will see the clear diff, when working on paginnation;
+isLoading -> no isFetching + no cache data -> it means we never made this query before;
+isFetching -> async query fn is not yet resolved; it could be REST or GRAPHQL API;
+isError -> if there is any error;  // By default, react query retries 3 times, in case of any issue;
+error -> actual error, in case of any error; 
+onError -> You can pass error callback to useQuery;
+
+React Query can be used with both REST and GraphQL API;
+
+React Query vs useEffect
+    The dominance of React Query over traditional state management tools like useEffect and others is that React Query comes with built-in query caching, which means, once data is fetched, it can be stored in a cache and reused later without making redundant API calls.
+    React Query also handles the state management of queries automatically, reducing the need for developers to write and maintain complex state management logic. 
+    It provides built-in error-handling capabilities, allowing developers to handle API errors gracefully.
+
+
+
+
+React Query's core functionality revolves around fetching and caching data from an API and manages the state of fetched data;
+React Query caches API responses, which stores the fetched data locally to reduce the need for subsequent fetches;
+This caching mechanism improves performance and reduces the time to display the requested information;
+
+Querying data
+Queries are used to extract, filter, and manipulate data based on specific conditions and criteria.
+Since we know what querying data means, let us perform basic data fetch with React Query.
+
+
+
+fetch/async/await
+
+handling state management;
+
+
+ while search engines like Google allow us to query and retrieve relevant information from an extensive database. Both React Query and Google aim to optimize data retrieval and improve user experiences.
+
+2 projects - blog posts, star wars; Jest and react testing library;
+
+v3 -> npm install react-query@^3
+v4 -> @tanstack/react-query
+    @tanstack/react-query-devtools
+
+    "@tanstack/eslint-plugin-query": "4.27.0",
+        "@tanstack/react-query": "4.28.0",
+        "@tanstack/react-query-devtools": "4.28.0",
+
+
+Gets data from https://jsonplaceholder.typicode.com/ - You can get posts, comments on a post etc; You can also make updates, but updates actually don't make any changes to the data on the server; They give you response, as though there were changes, but the server data remains the same;
+
+
+Create query client;
+Apply QueryProvider; It provides cache and client config to child components; Takes query client as the value;
+run useQuery hook - a hook which actually fetches data from server;
+
+nothing to write home about - not interesting/exciting, ordinary;
+    A: Hi AWC, how has your week been?
+    B: Pretty good. And yours?
+    A: Nothing to write home about…
+
+
+
+
+
+npx create-react-app react-query-typescript-crud-app --template typescript
+
+
+
+
+/*
+function useTodoList() {
+    return useQuery<Todo[], Error>('todos', async () => {
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/todos');
+        return data.results;
+    });
+}
+
+export default useTodoList;
+*/
+/*
+function GetTodos() {
+    const fetchTodos = async () => {
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/todos');
+        return data.results;
+    };
+}
+
+const getTodos = () => useQuery('todos', GetTodos);
+
+export default getTodos;
+*/

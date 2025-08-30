@@ -1,0 +1,35 @@
+What is a Module?
+    Module is a JS file that by default runs in strict mode(no need to use 'use strict');
+    It means everything inside the module(variables/functions/classes) is private by default and not added to global scope;
+
+    JavaScript has had modules for long time;
+    However, they are not built into the language, implemented via external libraries;
+    ES6 is the first time that JavaScript has built-in Modules;
+
+    By default, everything inside a module is local to the module, not accessible outside the module;
+    If you want to access them outside the module, you can add export keyword to it;
+    You can export any top-level var, let, const, function and class;
+    
+    Apart from exports, a module is a normal JS code; 
+    Inside a module, you can access globals like Array, Object;
+    Also, If your module runs in a web-browser, you can use document and XMLHttpRequest etc;
+
+    // export Syntax
+    export {v1, v2};
+    export {
+        v1 as newV1,
+        v2 as newV2,
+        v2 as newVersion2
+    };
+
+    // default export Syntax
+    // There can only one default export per file; Along with default export, a module can have multiple named exports;
+    export default <entity-name>
+
+    // import Syntax
+    import {x, y} from <module-name>
+    import {x as x1, y as y1} from <module-name>
+    import * as myCompany from <module-name>    // import all exports from specified module into an object named myCompany;
+
+------------------------------------------------------------------------------------------------------------
+Examples: Check Code/Module* folder;

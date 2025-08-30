@@ -1,0 +1,242 @@
+Arrow Functions
+    It provides a new syntax for writing functions in JavaScript;
+    It avoids the need to type function keyword, return keyword and curly braces, which makes your code concise;
+    Syntax: (param1, param2, paramN) => { function_body; } 
+
+Eg0: add() function in ES5 and ES6;
+    // ES5
+    var addEs5 = function(x, y) {
+        return x + y;
+    };
+    // ES6
+    const addEs6 = (x, y) => { return x + y };
+------------------------------------------------------------------------------------------------------------------
+Eg1: when there is ONLY one input parameter, Parentheses are optional;
+    const incrementer = x => { return x + 1};
+    console.log(incrementer(10));  // 11
+------------------------------------------------------------------------------------------------------------------
+Eg2: when there no input parameters OR more than one input parameters, Parentheses are required;
+    // ES5
+    var logDocEs5 = function docLog() {
+        console.log(document);
+    };
+    // ES6
+    var logDocEs6 = () => { console.log(document); };
+    logDocEs6(); // #document... <html> ….
+------------------------------------------------------------------------------------------------------------------
+Eg3: When function body has only 1 expression, you can remove the curly braces and return statement;
+    const addEs6 = (x, y) =>  x + y; // It implicitly returns x + y
+------------------------------------------------------------------------------------------------------------------
+Eg4: Arrow functions can return an object literal expression as well;
+    Only caveat is that the body needs to be wrapped in parentheses, in order to 
+    distinguish between a block and an object(both of which use curly brackets);
+
+    const me = () => { name: "samantha" };
+    me(); // undefined
+    
+    // What?! Why isn't it returning my object? 
+    // If you want to return objects from an arrow function, you need to wrap them in parentheses;
+    const me = () => ({ name: "samantha" });
+    me(); // { name: "samantha" }
+------------------------------------------------------------------------------------------------------------------
+Eg5: arrow functions bind the value of this to surrounding context;
+    const team = {
+        teamName: 'Rockers',
+        members: ['Jane', 'Sara'],
+        teamSummary: function() {
+            return this.members.map(function(member) {
+                return `${member} is on ${this.teamName}`;
+            });
+        }
+    }
+    team.teamSummary(); // TypeError: Cannot read property 'teamName' of undefined
+    // Why? b/c this inside anonymous function doesn't point to team;
+
+    There are many solutions for this problem:
+
+    Solution 1: In ES5, we used bind() method;
+        const team2 = {
+            teamName: 'Rockers',
+            members: ['Jane', 'Sara'],
+            teamSummary: function() {
+                return this.members.map(function(member) {
+                    return `${member} is on ${this.teamName}`;
+                }.bind(this));
+            }
+        }
+        team2.teamSummary(); // ["Jane is on Rockers", "Sara is on Rockers"]
+
+    Solution 2: 
+        const team3 = {
+            teamName: 'Rockers',
+            members: ['Jane', 'Sara'],
+            teamSummary: function() {
+                var self = this;
+                return this.members.map(function(member) {
+                    return `${member} is on ${self.teamName}`;
+                });
+            }
+        }
+        team3.teamSummary(); // ["Jane is on Rockers", "Sara is on Rockers"]
+
+    Solution 3: Using arrow functions; this inside arrow function still points to parent functions this, which is nothing but team object;
+        const team4 = {
+            teamName: 'Rockers',
+            members: ['Jane', 'Sara'],
+            teamSummary: function() {
+                return this.members.map(member => `${member} is on ${this.teamName}`);
+            }
+        }
+        team4.teamSummary(); // ["Jane is on Rockers", "Sara is on Rockers"]
+------------------------------------------------------------------------------------------------------------------
+Eg6: arrow functions bind the value of this to surrounding context, sometimes this is not the expected behaviour;
+    const profile = {
+        name: 'Alex',
+        getName: function() {
+            return this.name;
+        }
+    };
+    profile.getName(); // Alex
+
+    const profile2 = {
+        name: 'Alex',
+        getName: () => this.name
+    };
+    profile2.getName(); // ''
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+Eg10: this keyword inside arrow function;
+    As was mentioned previously, the this keyword works differently in arrow functions. The methods call(), apply(), and bind() will not change the value of this in arrow functions. (In fact, the value of this inside a function simply can’t be changed; it will be the same value as when the function was called.) If you need to bind to a different value, you’ll need to use a function expression.
+
+
+
+Eg10: PROMISES AND CALLBACKS
+    Code that makes use of asynchronous callbacks or promises often contains a great deal of function and return keywords. 
+    When using promises, these function expressions will be used for chaining.
+    // ES5
+    aAsync().then(function() {
+    returnbAsync();
+    }).then(function() {
+    returncAsync();
+    }).done(function() {
+    finish();
+    });
+    // ES6
+    aAsync().then(() => bAsync()).then(() => cAsync()).done(() => finish);
+
+    Let’s say we had a getTweets function that took in a user id and, after hitting a 
+    poorly designed API, returned us all of the user’s Tweets with over 50 stars and retweets. 
+    Using promise chaining, that function may look something like this:
+
+    function getTweets (uid) {
+        return fetch('//api.users.com/' + uid)
+            .then(function (response) {
+            return response.json()
+            })
+            .then(function (response) {
+            return response.data
+            }).then(function (tweets) {
+            return tweets.filter(function (tweet) {
+                return tweet.stars > 50
+            })
+            }).then(function (tweets) {
+            return tweets.filter(function (tweet) {
+                return tweet.rts > 50
+            })
+        })
+    }
+
+    // ES6 - Easy to read!
+    function getTweets (uid) {
+        return fetch('//api.users.com/' + uid)
+            .then((response) => response.json())
+            .then((response) => response.data)
+            .then((tweets) => tweets.filter((tweet) => tweet.stars > 50))
+            .then((tweets) => tweets.filter((tweet) => tweet.rts > 50))
+    }
+
+Eg11: CONSTRUCTORS
+    Arrow functions can’t be used as constructors as other functions can. 
+    Don’t use them to create similar objects as you would with other functions. 
+    If you attempt to use new with an arrow function, it will throw an error. 
+    Arrow functions, like built-in functions (aka methods), don’t have a prototype property or other internal methods. 
+    Because constructors are generally used to create class-like objects in JavaScript, you should use 
+    the new ES6 classes instead.
+
+Eg12: GENERATORS
+    Arrow functions are designed to be lightweight and can’t be used as generators. 
+    Using the yield keyword in ES6 will throw an error. Use ES6 generators instead.
+
+Eg13: ARGUMENTS OBJECT
+    Arrow functions don’t have the local variable arguments as do other functions. 
+    The arguments object is an array-like object that allows developers to dynamically discover and access 
+    a function’s arguments. This is helpful because JavaScript functions can take an unlimited number of arguments. 
+    Arrow functions do not have this object.
+
+
+ arrow functions really thrive when you’re using anonymous functions. 
+
+
+
+    
+
+Eg2:
+    const smartPhones = [
+        { name:'iphone', price:649 },
+        { name:'Galaxy S6', price:576 },
+        { name:'Galaxy Note 5', price:489 }
+    ];
+    
+    // Requirement: get array of prices;
+    // ES5
+    var prices = smartPhones.map(function(smartPhone) {
+        return smartPhone.price;
+    });
+    console.log(prices); // [649, 576, 489]
+    // ES6
+    const prices = smartPhones.map(smartPhone => smartPhone.price);
+    console.log(prices); // [649, 576, 489]
+
+Eg3:
+    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    // ES5
+    var divisibleByThrreeES5 = array.filter(function (v){
+        return v % 3 === 0;
+    });
+    // ES6
+    const divisibleByThrreeES6 = array.filter(v => v % 3 === 0);
+    console.log(divisibleByThrreeES6); // [3, 6, 9, 12, 15]
+
+
+Eg6:
+    // ES5
+    const fibonacci = function(n) {
+        if (n < 3) return 1;
+        return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+    // ES6
+    const fibonacci = n => (n < 3) ? 1 : fibonacci(n - 1) + fibonacci(n - 2);
+
+An arrow function does not have the arguments object, therefore, if you want to pass a number of arguments to the arrow function, you must use the rest parameters. See the following example:
+
+const combine = (...args) => {
+    return args.reduce((prev, curr) => prev + ' ' + curr);
+};
+let message = combine('JavaScript', 'Rest', 'Parameters'); // =>
+console.log(message); // JavaScript Rest Parameters
+Code language: JavaScript (javascript)
+
+Output:
+
+JavaScript Rest Parameters
+
+The combine() function is an arrow that takes an indefinite number of arguments and concatenates these arguments.

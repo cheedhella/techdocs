@@ -1,0 +1,807 @@
+==, ===	
+
+	
+		
+		
+		"" == false; // returns true. empty string is treated as false by ==
+		"abc" == false; // returns true. non-empty string is treated as false by ==
+		
+
+
+
+http://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
+
+	var var6 = [1, 2, 3];
+
+	
+	
+	
+	
+	
+	typeof(var6); // returns object, not array. 
+		how to check if a variable is an array or not? http://www.guyfromchennai.com/?p=27
+		obj.constructor.toString().indexOf(”Array”) != -1
+		obj instanceof Array
+
+	typeof(Math.PI); // returns number
+	typeof(var6.splice); // returns function
+
+	
+	typeof(null); // returns object
+	
+	typeof {} // "object"
+	typeof [] // "object"
+
+
+isPrototypeOf property - https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/IsPrototypeOf
+	http://perfectionkills.com/instanceof-considered-harmful-or-how-to-write-a-robust-isarray/
+
+
+	
+	
+	
+Javascript TypeError
+http://stackoverflow.com/questions/2449254/what-is-the-instanceof-operator-in-javascript
+
+	
+	
+	
+One minor point is that the prototype chain is effectively a singly-linked list, so there's no treelike hierarchy to traverse -- walk up the prototypes to the end, and you're done.
+
+	
+a boolean value indicating whether an object is an instance of a particular class.
+	
+
+	You can use instanceof operator to determine whether an object is an array or not,
+	as typeof operator returns object for an array.
+
+body.onload vs document.ready
+	onload is triggered only after all the resources(DOM/HTML, CSS, images) are loaded. only one onload event handler per page.
+	document.ready is jquery specific and is triggered once HTML is loaded. there can be multiple document.ready event handlers per page.
+
+
+	
+	
+
+
+
+	boolean datatype - var isFixed = true;
+	number datatype - var i = 1; var sum = 10.5;
+		JavaScript does not make a distinction between integer and floating-point values. All numbers are internally represented as floating-point values.
+	string datatype - var name = "cmr";
+	
+
+	
+	
+	
+	
+String
+	var s1 = 'javascript';
+	var s2 = "javascript";
+	var s3 = new String("javascript");
+	var s1 = 'javascript';
+	
+	
+	
+	
+	
+	
+null vs undefined
+	undefined means that the variable has not been declared or has not been given a value.
+	An attempt to access an undeclared variable will result in a ReferenceError exception being thrown(in FF atleast)
+	
+	
+	
+	check if a variable is null or not?
+	check if a variable is undefined or not?
+	
+	
+JavaScript Variables
+	JavaScript is a loosely typed language, meaning a JavaScript variable can hold a value of any data type.
+	JavaScript variable names are case-sensitive.
+	
+http://oreilly.com/javascript/excerpts/learning-javascript/javascript-datatypes-variables.html
+http://www.daaq.net/old/javascript/index.php?page=js+data+types&parent=core+javascript
+http://www.hunlock.com/blogs/Essential_Javascript_--_A_Javascript_Tutorial
+http://www.mapbender.org/JavaScript_pitfalls:_null,_false,_undefined,_NaN
+
+http://assets.expectnation.com/15/event/3/JavaScript_%20The%20Good%20Parts%20Paper%201.pdf
+https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/undefined
+https://developer.mozilla.org/en/JavaScript/Guide/Values,_Variables,_and_Literals
+http://www.yaldex.com/JSFactory_Pro.htm
+http://www.yaldex.com/wjscript/datatype.htm
+http://msdn.microsoft.com/en-us/library/d1et7k7c%28v=vs.94%29
+http://www.sitepoint.com/oriented-programming-1/
+http://www.cs.brown.edu/courses/bridge/1998/res/javascript/javascript-tutorial.html#3
+
+http://www.iccube.com/
+http://www.pentaho.com/
+undefined === undefined // true
+null == undefined // true
+null === undefined // false
+object.x === undefined should return true if x is unknown property.
+
+var a;
+typeof a === 'undefined'; // true
+a === undefined; // true
+typeof a === typeof undefined; // true
+typeof a === typeof sdfuwehflj; // true
+
+typeof x == "undefined" // this ensures the type of the variable is really undefined.
+undefined means "does not exist". null is an intentionally set value
+
+    var a;  
+    console.log("The value of a is " + a); // prints "The value of a is undefined"  
+    console.log("The value of b is " + b); // throws ReferenceError exception  
+	
+https://developer.mozilla.org/en/JavaScript/Guide/Values,_Variables,_and_Literals
+
+
+
+	
+	
+
+
+Javascript also has builtin objects known as Boolean, Number, String. These builtin objects are very different from primitive data types. 
+They have their own properties and methods.
+
+string data type - sequence of characters enclosed between single or double quotes.
+	var strString = "This is a string";
+	var anotherString= 'But this is also a string';
+
+
+JavaScript is untyped language. This means that a JavaScript variable can hold a value of any data type.
+Unlike many other languages, you don't have to tell JavaScript during variable 
+declaration what type of value the variable will hold. 
+The value type of a variable can change during the execution of a program and JavaScript takes care of it automatically.
+
+
+NaN
+Infinity
+Number.MAX_VALUE
+Number.MIN_VALUE
+
+
+You can convert other data types, such as numbers and booleans, to a string; typically, the scripting engine will do the conversion automatically, based on the context. As an example, if a numeric or boolean variable is passed to a function that expects a string, the value is implicitly converted to a string first, before the value is processed:
+
+var strValue = "4" + 3 + 1; // becomes "431"
+var strValueTwo = 4 + 3 + "1"; // becomes 71
+
+However, if you use operators other than +, the opposite type of conversion is applied—the string is converted to a number:
+var firstResult = "35" - 3; // subtraction is applied, resulting in 32
+var secondResult = 30 / "3"; // division is applied, resulting in 10
+var thirdResult = "3" * 3; // multiplication is applied, resulting in 9
+
+
+
+document.formName.elements.length - returns no. of elements in the form.
+document.formName.elements[0].type - returns type of the 1st element in the form.
+	Possible values: button | checkbox | file | hidden | image | password | radio | reset | select-one | select-multiple | submit | text | textarea
+document.formName.elements[0].<attribute-name> - returns the value of specified attribute such as name, value etc.
+
+
+
+
+document.formName.buttonName.disabled = true; // to disable the button
+document.formName.buttonName.disabled = false; // to enable the button
+
+document.formName.checkBoxName.disabled = false; // to enable the checkbox
+document.formName.checkBoxName.disabled = true; // to disable the checkbox
+document.formName.checkBoxName.checked = true; // to check the checkbox
+document.formName.checkBoxName.checked = false; // to uncheck the checkbox
+
+
+document.formName.hiddenFieldName.value - returns the value of specified hidden field
+
+
+
+
+
+function checkall()
+{
+for(i=0; i<document.FormName.elements.length; i++)
+{
+if(document.FormName.elements[i].type=="checkbox")
+{
+document.FormName.elements[i].checked=true;
+}
+}
+}
+
+function uncheckall()
+{
+for(i=0; i<document.FormName.elements.length; i++)
+{
+if(document.FormName.elements[i].type=="checkbox")
+{
+document.FormName.elements[i].checked=false;
+}
+}
+}
+
+
+
+
+
+http://api.jquery.com/jQuery.isArray/
+http://www.codecademy.com/tracks/javascript
+
+
+
+<a href=”#” onClick=”functionName()”>Link text</a>
+2. Use a javascript: URL in the href attribute of the a tag to call
+the function:
+<a href=”javascript:functionName()”>Link text</a>
+
+
+
+addressed by their index positions, window.frames[0] and window.frames[1], or by their name attributes, window.frame1 and window.frame2. 
+
+window, self - similar to 'this' keyword in object oriented programming, self refers to the window you are in.
+window.parent, self.parent, parent - 
+window.top - 
+window.frames[nameOrNumberOfFrame] - refers to frame held by the current page.
+	In case of single-frame windows, all window, self, top, parent are equal.
+	In case of multi-frame windows, top refers to the topmost window that defines the first <frameset>.
+
+
+
+javascript local vs global variables
+	var myVar = 10; 
+	newVar = 20;
+
+
+
+ null value is special in that it is automatically converted to initial values
+of other data types. When used as a number it becomes 0, when used as a
+string it becomes "", and when used as a Boolean value it becomes false.
+
+
+typeof event.nextStepIndex !== "undefined"
+ui.currentStepIndex
+ui.wizard.jWizard("changeStep", event.nextStepIndex);
+ui.type
+
+_updateButtons - need to customize for showing/hiding prev/next/finish buttons
+
+
+$('#jWizard').find(".jw-button-cancel").addClass("ui-helper-hidden");
+$('#jWizard').find(".jw-button-cancel").removeClass("ui-helper-hidden");
+
+$("#jWizard").data("jWizard")._setOption("buttons.cancelHide", false)
+$("#jWizard").data("jWizard")._setOption("buttons.cancelHide", true)
+
+_updateButtons - show/hide next/prev/cancel/finish buttons
+
+
+
+page n - after loading(show/hide sth, update the content), next handler(may be static html or dyanmic html), prev handler(may be static html or dyanmic html)
+
+
+
+
+
+
+
+
+
+
+HTML and JavaScript - <script> and <noscript> tags
+
+	Internal JavaScript - <script type=”text/javascript>any script goes here </script>
+	External JavaScript - <script type=”text/javascript src=”externalfile.js”></script>
+
+	<noscript> – Message to display if the visitor's browser doesn't support JavaScript or if JavaScript is disabled. Eg: <noscript> Your browser does not support JavaScript!! </noscript>
+ 
+	<script> and <noscript> tags can be placed at anywhere in the HTML document.
+
+	What about language attribute of <script> tag?
+	With XHTML, language attribute has been replaced by type attribute. Using the language attribute may cause a Web page to fail XHTML validation.	
+
+Data types
+
+	Primitive: Boolean, Number, String, null
+	Compound: array, function, object
+
+
+	Local variable – a variable declared inside a function using the var keyword. 
+
+	Variables declared within a function are only visible within that function.
+
+	Unlike C, C++, and Java, JavaScript does not have block-level scope: variables declared within the curly braces of a compound statement are not restricted to that block and are visible outside of it.
+
+
+Fedex
+DHL
+Speed post
+
+	JavaScript strings are immutable, which means that there is no way to change the contents of a string. Methods that operate on strings typically return a modified copy of the string.
+
+	The JavaScript equality operator, ==, defines equality loosely and allows type conversions. For example, it considers the number 3 and the string "3" to be equal, it considers false to be equal to 0, and it considers null and undefined to be equal. 
+	== operator considers both null and undefined equal; if you need to distinguish between them, use the === operator.
+
+	The == and === operators compare strings by value by testing to see whether they contain exactly the same characters.
+
+	null value - When used as a number it becomes 0, when used as a string it becomes "", and when used as a Boolean value it becomes false.
+	Since the source of many JavaScript errors is uninitialized variables, one of
+	the common debugging techniques is to initialize all uninitialized variables,
+	including the meaningless ones, with a null value.
+
+	
+
+	The other special value in JavaScript is the undefined value. This is the value of uninitialized variables and the value returned when you query object properties that do not exist.
+
+	typeof – returns “boolean”, “number”, “string”, “function”, “object” or “undefined”
+	returns “object” if the operand is null.
+	Instanceof, in, delete operators
+
+	Variable declaration: we only need to declare local variables in function bodies.
+		var name [ = value ] [ , name2 [ = value2 ]  . . .  ] ;
+
+
+
+
+
+	if(expression) {
+	}
+
+	if(expression) {
+	}else {
+	}
+
+	if(expression1) {
+	} else if(expression2) {
+	} else {
+	}
+
+	switch(variable) {
+		case value1: statements;break;
+		case value2: statements;break;
+		case value3: statements;break;
+		...
+		...
+		default: statements;
+	}
+
+	while(expression) {
+		statements;
+	}
+	
+	do {
+		statements;
+	} while(expression);
+
+	
+	// looping through the properties of an object
+	for(variable in object) {
+		statements;
+	}
+	for(initialization;expression;increment/decrement) {
+		statements;
+	}
+
+	continue – restarts the innermost loop enclosing continue.
+	break – terminates the innermost loop enclosing break.
+
+
+JavaScript entities - piece of javascript code that is embedded in the HTML.
+	usage: &{ JavaScript-statements };
+
+	<script>
+	var myimage="day.gif"
+	var today=new Date()
+	var day_night=current.getHours()
+	//if the hour is pass 12 p.m
+	if (day_night>12)
+	myimage="night.gif"
+	</script>
+
+	<img src="&{myimage };">
+
+JavaScript Comments
+	// one-line comments
+	/* multi-line comments */
+	<!-- indicates the browsers that don't understand JavaScript to ignore it -->
+
+
+If loop
+If (condition) {statemtns;}
+for (i = 1; i <= 10; i ++) { Code to execute in the loop}
+while (condition) { command }
+datatypes
+Arrays
+Functions
+Math object
+Check if java is enabled using javascript??
+document.write(“Java is enabled: “ +  navigator.javaEnabled()); // o/p: java is enabled: true
+
+	
+	
+
+
+null vs undefined
+	null is a special value (just like true, false, NaN, Infinity) meaning "no value". 
+	null is a special object because typeof null returns 'object'.
+	On the other hand, undefined means that the variable has not been declared, or has not been given a value.
+	Although null and undefined are different, equality(==) operator considers them equal. null == undefined returns true.
+	If you need to distinguish between them, use the === operator. 
+	http://joeyjavas.com/2007/04/25/javascript-difference-between-null-and-undefined/
+	Likewise, with the prompt() dialog box, if the user selects the Cancel button, a null  is returned.
+
+JavaScript Event Handling
+
+onabort - triggered when loading of an image/webpage is aborted.
+onblur - triggered when the form element loses the focus.
+onchange - triggered when the user changes the contents of a form element.
+onclick - triggered when a mouse click is done on the object.
+ondblclick - triggered when a mouse double click is done on the object.
+onfocus - triggered when a form element gains the focus.
+onload - triggered when the browser completes loading an image/webpage.
+onmouseover - triggered when the mouse is hovered over an object.
+onmousedown - triggered when the mouse is pressed down on an object.
+onmouseup - trigged when the mouse is pressed down and released on an object.
+onreset - when you reset a form
+onresize - 
+onselect - when a user selects some text in a text field.
+onsubmit - when you submit a form
+onunload - generated when you close or browse away from a page.
+
+
+Event Handler  	Used With
+onAbort   		image
+onBlur			select, text, textarea
+onChange		select, text, textarea
+onClick			button, checkbox, radio, link, reset, submit, area
+onError			image
+onFocus		select, text, testarea
+onLoad			body, windows, image
+onMouseOut		link, area
+onMouseOver		link, area
+onSelect		text, textarea
+onSubmit		form
+onUnload		window
+
+
+
+
+typeof
+
+
+
+triple equals (i.e., ===) in JavaScript is basically an absolute truth (equals in value and equals in type). For example: try this in Firebug: 0 == false, 0 === false â€“ first one returns true and the second one returns false.
+
+== compares the values of variables for equality, type casting as necessary. === checks if the two variables are of the same type AND have the same value.
+
+0==false   // true
+0===false  // false, because they are of a different type
+1=="1"     // true, auto type coersion
+1==="1"    // false, because they are of a different type
+
+http://geekswithblogs.net/brians/archive/2010/07/03/quality-equality-with-javascript-quotquot-gt-quotquot.aspx
+
+
+
+
+built-in functions
+
+eval() - takes a mathematical expression in the form of string and returns it's value. returns undefined in case of any prob.
+	eval("4*(5+6)"); // returns 44
+	eval("fred=999; wilma=777; document.write(fred + wilma);");  // returns1776
+escape() - non-alphanumeric characters in the input are encoded in the form "%xx", where xx is the ASCII encoding of a character in the string.
+    document.write (escape("Don't leave yet!")); // Don%27t%20go%20away%21%21
+
+unescape() - opposite to escape()
+	document.write (escape("Don%27t%20go%20away%21%21")); // Don't leave yet!
+
+isNaN(val) -
+	If you want to find out if a value is not a number then use isNaN(value) b/c 
+	comparing NaN with any number, even NaN, returns false.
+	i.e if(NaN == NaN) returns false. if(NaN != NaN) returns true.
+
+
+	isNaN(val) - to check if a number is NaN or not.
+	parseInt(val) - to convert string to int. eg: var value1 = parseInt("123.4"); // returns 123
+	parseFloat(val) - to convert string to float. eg: var value2 = parseFloat("123.4"); // returns 123.4
+
+
+parseInt(string, [radix]) - returns NaN if i/p can't be converted to a int.
+	If the radix is not specified or is specified as 0, JavaScript assumes the following:
+	If the input string begins with 0x, the radix is 16 (hexadecimal).
+	If the input string begins with 0, the radix is 8 (octal).
+	If the input string begins with any other value, the radix is 10 (decimal).
+
+
+If the first non-whitespace character is not numeric, the function returns the Not-a-Number value NaN. 
+
+Code: 
+document.write("<BR>" + parseInt("50"))
+document.write("<BR>" + parseInt("50.12345"))
+document.write("<BR>" + parseInt("32.00000000"))
+document.write("<BR>" + parseInt("71.348 92.218 95.405"))
+document.write("<BR>" + parseInt(" 37 aardvarks"))
+document.write("<BR>" + parseInt("Awarded the best wine of 1992")) 
+
+Output: 
+50
+50
+32
+71
+37
+NaN
+
+
+
+parseFloat(string) -
+If the first character in the string is not a number, the function returns the Not-a-Number value NaN. 
+
+Code: 
+document.write("<BR>" + parseFloat("50"))
+document.write("<BR>" + parseFloat("50.12345"))
+document.write("<BR>" + parseFloat("32.00000000"))
+document.write("<BR>" + parseFloat("71.348 92.218 95.405"))
+document.write("<BR>" + parseFloat("37 aardvarks"))
+document.write("<BR>" + parseFloat("Awarded the best wine of 1999")) 
+
+Output: 
+50
+50.12345
+32.00000000
+71.348
+37
+NaN 
+
+
+
+typeof - This function returns the type of the object it operates on. Values returned are string values and may be one of "undefined", "object", "function", "number", "Boolean", or "string". The example will return the string "number".
+
+typeof 10 
+
+var myVariable = 10;
+document.writeln ( "myVariable = " + typeof myVariable );
+
+myVariable = "Hello";
+document.writeln ( "myVariable = " + typeof myVariable );
+
+When executed, the above code displays the following output:
+
+myVariable = number
+myVariable = string
+
+	
+function Circle() {} Circle.prototype.getArea = function() {return 3 * 4;}; var a = new Circle(); a.propertyIsEnumerable("getArea");
+
+
+Functions do not run automatically. When the page loads, each function waits quietly until it is told to run.
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function alert_hello()
+   {
+   alert("hello!!!"); 
+   }
+//-->
+</SCRIPT>
+
+
+calling a function:
+	<A HREF="javascript:void(0)" onclick="alert_hello()">Function called thru an event handler</A>
+	<A HREF="javascript:redirectLink()">redirecting</A>
+	<A NAME="javatest" onClick="redirectLink()">redirecting</A>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+composite datatypes: All objects 
+number: decimal 19, octal 0765, hexa 0x1AD2. also can be special values like Infinity, -Infinity, NaN
+string is a sequence of characters surrounded by single or double quotes.
+Booleans take on one of two values: true or false.
+null value indicates an empty value; it essentially represents “nothing"
+undefined value indicates that variable either do not exist or have not been assigned a value.
+NaN, value is not a legal number
+
+--------------------------------------------------------
+objects - javascript is object based language. object properties are accessed with . operator aswellas with array sntax.
+		eg: var str = new String("abcde"); str.length, str["length"] both are same
+		same applies for method calling. str.toUpperCase(), str["toUpperCase"]() both are same
+		All JavaScript objects have the common properties and methods
+
+JavaScript has many predefined objects, such as a Date object and a Math object.
+An object is a compound data type that contains any number of properties. 
+Each property has a name and a value. The . operator is used to access a named property of an object.
+
+Objects are created with the new operator: var o = new Date();
+
+An object literal is a comma-separated list of name:value pairs, contained within curly braces. For example: var o = {x:1, y:2, total:3};
+
+
+
+
+Array.length - no. of elements in the array. indexing starts at 0.
+	Array.length is NOT a read-only value, you can set it as you wish. 
+	If you have 100 elements in an array and set the length to 50, Javascript will truncate the last 50 elements from the array (effectively deleting them). 
+	If you have 10 elements in an array and set Array.length to 100 then the length of the array will be expanded to 100, creating 90 undefined elements after the original 10 items. 
+
+
+
+
+
+var a = new Array( ); // Empty array 
+var b = new Array(10); // 10 elements 
+var c = new Array(1,2,3); // Elements 1,2,3
+
+
+As of JavaScript 1.2, you can use array literal syntax to include arrays directly in a program. 
+An array literal is a comma-separated list of values enclosed within square brackets. For example: 
+var a = [1,2,3];
+
+var b = [1, true, [1,2], {x:1, y:2}, "Hello"];
+
+
+
+
+functions
+
+var sum = function(x,y) { return x+y; }
+When a function is assigned to a property of an object, it is called a method of that object. Within the body of a method, the keyword this refers to the object for which the function is a property. 
+Within the body of a function, the arguments[ ] array contains the complete set of arguments passed to the function. 
+
+
+
+var sum = function(x,y) { return x+y; }
+When a function is assigned to a property of an object, it is called a method of that object. Within the body of a method, the keyword this refers to the object for which the function is a property. 
+Within the body of a function, the arguments[ ] array contains the complete set of arguments passed to the function. 
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+In JavaScript, all numbers, including integers, are treated as floating point numbers.
+Division of a positive number by zero results in “infinity,” division of a negative number by zero results in “negative infinity,” and 
+division of zero by zero is “undefined” (NaN).
+--------------------------------------------------------
+
+--------------------------------------------------------
+http://www.toknowmore.net/e/1/javascript/javascript-onchange.php
+http://www.webdevelopersnotes.com/tutorials/javascript/javascript_online_help_event_handlers.php3
+http://www.globalguideline.com/JavaScript_Guide/Java_Script_Events.php
+http://richardbowles.tripod.com/javascript/menu.htm
+
+
+
+
+
+
+Form Validation using Javascript:
+
+Must required: isBlank() - Eg: if(isEmpty(form.account_no)) { alert("Account Number can't be empty."); return false;}
+Less than 25 chars: 
+Must be an Integer: isNumeric() - Eg: if(!isNumeric(form.account_no)) { alert("Account Number can't be Float"); return false;}
+
+                                         print "if(document.importform.format.options[document.importform.format.selectedIndex].value == \"Tcpdump\") {";
+                                         print "if(document.browse.gzip.checked == true) {";
+                                         print "if(document.browse.upfile.value.search(/\.pcap\.gz$/) != -1) {";
+                                         print "alert(\"Please select a valid .pcap.gz file\"); return false;}}}";
+
+
+Changing Images on Mouseover Using JavaScript
+	http://www.webdevelopersnotes.com/tutorials/javascript/changing_images_on_mouseover_mouseout_javascript.php3
+	http://www.htmlgoodies.com/beyond/javascript/article.php/3470771/Advanced-JavaScript-for-Web-Developers-onClick-and-onMouseOver.htm
+	http://www.kryogenix.org/code/browser/jses/
+
+http://www.mapbender.org/JavaScript_pitfalls:_null,_false,_undefined,_NaN
+
+1. make sure that script is hidden from browsers that can't handle JavaScript.
+    <script language="JavaScript">
+    <!--    // ignore if non-JS browser   -->
+
+2. Form validation Related checks
+	TextField cant be empty. 
+	
+	If you have drop-down elements in your forms, you should include the first option as an empty field 
+	Eg: <option value="">choose one</option>). You can include any text you would like on the field, as long as the value is blank.
+   when you validate against it, simply look to see if the first option (the blank one) is still set, if it is, write the error message.
+      if (theForm.dd.options[0].selected == true)
+          error += "Please select from the drop-down list.\n";
+   
+
+
+Text elements are the easiest to validate. if (theForm.words.value == "") error += "Please fill in the text element.\n"
+
+	This portion of the script shows how to validate for an email address. It is a very simple validation, it only checks to make sure that there is a @-sign and a period. People can still put in fake email addresses, but this helps reduce the wrong entries a little.
+
+      if (theForm.email.value == "")
+      {
+        error += "You must include an accurate email address for a response.\n";
+      }
+      if ((theForm.email.value.indexOf ('@',0) == -1 ||
+       theForm.email.value.indexOf ('.',0) == -1) &&
+       theForm.email.value != "")
+      {
+        error += "Please verify that your email address is valid.";
+      } 
+
+<form action="" method="post" onsubmit="return Validator(this);
+
+The Perl script CGI snippet does the same thing as the JavaScript.
+With the two methods, CGI and JavaScript, you've validated an HTML form
+
+
+3.  Use {} instead of new Object(). Use [] instead of new Array().
+
+Use arrays when the member names would be sequential integers. Use objects when the member names are arbitrary strings or names. 
+
+4. java script is case sensitive. 
+	JavaScript ignores extra spaces. You can add white space to your script to make it more readable. The following lines are equivalent:
+	Microsoft Internet Explorer is more forgiving than  Netscape Navigator, so it's better to use  Navigator for checking your pages.
+
+5. manipulating status bar of browser
+	By default: when u move the cursor over a hyperlink, the status bar shows the destination URL. 
+	To display something on the status bar when the mouse is moved over this link:
+		<A HREF="mylink.htm" onMouseOver="window.status='Click here to know more about me'; return true" onMouseOut="window.status=''; ">Click here</A>
+
+
+
+test if input is integer or not: if (/^\d*$/.test(myNum))
+function isInteger(val)
+{
+    alert(val.value);
+    if(val==null)
+    {
+        alert(val);
+        return false;
+    }
+    if (val.length==0)
+    {
+        alert(val);
+        return false;
+    }
+    for (var i = 0; i < val.length; i++) 
+    {
+        var ch = val.charAt(i)
+        if (i == 0 && ch == "-")
+        {
+            continue
+        }
+        if (ch < "0" || ch > "9")
+        {
+            return false
+        }
+    }
+    return true
+}
+
+number.NEGATIVE_INFINITY and number.POSITIVE_INFINITY. 
+
+
+
+
+
+
+<form action="#">
+<input type="button" value="Bookmark us!" onclick="bookmark( 'http://cracksguru.com','CracksGuru')">
+</form>
+
+function bookmark(url,title){
+  if ((navigator.appName == "Microsoft Internet Explorer") && (parseInt(navigator.appVersion) >= 4)) {
+  window.external.AddFavorite(url,title);
+  } else if (navigator.appName == "Netscape") {
+    window.sidebar.addPanel(title,url,"");
+  } else {
+    alert("Press CTRL-D (Netscape) or CTRL-T (Opera) to bookmark");
+  }
+}

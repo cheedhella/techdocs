@@ -1,0 +1,102 @@
+HTMLElement.style, HTMLStyleElement, HTMLLinkElement, document.styleSheets, CSSStylesheet, CSSStyleRule, CSSStyleDeclaration, CSS2Properties
+
+HTMLStyleElement extends HTMLElement
+	This object represents a <style> element(internal styles) in an HTML document.
+	interface HTMLStyleElement : HTMLElement {
+		attribute boolean disabled;
+		attribute DOMString media;
+		attribute DOMString type;
+		attribute boolean scoped;
+	};
+	Eg: <style id="styleElement">body{background-color:#fff;}</style>
+	var styleElement = document.querySelector('#styleElement'); // returns HTMLStyleElement object
+	var styleSheetObject = styleElement.sheet; // first selecting the element in the DOM (<style> or <link>) and then use the .sheet property to gain access to the CSSStylesheet object.
+	var rules = styleSheetObject.cssRules;
+
+document.styleSheets
+	Returns a list of CSSStylesheet objects, each object representing a <style> or <link> tag. Returntype: StyleSheetList
+	document.styleSheets.length - no. of stylesheet objects present in this object.
+	styleSheetList.item(index) or styleSheetList[index] - returns a single stylesheet object by its index (index is 0-based). type of each is CSSStyleSheet.
+
+CSSStylesheet object - represents a <style> or <link rel="stylesheet"> tag.
+	Properties:
+		rules[](IE)/cssRules[](FF) - Returns an array containing all the CSS rules of a stylesheet. Returntype: cssRulesList, type of each object is CSSStyleRule
+		other properties - http://www.javascriptkit.com/domref/stylesheet.shtml
+		disabled, href, media, ownerNode, parentStylesheet, title, type, cssRules, ownerRule, deleteRule, insertRule
+		href, media, ownerNode, parentStylesheet, title, and type are read-only properties.
+	Methods:
+		addRule()/insertRule(), removeRule()/deleteRule()
+		http://my.safaribooksonline.com/book/web-design-and-development/032140971x/objects/ch04lev1sec39
+
+CSSStyleRule object - represents a style rule in a CSSStyleSheet Object.
+	Each css rule consists of selector part and declaration part. Selector part specifies the tags to which declared styles should apply. Eg: H1,H2,H3 {color:blue; font-family:Arial, Helvetica}
+	Properties:
+		cssText - String representation of entire rule. read/write
+		parentRule - another rule which contains this rule. Returntype: CSSMediaRule | CSSUnknownRule
+		parentStyleSheet - stylesheet object that contains this rule. Returntype: CSSStyleSheet
+		selectorText - returns the selector part of a rule. don't modify it.
+		style - this property provides access(read/write) to declaration part of a rule. Returntype: CSSStyleDeclaration
+			Eg: document.styleSheets[0].cssRules[0].style.backgroundColor="yellow";
+		type - returns "style"
+	http://www.javascriptkit.com/domref/cssrule.shtml
+	
+CSSStyleDeclaration object - represents declaration part of a style rule(style property of the CSSStyleRule).
+	Object representing a set of CSS style attributes and their values. Names of these javascript properties correspond closely to CSS attribute names.
+	Multiword attributes that contain hyphens, such as font-family, are written without hyphens in javascript, with each word after the first capitalized. Eg: fontFamily
+	Also, 'float' attribute conflicts with the reserved word float, so it traslates to the property cssFloat.
+	You can also use unmodified CSS attribute names if you use strings and brackets to access the properties.
+	Properties:
+		cssText - String representation of the declaration part, a semicolon-delimited list of property:value pairs.
+		length - number of property:value pairs in this declaration.
+		parentRule - rule containing this declaration. Returntype: CSSStyleRule | CSSImportRule | CSSFontFaceRule | CSSMediaRule | CSSCharsetRule | CSSPageRule | CSSUnknownRule
+	Methods:
+		getPropertyValue(propertyName) - Returns the value of the specified property as a string.
+		setProperty(propertyName, value) - Sets the value of the specified property. Creates the property if it does not yet exist, otherwise replaces the value. Returns true on success.
+		removeProperty(propertyName) - Removes the specified property from the rule.
+		---
+		getPropertyPriority(propertyName) - Returns true if the important flag of the specified property is set.
+		item(index) - Returns the value of the property at the specified index(0-based) as a string.
+
+Good links:
+http://www.quirksmode.org/dom/changess.html - quirks mode, css, javascript
+http://stackoverflow.com/questions/1679577/get-document-stylesheets-by-name-instead-of-index
+http://dev.opera.com/articles/view/dynamic-style-css-javascript/
+http://noobflash.com/set-style-dynamically-with-javascript/ - css and equivalent javascript properties
+http://docs.blackberry.com/en/developers/deliverables/27297/DOM_Style_Objects_1180980_11.jsp
+
+--------------------- Dust --------------------
+ToRead
+http://stackoverflow.com/questions/2961544/cssrules-is-empty
+http://help.dottoro.com/lcalsura.php - css import rule
+
+subtypes of CSSStyleRule - http://my.safaribooksonline.com/book/web-design-and-development/032140971x/objects/ch04lev1sec38
+	CSSCharsetRule Object (page 118)
+	CSSFontFaceRule Object (page 119)
+	CSSImportRule Object (page 120)
+	CSSMediaRule Object (page 122)
+	CSSPageRule Object (page 124)
+	CSSUnknownRule Object (page 131)
+A stylesheet is added to an HTML document by using either the HTMLLinkElement node (i.e., <link href="stylesheet.css" rel="stylesheet" type="text/css">) to include an external stylesheet or the HTMLStyleElement node (i.e., <style></style>) to define a stylesheet inline.
+
+document.styleSheets gives access to a list of all stylesheet objects (a.k.a. CSSStylesheet objects) explicitly linked (i.e., <link>) or embedded (i.e., <style>) in an HTML document.
+	styleSheets is live just like most other nodelists.
+	
+In addition to using styleSheets to access a document’s stylesheets, it’s possible to access a stylesheet in an HTML document by first selecting the element in the DOM (<style> or <link>) and then using the .sheet property to gain access to the CSSStylesheet object.
+
+http://www.quirksmode.org/dom/changess.html
+ 
+document.styleSheets[1].cssRules[0].style - CSS2Properties()
+
+HTMLLinkElement extends HTMLElement {
+	attribute boolean         disabled;
+	attribute DOMString       charset;
+	attribute DOMString       href;
+	attribute DOMString       hreflang;
+	attribute DOMString       media;
+	attribute DOMString       rel;
+	attribute DOMString       rev;
+	attribute DOMString       target;
+    attribute DOMString       type;       
+};
+https://developer.mozilla.org/en-US/docs/DOM/HTMLLinkElement
+---------------------------------------------

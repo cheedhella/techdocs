@@ -1,0 +1,26 @@
+What is favicon or favorite icon?
+    An icon that you see in Broser tab, history, bookmarks, favorites and address bar;
+    It is also used if the user pins the webpage to their home screen;
+
+What is touch icon?
+    An icon that you see when a site is added to home screen of safari in apple devices;
+
+Creating favicon
+    Favicons could be in many formats: ico, png, jpeg, gif, svg;
+    It can be 16x16, 32x32, 48x48, or 64x64 pixels in size and 8-bit, 24-bit, or 32-bit in color depth.
+    Because, favicon is usually displayed over grey color, make your icon's background transperant;
+
+    To create it, you can use either Adobe Photoshop OR there are many online tools:
+        https://www.favicon.cc/
+        http://xiconeditor.com 
+
+Adding favicon to your Page
+    <link rel="icon" type='image/x-icon' href="http://example.com/favicon.ico" />
+        type -> For PNG, use image/png; For GIF/JPEG, use image/gif; 
+                For ICO, use image/x-icon; For SVG, use image/svg+xml;
+        
+    <link rel="apple-touch-icon" href="http://example.com/images/apple-touch-icon.png" />
+    iOS will add rounded corners and a reflective shine to your iOS home screen icon;
+
+    // If you prefer it without the reflective shine, use the following code:
+    <link rel="apple-touch-icon-precomposed" href="http://example.com/images/apple-touch-icon.png" />

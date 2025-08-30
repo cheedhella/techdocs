@@ -1,0 +1,324 @@
+Function Declaration:
+	function sum(a, b) {
+	    return a + b;
+	}
+	
+	var sum = function(a, b) {
+	    return a + b;
+	}
+
+	// creating a function using Function object - new Function([arg1[, arg2[, ... argN]],] functionBody)
+	var sum = new Function("x", "y", "return x+ y"); alert(sum(3,7)); 
+
+Calling a function:
+	console.log(sum(1, 2)); // prints "3"
+	console.log(sum(1)); // prints "NaN", same as console.log(sum(1, undefined));
+	console.log(sum(1, 2, 3, 4)); // prints "3", ignores the extra arguments
+
+Return value - functions in javascript always returns a value. 
+	If you don't return any value explicitly, it implicitly returns undefined.
+
+
+	
+	
+	
+	
+	
+	Regarding return value of a Constructor - http://drj11.wordpress.com/2007/09/13/105/
+		If the constructor returns an object then that is used; otherwise the return value is ignored and the newly constructed object is used.
+
+Function object
+	Properties:
+	arguments - an object(not array) which contains all the arguments passed to a function.
+	arguments.length - returns actual no. of arguments passed to a function.
+	functionName.length - returns no. of arguments the function is expecting(as per its declaration).
+		// add(a, b, c, d) { return arguments.length }
+		// add.length - returns 4, add(1, 2) returns 2.
+		
+	arguments.callee - points to the calling function(currently executing). Generally, used by an anonymous function to call itself.
+		Eg: 
+		function(n) { 
+			if (n<=1) return 1; 
+			return n*arguments.callee(n-1);
+		}
+
+	caller - points to the caller, function which called the current function. returns null if the function is called at the top-level.
+		Eg:
+		function f1() {
+			alert(f1.caller);
+		}
+		f1(); // alerts null
+
+		function f2() {
+			f1(); 
+		}
+		f2(); // alerts function f2()
+		
+	prototype - an object through which all the objects created using this constructor function share properties & methods.
+		
+	used to add properties & methods to all the objects created using this constructor function dynamically.
+		
+
+	Methods:
+	myFunction.apply(thisContext, [arg1, arg2,...]); // arguments are passed as an array
+	myFunction.call(thisContext, arg1, arg2,...);
+		http://odetocode.com/blogs/scott/archive/2007/07/05/function-apply-and-function-call-in-javascript.aspx
+		Eg1: Here, f is a global function. So, 'this' inside the function refers the global object.
+			var x = 10;
+			function f() { 
+				alert(this.x); 
+			} 
+			f(); // alerts 10
+			
+		Eg2:
+			var x = 10;
+			var o = { x: 15 };
+			function f()
+			{
+				alert(this.x);
+			}
+			f(); // alerts 10
+			f.call(o); // alerts 15
+
+		Eg3:
+			var x = 10;
+			var o = { x: 15 };
+			function f(message)
+			{
+				alert(message);
+				alert(this.x);
+			}
+			f("invoking f"); // alerts "invoking f", "10"
+			f.call(o, "invoking f via call"); // alerts "invoking f via call", "15"
+
+		Eg4:
+			var x = 10;
+			var o = { x: 15 };
+			function f(message)
+			{
+				alert(message);
+				alert(this.x);
+			}
+			f("invoking f"); // alerts "invoking f", "10"
+			f.apply(o, ["invoking f through apply"]); // alerts "invoking f through apply", "15"
+
+		Eg5:
+			var o = { x: 15 };
+			function f1(message1)
+			{
+				alert(message1 + this.x);
+			}
+			function f2(message1, message2)
+			{
+				alert(message1 + (this.x * this.x) + message2);
+			}
+			f1.apply(o, ["the value of x = "]); // alerts "the value of x = 15"
+			f2.apply(o, ["the value of x squared = ", ". Wow!"]); // alerts "the value of x squared = 125. Wow!
+
+
+
+constructor, prototype 			
+javscript object comparision for equality???
+http://javascriptweblog.wordpress.com/2010/06/07/understanding-javascript-prototypes/
+	
+		
+		Here we have a global function by the name of f(). 
+		f() uses the this keyword to reference x, but notice we don't invoke the function through 
+		an instance of an object. So what object does this reference? this will reference the 
+		global object. The global object is where we defined the variable x. 
+		The above code does work and will show the value 10 in a dialog. 
+		
+	
+		Both apply() and call() are useful when you wish an object to "borrow" a method from another object and use it within its own context.
+		Eg1:
+		function borrowme(name) {
+			this.bonus=(this.salary * 0.15) + (this.seniority * 500);
+			alert(name + ", your bonus for this year is: " + this.bonus);
+		}
+		function employee(seniority, salary) {
+			this.seniority=seniority;
+			this.salary=salary;
+		}
+		var employee1=new employee(10, 30000);
+		borrowme.call(employee1, "Sarah"); // returns "Sarah, your bonus for this year is: 9500"
+
+		Eg2:
+		var x = { message: 'Hello World' };
+		var hello_function = function(name) {
+			alert(this.message + ", " + name);
+		}
+		hello_function.call(x, 'jason');
+
+
+		Eg1: 
+		
+		Eg2: 
+		Eg3:
+			
+		
+		
+function g(object, func, args)
+{
+    func.apply(object, args);
+}
+
+g(o, f1, );
+g(o, f2, );
+
+
+
+
+		apply() to pass all additional arguments to the target method via an array.
+	
+	toString() - returns the source code of the function.
+		Eg: function foo() { alert('x'); } alert(foo.toString()); // alerts "function foo() { alert('x'); }"
+
+
+
+every function in JavaScript is an object. 
+
+	
+	
+Function with variable number of arguments:
+	function sum() {
+		var sum = 0; 
+		for(var i=0; i<arguments.length; i++) {
+			sum = sum + arguments[i];
+		} 
+		return sum;
+	}
+	sum(1, 2, 3); // returns 6
+	sum(1, 2, 3, 4); // returns 10
+	
+Anonymous function - you can pass anonymous function as a parameter to another function or you can define a anonoymous function and execute it right away.
+	// anonymous function as self-invoking function
+	(function(param1) {
+		console.log(param1);
+	})("hello world");
+
+Callback function - you can pass a function as an argument to another function.
+	When you pass a function A to another function B and B executes A, it's often said that A is a callback function.
+	If A doesn't have a name, then you can say that it's an anonymous callback function.
+
+	function invoke_and_add(a, b){
+		return a() + b();
+	}
+	function one() {
+		return 1;
+	}
+	function two() {
+		return 2;
+	}
+	>>> invoke_and_add(one, two);
+	3	
+	
+Inner or private function - a function which is defined in another function.
+
+	function a() {
+		function b() {
+			return 2;
+		}
+		return "result is: " + b();
+	}
+
+	function a() {
+		var b = function() {
+			return 2;
+		}
+		return "result is: " + b();
+	}
+	
+Function which returns another function
+	function a() {
+		return function(a, b) {
+			return a + b;
+		}
+	}
+	a()(2, 3); // returns 5	
+	
+Functions that redefine themselves
+	function a() {
+		alert('A!');
+		return function(){
+			alert('B!');
+		};
+	}
+	a = a(); // alerts 'A!'
+	a(); // alerts 'B!'
+
+Global functions:
+	parseInt(string) - takes a string as input and returns integer(radix 10) value at the beginning of it or returns NaN.
+	parseInt(string, radix) - It can be used parse numeric-strings of different bases to decimal number.
+		parseInt('123'); // 123
+		parseInt('123.4'); // 123
+		parseInt('123abc'); // 123
+		parseInt('abc123'); // NaN
+		
+		parseInt('FF', 16); // 255
+		parseInt('FF', 10); // NaN
+		parseInt('0377', 8); // 255
+
+		parseInt('377'); // 377
+		parseInt('0377'); // 255
+		parseInt('0x377'); // 877
+	
+	parseFloat(string) - takes a string as input and returns floating value	at the beginning of it or returns NaN.
+		parseFloat('123'); // 123
+		parseFloat('1.23'); // 1.23
+		parseFloat('1.23abc'); // 1.23
+		parseFloat('abc1.23'); // NaN
+	
+	isNaN(value) - is basically used to check whether parseInt()/parseFloat() is succeeded or not, as both NaN == NaN and NaN === NaN returns false.
+		isNaN(NaN); // return true
+		isNaN(123); // return false
+		isNaN(parseInt('abc123')); // return true
+
+	isFinite(value) - returns true if the input value is valid number and finite or returns false if it is Infinity or -Infinity or NaN.
+		// 1/0 yields Infinity, (-1)/0 yields -Infinity, 0/0 yields NaN
+	
+	eval() - used to evaluate an expression and also used to convert JSON text into javascript object.
+		var str = "if (a) {1 + 1;} else {1 + 2;}"; var a = true; var b = eval(str); alert("b is : " + b);		// alerts "b is : 2"
+		It is advised to avoid using of eval() as it prone to XSS attacks.
+		If you don't trust the source of the input you pass to eval(), just don't use it.
+		
+	encodeURI(), decodeURI(), encodeURIComponent(), decodeURIComponent(), escape(), unescape()
+	http://www.w3schools.com/jsref/jsref_obj_global.asp
+	http://www.javascriptkit.com/jsref/globalfunctions.shtml
+		
+-------------------------------------------- Dust --------------------------------------
+http://javascriptweblog.wordpress.com/2010/08/30/understanding-javascripts-this/
+http://hexmen.com/blog/2006/12/revisiting-functionprototypeapply-for-ie5/
+http://www.digital-web.com/articles/scope_in_javascript/
+http://www.sitepoint.com/what-is-this-in-javascript/
+http://www.sitepoint.com/javascript-this-gotchas/
+http://www.quirksmode.org/js/this.html
+http://blog.morrisjohns.com/javascript_closures_for_dummies
+http://stackoverflow.com/questions/2780428/when-actually-is-a-closure-created
+http://www.bloggingdeveloper.com/post/Javascript-parseInt()-Function-Converting-Strings-to-Numbers.aspx
+http://www.sergiopereira.com/articles/advjs.html
+http://www.permadi.com/tutorial/jsFunc/index.html
+http://javascriptweblog.wordpress.com/2011/01/18/javascripts-arguments-object-and-beyond/
+
+
+
+Infinity vs Number.POSITIVE_INFINITY
+-Infinity vs Number.NEGATIVE_INFINITY
+
+arguments array, function to calculate the sum of variable number of arguments passed?
+	We'll also see that arguments is technically not an array, but an array-like object.
+	function sumOnSteroids() {
+		var i, res = 0;
+		var number_of_params = arguments.length;
+		for (i = 0; i < number_of_params; i++) {
+			res += arguments[i];
+		}
+		return res;
+	}
+	>>> sumOnSteroids(1, 1, 1);
+	3
+	>>> sumOnSteroids(1, 2, 3, 4);
+	10
+	
+	
+apply() vs call()
+converting json to object, object to json??

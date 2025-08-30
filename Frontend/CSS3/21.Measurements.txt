@@ -1,0 +1,81 @@
+
+------------------------------------------
+Absolute Measurement
+	in - measurement in inches;
+	cm - measurement in centi-meters;
+	mm - measurement in milli-meters;
+	pt - measurement in points, one point is equal to 1/72 of an inch;
+	pc - measurement in picas, one pica is equal to 1/6 of an inch or 12 points;
+	
+Relative Measurement
+	% - measurement in percentage; Eg: width: 50%; means width of the element is 50% of its parent element's width;
+	px - measurement in pixels; actual size of pixel depends on resolution of viewing device and varies from one device to another;
+	em - default font-size of the page. If it is 16px, then 1em = 16px;
+	Measurement relative to a font's x-height, determined by the height of the font's lowercase letter x
+	
+Different units of measurement are appropriate for different situations - when to use which unit?
+	1. It is usually best to size text using ems, as then the text will resize proportionally to its surroundings when browser resize controls are used, even in older browsers such as IE 6.
+	2. If you want a column of content to always remain the same size, then pixels will usually suffice.
+	3. If you want a column of content to resize proportionally to browser width, percentages are ideal.
+	It is my pleasure to inform you that for almost all day-to-day CSS design, no absolute measurements are needed.
+	
+	seeks to freeze a design, ensuring widths, heights, and so on are not adjusted no matter how the site is viewed.
+	enables web pages to be manipulated by the user or viewing device.
+	px - pixel, one dot on viewing device or monitor.
+	pt - point, a point is 1/72 of an inch. This is not reliable across platforms. Eg: line-height: 36pt;
+	% - , specifies the percentage of space available in the parent container.
+	- Physical sizes like these tend to be reliable only for styling printed matter.
+
+
+	
+Absolute Measurement - a measurement that is independent of environment(OS, Browser, Screen Resolution, font-size etc);
+	Absolute lengths are not intended for the computer screen; They are intended for where a physical measurement is necessary. For example, printing a document requires real-word measurements;
+	in - inches;
+	cm - centi-meters;
+	mm - milli-meters;
+	pt - points, one point is equal to 1/72 of an inch;
+	pc - picas, one pica is equal to 1/6 of an inch or 12 points;
+	
+Relative Measurement - a measurement that is dependent on screen resolution, font-size; Relative measurements are best suited for computer screen;
+	Pixel measurements are most useful on the screen; for print it is often better to use absolute measurements or other relative units.
+	% - measurement in percentage; Eg: width: 50%; means width of the element is 50% of its parent element's width;
+		If a parent has the font-size of 20px and the child has a font-size of 50%, it will come out to 10px.
+		A popular technique using percentages for font-sizing is to set a reasonable font size on the body (like "small") and then using percentages for everything else.
+	px - pixels, actual size of pixel depends on resolution of viewing device and varies from one device to another;
+	ex - relative to height of font's lower-case letter x;
+	em - default font-size of the page. If it is 16px, then 1em = 16px;
+		1em is equal to the current font-size of the element in question.
+		If you haven't set the font size anywhere on the page, then it is the browser default, which is probably 16px. So, by default 1em = 16px, and 2em = 32px. 
+		If you set a font-size of 20px on the body element, then 1em = 20px and 2em = 40px.
+		---
+		Say we need a header with a larger font-size, so we set h1 { font-size: 2em; }. That "2" is essentially a multiplier of the current em value. 
+		So if the current em size is 16px, that header tag is going to turn out to be 32px. 
+	
+Different units of measurement are appropriate for different situations - when to use which unit?
+	1. It is usually best to size text using ems, as then the text will resize proportionally to its surroundings when browser resize controls are used, even in older browsers such as IE 6.
+	2. If you want a column of content to always remain the same size, then pixels will usually suffice.
+	3. If you want a column of content to resize proportionally to browser width, percentages are ideal.
+	It is my pleasure to inform you that for almost all day-to-day CSS design, no absolute measurements are needed.
+	
+	seeks to freeze a design, ensuring widths, heights, and so on are not adjusted no matter how the site is viewed.
+	enables web pages to be manipulated by the user or viewing device.
+	px - pixel, one dot on viewing device or monitor.
+	pt - point, a point is 1/72 of an inch. This is not reliable across platforms. Eg: line-height: 36pt;
+	% - , specifies the percentage of space available in the parent container.
+	- Physical sizes like these tend to be reliable only for styling printed matter.
+
+
+why can't you just specify the width as 100 percent?
+
+lengths - measurements 
+	absolute lengths: cm, in, mm, pc, pt, 
+	relative lengths: em, ex, px
+	
+https://www.w3schools.com/cssref/css_units.asp
+https://www.w3.org/Style/Examples/007/units.en.html
+
+span {
+        width: 0.7em;
+        font-size: 400%;
+        line-height: 80%;
+      }

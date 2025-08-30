@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Built-in Bindings: CSS Binding</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+        <style>
+            .pass {
+                color: green;
+            }
+            .failed {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        Enter Marks: <input type="text" data-bind="value: marks"/> 
+        <div data-bind="css: resultCls">Result</div> <!-- CSS binding is used to add/remove/replace a class; -->
+        <script>
+            var myViewModel = function() {
+                this.marks = ko.observable(100);
+                this.resultCls = ko.computed(function() {
+                    return this.marks() < 35 ? 'failed' : 'pass';
+                });
+            };
+
+            ko.applyBindings(myViewModel);
+        </script>
+    </body>
+</html>

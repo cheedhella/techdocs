@@ -1,0 +1,309 @@
+Node 
+		attributes
+			Using the attributes property (inherited by element nodes from Node), we can get a collection of the Attr nodes that an element currently has defined. 
+			The list returned is a NamedNodeMap. 
+			The array returned from accessing the attributes property should be considered live.
+			The array that is returned inherits from the NamedNodeMap, which provides methods to operate on the array, such as 
+			------
+			, , and . Operating on attributes with these methods should be secondary to 
+			using getAttribute(), setAttribute(), hasAttribute(), and removeAttribute(). 
+			It’s this author’s opinion that dealing with Attr nodes is messy. 
+			The only benefit in using attributes is found in its functionality for returning a list of live attributes.
+----------------------------------
+TODO:
+	document.implementation, DOMImplementation interface
+	What is doctype, namespace?
+
+HTMLDocument extends Document
+	Every webpage has its own document object, which is an instance of HTMLDocument. // console.log(document.constructor); logs function HTMLDocument() { [native code] }
+
+	Properties:
+		document.activeElement
+			returns the element in the document that is active(<input>, <textarea> element that will get keystroke events if the user types any), returns body element if no element in the document has focus.
+			http://www.meeho.net/blog/2010/01/find-out-which-html-element-has-focus-using-javascript/
+			Return type: Element
+		document.anchors
+			Returns all anchors(<a> with name attribute) in the page. Return type: HTMLCollection
+		document.applets
+			Returns all applets in the page. Return type: HTMLCollection
+		document.body
+			Returns <body> element of the page. Return type: HTMLBodyElement
+		document.baseURI - returns the location of HTML page or XML document. Return type: String
+		document.childNodes - returns all child nodes of the document(doctype, documentElement). Return type: NodeList
+		document.cookie
+			Returns a semicolon-separated list of the cookies for that document.
+		document.dir
+			Specifies the direction of the text(ltr, rtl).
+		document.doctype 
+			returns the doctype of the HTML document. returns null if the document has no doctype specified. Return type: DocumentType
+		document.documentElement
+			returns root node of the HTML document, <html> element. Return type: Element
+		document.embeds
+			Returns all embedded objects in the document. Return type: HTMLCollection
+		document.forms
+			Returns all forms in the document. Return type: HTMLCollection
+		document.head
+			Returns <head> node of the current document. Return type: HTMLHeadElement
+		document.implementation
+			// Returns the DOM implementation associated with the current document. Return type: DOMImplementation
+		document.lastModified
+		document.links
+			Returns all links(<a> with href attribute) in the page. Return type: HTMLCollection
+		document.location
+			Return type: Location
+		------------------------
+		document.alinkColor - deprecated in DOM Level 2 HTML. Alternative is CSS selector :active.
+			Used to get or set the color of active links in the document.
+			A link is considered active b/w the time when mouse is pressed(mousedown) and released over it(mouseup).
+			Eg: document.alinkColor = 'green'; document.alinkColor = 'FF0000';
+			Return type: String
+		document.all
+		document.bgColor - deprecated, use background-color instead. document.body.bgColor, document.body.style.backgroundColor
+		------------------------
+		
+		
+		document.vlinkColor
+		document.links[], which grants access to all links (<a href>) 
+	Methods:
+		addEventListener()
+		document.appendChild()
+		document.captureEvents()
+		document.clear()
+		document.cloneNode()
+		document.close()
+		document.createAttribute()
+		document.createAttributeNS()
+		document.createCDATASection()
+		document.createComment()
+		document.createDocumentFragment()
+		document.createElement()
+		document.createElementNS()
+		document.createEvent()
+		document.createProcessingInstruction()
+		document.createTextNode()
+		document.dispatchEvent()
+		document.getElementById()
+		document.getElementsByClassName()
+		document.getElementsByName()
+		document.getElementsByTagName()
+		document.getElementsByTagNameNS()
+		document.getItems()
+		document.getSelection()
+		document.getUserData()
+		document.normalize()
+		
+		document.o*
+		document.plugins
+		https://developer.mozilla.org/en-US/docs/DOM/document
+		http://www.w3schools.com/jsref/dom_obj_element.asp
+		http://www.w3schools.com/jsref/dom_obj_node.asp
+		http://www.w3schools.com/jsref/dom_obj_body.asp
+		
+	HTML documents typically contain a single child node, <html>, perhaps with a DOCTYPE declaration before it. 
+	XML documents often contain multiple child nodes: the root element, the DOCTYPE declaration, and processing instructions.
+
+	
+window.getComputedStyle() - http://atomicrobotdesign.com/blog/javascript/get-the-style-property-of-an-element-using-javascript/
+
+Good Links
+http://reference.sitepoint.com/javascript/domcore	
+http://stackoverflow.com/questions/6581680/whats-the-difference-between-htmlelement-and-element
+http://toytic.com/class/overview.html
+http://www.w3schools.com/dom/default.asp - XML DOM
+http://www.w3schools.com/htmldom/default.asp - HTML DOM
+http://www.w3schools.com/jsref/default.asp - JS and HTML DOM
+http://www.howtocreate.co.uk/tutorials/javascript/domstructure
+
+DOM4 methods: before(), after(), prepend(), append(), remove(), replace()
+elements that extend from Element node??
+node.childNodes vs node.children
+document
+	http://www.javascriptkit.com/domref/documentproperties.shtml
+	http://www.javascriptkit.com/domref/documentmethods.shtml
+	http://www.developphp.com/list_javascript.php#DOM_document_Object_JavaScript
+	document.body vs document.documentElement
+	createElement(), createElementNS()
+		var element = document.createElement(tagName); // if tagName contains namespace, use createElementNS() method.
+	createAttribute("attributename")
+		var styleattr=document.createAttribute("align")
+		styleattr.nodeValue="center"
+		document.getElementById("sister").setAttributeNode(styleattr)
+		createAttribute() method is deprecated and should not be used for creating attribute nodes. Instead, developers typically use the getAttribute(), setAttribute(), and removeAttribute() methods.
+	createComment(commenttext)
+		var commentnode=document.createComment("Copyright JavaScript Kit")
+		document.getElementById("mydiv").appendChild(commentnode);
+	createDocumentFragment()
+	createTextNode(text)
+		document.createTextNode("This is new.");
+	document.getElementById("div1");
+	document.querySelector('a')
+	// document node
+	document.nodeName, //logs '#document'
+    document.nodeType //logs 9 which maps to DOCUMENT_NODE
+	// doctype node
+	document.doctype to get <!DOCTYPE html>
+	document.doctype.nodeName // 'html'
+	document.doctype.nodeType // 10
+	// docfragment node
+	document.createDocumentFragment().nodeName, //logs '#document-fragment'
+    document.createDocumentFragment().nodeType // logs 11
+	The createCSSStyleSheet function (page 142) of the document Object (page 138) for a markup document can create a new CSSStyleSheet object for a new, empty, embedded style sheet, or a new object to represent an existing external style sheet:
+		var myStyleSheet = docObj.createCSSStyleSheet();
+		var myStyleSheet = docObj.createCSSStyleSheet(cssFile);
+
+
+https://developer.mozilla.org/en-US/docs/DOM/Node.attributes
+
+window
+	window.getSelection()
+		Typically a user can press the tab key to move the focus around the page among focusable elements, and use the space bar to activate it (press a button, choose a radio).
+		Do not confuse focus with a selection over the document, consisting mostly of static text nodes.  See window.getSelection() for that. 
+	
+Bidirectional Text
+	http://www.i18nguy.com/markup/right-to-left.html	
+	Middle eastern languages such as Hebrew and Arabic are written predominantly right-to-left.
+	Some documents are bidirectional in nature, a mix of both right-to-left (RTL) and left-to-right (LTR) writing. Text written in the Hebrew and Arabic languages is often referred to as bidirectional, or "bidi" for short. 
+	How to do this using CSS??
+	
+http://www.gamaldivine.4t.com/Meta.html
+
+What is Core DOM Level 3 specification?
+	document.implementation.hasFeature('Core','2.0')??
+	
+height of entire page that has vertical scrollbar is document.documentElement.scrollHeight
+	
+or cross-browser compatibility, use window.pageXOffset and window.pageYOffset instead of window.scrollX and window.scrollY, except use (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollLeft == 'number' ? t : document.body).ScrollLeft and (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollTop == 'number' ? t : document.body).ScrollTop when window.pageXOffset and window.pageYOffset (and window.pageXOffset and window.pageYOffset) are undefined.
+
+height
+width
+http://javascript.info/tutorial/coordinates
+---------------
+1. How to find the size of the browser's viewport?
+	function getViewPort() {
+		var height, width;
+		if(document.compatMode == 'BackCompat') {
+			height = document.body.clientHeight;
+			width = document.body.clientWidth;
+		} else {
+			height = document.documentElement.clientHeight;
+			width = document.documentElement.clientWidth;
+		}
+		return {'height':height, 'width':width};
+	}
+	
+2. How to find the size of actual page?
+	document.documentElement.scrollHeight;
+	document.documentElement.scrollWidth;
+	OR
+	Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight)
+	Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth)
+
+3. Manipulating coordinates?
+	There are 2 kinds of coordinate systems: 1. w.r.t document(actual) 2. w.r.t window(viewport) 3. w.r.t another element
+	How to get the left upper corner coordinates of an element total page?
+		document.documentElement.scrollLeft, document.documentElement.scrollTop
+	How to get the left upper corner coordinates of an element w.r.t. view port?
+		document.getElementById('content-container').getBoundingClientRect()
+		document.documentElement.scrollLeft, document.documentElement.scrollTop
+
+3. Scroll a page to top?	
+	document.documentElement.scrollTop = 0;
+	
+as we quickly discovered it has a weird 2-pixel offset except on IE6 if the HTML element has a border (which is a "feature" that was removed in IE7 and which we chose not to support). It also doesn't include the document's scroll position.
+
+
+// JS function to scroll to top
+	function scrollToTop(element) {
+		if(element.scrollTop != 0) {
+			element.scrollTop = 0;
+		}
+	}
+	
+What is quicks mode in IE?
+	In IE quirks mode, you need to use document.body instead of document.documentElement.
+	
+Other properties on window/docuemnt/body objects?
+	window.pageYOffset || docElem.scrollTop || body.scrollTop
+	
+
+CSSStyleRule.
+http://javascript.info/tutorial/styles-and-classes-getcomputedstyle
+
+window.getComputedStyle(element) - used to get an element's computed style(all final CSS properties). Returntype: CSSStyleDeclaration, read-only.
+	Includes inline styles, inherited styles, internal styles(<style> tags), external style sheets.
+	http://css-tricks.com/specifics-on-css-specificity/
+window.getDefaultComputedStyle()
+http://krook.org/jsdom/HTMLElement.html
+Read 4.5 section later again.
+http://www.sitebugger.com/free-javascript-tutorials-dev-web-tutorials/javascript-tutorials/javascript-html-objects.aspx
+http://coursesweb.net/
+http://www.howtocreate.co.uk
+http://ejohn.org/blog/dom-documentfragments/
+-----------------
+javascript- array - foreach method usage
+	["blue", "green", "red", "blue", "pink"].forEach(function(e) {
+		var li = document.createElement("li");
+		li.textContent = e;
+		docFrag.appendChild(li);
+	});
+	
+nodeName vs tagName
+	For element node, element.nodeName returns element name in UPPER CASE.
+	For document node, document.nodeName returns '#document'
+	For text node, it returns '#text'
+	For comment node, it returns '#comment'
+	----
+	For element nodes, nodeName and tagName are the same. // looks tagName is only applicable for element nodes
+	For most other node types, nodeName is undefined and equals '!' for comment nodes in IE.
+
+attributes vs custom properties	
+childNodes vs children
+	
+	HTMLDocument Properties: doctype, documentElement, head, body, title, 
+	
+	HTMLCollection
+	
+	Other Node Standard PropertiesTraversing  vs children,   previousElementSibling,  nextElementSibling.
+	Custom Properties vs Attributes. Attribute Manipulation: attributes(), hasAttribute(), getAttribute(), setAttribute(), removeAttribute().
+	
+	
+	document.activeElement  vs window.getSelection()
+
+Objects -
+	HTMLElement: id, title, lang, dir, className;
+	All objects: 
+	document - properties: fgcolor, bgcolor, documentElement, title, body, anchors[], links[], forms[], images[]; methods: write(), writeln();
+	
+	 In IE6-8, the document.compatMode property indicates the rendering mode. This property does not exist in IE < 6.
+	 
+What might be compelling javascript to distinguish b/w undefined and null?
+What is IE8 vs IE8 compatible mode?
+You can use firebug to see the web page in the form of a DOM tree?
+	https://www.google.co.in/search?q=firebug+%2B+dom+tree&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a
+	http://getfirebug.com/dom
+	http://getfirebug.com/wiki/index.php/DOM_Panel
+	http://stackoverflow.com/questions/1754954/what-do-the-firebug-dom-colors-mean
+	Opera Dragonfly
+
+HTML doctype 
+	http://www.w3schools.com/tags/tag_doctype.asp
+	http://help.dottoro.com/ljlsvbgj.php
+http://www.developerdrive.com/
+http://www.developphp.com/
+http://www.yourwebskills.com/
+http://jsperf.com/ - awesome
+http://javascript.crockford.com/memory/leak.html
+http://www.javascriptbank.com/top-10-best-javascript-ebooks-that-beginners-should-learn.html
+http://webdoubts.com
+http://www.lynda.com/allcourses?category=web_88%2cdreamweaver_185 - Nice collection of tutorials
+http://www.htmlhelp.com/reference/css/properties.html - css good link
+http://www.htmlhelp.com/reference/css/ - css for beginners
+http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-35143001 - javascript objects for each html element
+
+http://stackoverflow.com/questions/8913774/how-to-get-a-cssstylesheet-object-from-a-htmlstyleelement-element
+http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
+http://stackoverflow.com/questions/2698208/change-the-content-of-a-style-element-through-javascript
+http://stackoverflow.com/questions/1720320/how-to-dynamically-create-css-class-in-javascript-and-apply
+https://addons.mozilla.org/en-us/firefox/addon/tilt/
+
+transform: rotate(1deg); // google 'tilt'

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KnockoutJS Control Flow Bindings: foreach</title>
+        <script type='text/javascript' src='./knockout-3.5.1.js'></script>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr><th>Book</th><th>Author</th><th>Action</th></tr>
+            </thead>
+            <!-- 
+                $parent -> 
+                $parents -> 
+                $root -> typically, it refers to view model object!
+            -->
+            <tbody data-bind="foreach: books">
+                <tr>
+                    <td data-bind="text:title"></td><td data-bind="text:author"></td><td><a href="#" data-bind="click: $parent.removeBook">Remove</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <script>
+            var myViewModel = function() {
+                var self = this;
+                self.books = ko.observableArray([
+                    { title: 'Let us C', author: 'Y Kanethkar' },
+                    { title: 'Core Java', author: 'Bala' },
+                    { title: 'HTML', author: 'Tom' }
+                ]);
+                self.removeBook = function() {
+                    self.books.remove(this); // this refers to the book, not view model!
+                };
+            };
+
+            ko.applyBindings(new myViewModel());
+        </script>
+    </body>
+</html>

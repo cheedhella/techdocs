@@ -1,0 +1,479 @@
+What is mxGraph?
+	JavaScript library that is suitable for web applications that need to design/edit workflows, flow charts, UML diagrams, 
+	electronic circuits etc; Though, it supports some charts, it is not a charting library;
+
+	https://app.diagrams.net - earlier it is draw.io;
+		It is a production-grade example that demonstrates extending the functionality of this library; 
+		The sources to diagrams.net are also available; https://github.com/jgraph/www.diagrams.net-source
+
+--------------------------------------------------------------------------------------------------------------------------------
+Basic Terms: Graph, Vertex/Node, Edge, Cell, Group, Root, Layer;
+
+- A Graph consists of vertices(also called nodes) and edges(connecting lines between nodes);
+- Cell refers to an element of the graph, either edge, vertex or group;
+- The root element of the graph contains the layers; The parent of each layer is the root element;
+  A layer may contain vertices, edges and groups;
+  A group may contain vertices, edges and other groups recursively;
+
+
+- mxGraph supports a wide range of features to enable the display of cells to only be limited by the skill of the developer;
+	Vertices may be shapes, images, vector drawing, animations, virtually any graphical operations available in browsers;
+	You can also use HTML mark-up in both vertices and edges;
+- mxGraph supports cloning cells, re-sizing and re-shaping, connecting and disconnecting, dragging and dropping from 
+  external sources, editing cell labels in-place and more. One of the key benefits of mxGraph is the flexibility of 
+  how interaction can be programmed.
+- Graph Layout
+	Graph cells can be drawn anywhere in a simple application, including on top of one another. 
+- Graph Analysis
+	Analysis of graphs involves the application of algorithms determining certain details about the graph structure, for example, determining all routes or the shortest path between two cells.
+--------------------------------------------------------------------------------------------------------------------------------
+There are two types of “classes” in mxGraph; classes and singletons (where only one instance of the class exists). Singletons are mapped to global objects where the variable name is the same as the class name. For example, mxConstants is an object with all the constants defined as object fields. Normal classes are mapped to a constructor function and a prototype which defines the instance fields and methods. For example, mxEditor is a function and mxEditor.prototype is the prototype for the object that the mxEditor function creates. The mx prefix is a convention that is used for all classes in the mxGraph package to avoid conflicts with other objects in the global namespace.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+mxConstants
+
+mxClient
+	isBrowserSupported()
+
+--------------------------------------------------------------------------------------------------------------------------------
+mxGraph
+	If you want the graph to be read-only, use graph.setEnabed (false).
+
+
+mxGraphModel 
+	- It defines the structure of the graph;
+	- Additions, changes and removals to and from the graph structure take place through the graph model API;
+	- It also has methods to set visual states such as visibility, grouping and style;
+	- mxGraph also exposes same API as that of mxGraphModel; Use mxGraph API whenever possible;
+	- beginUpdate(), endUpdate() -> mxGraph uses a transactional system for making changes to the model; 
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+https://github.com/jgraph/mxgraph/releases - Releases;
+https://jgraph.github.io/mxgraph/docs/manual.html - Documentation;
+https://github.com/jgraph/mxgraph/tree/master/javascript/examples - Examples;
+https://jgraph.github.io/mxgraph/docs/js-api/files/index-txt.html - API Specification;
+
+
+
+
+
+mxBasePath variable is used to define the directory of library resources. This variable must be defined before loading the library.
+
+<script type="text/javascript">
+  mxBasePath = 'javascript/src/';
+</script>
+<script type="text/javascript" src="javascript/src/js/mxClient.js"></script>
+
+
+
+	Although some charts are graphs;
+	It uses SVG and HTML for rendering. saving and exporting. It is also very convenient to convert to bitmaps.
+
+	There are 2 versions of mxclient.js
+	production -> javascript/src/js/mxClient.js
+	development/debug -> javascript/debug/js/mxClient.js
+
+
+
+mxGraph supports a wide range of features to enable the display of cells to only be limited by the skill of the developer and the platform functionality available.
+Vertices may be shapes, images, vector drawing, animations, virtually any graphical operations available in browsers. 
+You can also use HTML mark-up in both vertices and edges.
+
+Graph Visualization
+
+Graph Interaction
+	It supports dragging, cloning, re-sizing, re-shaping, connecting and disconnecting, drag and drop from external sources, editing cell labels in-place and more. One of the key benefits of mxGraph is the flexibility of how interaction can be programmed.
+
+Graph Layouts
+	It supports a range of layouts such as tree, force-directed and hierarchical layouts which will fit most layout needs. 
+
+	Graph cells can be drawn anywhere in a simple application, including on top of one another. 
+	Certain applications need to present their information in a generally ordered, or specifically ordered structure. 
+	This might involve ensuring cells do not overlap and stay at least a certain distance from one another, or that cells appear in specific positions relative to other cells, usually the cells they are connected to by edges. 
+	This activity, called the layout application, can be used in a number of ways to assist users in setting out their graph.
+
+Graph Analysis
+	You can apply alogirthms to find certain details about the graph.
+	For eg, determining all routes or the shortest path between two cells.
+
+
+vertex (point) and edge (edge), but in fact they belong to instances of mxCell class, only some attribute values are different.
+
+
+mxGraphModel.beginUpdate() - starts a new transaction or a sub-transaction.
+mxGraphModel.endUpdate() - completes a transaction or a sub-transaction.
+mxGraph.addVertex() - Adds a new vertex to the specified parent cell.
+mxGraph.addEdge() - Adds a new edge to the specified parent cell.
+
+
+
+
+
+Control-Drag: Duplicates (clones) selected cells
+Shift-Rightlick: Shows the context menu
+Alt-Click: Forces rubberband (aka. marquee)
+Control-Select: Toggles the selection state
+Shift-Drag: Constrains the offset to one direction
+Shift-Control-Drag: Panning (also Shift-Rightdrag)
+
+When the canvas is created, it creates mxEditor(has a ref to it), configures the mxGraph, initializes it(with dom node), loads it.\
+
+Pd.Globals.draftVersion.getGraphModel()
+Pd.Globals.draftVersion.getGraphModelXmlNode()
+ // <mxGraphModel> XML node for the passed-in version of the graph
+        var graphModelXmlNode = this.getGraphModelXmlNode();
+        // mxGraphModel for the passed-in version of the graph
+        var graphModel = this.getGraphModel();
+
+        // If forceLoad is true, set the graphModelLoaded config to false. This ensures that the
+        // graph is always reloaded.
+        if (forceLoad) {
+            this.setGraphModelLoaded(false);
+        }
+
+        Pd.graph.Helper.loadGraphIfNecessary(this, graphModelXmlNode, graphModel);
+        	canvas.getVersion() // canvas has a version and ref to mxEditor.        	 
+        	Pd.Globals.draftVersion.setGraphModel(graph.getModel());
+        	editor.readGraphModel(graphModelXmlNode); // load the graph model with mxgraph's xml
+        	Pd.helper.node.EventSwitchHelper.updateEventSwitches();
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+	//Pd.util.Constants
+
+
+
+mxGraphView
+	It caches the <mxCellStates> for the cells.
+	dialect can be svg, vml, html; // init() - 
+	createSvg() - creates and returns the DOM node for svg display.
+	
+	edge.style = 'edgeStyle=orthogonalEdgeStyle;';        
+    graph.view.createState(edge); // {mxCellState}
+
+
+
+
+
+mxUtils
+
+
+
+
+
+mxGraph extends mxEventSource
+	model - reference to mxGraphModel
+	view
+	stylesheet - mxStylesheet
+	selectionModel - 
+	cellEditor - 
+	cellRenderer - mxCellRenderer
+	multiplicities - array of mxMultiplicities
+	getDefaultParent()/setDefaultParent(cell) - If not set explicitly, it returns the first child.
+	createVertex(parent, id, value, x, y, height, width, style, relative); // returns the created vertex
+	createEdge(parent, id, value, sourceMxCell, targetMxCell, style); // returns the created edge
+
+	getChildVertices(mxCell) - returns child vertices of the specified cell/default parent.
+	getChildEdges(mxCell) - returns child edges of the specified cell/default parent.
+	getChildCells(mxCell, vertices, edges) - returns child vertices and edges of the specified cell/default parent.
+		vertices defaults to false and edge is defaults to false. If both are false, it returns all the children.
+	getIncomingEdges(mxCell, parent) - returns all incoming edges to the given cell.
+		If parent is specified, it returns all incoming edges from that cell only.
+	getOutgoingEdges(mxCell, parent) - returns all outgoing edges to the given cell.
+		If parent is specified, it returns all outgoing edges to that cell only.
+	getEdges(mxCell, parent, incoming, outgoing, includeLoops, recurse) - 
+    
+    init(this.getEl().dom); // initializes the container/DOM node that holds the graph. creates mxCellEditor to be used in this graph.
+    isEnabled()/setEnabled(boolean) - used to enable/disable any interactions with graph.
+    setAllowNegativeCoordinates(false) - Don't allow vertexes to be moved into negative coordinates
+    setConnectable(true) - Allow new edges to be created
+    mxGraph.prototype.ordered = false; // // Experimental, to make vertexes go on top of edges
+
+
+
+
+mxStylesheet - defines appearance of the cells. // Pd.graph.Configurer._stylesheet
+
+
+mxGraphSelectionModel - models the current selection.
+mxCellEditor - used for in-place editing.
+mxCellRenderer - used for rendering the cells in the graph.
+mxMultiplicities - defines allowed connections in a graph.
+
+
+
+
+
+
+	getStylesheet() - mxStylesheet
+
+graph.setAllowDanglingEdges(false);
+graph.setDisconnectOnMove(false);
+
+
+
+)
+	mxGraph.prototype.getChildVertices = function(parent)
+	mxGraph.prototype.getChildEdges = function(parent)
+	mxGraph.prototype.getChildCells = function(		)
+	graph.getChildCells(graph.getDefaultParent(), false, false) - // returns all cells(edges and vertices)
+	mxGraph.prototype.getConnections = function(	cell,parent	)
+	mxGraph.prototype.getIncomingEdges = function(	cell,
+parent	)
+mxGraph.prototype.getOutgoingEdges = function(	cell,
+parent	)
+
+
+mxStylesheet
+	getDefaultVertexStyle()
+
+	var style = new Object();
+	style[mxConstants.STYLE_SHAPE] = 'box';
+	style[mxConstants.STYLE_STROKECOLOR] = '#000000';
+	style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+	graph.getStylesheet().putCellStyle('boxstyle', style);
+	var vertex = graph.insertVertex(parent, null, 'Hello, World!', 20, 20, 80, 20, 'boxstyle');
+
+
+To produce an XML representation for a diagram
+var enc = new mxCodec(mxUtils.createXmlDocument());
+var node = enc.encode(graph.getModel());
+var xml = mxUtils.getXml(node);
+To obtain a formatted string, mxUtils.getPrettyXml can be used instead.
+
+Input
+var xmlDoc = mxUtils.load(url).getXml();
+var node = xmlDoc.documentElement;
+var dec = new mxCodec(node.ownerDocument);
+dec.decode(node, graph.getModel());
+
+
+mxRubberband
+	Event handler that selects rectangular regions. To enable rubberband selection in a graph, do this: var rubberband = new mxRubberband(graph);
+
+
+Pd.getApplication().fireEvent('draftGraphChange');
+
+// Get XML text from input text area.
+                        importXmlStr = win.down('textarea').getValue();
+                        // Parse it to an XML document.
+                        importXmlDoc = Pd.util.Functions.parseXml(importXmlStr);
+                        // <ri:config> and <ri:list> elements from the XML document.
+                        var riConfigNode = Uif.Functions.getElementsByNamespacedTagName(importXmlDoc, 'ri:config')[0];
+                        var riListNode = Uif.Functions.getElementsByNamespacedTagName(riConfigNode, 'ri:list')[0];
+
+String inputString = Pd.util.Functions.getXml(Pd.codec.Flow1_1Encoder.encode(Pd.Globals.draftVersion).documentElement)
+importXmlDoc = Pd.util.Functions.parseXml(importXmlStr); // string to xml doc
+
+Pd.graph.Helper
+
+
+
+var graph = new mxGraph(null, null, this.graphRenderHint);
+	
+	// Enables rubberband, tooltips, panning
+	graph.setTooltips(true);
+	graph.setPanning(true);
+
+	// Overrides the dblclick method on the graph to
+	// invoke the dblClickAction for a cell and reset
+	// the selection tool in the toolbar
+	this.installDblClickHandler(graph);
+	
+	// Installs the command history
+	this.installUndoHandler(graph);
+
+	// Installs the handlers for the root event
+	this.installDrillHandler(graph);
+	
+	// Installs the handler for validation
+	this.installChangeHandler(graph);
+
+	// Installs the handler for calling the
+	// insert function and consume the
+	// event if an insert function is defined
+	this.installInsertHandler(graph);
+
+	// Redirects the function for creating the
+	// popupmenu items
+	graph.popupMenuHandler.factoryMethod =
+		mxUtils.bind(this, function(menu, cell, evt)
+		{
+			return this.createPopupMenu(menu, cell, evt);
+		});
+
+	// Redirects the function for creating
+	// new connections in the diagram
+	graph.connectionHandler.factoryMethod =
+		mxUtils.bind(this, function(source, target)
+		{
+			return this.createEdge(source, target);
+		});
+	
+	// Maintains swimlanes and installs autolayout
+	this.createSwimlaneManager(graph);
+	this.createLayoutManager(graph);
+
+mxUtils.alert("test "+cell);
+
+
+		var dec = new mxCodec(xmlNode.ownerDocument).decode(xmlNode, this);
+		dec;
+
+	actions - 
+	// Loading mxGraph XML from an external file
+	var doc = mxUtils.load('editors/config/keyhandler-commons.xml');
+	var doc = mxUtils.parseXML(xmlString);
+	var node = doc..getDocumentElement();
+		You load the configuration from an external xml file and create editor object using it.
+	var config = 
+var editor = new mxEditor(config);
+
+var doc = 
+var node = doc.documentElement;
+editor.readGraphModel(node);
+
+
+mxGraph - It describes the structure of the graph.
+
+mxEditor - every canvas has a mxEditor.
+graph.init(this.getEl().dom);
+mxEditor - extends mxEventSource	// when the canvas is created, mxEditor object is created.
+	actions - maps from actionnames to actions, which are functions taking the editor and the cell as arguments.
+	graph - 
+	toolbar - mxDefaultToolbar 
+	status - 
+	undoManager - mxUndoManager
+	defaultEdge
+	defaultEdgeStyle
+
+	
+	disableContextMenu(element)
+
+	mxEvent.CLICK
+
+mxUndoableEdit
+mxRootChange
+mxDragSource
+----------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
+mxEvent - It is used to add/remove listeners to DOM nodes in a browser-independant way.
+	addListener(), removeListener(), removeAllListeners()
+
+mxEventObject - It is a wrapper for all the properties of the event.
+	new mxEventObject("eventName", key1, val1, .., keyN, valN);
+	getName(), getProperties(), getProperty(), isConsumed(), consume()
+
+mxEventSource - base class for objects that can dispatch/trigger events;
+	Subclasses: mxGraphModel, mxGraph, mxGraphView, mxEditor, mxCellOverlay, mxToolbar, mxWindow;
+	mxEventSource() - 
+	isEventsEnabled() - 
+	setEventsEnabled(boolean)
+	addListener(name, function)
+	removeListener(function)
+	fireEvent(name, sender) // fireEvent(new mxEventObject("eventName", key1, val1, .., keyN, valN))
+
+mxEditor extends mxEventSource - It is the central class, everything else is auxiliary.
+	mxEditor(xmlNode)
+		- creates an instance of mxGraph + mxDefaultToolbar + mxDefaultKeyHandler
+		- calls configre(xmlNode)
+
+	actions - holds a map of eventname and listeners;
+	disableContextMenu - enable/disable context menu in the container.
+	graph - holds the underlying mxGraph instance.
+	popupHandler - holds an instance of mxDefaultPopupMenu for displaying popups.
+	toolbar - holds the underlying mxDefaultToolbar instance.
+	undoManager - holds an instance of mxUndoManager for managing history.
+
+	addAction(actionname, funct(editor, cell) {}) - used to bind a listener to an event.
+	execute(actionname, cell, evt) - used to trigger an event. // editor.execute("showProperties", cell);
+	configre(xmlNode)/readGraphModel(xmlNode) - Renders the graph based on the specified XML node, resets command history and modified state.
+	writeGraphModel() - returns the string representation fo the graph. // return mxUtils.getXml(new mxCodec().encode(this.graph.getModel()))
+	undo() - discard the last change; 
+	redo() - redo the last change;
+
+mxGeometry - It represents the geometry of a cell.
+	new mxGeometry(x, y, height, width);
+
+mxCell - It represents vertices and edges in a graph;
+	new mxCell(cellValue, mxGeometry, style);
+
+	// Properties
+	children - returns the child cells.
+	edges - returns the edges.
+	source - if this is a edge, returns source vertex.
+	target - if this is a edge, returns target vertex.
+
+	// Methods
+	isVertex() - returns true, if it is a vertex;
+	isEdge() - returns true, if it is a edge;
+	getId()/setId() - get/set cell id.
+	getValue()/setValue() - get/set cell value.
+	getParent()/setParent() - get/set parent cell.
+	removeFromParent() - remove this cell from its parent.
+	getChildrenCount()
+	insert(child, index), getChildAt(index), remove(index)
+	getGeometry()/setGeometry()
+	getStyle()/setStyle()
+	setAttribute(name, value), getAttribute(name), hasAttribute(name)
+
+mxGraphModel extends mxEventSource - contains the cells to be displayed.
+	new mxGraphModel(rootCell) 
+
+	isRoot(cell) - returns true, if the cell is root of the model.
+	isLayer(cell) - returns true, if the parent of given cell is root of the model. // return this.isRoot(this.getParent(cell));
+
+	contains(cell) - returns true, if the model contains given cell.
+	isAncestor(parentCell, childCell) - returns true, if parentCell is an ancestor of the given childCell. 
+	getParent(cell) - returns the parent of the given cell.
+	getRoot(cell) - returns the root of the given cell.
+	getCell(id) - returns the cell(vertex/edge/layer) with given ID.
+	getDescendants(cell) - returns array of descendant cells(layers/edges/vertices), including that cell.
+	getNearestCommonAncestor(cell1, cell2) - returns the nearest common ancestor of cell1 and cell2.
+	add(parent, cell, index), remove(cell) - add/remove a cell.
+	isVisible(cell), setVisible(cell, boolean) - show/hide a cell.
+
+	updateLevel - Initial value is 0. Each call beginUpdate() increments it and each call to endUpdate() decrements it. 
+		When it reaches 0, transaction is closed and the respective events are fired. 
+	beginUpdate() - increments updateLevel by 1. It represents a single undoable change on the model.
+	endUpdate() - decrements updateLevel by 1 and fires <undo> event if it reaches 0.
+
+	getChildCount(cell) - returns number of children of specified cell(only first level);
+	getChildAt(cell, index) - 
+	getChildren(cell)/getChildCells(cell) -  
+	getChildVertices(cell) -  
+	getChildEdges(cell) - 
+
+	getEdges(cell) - returns all incoming + outgoing + loops from/to the cell.
+	getIncomingEdges(cell) - returns only incoming edges to specified cell.
+	getOutgoingEdges(cell) - returns only outgoing edges from specified cell.
+	getConnections(cell) - returns all incoming and outgoing edges from/to the cell.
+	getEdges(cell, incoming, outgoing, includeLoops) - returns all the specified edges from specified cell.
+	getEdgesBetween(source, dest, directed)
+		If directed is true, only edges from source to dest are returned. Else, all the edges are returned. directed defaults to false.
+
+	getEdgeCount(cell) - returns the total number of edges(incoming + outgoing + loops).
+	getEdgeAt(cell, index)
+	getDirectedEdgeCount()
+	
+	getTerminal(edgeCell, isSource) - If isSource is true, returns source vertex. Else, it returns target vertex. isSource defaults to false.
+	updateEdgeParents(cell, root)
+	updateEdgeParent(edge, root)
+
+
+mxCellPath
+	create(cell) - returns cell path for the given cell.
+		Cell path is the concatenation of indices of all ancestors on the path to the root.
+	resolve(root, path) - returns cell for the given cell path.
+

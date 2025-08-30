@@ -1,0 +1,101 @@
+Form Validation using Javascript:
+
+Must required: isBlank() - Eg: if(isEmpty(form.account_no)) { alert("Account Number can't be empty."); return false;}
+Less than 25 chars: 
+Must be an Integer: isNumeric() - Eg: if(!isNumeric(form.account_no)) { alert("Account Number can't be Float"); return false;}
+
+                                         print "if(document.importform.format.options[document.importform.format.selectedIndex].value == \"Tcpdump\") {";
+                                         print "if(document.browse.gzip.checked == true) {";
+                                         print "if(document.browse.upfile.value.search(/\.pcap\.gz$/) != -1) {";
+                                         print "alert(\"Please select a valid .pcap.gz file\"); return false;}}}";
+
+
+Changing Images on Mouseover Using JavaScript
+	http://www.webdevelopersnotes.com/tutorials/javascript/changing_images_on_mouseover_mouseout_javascript.php3
+	http://www.htmlgoodies.com/beyond/javascript/article.php/3470771/Advanced-JavaScript-for-Web-Developers-onClick-and-onMouseOver.htm
+	http://www.kryogenix.org/code/browser/jses/
+
+http://www.mapbender.org/JavaScript_pitfalls:_null,_false,_undefined,_NaN
+
+1. make sure that script is hidden from browsers that can't handle JavaScript.
+    <script language="JavaScript">
+    <!--    // ignore if non-JS browser   -->
+
+2. Form validation Related checks
+	TextField cant be empty. 
+	
+	If you have drop-down elements in your forms, you should include the first option as an empty field 
+	Eg: <option value="">choose one</option>). You can include any text you would like on the field, as long as the value is blank.
+   when you validate against it, simply look to see if the first option (the blank one) is still set, if it is, write the error message.
+      if (theForm.dd.options[0].selected == true)
+          error += "Please select from the drop-down list.\n";
+   
+
+
+Text elements are the easiest to validate. if (theForm.words.value == "") error += "Please fill in the text element.\n"
+
+	This portion of the script shows how to validate for an email address. It is a very simple validation, it only checks to make sure that there is a @-sign and a period. People can still put in fake email addresses, but this helps reduce the wrong entries a little.
+
+      if (theForm.email.value == "")
+      {
+        error += "You must include an accurate email address for a response.\n";
+      }
+      if ((theForm.email.value.indexOf ('@',0) == -1 ||
+       theForm.email.value.indexOf ('.',0) == -1) &&
+       theForm.email.value != "")
+      {
+        error += "Please verify that your email address is valid.";
+      } 
+
+<form action="" method="post" onsubmit="return Validator(this);
+
+The Perl script CGI snippet does the same thing as the JavaScript.
+With the two methods, CGI and JavaScript, you've validated an HTML form
+
+
+3.  Use {} instead of new Object(). Use [] instead of new Array().
+
+Use arrays when the member names would be sequential integers. Use objects when the member names are arbitrary strings or names. 
+
+4. java script is case sensitive. 
+	JavaScript ignores extra spaces. You can add white space to your script to make it more readable. The following lines are equivalent:
+	Microsoft Internet Explorer is more forgiving than  Netscape Navigator, so it's better to use  Navigator for checking your pages.
+
+5. manipulating status bar of browser
+	By default: when u move the cursor over a hyperlink, the status bar shows the destination URL. 
+	To display something on the status bar when the mouse is moved over this link:
+		<A HREF="mylink.htm" onMouseOver="window.status='Click here to know more about me'; return true" onMouseOut="window.status=''; ">Click here</A>
+
+
+
+test if input is integer or not: if (/^\d*$/.test(myNum))
+function isInteger(val)
+{
+    alert(val.value);
+    if(val==null)
+    {
+        alert(val);
+        return false;
+    }
+    if (val.length==0)
+    {
+        alert(val);
+        return false;
+    }
+    for (var i = 0; i < val.length; i++) 
+    {
+        var ch = val.charAt(i)
+        if (i == 0 && ch == "-")
+        {
+            continue
+        }
+        if (ch < "0" || ch > "9")
+        {
+            return false
+        }
+    }
+    return true
+}
+
+number.NEGATIVE_INFINITY and number.POSITIVE_INFINITY. 
+

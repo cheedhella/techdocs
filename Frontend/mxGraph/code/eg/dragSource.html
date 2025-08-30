@@ -1,0 +1,199 @@
+<html>
+    <head>
+        <title>GraphModel API with layers</title>
+        <script type="text/javascript">
+            var rootCell, layer_a, layer_b, layer_c;
+            var g, gm, dp, a, b1, b2, b3, c, e1, e2, e3, e4, e5, e6;
+        </script>
+        <script
+            type="text/javascript"
+            src="/Users/mcheedhe/dev/git-repo/interact/workflowdesigner/framework/src/main/web/js/mxgraph/mxgraph-3_5_1_5/javascript/debug/js/mxClient.js"
+        ></script>
+
+        <script type="text/javascript">
+            function main() {
+                // Enables guides
+                mxGraphHandler.prototype.guidesEnabled = true;
+
+                // Alt disables guides
+                mxGuide.prototype.isEnabledForEvent = function (evt) {
+                    return !mxEvent.isAltDown(evt);
+                };
+
+                // Enables snapping waypoints to terminals
+                mxEdgeHandler.prototype.snapToTerminals = true;
+
+                var graphs = [];
+
+                // Creates the graph inside the given container
+                for (var i = 0; i < 2; i++) {
+                    var container = document.createElement("div");
+                    container.style.overflow = "hidden";
+                    container.style.position = "relative";
+                    container.style.width = "300px";
+                    container.style.height = "300px";
+                    container.style.background =
+                        "url('https://raw.githubusercontent.com/jgraph/mxgraph/master/javascript/examples/editors/images/grid.gif')";
+                    container.style.cursor = "default";
+                    document.body.appendChild(container);
+
+                    var graph = new mxGraph(container);
+                    graph.gridSize = 30;
+
+                    // Uncomment the following if you want the container
+                    // to fit the size of the graph
+                    // graph.setResizeContainer(true);
+
+                    // Enables rubberband selection
+                    new mxRubberband(graph);
+
+                    // Gets the default parent for inserting new cells. This
+                    // is normally the first child of the root (ie. layer 0).
+                    var parent = graph.getDefaultParent();
+
+                    // Adds cells to the model in a single step
+                    graph.getModel().beginUpdate();
+                    try {
+                        var v1 = graph.insertVertex(
+                            parent,
+                            null,
+                            "Hello,",
+                            20,
+                            20,
+                            60,
+                            30
+                        );
+                        var v2 = graph.insertVertex(
+                            parent,
+                            null,
+                            "World!",
+                            200,
+                            150,
+                            60,
+                            30
+                        );
+                        var e1 = graph.insertEdge(parent, null, "", v1, v2);
+                    } finally {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+
+                    graphs.push(graph);
+                }
+
+                // Returns the mxGraph under the mouse
+                var graphFn = function (evt) {
+                    var x = mxEvent.getClientX(evt);
+                    var y = mxEvent.getClientY(evt);
+                    var elt = document.elementFromPoint(x, y);
+
+                    for (var i = 0; i < graphs.length; i++) {
+                        if (mxUtils.isAncestorNode(graphs[i].container, elt)) {
+                            return graphs[i];
+                        }
+                    }
+
+                    return null;
+                };
+
+                // Inserts a cell at the given location
+                // Function to execute on a successful drop.
+                var successFn = function (graph, evt, target, x, y) {
+                    var cell = new mxCell("Test", new mxGeometry(0, 0, 80, 40));
+                    cell.vertex = true;
+                    var cells = graph.importCells([cell], x, y, target);
+                    if (cells != null && cells.length > 0) {
+                        graph.scrollCellToVisible(cells[0]);
+                        graph.setSelectionCells(cells);
+                    }
+                };
+
+                // Creates a DOM node that acts as the drag source
+                var dragNode = mxUtils.createImage(
+                    "https://raw.githubusercontent.com/jgraph/mxgraph/master/javascript/examples/images/icons48/gear.png"
+                );
+                dragNode.style.width = "50px";
+                dragNode.style.height = "50px";
+                document.body.appendChild(dragNode);
+
+                // Disables built-in DnD in IE (this is needed for cross-frame DnD, see below)
+                if (mxClient.IS_IE) {
+                    mxEvent.addListener(dragNode, "dragstart", function (evt) {
+                        evt.returnValue = false;
+                    });
+                }
+
+                // Creates the element that is being for the actual preview.
+                var dragPreviewNode = document.createElement("div");
+                dragPreviewNode.style.border = "dashed red 1px";
+                dragPreviewNode.style.width = "30px";
+                dragPreviewNode.style.height = "30px";
+
+                // Drag source is configured to use dragElt for preview and as drag icon
+                // if scalePreview (last) argument is true. Dx and dy are null to force
+                // the use of the defaults. Note that dx and dy are only used for the
+                // drag icon but not for the preview.
+
+                // Configures the given DOM element to act as a drag source for the specified graph. It returns a a new mxDragSource.
+                var ds = mxUtils.makeDraggable(
+                    dragNode,
+                    graphFn,
+                    successFn,
+                    dragPreviewNode,
+                    null,
+                    null,
+                    graph.autoscroll,
+                    true
+                );
+
+                // Redirects feature to global switch. Note that this feature should only be used
+                // if the the x and y arguments are used in funct to insert the cell.
+                ds.isGuidesEnabled = function () {
+                    return graph.graphHandler.guidesEnabled;
+                };
+
+                // Restores original drag icon while outside of graph
+                ds.createDragElement = mxDragSource.prototype.createDragElement;
+            }
+
+            // NOTE: To enable cross-document DnD (eg. between frames),
+            // the following methods need to be overridden:
+            /*mxDragSourceMouseUp = mxDragSource.prototype.mouseUp;
+        mxDragSource.prototype.mouseUp = function(evt)
+        {
+            var doc = this.element.ownerDocument;
+            
+            if (doc != document)
+            {
+                var mu = (mxClient.IS_TOUCH) ? 'touchend' : 'mouseup';
+                
+                if (this.mouseUpHandler != null)
+                {
+                    mxEvent.removeListener(doc, mu, this.mouseUpHandler);
+                }
+            }
+            
+            mxDragSourceMouseUp.apply(this, arguments);
+        };*/
+
+            /*mxDragSourceMouseDown = mxDragSource.prototype.mouseDown;
+        mxDragSource.prototype.mouseDown = function(evt)
+        {
+            if (this.enabled && !mxEvent.isConsumed(evt))
+            {
+                mxDragSourceMouseDown.apply(this, arguments);
+                var doc = this.element.ownerDocument;
+                
+                if (doc != document)
+                {
+                    var mu = (mxClient.IS_TOUCH) ? 'touchend' : 'mouseup';
+                    mxEvent.addListener(doc, mu, this.mouseUpHandler);
+                }
+            }
+        };*/
+        </script>
+    </head>
+    <body onload="main(document.getElementById('graphContainer'))">
+        <div id="graphContainer"></div>
+    </body>
+</html>

@@ -1,0 +1,199 @@
+React Testing Library 
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Query Functions 
+  - screen object in react testing library provides around 48 query functions;
+  - getBy       -> getByRole(), getByText()
+    getAllBy    -> getAllByText(), getByDisplayValue()
+    queryBy     -> queryByDisplayValue(), queryByTitle()
+    queryAllBy  -> queryAllByTitle(), queryAllByText()
+    findBy      -> findByRole(), findByText()
+    findAllBy   -> findAllByText(), findAllByDisplayValue()
+
+They return an element or array of elements;
+What happens if a function returns 0, 1, >1 elements?
+Whether the function returns instantly(synchronously) OR looks for an element over a period of time(asynchronously)?
+
+Looking for a single element
+                  0         1         >1
+  getBy     ->  Error     Element     Error
+  queryBy   ->  null      Element     Error
+  findBy    ->  Error     Element     Error   // Looks for the element over a period of 1 second;
+
+Looking for multiple elements
+                    0         1             >1
+  getAllBy     ->  Error     Element[]    Element[]
+  queryAllBy   ->  []        Element[]    Element[]
+  findAllBy    ->  Error     Element[]    Element[]  // Looks for the element over a period of 1 second;
+
+When to use each?
+    Prove an element exists -> getBy, getAllBy
+    Prove an element doesn't exists -> queryBy, queryAllBy
+    Make sure an element eventually exists -> findBy, findAllBy
+    
+
+<ul>              // list 
+  <li>one</li>    // listitem
+  <li>two</li>
+  <li>three</li>
+</ul>
+
+// tests on element that doesn't exist - textbox;
+expect(() => screen.getByRole('textbox')).toThrow();
+expect(screen.queryByRole('textbox')).toEqual(null);
+let errorThrown = false;
+try {
+  await screen.findByRole('textbox'); // findByRole() returns a promise; use await for the promise to complete;
+}catch(err) {
+  errorThrown = true;
+}
+expect(errorThrown).toEqual(true);
+
+
+// tests on element that exist once - list;
+expect(() => screen.getByRole('list')).toBeInTheDocument();
+expect(screen.queryByRole('list')).toBeInTheDocument();
+expect(await screen.findByRole('list')).toBeInTheDocument();
+
+// tests on element that exists more than 1 element - listitem;
+expect(() => screen.getByRole('listitem')).toThrow();
+expect(screen.queryByRole('listitem')).toThrow();
+let errorThrown = false;
+try {
+  await screen.findByRole('listitem');
+} catch(err) {
+  errorThrown = true;
+}
+expect(errorThrown).toEqual(true);
+
+
+// 
+expect(() => screen.getAllByRole('listitem')).toHaveLength(3);
+expect(screen.queryAllByRole('listitem')).toHaveLength(3);
+expect(await screen.findAllByRole('listitem')).toHaveLength(3);
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Matchers 
+
+
+
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+    @testing-library/react 
+    React Testing Library is not an alternative to Jest, because they need each other and every one of them has a clear task.
+    
+    
+    React-testing-library comes installed by default when setting up React apps with create-react-app.
+
+
+    
+    jest
+
+
+
+React Testing Library, in contrast to Jest, is one of the testing libraries to test React components. 
+Another popular one in this category is Enzyme as mentioned earlier. 
+
+
+
+Step 5: Testing Asynchronous Behavior Many React applications involve asynchronous operations like fetching data from an API. Explore techniques to test asynchronous behavior by using Jest’s async/await syntax, utilizing mock functions, and simulating delayed responses.
+
+// Simulate asynchronous data fetching or API call
+    await waitFor(() => {
+      // Assert the expected behavior once the data is fetched
+      expect(screen.getByText('Data loaded successfully!')).toBeInTheDocument();
+    });
+
+// These query functions are provided by react testing library;
+// There are around 48 query functions in total;
+
+
+
+
+screen.getByRole()
+screen.queryByRole()
+screen.findByRole()
+screen.findByTitle()
+screen.findAllByTitle()
+screen.findAllByDisplayValue()
+screen.queryAllByRole()
+screen.queryByLabelText()
+screen.getByLabelText()
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ARIA Role 
+    ARIA is a set of attributes, that are added to HTML elements, to make webapplications accessible to users with disabilities;
+    Triditionally used by screen reader softwares to help users understand the content on the screen;
+    Many HTML elements, such as tables and text inputs and buttons, have an implicit or automatically assigned ARIA role;
+    Elements can be maually assigned with a role;
+    Event highly trained engineers makes mistakes in assigning roles; So, If you don't know exactly what you are doing, It's best not to assign roles manually;
+
+    h1,h2,h3,h4,h5,h6 -> heading 
+    ul, li -> list 
+    button -> button 
+    a -> link 
+    input, type=text -> textbox
+    thead -> rowgroup
+    tbody -> rowgroup
+    tr -> row
+    th -> columnheader 
+    td -> cell 
+
+If you don't want to use roles at all, there are many other ways to find elements;
+
+Sometimes finding elements by roles just doesn't work out well; Don't obess over getting the right query;
+There are 2 escape hatches, when it doesn't work;
+#1: data-testid 
+    - find elements by using an attribute called data-testid;
+    - some people don't like the idea of adding data-testid, for testing purposes;
+
+#2: container.querySelector()
+
+within 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Labels 
+    <label htmlFor="email">Enter Email</label>
+    <input id="email"/>
+    If you click on label, input will be focused;
+
+    screen.getByLabelText('/enter email/i'); -> Input can be selected with label text;
+    screen.getByRole('textbox', {name: /enter email/i'}); -> select all text boxes and second filter selects a textbox with speified name; // name attribute here checks for the labels text;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Roles 
+    React testing library prefers or recommends to use roles to select elements;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Accessible Names 
+    Text inside an element is the access name of that element; Not all elements have accessible names;
+    Eg:
+        <button>Submit</button>
+        <button>Cancel</button>
+        
+        const submitBtn = screen.getByRole('button', { name: 'Submit'});
+        expect(submitBtn).toBeInTheDocument();
+        const cancelBtn = screen.getByRole('button', { name: /cancel/i});
+        expect(cancelBtn).toBeInTheDocument();
+
+    Eg2: <input/> is self-closing tag; It doesn't have label; we can use <label> to give input a label;
+        <label htmlFor="email">Email</label>
+        <input id="email"/>
+        <label htmlFor="age">Age</label>
+        <input id="age"/>
+
+        const emailInput = screen.getByRole('textbox', { name: /email/i});
+        expect(emailInput).toBeInTheDocument();
+
+    Eg3: Very often, we use svg inside button, rather than plain text; we can add aria-label;
+        <button aria-label='sign in'><svg/></button>
+        <button aria-label='sign out'><svg/></button>
+
+        const buttonOne = screen.getByRole('button', { name: /sign in/i});
+        const buttonTwo = screen.getByRole('button', { name: /sign out/i});
+        expect(buttonOne).toBeInTheDocument();
+        expect(buttonTwo).toBeInTheDocument();
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Grid</title>
+    <!-- 
+      A grid item is a thing that participates in grid layout within a grid-formatting context.This is usually a child element of a gridcontainer, but it can also be the anonymous (that is, not containedwithin an element) bits of text that are part of an element’s content.
+      Notice how each element, and each bit of text between them, has become agrid item. The image is a grid item, just as much as the elements andtext runs—seven grid items in all.
+     -->
+    <style>
+      #warning {
+        display: grid;
+        background: #fcc;
+        padding: 0.5em;
+        grid-template-rows: 1fr;
+        grid-template-columns: repeat(7, 1fr);
+        width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="warning">
+      <img src="../images/warning.png" /><strong>Note:</strong> This element is
+      a <em>grid container</em> with several <em>grid items</em> inside it.
+    </p>
+  </body>
+</html>

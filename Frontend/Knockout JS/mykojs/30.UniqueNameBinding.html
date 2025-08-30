@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+   <title>KnockoutJS Form Field Bindings: uniqueName</title>
+   <script type="text/javascript" src="./knockout-3.5.1.js"></script>
+</head>
+<body>
+    <!-- 
+      It ensures that associated DOM element has non-empty name attribute. In otherwords, KO generates unique name for specified field.
+
+      Note: IE8 doesn't allow you select a radio buttons, if it doesn't have name attribute.
+    -->
+    <input data-bind="value: firstName, uniqueName: true" />
+    <div data-bind="html: firstName"></div>
+
+    <script>
+      var myViewModel = {
+          firstName: ko.observable('Matt')
+      };
+
+      ko.applyBindings(myViewModel);
+    </script>
+</body>
+</html>
