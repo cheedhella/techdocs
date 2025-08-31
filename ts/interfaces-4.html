@@ -6,81 +6,43 @@
         <link rel="stylesheet" href="../resources/css/codeblock.css" />
     </head>
     <body>
-        <p class="question"><strong>1. What is Interface?</strong></p>
+        <p class="question"><strong>1. What is Callable Interface?</strong></p>
         <p class="answer">
             <ol>
-                <li>It is used to define the type/structure of an object;</li>
-                <li>It tells the compiler:
-                  <ul>
-                    <li>What properties an object should have and their types;</li>
-                    <li>What methods an object should have and their signatures;</li>
-                    <li>Optional properties;</li>
-                    <li>Readonly properties</li>
-                  </ul>
-                </li>
+                <li>It is an interface that defines the signature of a function, including its parameters and return type;</li>
+                <li>It is used to ensure that any function assigned to a variable of that interface type will have the correct structure;</li>
             </ol>
         </p>
 
-        // Interface extending interface
-        // Class implementing interface 
-        // Interface vs Type
         <div class="code-block">
-            <div class="code-block-title">interface-1.ts</div>
+            <div class="code-block-title">interface-4.ts</div>
             <button class="copy-btn">Copy</button>
-            <pre><code>interface UserAccount {
-  // mandatory properties
-  id: number;
-  username: string;
-
-  // readonly property (cannot be changed after creation)
-  readonly createdAt: Date;
-
-  // optional property
-  email?: string;
-
-  // method with no return value
-  login(): void;
-
-  // method with a return type
-  logout(): boolean;
+            <pre><code>// Greet is an interface that describes a function taking string → returning string.
+interface if4_Greet {
+  (name: string): string;  // call signature
 }
+const if4_sayHello: if4_Greet = (name) => `Hello, ${name}`;
+console.log(if4_sayHello("Alice")); // "Hello, Alice"
 
-
-const if1u1: UserAccount = {
-  id: 1,
-  username: "alice123",
-  createdAt: new Date(),
-
-  login() {
-    console.log(`${this.username} logged in.`);
-  },
-
-  logout() {
-    console.log(`${this.username} logged out.`);
-    return true;
-  },
+// YOu can also define multiple ways(overloads) to call the same function;
+interface if4_StringFormatter {
+  (input: string): string;
+  (input: string, toUpper: boolean): string;
+}
+const if4_format: if4_StringFormatter = (input: string, toUpper?: boolean) => {
+  return toUpper ? input.toUpperCase() : input.toLowerCase();
 };
-
-// ✅ Allowed: modifying normal property
-if1u1.username = "aliceUpdated";
-
-// ❌ Not allowed: modifying readonly property
-// if1u1.createdAt = new Date(); // Error
-
-// ✅ Optional property (can be added later)
-if1u1.email = "alice@example.com";
-
-// ✅ Using methods
-if1u1.login();   // "aliceUpdated logged in."
-if1u1.logout();  // "aliceUpdated logged out."
+console.log(if4_format("Hello"));        // "hello"
+console.log(if4_format("Hello", true));  // "HELLO"
 
 
 <b>Output:</b>
-npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/interface-1.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
-node ~/target/interface-1.js
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/interface-4.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/interface-4.js
 
-aliceUpdated logged in.
-aliceUpdated logged out.
+Hello, Alice
+hello
+HELLO
 
 </code></pre>
       </div>

@@ -1,26 +1,3 @@
-// Indexable Types
-//      An indexable object is an object whose properties can be accessed using an index signature like obj['property'];
-//      This is the default way to access an array element, but we can also do this for the object;
-//      Key type of an indexable type must be either string or number;
-
-// ----------------------------------------------------------------------------------------------------------------
-// Array or Object items in JavaScript can be indexed using number or string key;
-const a1 = [ 1, 2, 3 ];
-console.log(a1[0]);     // 1
-console.log(a1['0']);   // 1
-// console.log(a1.0]);     // Compiler Error!
-
-const o1 = { one: 1, two: 2, three: 3 };
-console.log(o1[1]);       // undefined
-console.log(o1['one']);   // 1
-console.log(o1.one);      // 1
-
-const o2 = { 1: 1, '2': 2, 3: 3 };
-console.log(o2[1]);       // 1
-console.log(o2[2]);       // 2
-console.log(o2['2']);     // 2
-//console.log(o2.2);     // Compiler Error!
-
 // ----------------------------------------------------------------------------------------------------------------
 // Interface as an Array Type
 //      Interface can be used to define the type of an array, where you can define the type of index as well as values;
