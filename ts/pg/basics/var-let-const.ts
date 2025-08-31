@@ -1,34 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Datatypes</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
-
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
-    </head>
-    <body>
-        <p class="question"><strong>Datatypes</strong></p>
-        <p class="answer">
-            <ul>
-                <li>Primitive Types: boolean, number, string, null, undefined, bigint, symbol;</li>
-                <li>Special Types: any, unknown, never, void;</li>
-                <li>Object Types: function, Array vs Tuple, Object, Interface, Class, Enum;</li>
-                <li>Advanced Types: Union, Intersection, Alias, Literal;</li>
-            </ul>
-        </p>
-        
-        <div class="code-block">
-            <div class="code-block-title">datatypes.ts</div>
-            <button class="copy-btn">Copy</button>
-            <pre><code>// var
+// var
 function demoVar() {
   if (true) {
     var x1 = 10;
@@ -99,22 +69,3 @@ arr.push(4); // ✅ Allowed (array contents mutable)
 const obj = { name: "Alice" };
 obj.name = "Bob"; // ✅ Allowed (properties mutable)
 
-<b>Output:</b>
-npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/basics/var-let-const.ts --outDir ~/target/
-node ~/target/var-let-const.js 
-10
-y1: 15
-20
-undefined
-5
-10
-Hello
-
-</code></pre>
-      </div>
-
-
-    <script src="../../resources/js/codeblock.js"></script>
-
-    </body>
-</html>

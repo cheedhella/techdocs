@@ -1,6 +1,3 @@
-1. Types
-	Primitive types: boolean, number, string/template string, symbol, null VS undefined, void, never, any;
-	Object types: function, array VS tuple, object, interface, class;
 
 2. Declaring Variables: var, let, const; // TODO: Scope of variables declared <script> block;
 	TS compiler converts let to var in js; So that, this works in older browsers, this behavior can be disabled;
