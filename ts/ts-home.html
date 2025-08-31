@@ -7,26 +7,309 @@
         <script src="../resources/js/highlight.min.js"></script>
     </head>
     <body>
-        <div class="main-grid-container">
-            <div class="main-grid-item main-grid-item-1 grid-wide-column">
-                <img src="../resources/imgs/gears.gif" alt="" srcset="" />
-                <h2>Typescript</h2>
-            </div>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <img src="../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Typescript</h2>
+        </div>
+
+        <div class="toc-container">
+            <ul>
+                <li>Basics
+                    <ul>
+                        <li><a href="./what.html">What is Typescript?</a></li>
+                        <li><a href="./install.html">Install Typescript</a></li>
+                        <li><a href="./create-project.html">Create a Typescript project</a></li>
+                    </ul>
+                </li>
+                <li>Datatypes
+                    <ul>
+                        <li><a href="./what.html">What is Typescript?</a></li>
+                        <li><a href="./install.html">Install Typescript</a></li>
+                        <li><a href="./create-project.html">Create a Typescript project</a></li>
+                    </ul>
+                </li>
+                <li>Interfaces
+                    <ul>
+                        <li><a href="./interfaces-1.html">Interfaces</a></li>
+                        <li><a href="./interfaces-2.html">Interface extending Interface</a></li>
+                        <li><a href="./interfaces-3.html">Interface vs Type</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+                        <li><a href="./interfaces-3.html">Class implementing Interface</a></li>
+
+
+
+🔹 5. Interfaces & Type Aliases
+
+Defining interfaces
+
+Extending interfaces (extends)
+
+Type aliases (type)
+
+Differences between interface and type
+
+Merging interfaces
+
+Indexable types
+
+Callable interfaces
+
+            <br/><br/><br/><br/>
+            
             <div class="main-grid-item main-grid-item-2">
                 <section>
                     <ul>
                         <li>Basic Concepts
                             <ul>
                                 <li><a href="./basics/install.html">Install Typescript</a></li>
-                                <li><a href="./basics/datatypes.html">Datatypes</a></li>
+                                <li><a href="./datatypes.html">Datatypes</a></li>
                                 <li><a href="./basics/var-let-const.html">Declaring variables</a>: var, let, const</li>
                                 <li><a href="./basics/duck-typing.html">Duck or Structural Typing</a></li>
+                                <li><a href="./basics/type-inference.html">Type Inference</a></li>
+                                <li><a href="./basics/type-annotations.html">Type Annotations</a></li>
+                                <li><a href="./basics/union-intersection.html">Union and Intersection</a></li>
+                                <li><a href="./basics/type-guards.html">Type Guards</a></li>
+                                <li><a href="./basics/utility-types.html">Utility Types</a>: Partial<T>, Readonly<T>, Pick<T, K>, and Omit<T, K></T></li>
+                                <li><a href="./basics/interfaces.html">Interfaces: interface as Array type, Object type, function signature, constructor type, index signature type VS Record; Elvis operator(optional members), readonly members, ReadOnly, ReadonlyArray types;</a></li>
+                                <li><a href="./basics/classes.html">Classes</a>: class, constructor, new, this, get/set accessor methods, extends, super, implements; 
+                                    <ul>
+                                        <li>Access Modifiers: private, protected, public; static methods; abstract property, abstract method, abstract class;</li>
+                                        <li></li>
+   Type Assertion;</li>
+                                <li><a href="./basics/enum.html">Enum</a></li>
+                                <li><a href="./basics/type-alias.html">Type Alias</a></li>
+                                <li><a href="./basics/generics.html">Generics</a></li>
+                                <li><a href="./basics/modules.html">Modules</a></li>
+                                <li><a href="./basics/async-await.html">Async Await</a></li>
+                                <li><a href="./basics/decorators.html">Decorators</a></li>
                                 <li><a href="./basics/tsconfig.html">tsconfig.json</a></li>
                             </ul>
                         </li>
                     </ul>
                 </section>
             </div>
+
+1. Basics (Core Language)
+
+What is TypeScript? Why use it?
+
+Setting up a TS project (tsc, tsconfig.json)
+
+Compilation targets (ES5, ES2015+, ESNext)
+
+Basic types
+
+string, number, boolean
+
+null, undefined, any, unknown
+
+void, never, bigint, symbol
+
+Type assertions (as, angle-bracket syntax)
+
+Type inference (implicit vs explicit typing)
+
+Union types (string | number)
+
+Intersection types (TypeA & TypeB)
+
+🔹 2. Variables & Scoping
+
+var vs let vs const
+
+Hoisting & Temporal Dead Zone
+
+readonly and immutability
+
+🔹 3. Functions
+
+Function declarations, expressions, arrow functions
+
+Parameter types
+
+Optional parameters (?)
+
+Default parameters
+
+Rest parameters
+
+Return types
+
+void vs never
+
+Function overloads
+
+Function types (signatures)
+
+Callbacks and higher-order functions
+
+🔹 4. Objects & Arrays
+
+Object types ({ key: type })
+
+Optional & readonly properties
+
+Index signatures ({ [key: string]: number })
+
+Array types (number[] vs Array<number>)
+
+Tuples ([string, number])
+
+Destructuring with types
+
+
+🔹 6. Classes & OOP in TS
+
+Classes & constructors
+
+Public, private, protected
+
+readonly properties
+
+Getters & setters
+
+static properties & methods
+
+Inheritance (extends)
+
+Abstract classes
+
+Implementing interfaces
+
+🔹 7. Advanced Types
+
+Literal types ("yes" | "no")
+
+Enums (numeric & string)
+
+Discriminated unions (tagged unions)
+
+Type narrowing
+
+typeof, instanceof, in
+
+Control flow analysis
+
+Type guards (custom type predicates)
+
+Mapped types (Partial<T>, Readonly<T>, etc.)
+
+Conditional types (T extends U ? X : Y)
+
+Utility types (Pick, Omit, Record, etc.)
+
+keyof and indexed access types
+
+typeof (type queries)
+
+infer keyword
+
+Template literal types
+
+satisfies operator (TS 4.9+)
+
+🔹 8. Generics
+
+Generic functions
+
+Generic classes
+
+Generic interfaces
+
+Constraints (<T extends SomeType>)
+
+Default type parameters
+
+Generic utility patterns
+
+🔹 9. Modules & Namespaces
+
+ES Modules (import / export)
+
+Default vs named exports
+
+Type-only imports/exports (import type)
+
+Namespaces (older style, rarely used in modern TS)
+
+Ambient modules (declare module)
+
+🔹 10. Asynchronous TypeScript
+
+Promises & async/await
+
+Typing Promise<T>
+
+async function return types
+
+Error handling with typed catch
+
+🔹 11. Advanced Features
+
+Decorators (experimental)
+
+Mixins
+
+Declaration merging
+
+Type compatibility (structural typing)
+
+Excess property checks
+
+Index signatures
+
+this typing
+
+Variadic tuple types
+
+Conditional inferencing
+
+🔹 12. TypeScript with Tooling
+
+tsconfig.json options
+
+target, lib, module, outDir, rootDir
+
+strict mode (strictNullChecks, noImplicitAny, etc.)
+
+esModuleInterop
+
+Source maps (.map)
+
+Watching with tsc --watch
+
+🔹 13. TypeScript in Real Projects
+
+Using DefinitelyTyped (@types/...)
+
+Writing declaration files (.d.ts)
+
+Type narrowing in React props
+
+Typing APIs (REST, GraphQL)
+
+Working with third-party libraries
+
+🔹 14. Patterns & Best Practices
+
+Favor unknown over any
+
+Use union types + narrowing
+
+Prefer type for composition, interface for contracts
+
+Avoid overusing enums (use literal types instead if possible)
+
+Strict null checks everywhere
+
+Keep tsconfig.json strict
+
+Documenting with JSDoc + TS types
+
             <div class="main-grid-item main-grid-item-3">
                 <section>
                     <ul>

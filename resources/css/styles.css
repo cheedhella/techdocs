@@ -80,3 +80,16 @@ div.command-table td {
 div.command-table th {
     font-weight: bold;
 }
+
+div.toc-container > ul > li {
+    margin-top: 20px;
+}
+
+div.toc-container ul {
+    list-style-type: disc;
+    margin-top: 10px;
+}
+
+div.toc-container li {
+    margin-bottom: 5px;
+}

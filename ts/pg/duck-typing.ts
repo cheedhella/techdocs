@@ -2,6 +2,7 @@
 type Point = { x: number; y: number };
 type Coordinate = { x: number; y: number };
 
+// You can assigne a Point to Coordinate and Coordinate to a Point, b/c they have same structure;
 let p: Point = { x: 10, y: 20 };
 let c: Coordinate = p; // ✅ Allowed
 console.log("Example 1:", c);

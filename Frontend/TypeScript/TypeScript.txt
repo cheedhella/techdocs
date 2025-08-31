@@ -13,9 +13,7 @@
 	https://dmitripavlutin.com/differences-between-arrow-and-regular-functions/
 
 10. 
-2. Interfaces: interface as Array type, Object type, function signature, constructor type, index signature type VS Record; Elvis operator(optional members), readonly members, ReadOnly, ReadonlyArray types;
-   Classes: class, constructor, new, this, get/set accessor methods, extends, super, implements; Access Modifiers: private, protected, public; static methods; abstract property, abstract method, abstract class;
-   Type Assertion;
+2. 
 
 
 ---------------------------------------------------------------------------------------------------------

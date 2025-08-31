@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Class</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>What is Class?</strong></p>
+        <p class="answer">
+            <ol>
+                <li>Typescript cares about the shape or structure of a type, not it's name or declaration;</li>
+                <li>If two objects have the same structure, they are considered compatible, even if they were defined separately.</li>
+                <li>This is sometimes called duck typing: If it walks like a duck and quacks like a duck, it’s a duck;</li>
+                <li>Makes TypeScript flexible; But, sometimes can allow more than you expect (needs careful design);</li>               
+            </ol>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">class-demo.ts</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>
+
+
+<b>Output:</b>
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/basics/class-demo.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/class-demo.js
+
+Example 1: { x: 10, y: 20 }
+Example 2: { name: 'Alice', age: 25 }
+Example 3: 12
+Example 4: { name: 'Rex', breed: 'Labrador' }
+Example 5: TS Handbook
+</code></pre>
+      </div>
+
+
+    <script src="../../resources/js/codeblock.js"></script>
+
+    </body>
+</html>

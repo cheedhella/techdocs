@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Interfaces</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>1. What is Interface?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is used to define the type/structure of an object;</li>
+                <li>It tells the compiler:
+                  <ul>
+                    <li>What properties an object should have and their types;</li>
+                    <li>What methods an object should have and their signatures;</li>
+                    <li>Optional properties - you can use Elvis operator (?) to make them optional;</li>
+                    <li>Readonly properties</li>
+                  </ul>
+                </li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">interface-1.ts</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>interface UserAccount {
+  // mandatory properties
+  id: number;
+  username: string;
+
+  // readonly property (cannot be changed after creation)
+  readonly createdAt: Date;
+
+  // optional property
+  email?: string;
+
+  // method with no return value
+  login(): void;
+
+  // method with a return type
+  logout(): boolean;
+}
+
+
+const if1u1: UserAccount = {
+  id: 1,
+  username: "alice123",
+  createdAt: new Date(),
+
+  login() {
+    console.log(`${this.username} logged in.`);
+  },
+
+  logout() {
+    console.log(`${this.username} logged out.`);
+    return true;
+  },
+};
+
+// ✅ Allowed: modifying normal property
+if1u1.username = "aliceUpdated";
+
+// ❌ Not allowed: modifying readonly property
+// if1u1.createdAt = new Date(); // Error
+
+// ✅ Optional property (can be added later)
+if1u1.email = "alice@example.com";
+
+// ✅ Using methods
+if1u1.login();   // "aliceUpdated logged in."
+if1u1.logout();  // "aliceUpdated logged out."
+
+
+<b>Output:</b>
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/interface-1.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/interface-1.js
+
+aliceUpdated logged in.
+aliceUpdated logged out.
+
+</code></pre>
+      </div>
+
+
+    <script src="../resources/js/codeblock.js"></script>
+
+    </body>
+</html>

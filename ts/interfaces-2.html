@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Interfaces</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>Interface can extend one or more other interfaces;</strong></p>
+
+        <div class="code-block">
+            <div class="code-block-title">interface-2.ts</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>// Base interface
+interface IF2_Item {
+  name: string;
+}
+
+// Interface Extending another interface
+interface IF2_Person extends IF2_Item {
+  age: number;
+}
+
+const if2_p1: IF2_Person = {
+  name: "Alice",
+  age: 28,
+};
+
+console.log(if2_p1.name);       // "Alice"
+console.log(if2_p1.age); // "Engineering"
+
+interface IF2_Drivable {
+  start(): void;
+  stop(): void;
+}
+
+// Interface Extending multiple interfaces
+interface IF2_Vehicle extends IF2_Item, IF2_Drivable {
+  
+}
+
+const if2_v1: IF2_Vehicle = {
+  name: "Tiago",
+  start() {
+    console.log("Started the vehicle: " + this.name);
+  },
+  stop() {
+    console.log("Stopped the vehicle: " + this.name);
+  },
+};
+
+if2_v1.start();  // "Started the vehicle: Tiago"
+if2_v1.stop();   // "Stopped the vehicle: Tiago"
+
+
+<b>Output:</b>
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/interface-2.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/interface-2.js
+
+Alice
+28
+Started the vehicle: Tiago
+Stopped the vehicle: Tiago
+
+</code></pre>
+      </div>
+
+
+    <script src="../resources/js/codeblock.js"></script>
+
+    </body>
+</html>
