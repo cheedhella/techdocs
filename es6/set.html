@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Datatypes</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/codeblock.css" />
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      A collection of unique values (no duplicates allowed).
+
+Can store primitives or object references.
+
+Maintains insertion order.
+// Set of numbers
+let numbers: Set<number> = new Set([1, 2, 3, 3, 4]);
+console.log(numbers); // Set { 1, 2, 3, 4 }  (no duplicate)
+
+// Add values
+numbers.add(5);
+numbers.add(2); // duplicate ignored
+
+// Check values
+console.log(numbers.has(3)); // true
+console.log(numbers.has(99)); // false
+
+// Delete a value
+numbers.delete(1);
+
+// Iterate
+for (let num of numbers) {
+  console.log(num);
+}
+
+
+let fruits: Set<string> = new Set();
+
+fruits.add("apple");
+fruits.add("banana");
+fruits.add("apple"); // ignored
+
+console.log(fruits); // Set { 'apple', 'banana' }
+
+
+
+type User = { id: number; name: string };
+let users: Set<User> = new Set();
+
+users.add({ id: 1, name: "Alice" });
+users.add({ id: 2, name: "Bob" });
+users.add({ id: 1, name: "Alice" }); // ❗ treated as a different object reference
+
+console.log(users.size); // 3 (not 2) because objects are compared by reference
+
+
+// 👉 If you want uniqueness by a property (like id), you’d need extra logic.
+let set = new Set([1, 2, 3]);
+
+// Set → Array
+let arr = Array.from(set); // [1, 2, 3]
+
+// Array → Set (removes duplicates)
+let arrWithDupes = [1, 2, 2, 3];
+let unique = new Set(arrWithDupes); // Set {1, 2, 3}
+
+Use Set<T> when you want unique values.
+Arrays allow duplicates, Sets don’t.
+
+
+        <p class="question"><strong>Datatypes</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Primitive Types: boolean, number, string, null, undefined, bigint, symbol;</li>
+                <li>Special Types: any, unknown, never, void;</li>
+                <li>Object Types: Object, Array, Tuple, Enum;</li>
+                <li>Advanced Types: Union, Intersection, Alias, Literal, Interface;</li>
+            </ul>
+        </p>
+        
+
+    <script src="../resources/js/codeblock.js"></script>
+
+    </body>
+</html>
