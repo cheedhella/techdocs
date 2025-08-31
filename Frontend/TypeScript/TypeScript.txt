@@ -1,7 +1,4 @@
 
-2. Declaring Variables: var, let, const; // TODO: Scope of variables declared <script> block;
-	TS compiler converts let to var in js; So that, this works in older browsers, this behavior can be disabled;
-	type keyword;
 
 3. Type Checking: Type Inference, Type Annotations;
 

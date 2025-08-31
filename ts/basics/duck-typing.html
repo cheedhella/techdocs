@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Duck or Structural Typing</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>What is Duck Typing?</strong></p>
+        <p class="answer">
+            <ol>
+                <li>Typescript cares about the shape or structure of a type, not it's name or declaration;</li>
+                <li>If two objects have the same structure, they are considered compatible, even if they were defined separately.</li>
+                <li>This is sometimes called duck typing: If it walks like a duck and quacks like a duck, it’s a duck;</li>
+                <li>Makes TypeScript flexible; But, sometimes can allow more than you expect (needs careful design);</li>               
+            </ol>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">duck-typing.ts</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>// ✅ Example 1: Compatible Types
+type Point = { x: number; y: number };
+type Coordinate = { x: number; y: number };
+
+let p: Point = { x: 10, y: 20 };
+let c: Coordinate = p; // ✅ Allowed
+console.log("Example 1:", c);
+
+
+// ✅ Example 2: Extra Properties Allowed
+type Person = { name: string };
+
+let user = { name: "Alice", age: 25 };
+let person: Person = user; // ✅ Allowed because user has "name"
+console.log("Example 2:", person);
+
+// ❌ Excess property check with object literal
+// let person2: Person = { name: "Bob", age: 30 }; // Error
+
+
+// ✅ Example 3: Functions are Structurally Typed
+type Add = (a: number, b: number) => number;
+
+function sum(x: number, y: number): number {
+  return x + y;
+}
+
+let calc: Add = sum; // ✅ Allowed
+console.log("Example 3:", calc(5, 7));
+
+
+// ✅ Example 4: Interface Compatibility
+interface Animal {
+  name: string;
+}
+
+interface Dog {
+  name: string;
+  breed: string;
+}
+
+let a: Animal;
+let d: Dog = { name: "Rex", breed: "Labrador" };
+
+a = d; // ✅ Dog has at least Animal’s structure
+console.log("Example 4:", a);
+
+
+// ✅ Example 5: Flexible APIs with Structural Typing
+interface Printable {
+  print(): void;
+}
+
+function printIt(item: Printable) {
+  item.print();
+}
+
+let book = {
+  title: "TS Handbook",
+  print() {
+    console.log("Example 5:", this.title);
+  }
+};
+
+printIt(book); // ✅ Works without "implements Printable"
+
+
+<b>Output:</b>
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/basics/duck-typing.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/duck-typing.js
+
+Example 1: { x: 10, y: 20 }
+Example 2: { name: 'Alice', age: 25 }
+Example 3: 12
+Example 4: { name: 'Rex', breed: 'Labrador' }
+Example 5: TS Handbook
+</code></pre>
+      </div>
+
+
+    <script src="../../resources/js/codeblock.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Functions</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>Functions</strong></p>
+        <p class="answer">
+            <ol>
+                <li>Basic Function;</li>
+                <li>Function Expression;</li>
+                <li>Arrow Function;</li>
+                <li>Optional Parameters;</li>
+                <li>Default Parameters;</li>
+                <li>Rest Parameters;</li>
+                <li>Function Types;</li>
+                <li>Void Functions;</li>
+                <li>Never Functions;</li>
+                <li>Overload Functions;</li>                
+            </ol>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">functions.ts</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>// ✅ 1. Basic Function Declaration
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+console.log(greet("Alice"));
+
+// ✅ 2. Function Expression
+const add = function (a: number, b: number): number {
+  return a + b;
+};
+console.log("Add:", add(5, 3));
+
+// ✅ 3. Arrow Function
+const multiply = (a: number, b: number): number => a * b;
+console.log("Multiply:", multiply(4, 2));
+
+// ✅ 4. Optional Parameters
+function greetUser(name: string, age?: number): string {
+  return age ? `${name} is ${age} years old` : `Hello, ${name}`;
+}
+console.log(greetUser("Bob"));
+console.log(greetUser("Charlie", 30));
+
+// ✅ 5. Default Parameters
+function greetMsg(name: string = "Guest"): string {
+  return `Welcome, ${name}`;
+}
+console.log(greetMsg());
+console.log(greetMsg("Dave"));
+
+// ✅ 6. Rest Parameters
+function sumAll(...nums: number[]): number {
+  return nums.reduce((a, b) => a + b, 0);
+}
+console.log("Sum:", sumAll(1, 2, 3, 4, 5));
+
+// ✅ 7. Function Types
+let calculator: (x: number, y: number) => number;
+calculator = (x, y) => x - y;
+console.log("Calculator (Subtract):", calculator(10, 4));
+
+// ✅ 8. Void Function
+function logMessage(msg: string): void {
+  console.log("Log:", msg);
+}
+logMessage("This is a log message!");
+
+// ✅ 9. Never Function
+function throwError(message: string): never {
+  throw new Error(message);
+}
+// Uncommenting the below line will crash the program
+// throwError("Something went wrong!");
+
+// ✅ 10. Function Overloading
+function getLength(x: string): number;
+function getLength(x: any[]): number;
+function getLength(x: any): number {
+  return x.length;
+}
+console.log("Length of string:", getLength("Hello"));
+console.log("Length of array:", getLength([1, 2, 3, 4]));
+
+
+<b>Output:</b>
+npx tsc /Users/mcheedhe/Data/techdocs/ts/pg/basics/functions.ts --outDir ~/target/ --target ES2020 --lib ES2020,DOM
+node ~/target/functions.js
+
+Hello, Alice
+Add: 8
+Multiply: 8
+Hello, Bob
+Charlie is 30 years old
+Welcome, Guest
+Welcome, Dave
+Sum: 15
+Calculator (Subtract): 6
+Log: This is a log message!
+Length of string: 5
+Length of array: 4
+</code></pre>
+      </div>
+
+
+    <script src="../../resources/js/codeblock.js"></script>
+
+    </body>
+</html>
