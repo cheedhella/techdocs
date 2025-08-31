@@ -93,3 +93,7 @@ div.toc-container ul {
 div.toc-container li {
     margin-bottom: 5px;
 }
+
+a {
+  text-decoration: none;
+}
