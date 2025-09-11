@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Component</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>What is Component?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Component is a reusable piece of code that defines a part of the user interface (UI);</li>
+                <li>It can be a button, form, header or any other part of the page that you can think of;</li>
+                <li>Each component manages its own state, structure, style, behaviour and returns JSX to render on the screen;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Characteristics of Components</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Reusability - Components can be used multiple times in a page;</li>
+                <li>Encapsulation - Each component manages its own state and logic, keeping concerns separate;</li>
+                <li>Composition - Complex user interfaces are built by combining multiple simple components;</li>
+                <li>Props and State - Components use props (short for properties) to receive data from their parent components and state to manage their own internal data that can change over time;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Types of Components</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Function based components - we can use simple function(rfc) or arrow function(rafc);</li>
+                <li>Class based components - we are not using them after v16;</li>
+                <li>Each component will have it's own js file; First letter of the file should be in capital;</li>
+            </ul>
+        </p>
+
+      <div class="code-block">
+         <div class="code-block-title">Functional Component with Props</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>
+                    // They are basically JavaScript functions that take in props (input data) and return JSX (JavaScript Syntax Extension) elements.
+
+function UserCard({ name, age }) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;{name}&lt;/h2&gt;
+      &lt;p&gt;Age: {age}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;UserCard name="Alice" age={25} /&gt;
+      &lt;UserCard name="Bob" age={30} /&gt;
+    &lt;/div&gt;
+  );
+}
+</code></pre>
+      </div>
+
+<br><br>
+    <div class="code-block">
+         <div class="code-block-title">Functional Component with state</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>
+import React, { useState } from "react";
+
+function Counter() {
+  // Declare a state variable "count" with initial value 0
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div style={{ textAlign: "center", marginTop: "20px" }}&gt;
+      &lt;h2&gt;Counter: {count}&lt;/h2&gt;
+      &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Increase&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(count - 1)}&gt;Decrease&lt;/button&gt;
+      &lt;button onClick={() =&gt; setCount(0)}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default Counter;
+
+import React from "react";
+import Counter from "./Counter";
+
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;React State Example&lt;/h1&gt;
+      &lt;Counter /&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default App;
+
+<ul>
+    <li>useState(0) → creates a state variable count with initial value 0.</li>
+    <li>setCount → function to update the state.</li>
+    <li>Every time setCount is called, React re-renders the component with the new state value.</li>
+    <li>The buttons call setCount with new values.</li>
+</ul>
+
+</code></pre>
+      </div>
+
+      <ul>
+        <li>Higher-Order Components - A higher-order component is a function that takes a component and returns a new component. HOCs are used to enhance components with additional functionality. For eg, for Implement cross-cutting concerns like authentication or logging.
+ </li>
+        <li>Pure Components - Pure components are a type of class component that optimizes performance by implementing a shallow comparison in shouldComponentUpdate. Useful for improving performance in large applications.
+</li>
+<li>Controlled Components: Manage their state through React. Example: Form elements with value controlled by state.</li>
+<li>Uncontrolled Components: Manage their state through the DOM. Example: Using ref for accessing DOM elements directly.</li>
+<li>Default props and PropTypes are additional tools that enhance component reliability. Default props provide fallback values to prevent breakage due to missing data, while PropTypes enforce data type validation, bolstering application integrity.</li>
+      </ul>
+        <script src="../resources/js/codeblock.js"></script>
+    </body>
+</html>

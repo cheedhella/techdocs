@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>JSX</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/highlight.min.css" />
+    </head>
+    <body>
+        <div class="question"><strong>What is JSX(JavaScript XML)?</strong></div>
+        <div class="answer">
+            <ul>
+                <li>Component is JavaScript function that take in props as input and returns JSX;</li>
+                <li>It is not HTML, but it lets you write HTML inside JavaScript code;</li>
+                <li>It is more convinent way of creating HTML elements, than React.createElement() calls;</li>
+                <li>Eg: const element = &lt;h1&gt;Hello, world!&lt;/h1&gt;; Behind the scenes, react uses tools like Babel to convert JSX into JS code: const element = React.createElement("h1", null, "Hello, world!");</li>
+            </ul>
+        </div>
+
+        <div class="question"><strong>Comments</strong></div>
+        <div class="answer">
+            <ul>
+                <li>Comments can be added within curly braces inside JSX and won’t be included in the rendered output;</li>
+                <li>Eg: {/* This is a comment */}</li>
+            </ul>
+        </div>
+
+        <div class="question"><strong>Self closing tags</strong></div>
+        <div class="answer">
+            <ul>
+                <li>JSX support self-closing tags, similar to HTML;</li>
+                <li>It’s useful for elements without content, such as images or icons;</li>
+                <li>Eg: const element = &lt;img src="logo.png" /&gt;;</li>
+            </ul>
+        </div>
+
+        <div class="question"><strong>Expression</strong></div>
+        <div class="answer">
+            <ul>
+                <li>Inside the curly brackets, we can write an expression that evaluates to some value;</li>
+const MyComponent = () => {
+  const name = "John";
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Hello, {name}!&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+            </ul>
+        </div>
+
+        <div class="question"><strong>Attributes</strong></div>
+        <div class="answer">
+            <ul>
+                <li>JSX attributes look like HTML attribute, but use camelCase for most;</li>
+                <li>class → className, for → htmlFor; Eg: const element = &lt;img src="logo.png" className="app-logo" /&gt;;</li>
+            </ul>
+        </div>
+
+        <div class="question"><strong>Conditional Rendering</strong></div>
+        <div class="answer">
+            <ul>
+                <li>Expressions are used to conditionally render elements;</li>
+const App = () => {
+  const number = 10;
+  return (
+    &lt;div&gt;
+      {number > 0 ? (
+        &lt;p&gt;Number {number} is positive&lt;/p&gt;
+      ) : (
+        &lt;p&gt;Number {number} is Negative&lt;/p&gt;
+      )}
+    &lt;/div&gt;
+  );
+};
+            </ul>
+        </div>
+
+
+
+        <div class="question"><strong>Fragment</strong></div>
+        <div class="answer">
+            <ul>
+                <li>A component can't return multiple elements; Rather, wrap them in div-like element OR fragment;</li>
+// ❌ Invalid
+return (
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+);
+
+// ✅ Valid
+return (
+  &lt;div&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+  &lt;/div&gt;
+);
+
+// ✅ Valid - Fragments
+return (
+  &lt;div&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Paragraph&lt;/p&gt;
+  &lt;/div&gt;
+);
+
+            </ul>
+        </div>
+
+        <div class="question"><strong>Event Handlers</strong></div>
+        <div class="answer">
+            <ul>
+                <li>React event handling is very similar to handling DOM events in plain JavaScript, but with a few important differences;</li>
+                <li>CamelCase naming
+// ✅ Correct
+&lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;
+
+// ❌ Incorrect
+&lt;button onclick={handleClick}&gt;Click me&lt;/button&gt;
+
+                </li>
+                <li>Pass a function, not a string <br/>
+// ✅ Correct
+&lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;
+
+// ❌ Incorrect
+&lt;button onClick="handleClick"&gt;Click me&lt;/button&gt;
+                </li>
+
+                <li>Inline event Handlers, Eg: &lt;button onClick={() => alert("Hello!")}&gt;Click Me&lt;/button&gt;</li>
+
+                <li>React passes a synthetic event object (wrapper around native events) to the handler:
+                    function App() {
+  function handleClick(event) {
+    console.log(event);         // SyntheticBaseEvent
+    console.log(event.type);    // "click"
+  }
+
+  return (
+    &lt;button onClick={handleClick}&gt;Click me&lt;/button&gt;
+  );
+}
+
+                </li>
+
+                <li>You can pass arguments to event handlers;
+                    function App() {
+  function greet(name) {
+    alert(`Hello, ${name}!`);
+  }
+
+  return (
+    &lt;button onClick={() => greet("Alex")}&gt;Greet&lt;/button&gt;
+  );
+}
+                </li>
+            </ul>
+        </div>
+        <script src="../resources/js/codeblock.js"></script>
+    </body>
+</html>

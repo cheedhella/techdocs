@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Create React App</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    </head>
+    <body>
+        <p class="question"><strong>Once NodeJS is installed, you can use npm or npx or vite or next.js to create a React application;</strong></p>
+       
+        <p class="question"><strong>Using CRA(Create React App)</strong></p>
+        <p class="answer">
+            <ul>
+                <li>npx create-react-app my-app</li>
+                <li>cd my-app</li>
+                <li>npm start - Runs the development server;</li> 
+            </ul>
+        </p>
+
+        <p class="question"><strong>Using Set React App</strong></p>
+
+        <p class="question"><strong>Using Vite</strong></p>
+        <p class="answer">
+            <ul>
+                <li>npm create vite@latest my-app --> Choose React or React + TypeScript when prompted;</li>
+                <li>cd my-app</li>
+                <li>npm install</li> 
+                <li>npm run build → bundles the app for production;</li>
+                <li>npm run dev
+                    <ul>
+                        <li>It starts the vite's development server, which serves your app locally (at http://localhost:5173 for Vite or http://localhost:3000 for CRA)</li>
+                        <li>It watches your files for changes and automatically reloads the browser(hot-reloading);</li>
+                    </ul>
+                </li>
+                <li>npm start - could mean development or production, depends on config;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Using Next.js - You can also use Next.js for creating a React application;</strong></p>
+
+        <ul>
+            <li>Check package.json of existing applicaiton, to find if it is using npx or vite or next.js;</li>
+        </ul>
+
+        <p class="question"><strong>Online playground</strong> - StackBlitz</p>
+
+        <p class="question"><strong>React Project Structure</strong></p>
+        <p class="answer">
+my-app/
+│
+├── node_modules/        # Installed dependencies; 'npm install' downloads all these dependencies; No need to commit this heavy folder (auto-generated);
+├── public/              # Static files (served as-is, e.g. favicon, images)
+│   └── index.html       # Root HTML file, React mounts into here
+│
+├── src/                 # Source code of your app
+│   ├── assets/          # Images, fonts, global styles, etc.
+│   ├── components/      # Reusable UI components (buttons, navbars, etc.)
+│   ├── pages/           # Page-level components (Home, About, Dashboard, etc.)
+│   ├── layouts/         # Layout wrappers (e.g. sidebar, header, footer)
+│   ├── hooks/           # Custom React hooks (e.g. useAuth, useFetch)
+│   ├── context/         # React Context providers (e.g. AuthContext)
+│   ├── services/        # API calls, external integrations
+│   ├── utils/           # Helper functions, constants
+│   ├── App.jsx          # Main app component
+│   ├── main.jsx         # Entry point, renders <App /> into index.html
+│   └── index.css        # Global styles
+│
+├── package.json         # Project metadata(name, description) + dependencies
+├── package-lock.json    # Exact dependency versions
+├── .gitignore           # Files ignored by Git(e.g. node_modules)
+└── README.md            # Project documentation
+
+
+            <ul>
+                <li>Check: hello-world app</li>
+            </ul>
+        </p>
+    </body>
+</html>
