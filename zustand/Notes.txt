@@ -123,3 +123,6 @@ export const useCounterStore = create((set, get) => (
 
 
 You can easily use async/await inside the hook and simply call set() whenever the data is ready. Check out here:
+
+TypeScript, Middlewares, Firebase, Immer, Persistencia, Slices Pattern, JWTs, Autenticación, Interceptores y más
+Lots of time was spent to deal with common pitfalls, like the dreaded zombie child problem, React concurrency, and context loss between mixed renderers. It may be the one state manager in the React space that gets all of these right.

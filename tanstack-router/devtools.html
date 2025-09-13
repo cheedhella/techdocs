@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Tanstack Router Devtools</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/highlight.min.css" />
+        <script src="../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="question"><strong>What is Tanstack Router Devtools?</strong></div>
+        <div class="answer">
+            <ul>
+                <li>It is used to inspect the current route, loader data, matches, etc. live in your app.</li>
+                <li>Install: npm install @tanstack/router-devtools</li>
+            </ul>
+        </div>
+
+        import React from "react";
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "@tanstack/react-router";
+import { router } from "./router";
+
+// ✅ import devtools
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+    {/* ✅ Add DevTools after RouterProvider */}
+    <TanStackRouterDevtools position="bottom-right" />
+  </React.StrictMode>
+);
+
+
+Customize position (optional)
+The position prop controls where the DevTools panel floats:
+"bottom-right" (default)
+"bottom-left"
+"top-right"
+"top-left"
+Example:
+<TanStackRouterDevtools position="top-left" />
+
+
+
+Usage
+
+Run your app: npm run dev
+
+Click the TanStack logo button in the corner → it opens the devtools panel.
+
+You’ll see:
+
+Current route tree & active matches
+
+Loader status (idle / loading / error)
+
+Data returned by loaders
+
+Router state
+
+This is especially helpful with your /posts loader and /posts/new action — you’ll see the loader refresh when router.invalidate() runs after creating a new post.
+
+
+
+    </body>
+</html>

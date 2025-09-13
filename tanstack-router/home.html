@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tanstack Router</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/highlight.min.css" />
+    <script src="../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item main-grid-item-1 grid-wide-column">
+        <img src="../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>React</h2>
+    </div>
+
+    <div class="question"><strong>What is Tanstack Router?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Routing is a critical part of any web application; Whether you’re building a simple blog or a complex
+                and data-driven platform, a reliable and feature-rich router can make your job easier;</li>
+            <li>Tanstack Router is a routing library for React;</li>
+            <li>It provides a way to define and manage navigation, routes, loaders, and data fetching in React apps;
+            </li>
+            <li>It’s considered a type-safe, file-based alternative to React Router and other traditional routers;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Types of Routing</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Code based routing</b>
+                <ul>
+                    <li>Routes are defined programatically using functions like createRoute, createRootRoute;</li>
+                </ul>
+            </li>
+            <li><b>File based routing</b>
+                <ul>
+                    <li>Routes are generated automatically, based on file structure and specific naming conventions;
+                    </li>
+                    <li>For example, about.jsx in a pages folder becomes the /about route;</li>
+                    <li>Here are the rules:
+                        <ul>
+                            <li><b>Root route</b> - Use __root.tsx in the root directory for the app's root route;</li>
+                            <li><b>Dot Separator</b> - denotes nested root; For eg, blog.post.tsx becomes /blog/post
+                            </li>
+                            <li><b>Dynamic segments</b> - Add $ for parameterized routes; For eg, blog.$id.tsx for
+                                /blog/:id</li>
+                            <li><b>Layouts</b> - Prefix files or folders with _ to create layouts not matched directly
+                                in URLs;</li>
+                            <li><b>Index Routes</b> - Use index for exact parent path matching; dashboard.index.tsx for
+                                /dashboard</li>
+                            <li><b>Lazy Loading</b> - Use .lazy.tsx to enable code splitting;</li>
+                            <li><b>Reserved routes</b> - Routes starting with /api are reserved for API usage. Adjust
+                                via the apiBase option if needed;</li>
+                            <li><b>Ignored Files</b> - Files/folders prefixed with - are ignored by default,
+                                configurable in tsr.config.json;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>API Explaination</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>createRootRoute</b>
+                <ul>
+                    <li>It defines entry point of your applicaiton;</li>
+                    <li>You should pass it to the RouterProvider;</li>
+                    <li>It returns a RootRoute instance that has methods like: addChildren(), useLoaderData() etc;</li>
+                    <li>You need to nest all other routes under it;</li>
+                    <li>Config:
+                        <ul>
+                            <li>path -> Path is implicit for root route;</li>
+                            <li>component -> react component to render;</li>
+                            <li>loader -> data fetching logic;</li>
+                            <li>errorComponent -> error boundary for that route;</li>
+                            <li>pendingComponent -> loading state handler;</li>
+                        </ul>
+                    </li>
+                    <li>API:
+                        <ul>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>createFileRoute</b>
+                <ul>
+                    <li>Use it for file based routing, never mix file-based routing with manual addChildren();</li>
+                </ul>
+            </li>
+            <li><b>Route, RootRoute, FileRoute, Link</b>
+                <ul>
+                    <li>getParentRoute -> returns parent root(for children, not needed for root);</li>
+                    <li>addChildren -> to add child routes;</li>
+                    <li>useLoaderData -> to access data fetched by loader;</li>
+                    <li>useRouteError -> to access error thrown by loader or action;</li>
+                    <li>useMatch -> to get match object for the route;</li>
+                    <li>useParams -> to get params for the route;</li>
+                    <li>useSearch -> to get search params for the route;</li>
+                    <li>useNavigate -> to navigate programmatically;</li>
+                    <li>useLocation -> to get current location object;</li>
+                    <li>useIsPending -> to check if a navigation is in progress;</li>
+                    <li>useIsRouting -> to check if the router is currently routing;</li>
+                    <li>useRouter -> to get the router instance;</li>
+                </ul>
+            </li>
+            <li><b>Outlet</b>
+                <ul>
+                    <li>It is a placeholder component;</li>
+                    <li>It tells the router: when a child render it here inside the parent’s layout; Otherwise, nested
+                        routes would never appear;</li>
+                </ul>
+            </li>
+            <li><b>Link</b>
+                <ul>
+                    <li>It is a component to create links;</li>
+                    <li>It accepts to prop for the target route;</li>
+                    <li>It handles client-side navigation;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Why Tanstack Router?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Full Type-Safety</li>
+            <ul>
+                <li>The IDE warns you if you mistype a path param ($postId vs $postID) or forget required query
+                    params;</li>
+                <li>Both path and query parameters are parsed and type-validated automatically;</li>
+            </ul>🛡
+            <li>
+                <ul>
+                    <li>Automatic Navigation</li>
+                    <li>When you navigate to a route, the router automatically handles URL updates, history management,
+                        and state transitions;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Data Loading</li>
+                    <li>Routes can define loaders to fetch data before rendering components;</li>
+                    <li>This ensures that components have the necessary data when they mount;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Error Handling</li>
+                    <li>Routes can specify error components to display when data loading fails;</li>
+                    <li>This provides a consistent way to handle errors across the app;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Nested Routes and Layouts</li>
+                    <li>Supports deeply nested route hierarchies with shared layouts and context;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>File-Based Routing</li>
+                    <li>Routes can be defined based on the file system structure, making it easy to organize and
+                        manage routes;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Performance</li>
+                    <li>Features like lazy loading and smooth integration with TanStack Query optimize app
+                        scalability;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Developer Experience</li>
+                    <li>Comprehensive TypeScript support, detailed documentation, and an active community;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Key Features of Tanstack Router</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Type-Safe Routing – Full TypeScript support for routes, params, and query strings</li>
+            <li>Data Loaders – Route-level data fetching with built-in support for async operations</li>
+            <li>Error Boundaries – Route-specific error handling and fallback UI</li>
+            <li>Nested Routes – Deeply structured route hierarchies with shared layouts and context</li>
+            <li>Layout Routes – Layouts that wrap groups of routes</li>
+            <li>Grouped Routes – Logical route organization without affecting the URL path structure</li>
+            <li>File-based Routing – A file system approach to routing</li>
+            <li>Parallel Data Loading – Data fetching for multiple routes in parallel to speed up rendering</li>
+            <li>Prefetching – Loading of route data and components ahead of time</li>
+            <li>Error Boundaries and Handling – Route-based error boundaries and fallbacks</li>
+            <li>SSR (Server-Side Rendering) – Rendering of pages on the server with support for streaming</li>
+            <li>Route Masking – Customization and mapping of internal route structure to different URL paths</li>
+        </ul>
+    </div>
+
+    <pre>
+
+How to setup file based routing, so that each file dictates the URL?
+How to handle dynamic parameters?
+How to handle search parameters?
+
+How to load data in your components?
+
+Install: npm install @tanstack/react-router
+Install: npm install @tanstack/router
+Install: npm install @tanstack/router-devtools
+Install: npm install @tanstack/router-plugin/vite
+
+What is Tanstack Router?
+
+Why Tanstack Router?
+Full Type-Safety
+- The IDE warns you if you mistype a path param ($postId vs $postID) or forget required query params.
+- Both path and query parameters are parsed and type-validated automatically.
+
+Do you want me to also include TanStack Router DevTools integration and show how to use route loaders/actions (like data
+fetching),
+    </pre>
+</body>
+
+</html>
