@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hp-demo-p1
+spec:
+  containers:
+    - image: nginx
+      name: hp-demo-p1-container
+      volumeMounts:
+        - mountPath: /host-data             # Path where to mount the specified volume inside the container;
+          name: hp-demo-p1-volume
+  volumes:
+    - name: hp-demo-p1-volume               # Name of the volume to be created;
+      hostPath:
+        path: /data                         # Path of a file/directory on the host; TODO: If host path doesn't exist, you should get some error, while pod starting up;
+        type: Directory                     # Optional, type of path;

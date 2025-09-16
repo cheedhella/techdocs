@@ -1,0 +1,3 @@
+use labels to distinguish resources within the same namespace.
+
+kubectl get endpoints

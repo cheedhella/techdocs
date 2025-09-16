@@ -1,0 +1,12 @@
+KEDA - Kubernetes Event-Driven Autoscaling;
+
+
+
+
+
+https://faun.pub/event-driven-autoscaling-for-kubernetes-with-kafka-keda-d68490200812 - Must try!
+https://levelup.gitconnected.com/scale-your-apps-using-keda-in-kubernetes-a1f2142ecc20
+
+
+
+If you ever think about giving up, remember why you started...

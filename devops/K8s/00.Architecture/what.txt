@@ -1,0 +1,49 @@
+Why K8s?
+    It automates the following tasks at scale:
+        - Configuration of containers
+        - Scheduling 
+            -- You can schedule/create the Pods on most appropriate nodes in a automated way;
+            For eg, if a pod requires 2GB of memory, K8s will filter out all nodes that have less than 2GB of memory;
+
+    
+    
+    scheduling refers to making sure that Pods are matched to Nodes so that Kubelet can run them.
+    
+Configuring and scheduling of containers
+Provisioning and deployment of containers
+Redundancy and availability of containers
+Scaling up or removing containers to spread application load evenly across host infrastructure
+Movement of containers from one host to another if there is a shortage of resources in a host, or if a host dies
+Allocation of resources between containers
+External exposure of services running in a container with the outside world
+Load balancing of service discovery between containers
+Health monitoring of containers and hosts
+
+What is Container Orchestration?
+    The process of automatically deploying and managing containers in a clustered environment is known as Container Orchestration;
+
+
+
+What is Container?
+    Container is a completely isolated environment;
+    It has it's own processes, mounts and networking interfaces;
+
+What is K8s?
+    Container 
+    Orchestration
+
+Container orchestration automatically provisions, deploys, scales, and manages containerized applications without worrying about the underlying infrastructure. 
+
+
+    Kubernetes (K8s) is an open-source system to deploy, scale, and manage containerized apps anywhere
+    Kubernetes is designed to orchestrate containers across multiple servers (a cluster) where as docker-compose is designed to run on a single machine.
+Kubernetes, also known as K8s, is an open source system for managing containerized applications across multiple hosts. 
+Google later donated the Kubernetes project to the newly formed Cloud Native Computing Foundation (CNCF) in 2015.
+
+Why K8s?
+    Fast and easy deployment: 
+    It also provides container updates with no downtime during production.
+
+Docker has its own tool called Docker Swarm, Kubernetes from Google and MESOS from Apache.
+
+Scheduling -> https://romanglushach.medium.com/kubernetes-scheduling-understanding-the-math-behind-the-magic-2305b57d45b1

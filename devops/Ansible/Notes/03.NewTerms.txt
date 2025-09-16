@@ -1,0 +1,18 @@
+Ansible Server      -> Machine with Ansible installed, which runs all playbooks and tasks;
+Hosts               -> One or more devices that you want to manage with Ansible Server;
+Playbook            -> It is a YAML file containing one or more Plays;
+Play                -> It is a set(one or more) of tasks that you want to execute on a set of hosts;
+Module              -> It is a reusable script(usually written in Python) that is used to interact with the cloud like Azure or on-prem resources like Hyper-V;
+
+
+Playbook 
+    - Written in YAML;
+    - It is present on Control node;
+    - What changes needs to do on which node;
+
+
+/etc/ansible/hosts 
+/etc/ansible/ansible.cfg 
+
+
+

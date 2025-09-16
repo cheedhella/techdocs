@@ -1,0 +1,273 @@
+Image Identifier 													 	# <registry-uri>/<namespace>/<repository>[:tag]
+																		# <registry-uri>/<namespace>/<sub-namespace>/<repository>[:tag]
+																		# If registry-uri is not specified, it defaults to docker.io(Docker Hub);
+																		# Eg #1: myregistry.local:5000/namespace/repo-name:tag
+																		# Eg #2: docker.io/cheedhella/hello-world:v1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+docker image inspect 		
+	see the layers of an image is to inspect the image
+	The docker image inspect command is a great way to see the details of an image.
+
+docker history 
+	The docker history command is another way of inspecting an image and seeing layer data. However, it shows the build history of an image and is not a strict list of layers in the final image.
+	Few instructions add metadata to the image and do not result in permanent layers being created.
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx
+  compose*    Docker Compose
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Repository: login, logout;
+Image: build, tag, push; images, rmi, image prune; search vs manifest inspect, pull;
+Container: run, ps vs inspect, start, stop vs kill, restart, rm vs container prun, rename, cp, exec;
+Context: 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker build 
+    
+
+
+docker build --no-cache -f Dockerfile -t alap-jan28:latest -t alap-jan28:1
+
+docker build [OPTIONS] PATH | URL - Used to build an image from Dockerfile and context(set of files located in specified PATH or git-repo URL)
+	By default, docker build will look for Dockerfile at the root of build context.
+	It outputs the image ID of the newly created image.
+
+	-f <fileName>, lets you specify a file alternative to Dockerfile.
+	-t <YourDockerID/RepositoryName:Version>, You can apply one or more tags to the newly created image.
+
+
+docker build <dir>
+	It builds the image and returns image id. You can use 'docker run <imageId>', to create a container.
+
+docker build  <dir>
+	
+
+docker commit -c 'CMD ["redis-server"]' <imageId> 
+	Used to specify a command for an image
+
+Image Related: images, pull, image history, image inspect, remove, tag;
+Container Related: run, ls, 
+
+
+
+The pull operation downloads the image to your local Docker host where Docker can use it to start one or more containers.
+
+
+
+
+
+image ls/pull
+
+images; image build/inspect/ls/pull/push/rm/tag/history;
+
+
+Create  - run;
+Read    - 
+Update  -
+Delete  - 
+
+
+
+docker history 
+    - It gives insight on different instructions that make up your image's layers;
+    - Inspect docker image like a pro - docker inspect <image>, RootFS, dive, overlayFS;
+    - https://medium.com/@irac.grgic/inspect-your-docker-image-like-a-pro-5986f1d40ae0
+
+    - What’s with the <missing> values in the IMAGE column?
+        - Images are not generated for each layer;
+        - As last layer is indeed an image, generated by overlaying all previous layers, so only it has image ID;
+
+
+
+
+
+docker build . 															# Create image, without any name and tag;
+docker build -t username/repo_name[:tag] .								# Creates image, with specified name and tag;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker tag  repo_name:tag username/repo_name:tagname 					# You can assign multiple tags to the same image;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker login -u cheedhella -p CHmal@2862  												# Login to the Docker Hub;
+docker login -u username -p <token/apikey> <reponame>.usw1.packages.broadcom.com		# Login to private repository;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker push username/repo-name:tag 										# Push image; Eg: docker push cheedhella/hello-world:v1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker rmi <image-id> 													# Delete local image by id; Use -f option, to forcefully remove an image;
+docker rmi username/<repo-name.:tag										# Delete local image by repo name and tag; Deleting image deletes all associated tags;
+docker rmi -f $(docker images -aq)    									# Delete all images - Query image ID of all images and delete each image by image ID;
+docker image prune 														# Delete all dangling images;
+docker image prune -a 													# Delete all dangling and unused images;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+> docker images  														# List all local images
+> docker images username/[REPOSITORY[:TAG]]								# List all local images, pulled from specified repository and tag;
+> docker images -f "label=com.example.version=1.0" 						# Filter all local images, with label com.example.version, with value 1.0;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+> docker search <keyword> 												# Search DockerHub for images whose name contains the given keyword;
+> docker search <keyword> -f <key=value> --limit <limit>				# stars -> number of starts; is-official -> is the image official or not; 
+																		# limit -> limit no. of rows in output;
+
+																		The docker search command lets you search Docker Hub from the CLI. This has limited value, as you can only pattern-match against strings in the “NAME” field.
+																		However, you can filter output based on any of the returned columns.
+																		$ docker search alpine --filter "is-official=true" 
+																		$ docker search alpine 	#  list all repositories that include the string “alpine” in the name.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker manifest inspect <image-identifier> 							    # Check if image exists in any registry; Eg: docker manifest inspect cheedhella/hello-world
+																		# docker search is limited to popular repos in docker hub;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker pull <image-identifier> 											# Download the image; Eg: docker pull cheedhella/hello-world
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker image ls --filter dangling=true			# List all dangingling images 
+
+Docker currently supports the following filters:
+	dangling: Accepts true or false, and returns only dangling images (true) or non-dangling images (false).
+	before: Requires an image name or ID as argument, and returns all images created before it.
+	since: Same as above, but it returns images created after the specified image.
+	label: Filters images based on the presence of a label or label and value. The docker image ls command does not display labels in its output.
+	For all other filtering, you can use reference.
+
+For all other filtering, you can use reference.
+	$ docker image ls --filter=reference="*:latest"			#  using reference to only display images tagged as “latest.”
+
+docker tag local-image:tagname new-repo:tagname
+docker push new-repo:tagname
+
+docker pull <image>:<tag>       # DOwnload the image 
+    If you dont specify an tag, it defaults to latest;
+    Eg: docker pull nginx:1.15.12, docker pull nginx:1.16.0
+
+
+
+docker images       # All local images 
+docker rmi <image>:<tag>  # delete local image;
+docker rmi <imageid>        # delete image by id;
+
+tags 
+
+docker image pull redis:latest    # pull latest redis image
+
+$ docker image pull alpine:latest   # pull latest alpine image
+
+$ docker image ls   # check all images
+	Docker provides the --filter flag to filter the list of images returned by docker image ls.
+
+	
+Once you’ve started a container from an image, the two constructs become dependent on each other, and you cannot delete the image until the last container using it has been stopped and destroyed.
+ Attempting to delete an image without stopping and destroying all containers using it will result in an error.
+
+Images are usually small#
+	- For example, Docker images do not ship with 6 different shells for you to choose from. In fact, many application images ship without a shell. If the application doesn’t need a shell to run, it doesn’t need to be included in the image. General-purpose images such as busybox and Ubuntu ship with a shell, but when you package your business applications for production, you will probably package them without a shell.
+	The image also doesn’t contain a kernel; all containers running on a Docker host share access to the host’s kernel.
+
+Local Repository 
+	A cleanly installed Docker host does not have any images in its local repository.
+	The local image repository on a Linux-based Docker host is usually located at /var/lib/docker/<storage-driver>. 
+
+
+docker info 
+	The output of the following command is snipped, but you can see that Docker is configured to use https://index.docker.io/v1/ as its default registry when pushing and pulling images (this actually redirects to v2).
+
+
+$ docker image pull alpine:latest and docker image pull redis:latest
+
+latest tag 
+	the latest tag doesn’t have any magical powers. Just because an image is tagged as latest does not guarantee it is the most recent image in a repository.
+	 For example, the most recent image in the alpine repository is usually tagged as edge. The moral of the story: take care when using the latest tag.
+	Note: When it comes to production, a recommended docker image tagging method is semantic versioning (Semver).
+
+
+If the image you are trying to delete is in use by a running container, you will not be able to delete it. Stop and delete any containers before trying the delete operation again.
+
+However, if an image layer is shared by more than one image, that layer will not be deleted until all images that reference it have been deleted.
+
+Suppose a Docker host has three images: image_1, image_2, and image_3.
+
+image_1 is composed of the following layers: A, B, and C.
+image_2 is composed of the following layers: C, D, and E.
+image_3 is composed of the following layers: A and D.
+How many layers will be left after you delete image_3?
+
+
+docker image rm $(docker image ls -q) -f 		# deleting all images on a Docker host 
+
+
+
+docker image pull is the command to download images. We pull images from repositories inside of remote registries. By default, images will be pulled from repositories on Docker Hub. The following command will pull the image tagged as latest from the alpine repository on Docker Hub: docker image pull alpine:latest.
+
+docker image ls lists all of the images stored in your Docker host’s local image cache. To see the SHA256 digests of images add the --digests flag.
+
+docker image inspect is a thing of beauty! It gives you all of the glorious details of an image—layer data and metadata.
+
+docker manifest inspect allows you to inspect the manifest list of any image stored on Docker Hub. This will show the manifest list for the redis image: docker manifest inspect redis.
+
+docker buildx is a Docker CLI plugin that extends the Docker CLI to support multi-arch builds.
+
+docker image rm is the command to delete images. This command shows how to delete the alpine:latest image: docker image rm alpine:latest. You cannot delete an image that is associated with a container in the running (Up) or stopped (Exited) states.
+
+
+
+Docker caches the build steps. So if we build the image again the process will move a little faster. For example, it will not download the Ubuntu 18.04 image again.

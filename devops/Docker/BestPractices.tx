@@ -1,0 +1,12 @@
+Use a .dockerignore file to exclude unnecessary files and directories to increase the build’s performance.
+Use trusted base images only and keep updating the images periodically.
+Each instruction in the Dockerfile adds an extra layer to the Docker image. Minimize the number of layers by consolidating the instructions to increase the build’s performance and time.
+Run as a Non-Root User to avoid security breaches.
+Keep the image small: Reduce the image size for faster deployment and avoid installing unnecessary tools in your image. Use minimal images to reduce the attack surface.
+Use specific tags over the latest tag for the image to avoid breaking changes over time.
+Avoid using multiple RUN commands as it creates multiple cacheable layers which will affect the efficiency of the build process.
+Never share or copy the application credentials or any sensitive information in the Dockerfile. If you use it, add it to .dockerignore
+Use EXPOSE and ENV commands as late as possible in Dockerfile.
+Use a linter: Use a linter like hadolint to check your Dockerfile for common issues and best practices.
+Use a single process per container: Each container should run a single process. This makes it easier to manage and monitor containers and helps to keep containers lightweight.
+Use multi-stage builds: Use multi-stage builds to create smaller and more efficient images.

@@ -1,0 +1,1 @@
+Helm test is nothing but whatever the helm chart you have installed, whatever the applications it has created as part of that helm chart so you can use the helm test command to test them.

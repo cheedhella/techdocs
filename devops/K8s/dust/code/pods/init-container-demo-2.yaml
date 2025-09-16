@@ -1,0 +1,29 @@
+# mybusybox init container starts first and it writes data to index.html in myworkdir volume and terminates before start of main container;
+# mynginx main container starts next, and it has myworkdir volume mounted at /usr/share/nginx/html;
+# it listends on port 80 and serves the content of index.html;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-container-demo
+spec:
+  containers:
+  - name: mynginx
+    image: nginx
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: myworkdir
+      mountPath: /usr/share/nginx/html
+  # These containers are run during pod initialization
+  initContainers:
+  - name: mybusybox
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "echo '<html><h1>Hi I am from Init container</h1><html>' >> /work-dir/index.html"]
+    volumeMounts:
+    - name: myworkdir
+      mountPath: "/work-dir"
+  dnsPolicy: Default
+  volumes:
+  - name: myworkdir
+    emptyDir: {}

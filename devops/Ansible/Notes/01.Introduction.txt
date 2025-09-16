@@ -1,0 +1,13 @@
+What is Ansible?
+    - Software Installation                             -> Automates the task of installing a software on various machines;
+    - Manage Configuration                              -> Generate/update/delete configuration of each application for each Node;
+    - Application Deployment                            -> Run instance with generated configuration;
+
+Alternatives?
+    - Chef, Puppet;
+
+Why Ansible?
+    - Free, open-source;
+    - Uses YAML as scripting language; // low learning curve!
+    - Can be used with on-prem or cloud VMs;
+    - uses Push mechanism(where as Chef uses pull mechanism)

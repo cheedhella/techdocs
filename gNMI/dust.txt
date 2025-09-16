@@ -1,0 +1,32 @@
+Collaborate within Agile teams to design and implement features for the management and control of Packet Optical Devices, including third-party products.
+Work closely with Product Owners and Architects to understand requirements related to IP/MPLS technologies, including Segment Routing, OSPF, BGP, and VPNs.
+Develop solutions based on YANG models and Netconf/gNMI protocols, enabling integration with external router platforms.
+Contribute to the design, development, and testing of microservices within the Navigator software architecture.
+Support the release/design lead to ensure high-quality delivery of features and software updates.
+
+The Must Haves
+
+Bachelor’s or Master’s degree in Computer Science or related field.
+Minimum 5 years of experience as a Java developer.
+Strong expertise in advanced Java, multithreading, and data structures.
+Practical knowledge of Netconf/gNMI protocols and YANG models.
+Hands-on experience working with microservice architecture and RESTful APIs.
+Strong debugging and troubleshooting skills.
+Excellent verbal and written communication.
+Self-starter who can work independently and meet tight deadlines.
+
+Assets
+
+Working knowledge of Layer-2/Layer-3 protocols such as ISIS, OSPF, BGP, BGP-LU, MPLS, LDP, L2/L3 VPNs, and Segment Routing.
+Experience with UI development or as a full-stack developer.
+Familiarity with XSLT (Extensible Stylesheet Language Transformations).
+Exposure to third-party router implementations and data modeling using vendor-specific YANGs.
+
+Sr Software Engineer -9910- GOLANG, GNMI, YANG, OPENCONFIG, MICROSERVICE 
+KEYWORDS: GOLANG, GNMI, YANG, OPENCONFIG, MICROSERVICE, NATS, JETSTREAM, REDIS, VALKEY, GIT
+
+Experience in GoLang programming language
+Knowledge of YANG, OpenConfig, RPCs, GNMI
+Work experience in Databases (Redis, Postgres) , Message bus (NATS, RabbitMQ, etc)
+Good understanding of microservice architecture
+Experience using Git, JIRA, Jenkins, Confluence

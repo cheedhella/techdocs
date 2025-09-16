@@ -1,0 +1,184 @@
+Why minikube?
+	K8s cluster can have 1 or more master nodes and 1 or more worker nodes;
+	Master node will have API Server + Scheduler + Control Manager + etcd;
+	Worker node will have a set of Pods;
+	Each Node(Master or Worker) can be a separate physical machine or virtual machine(such as VirtualBox);
+	So, you need to provision lot of infrastructure to setup a k8s cluster; 
+	What if you want to set it up on your local? Answer is Minikube;
+
+What is minikube?
+	Minikube is a open source tool, which is used to run a single-node k8s cluster, inside a VM(created using a hypervisor such as VirtualBox) on your laptop(can be windows/linux/mac) - both master and worker processes run in that single VM;
+	To deploy applications in minikube, you don't need to install docker in it, as minikube VM comes with docker pre-installed;
+
+Install minikube
+	Check if virtualization is enabled on your laptop:  sysctl -a | grep -E --color 'VMX'
+	https://medium.com/@duruldalkanat/kubernetes-installation-with-minikube-101-hello-world-996a1146d54d
+	https://medium.com/containers-101/local-kubernetes-for-mac-minikube-vs-docker-desktop-f2789b3cad3a
+
+	Install VirtualBox
+
+
+	minkube has kubectl as dependency; // kubernetes-cli
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+minikube start --vm-driver=virtualbox --cpus=2 --memory=1024 --disk-size=8g		# Create a VM and start minikube in it; It supports many options;
+			# vm-driver -> Defaults to docker driver, if you have docker running; Specify the --vm-driver, if you are using a different hypervisor;
+
+minikube stop 							# Stop minikube and power-off the VM;
+minikube delete	&& rm -rf ~/.minikube	# To delete the minikube VM and configuration completely;
+
+minikube version 				# 
+minikube status	 				# 
+
+minikube dashboard 				# Web-based UI which can be used to deploy containerized applications and manage cluster resources;
+minikube service <svc> 			# Opens browser with url: http://192.168.99.100:30219
+minikube service <svc> --url    # Prints the service URL;
+
+minikube ip 					# Shows the Kubernetes VM (node) IP address
+minikube update-context			# Checks and updates ~/.kube/config if the VM IP address is changed
+minikube ssh 					# 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is addon?
+	It is used to enable features like dashboard, ingress, registry credentials etc;
+	You can use addons that are already available or you can customize addons by modifying the associated YAML file;
+
+minikube addons list 						# To list all available addons and to check which addon is enabled/disabled;
+minikube addons enable <ADDON_NAME> 		# To enable an add-on;
+minikube addons disable <ADDON_NAME> 		# To disable an add-on;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is kubectl? 
+	Once you have a k8s cluster(minikube or cloud based), kubectl is used to interact with that cluster;
+
+# How to Deploy nginx image on minikube k8s cluster?
+
+> kubectl get nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   17d   v1.23.3
+
+> kubectl get pods
+No resources found.
+
+> kubectl create deployment mynginx --image=nginx
+NAME                       READY   STATUS    RESTARTS   AGE
+mynginx-6b78685d4d-24ffz   1/1     Running   0          90s
+
+# kubectl expose deployment mynginx --type=NodePort --port=8080 		# TODO: Not working, why?
+# kubectl expose deployment mynginx --type=LoadBalancer --port=8080 	# TODO: Not working, why?
+# kubectl create service nodeport mynginx --tcp=80:80
+service/mynginx exposed
+
+> minikube service mynginx --url 
+http://192.168.59.100:31265
+
+# Open browser and access: http://192.168.59.100:31265
+
+> kubectl get services
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP   10.96.0.1      <none>        443/TCP        18d
+mynginx      NodePort    10.101.91.88   <none>        80:31265/TCP   82s
+
+> kubectl get pods
+NAME                       READY   STATUS    RESTARTS   AGE
+mynginx-6b78685d4d-24ffz   1/1     Running   0          107m
+
+> kubectl delete service mynginx
+service "mynginx" deleted
+
+> kubectl delete deployment mynginx
+deployment.apps "mynginx" deleted
+
+> minikube stop
+
+
+> kubectl get namespaces
+NAME                   STATUS   AGE
+default                Active   18d
+kube-node-lease        Active   18d
+kube-public            Active   18d
+kube-system            Active   18d
+kubernetes-dashboard   Active   18d
+mclocal                Active   17d
+web                    Active   17d
+
+> kubectl config current-context 						# Dispaly current context
+minikube
+
+> kubectl config get-contexts 							# List of all contexts 
+CURRENT   NAME       CLUSTER    AUTHINFO   NAMESPACE
+*         minikube   minikube   minikube   default
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How to setup minikube with plenty of RAM?
+	- minikube stop
+	= minikube delete
+	- Remove config files: rm -rf ~/.kube   rm -rf ~/.minikube
+	- minikube start --memory 4096  # This will allocate 4Gb of RAM to minikube
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is ingress add-on?
+	https://medium.com/@Oskarr3/setting-up-ingress-on-minikube-6ae825e98f82
+
+	>  minikube addons enable ingress 		# It starts nginx-ingress-controller pod in ingress-nginx namespace;
+	> kubectl get po -n ingress-nginx
+	NAME                                       READY   STATUS      RESTARTS   AGE
+	ingress-nginx-admission-create-sxjj7       0/1     Completed   0          9m42s
+	ingress-nginx-admission-patch-htcjd        0/1     Completed   0          9m42s
+	ingress-nginx-controller-cc8496874-q6rb8   1/1     Running     0          9m42s
+
+https://iceburn.medium.com/use-ingress-in-minikube-ae5e87ea858c
+Let’s have a hand’s on a real Kubernetes cluster and see how this works. You can use an online Kubernetes Playground to try this out if you don’t have a Kubernetes cluster already set up. https://www.katacoda.com/courses/kubernetes/playground.
+
+The default login is, username: “docker“, password: “tcuser“. You can also use this login to SSH to the box directly (this requires port forwarding) or use minikube ssh
+
+
+API Server
+	- entry point to the cluster; 
+	- Clients can use multiple ways to interact with API server - using UI, API, kubectl;
+
+
+minikube - create/delete the single node k8s cluster;
+kubectl - configure the cluster;
+
+start in debug mode -> --v=7 --alsologtostderr 
+
+
+Kubectl 
+	Download -> curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+	Install -> sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+	Test -> kubectl version --client --output=yaml
+
+Minikube 
+	Download -> curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+	Install -> sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+	Start cluster -> minikube start 
+	Interact with cluster 
+		UI -> minikube dashboard
+		cli -> kubectl get nodes 
+	Stop cluster -> minikube stop
+	Delete cluster -> minikue delete -all
+
+
+	https://minikube.sigs.k8s.io/docs/start/
+
+
+
+	
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Install Visual Studio c++ in Windows 
+	It is prerequisite for VirtualBox;
+	https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+Install VirtualBox in Windows 
+	https://www.geeksforgeeks.org/how-to-install-virtualbox-on-windows/
+
+Install kubectl in Windows 
+	Download -> curl.exe -LO "https://dl.k8s.io/release/v1.29.2/bin/windows/amd64/kubectl.exe" to C:\dev\tools\kubectl\
+	Install ->  Advance System settings>Environment Variables and edit path by adding “C:\dev\tools\kubectl”
+	Verify -> kubectl version 
+
+Install minikube
+	https://minikube.sigs.k8s.io/docs/start/
+
+minikube start --driver=virtualbox --no-vtx-check
+minikube config set driver virtualbox
+https://stackoverflow.com/questions/37955942/vagrant-up-vboxmanage-exe-error-vt-x-is-not-available-verr-vmx-no-vmx-code

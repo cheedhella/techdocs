@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: mc-pv-sc
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-demo-p1
+spec:
+  containers:
+    - name: mybusybox
+      command: ['tail', '-f', '/dev/null']
+      image: busybox
+      volumeMounts:
+        - name: my-pvc-vol
+          mountPath: /data
+  volumes:
+    - name: my-pvc-vol
+      persistentVolumeClaim:
+        claimName: my-pvc

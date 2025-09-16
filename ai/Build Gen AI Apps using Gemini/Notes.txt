@@ -1,0 +1,53 @@
+Machine Learning 
+Deep Learning 
+NLP 
+Generative AI 
+
+How to build LLM and LIM applications using Gemini models?
+Advanced fine tuning techniques: quantization, Laura and Clara, 
+Google Gamma model;
+
+
+
+Agent Development Kit
+
+Build Agents that think like humans 
+Create systems that work while you sleep
+Deploy anywhere with one command
+
+3 simple steps: Install ADK, Define your Agent, Deploy Anywhere;
+Basic Agent,  Basic Agent with Tool, Agent with State, Multi-Tool Agent, Structured output Agent, Callback Agent;
+
+pip install google-adk yfinance 
+adk create app 
+adk run app 
+adk --help 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------
+API Key 
+    An API key is a unique code used to authenticate a user or application when making requests to an API
+    curl -H "X-GEMINI-APIKEY: your_api_key" https://api.gemini.com/v1/order/status
+
+You get this from Google AI Studio or Google Cloud Console.
+
+You get this from Google AI Studio or Google Cloud Console.
+
+-------------------------------------------------------------------------------------------------------------------------------------
+What is AI Agent?
+How to build AI Agent?
+How to run AI Agent on Vertex AI?
+    Cloud Run -> serverless runtime to run your AI agent on google infrastructure;
+
+-------------------------------------------------------------------------------------------------------------------------------------
+Reason, Memory, Plans, 
+Tools   
+    Tasks can be performed using Tools;
+    Basic Tools: calculator, unit converter, time and timezone; // LLMs are not good at basic math;
+    Data access tools: RAG, Database read-only query; // Agents can fetch context;
+    API: 
+
+ADK - Agent development Kit 
+LangGraph - 
+
+

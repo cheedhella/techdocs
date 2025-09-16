@@ -1,0 +1,103 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Docker provides networking capabilities for containers to communicate with each other and with external networks. It uses software-defined networks (SDN) to create virtual networks, enabling connectivity and isolation. Users can create custom networks, connect containers to networks, and define network policies using Docker commands or Docker Compose.
+    Docker networks are used to isolate containers and are also used to allow containers to communicate with each other.
+
+Why Network is important?
+
+
+
+Default Bridge network 
+    - After a fresh Docker installation, you can find a default bridge network up and running;
+    - A default bridge network allows container communication using IP addresses.
+
+User-defined Bridge Network 
+
+Host Network 
+
+
+Macvlan Network
+
+
+Overlay Network 
+
+
+None Network 
+
+
+
+Bridge:
+This is a private default internal network created by docker on the host. 
+So, all containers get an internal IP address and these containers can access each other, using this internal IP. 
+The Bridge networks are usually used when your applications run in standalone containers that need to communicate.
+
+move all files to /opt/prometheus
+
+
+
+# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+b64765e463c2   bridge    bridge    local
+d5c818705cbe   host      host      local
+e0f6c0ee010b   none      null      local
+
+// If you use ifconfig command, you will also notice that this network interface is called “docker0”:
+// All Docker installations have this network. If you run a container, say, Nginx, it will be attached by default to the bridge network: 
+# ifconfig
+docker0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.17.0.1  netmask 255.255.0.0  broadcast 172.17.255.255
+        inet6 fe80::42:7aff:fe4e:4845  prefixlen 64  scopeid 0x20<link>
+        ether 02:42:7a:4e:48:45  txqueuelen 0  (Ethernet)
+        RX packets 13  bytes 1864 (1.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 70  bytes 7019 (6.8 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+# docker network inspect bridge                 # List all  containers running inside a network;
+
+
+Docker uses a software-based bridge network that allows containers connected to the same bridge network to communicate while isolating them from other containers not running in the same bridge network.
+
+
+
+
+
+Docker can be used in various use cases: the standalone mode, using Docker Compose, in a single host, or by deploying containers and connecting Docker engines across multiple hosts.
+ The user can use Docker containers with the default network, the host network, or other types of more advanced networks like overlays. 
+
+
+
+
+
+Docker provides a range of networking options for connecting containers, allowing them to communicate with each other or with external networks. 
+Docker creates default bridge networks, but users can define custom networks as needed.
+
+These include single-host bridge networks, multi-host overlays, and options for plugging into existing VLANs. 
+Ecosystem partners can extend things further by providing their own drivers.
+
+
+
+Get an introduction to container networking by exploring single-host Docker networking modes
+Examine issues that arise when you move to multihost container networking
+Maintain a map of running containers and their locations with service discovery tools such as ZooKeeper and etcd
+Configure network interfaces in Linux containers by using plugins with the Container Network Interface (CNI)
+Learn how the Kubernetes orchestration system approaches container networking

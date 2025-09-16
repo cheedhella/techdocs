@@ -1,0 +1,63 @@
+Probe 
+    - Probe is a periodic check to determine the health of a Pod;
+    - There are 3 types of probes: Startup, Liveness, Readiness;
+    - Startup probe is executed only on startup, liveness and readiness probes are run periodically(as defined by periodSeconds) after startup probe succeeds;
+
+Startup Probe 
+    - If you specify a startup probe, k8s will not send any traffic to that pod, until that container's startup succeeds;
+    - It is useful in some situations, where you have to deal with legacy applications that take lot of time to start up, thus avoiding them getting killed by kubelet, before they are up and running;
+    - If you specify a startup probe, liveness and readiness probes will not run, until startup succeeds, making sure these probes don’t interfere with the application startup;
+    - If startup probe fails, kubelet logs an event, kills the container and follows the Pod's restartPolicy;
+    - Make sure failureThreshold * periodSeconds is enough to cover the worst case startup time;
+
+Readiness Probe 
+    - It is useful to perform time-consuming initial tasks, such as loading/warming caches etc;
+    - It indicates whether the container is ready to receive requests or not;
+
+Liveness Probe
+    - Liveness probe don't wait for the readiness probes to succeed; If you want to wait, use initialDelaySeconds;
+    - It is used check the health of a Pod - whether the Pod is up and running and responding(may be deadlocked and not responding);
+    - If the probe is successful, no action is taken and no logs are recorded;
+    - If a liveness probe fails failureThreshold number of times, kubelet will restart the application;
+
+initialDelaySeconds -> how long to wait after the container starts and before sending the probe; Defaults to 0;
+timeoutSeconds      -> how long to wait for the response, during probing; If the time is exceeded, probe is considered failed; Defaults to 1;
+periodSeconds       -> It specifies the period/gap between each check; Defaults to 10;
+successThreshold    -> Specifies the minimum consecutive successes for the probe to be considered successful after it has failed; Defaults to 1;
+failureThreshold    -> Specifies the minimum consecutive failures for the probe to be considered failed after it has succeeded; Defaults to 3;
+
+Type of probes 
+    - Command probe 
+        -- It executes the specified command in the container and considers the container ready, if the command returns zero exit code;
+    - HTTP probe 
+        -- It sends HTTP request to specified endpoint in the container and checks if it receives a successful response;
+    - TCP probe 
+        -- It checks if a specific port is open and listening on the container;
+
+Best Practices 
+    - Misconfigured probes can impact application performance, if they run too frequently;
+    - If a container performs a simple operation and terminates quickly, it may not need health probe;
+    - Set a realist wait time - if the readiness probe takes more than configured wait time, kubelet may assume the application is not responing and restart it, while it is still running;
+    - Set a failure threshold for your liveness probes to avoid unnecessary restarts of your application; 
+    - Use the kubectl command-line tool to test your probes and make sure that they are correctly configured.
+    - Choose the appropriate probe type for your application. For example, use an HTTP probe for web applications, while a TCP probe might be more appropriate for a database;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Restart Policy 
+    - Pods managed via Deployments, DaemonSets, and StatefulSets only support a restart policy of Always;
+    - Sidecar containers, like logging and observability services, will always restart by default;
+
+    Always      -> default; 
+    OnFailure   -> kubelet restarts the Pod, after a failed probe;
+    Never       -> It leaves the container in failed state;
+
+    Setting the restart policy to Always doesn’t mean Kubernetes will keep trying to restart a failed Pod perpetually;
+    Instead, it uses an exponential back-off delay that starts at 10 seconds and goes up to five minutes;
+    In other words, let’s say you have a Pod with a critical error that prevents it from completing its startup process;
+    Kubernetes will try to start it, see that it failed, wait 10 seconds, then restart it; 
+    The next time it fails, Kubernetes will wait 20 seconds, then 40 seconds, then 1 minute 20 seconds, etc, all the way up to five minutes;
+    After this point, if the container still fails to start, Kubernetes will no longer try to start it. 
+    But if Kubernetes does manage to get the container running, this timer will reset after 10 minutes of continuous runtime;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.gremlin.com/blog/how-to-ensure-your-kubernetes-pods-and-containers-can-restart-automatically

@@ -1,0 +1,48 @@
+Docker 
+    # 1. Clean the old docker packages, if you already have a old version of docker!
+    > sudo yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+    # 2. Add latest docker repository 
+    > sudo yum install -y yum-utils
+    > sudo yum-config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo      # RHEL 
+
+    # 3. Install Docker Community Edition
+    > sudo yum install docker-ce
+    
+    # 4. Start docker and enable it to run it on boot
+    > sudo systemctl start docker && sudo systemctl enable docker
+
+    > sudo systemctl stop docker
+    > sudo systemctl status docker
+    > systemctl is-active docker        # Check if docker is running
+    > sudo systemctl restart docker
+
+    # 5. Test 
+    > sudo docker run hello-world       # Excepected output should contain: Hello from Docker!
+
+Docker Compose 
+    1. Download it
+       > curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o docker-compose
+    2. After the binary file is downloaded, move it to the /usr/local/bin folder, and then make it executable
+       > sudo mv docker-compose /usr/local/bin && sudo chmod +x /usr/local/bin/docker-compose
+       > sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+Minikube 
+    > curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    > sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+    > minikube start --force
+
+Kubectl 
+    kubectl is a command line used to interact with Kubernetes cluster. 
+    Prerequisites: Docker, kubectl, K8s cluster/minikube;
+
+    > curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    > sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    Reference: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+Helm 
+    > wget https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz
+    > tar -xvzf helm-v3.15.0-linux-amd64.tar.gz 
+    > mv linux-amd64/helm  /usr/local/bin/helm
+    > helm version
+    

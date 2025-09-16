@@ -1,0 +1,178 @@
+Summary of changes:
+    - Separated context setting from checks;
+    - Splitted checks into multiple files, so that we can plug them into various flows as needed;
+    - Generalized utility for password encryption and decryption;
+    - SSL keystore password format migrated from enc:<enc_password> to ENC(enc_password)
+    - Turned off fact gathering during prechecks
+    - Defects:
+        DE170054: playbook: uninstall checks
+        DE170053: playbook: scale up issue
+        DE170100: Playbook: ssl-keys are not getting overwritten if folder already exists during fresh installation
+        DE170231: Playbook: fetching of custom topic names during scale down
+        DE154999: Playbook: Installing a specific service using tags, is not starting the service post deployment
+
+
+Usecases:
+1. Checks:
+    - Bring down one or more VMs in inventory, ensure you get proper error(during install/upgrade/uninstall)
+    - inventory file checks:
+        -- Mandatory groups: Kafka, Neo4j, HZ, gas, ts, cs, cdc, acs
+        -- Kafka, Neo4j nust have odd number of hosts;
+        -- HZ must have one or more hosts;
+        -- GAS, Prometheus must have only 1 host and it must be same;
+        -- Other services(TS, CS, CDC) can have 1 or more hosts;
+        -- ACS can have only 1 host;
+        -- DA can have 1 or more hosts;
+        -- All host aliases are unique(like TS1, TS2 etc);
+        -- ansible_user, ansible_group are defined and have a value, ansible_user should be a member of ansible_group;
+        -- SSL keystore password is specified and not equal to changeme;
+    - PC and Mysql 
+        -- PC host ip specified and pingable;
+        -- User must specify netqos password; and topologyuser and netqos passwords must be same; 
+        -- when plain password, connecton checks to mysql and hz and nacs tables cleanup should work;
+        -- when encrypted, connecton checks to mysql and hz and nacs tables cleanup should work;
+    - Usecases around clean up hazelcast and acs tables;
+    
+2. Install with SSL off(each in different VM) - Check the health of services;
+   Scale up - Check health;
+   Scale down - Check health;
+   Same version upgrade;
+   Uninstall;
+
+3. Install with SSL off(all in 1 VM, spread them in different VMs) - Check the health of services;
+   Scale up - Check health;
+   Scale down - Check health;
+   Same version upgrade;
+   Uninstall;
+
+3. Install with SSL on(3-node kafka, neo4j, hz, with custom ports, topic names) - Check the health of services;
+    Scale up - Check health;
+    Same version upgrade;
+    Scale down - Check health;
+    Uninstall;
+
+4. Upgrade 
+    1. Install 24.4.9(with SSL On, Kafka SSL On), Upgrade to latest;
+       Scale up, scale down, same version upgrade, uninstall;
+    2. Install 24.4.9(With custom ports, custom topic names, SSL On, Kafka SSL On), Upgrade to latest;
+       Scale up, scale down, same version upgrade, uninstall;
+
+5. Misc:
+    1. Swagger Password
+    2. Mysql Password 
+    3. https enable
+    4. https disable 
+
+6. Full Sync with Fresh install and upgraded environment.
+---------------------------------------------------------------------------------------------------------------------
+
+add enough checks to misc tools 
+Check if we are deleting installHistory file as part of uninstall 
+ansible-playbook -i /home/topology/inventory -K topology-uninstall.yaml --skip-tags "configure-da-properties"
+ansible-playbook -i /home/topology/inventory -K topology-uninstall.yaml --tags "uninstall-ts,uninstall-cs"
+ansible-playbook -i /home/topology/inventory -K topology-install.yaml --tags "install-ts,install-cs"
+---------------------------------------------------------------------------------------------------------------------
+1. .
+2. Inventory file checks:
+    -- 
+
+3. Prerequisites:
+   ansible core - 2.15.0
+   ansible-community - 8.7.0
+   python - 3.9
+   ansible-galaxy mysql plugin 
+4. 
+ 
+ansible --version
+ansible-community --version
+/usr/bin/python3.9 -m pip install --upgrade ansible=8.7.0
+
+
+
+All spring boot applications use logback as default logging framewrok. So
+It 
+It works by default with 
+Logback is the default logging framework for all 
+-----------
+- In prerequisites, should we check python version first?
+-----------
+Logging 
+    - Ansible Logs 
+        - Location of logs: <playbook-home>/ansible_ifm.log
+        - Archived logs: <playbook-home>/logs/ansible_ifm<date>.log
+        - Changing log level -
+            -v : Verbose    (Default)
+            -vv : More verbose
+            -vvv : Very verbose
+            -vvvv : Debugging level 
+    - Service Logs 
+        - Location: <service-dir>/logs/topology-service.log
+        - Archive: <service-dir>/archived/topology-service<date>.log
+        - Changing log level: <service-dir>/logback.xml 
+            - Log levels: TRACE, DEBUG, INFO, WARN and ERROR
+            - Advice is to keep the root logger always INFO level;
+
+
+        Changing log level 
+           -- Every service has a logback.xml 
+           -- <logger name="com.broadcom.netops" level="INFO" />
+        
+Neo4j 
+    - start/stop logs(<NEO4J_HOME>/logs/neo4j.log)
+    - runtime logs(<NEO4J_HOME>/logs/debug.log)
+    - Changing log level: <NEO4J_HOME>/conf/neo4j.conf      # Requires restart of neo4j 
+        dbms.logs.debug.level=INFO
+     
+Hazelcast 
+    - /opt/netops-topology/hazelcast-5.4.0-slim/logs/hazelcast.log 
+
+Netops Kafka logs:
+    - /opt/CA/netops-kafka/kafka/logs/server.log
+
+    
+•Accessinglogs
+•Understandinglog levels and formats
+•Debugging tips and techniques for common issues
+Troubleshooting & Triage
+
+
+•Identifyingcommon issues
+•Methodsfor efficient troubleshooting
+
+
+-------
+All topology services are using logback framework for logging.​
+It is the default logging framework for all spring boot applications.
+It is easy to configure, every service have a logback.xml.
+It supports log rolling as well.
+
+
+
+SSL 
+  - User can enable/disable during installtion.
+  - During scale up/down,
+        - User need to provide SSL context(ifm_enable_ssl in inventory);
+        - User can't enable/disable SSL during scale up;
+        - Does user need to provide ssl password? Provide, but not touched;
+  - Upgrade 
+        - User need to provide SSL context(ifm_enable_ssl in inventory) during upgrade.
+  - User can enable SSL during upgrade.
+  - User can't disable SSL during upgrade - Confirm if it throws error or ignores silently?
+  - User need NOT to provide SSL context(ifm_enable_ssl in inventory) during scale down; 
+  - User can't enable/disable SSL during scale down.
+  - User need NOT to provide SSL context(ifm_enable_ssl in inventory) during uninstall - User can enable/disable SSL during uninstallation.
+  - https_enable.yaml 
+  - https_disable.yaml 
+
+  
+PC 
+    - User need NOT to provide PC and mysql details for scaling up/down and uninstall;
+    - User need to provide PC and mysql details during install, upgrade;
+
+Kafka 
+    - If you have a kafka cluster installed, no need to update the detains again during scale up/down/upgrade/uninstall.
+
+
+Add inventory check to ensure unique IP is entered in case of clustering.
+
+journalctl --unit=prometheus.service -n 100 --no-pager

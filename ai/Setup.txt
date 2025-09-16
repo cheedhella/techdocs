@@ -1,0 +1,163 @@
+Windows:
+    0. Install JDK 17
+    1. Install Python 3.12 
+        Download and install: https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe
+        Test: python --version, pip --version
+    2. Python Poetry        
+        # Packaging and Dependency management tool for python projects(like maven); 
+        # Also, manages virtual environments for your project;
+        # Alternative to pip, virtualenv etc;
+
+        Install: curl -sSL https://install.python-poetry.org | python -
+        Test: poetry --version
+        
+    3. Install VSCode
+    4. Google ADK - https://google.github.io/adk-docs/get-started/installation/
+        pip show google-adk             # Check if google-sdk is already installed?
+        pip install google-adk          # Install google-sdk
+    5. Google Cloud CLI
+        # It allows you to manage GCP resource directly from your terminal;
+        Download Installer: https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe
+        # After installating gcloud CLI, we need to initialize it to link our Google cloud account using 'gcloud init'
+        # Alternatively, we can use service accounts for non-interactive auth from scripts and pipelines;
+
+        # What is service account? It is a digital identity used when an application interacting with google cloud;
+        Download service account json file from: https://broadcom.ent.box.com/folder/323523594334?s=8g3mopwuc6syjghxe4kpbu8k0kjn0j9y
+        > cd <folder-containing-service-account-file>
+        > gcloud auth activate-service-account --key-file laod001-netops-gis01-ac23f271fe76.json
+          Activated service account credentials for: [terraform@laod001-netops-gis01.iam.gserviceaccount.com]
+        > gcloud auth list      # Check active service account 
+        
+    6. Extensions(Ctrl+Shift+X) -> search for python -> Install Python extension in VSC;
+
+    7. Command Palette (Ctrl+Shift+P) -> Python: Select Interpreter -> Select to path to python 
+        C:\Users\admin\AppData\Roaming\pypoetry\venv\Scripts
+
+cd C:\dev\code\topo-genie
+adk web                                 # Run UI agent 
+python -m topo_genie.api.run_server     # Run swagger based agent, goto http://localhost:9191/docs
+
+create virtual env:
+Open the folder in VS Code and open the integrated terminal (Ctrl + ~), then run:
+python -m venv venv
+source venv/bin/activate 
+
+pip install -r requirements.txt
+add .venv file
+------------------------------------------------------------------------------------------------------------
+Unless you are in a closed preview or early access for Google's ADK, I recommend building with the Gemini SDK (google-generativeai), which is:
+
+✅ Stable
+✅ Public
+✅ Supports Gemini 1.5 Flash + Pro
+✅ Easy to integrate with your FastAPI backend
+
+Would you like me to update your employee-agent app using the official Gemini SDK until ADK becomes production-ready with docs/examples?
+
+
+
+because google-agents is not yet available on PyPI as google-agents. The confusion often comes from Google’s Agent Development Kit (ADK) being a private SDK, still in preview/alpha and not generally installable via pip install google-agents.
+
+✅ Current Status of Google ADK
+As of now:
+
+Google ADK is not a public PyPI package.
+
+It is part of the Vertex AI Agents platform.
+
+You can build agents using Vertex AI Extensions or the Vertex AI Studio.
+
+
+
+------------------------------------------------------------------------------------------------------------
+# Create a new project
+poetry new my-project
+
+# Add a dependency
+poetry add requests
+
+# Run code inside the project's virtual environment
+poetry run python main.py
+
+# Publish your package (if you're distributing it)
+poetry publish --build
+------------------------------------------------------------------------------------------------------------
+What is virtual environment?
+    What Is a Virtual Environment?
+    A virtual environment is an isolated Python environment. It lets you:
+
+    Install project-specific dependencies without affecting system-wide Python.
+
+    Avoid conflicts between different project requirements.
+
+    Keep your global Python installation clean.
+
+    📁 What Gets Created in .venv?
+    Inside the .venv folder, you'll find:
+
+    A copy of the Python interpreter.
+
+    A local Scripts/ directory with:
+
+    python.exe
+
+    pip.exe
+
+    An isolated environment to install packages with pip.
+
+    ▶️ How to Activate the Virtual Environment (Windows)
+    Once it's created, activate it with:
+
+    bash
+    Copy
+    Edit
+    .venv\Scripts\activate
+------------------------------------------------------------------------------------------------------------
+Python windows- https://www.python.org/downloads/windows/
+Vscode windows - https://code.visualstudio.com/docs/?dv=win64
+Installation: https://google.github.io/adk-docs/get-started/installation/
+poetry installation - https://python-poetry.org/docs/#installing-with-the-official-installer
+
+
+Hackathon:
+Install:
+1) Python 3.12 (windows)- https://www.python.org/downloads/windows/
+2) Google ADK - https://google.github.io/adk-docs/get-started/installation/
+3) poetry installation - https://python-poetry.org/docs/#installing-with-the-official-installer
+4) google cloud cli - https://cloud.google.com/sdk/docs/install
+
+5) Use existing intellij and add python sdk:
+Go to Project Structure -> Modules -> Dependencies -> Select python 3.10 as Module SDK and apply the changes
+
+6) Download the service account file  from below box location:
+https://broadcom.ent.box.com/folder/323523594334?s=8g3mopwuc6syjghxe4kpbu8k0kjn0j9y
+
+7) gcloud activate service account:
+gcloud auth activate-service-account --key-file laod001-netops-gis01-ac23f271fe76.json
+
+8) Follow the below link to make vertex ai API's work
+https://cloud.google.com/docs/authentication/application-default-credentials
+
+gcloud activate service account:
+gcloud auth activate-service-account --key-file laod001-netops-gis01-ac23f271fe76.json
+Download the service account file  from below box location:
+https://broadcom.ent.box.com/folder/323523594334?s=8g3mopwuc6syjghxe4kpbu8k0kjn0j9y
+
+gcloud auth list
+
+Go to Project Structure -> Modules -> Dependencies -> Select python 3.10 as Module SDK and apply the changes
+
+https://cloud.google.com/docs/authentication/application-default-credentials
+GOOGLE_APPLICATION_CREDENTIALS
+
+
+cp laod001-netops-gis01-ac23f271fe76.json $HOME/.config/gcloud/application_default_credentials.json
+export GOOGLE_APPLICATION_CREDENTIALS=/Users/mn895908/.config/gcloud/application_default_credentials.json
+------------------------------------------------------------------------------------------------------------
+mkdir emp-agent 
+cd emp-agent 
+touch requirements.txt
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+

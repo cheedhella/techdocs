@@ -1,0 +1,412 @@
+// Feature pipeline
+//
+// Shared libraries are defined as groovy scripts in a repository of your choice and "registered" in Jenkins via:
+// Jenkins->Manage Jenkins->Configure System->[Global Pipeline Libraries]
+// Libraries are "imported" by a Jenkinsfile using a name you choose as an alias for the repository you specified
+// in the Jenkins configuration. Groovy files are defined in /vars/... for "global" variables ("functions").
+// Classes can be defined as well and stored in the repository under /src/... (e.g. /src/org/ca/)
+//
+//
+//@Library('build-tools') _
+library 'build-tools'
+
+def PROJECT_NAME = 'IFM'
+def EXECUTE_ACTION_VERBOSITY = ''
+def EXTRA_MAVEN_ARGS = ""
+def MAVEN_SETTINGS_SECRET_FILE = 'maven-artifactory'
+def ARTIFACTORY_CREDENTIALS = 'rtcbuild.artifactory'
+
+def getM2RepositoryVar( value ) {
+    return value != null ? "--var maven-repository=" + value : ""
+}
+
+def isVersionBuild() {
+    return params.VERSION_BUILD
+}
+
+def shouldPushVersionChanges() {
+    return currentBuild.currentResult == "SUCCESS" && isVersionBuild() && params.PUSH_VERSION_CHANGES
+}
+
+
+def action_wrapper( action, extra_vars ) {
+  return execute_action( action, extra_vars, buildproperties )
+}
+
+def coverity_gate_check(scanType, buildType, envVars) {
+    if ( buildType == 'pr' ) {
+        EXITCODE = execute_action_and_set_pr_status( "coverity-check-new-defects",
+                                                     "coverity-quality-gate",
+                                                     failureMessage:"New defects detected (See build log)",
+                                                     extraActionParams: envVars,
+                                                     outputMode:"onfailure" )
+    } else if ( scanType == 'new defects' ) {
+        EXITCODE = action_wrapper( "coverity-check-new-defects", envVars )
+    } else if ( scanType == 'all defects' ) {
+        EXITCODE = action_wrapper( "coverity-check-all-defects", envVars )
+    } else {
+        EXITCODE = 0
+        println("No coverity validation performed (BUILD_TYPE="+buildType+", SCAN_COVERITY="+scanType+")")
+    }
+    return EXITCODE
+}
+
+
+pipeline {
+
+  options {
+    timestamps()
+  }
+
+  environment {
+    ARTIFACT_URL="https://usw1.packages.broadcom.com/artifactory/esd-netops-maven-virtual/"
+    EMAIL_TO = 'team-aiops-spectrum-avalanche-scrum.pdl@broadcom.com'
+    LEGACY_BRANCHING="false"
+    BUILD_NUMBER_OVERRIDE=pipelineInit().trim()
+    WORKSPACE_DIR="/builds/workspace/${PROJECT_NAME}/${env.BRANCH_NAME}/${env.BUILD_NUMBER}"
+    GENERAL_VARS="--var working-dir=${env.WORKSPACE_DIR}"
+    SONAR_WORKSPACE_DIR="${env.WORKSPACE_DIR}/sonar"
+    SONAR_VARS="--var working-dir=${env.SONAR_WORKSPACE_DIR} --var build-artifact-location-suffix=${env.WORKSPACE_SUFFIX} --var sonar-token=sqp_ddc46fc7c7a066efdfe196f142c7d5398af3d46f --var pull-request-key=${env.PR_NUMBER} --var branch=${env.BRANCH_NAME} --var pull-request-target=${env.PR_BRANCH_BASE} ${getM2RepositoryVar( params.MAVEN_REPOSITORY )}"
+    MAVEN_SETTINGS_FILE = credentials("${MAVEN_SETTINGS_SECRET_FILE}")
+    SONAR_REPORT_URL="https://sonarqube.broadcom.net/dashboard?id=ESD-IFM-01&pullRequest=${env.PR_NUMBER}"
+    INSTALLER_VARS="--var working-dir=${env.INSTALLER_WORKSPACE_DIR} --var build-artifact-location-suffix=${env.WORKSPACE_SUFFIX} ${getM2RepositoryVar( params.MAVEN_REPOSITORY )}"
+    ARTIFACTORY = credentials("${ARTIFACTORY_CREDENTIALS}")
+    ARTIFACTORY_API_KEY = credentials('rtcbuild@isl-dsdc')
+    MAVEN_USER = "${env.ARTIFACTORY_CREDS_USR}"
+    MAVEN_PASSWORD = "${env.ARTIFACTORY_CREDS_PSW}"
+	RALLY_SERVER="rally1.rallydev.com"
+    RALLY_CREDS=credentials('rtcbuild.rally')
+    RALLY_USER="${env.RALLY_CREDS_USR}"
+    RALLY_APIKEY="${env.RALLY_CREDS_PSW}"
+    RALLY_WORKSPACE="Rally"
+    RALLY_PROJECT="NetOps Value Stream"
+	GIT_CREDS=credentials('rtcbuild.github.token')
+    GIT_APIKEY="${env.GIT_CREDS_PSW}"
+	    
+    //Playbook Environment
+    IFM_JARS="--var IFM_JARS=ifm-playbook/target/netops-ifm-deployment/ifm_jars --var TARGET_FOLDER=ifm-playbook/target/netops-ifm-deployment"
+	THIRDPARTY_BINARIES="--var THIRDPARTY_BINARIES=ifm-playbook/target/netops-ifm-deployment/thirdparty_binaries --branch=${env.BRANCH_NAME}"
+	ZIP_THIRDPARTY="--var TARGET_FOLDER=ifm-playbook/target/netops-ifm-deployment --var THIRDPARTY_BINARIES=ifm-playbook/target/netops-ifm-deployment/thirdparty_binaries --var IFM_JARS=ifm-playbook/target/netops-ifm-deployment/ifm_jars --branch=${env.BRANCH_NAME}"
+
+    // Auto Deploy Remote Jenkins Details
+    JENKINS_URL="https://jenkins-netops-01.devops.broadcom.net"
+    JOB_NAME="IFM/job/IFM-Automation/job/F_US908857-CreateIFMAutomation"
+    JENKINS_USERNAME="lk670442"
+    API_TOKEN="1187e8bd389a1c320460496ee1c5ac6696"
+    BUILD_PARAMS="IS_DOWN_STREAM_JOB=true"
+
+  }
+
+  parameters {
+    booleanParam( name: 'UNIT_TEST', defaultValue: true, description: 'Enable unit tests' )
+    booleanParam( name: 'SCAN_SONAR', defaultValue: true, description: 'Perform a sonar scan' )
+	booleanParam( name: 'SCAN_COVERITY', defaultValue: true, description: 'Perform a coverity scan')    
+    booleanParam( name: 'PRESERVE_WORKSPACE', defaultValue: false, description: 'Do not remove build workspace after build is complete (USE WITH CAUTION)' )
+    booleanParam( name: 'ZIP_THIRDPARTY_BINARIES', defaultValue: false, description: 'Enable to upload thirdparty binaries for playbook packaging' )
+    booleanParam( name: 'PLAYBOOK_DEPLOY_TEST', defaultValue: false, description: 'Perform playbook deploy tests' )
+    string(name: 'PLAYBOOK_CONTROLLER_HOST', defaultValue: '10.253.19.163', trim: true, description: 'Playbook Controller Host')
+    string(name: 'PLAYBOOK_CONTROLLER_LOGIN_USER', defaultValue: 'topology', trim: true, description: 'Playbook Controller Host Login User')
+    string(name: 'PLAYBOOK_CONTROLLER_LOGIN_PASS', defaultValue: 'interOP@123', trim: true, description: 'Playbook Controller Host Login Password')
+  }
+
+  agent {
+    node {
+      label 'gcp-da'
+      customWorkspace "/builds/workspace/IFM/${env.BRANCH_NAME}/${env.BUILD_NUMBER}"
+    }
+  }
+
+  stages {
+  
+	stage('setup') {
+      steps {
+        script {
+          // Initialize Pull Request checks (if this build is a PR Build)
+          gitapi.prSetStatus( 'pending', 'unit-test' );
+          gitapi.prSetStatus( 'pending', 'sonar-quality-gate' );
+          gitapi.prSetStatus( 'pending', 'build-status' );
+	      gitapi.prSetStatus( 'pending', 'coverity-quality-gate' );
+	      gitapi.prSetStatus( 'pending', 'ifm-auto-deploy-status' );
+        }
+	   sh 'cp ${MAVEN_SETTINGS_FILE} settings.xml'    
+      }
+    }
+	
+	//Step 0 
+	 stage('scm-check') {
+      when { expression { scmWhen() } }
+      steps {
+        script {
+          gitapi.prSetStatus( 'pending', 'scm-check', "Source control validation" )
+          scmCheck( reponame:"ESD/IFM", branchname:env.BRANCH_NAME, buildnum:env.BUILD_NUMBER, logfile:env.CITOOL_LOGFILE, debug:true )
+        }
+      }
+    }
+
+    // Step 1. Compile
+    stage('compile') {
+      steps {
+		execute_action( 'compile', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' )      
+      }
+    }
+	
+   // Step 2. UNIT_TEST
+   stage('Test Run') {		
+        when {
+        expression { shouldRunTestOrScanStage( params.UNIT_TEST) }
+        }		
+     steps {	   
+	    execute_action( 'stop-embedded-neo4j', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' )
+		execute_action( 'start-embedded-neo4j', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' )
+		execute_action_and_set_pr_status("unit-tests", "unit-test", extraActionParams:"--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}' ${EXECUTE_ACTION_VERBOSITY}")	  
+	 }
+    }
+
+	 
+    // Step3. Sonar Scan
+        stage('sonar') {
+          when { expression { shouldRunTestOrScanStage( params.SCAN_SONAR, env.FIRST_BUILD ) && !isVersionBuild() } }
+          stages {
+            stage('sonar-analyze') {
+              steps {
+                track_branch( "origin/integration", "master", true )
+                script {
+                  if ( env.BUILD_TYPE == "pr" ) {
+                    execute_action( 'sonar-pullrequest', "$SONAR_VARS --var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW}", "" );
+                  } else {
+                    execute_action( 'sonar', "$SONAR_VARS --var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW}", "" );
+                  }
+                }
+              }
+            }
+            stage('sonar-validate') {
+              when {
+                allOf {
+                  expression { env.BUILD_TYPE == "pr" }
+                  expression { shouldRunTestOrScanStage( params.SCAN_SONAR, env.FIRST_BUILD ) }
+                }
+              }
+              steps {
+				script {
+                  if ( env.BUILD_TYPE == "pr" ) {
+                   execute_action_and_set_pr_status( "sonar-quality-gate", "sonar-quality-gate", failureMessage:"Failure to pass quality gate", detailsUrl:"${env.SONAR_REPORT_URL}", extraActionParams:"${env.SONAR_VARS}", outputMode:"onfailure" )
+				} else {
+	            execute_action( 'sonar-quality-gate', "$SONAR_VARS", "" ); 
+				}
+				}
+              }
+            }
+          }
+          post {
+            always {
+              execute_action( 'sonar-cleanup', "${env.SONAR_VARS}", "" )
+            }
+          }
+        }
+
+	
+	//Step 4.a Coverity Stages
+    stage('coverity-compile') {
+		when {
+        expression { shouldRunTestOrScanStage( params.SCAN_COVERITY) }
+        }
+        steps {               
+                execute_action( 'clean', "${env.GENERAL_VARS}", '' )
+                execute_action( 'coverity-clean', "${env.GENERAL_VARS}", '' )
+                execute_action( 'coverity-compile', "${env.GENERAL_VARS}", '' )
+        }
+    }
+	//4.b
+    stage('coverity-validate') {
+		when {
+        expression { shouldRunTestOrScanStage( params.SCAN_COVERITY) }
+        }
+        steps {
+            script {
+                COVERITY_GATE_EXITCODE = coverity_gate_check("buildproperties.SCAN_COVERITY", "${env.BUILD_TYPE}", "${env.GENERAL_VARS}" )
+            }
+        }
+    }
+    //4.c
+    stage('coverity-analyze-commit') {
+        when { expression { params.SCAN_COVERITY == true || COVERITY_GATE_EXITCODE != 0 } }
+            steps {
+                execute_action( 'coverity-analyze', "${env.GENERAL_VARS}", '' )
+                execute_action( 'coverity-commit-dev', "${env.GENERAL_VARS}", '' )
+            }
+        }	
+	
+
+
+    //Step 5. downlod libraries for playbook packaging
+	//Second time compile will get the latest IFM jars
+	stage('Download libs') {
+		steps {
+		   script {
+		    execute_action("compile", "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS} ${env.IFM_JARS}", '')
+	             if ( params.ZIP_THIRDPARTY_BINARIES ) {
+			       execute_action('download_thirdparty', "${env.THIRDPARTY_BINARIES}", '')
+                }
+		   }		   
+	   }
+	}
+
+    //Step 6. Copy application.yamls, event-metadata-repo and config files to playbook package
+    stage('Copy config files to playbook'){
+        steps {
+		  execute_action("copy_config_files", "${env.IFM_JARS}", '')
+        }
+    }
+
+    //Step 7. Replace values with ENV in copied application.ymls
+	stage('Update application.ymls'){
+		steps {
+			execute_action("update-ags-application-properties",'','')
+	    	execute_action("update-egs-application-properties",'','')
+			execute_action("update-fis-application-properties",'','')
+			execute_action("update-ts-application-properties",'','')
+			execute_action("update-cs-application-properties",'','')
+			execute_action("update-graph-store-api-service-properties",'','')
+			execute_action("update-graph-store-transaction-properties",'','')
+			execute_action("update-graph-store-cdc-properties",'','')
+			execute_action("update-alarm-consumer-service-properties",'','')
+        }
+	}
+	
+	//Step 8. Moving files for playbook packaging
+	stage('Move files to playbook'){
+		steps {
+           	 execute_action("mv_files_to_zip", "${env.ZIP_THIRDPARTY}", '')
+		}
+	}
+	
+	
+	//Step 9. Prepare zip file
+	stage('Prepare zip file'){
+		steps {
+		  execute_action( 'package', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' )      
+		}
+	}	
+	
+    stage('Copy Playbook Package To Controller Node') {
+        steps {
+            script {
+             if ((env.BUILD_TYPE == "pr" || env.BRANCH_NAME == "integration") && params.PLAYBOOK_DEPLOY_TEST == true ) {
+               def controllerHost = params.PLAYBOOK_CONTROLLER_HOST
+               def remoteUser = params.PLAYBOOK_CONTROLLER_LOGIN_USER
+               def remoteUserPwd = params.PLAYBOOK_CONTROLLER_LOGIN_PASS
+               def automationDir = '/opt/IFM/automation'
+               def playbookZip = 'ifm-playbook/target/netops-ifm-deployment.zip'
+               //def thirdpartylibs = 'thirdparty_binaries.zip'
+
+               // Command to create automation directory on controller node
+               def remoteCommands = """
+                    rm -rf $automationDir
+                    mkdir -p $automationDir
+               """
+
+               def sshCommand = "sshpass -p '$remoteUserPwd' ssh -T $remoteUser@$controllerHost '${remoteCommands}'"
+               // Execute the SSH command
+               sh(sshCommand)
+            
+               // Command to copy the playbook to the controller node using scp with SSH key authentication
+               // def scpCommand = "scp $playbookZip $remoteUser@$controllerHost:$automationDir"
+               def scpCommand = "sshpass -p $remoteUserPwd scp -o StrictHostKeyChecking=no $playbookZip $remoteUser@$controllerHost:$automationDir"
+
+               // Execute the scp command and capture the exit status
+               def exitStatus = sh(script: scpCommand, returnStatus: true)
+
+               if (exitStatus == 0) {
+                   echo "Playbook package copied successfully to the host: $controllerHost"
+               } else {
+                   error "Failed to copy playbook package. Exit status: ${exitStatus}"
+               }
+           }
+          }
+        }
+    }
+
+        stage('Deploy Playbook') {
+            steps {
+                script {
+                  if ((env.BUILD_TYPE == "pr" || env.BRANCH_NAME == "integration") && params.PLAYBOOK_DEPLOY_TEST == true) {
+                    // Trigger the Jenkins job and get the queue URL
+                    def queueUrl = sh(script: """
+                        curl -X POST $JENKINS_URL/job/$JOB_NAME/buildWithParameters --user $JENKINS_USERNAME:$API_TOKEN --data $BUILD_PARAMS -D - | grep -i Location | awk '{print \$2}'
+                        """, returnStdout: true).trim()
+                    
+                    echo "Auto Deploy Job Queue URL: ${queueUrl}"
+
+                    def queueId = sh(script: """
+                        basename ${queueUrl}
+                        """, returnStdout: true).trim()
+                    
+                    echo "Auto Deploy Job Queue ID: ${queueId}"
+                    gitapi.prSetStatus( 'pending', 'ifm-auto-deploy-status' );
+                }
+              }
+            }
+        }
+
+
+    // Step 10. deploy
+    stage('publish artifacts to artifactory') {
+	    when {
+			allOf {
+			  expression { env.BRANCH_NAME == "integration" }
+			  expression { currentBuild.currentResult == "SUCCESS" }
+			}
+		}
+		steps {
+    		execute_action( 'upload-artifacts', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' )			
+			execute_action( 'upload-common-release-artifacts', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} ${env.GENERAL_VARS}", '' ) 			
+			
+        }
+    }
+	  
+  } // stages
+  
+  post {
+
+        always {
+		script {
+			if ( params.PLAYBOOK_DEPLOY_TEST == false ) {
+			        gitapi.prSetStatus( 'success', 'ifm-auto-deploy-status' );	   
+			}
+		    }
+		}
+        success {
+		script {
+			if ( env.BRANCH_NAME == 'integration' && ( currentBuild.previousBuild != null && currentBuild.previousBuild.result != 'SUCCESS') ) {
+			        emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Build Success in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'		   
+			}
+			 gitapi.prSetStatus( 'success', 'build-status' );
+			 
+			}
+		}
+
+        failure {
+		 script {
+			if ( env.BRANCH_NAME == 'integration' ) {
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+				}	
+			gitapi.prSetStatus( 'failure', 'build-status' );
+			}
+        }
+        unstable {
+		 script {
+			if ( env.BRANCH_NAME == 'integration' ) {
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Unstable build in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+				}	
+			gitapi.prSetStatus( 'failure', 'build-status' );
+			}
+        }
+    }
+  
+} // pipeline

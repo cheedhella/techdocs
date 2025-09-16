@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hp-demo-p2
+spec:
+  containers:
+    - image: nginx
+      name: hp-demo-p2-container
+      volumeMounts:
+        - mountPath: /host-dir                        # TODO: Why this mount is not successful?
+          name: hp-demo-p2-mydir
+      volumeMounts:
+        - mountPath: /host-file.txt
+          name: hp-demo-p2-myfile
+  volumes:
+    - name: hp-demo-p2-mydir 
+      hostPath:
+        path: /Users/mcheedhe/dev/sites/config/
+        type: DirectoryOrCreate                        # It creates the directory on host file system, if it doesn't exist;
+    - name: hp-demo-p2-myfile
+      hostPath:
+        path: /Users/mcheedhe/dev/sites/config/PodConfig.ini
+        type: FileOrCreate

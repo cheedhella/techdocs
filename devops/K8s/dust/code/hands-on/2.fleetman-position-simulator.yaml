@@ -1,0 +1,25 @@
+# All it does is churning out messages, all day and night, and save it out to the queue;
+# So, it doesn't need to expose any ports; It doesn't need any service either;
+
+# One of the features of Spring Boot is that an application can run using different so-called profiles;
+# Based on the profile specified, it will read configuration from src/main/resources/application-*.properties
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleetman-position-simulator-deployment
+spec:
+  selector:
+    matchLabels:
+      app: fleetman-position-simulator-label
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fleetman-position-simulator-label
+    spec:
+      containers:
+      - name: fleetman-position-simulator
+        image: richardchesterwood/k8s-fleetman-position-simulator:release2
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: production-microservice

@@ -1,0 +1,144 @@
+What is Role?
+    The role is the primary mechanism in Ansible for dividing a playbook into multiple files. 
+    This simplifies the creation of complex playbooks and makes them more reusable.
+
+    Ansible Roles are independent of each other. Execution of one role doesn’t depend on others and hence they can be reused. 
+
+    An Ansible role is a collection of tasks used to configure a host for a specific purpose, such as configuring a service. 
+    YAML files with a predefined directory structure are used to define roles. 
+
+Role VS Playbook
+    Each playbook is a collection of Roles - It maps each role to a set of hosts; Each Role performs a specific functionality;
+    For eg, if you want your playbook to perform 10 different tasks on 5 different systems, would you use a single playbook for this? No! It can make it confusing and prone to blunders;
+    Instead, you can create 10 different roles, where each role will perform one task; 
+    Then, all you need to do is, mention the name of the role inside the playbook to call them;
+    
+Roles Directory Structure
+    The following directories are found in a role directory structure: defaults, vars, tasks, files, templates, meta, and handlers;
+
+    To create an Ansible role, use the ansible-galaxy command, which includes templates. 
+    This will create it in the default directory /etc/ansible/roles and make the necessary changes; otherwise, we must manually create each directory and file. 
+    > sudo ansible-galaxy init <role-name>          # Creates a role 
+
+    # If you want create a role, in your directory:
+    #   Use the —roles-path option for the ansible-galaxy command.      # ansible-galaxy init prometheus --init-path=C:\dev\code\IFM\ifm-playbook\provisioning\roles\
+    #   Define roles_path in an ansible.cfg file.
+
+    > cat ansible.cfg
+    [defaults]
+    inventory=hosts
+    remote_user=ansible
+    timeout=3000
+    roles_path=/home/ansible/dev/roles
+
+    defaults 
+        -  Contains the default variables that are going to be used by this role.
+
+    vars 
+        - This directory consists of other variables that are going to be used by the role. 
+        - These variables can be defined in your playbook, but it’s a good habit to define them in this section.
+        - Vars takes precedence over defaults.
+
+    files 
+        - Contains files that can be deployed by this role. It contains files that need to be sent to the hosts while configuring the role.
+    
+    meta 
+        - Defines metadata for this role. Basically, it contains files that establish role dependencies.
+        - specifies some data / information about this role (author, dependency, versions, examples, and so on).
+
+    tasks 
+        - It contains the main list of tasks that are to be executed by the role. It contains the main.yml file for that particular role.
+
+    Handlers 
+        - Contains handlers which may be used by this role or even anywhere outside this role.
+        - If your role includes handlers (tasks triggered by other tasks), you can define them in the `handlers/main.yml` file.
+
+    templates 
+        - contains file template which supports modifications from the role. We use the Jinja2 templating language for creating templates.
+
+
+    - When roles are executed, the meta folder is checked for and executed first, followed by the task folder.
+
+
+
+
+
+
+https://github.com/MiteshSharma/PrometheusWithGrafana/tree/master?tab=readme-ov-file
+https://github.com/angristan/ansible-prometheus
+https://github.com/mesaguy/ansible-prometheus
+https://github.com/cloudalchemy/ansible-prometheus
+
+
+notify: 'service restart'
+
+> cat handers/main.yml 
+- name: 'service restart'
+  service: 
+    name: "{{ name }}"
+    state: restarted 
+    
+/etc/ansible/roles 
+
+
+How to create multiple tasks inside a Role?
+Creating multiple roles?
+
+
+https://medium.com/cloudnloud/roles-in-ansible-playbook-ffbe4574641b
+https://www.redhat.com/sysadmin/developing-ansible-role
+https://www.pluralsight.com/resources/blog/cloud/ansible-roles-explained
+https://spacelift.io/blog/ansible-roles
+https://www.youtube.com/watch?v=HYBFuHUQBT8
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+[root@netops-rl8-1892 PrometheusWithGrafana]# ansible-playbook playbook.yml
+
+PLAY [prometheus] ***********************************************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************************************************************************************************************
+ok: [10.252.21.155]
+
+TASK [prometheus : Creating prometheus user group] **************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Creating prometheus user] ********************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Install prometheus] **************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Copy prometheus file to bin] *****************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Delete prometheus tmp folder] ****************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Creates directory] ***************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Creates directory] ***************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : config file] *********************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : alert config file] ***************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Copy systemd init file] **********************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Start prometheus service] ********************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+TASK [prometheus : Check if prometheus is accessible] ***********************************************************************************************************************************************************************************************
+ok: [10.252.21.155]
+
+RUNNING HANDLER [prometheus : Reload systemd] *******************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+PLAY RECAP ******************************************************************************************************************************************************************************************************************************************
+10.252.21.155              : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+

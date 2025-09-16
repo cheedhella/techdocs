@@ -26,6 +26,83 @@
         </ul>
     </div>
 
+    <div class="question"><strong>Why Tanstack Router?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Full Type-Safety</li>
+            <ul>
+                <li>The IDE warns you if you mistype a path param ($postId vs $postID) or forget required query params;
+                </li>
+                <li>Both path and query parameters are parsed and type-validated automatically;</li>
+            </ul>
+            <li>
+                <ul>
+                    <li>Automatic Navigation</li>
+                    <li>When you navigate to a route, the router automatically handles URL updates, history management
+                        and state transitions;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Data Loading</li>
+                    <li>Routes can define loaders to fetch data before rendering components;</li>
+                    <li>This ensures that components have the necessary data when they mount;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Error Handling</li>
+                    <li>Routes can specify error components to display when data loading fails;</li>
+                    <li>This provides a consistent way to handle errors across the app;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Nested Routes and Layouts</li>
+                    <li>Supports deeply nested route hierarchies with shared layouts and context;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>File-Based Routing</li>
+                    <li>Routes can be defined based on the file system structure, making it easy to organize and
+                        manage routes;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Performance</li>
+                    <li>Features like lazy loading and smooth integration with TanStack Query optimize app
+                        scalability;</li>
+                </ul>
+            </li>
+            <li>
+                <ul>
+                    <li>Developer Experience</li>
+                    <li>Comprehensive TypeScript support, detailed documentation, and an active community;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Key Features of Tanstack Router</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Type-Safe Routing – Full TypeScript support for routes, params, and query strings</li>
+            <li>Data Loaders – Route-level data fetching with built-in support for async operations</li>
+            <li>Error Boundaries – Route-specific error handling and fallback UI</li>
+            <li>Nested Routes – Deeply structured route hierarchies with shared layouts and context</li>
+            <li>Layout Routes – Layouts that wrap groups of routes</li>
+            <li>Grouped Routes – Logical route organization without affecting the URL path structure</li>
+            <li>File-based Routing – A file system approach to routing</li>
+            <li>Parallel Data Loading – Data fetching for multiple routes in parallel to speed up rendering</li>
+            <li>Prefetching – Loading of route data and components ahead of time</li>
+            <li>Error Boundaries and Handling – Route-based error boundaries and fallbacks</li>
+            <li>SSR (Server-Side Rendering) – Rendering of pages on the server with support for streaming</li>
+            <li>Route Masking – Customization and mapping of internal route structure to different URL paths</li>
+        </ul>
+    </div>
+
     <div class="question"><strong>Types of Routing</strong></div>
     <div class="answer">
         <ul>
@@ -108,6 +185,8 @@
                     <li>useRouter -> to get the router instance;</li>
                 </ul>
             </li>
+            <li>TanStack offers 4 type-safe navigations: Link component, useNavigate hook, Navigate component,
+                router.navigate() method;</li>
             <li><b>Outlet</b>
                 <ul>
                     <li>It is a placeholder component;</li>
@@ -118,77 +197,65 @@
             <li><b>Link</b>
                 <ul>
                     <li>It is a component to create links;</li>
-                    <li>It accepts to prop for the target route;</li>
-                    <li>It handles client-side navigation;</li>
+                    <li>Link component generates the traditional <a> tag with a valid href, which can be clicked to
+                            navigate to a new page.</li>
+                    <li>Eg: &lt;Link to="/"&gt;Home&lt;/Link&gt;
+                    <li>
+                    <li>You can pass parameters and search values to the target route;</li>
+                    <li>Eg: &lt;Link to="/books/$bookId" params={{ bookId: "1" }}&gt;Books&lt;/Link&gt;</li>
+                </ul>
+            </li>
+            <li><b>useNavigate</b>
+                <ul>
+                    <li>It is used to navigate across the application programmatically;</li>
+                    <li>It is useful when you need to navigate based on some user action, like a button click or after
+                        form submission.</li>
+                    <li>The useNavigate() hook returns a navigate function that can be called to imperatively navigate
+                        to a different route;</li>
+                    <pre>
+                        import { useNavigate } from "@tanstack/react-router";
+
+function Books() {
+  const navigate = useNavigate();
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={() => navigate({ to: "/books" })}>Books&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+                    </pre>
+                </ul>
+            </li>
+            <li><b>Navigate component</b>
+                <ul>
+                    <li>Navigate component provides a great way to handle client-side redirections;</li>
+                    <li>It comes in handy in cases where we want to navigate immediately when a component renders;</li>
+                    <li>Rather than relying on the useNavigate() hook and then bringing in useEffect, we can just use
+                        the Navigate component;</li>
+                    <pre>
+                        function Books() {
+  return &lt;Navigate to="/books/$bookId" params={{ bookId: "1" }} /&gt;;
+}
+                    </pre>
                 </ul>
             </li>
         </ul>
-    </div>
-
-    <div class="question"><strong>Why Tanstack Router?</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Full Type-Safety</li>
+        <li><b>router.navigate()</b>
             <ul>
-                <li>The IDE warns you if you mistype a path param ($postId vs $postID) or forget required query
-                    params;</li>
-                <li>Both path and query parameters are parsed and type-validated automatically;</li>
-            </ul>🛡
-            <li>
-                <ul>
-                    <li>Automatic Navigation</li>
-                    <li>When you navigate to a route, the router automatically handles URL updates, history management,
-                        and state transitions;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>Data Loading</li>
-                    <li>Routes can define loaders to fetch data before rendering components;</li>
-                    <li>This ensures that components have the necessary data when they mount;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>Error Handling</li>
-                    <li>Routes can specify error components to display when data loading fails;</li>
-                    <li>This provides a consistent way to handle errors across the app;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>Nested Routes and Layouts</li>
-                    <li>Supports deeply nested route hierarchies with shared layouts and context;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>File-Based Routing</li>
-                    <li>Routes can be defined based on the file system structure, making it easy to organize and
-                        manage routes;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>Performance</li>
-                    <li>Features like lazy loading and smooth integration with TanStack Query optimize app
-                        scalability;</li>
-                </ul>
-            </li>
-            <li>
-                <ul>
-                    <li>Developer Experience</li>
-                    <li>Comprehensive TypeScript support, detailed documentation, and an active community;</li>
-                </ul>
-            </li>
-        </ul>
+                <li>router.navigate() method works just like the navigate function returned by useNavigate() hook;</li>
+                <li>In addition that it is available anywhere the router instance is available;</li>
+                <li>Therefore, it is a great way to navigate imperatively from anywhere within the application;</li>
+                <li>Eg: router.navigate({ to: "/books" });</li>
+            </ul>
+        </li>
     </div>
 
-    <div class="question"><strong>Key Features of Tanstack Router</strong></div>
+    <div class="question"><strong>Dynamic Routing</strong></div>
     <div class="answer">
         <ul>
-            <li>Type-Safe Routing – Full TypeScript support for routes, params, and query strings</li>
-            <li>Data Loaders – Route-level data fetching with built-in support for async operations</li>
+            <li>Defining URL segments that act like a variable, which enables the rendering of different content based on the dynamic parameter;</li>
+            <li>In file-based routing with TanStack Router, dynamic segments are created by starting the parameter name with a $ inside the filename; The dynamic parameter can then be accessed inside the route using the useParams method or in a loader;</li>
             <li>Error Boundaries – Route-specific error handling and fallback UI</li>
             <li>Nested Routes – Deeply structured route hierarchies with shared layouts and context</li>
             <li>Layout Routes – Layouts that wrap groups of routes</li>
@@ -202,7 +269,26 @@
         </ul>
     </div>
 
+    <div class="question"><strong>References</strong></div>
+    <div class="answer">
+        <ul>
+            <li>https://www.telerik.com/blogs/building-modern-scalable-applications-tanstack-router-react
+            </li>
+            <li>Authenticated Routes - https://tanstack.com/router/latest/docs/framework/react/examples/authenticated-routes?path=examples%2Freact%2Fauthenticated-routes%2Fsrc%2Froutes%2F__root.tsx</li>
+            <li>File routes - https://tanstack.com/router/latest/docs/framework/react/examples/kitchen-sink-file-based?path=examples%2Freact%2Fkitchen-sink-file-based%2Fsrc%2Froutes%2Fdashboard.invoices.%24invoiceId.tsx</li>
+            <li>https://www.youtube.com/watch?v=KcKkwF55Pes</li>
+            <li>https://tanstack.com/router/latest/docs/framework/react/examples/basic</li>
+            <li>https://www.youtube.com/watch?v=OwoZtv6u9p4</li>
+            <li>https://medium.com/@yasui-edu0834/tanstack-router-is-one-of-the-most-powerful-options-for-spa-development-tanstack-query-cc7ecdc73550</li>
+        </ul>
+    </div>
+
+
+
+
     <pre>
+Official devtools help debug route state, data loaders, caches, and errors with a dedicated UI — available now for React.
+
 
 How to setup file based routing, so that each file dictates the URL?
 How to handle dynamic parameters?

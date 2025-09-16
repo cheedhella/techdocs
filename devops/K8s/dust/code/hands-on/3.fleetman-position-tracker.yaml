@@ -1,0 +1,34 @@
+# It's job is to read the message from queue and it exposes a REST interface, so that the clients can access details of any vehicle;
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fleetman-position-tracker-deployment
+spec:
+  selector:
+    matchLabels:
+      app: position-tracker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: position-tracker
+    spec:
+      containers:
+      - name: position-tracker
+        image: richardchesterwood/k8s-fleetman-position-tracker:release3      # release3 stores history in MongoDB;
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: production-microservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetman-position-tracker
+spec:
+  type: ClusterIP # NodePort
+  selector:
+    app: position-tracker
+  ports:
+    - name: http
+      port: 8080
+      # nodePort: 30020       # Just for testing Rest API; Ideally, it's the job of API gateway;

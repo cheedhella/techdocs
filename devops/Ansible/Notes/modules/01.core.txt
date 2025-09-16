@@ -1,0 +1,23 @@
+ansible.builtin.debug -> This task is used to print a message;
+    Eg:
+        - name: Print a message
+          ansible.builtin.debug:
+            msg: 'I execute normally'
+
+ansible.builtin.command -> It takes a command with space-delimited arguments and runs it on all nodes;
+    Eg: 
+        - name: Return motd to registered var
+          ansible.builtin.command: cat /etc/motd
+            register: mymotd
+
+
+ansible.builtin.shell
+    Execute shell commands on targets.
+    Eg: 
+    - name: This command will change the working directory to somedir/
+      ansible.builtin.shell:
+        cmd: ls -l | grep log
+        chdir: somedir/
+
+ansible.builtin.script
+Runs a local script on a remote node after transferring it.

@@ -1,0 +1,38 @@
+What is Actuator?
+	It is a module that provides production-ready features to monitor and manage your Spring Boot application.
+	It offers various endpoints and metrics that can be used for monitoring, health checks, auditing, and managing your application. 
+	The actuator exposes these features via RESTful endpoints or JMX (Java Management Extensions) beans.
+	It provides production-ready features to help you monitor and manage your application. 
+	With Actuator, you can add several built-in services to your application without writing any code.
+
+By default, Actuator endpoints are enabled, but we can customize the configuration in the application.properties or application.yml file. 
+For example, to enable all Actuator endpoints, we can add the following line to application.properties file:
+
+management.endpoints.web.exposure.include=*
+
+Now that we have Actuator enabled, we can access various endpoints to monitor and manage the…
+
+
+
+
+Features of Spring Boot Actuator
+Here are some features provided by Spring Boot Actuator:
+
+Health check-up: Spring Boot Actuator provides a /health endpoint to check the health of your application.
+Metrics gathering: It gathers various metrics about your application like memory usage, garbage collection, web request tracing, etc.
+HTTP tracing: It keeps track of HTTP request-response exchange details.
+Application info: It can display application-related information.
+Shutdown: It exposes a shutdown endpoint to gracefully shut down the application.
+Environment information: It exposes environment variables and configuration properties.
+
+
+By default, only the ‘health’ and ‘info’ endpoints are enabled. 
+If you want to expose only specific endpoints, you can list them: management.endpoints.web.exposure.include=health,info,beans
+If you want to enable all endpoints, you can add the following property to your application.properties file: management.endpoints.web.exposure.include=*
+
+By default, /info endpoint is disabled in actuator. We need to add the below config to application.properties file to see application related information exposed by us.
+management.info.env.enabled=true
+info.app.name=Spring Boot Actuator Dashboard
+info.app.description=Spring Boot backend to demonstrate actuator APIs
+info.app.version=1.0
+

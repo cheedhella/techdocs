@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-demo-pod-2
+spec:
+  containers:
+    - image: nginx
+      name: cm-demo-pod-2-container
+      envFrom:
+        - configMapRef:
+            name: cm2

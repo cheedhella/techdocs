@@ -1,0 +1,59 @@
+DevOps Engineer having Experience with Aws, Ansible, Docker, Kubernetes, Jenkins, Linux, Git, GitHub, 
+Tomcat, Maven, Shell Script, Sonarqube, and Terraform
+Chef, Puppet;
+
+
+DevOps
+    In the Dev Perspective, we’ll focus more on the app. We’ll clone some app-code from GitHub, inspect a Dockerfile, containerize the app, and run it as a container.
+    In the Ops Perspective, we’ll download an image, start a new container, log in to the new container, run a command inside of it, and then destroy it.
+
+Github 
+    On VM where you want to clone a repository:
+        - Run: ssh-keygen
+        - Copy the public key: C:\Users\Administrator/.ssh/id_ed25519.pub
+    Go to GitHub → Settings → SSH and GPG keys
+    Click "New SSH key"
+    Set a title (e.g. "Windows VM")
+    Paste the copied key into the Key field
+    Click "Add SSH key"
+    Test: ssh -T git@github.com
+
+    # GitHub supports SSH over port 443, which is typically open even on restricted networks.
+    C:\Users\YourUsername\.ssh\config
+    Host github.com
+      HostName ssh.github.com
+      Port 443
+      User git
+      IdentityFile ~/.ssh/id_ed25519
+    
+
+    git clone git@github.com:cheedhella/emp-manager.git
+
+curl http://localhost:8080/api/employees
+curl -X POST http://localhost:8080/api/employees -H "Content-Type: application/json" -d "{\"name\":\"e101\"}"
+curl http://localhost:8080/api/employees/1
+curl -X PUT http://localhost:8080/api/employees/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "email": "alice.johnson@example.com"
+  }'
+curl -X DELETE http://localhost:8080/api/employees/1
+
+
+mvn clean package -Ddockerhub.username=cheedhella -Ddockerhub.password=
+mvn clean package -Ddockerhub.username=cheedhella -Ddockerhub.password=
+mvn compile jib:build -Pjib-dockerhub
+mvn compile jib:build \
+   \
+  
+
+mvn compile jib:build -s ~/.m2/settings-dockerhub.xml -Pjib-dockerhub -Ddockerhub.username=cheedhella -Ddockerhub.password=
+mvn compile jib:build -s C:\Users\Administrator\.m2\settings-dockerhub.xml -Pjib-dockerhub -DDOCKER_HUB_USERNAME=cheedhella -DDOCKER_HUB_PASSWORD=
+
+
+docker login -u cheedhella
+docker.io/cheedhella/employee-manager
+namespace - cheedhella 
+repository - employee-manager

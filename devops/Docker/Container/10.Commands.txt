@@ -1,0 +1,8 @@
+docker run nginx:alpine             # foreground, ,press ctrl + c to exit it;
+docker run -d nginx:alpine          # run in background, detach mode;
+docker ps -l                    # List all containers 
+docker rm <containerid>         # delete container ; you con't delete a running container;
+docker rm- f <containerid>      # use -f option, if you want to delete a running container;
+
+<jib.skip>true</jib.skip>
+

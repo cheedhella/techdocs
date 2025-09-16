@@ -1,0 +1,70 @@
+What is Replicaset? // ReplicaSet = Pod + self-healing + scaling;
+	- A Pod, by itself, is not self-healing; In case of any failure, it won't recover on its own;
+	  It means: If you create a Pod without Replicaset, then a new Pod won't be created, in case of any failure;
+	  Replicaset takes care of it!
+
+	- It ensures that specified number of Pods are always up and running, in the cluster;
+
+	- Replicaset keeps monitoring the pods and ensures desired number of pods are always running; No need to monitor 24/7 manually;
+	  If there are lesser number of pods than what is specified, may be a pod crashed, it spins up new pods;
+	  If there are more number of pods than what is specified, may be you reduced the number of replicas, it deletes the pods;
+
+    - Different k8s clusters(on-premise and cloud-based) provide different ways to distribute the replicas among the nodes;
+	  In general, all replicas/pods of a replicaset are evenly distributed across all the nodes in the cluster;
+
+	- Usually, In Production, you will never create a Replicaset directly; Instead, Deployment is used;
+	  Use ReplicaSet directly, only when you don't require to update OR require a custom update orchestration;
+
+	- Replicaset supports set based and equality based selector.
+
+Benefits of ReplicaSet?
+	- Fault tolerance
+	  If a Pod fails, k8s can detect and replace the failed replica with a new one;
+	- Scalability
+	  You can scale up or down the number of replicas;
+	- High Availability
+	  By running multiple replicas of a Pod, we can ensure that application remains available, even if one or more replicas fail;
+	
+Disadvantages of ReplicaSet?
+	- Stateful applications
+	  ReplicaSet works well for stateless applications, where Pods are interchangable and any Pod can handle a request;
+	  In case of stateful application, such as Database, each Pod may be having unique data that is not yet replicated across all Pods;
+	  In that case, StatefulSet is more appropriate;
+	- Limited Load Balancing
+	  It only provides basic load balancing by distributing requests across all replicas;
+	  However, they do not provide advanced load balancing features such as session affinity or weighted routing;
+	  In these cases, an external load balancer OR an Ingress controller may be needed;
+
+What causes a Pod to die/fail?
+	There are lot of reasons why the life of a particular pod could come to an end:
+		- Underlying node might have failed;
+		- K8s has evicted that pod 
+			-- to better utilize the resources of the cluster;
+			-- to prepare the node for shutdown/restart;
+		- Deleted by mistake;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl apply -f <manifest-file> 		# Create Resources
+kubectl get rs 							# List all Replicasets
+kubectl describe rs/<name> 				# Describe a Replicaset
+kubectl edit rs <name> 					# It will open the YAML manifest using default text editor; You can change the replicas under spec element and save;
+kubectl scale rs/<name> --replicas=4 	# Scale Up/Down
+kubectl delete -f <manifest-file> 		# Delete resources 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Scaling
+	It’s possible to scale our apps manually, and we’ll see how to do that shortly. However, Kubernetes has several autoscalers that automatically scale our apps and infrastructure. Some of them include:
+
+	The Horizontal Pod Autoscaler
+
+	The Vertical Pod Autoscaler
+
+	The Cluster Autoscaler
+
+	The Horizontal Pod Autoscaler (HPA) adds and removes Pods to meet current demand. Most clusters install it by default, and it’s widely used.
+
+	The Cluster Autoscaler (CA) adds and removes cluster nodes so we always have enough to run all scheduled Pods. This is also installed by default and widely used.
+
+	The Vertical Pod Autoscaler (VPA) increases and decreases the CPU and memory allocated to running Pods to meet current demand. It isn’t installed by default, has several known limitations, and is less widely used. Current implementations delete the existing Pod and replace it with a new one every time they scale the Pods resources. This is disruptive and can even result in Kubernetes scheduling the new Pod to a different node. However, work is underway to enable in place updates to live Pods.
+
+	Community projects like Karmada take things further by allowing us to scale apps across multiple clusters.

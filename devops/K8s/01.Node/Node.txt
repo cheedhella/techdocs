@@ -1,0 +1,38 @@
+kubectl get nodes -o wide                                  # List all nodes in the cluster; Status: Ready, Not Ready, Unreachable; Roles: master, worker; Version: k8s version running on the node;
+kubectl describe node <node-name>                          # Detailed information(condition etc) about a node;
+kubectl label node key=value                               # Add label to a node  
+kubectl get nodes -l environment=production                # Get nodes with given label 
+kubectl get nodes --show-labels=true                       # Show labels of nodes 
+
+Node Condition
+    Ready   ->  True - Node is healthy and ready to accept pods; False - Node is not healthy and not accepting pods; 
+                Unknown - If the node controller has not heard from the node in the last 50 seconds; By default, node controller polls the health of nodes for every 5 seconds;
+    DiskPressure -> True, if the disk capacity is low;
+    MemoryPressure -> True, if the node memory is low;
+    PIDPressure -> True, if there are too many processes on the node;
+    NetworkUnavailable -> True, if the network for the node is not correctly configured;
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Questions:
+How to add a node to existing k8s cluster? 
+How to safely vacate all workloads from a node and release the node? Graceful restart of a node;
+Node Autoscaling?
+Node capacity planning 
+Node Health monitoring 
+How to capture history of memory and cpu usage at node level? Prometheus + Grafana = Prometheus scrapes metrics from nodes, kubelets, and apps. Grafana visualizes them with dashboards.
+
+
+
+
+
+kubectl get nodes -o custom-columns=NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory # Understand the available resources on each node for capacity planning.
+https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
+A node can also have one or more annotations;
+
+
+
+
+
+
+
+

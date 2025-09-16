@@ -1,0 +1,2 @@
+This is provided by kubernetes.io as a method to deploy a single-master, multi-node cluster. 
+There are additional instructions for setting up a multi-master configuration, too.

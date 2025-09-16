@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3
+type: Opaque
+data:
+  password3: cGFzc3dvcmQz

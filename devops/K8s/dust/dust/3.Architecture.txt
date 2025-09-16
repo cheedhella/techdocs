@@ -1,0 +1,45 @@
+What is K8s Cluster?
+	A Cluster is made up of one Master and a set of Nodes.
+	It’s possible to have a multi-master setup (for high availability), but by default there is a single master.
+
+	Master 
+		It runs these components/processes: kube-apiserver(API Server), kube-controller-manager(Controller Manager), kube-scheduler(Scheduler), etcd
+			core@master ~ $ systemctl -a | grep kube
+			kube-apiserver.service          loaded active  running Kubernetes API Server
+			kube-controller-manager.service loaded active  running Kubernetes Controller Manager
+			kube-scheduler.service          loaded active  running Kubernetes Scheduler
+
+	Node
+		It runs these components/processes: kubelet, kube-proxy, docker
+			core@node-1 ~ $ systemctl -a | grep kube
+			kube-kubelet.service loaded active running Kubernetes Kubelet
+			kube-proxy.service   loaded active running Kubernetes Proxy
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------
+https://www.aquasec.com/wiki/display/containers/Kubernetes+Architecture+101 - Architecture
+https://learning.oreilly.com/library/view/managing-kubernetes/9781492033905/ch03.html - K8s Components
+https://learning.oreilly.com/library/view/managing-kubernetes/9781492033905/ch04.html - API Server
+https://learning.oreilly.com/library/view/managing-kubernetes/9781492033905/ch05.html - Scheduler
+https://matthewpalmer.net/kubernetes-app-developer/articles/how-does-kubernetes-use-etcd.html - etcd
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ToDo:
+1. SSH to Master from Host
+2. SSH to Node from Host
+3. Hello world example: https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+https://learning.oreilly.com/library/view/managing-kubernetes/9781492033905/ch03.html
+
+https://portworx.com/basic-guide-kubernetes-storage/ - kubelet and controller
+kubectl get pods --namespace=kube-system
+
+
+kubectl - It is used to interact with any cluster(master in the cluster) from host machine. 
+	context is what determines which cluster kubectl is interacting with. 
+	We can see all our available contexts in the ~/.kube/config file:
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.aquasec.com/cloud-native-academy/kubernetes-101/kubernetes-architecture/
+
+

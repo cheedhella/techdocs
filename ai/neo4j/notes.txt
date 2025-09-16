@@ -1,0 +1,13 @@
+https://neo4j.com/videos/neo4j-live-building-ai-agents-with-googles-genai-toolbox/
+MCP toolbox for databases 
+ using the popular GraphRAG techniques, 
+ https://broadcom-1.udemy.com/course/knowledge-graphs-rag/
+https://broadcom-1.udemy.com/course/java-spring-ai-neo4j-openai-knowledge-graph-rag/
+
+https://neo4j.com/blog/developer/llm-knowledge-graph-builder/
+https://neo4j.com/whitepapers/developers-guide-how-to-build-knowledge-graph/
+https://neo4j.com/blog/developer/llm-knowledge-graph-builder-back-end/
+https://neo4j.com/blog/developer/frontend-architecture-and-integration/
+https://neo4j.com/blog/developer/llm-knowledge-graph-builder/
+https://www.youtube.com/watch?v=0LJuGTsgTgw&list=PL9Hl4pk2FsvVLtbHf1ygw-XHEOhvMxtIo
+https://github.com/neo4j/neo4j-graphrag-python

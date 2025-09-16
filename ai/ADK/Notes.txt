@@ -1,0 +1,78 @@
+What LLMs can and can't do?
+    They can't access dedicated apps or databases; // It can't login to bookmyshow and book a ticket;
+
+LiteLLM 
+    It is used connect to multiple LLMs;
+    pip install litellm 
+
+Ollama
+    It helps in downloading and running LLMs locally;
+    Download and install;
+
+tinyllama
+    ollama pull tinyllama
+    ollama list 
+
+uv 
+    pip install uv      # Used to install pyton projects;
+
+
+
+What is AI Agent?
+     
+What is Agent Development Kit?
+    Model agnostic -> You can choose any model;
+    Deployment agnostic -> You can deploy the agent to any cloud or anywhere;
+    Interoperable -> You can bring in agents built using other frameworks and they all work together;
+
+
+Model Context Protocol (MCP)
+
+A2A
+    https://github.com/google-a2a/A2A/tree/main
+    https://google-a2a.github.io/A2A/
+
+pip install google-adk
+    agent.py    # Contains the definitions of root and sub agents;
+
+What are the instructions to agents?
+    load_instruction_from_file
+
+
+ADK offers several types of agents:
+    LLMAgent — Uses a large language model to interpret instructions and decides how to act.
+        Agent which has LLM and tools;
+    WorkflowAgent — This type of agent is a deterministic rule-based agent, where LLM is not involved. This type of agent is further divided into three different types as Sequential, Parallel, or Loop.
+        To pick/skip a subagent, I don't need LLM, I know the logic; In that case, you can use workflow agent;
+        sequential - run all subagents in a sequence, one after another;
+        parallel - run all subagents parallely;
+        loop - it runs subagents in a loop, until a condition is met;
+    ToolOnlyAgent – This agent is also a rule-based agent, whose sole purpose is to run the associated tool when invoked.
+    SubAgents — This type is used to define the hierarchy among different agents.
+    CustomAgent — This allows you to define a custom implementation of the agent you want to build with more fine-grained programmatic control.
+
+
+
+There are 4 ways to interact:
+    CLI - 'adk run' is used to run the agent in the command line;
+    UI - 'adk web' spins up a new Angular UI, through which you can interact with the agent;
+    API server - It exposes your agent as REST API;
+    API(programmatic way) - 
+
+
+https://www.youtube.com/watch?v=44C8u0CDtSo&t=26s - Getting started with Agent Development Kit
+https://github.com/google/adk-samples/tree/main/python
+https://www.datacamp.com/tutorial/agent-development-kit-adk
+
+
+
+
+
+
+
+https://www.youtube.com/watch?v=0LJuGTsgTgw&pp=ygUIbmVvNGogYWk%3D
+https://www.youtube.com/results?search_query=neo4j+ai
+https://www.youtube.com/watch?v=zK_8wYNyAec
+
+
+https://github.com/neo4j/neo4j-graphrag-python

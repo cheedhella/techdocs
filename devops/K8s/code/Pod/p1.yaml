@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:                             # Metadata = Name + Labels + Annotations
+  name: grade-submission-portal       # Name of Pod
+  labels:                             # Labels 
+    app.kuberenetes.io/name: myapp
+  annotations:
+    description: "This pod runs the frontend service."
+    backup: "true"
+spec:                   # Container runtime requirements
+  containers:
+  - name: myapp
+    image: <Image>
+    resources:
+      requests:               # Minimum amount of memory and CPU needed
+        memory: "128Mi"
+        cpu: "500m"       # You can throttle compute, you can't throttle memory
+      limits:               # If you don't specify a limit, it takes up however much memory available. If all apps does same thing, they run out of memory and containers are terminated left and right. Suddenly, you have no more apps left;
+        memory: "128Mi"
+        # cpu: "500m"         # We don't want to put a limit on CPU, as CPU can be throttled;
+    ports:
+      - containerPort: <Port>
+
+# Labels
+#   - Pod can have one or more labels; // Keys should namespaced to avoid conflicts;
+#     Eg:
+#       app: frontend
+#       environment: production
+# Why Labels?
+#   - They are used for grouping and selection; For eg, you can get all frontend and production pods;
+#   - Services use labels to select few pods and route traffic to them;
+
+# Annotation
+#   - A Pod/Service/Deployment can have 1 or more annotations;
+#   - It is used to store arbitary metadata, not meant for selection;
+#   - Some ingress controllers use annotations for configuration;
+
+kubectl apply -f great=submission-pod.yaml
+kubectl delete pods -l ""   # Delete pods with given label;

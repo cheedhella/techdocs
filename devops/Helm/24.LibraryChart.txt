@@ -1,0 +1,3 @@
+Library chart was introduced in Helm 3, 
+Library charts do not define any templates and therefore cannot be deployed.
+A library chart differs from an application chart because it is not installable and usually doesn't contain any resource objects. 

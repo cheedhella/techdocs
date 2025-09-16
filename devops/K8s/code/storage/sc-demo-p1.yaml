@@ -1,0 +1,35 @@
+# It dynamically provisions PersistentVolumes using the microk8s.io/hostpath provisioner;
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-1
+provisioner: microk8s.io/hostpath
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sc-pvc-1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: sc-1        # Refers to name of the StorageClass;
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sc-demo-p1
+spec:
+  containers:
+    - name: mybusybox
+      command: ['tail', '-f', '/dev/null']
+      image: busybox
+      volumeMounts:
+        - name: sc-vol-1
+          mountPath: /data
+  volumes:
+    - name: sc-vol-1
+      persistentVolumeClaim:
+        claimName: sc-pvc-1

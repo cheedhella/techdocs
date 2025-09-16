@@ -1,0 +1,148 @@
+What is K8s? // Pronounced as Koo-Ber-Net-ees;
+	It is an open-source container orchestration platform;
+
+What is Container Orchestration?
+	It is all about managing the lifecycle of containers;
+		- Deployment
+		- Rolling out new version of the apps and configuration without downtime; If something goes wrong, it can rollback the change for you; 
+		- Load balancing - distributing the load between containers;
+		- Scaling up/down by adding/removing containers when demand changes;
+		- Health monitoring and Auto healing - Move the containers from one host to another, if the host dies or there is shortage of resources in it;
+		- Storage, Networking, Service Discovery;
+		- Monitoring, Logging, Debugging;
+		- Apps build to work with k8s can be easily moved from one IaaS to another, without any changes to app source code;
+		  Apps are deployed on K8s cluster and K8s cluster is deployed in IaaS;
+
+Why K8s?
+	Check '01. Why K8s.png';
+
+	It has already been stated that Kubernetes can abstract lower-level on-prem and cloud infrastructure, allowing you to write your applications to run on Kubernetes without even knowing which cloud is behind it. Well, this has a few side benefits, including:
+	You can deploy to one cloud today and switch to another tomorrow.
+	You can run multi-cloud
+	You can ramp onto a cloud and then ramp off back to on-prem more easily.
+	Basically, applications written for Kubernetes will run anywhere that you have Kubernetes.
+
+	containerization -> application to docker image;
+	resulting application is called a containerized application
+
+What is K8s Cluster?
+	Cluster is nothing but a set of nodes;
+
+What is K8s Node?
+	What is K8s? K8s is a Resource Manager; 
+	What Resources it manages? It manages Virtual Servers(not physical);
+	What is Virtual Server? 
+		In AWS, it is called EC2 instance; In Azure, it is called Virtual Machine; In Google Cloud, it is called Compute Engine; 
+		K8s gave all of them a generic name - called Worker Node;
+	To manage 100s of worker nodes, you need Master Nodes;
+	To simlify:
+		Worker Node -> Runs our applications;
+		Master Node -> Manages the Cluster or worker nodes;
+
+Type k8s resources?
+	- Pod
+	- Replica Set
+	- Deployment
+	- Services
+	- Labels
+	- Endpoints
+	- Service Publishing
+	- Namespaces
+	- Context
+	- Ingress
+	- DNS
+	- ConfigMaps
+	- Secrets
+	- Persistent Volumes
+	- Cloud Providers and Storage Classes
+	- Stateful Sets
+	- Role Based Access
+	- Pod Backups
+	- Helm Charts
+	- Taints and Tolerations
+	- Network Policies
+	- Pod Security Policies
+	- Resource Requests and Limits
+	- Pod Autoscaling
+	- Liveness and Readiness Probes
+	- Validating Admission Controllers
+	- Jobs and CronJobs
+
+Why so many resources?
+	K8s follows single responsibility principle - each resource has only one responsibility/purpose;
+
+How to create different resources in k8s cluster?
+	There are 2 different ways to create objects in k8s cluster; First way is through command line and second is through a manifest file;
+	kubectl apply -f <manifest.yaml>
+	kubectl delete -f <manifest.yaml>
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pod 			-> Set of Containers;
+ReplicaSet 		-> Pod + self-healing(high availability) + scaling;
+Deployment 		-> Replicaset + Rollout and Rollback;
+
+
+
+
+What Kubernetes Brings to the Table
+
+This chapter introduces us to Kubernetes and gives us enough information to run our first application.
+
+Kubernetes Architecture
+
+This chapter explains the basic architecture of a Kubernetes cluster, the functions of each component, and the overall goal.
+
+Pods
+
+This chapter explains the use of pods in Kubernetes. We will learn about multi-container pods, and how to manage them effectively.
+
+Deployments
+
+This chapter teaches us to deploy application releases using Kubernetes, and how to counterbalance each scenario related to them.
+
+Services
+
+This chapter highlights the different services related to Kubernetes.
+
+Ingress
+
+This chapter introduces us to Ingress, and compares it to a load balancer.
+
+Configuring Applications with ConfigMaps
+
+This chapter teaches us the role of ConfigMaps in configuring applications in Kubernetes.
+
+Secrets
+
+This chapter teaches us the concept of secrets in Kubernetes.
+
+Running Jobs
+
+This chapter introduces the mechanism of running and managing multiple jobs in Kubernetes.
+
+Organizing Resources with Namespaces
+
+This chapter introduces us to namespaces, and the process of running Kubernetes resources in them.
+
+Managing Container Resource Usage
+
+This chapter teaches us resource usage management in Kubernetes, and defines resource requests and limits.
+
+Understanding the Kubeconfig File
+
+This chapter explains the Kubernetes configuration file in different contexts.
+
+We will just say, “I need 2 copies of this application, and it needs 2 cores and 5 GB of memory,” and Kubernetes will find a way to run it.
+
+
+https://www.educative.io/module/page/1j8yMXCkjGqYGZ9Py/10370001/6434695478247424/4536185849905152
+
+
+kubectl apply -f nginx.yaml
+
+It will take the name of our application that is nginx, and forwards the requests received locally on port 3000 to the container’s port, 80 (that’s the default port nginx is listening to).
+kubectl exec -it <pod name> --container <container name> -- /bin/bash		# connect to container, when pod has more than 1 container 
+kubectl exec --stdin --tty nginx -- /bin/bash
+

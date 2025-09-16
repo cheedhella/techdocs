@@ -1,0 +1,816 @@
+Prerequisites:
+    - Procure nodes based on CPU/Memory needs;
+    - Open Ports 
+
+What is kubeadm?
+    kubeadm is a tool provided by k8s to setup the k8s cluster quickly;
+
+    > sudo kubeadm init 
+        - Initiates key components like API server, controller manager, scheduler and etcd on master node/control plane;
+    > sudo kubeadm join <master-ip>:<port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>
+        - Used to join the worker nodes to the cluster;
+    
+AddOn Components 
+    CNI plugin 
+
+Ports to unblock:
+    Master Node Ports: 2379,6443(API Server),10250(kubelet),10251(Scheduler),10252(Controller)
+    Worker Node Ports: 10250, 30000–32767
+    Default port range for NodePort Services: 30000–32767
+
+
+mkdir installer
+cd installer
+cp -r  /project/dist/VNANG/cnvna-ansible .
+cd cnvna-ansible
+./replace_inventory_hostnames.sh 10.253.228.90 10.253.228.92 10.253.228.62 10.253.229.120 ./inventory/inventory_cnvna_ssh.ini
+./replace_inventory_hostnames.sh 10.253.228.90 10.253.228.92 10.253.228.62 10.253.229.120 ./inventory/inventory_cnvna.ini
+
+vi ansible.cfg 
+[defaults]
+host_key_checking = False
+
+ansible-playbook -i inventory/inventory_cnvna_ssh.ini setup_passwordless_ssh.yml
+
+
+
+
+
+
+
+[root@netops-rl8-1535 cnvna-ansible-2]# ansible-playbook -i inventory/inventory_cnvna.ini cnvna_playbook.yml
+
+PLAY [Deploy CNVNA] *******************************************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.228.62]
+ok: [10.253.229.120]
+ok: [10.253.228.92]
+
+TASK [prepare_all_the_cluster_nodes : Include tasks for install packages] *************************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/prepare_all_the_cluster_nodes/tasks/install_packages.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [prepare_all_the_cluster_nodes : Install required packages] **********************************************************************************************************************************************************************************
+ok: [10.253.228.90] => (item=wget)
+ok: [10.253.228.62] => (item=wget)
+ok: [10.253.228.92] => (item=wget)
+ok: [10.253.229.120] => (item=wget)
+ok: [10.253.228.90] => (item=curl)
+ok: [10.253.228.62] => (item=curl)
+ok: [10.253.228.92] => (item=curl)
+ok: [10.253.229.120] => (item=curl)
+ok: [10.253.228.90] => (item=vim)
+ok: [10.253.228.62] => (item=vim)
+ok: [10.253.228.92] => (item=vim)
+ok: [10.253.229.120] => (item=vim)
+ok: [10.253.228.90] => (item=bash-completion)
+ok: [10.253.228.62] => (item=bash-completion)
+ok: [10.253.228.92] => (item=bash-completion)
+ok: [10.253.229.120] => (item=bash-completion)
+ok: [10.253.228.90] => (item=nc)
+ok: [10.253.229.120] => (item=nc)
+ok: [10.253.228.92] => (item=nc)
+ok: [10.253.228.90] => (item=tcpdump)
+ok: [10.253.229.120] => (item=tcpdump)
+ok: [10.253.228.92] => (item=tcpdump)
+ok: [10.253.228.90] => (item=telnet)
+ok: [10.253.229.120] => (item=telnet)
+ok: [10.253.228.92] => (item=telnet)
+changed: [10.253.228.62] => (item=nc)
+ok: [10.253.228.90] => (item=bind-utils)
+ok: [10.253.229.120] => (item=bind-utils)
+ok: [10.253.228.92] => (item=bind-utils)
+ok: [10.253.228.62] => (item=tcpdump)
+changed: [10.253.228.62] => (item=telnet)
+ok: [10.253.228.62] => (item=bind-utils)
+
+TASK [prepare_all_the_cluster_nodes : Include tasks for setting firewall] *************************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/prepare_all_the_cluster_nodes/tasks/firewall.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [prepare_all_the_cluster_nodes : Check if firewalld is running] ******************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+ok: [10.253.228.90]
+
+TASK [prepare_all_the_cluster_nodes : Open necessary TCP ports] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.92] => (item=6443) 
+skipping: [10.253.228.92] => (item=2379) 
+skipping: [10.253.228.92] => (item=2380) 
+skipping: [10.253.228.92] => (item=10250) 
+skipping: [10.253.228.92] => (item=10251) 
+skipping: [10.253.228.92] => (item=10252) 
+skipping: [10.253.228.92] => (item=10257) 
+skipping: [10.253.229.120] => (item=6443) 
+skipping: [10.253.228.92] => (item=10259) 
+skipping: [10.253.228.92] => (item=179) 
+skipping: [10.253.228.92]
+skipping: [10.253.229.120] => (item=2379) 
+skipping: [10.253.229.120] => (item=2380) 
+skipping: [10.253.228.62] => (item=6443) 
+skipping: [10.253.229.120] => (item=10250) 
+skipping: [10.253.229.120] => (item=10251) 
+skipping: [10.253.229.120] => (item=10252) 
+skipping: [10.253.228.62] => (item=2379) 
+skipping: [10.253.229.120] => (item=10257) 
+skipping: [10.253.229.120] => (item=10259) 
+skipping: [10.253.229.120] => (item=179) 
+skipping: [10.253.228.62] => (item=2380) 
+skipping: [10.253.228.62] => (item=10250) 
+skipping: [10.253.228.62] => (item=10251) 
+skipping: [10.253.228.62] => (item=10252) 
+skipping: [10.253.228.62] => (item=10257) 
+skipping: [10.253.228.62] => (item=10259) 
+skipping: [10.253.228.62] => (item=179) 
+skipping: [10.253.229.120]
+skipping: [10.253.228.62]
+changed: [10.253.228.90] => (item=6443)
+changed: [10.253.228.90] => (item=2379)
+changed: [10.253.228.90] => (item=2380)
+changed: [10.253.228.90] => (item=10250)
+changed: [10.253.228.90] => (item=10251)
+changed: [10.253.228.90] => (item=10252)
+changed: [10.253.228.90] => (item=10257)
+changed: [10.253.228.90] => (item=10259)
+changed: [10.253.228.90] => (item=179)
+
+TASK [prepare_all_the_cluster_nodes : Open necessary UDP ports] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [prepare_all_the_cluster_nodes : Reload firewall] ********************************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [prepare_all_the_cluster_nodes : Check if firewalld is running] ******************************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.229.120]
+ok: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Open necessary TCP ports] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.90] => (item=179) 
+skipping: [10.253.228.90] => (item=10250) 
+skipping: [10.253.228.90] => (item=30000-32767) 
+skipping: [10.253.228.90]
+changed: [10.253.229.120] => (item=179)
+changed: [10.253.228.92] => (item=179)
+changed: [10.253.228.62] => (item=179)
+changed: [10.253.229.120] => (item=10250)
+changed: [10.253.228.92] => (item=10250)
+changed: [10.253.228.62] => (item=10250)
+changed: [10.253.229.120] => (item=30000-32767)
+changed: [10.253.228.92] => (item=30000-32767)
+changed: [10.253.228.62] => (item=30000-32767)
+
+TASK [prepare_all_the_cluster_nodes : Open necessary UDP ports] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Reload firewall] ********************************************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+changed: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Include tasks for disabling selinux] ************************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/prepare_all_the_cluster_nodes/tasks/selinux.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [prepare_all_the_cluster_nodes : Set SELinux to permissive mode] *****************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+changed: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Ensure SELinux is set to permissive in config] **************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.229.120]
+ok: [10.253.228.92]
+ok: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Include tasks for disabling swap] ***************************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/prepare_all_the_cluster_nodes/tasks/swap.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [prepare_all_the_cluster_nodes : Disable swap] ***********************************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+changed: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Remove swap entry from /etc/fstab] **************************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.229.120]
+ok: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Remove swap entries from /etc/default/grub] *****************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.229.120]
+ok: [10.253.228.92]
+ok: [10.253.228.62]
+
+TASK [prepare_all_the_cluster_nodes : Rebuild grub configuration] *********************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+changed: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Include tasks for installing containerd] ****************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/install_and_configure_the_cluster/tasks/install_containerd.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [install_and_configure_the_cluster : Ensure containerd configuration file exists] ************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Set up containerd prerequisites (overlay and br_netfilter)] *********************************************************************************************************************************************
+ok: [10.253.228.92]
+ok: [10.253.228.90]
+ok: [10.253.229.120]
+ok: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Load containerd kernel modules] *************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Ensure Kubernetes network settings configuration file exists] *******************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Set up Kubernetes network settings] *********************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.229.120]
+ok: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Apply sysctl settings] **********************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+
+TASK [install_and_configure_the_cluster : Add Docker repository] **********************************************************************************************************************************************************************************
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.62]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Install containerd.io] **********************************************************************************************************************************************************************************
+
+changed: [10.253.228.90]
+changed: [10.253.228.62]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Configure containerd] ***********************************************************************************************************************************************************************************
+changed: [10.253.228.62]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Restart containerd service] *****************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.228.62]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+
+TASK [install_and_configure_the_cluster : Include tasks for configuring kubernetes repo] **********************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/install_and_configure_the_cluster/tasks/k8s_prereqs.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [install_and_configure_the_cluster : Create Kubernetes repository] ***************************************************************************************************************************************************************************
+changed: [10.253.228.90]
+changed: [10.253.228.62]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Update the repository list and generate metadata cache] *************************************************************************************************************************************************
+changed: [10.253.228.92]
+changed: [10.253.228.90]
+changed: [10.253.228.62]
+changed: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Install Kubernetes packages] ****************************************************************************************************************************************************************************
+changed: [10.253.228.62]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Enable and start kubelet service] ***********************************************************************************************************************************************************************
+changed: [10.253.228.62]
+changed: [10.253.228.90]
+changed: [10.253.228.92]
+changed: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Include tasks for kubeadm images pull] ******************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/install_and_configure_the_cluster/tasks/kubeadm_config_images_pull.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [install_and_configure_the_cluster : Get the list of Kubernetes config images] ***************************************************************************************************************************************************************
+ok: [10.253.228.62]
+ok: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Get the list of pulled images by crictl] ****************************************************************************************************************************************************************
+ok: [10.253.228.92]
+ok: [10.253.228.62]
+ok: [10.253.228.90]
+ok: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Extract Kubernetes config image names] ******************************************************************************************************************************************************************
+ok: [10.253.228.92]
+ok: [10.253.228.90]
+ok: [10.253.228.62]
+ok: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Extract names of Kubernetes images pulled by crictl] ****************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.228.62]
+ok: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Find Kubernetes images yet to be pulled] ****************************************************************************************************************************************************************
+ok: [10.253.228.90]
+ok: [10.253.228.92]
+ok: [10.253.228.62]
+ok: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Notify if all Kubernetes config images have already been pulled] ****************************************************************************************************************************************
+skipping: [10.253.228.90]
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+
+TASK [install_and_configure_the_cluster : Notify if Kubernetes config images have not been pulled yet] ********************************************************************************************************************************************
+ok: [10.253.228.90] => {
+    "msg": [
+        "Kubernetes config images have not been pulled yet.",
+        "Following images are yet to be pulled:",
+        [
+            "kube-apiserver",
+            "kube-controller-manager",
+            "kube-scheduler",
+            "kube-proxy",
+            "coredns",
+            "pause",
+            "etcd"
+        ]
+    ]
+}
+ok: [10.253.228.92] => {
+    "msg": [
+        "Kubernetes config images have not been pulled yet.",
+        "Following images are yet to be pulled:",
+        [
+            "kube-apiserver",
+            "kube-controller-manager",
+            "kube-scheduler",
+            "kube-proxy",
+            "coredns",
+            "pause",
+            "etcd"
+        ]
+    ]
+}
+ok: [10.253.228.62] => {
+    "msg": [
+        "Kubernetes config images have not been pulled yet.",
+        "Following images are yet to be pulled:",
+        [
+            "kube-apiserver",
+            "kube-controller-manager",
+            "kube-scheduler",
+            "kube-proxy",
+            "coredns",
+            "pause",
+            "etcd"
+        ]
+    ]
+}
+ok: [10.253.229.120] => {
+    "msg": [
+        "Kubernetes config images have not been pulled yet.",
+        "Following images are yet to be pulled:",
+        [
+            "kube-apiserver",
+            "kube-controller-manager",
+            "kube-scheduler",
+            "kube-proxy",
+            "coredns",
+            "pause",
+            "etcd"
+        ]
+    ]
+}
+
+TASK [install_and_configure_the_cluster : Pulling Kubernetes config images (this might take some time)] *******************************************************************************************************************************************
+changed: [10.253.229.120]
+changed: [10.253.228.62]
+changed: [10.253.228.92]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Include tasks for installing kubernetes] ****************************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/install_and_configure_the_cluster/tasks/initialise_cluster.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [install_and_configure_the_cluster : Initialize Kubernetes Cluster] **************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : debug] **************************************************************************************************************************************************************************************************
+ok: [10.253.228.90] => {
+    "kubeadm_init": {
+        "changed": true,
+        "cmd": [
+            "kubeadm",
+            "init",
+            "--pod-network-cidr=10.10.0.0/16",
+            "--apiserver-advertise-address=10.253.228.90",
+            "--cri-socket=unix:///run/containerd/containerd.sock"
+        ],
+        "delta": "0:00:13.529816",
+        "end": "2025-07-01 18:10:39.483970",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2025-07-01 18:10:25.954154",
+        "stderr": "I0701 18:10:26.170862   30386 version.go:256] remote version is much newer: v1.33.2; falling back to: stable-1.29\n\t[WARNING Firewalld]: firewalld is active, please ensure ports [6443 10250] are open or your cluster may not function correctly\n\t[WARNING FileExisting-tc]: tc not found in system path\nW0701 18:10:26.594467   30386 checks.go:835] detected that the sandbox image \"registry.k8s.io/pause:3.6\" of the container runtime is inconsistent with that used by kubeadm. It is recommended that using \"registry.k8s.io/pause:3.9\" as the CRI sandbox image.",
+        "stderr_lines": [
+            "I0701 18:10:26.170862   30386 version.go:256] remote version is much newer: v1.33.2; falling back to: stable-1.29",
+            "\t[WARNING Firewalld]: firewalld is active, please ensure ports [6443 10250] are open or your cluster may not function correctly",
+            "\t[WARNING FileExisting-tc]: tc not found in system path",
+            "W0701 18:10:26.594467   30386 checks.go:835] detected that the sandbox image \"registry.k8s.io/pause:3.6\" of the container runtime is inconsistent with that used by kubeadm. It is recommended that using \"registry.k8s.io/pause:3.9\" as the CRI sandbox image."
+        ],
+        "stdout": "[init] Using Kubernetes version: v1.29.15\n[preflight] Running pre-flight checks\n[preflight] Pulling images required for setting up a Kubernetes cluster\n[preflight] This might take a minute or two, depending on the speed of your internet connection\n[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'\n[certs] Using certificateDir folder \"/etc/kubernetes/pki\"\n[certs] Generating \"ca\" certificate and key\n[certs] Generating \"apiserver\" certificate and key\n[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local netops-rl8-1535] and IPs [10.96.0.1 10.253.228.90]\n[certs] Generating \"apiserver-kubelet-client\" certificate and key\n[certs] Generating \"front-proxy-ca\" certificate and key\n[certs] Generating \"front-proxy-client\" certificate and key\n[certs] Generating \"etcd/ca\" certificate and key\n[certs] Generating \"etcd/server\" certificate and key\n[certs] etcd/server serving cert is signed for DNS names [localhost netops-rl8-1535] and IPs [10.253.228.90 127.0.0.1 ::1]\n[certs] Generating \"etcd/peer\" certificate and key\n[certs] etcd/peer serving cert is signed for DNS names [localhost netops-rl8-1535] and IPs [10.253.228.90 127.0.0.1 ::1]\n[certs] Generating \"etcd/healthcheck-client\" certificate and key\n[certs] Generating \"apiserver-etcd-client\" certificate and key\n[certs] Generating \"sa\" key and public key\n[kubeconfig] Using kubeconfig folder \"/etc/kubernetes\"\n[kubeconfig] Writing \"admin.conf\" kubeconfig file\n[kubeconfig] Writing \"super-admin.conf\" kubeconfig file\n[kubeconfig] Writing \"kubelet.conf\" kubeconfig file\n[kubeconfig] Writing \"controller-manager.conf\" kubeconfig file\n[kubeconfig] Writing \"scheduler.conf\" kubeconfig file\n[etcd] Creating static Pod manifest for local etcd in \"/etc/kubernetes/manifests\"\n[control-plane] Using manifest folder \"/etc/kubernetes/manifests\"\n[control-plane] Creating static Pod manifest for \"kube-apiserver\"\n[control-plane] Creating static Pod manifest for \"kube-controller-manager\"\n[control-plane] Creating static Pod manifest for \"kube-scheduler\"\n[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"\n[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"\n[kubelet-start] Starting the kubelet\n[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory \"/etc/kubernetes/manifests\". This can take up to 4m0s\n[apiclient] All control plane components are healthy after 5.502934 seconds\n[upload-config] Storing the configuration used in ConfigMap \"kubeadm-config\" in the \"kube-system\" Namespace\n[kubelet] Creating a ConfigMap \"kubelet-config\" in namespace kube-system with the configuration for the kubelets in the cluster\n[upload-certs] Skipping phase. Please see --upload-certs\n[mark-control-plane] Marking the node netops-rl8-1535 as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]\n[mark-control-plane] Marking the node netops-rl8-1535 as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]\n[bootstrap-token] Using token: zpw6fb.b141xpgkjwmmeaoi\n[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles\n[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes\n[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials\n[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token\n[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster\n[bootstrap-token] Creating the \"cluster-info\" ConfigMap in the \"kube-public\" namespace\n[kubelet-finalize] Updating \"/etc/kubernetes/kubelet.conf\" to point to a rotatable kubelet client certificate and key\n[addons] Applied essential addon: CoreDNS\n[addons] Applied essential addon: kube-proxy\n\nYour Kubernetes control-plane has initialized successfully!\n\nTo start using your cluster, you need to run the following as a regular user:\n\n  mkdir -p $HOME/.kube\n  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config\n  sudo chown $(id -u):$(id -g) $HOME/.kube/config\n\nAlternatively, if you are the root user, you can run:\n\n  export KUBECONFIG=/etc/kubernetes/admin.conf\n\nYou should now deploy a pod network to the cluster.\nRun \"kubectl apply -f [podnetwork].yaml\" with one of the options listed at:\n  https://kubernetes.io/docs/concepts/cluster-administration/addons/\n\nThen you can join any number of worker nodes by running the following on each as root:\n\nkubeadm join 10.253.228.90:6443 --token zpw6fb.b141xpgkjwmmeaoi \\\n\t--discovery-token-ca-cert-hash sha256:d09713e67177338ceb4f170876cd1235ad50ca1934c7d3f01f49c1b424a8af6b ",
+        "stdout_lines": [
+            "[init] Using Kubernetes version: v1.29.15",
+            "[preflight] Running pre-flight checks",
+            "[preflight] Pulling images required for setting up a Kubernetes cluster",
+            "[preflight] This might take a minute or two, depending on the speed of your internet connection",
+            "[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'",
+            "[certs] Using certificateDir folder \"/etc/kubernetes/pki\"",
+            "[certs] Generating \"ca\" certificate and key",
+            "[certs] Generating \"apiserver\" certificate and key",
+            "[certs] apiserver serving cert is signed for DNS names [kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local netops-rl8-1535] and IPs [10.96.0.1 10.253.228.90]",
+            "[certs] Generating \"apiserver-kubelet-client\" certificate and key",
+            "[certs] Generating \"front-proxy-ca\" certificate and key",
+            "[certs] Generating \"front-proxy-client\" certificate and key",
+            "[certs] Generating \"etcd/ca\" certificate and key",
+            "[certs] Generating \"etcd/server\" certificate and key",
+            "[certs] etcd/server serving cert is signed for DNS names [localhost netops-rl8-1535] and IPs [10.253.228.90 127.0.0.1 ::1]",
+            "[certs] Generating \"etcd/peer\" certificate and key",
+            "[certs] etcd/peer serving cert is signed for DNS names [localhost netops-rl8-1535] and IPs [10.253.228.90 127.0.0.1 ::1]",
+            "[certs] Generating \"etcd/healthcheck-client\" certificate and key",
+            "[certs] Generating \"apiserver-etcd-client\" certificate and key",
+            "[certs] Generating \"sa\" key and public key",
+            "[kubeconfig] Using kubeconfig folder \"/etc/kubernetes\"",
+            "[kubeconfig] Writing \"admin.conf\" kubeconfig file",
+            "[kubeconfig] Writing \"super-admin.conf\" kubeconfig file",
+            "[kubeconfig] Writing \"kubelet.conf\" kubeconfig file",
+            "[kubeconfig] Writing \"controller-manager.conf\" kubeconfig file",
+            "[kubeconfig] Writing \"scheduler.conf\" kubeconfig file",
+            "[etcd] Creating static Pod manifest for local etcd in \"/etc/kubernetes/manifests\"",
+            "[control-plane] Using manifest folder \"/etc/kubernetes/manifests\"",
+            "[control-plane] Creating static Pod manifest for \"kube-apiserver\"",
+            "[control-plane] Creating static Pod manifest for \"kube-controller-manager\"",
+            "[control-plane] Creating static Pod manifest for \"kube-scheduler\"",
+            "[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"",
+            "[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"",
+            "[kubelet-start] Starting the kubelet",
+            "[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory \"/etc/kubernetes/manifests\". This can take up to 4m0s",
+            "[apiclient] All control plane components are healthy after 5.502934 seconds",
+            "[upload-config] Storing the configuration used in ConfigMap \"kubeadm-config\" in the \"kube-system\" Namespace",
+            "[kubelet] Creating a ConfigMap \"kubelet-config\" in namespace kube-system with the configuration for the kubelets in the cluster",
+            "[upload-certs] Skipping phase. Please see --upload-certs",
+            "[mark-control-plane] Marking the node netops-rl8-1535 as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]",
+            "[mark-control-plane] Marking the node netops-rl8-1535 as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]",
+            "[bootstrap-token] Using token: zpw6fb.b141xpgkjwmmeaoi",
+            "[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles",
+            "[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes",
+            "[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials",
+            "[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token",
+            "[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster",
+            "[bootstrap-token] Creating the \"cluster-info\" ConfigMap in the \"kube-public\" namespace",
+            "[kubelet-finalize] Updating \"/etc/kubernetes/kubelet.conf\" to point to a rotatable kubelet client certificate and key",
+            "[addons] Applied essential addon: CoreDNS",
+            "[addons] Applied essential addon: kube-proxy",
+            "",
+            "Your Kubernetes control-plane has initialized successfully!",
+            "",
+            "To start using your cluster, you need to run the following as a regular user:",
+            "",
+            "  mkdir -p $HOME/.kube",
+            "  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
+            "  sudo chown $(id -u):$(id -g) $HOME/.kube/config",
+            "",
+            "Alternatively, if you are the root user, you can run:",
+            "",
+            "  export KUBECONFIG=/etc/kubernetes/admin.conf",
+            "",
+            "You should now deploy a pod network to the cluster.",
+            "Run \"kubectl apply -f [podnetwork].yaml\" with one of the options listed at:",
+            "  https://kubernetes.io/docs/concepts/cluster-administration/addons/",
+            "",
+            "Then you can join any number of worker nodes by running the following on each as root:",
+            "",
+            "kubeadm join 10.253.228.90:6443 --token zpw6fb.b141xpgkjwmmeaoi \\",
+            "\t--discovery-token-ca-cert-hash sha256:d09713e67177338ceb4f170876cd1235ad50ca1934c7d3f01f49c1b424a8af6b "
+        ]
+    }
+}
+ok: [10.253.228.92] => {
+    "kubeadm_init": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+ok: [10.253.228.62] => {
+    "kubeadm_init": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+ok: [10.253.229.120] => {
+    "kubeadm_init": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+
+TASK [install_and_configure_the_cluster : Delete .kube directory if already exists] ***************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+ok: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Create .kube directory] *********************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Copy admin.conf to kube config] *************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Add kubectl completion to .bashrc of user ansikube] *****************************************************************************************************************************************************
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+skipping: [10.253.228.92]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Get the join command from the control plane] ************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+changed: [10.253.228.62 -> 10.253.228.90]
+changed: [10.253.228.92 -> 10.253.228.90]
+changed: [10.253.229.120 -> 10.253.228.90]
+
+TASK [install_and_configure_the_cluster : Execute join command] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+changed: [10.253.228.62]
+changed: [10.253.229.120]
+changed: [10.253.228.92]
+
+TASK [install_and_configure_the_cluster : debug] **************************************************************************************************************************************************************************************************
+skipping: [10.253.228.90]
+ok: [10.253.228.92] => {
+    "join_output": {
+        "changed": true,
+        "cmd": [
+            "kubeadm",
+            "join",
+            "10.253.228.90:6443",
+            "--token",
+            "s15p7u.v4keu071fhj08px0",
+            "--discovery-token-ca-cert-hash",
+            "sha256:d09713e67177338ceb4f170876cd1235ad50ca1934c7d3f01f49c1b424a8af6b"
+        ],
+        "delta": "0:00:18.046651",
+        "end": "2025-07-01 18:11:02.629196",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2025-07-01 18:10:44.582545",
+        "stderr": "\t[WARNING FileExisting-tc]: tc not found in system path",
+        "stderr_lines": [
+            "\t[WARNING FileExisting-tc]: tc not found in system path"
+        ],
+        "stdout": "[preflight] Running pre-flight checks\n[preflight] Reading configuration from the cluster...\n[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'\n[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"\n[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"\n[kubelet-start] Starting the kubelet\n[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...\n\nThis node has joined the cluster:\n* Certificate signing request was sent to apiserver and a response was received.\n* The Kubelet was informed of the new secure connection details.\n\nRun 'kubectl get nodes' on the control-plane to see this node join the cluster.",
+        "stdout_lines": [
+            "[preflight] Running pre-flight checks",
+            "[preflight] Reading configuration from the cluster...",
+            "[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'",
+            "[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"",
+            "[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"",
+            "[kubelet-start] Starting the kubelet",
+            "[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...",
+            "",
+            "This node has joined the cluster:",
+            "* Certificate signing request was sent to apiserver and a response was received.",
+            "* The Kubelet was informed of the new secure connection details.",
+            "",
+            "Run 'kubectl get nodes' on the control-plane to see this node join the cluster."
+        ]
+    }
+}
+ok: [10.253.228.62] => {
+    "join_output": {
+        "changed": true,
+        "cmd": [
+            "kubeadm",
+            "join",
+            "10.253.228.90:6443",
+            "--token",
+            "j2d5ln.8bxlf0h5nb9238wf",
+            "--discovery-token-ca-cert-hash",
+            "sha256:d09713e67177338ceb4f170876cd1235ad50ca1934c7d3f01f49c1b424a8af6b"
+        ],
+        "delta": "0:00:13.287280",
+        "end": "2025-07-01 18:10:57.858534",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2025-07-01 18:10:44.571254",
+        "stderr": "\t[WARNING FileExisting-tc]: tc not found in system path",
+        "stderr_lines": [
+            "\t[WARNING FileExisting-tc]: tc not found in system path"
+        ],
+        "stdout": "[preflight] Running pre-flight checks\n[preflight] Reading configuration from the cluster...\n[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'\n[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"\n[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"\n[kubelet-start] Starting the kubelet\n[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...\n\nThis node has joined the cluster:\n* Certificate signing request was sent to apiserver and a response was received.\n* The Kubelet was informed of the new secure connection details.\n\nRun 'kubectl get nodes' on the control-plane to see this node join the cluster.",
+        "stdout_lines": [
+            "[preflight] Running pre-flight checks",
+            "[preflight] Reading configuration from the cluster...",
+            "[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'",
+            "[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"",
+            "[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"",
+            "[kubelet-start] Starting the kubelet",
+            "[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...",
+            "",
+            "This node has joined the cluster:",
+            "* Certificate signing request was sent to apiserver and a response was received.",
+            "* The Kubelet was informed of the new secure connection details.",
+            "",
+            "Run 'kubectl get nodes' on the control-plane to see this node join the cluster."
+        ]
+    }
+}
+ok: [10.253.229.120] => {
+    "join_output": {
+        "changed": true,
+        "cmd": [
+            "kubeadm",
+            "join",
+            "10.253.228.90:6443",
+            "--token",
+            "gzhyqo.wxdpcddapl98eiuz",
+            "--discovery-token-ca-cert-hash",
+            "sha256:d09713e67177338ceb4f170876cd1235ad50ca1934c7d3f01f49c1b424a8af6b"
+        ],
+        "delta": "0:00:13.622038",
+        "end": "2025-07-01 18:10:58.201159",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2025-07-01 18:10:44.579121",
+        "stderr": "\t[WARNING FileExisting-tc]: tc not found in system path",
+        "stderr_lines": [
+            "\t[WARNING FileExisting-tc]: tc not found in system path"
+        ],
+        "stdout": "[preflight] Running pre-flight checks\n[preflight] Reading configuration from the cluster...\n[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'\n[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"\n[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"\n[kubelet-start] Starting the kubelet\n[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...\n\nThis node has joined the cluster:\n* Certificate signing request was sent to apiserver and a response was received.\n* The Kubelet was informed of the new secure connection details.\n\nRun 'kubectl get nodes' on the control-plane to see this node join the cluster.",
+        "stdout_lines": [
+            "[preflight] Running pre-flight checks",
+            "[preflight] Reading configuration from the cluster...",
+            "[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'",
+            "[kubelet-start] Writing kubelet configuration to file \"/var/lib/kubelet/config.yaml\"",
+            "[kubelet-start] Writing kubelet environment file with flags to file \"/var/lib/kubelet/kubeadm-flags.env\"",
+            "[kubelet-start] Starting the kubelet",
+            "[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...",
+            "",
+            "This node has joined the cluster:",
+            "* Certificate signing request was sent to apiserver and a response was received.",
+            "* The Kubelet was informed of the new secure connection details.",
+            "",
+            "Run 'kubectl get nodes' on the control-plane to see this node join the cluster."
+        ]
+    }
+}
+
+TASK [install_and_configure_the_cluster : Include tasks for setting the network plugin] ***********************************************************************************************************************************************************
+included: /root/installer/cnvna-ansible-2/roles/install_and_configure_the_cluster/tasks/pod_network.yml for 10.253.228.90, 10.253.228.92, 10.253.228.62, 10.253.229.120
+
+TASK [install_and_configure_the_cluster : Apply Calico network] ***********************************************************************************************************************************************************************************
+skipping: [10.253.228.92]
+skipping: [10.253.228.62]
+skipping: [10.253.229.120]
+changed: [10.253.228.90]
+
+TASK [install_and_configure_the_cluster : debug] **************************************************************************************************************************************************************************************************
+ok: [10.253.228.90] => {
+    "calico_output": {
+        "changed": true,
+        "cmd": [
+            "kubectl",
+            "apply",
+            "-f",
+            "https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/calico.yaml"
+        ],
+        "delta": "0:00:01.137387",
+        "end": "2025-07-01 18:11:04.754500",
+        "failed": false,
+        "msg": "",
+        "rc": 0,
+        "start": "2025-07-01 18:11:03.617113",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "poddisruptionbudget.policy/calico-kube-controllers created\nserviceaccount/calico-kube-controllers created\nserviceaccount/calico-node created\nserviceaccount/calico-cni-plugin created\nconfigmap/calico-config created\ncustomresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/bgpfilters.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/caliconodestatuses.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/ipreservations.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/kubecontrollersconfigurations.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/tiers.crd.projectcalico.org created\ncustomresourcedefinition.apiextensions.k8s.io/adminnetworkpolicies.policy.networking.k8s.io created\nclusterrole.rbac.authorization.k8s.io/calico-kube-controllers created\nclusterrole.rbac.authorization.k8s.io/calico-node created\nclusterrole.rbac.authorization.k8s.io/calico-cni-plugin created\nclusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created\nclusterrolebinding.rbac.authorization.k8s.io/calico-node created\nclusterrolebinding.rbac.authorization.k8s.io/calico-cni-plugin created\ndaemonset.apps/calico-node created\ndeployment.apps/calico-kube-controllers created",
+        "stdout_lines": [
+            "poddisruptionbudget.policy/calico-kube-controllers created",
+            "serviceaccount/calico-kube-controllers created",
+            "serviceaccount/calico-node created",
+            "serviceaccount/calico-cni-plugin created",
+            "configmap/calico-config created",
+            "customresourcedefinition.apiextensions.k8s.io/bgpconfigurations.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/bgpfilters.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/bgppeers.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/blockaffinities.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/caliconodestatuses.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/clusterinformations.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/felixconfigurations.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/globalnetworkpolicies.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/globalnetworksets.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/hostendpoints.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/ipamblocks.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/ipamconfigs.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/ipamhandles.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/ippools.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/ipreservations.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/kubecontrollersconfigurations.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/networkpolicies.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/networksets.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/tiers.crd.projectcalico.org created",
+            "customresourcedefinition.apiextensions.k8s.io/adminnetworkpolicies.policy.networking.k8s.io created",
+            "clusterrole.rbac.authorization.k8s.io/calico-kube-controllers created",
+            "clusterrole.rbac.authorization.k8s.io/calico-node created",
+            "clusterrole.rbac.authorization.k8s.io/calico-cni-plugin created",
+            "clusterrolebinding.rbac.authorization.k8s.io/calico-kube-controllers created",
+            "clusterrolebinding.rbac.authorization.k8s.io/calico-node created",
+            "clusterrolebinding.rbac.authorization.k8s.io/calico-cni-plugin created",
+            "daemonset.apps/calico-node created",
+            "deployment.apps/calico-kube-controllers created"
+        ]
+    }
+}
+ok: [10.253.228.92] => {
+    "calico_output": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+ok: [10.253.228.62] => {
+    "calico_output": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+ok: [10.253.229.120] => {
+    "calico_output": {
+        "changed": false,
+        "false_condition": "'control_plane' in group_names",
+        "skip_reason": "Conditional result was False",
+        "skipped": true
+    }
+}
+
+TASK [install_and_configure_the_cluster : Wait for calico pods] ***********************************************************************************************************************************************************************************
+Pausing for 120 seconds
+(ctrl+C then 'C' = continue early, ctrl+C then 'A' = abort)
+ok: [10.253.228.90]
+
+PLAY RECAP ****************************************************************************************************************************************************************************************************************************************
+10.253.228.62              : ok=47   changed=22   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0   
+10.253.228.90              : ok=51   changed=24   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0   
+10.253.228.92              : ok=47   changed=21   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0   
+10.253.229.120             : ok=47   changed=21   unreachable=0    failed=0    skipped=11   rescued=0    ignored=0 

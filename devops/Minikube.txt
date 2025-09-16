@@ -1,0 +1,66 @@
+What is Minikube?
+    It is a tool which is used to setup single node K8s cluster on your local OR a VM;
+    It is available for Windows, Linux, MacOS systems;
+
+Prerequisites
+    - 2 CPUs or more
+    - 2 GB of free RAM
+    - 20GB of free disk space 
+    - Internet connection 
+    - Container runtime: such as docker, podman, VirtualBox etc;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+minikube start
+> minikube start --driver=docker                        # Start the cluster using docker driver;
+minikube start --kubernetes-version 1.21.2
+Note: in case your minikube has issue you can start it with specific version of kubernetes e.g.:
+
+
+> minikube status                                       # Get the status of the cluster; Verify Minikube is Running
+> 
+
+
+~/.minikube/config -> create config.json file
+{
+"cpus": 8,
+"driver": "docker",
+"memory": "12000"
+}
+
+minikube config view    # prints ~/.minikube/config/config.json
+
+
+Setup Minikube
+	
+	- https://minikube.sigs.k8s.io/docs/start/
+	- https://medium.com/@javatechie/kubernetes-tutorial-install-run-minikube-in-mac-os-k8s-cluster-369b25b0c3f0
+	- https://medium.com/@javatechie/kubernetes-tutorial-setup-kubernetes-in-windows-run-spring-boot-application-on-k8s-cluster-c6cab8f7de5a
+
+	- Check if your system supports virtualization;
+		sysctl -a | grep -E --color 'machdep.cpu.features|VMX' 		# You should see VMX in the output, colored;
+	- Install kubectl - A tool which is used to interact with k8s clusters;
+		brew install kubectl
+	- Install a Hypervisor, such as: VirtualBox, HyperKit etc;
+		brew install 
+	- Install minikube;
+		- brew install minikube 		# minikube version
+	- minikube start 			# Start minikube
+	  minikube status 			# Status of minikube
+	  minikube stop 			# Stop minikube
+	  minikube delete 			# Deletes the k8s cluster; It deletes the VM, and removes all associated files;
+	  minikube dashboard 		# 
+
+
+
+minikube start --driver=docker
+minikube status
+minikube addons list        # By default, only a couple of addons are enabled during minikube installation.
+minikube addons enable metrics-server
+ minikube dashboard
+minikube dashboard --url
+kubectl proxy --address='0.0.0.0' --disable-filter=true &
+http://server_ip:8001/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/workloads?namespace=default
+
+
+kubectl config use-context minikube         # Set context to minikube;
+kubectl config current-context              # Print current context;

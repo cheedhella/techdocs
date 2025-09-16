@@ -1,0 +1,84 @@
+What is K8s? // Pronounced as Koo-Ber-Net-ees;
+	It is an open-source container orchestration platform;
+
+Why K8s?
+
+What is K8s Cluster?
+	Cluster is nothing but a set of nodes;
+
+What is K8s Node?
+	What is K8s? K8s is a Resource Manager; 
+	What Resources it manages? It manages Virtual Servers(not physical);
+	What is Virtual Server? 
+		In AWS, it is called EC2 instance; In Azure, it is called Virtual Machine; In Google Cloud, it is called Compute Engine; 
+		K8s gave all of them a generic name - called Worker Node;
+	To manage 100s of worker nodes, you need Master Nodes;
+	To simlify:
+		Worker Node -> Runs our applications;
+		Master Node -> Manages the Cluster or worker nodes;
+
+What is Pod?
+	It is the smallest deployable unit, in k8s; 
+	You might think container is the smallest deployable unit, but No! In K8s, Pod is the smallest deployable unit;
+	In K8s, you will not be able to create a container, without creating pod;
+	Your container lives in Pods;
+
+Why do we need a Pod?
+	Each pod can have one or more containers; 
+	It has a unique IP address; All containers in a Pod share the Resources;
+	Within a Pod, containers can talk to each other using localhost;
+
+What is Replica Set?
+	It ensures that specific number of pods are running all the time;
+
+What is Deployment?
+	It makes sure that upgrade from one version to another version happens without any downtime;
+
+What is Service?
+	It makes sure that service is always available(up and running) on same URL, even when one pod is down or when pods are getting upgraded;
+	In other words, it exposes an always available URL to applications running in the pods;
+	Service is created when you run 'kubectl expose deployment';
+	It load balances the requests among all pods running;
+
+What is Name Space?
+	It is used to isolate a part of the cluster from other part; It is a way to separate resource dev, qa, preprod, prod environments;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Initially we create a Deployment; It implicitly creates Deployment, Replicaset, Pod;
+Cluster is a collection of Nodes;
+Node is a collection of Pods;
+Pod is a collection of Containers;
+
+
+ClusterIP Service -> It can be accessed only inside the cluster; 
+NodePort Service -> It can be accessed only inside the cluster; 
+
+
+
+
+
+What is Container Orchestration?
+	It is all about managing the lifecycle of containers.
+		- Deployment
+		- Rolling out new version of the apps and configuration without downtime. If something goes wrong, it can rollback the change for you. 
+		- Load balancing - distributing the load between containers.
+		- Scaling up/down by adding/removing containers when demand changes.
+		- Health monitoring and Auto healing - Move the containers from one host to another, if the host dies or there is shortage of resources in it.
+		- Storage, Networking, Service Discovery
+		- Monitoring, Logging, Debugging
+		- Apps build to work with k8s can be easily moved from one IaaS to another, without any changes to app source code.
+		  Apps are deployed on K8s cluster and K8s cluster is deployed in IaaS.
+
+What is Monolithic Service?
+	All the components of an application are packaged together and deployed.
+
+What is a Micro Service?
+	It structures an application as a collection of small autonomous services.
+	Advantages: scaling, independant deployment etc.
+	
+	https://dzone.com/articles/what-is-microservices-an-introduction-to-microserv
+	https://www.tatvasoft.com/blog/the-difference-between-micro-services-and-web-services/
+
+What is Continous Integration, Continous Deployment, Continuous Delivery?
+	https://stackoverflow.com/questions/28608015/continuous-integration-vs-continuous-delivery-vs-continuous-deployment
+	https://stackify.com/continuous-delivery-vs-continuous-deployment-vs-continuous-integration/
+

@@ -1,0 +1,107 @@
+Key Components of Vertex AI
+
+Pre-trained APIs
+
+For vision, NLP, translation, speech, etc.
+
+You can call them directly without training your own models.
+
+AutoML
+
+Train custom models without deep ML expertise.
+
+Works well for tabular data, images, video, or text.
+
+Custom Training
+
+Bring your own ML code (TensorFlow, PyTorch, Scikit-learn, XGBoost, etc.).
+
+Train on GPUs/TPUs with managed infrastructure.
+
+Vertex AI Workbench
+
+Jupyter-based environment for data science and experimentation.
+
+Vertex AI Pipelines
+
+Orchestrate ML workflows (ETL → Training → Deployment → Monitoring).
+
+Vertex AI Prediction
+
+Deploy trained models as scalable endpoints (REST or gRPC APIs).
+
+Vertex AI Matching Engine / Vector Search
+
+For semantic search and recommendation systems.
+
+Vertex AI Generative AI (PaLM, Imagen, Codey, etc.)
+
+Use large foundation models with tuning (adapter, LoRA, or prompt engineering).
+
+🛠️ Steps to Build an AI App with Vertex AI
+
+Define the Use Case
+
+What problem are you solving? (e.g., customer support chatbot, fraud detection, recommendation system).
+
+Prepare Data
+
+Ingest via BigQuery, Cloud Storage, or Pub/Sub.
+
+Clean, transform, and label (Vertex AI has a labeling service).
+
+Choose an Approach
+
+Use pre-trained models if they fit (e.g., Vertex AI Vision, NLP APIs).
+
+Use AutoML if you have labeled data but little ML expertise.
+
+Use custom training if you need full control of model architecture.
+
+Train the Model
+
+AutoML: just upload labeled data.
+
+Custom training: submit training jobs with your code in Docker or prebuilt ML frameworks.
+
+Evaluate the Model
+
+Vertex AI provides metrics (accuracy, AUC, precision/recall, etc.).
+
+Use explainability tools (Feature Attribution, SHAP).
+
+Deploy the Model
+
+One-click deployment to a managed Vertex AI Prediction endpoint.
+
+Choose between online prediction (real-time) or batch prediction.
+
+Integrate with Your App
+
+Call model endpoints via REST/gRPC.
+
+Combine with other GCP services:
+
+Cloud Run / App Engine → backend logic
+
+Firestore / BigQuery → data storage
+
+Dialogflow CX → conversational AI
+
+Monitor & Maintain
+
+Monitor latency, prediction drift, and accuracy over time.
+
+Retrain with new data periodically.
+
+📦 What You’ll Need
+
+Google Cloud Project with Vertex AI enabled.
+
+IAM roles (e.g., Vertex AI Admin, Storage Admin).
+
+Data scientists / ML engineers for model development (unless relying only on pre-trained APIs).
+
+Backend engineers for app integration.
+
+Budget planning (Vertex AI pricing depends on compute, storage, and predictions served).

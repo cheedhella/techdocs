@@ -1,0 +1,368 @@
+What is a Container?
+    It is a running instance of an image; 
+    You can create, start, stop, restart, pause, resume, delete a container;
+    
+    By default, a container is isolated from other containers and it's host machine;
+    You can connect a container to one or more networks, attach storage OR even create a new image based on it's current state;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker run <options> <image> <command> <args>                       # It pulls the image if needed and creates a container; command -> cmd to run inside the container;
+    Options:
+        -d                              -> Runs the container in background mode, by detaching the terminal from container;
+        -name <name>                    -> By default, container name is auto-generated; If you want, you can provide a name explicitly;
+        -p <HostPort:ContainerPort>     -> It maps specified port on host to container port; Any requests to <HostIP:HostPort> are routed to <ContainerIP:ContainerPort>;
+        -v                              -> It mounts a directory on host filesystem in the container file system;
+        -env                            -> It is used to setup environment variables inside the container;
+        -env-file                       -> File of environment variables;
+        -it                             -> It opens interative session, so that you can interact with the container's CLI;
+                                        -> Press Ctrl + PQ to exit the container, without killing it;
+                                        -> Press Ctrl + C to kill and exit the container;
+        --rm                            -> A stopped/exited container continue to exist and you can again start is using docker start;
+                                        -> In case, if you don't need it ever, use this option to automatically remove the stopped/exited container, thus saving disk space;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker ps                                   # List all running containers; It returns id, name, image, port bindings, health status etc;
+docker ps -a                                # List all containers(both running and stopped);
+docker ps -l                                # Get recently created container; Alias to --latest;
+docker ps -n 2                              # Get 2 most recently created containers; alias to --last;
+docker ps -s                                # Display the size of containers, along with other information;
+docker ps -q                                # Display only container ID;
+docker ps --filter label=my-label           # List all containers with specified label;
+docker ps --filter volume=my-vol            # List all containers using specified volume;
+docker ps --filter network=my-network       # List all containers sharing specified network;
+docker ps --filter status=exited            # List all stopped/exited containers;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker inspect <containerID>                # docker ps is used to get some quick information about containers; 
+                                            # Use docker inspect, if you want more detailed information;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker start <containerId/Name>             # It is used to start a stopped/exited container;
+docker stop <containerId/Name>              # It is used to stop a running container gracefully(It sends SIGTERM signal to container and wait for 10secs to cleanup);
+docker kill <containerId/Name>              # It is used to forcefully stop a running container(It sends SIGKILL signal to container);
+docker restart <containerId/Name>           # It is used to restart a container;
+
+SIGSTOP is the pause signal. The only behaviour is to pause the process. The shell uses pausing (and its counterpart, resuming via SIGCONT) to implement job control.
+
+docker rm <containerId/Name>                # You can remove/cleanup a container;
+docker rename <name> <newName>              # It is used to rename a container;
+
+docker container prune                      # It removes all stopped containers;
+docker system prune                         # It removes all stopped containers, unused images and networks;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker exec <options> <containerID/Name> <command> <args>           # It is used to run a command in the running container;
+                                                                    # You must specify exact path to the command, if command is not in PATH;
+                                                                    # All relative paths are relative to the container's default working directory;
+
+# Non-interactive session
+docker exec <containerID/Name> ls                           # It connects to the container and runs ls and detaches itself from container;
+docker exec --env key1=value1 --env key2=value2 <containerID/Name> env  # docker exec can be used to set environment variables in a running container;
+docker exec --workdir /app/bin <containerID/name> <command>             # it is used to change default working directory in a container;
+docker exec <containerID/name> sh -c “command1;command2”                # It is used to run multiple commands in the container;
+
+# Interactive session
+docker exec -it <containerID/name> /bin/bash                            # It opens interactive session to the docker container;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker cp <src> <dest>                      # It is used to copy from host to container and vice versa;
+                                            # In general, you should avoid manual changes to containers, unless destination is a bound volume;
+                                            # Copy from host to container: docker cp hello.txt 181b67a8c7b0:/root/  docker cp hello.txt my-nginx-1:/root/
+                                            # Copy from container to host: docker cp my-nginx-1:/root/hello.txt ./hello-new.txt 
+                                            # You can't use docker cp to copy b/w 2 containers; 
+                                            # To achieve it, copy it from src container to host first and from host to destination container;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+docker logs <containerID/Name>
+
+docker exec --env key1=value1 --env key2=value2 <containerID/Name> env 
+docker exec <options> <containerID/Name>    # Attach your terminal's STDIN, STDOUT, STDERR to a running container;
+                                            # Prefer docker logs, if your intent is to view container logs;
+
+
+docker run -d --name my-ngnix-1 nginx:latest
+
+    
+    Context
+    One docker client can be configured with multiple docker servers(may be one running locally and another running on cloud);
+    
+    docker context ls                                                       -> List all docker servers configured; * indicates current active context;
+    docker context create <ctx-name> --docker host=tcp://docker:2375        -> Create new context;
+    docker context create <ctx-name> --docker host=ssh://host               -> Create new context;
+    docker context use <ctx-name>                                           -> Switch to specified context; You can also use DOCKER_CONTEXT environment variable to set active context;
+    docker context update <ctx-name> --description "Test context"           -> Update context;
+    docker context rm <ctx-name>
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Image 
+    docker image ls                                 # List of images present in your local, not in Registry!
+    docker image pull <img_name>                    # Download image from remote repository to your local; It won't create a container!
+
+
+docker pull <repo>:<tag>				# Pull command downloads the image to your local; 
+docker pull <repo>  					# default tag is latest; latest tag need not to be really latest always!
+
+docker search mysql 					# It searches if there is any image with specified name; local or registry?
+docker image history <imageId> 			# It shows all the steps/commands involved in creating that image;
+docker image history <repo>:<oldTag> 	# Same as above; You can query by repository and tag;
+docker image inspect <imageId>; 		# It provides lot of information about the image: when it was created, tags, containers created using it, 
+									    # Entrypoint, docker version used to create image, exposed ports, environment variables etc;
+
+docker image remove <imageId> 			# Delete the image from your local;
+
+docker tag <repo>:<oldTag> <newRepo>:<newTag> 		# You can give more than 1 tag to an Image;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker run nginx        -> docker run docker.io/nginx/nginx     # So whenever we don’t type in the name of the user/account, it is by default considered to be similar to the image/repository name. 
+$ docker run -d -p 5000:5000 --name registry registry:2         This command helps us establish a connection with our private registry on the port 5000. So that then we can start to push our docker images to our private registry. Before we push our docker image we need to tag it first.
+
+
+So 
+
+$ docker run --cpu=.5 --memory=1000m  ubuntu    # we need a way to restrict the resource that the dockers can use. This implies that this particular docker container can use only a maximum of 1000 megabyte of memory. This assigns a maximum of only 50% of the CPU resource to this container, thus making sure that the CPU.
+
+docker container run -it ubuntu:latest /bin/bash
+    Now that we have an image pulled locally, we can use the docker container run command to launch a container from it.
+    docker container run tells the Docker daemon to start a new container. 
+    The -it flags tell Docker to make the container interactive and to attach the current shell to the container’s terminal (we’ll get more specific about this in the chapter on containers). 
+    Next, the command tells Docker that we want the container to be based on the ubuntu:latest image
+    Finally, we tell Docker which process we want to run inside of the container. For the Linux example, we’re running a Bash shell. 
+    Press Ctrl-PQ to exit the container without terminating it. This will land your shell back at the terminal of your Docker host.
+    In a previous step, you pressed Ctrl-PQ to exit from the container. Doing this from inside of a container will exit you from the container without killing it.
+
+    You can attach your shell to the terminal of a running container with the docker container exec command. As the container from the previous steps is still running, let’s make a new connection to it.
+
+docker container exec -it vigilant_borg bash
+The format of the docker container exec command is: docker container exec <options> <container-name or container-id> <command/app>. 
+
+docker container ls
+Stop the container, and kill it using the docker container stop and docker container rm commands.
+docker container ls -a
+
+
+> docker                        # List all available commands
+> docker version
+> docker info 
+
+
+
+docker search <word>            # Search for matching image 
+docker pull <image>             # Download the specified image 
+docker images                   # List all local images 
+docker rmi <image>              # If you don't need an image no longer and you can delete it on your local;
+
+docker ps -l                                                                # List of all(running and stopped) containers;
+docker stop <containerId/containerName>                                     # Stop a running container;
+docker start <containerId/containerName>                                    # Start a stopped container;
+docker kill <ontainerId/containerName>
+
+docker ps -l 
+
+    https://docs.docker.com/engine/install/ubuntu/
+    sudo systemctl start docker
+
+
+
+
+docker stats ubuntu20.04
+docker top ubuntu20.04 
+
+
+Images 
+    in28min/todo-rest-api-h2:1.0.0.RELEASE 
+
+
+
+
+docker info
+
+/CentOS
+   
+docker pull alpine
+
+docker images
+
+
+
+
+
+How to find out info about Docker network bridge and IP addresses
+Default network bridge named as docker0 and is assigned with an IP address. To find this info run the following ip command:
+
+
+$ ip a
+$ ip a list docker0
+
+
+docker search nginx
+
+
+
+
+# List running containers 
+docker ps
+docker ps -a
+
+# How to run a command in a running container
+docker exec my-nginx-c1 ls /etc/nginx
+
+# Stop running container
+> docker stop my-nginx-c1
+
+# Remove 
+> docker rm my-nginx-c1
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+> docker pull ubuntu:22.04
+docker image pull debian
+
+By default, docker pull pulls images from Docker Hub
+t is also possible to manually specify the path of a registry to pull from. 
+For example, if you have set up a local registry, you can specify its path to pull from it. 
+A registry path is similar to a URL, but does not contain a protocol specifier (https://).
+
+ docker image pull myregistry.local:5000/testing/test-image
+Registry credentials are managed by docker login.
+
+
+
+docker pull "repositoryName"/"imageName"[:tag]
+docker login -u username -p <token/apikey> <reponame>.usw1.packages.broadcom.com
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker logs <containerID>: show the log of the container
+
+
+# Return all log history (no keep tracking new logs)
+root@jielim36:/home/jielim36# docker logs 81b1ef821f70
+root@81b1ef821f70:/# ls
+bin   dev  home  lib32  libx32  mnt  proc  run   srv  tmp  var
+boot  etc  lib   lib64  media   opt  root  sbin  sys  usr
+
+# optional
+-f : Follow log output
+-t : show timestamps, and keep tracking the logs (持续输出新的日志)
+You can combine to -tf
+
+--tail <number>: return X rows
+
+# return maximum 10 row logs, and keep tracking the new logs, it would not automatic ending.
+$ docker log -t -f --tail 10 <containerID>
+------------------------------------------------------------------------
+
+docker image prune 												# Remove all dangling and unused images;
+docker system prune -a, it will remove all stopped containers, images and networks without a container associated, and build cache.
+Every pulled image that does not have an active container
+Every container with a stopped status
+Volumes corresponding to stopped and removed containers
+Build caches
+
+
+
+
+
+7ed6e7202eca
+
+
+
+
+docker search <image> will search for images in the Docker Hub (part 2 of the series). This command handles multiple options, I’ll show you some of them.
+
+docker search — limit=1 <Name> this limits the query results for a certain image name
+docker search — filter “is-official=true” <name> this will check for official Docker images only (more in part 2 of the series)
+docker search --filter "stars=80” <name> this will find images with 80 or more stars in the ranking (Docker hub)
+
+
+	docker image ls (this lists repository, tag, image ID, size, and more)
+
+
+$ docker image history nginx
+$ docker image history nginx
+2. Check the history of the docker image.
+
+
+$ docker rmi mysql 	# 3. The Docker images on the system can be removed via the docker rmi command.
+
+$ docker images inspect alpine 	# 5. This command is used to see the details of an image or container.
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+A Docker image is made up of multiple layers. 
+An image is a read-only template with instructions for creating a Docker container. 
+Often, an image is based on another image, with some additional customization. 
+For example, you may build an image which is based on the ubuntu image, but installs the Apache web server and your application, as well as the configuration details needed to make your application run.
+
+You might create your own images or you might only use those created by others and published in a registry. 
+To build your own image, you create a Dockerfile with a simple syntax for defining the steps needed to create the image and run it. 
+Each instruction in a Dockerfile creates a layer in the image. 
+When you change the Dockerfile and rebuild the image, only those layers which have changed are rebuilt. This is part of what makes images so lightweight, small, and fast, when compared to other virtualization technologies.
+
+Ways to Create an Image:
+a) Take image from the docker hub.
+b) Create image from docker file.
+c) Create image from existing docker containers.
+
+
+    Windows images can be large and take a long time to pull.
+It’s also worth noting that each image gets its own unique ID. When referencing images, you can refer to them using either IDs or names. 
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+spring-boot-maven-plugin
+	By default, this plugin is added to every spring boot project created using https://start.spring.io;
+
+	It provides many features:
+		- It collects all the jars on the classpath and builds a single, runnable uber-jar, which makes it more convenient to execute and transport your service;
+		- We would want to run the applications in place without building a JAR or a WAR;
+		- We would want to build a JAR and a WAR for later deployment;
+
+	It provides several goals:
+		- run 				-> It is used to run your spring boot application in-place; You can pass several parameters to it;
+		- build-image 		-> It is used to build docker image from jar or war file;
+		- repackage 		-> It is used to create executable jar, which contains all dependencies and can be run with java -jar;
+		- start, stop 		-> integrate your Spring Boot application to the integration-test phase;
+
+
+How to create a Docker Image for Spring Boot Applications?
+	Starting Spring Boot 2.3, it is very easy to create docker image for spring boot applications;
+	You can use spring-boot-maven-plugin;
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<!-- name of the image that we want to create! in28min is my docker id! -->
+						<image>in28min/mmv2-${project.artifactId}:${project.version}</image> 		
+						<!-- spring-boot-maven-plugin makes use of lot of docker images, while building an image; -->
+						<!-- Default pullPolicy: always; It pulls images, whether it is present or not in your local; -->
+						<!-- As a optimization, change it to IF_NOT_PRESENT -->
+						<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+
+		To build the docker image locally:
+			Using Eclipse: Right click on project -> Run As -> Maven Build -> Goals -> spring-boot:build-image -DskipTests
+			Using CLI: mvn spring-boot:build-image -DskipTests
+
+		To create a container: docker run -p 8000:8000 in28min/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+
+		# Once you find, everything is good, you can push the image to docker registry;
+		docker push docker.io/in28min/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Dockerfile 
+    It is a text file that contains instructions for building a Docker image;
+
+build 
+    This command is used to build a Docker image from a Dockerfile;
+    
+    docker build -t <img_name>:<img_tag> .              # It builds using the Dockerfile in the current directory  
+
+
+https://kodekloud.com/blog/docker-build-args/
+
+docker save -o image.tar 406bsa29d5ab
+docker load /path/to/image.tar

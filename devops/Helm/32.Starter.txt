@@ -1,0 +1,50 @@
+What is a starter chart?
+    It is a chart with reusable templates that helps us in building new chart;
+
+
+
+
+
+So with that we are going to create a starter starter chart template in a detailed manner, how we need
+
+to create it, how we need to store it in our local desktop and using that, how we are going to create
+
+a new chart, all those things we are going to learn now.
+
+
+
+A new developer don't need to start from scratch in your organization.
+
+If you already have a starter chart, he can use them and build on top of it.
+
+So all the standards, whatever you want to define as per your organization standards, so you can define
+
+those in your starter charts like deployment, how many replicas you need to create, or what are the
+
+labels you need to use for deployment and service like that?
+
+Everything you can define in your starter charts and any new developer comes, they will be able to
+
+create new charts by using the starter chart templates.
+
+In addition to that, we can also enforce certain resources that need to be available in the charts
+
+created using helm charts or helm starters.
+
+So an
+
+
+# TO create a chart from starter chart 
+helm create mychart --starter=mystarterchart
+
+Where to keep helm starter charts?
+    we need to place starter charts in $HELM_DATA_HOME/starters folder;
+    // helm env 
+
+Any drawbacks?
+    Chart.yaml is overwritten by the chart generator;
+    Due to that, we don't get chart version, app version, dependencies info from starter template;
+    If you have any child charts in starter template, they are copied to new chart; But, you need to update Chart.yaml manually;
+
+
+https://dev.to/harisharavindan/helm-starter-chart-m1j

@@ -1,0 +1,9 @@
+https://techsemicolon.github.io/blog/2019/07/07/ansible-everything-you-need-to-know-about-set-facts/
+https://www.educative.io/answers/ansible-setfact-to-create-a-dictionary-from-register-result
+
+
+
+vars and host vars 
+    https://admantium.medium.com/ansible-working-with-variables-and-hostvars-479c9d3f4f54
+    https://berndonline.medium.com/how-to-delegate-ansible-host-variables-with-set-fact-6e7c937d0f4c
+    

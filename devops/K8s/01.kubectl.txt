@@ -1,0 +1,48 @@
+What is Kubectl?
+    kubectl is a CLI tool, which is used for interacting with(managing or running commands) one or more k8s clusters;
+    By default, every kubectl commands looks at this location for context:  ~/.kube/config;
+    If your kube config is present at some other location, use this: 
+        Option #1: kubectl --kubeconfig <path-to-kube-config> get pods;
+        Option #2: export KUBECONFIG=<path-to-kube-config>      # You can also specify one or more config files;
+
+kubeconfig
+    It is a yaml file, that contains all the details needed by kubectl for interacting with a cluster: 
+        - Clusters: For each cluster that it manages, it holds the following:
+            -- API Server address
+            -- Path to certificates
+        - Users: 
+            -- name -> username;
+            -- kubectl uses below ways for authenticating itself with API server: 
+                -- Username/password
+                -- Bearer tokens 
+                -- Client certificates 
+        - Context:
+            -- It specifies what User, Cluster, namespace(Optional) to use;
+        - Current context
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Where to install kubectl?
+    - It is not required on worker nodes; Worker nodes usually use kubelet to communicate with API server;
+    - You can install it on your local machine OR master node OR CI/CD pipeline, from whereever you want to manage the cluster;
+
+How to install kubectl?
+    # Linux
+    curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl config view                                                             # View kubeconfig file;
+
+kubectl config set-context <ctx-name> --cluster=<cluster> --user=<user>	        # Create or update a context
+kubectl config set-context <ctx-name> --namespace=dev                           # Update namespace of specified context 
+kubectl config set-context --current --namespace=dev                            # Update namespace of current context 
+kubectl config get-contexts	                                                    # List all contexts
+kubectl config current-context                                                  # Show the current active context;
+kubectl config use-context <name>	                                            # Switch to another context
+kubectl config delete-context <name>	                                        # Remove the context
+kubectl config rename-context <old> <new>	                                    # Rename a context
+
+kubectl config set-cluster <cluster-name> --server=<API_SERVER> [--certificate-authority=<path-to-crt> | --insecure-skip-tls-verify=true]	    # Add or update a cluster
+kubectl config set-credentials <user> [--client-certificate=<path/to/cert.pem>] [--client-key=<path/to/key.pem>] [--token=<bearer-token>] [--username=<user> --password=<pass>]         # Add or update a user/credentials entry
+
+kubectl get-clusters                                                            # List all clusters configured
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TODO: How to Use RBAC if you want to limit what the user can do?

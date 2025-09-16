@@ -1,0 +1,38 @@
+Setup Ansible Server or Control Node
+    - Install Ansible 
+        -- Linux 
+            > sudo apt install ansible 
+            > ansible --version
+        -- Windows
+    - Setup SSH Keys -> Ansible uses SSH to connect to remote hosts/nodes and execute commands; Repeat this process for each managed node;
+        -- Linux 
+            > pwd                   
+                /root/.ssh
+            > ssh-keygen                        # Generates ~/.ssh/id_rsa (private key), ~/.ssh/id_rsa.pub (public key);
+            > cat id_rsa.pub                    # Copy public key!
+            > ssh-copy-id root@10.252.21.155    # Copy public key of controlled node to all managed nodes!
+            > ssh 10.252.21.155                 # Once public key has been copied to managed host/node, you should be able to connect to it without entering a password;
+
+
+
+- hosts:  graph_store_api_service
+  tasks:
+  - name: Show host's ip
+    debug:
+#      msg: "IP2: {{ ansible_host }} "
+      msg: "IP: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+  - name: Print hostnames of 'registry' inventory group
+    vars:
+      registry_hostnames: "{{ groups['topology_service'] | map('extract', hostvars) | map(attribute='ansible_host') }}"
+    debug:
+      var: registry_hostnames
+
+  - name: Print hostname
+    vars:
+      msg: "IP3: {{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+#      registry_hostname: "{{ hostvars['TS1'] }}"
+#      registry_hostname: "{{ hostvars['TS1']['ansible_facts']['eth0']['ipv4']['address'] }}"
+#      registry_hostname:  "{{ groups }}"
+#      registry_hostname:  "{{ groups['topology_service']['TS1']['ansible_host'] }}"
+#      registry_hostname: "{{ registry_hostnames | first }}"
+#      registry_hostname: "{{ registry_hostnames[0] }}"

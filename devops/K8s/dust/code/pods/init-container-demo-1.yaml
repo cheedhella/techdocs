@@ -1,0 +1,16 @@
+# In this example, k8s runs init-myservice until it is successful, then init-mydb and then myapp-container;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc2
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: myapp-container
+      image: 'busybox:1.28'
+  initContainers:
+    - name: init-myservice
+      image: 'busybox:1.28'
+    - name: init-mydb
+      image: 'busybox:1.28'

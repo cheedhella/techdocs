@@ -1,0 +1,22 @@
+There are many ways to define a Variable:
+
+1. Inline variables 
+    - Defined directly in a task or playbook;
+
+2. Inventory variables 
+    - Defined in inventory file for a specific host or group;
+
+3. Group variables 
+    - Defined in a YAML file in /etc/ansible/group_vars directory for a specific group;
+
+4. Host variables 
+    - Defined in a YAML file in /etc/ansible/host_vars directory for a specific host;
+
+5. Role variables 
+    - Defined in a YAML file in vars directory of a role;
+
+Variables can be used in tasks and playbooks using {{ variable_name }} syntax;
+
+
+
+

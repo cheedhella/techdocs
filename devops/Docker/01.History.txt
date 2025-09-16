@@ -1,0 +1,40 @@
+Server
+    In old days, we could deploy only one application per server; 
+    Nobody knew the performance requirements of an application, forcing the operations team to make guess when choosing model and size of the server to buy;
+    In some cases, it resulted in under-powered servers, which are unable to execute transactions and potentially lose customers and revenue;
+    In other cases, it resulted in over-powered servers, which are operating as low as 5-10% of their potential capacity, thus wasting lot of company's capital;
+
+Virtual Machine
+    Amid all this, VMware came up with virtual machine technology, which allowed us to have multiple applications on a single server;
+    But, VMs are far from Perfect! The fact that every VM requires a dedicated OS is a major flaw!
+    Every OS consumes CPU, RAM and other resources that could otherwise be used to power more applications;
+    Every OS needs patching and monitoring; In some cases, every OS requires a license;
+    All of this resulted in wasted time and resources;
+
+	Application1 	Applicaiton2 	Application3
+	Software1	 	Software2	 	Software3
+	GuestOS1 		GuestOS2 		GuestOS3
+	---------------------------------------------
+				Hypervisor
+	---------------------------------------------
+			  	  Host OS
+	---------------------------------------------
+				 Hardware
+	---------------------------------------------
+
+Container
+    With this, you only need to install docker on host OS;
+	Docker Image has everything that is needed to create a container;
+    One VM can host one or more containers; All containers share the same host OS;
+    That frees up lot of CPU, RAM, Storage; It also reduces licensing costs and overhead of maintanance(such as patches);
+    Net Result: savings on time, resource, and capital fronts;
+
+    Container1 	Container2 	Container3
+	----------------------------------
+			Docker Engine
+	----------------------------------
+			  Host OS
+	----------------------------------
+			Cloud Infra
+	----------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------

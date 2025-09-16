@@ -1,0 +1,313 @@
+When a Pod is destroyed, all of the data contained inside that pod is lost;
+But, we can store data permanently on a persistent volume, such as a file on the host OR real hard drive in a cloud environment such as elastic block store volume in AWS;
+
+
+
+
+release2 -> allows us to track history of each vehicle; 
+To actually store history of each vehicle, we create a new microservice, based on mongoDB;
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+a large series of standard Docket images for popular
+
+open source products, so anything like popular databases,
+
+MySQL, Mongo, Cassandra, etc. will almost certainly
+
+have a standard image published on Docker.
+
+How to monitor a cluster?
+
+
+such as environment variables,
+
+how to get logs from a pod,   kubectl logs <pod-name> 		you can get logs only from a pod, not a service/rs/deployment;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+K8s and Microservices
+	- 
+
+
+Microservice vs monolitic application
+	- In case of monolitic application, entire system is deployed as a single unit or single war file;
+	  If this is a shopping site, you will find code for shopping cart mgmt, catalog mgmt, sales, inventory mgmt, authentication etc;
+	- Usually, of course there will be a global database backing this application;
+	  All of these business areas would typically be able to read and write to that database schema;
+	  That's not always the case;
+	  A schema could be broken up into separate schemas, but it is common to have one of these global databases;
+	  Often, this database might even be shared with other monolith applications;
+	- What's the problem here?
+	  It gets harder and harder to make changes to one business area, without you accidentally breaking another business area;
+
+	You can really think of microservices as just being an extreme form of modularity, of building the system as a set of self-contained components;
+
+	The key thing is that these microservices can function on their own.
+	They can be deployed on their own.
+	They can be developed on their own.
+	But these microservices can of course communicate with each other, through well-defined interfaces.
+so in practise, the microservices would often be deployed to their own containers.
+
+	The code in one microservice is going to have no direct visibility of code in another one.
+	Now of course, there's got to be communication between them,
+		Traditionally REST calls are used,
+		but you could also have messages passing between them.
+
+	and to have a microservice only dealing with one single requirement is something of an ideal.
+
+	Two-pizza rule
+		- many companies are adopting two-pizza rule;
+		- can we feed the entire development team for this microservice using just two pizzas?
+		- The microservices are going to be very constrained in their size;
+		- If you start finding that you have four, five, six developers who need to work on a microservice, then it's definitely too big;
+		- I'm going to keep saying my rule of thumb is that a microservice should be dealing with only one specific area of business functionality.
+		- what point do we break a microservice down into multiple microservices? single responsibility principle;
+		- it really is possible to have a microservice that is just a few lines of code.
+
+		- Each microservice should be highly cohesive and loosely coupled; what does this mean?
+		- highly cohesive ->  each microservice should be handling one business requirement.
+			Cohesive means that a microservice should have a single set of responsibilities.
+		- loosely coupled -> 
+			wherever possible, we need to minimise the interfaces between our microservices.
+			It would be no good if the dependencies between the microservices looks something like this. Now maintaining loose coupling is hard, I don't deny that.
+		- We have to be very careful in designing the interfaces, and not letting them get out of control.
+		  And that's typically the job of a system architect,
+		- We're also going to see on this course that we can use messaging.
+		  That can help us to loosen the coupling in the system;
+
+
+Let's talk about databases in microservices;
+	- For microservice architectures, integration databases are a definite NO. So, why is that the case?
+	  Because they immediately violate the two principles that we've discussed;
+	  They are, by design, not cohesive because they contain many different business areas;
+	  They're certainly not loosely coupled because any part of the system can read or write to this database;
+
+	- The key thing is that each microservice will maintain its own data store.
+	  That microservice will be really the only part of the system that can read or write that data.
+
+
+
+It's worth mentioning then that when building a microservice architecture, I don't believe you can possibly do a big design upfronts;
+Microservice architectures are very, as we say, emergence.
+They tend to develop over time as your understanding of the system improves.
+So you will find yourself designing, building, and deploying a microservice;
+
+But it's only a few weeks later or whatever down the line that you, you have a eureka moment, and you realise that no that's too big, it's doing too much, it should be broken down. And that's fine, that's good. You refactor later.
+So agility is really important in microservices because it is impossible for any human being to get the right answer in advance of building the system.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+How networking works?
+How service discovery works?
+
+
+How do we network containers together?
+	Why networking is needed?
+		Imagine you have 2 containers running: one runs mysql db, another runs your application;
+		If you deploy those 2 containers in a single pod, it is easier; 2 containers can see each other, using localhost;
+		localhost:3306 -> mysql; 
+		Having the database and application in the same pod, makes it complicated to manage;
+		So, we want to have separate pods for each of those and we also want to expose the functionality of the pods as service;
+
+		Every service will have private IP address that is visible only in the cluster;
+		Application container doesn't know the IP address of the db container, as IP addresses are assigned dynamically;
+
+		Solution is k8s maintains it's own private DNS service, kube-dns; Its a database of key-value pairs;
+			key - name of the k8s service; value - IP address of the service;
+		k8s takes full responsibility of maintaining this dns system;
+		We don't need to configure it; It runs automatically in the background;
+
+		Why have we not seen this kube-dns service so far?	
+
+		how does our webapp container know where to find this kube-dns service?
+			The answer is a piece of automatic configuration that kubernetes is doing behind the scenes for us with all of our containers;
+			Kubernetes will automatically do some management of the containers and it automatically configures the dns system.
+
+		kubectl exec -lt <pod-name> sh 			# sh into any container;
+		> cat /etc/resolv.conf
+		nameserver 10.96.0.10 					# It refers to the kube-dns service running in kube-system namespace;
+		search default.svc.cluster.local svc.cluster.local cluster.local
+		options ndots:5
+
+		> nslookup google.com
+
+		> nslookup database 		// It can also resolve k8s service name
+
+		> mysql 		# command not found
+
+		> apk update
+
+		> apk add mysql-client
+
+		> mysql 			# It throws an error
+		> mysql -h database -u root -p password fleetman 		# mysql -h <service-name> -u <username> -p <password> <db-name>
+
+		# Now, we have made remote connection to the container;
+
+		> create table testtable (test varchar(255));
+
+		> show tables;
+
+		We can find IP address of any service by it's name - it is called service discovery;
+
+
+Fully Qualified Domain Names
+	- Service is not registered under service-name; But, FQDN such as: database.default.svc.cluster.local
+	  In the event of a name is unresolved, it tries appending one of the values mentioned in Line #2 in /etc/resolv.conf;
+	  default -> refers to the namespace the service is in;
+
+	- nslook <svcname> works absolutely fine, if service is in default namespace; otherwise, try: nslookup <service-name>.<name-space>.
+	- 
+
+
+
+
+
+If you're running a Mac M1, then you can use the image mysql/mysql-server:8.0.23 in the upcoming session.
+
+replicated MongoDB database;
+
+richardchesterwood/k8s-fleetman-webapp-angular:release0
+kubectl get all 					# Returns all pods, replicasets, deployments, services;
+kubectl exec mypod ls 				# Run this command on the pod
+kubectl -it exec mypod sh 			# Connect to the Pod
+Pods are not visible outside the cluster, Pods are visible only inside the cluster;
+
+2 services can communicate using name, grab an example?
+
+
+To build image: spring-boot:build-image -DskipTests
+
+
+
+
+
+kubectl get pods --show-labels 		# Show labels of all pods
+kubectl get pods -l app=nginx 		# Get all pods with specified label
+
+Deploy ActiveMQ as service and pod
+	- One of the service need queue service; In later part of the course, we will see why a queue is needed! 
+	- Our job is deploy this queue and check that it is working, by visiting admin console for the queue;
+	- richardchesterwood/k8s-fleetman-queue:release1
+	- This queue is used by fleetman vehicles to report their positions;
+	- TO run: docker container run -d --name fleetman-queue --network fleetman -p 8161:8161 richardchesterwood/k8s-fleetman-queue:release1
+	- Port mapping is necessary only if you want to peek at the queue; it is not secure, username/password: admin/admin; 
+	  port 8161 is the admin console; expose this using to a browser using 30010;
+
+	We're only getting a local version of this cluster up and running;
+
+
+webpushappdimensiondao
+BillingAggregationtargetdao.jav
+
+
+> kubectl apply -f h1.yaml
+pod/queue unchanged
+service/fleetman-queue created
+
+> kubectl get all
+NAME                     READY   STATUS    RESTARTS   AGE
+pod/fleetman-queue-pod   1/1     Running   0          15s
+
+NAME                             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+service/fleetman-queue-service   NodePort    10.104.248.82   <none>        8161:30010/TCP   15s
+service/kubernetes               ClusterIP   10.96.0.1       <none>        443/TCP          4d23h
+
+> minikube ip
+192.168.59.100
+
+> http://192.168.59.100:30010/admin 		# admin/admin
+
+kubectl get all
+kubectl delete pods --all
+
+kubectl rollout status deployment <deployment-name>
+
+If a Pod takes more CPU than what is allowed, k8s kills it;
+
+
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl logs -f <pod-name>
+
+
+Excpectation
+	- Use K8s to bring up a system that is based on microservices architecture, using a set of pre-prepared Docker images;
+	- Along the way, lets look at design decisions and trade-offs that you need to make, when managing a complex microservice system;
+	- Everything is done on local, using Minikube;
+	- In later part of the course, lets move everything to AWS cloud;
+	  So, by the end of the course, you will have a robust, self-healing, distributed system spread across multiple Amazon data centres;
+	- We store the data to Mongo database, stored on real SSD drives in the cloud;
+	  Even in the event of a catastrophic failure, data will survive;
+	- We will use Elastic Stack to setup logging, monitoring and alerting to get alerts when the system starts to fail;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+<minikube-ip>:30020/vehicles/City%20Truck 		
+<minikube-ip>:30021/vehicles/City%20Truck 		
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Kubernetes Concepts
+To help you get started with Minikube, it helps to understand some basic k8s concepts. Below are the most basic aspects you should know:
+
+Deployment—configured and operational resources. Deployments are the overall processes that enable you to orchestrate your resources.
+ReplicaSet—sets of pods that provide the resources for your services.
+Pod—a unit that contains one or more containers along with attached storage resources, and configuration definitions. Pods are grouped together in ReplicaSets and all pods in a set run the same container images.
+Node cluster—control plane and worker nodes that each contain one or more pods. The workers run your workloads and the control plane orchestrates the workers together. This is what is created by Minikube.
+Node processes—the various components that you use to connect and manage Kubernetes. Control plane processes include API servers, ectd, Scheduler, kube-controller-manager, and cloud-controller-manager. Worker processes include kubelet, kube-proxy, and your container runtime.
+Container—the image you create to hold your applications.
+
+
+Basic concepts: Pods, Replicasets, deployments, services;
+
+
+In an orchestration system, we'll be defining a series of fairly simple text files called manifests.
+Now these manifests are going to allow us to capture our system's entire architecture.
+It'll allow us to describe what containers we want to be running.
+It will allow us to describe what infrastructure we want to be running, so just hard discs or nodes.
+And really importantly, it will allow us to make the system robust.
+
+
+We're going to be able to ensure that, for example, there is always one or more instances of a particular container running at any one time.
+
+And even if there's some kind of catastrophe, which means containers have crashed, then the orchestration system will be responsible for restoring the system back to it's healthy state with no intervention required from an administrator.
+
+Now if you're on this course, you're probably going to be working in the cloud.
+And the cloud, of course, brings lots of complications of it's own.
+We're going to need things like load balances, external hard drives, security configurations and so on.
+And again, this is something that can be handled by our orchestration system.
+
+Towards the end of this course, you'll be taking these manifest files that you've developed locally and you'll transfer them to the cloud.
+
+and you can deploy them to different cloud platforms, Amazon, Azure, Google, and so on.
+And without changing those manifests, Kubernetes is capable configuring the infrastructure in your environment.
+So Kubernetes is almost the way of abstracting away the low level details of your underlying cloud platform.
+
+And if that doesn't make any sense yet, don't worry, when we get to the chapter
+when we move to AWS, you'll see that we hardly do anything with AWS.
+We don't even need to start up any images.
+We just run our scripts and all the load balances, the hard discs, and the instances are all automatically created.
+
+
+It just happens to be a Java-based application with angular on the front-end.
+Our job is to take these images and assemble them together using Kubernetes manifests to build the most robust system that we possibly can.
+The system is a Fleet Management system where we're going to be tracking the moving lorries as they make deliveries and so on;
+
+
+
+minikube start --memory 4096 --driver=kvm2
+
+This uses kvm2, which you might need to set up on your system, using the information here: https://minikube.sigs.k8s.io/docs/drivers/kvm2/

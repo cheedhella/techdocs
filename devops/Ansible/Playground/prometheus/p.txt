@@ -1,0 +1,13 @@
+https://github.com/prometheus-community/ansible/blob/main/roles/prometheus/README.md
+
+https://github.com/prometheus-community/ansible/blob/main/roles/prometheus/defaults/main.yml
+
+https://github.com/prometheus-community/ansible/blob/main/roles/prometheus/tasks/configure.yml
+
+https://www.padok.fr/en/blog/prometheus-monitoring-ansible
+https://opensource.com/article/18/3/how-use-ansible-set-system-monitoring-prometheus
+
+
+
+create file - https://phoenixnap.com/kb/ansible-create-file
+https://phoenixnap.com/kb/ansible-check-if-file-exists

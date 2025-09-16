@@ -1,0 +1,339 @@
+Why Docker?
+	- Docker standardizes the application packaging;
+	  Developer builds the image; Image has everything that is needed;
+	  Ops team can run the image anywhere docker is installed;
+	  Ops team need not to worry about OS, libraries, configuration etc;
+	  They just need to run below command, to bring up a container;
+	  docker run -p 8080:8080 in28min/hello-world-rest-api:0.0.1.RELEASE
+-------------------------------------------------------------------------------------------------------------------------------------------------
+What is Container Orchestration?
+	Say, you have below requirement:
+		- I want 10 instances of Microservice A container, 20 instances of Microservice B container etc;
+		- Auto scaling: scale containers based on load;
+		- Service Discovery: Help microservices find each other;
+		- Load Balancing: Distribute load among multiple instances of a microservice;
+		- Self Healing: Do health checks and replace failing instances;
+		- Zero Downtime Deployments: Release new versions without downtime;
+	A container orchestration framework will help with all the above requirements;
+
+Container Orchestration Frameworks
+	- Elastic Container Service(AWS specific);
+	- Fargate(Serverless version of ECS, AWS specific);
+	- Kubernetes(Works with any cloud provider);
+
+You need to run below k8s commands to meet above requirements:
+	# It deploys the application in the Cluster that you are connected to!
+	kubectl create deployment hello-world-rest-api --image=in28min/hello-world-rest-api:0.0.1.RELEASE 
+	# Expose the deployment to outside world!	
+	kubectl expose deployment hello-world-rest-api --type=LoadBalancer --port=8080
+
+	// If you want 3 more instances right away, independant of load?
+	kubectl scale deployment hello-world-rest-api --replicas=3
+
+	// If you want bring up new pods, based on load(when cpu utilization goes beyond 70)?
+	kubectl autoscale deployment hello-world-rest-api --min=1 --max=10 --cpu-percent=70
+
+	// If you want to bring up another instance, when one of them goes down!
+	// Try deleting one of the instance manually, k8s automatically brings up another instance!
+	kubectl delete pod hello-world-rest-api-232322
+
+	// you want to upgrade all containers to 0.0.2.RELEASE version of image;
+	kubectl edit deployment hello-world-rest-api 	# change 'minReadySeconds: 45' to 'minReadySeconds: 15'
+	kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+gcloud container clusters get-credentials in28minutes-cluster --zone us-central1-a --project solid-course-258105
+kubectl create deployment hello-world-rest-api --image=in28min/hello-world-rest-api:0.0.1.RELEASE
+kubectl expose deployment hello-world-rest-api --type=LoadBalancer --port=8080
+kubectl set image deployment hello-world-rest-api hello-world-rest-api=DUMMY_IMAGE:TEST
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl get componentstatuses
+kubectl get pods --all-namespaces
+ 
+kubectl get events
+kubectl get pods
+kubectl get replicaset
+kubectl get deployment
+kubectl get service
+ 
+kubectl get pods -o wide
+ 
+kubectl explain pods
+kubectl get pods -o wide
+ 
+kubectl describe pod hello-world-rest-api-58ff5dd898-9trh2
+ 
+kubectl get replicasets
+kubectl get replicaset
+ 
+kubectl scale deployment hello-world-rest-api --replicas=3
+kubectl get pods
+kubectl get replicaset
+kubectl get events
+kubectl get events --sort.by=.metadata.creationTimestamp
+ 
+kubectl get rs
+kubectl get rs -o wide
+kubectl set image deployment hello-world-rest-api hello-world-rest-api=DUMMY_IMAGE:TEST
+kubectl get rs -o wide
+kubectl get pods
+kubectl describe pod hello-world-rest-api-85995ddd5c-msjsm
+kubectl get events --sort-by=.metadata.creationTimestamp
+ 
+kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+kubectl get events --sort-by=.metadata.creationTimestamp
+kubectl get pods -o wide
+kubectl delete pod hello-world-rest-api-67c79fd44f-n6c7l
+kubectl get pods -o wide
+kubectl delete pod hello-world-rest-api-67c79fd44f-8bhdt
+ 
+gcloud container clusters get-credentials in28minutes-cluster --zone us-central1-c --project solid-course-258105
+docker login
+docker push in28min/mmv2-currency-exchange-service:0.0.11-SNAPSHOT
+docker push in28min/mmv2-currency-conversion-service:0.0.11-SNAPSHOT
+ 
+kubectl create deployment currency-exchange --image=in28min/mmv2-currency-exchange-service:0.0.11-SNAPSHOT
+kubectl expose deployment currency-exchange --type=LoadBalancer --port=8000
+kubectl get svc
+kubectl get services
+kubectl get pods
+kubectl get po
+kubectl get replicaset
+kubectl get rs
+kubectl get all
+ 
+kubectl create deployment currency-conversion --image=in28min/mmv2-currency-conversion-service:0.0.11-SNAPSHOT
+kubectl expose deployment currency-conversion --type=LoadBalancer --port=8100
+ 
+kubectl get svc --watch
+ 
+kubectl get deployments
+ 
+kubectl get deployment currency-exchange -o yaml >> deployment.yaml 
+kubectl get service currency-exchange -o yaml >> service.yaml 
+ 
+kubectl diff -f deployment.yaml
+kubectl apply -f deployment.yaml
+ 
+kubectl delete all -l app=currency-exchange
+kubectl delete all -l app=currency-conversion
+ 
+kubectl rollout history deployment currency-conversion
+kubectl rollout history deployment currency-exchange
+kubectl rollout undo deployment currency-exchange --to-revision=1
+ 
+kubectl logs currency-exchange-9fc6f979b-2gmn8
+kubectl logs -f currency-exchange-9fc6f979b-2gmn8 
+ 
+kubectl autoscale deployment currency-exchange --min=1 --max=3 --cpu-percent=5 
+kubectl get hpa
+ 
+kubectl top pod
+kubectl top nodes
+kubectl get hpa
+kubectl delete hpa currency-exchange
+ 
+kubectl create configmap currency-conversion --from-literal=CURRENCY_EXCHANGE_URI=http://currency-exchange
+kubectl get configmap
+ 
+kubectl get configmap currency-conversion -o yaml >> configmap.yaml
+ 
+watch -n 0.1 curl http://34.66.241.150:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+ 
+docker push in28min/mmv2-currency-conversion-service:0.0.12-SNAPSHOT
+docker push in28min/mmv2-currency-exchange-service:0.0.12-SNAPSHOT
+
+
+
+You can run K8s on your data center or any cloud platform;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Create K8s Cluster
+
+	It is a group of servers, where your microservices run;
+	Setting up a K8s cluster is not easy! In this lecture, we use Google K8s Engine(GKS) on Google Cloud Platform(GCP);
+
+	- create Google Cloud Account 	https://cloud.google.com 
+	- Create a Cluster
+	- deploy rest api
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl [command] [type] [NAME] [flags]
+command -> create | get | describe | delete;
+type 	-> 
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+K8s New Terms: Cluster, Node, Pod, Container, Deployment, Service, Replica Set etc;
+GCP New Terms: Regions, Zone, Project, Compute Engine;
+kubectl - kube controller;
+
+What it takes to deploy microservices to a K8s cluster on Google Cloud?
+	- Create a Google Cloud free trial account;
+	  Free trial account gives you $300 credit and also free access to a number of Google services for about 12 months;
+	  One of the cool feature is: Google doesn't auto charge you after free trial ends!
+	- Create a K8s Cluster;
+	  In general, setting up and managing K8s cluster is really tough;
+	  We would use GKE, Google Kubernetes Engine, a managed service provided by GCP;
+
+What is Node?
+	What is K8s - It is the best resource manager ever;
+	What resources it manages? It manages your servers; Because, these servers are in the cloud, they are virtual servers;
+	Different cloud providers gave different names to those servers: AWS calls it EC2, GCP calls it Compute Engine, Azure calls it Virtual Servers;
+	K8s gave all of them a generic name called Node;
+
+	K8s can manage thousands of Nodes; What do you when you have 1000s Nodes to manage? You introduce managers;
+	In k8s, these managers are nothing but Master Nodes;
+	Typically, you will have 1 master node; But, if you need high availability, go for multiple master nodes;
+
+What is Cluster?
+	It is nothing but a set of Nodes;
+	Nodes that actually does the work are called Worker Nodes;
+	Master nodes ensure that nodes are available and do some useful work;
+
+How to create K8s cluster using GCP?
+	https://cloud.google.com -> Login -> Console -> Create/Choose Project -> Goto K8s Engine -> Enable -> Create Cluster;
+	While creating a Cluster: choose Type of nodes, number of nodes and their location;
+
+How to deploy an application in K8s cluster?
+	- Connect to the K8s cluster;
+	  GCP provides Google Cloud Shell - which allows you to connect to the cluster using CLI;
+	  Goto https://cloud.google.com -> Navigate to that cluster -> click on 'Activate Cloud Shell';
+	  That launches the Cloud Shell;
+
+	  Click on Connect -> Copy the command to clip board -> Run it cloud shell to actually connect;
+	  Now we are connected to the Cluster!
+
+	- Check if kubectl is installed in the Cloud Shell;
+	  kubectl version // It shows the client version and server version; So, Cloud Shell is packaged with kubectl;
+
+	- kubectl create deployment my-hw-deployment-1 --image=in28min/hello-world-rest-api:0.0.1.RELEASE
+
+	# Expose the service to outside world, as a LoadBalancer on specified port;
+	- kubectl expose deployment my-hw-deployment-1 --type=LoadBalancer --port=8080 	
+
+	# To access the application: Goto Services -> Grab the Endpoint on cloud portal UI; 
+	  Try http://35.223.169.37:8080/hello-world-bean
+-------------------------------------------------------------------------------------------------------------------------------------------------
+- Bringing up a service is very easy, but what's happening in the background is very difficult to understand!
+
+> kubectl get events 		# You will see lot of events: it created a pod, replicaset, deployment, service etc;   
+
+# When you create a deployment, it internally creates a Pod, Replicaset, Deployment etc;
+# Why? Because K8s follows single resposibility principle; Each of them have an important role to play!
+
+What is a Pod?
+	Pod is the smallest deployable unit;
+	You might think container is the smallest deployable unit? Not the case in K8s!
+	In K8s, you can't have a Container without Pod! Container lives in a Pod;
+
+	So, what does a Pod can have?
+		- Check the output of: kubectl get pod -o wide;
+		- Each pod will have a unique IP address;
+		- 1/1 -> Number of containers in that Pod and how many of them are ready;
+
+	A pod can have multiple containers;
+	All containers in a Pod share the resources;
+	Within the Pod, containers can talk to each other using localhost;
+
+	A pod can have a namespace, labels, annotations;
+
+	A pod can have a Status; 
+
+What is a Replicaset?
+	It ensures that specific number of Pods are running at all times;
+	It always keeps monitoring the pods and if there are lesser number of pods than what is needed, then it creates new pods;
+
+	How can I tell the replica set to maintain a higher number of pods? 
+	The way we can do that in Kubernetes is by saying: kubectl scale deployment --replicas=3
+
+	So, what we now have is more than two instances of the application running and they are also having load distribution between them.
+	Let's not worry about the load distribution part for now.
+
+	In practice, you would see that a replica set is always tied with a specific release version.
+
+
+What is a Deployment?
+	Typically, we want to update applications and when we update, we want zero downtime;
+
+	kubectl set image deployment <deploymentName> <containerName>=<imageName>
+
+	The strategy which the deployment is using, by default, is something called rolling updates.
+
+
+
+What is a Service?
+	Service gets created, when you expose a deployment;
+	It allows your application to receive traffic through a permanent lifetime IP address;
+	It provides an always-available external interface to the applications which are running inside the pods;
+
+	If you access the URL, while the pods are being deleted and new ones are being launched up, you would see that this service is always up and running.
+	How is this magic happening?
+	This magic is happening because of something called a Service. In the Kubernetes world, a pod is a throw away unit.
+	Your pods might go down, new pods might come up whenever I do a new release, there might be several new pods which are 
+	created, and the old pods completely go away.
+	Irrespective of all the changes happening with the pods, we don't want the consumer side of things to get affected.
+	We don't want the user of the application to use a different URL, that's the role of a service.
+
+	LoadBalancer - it balances the load b/w all active pods;
+	ClusterIP
+		You can see that the Kubernetes service is actually running as a ClusterIP service.
+		A ClusterIP service can only be accessed from inside the cluster.
+		You will not be able to access this service from outside the cluster.
+		You can see that there is no External-IP for this specific service.
+		So, if you have any services which are directly consumed inside your cluster, you can have them use a ClusterIP.
+	NodePort
+
+
+# Deployment Related
+kubectl create deployment 			# Creates Pod, Replicaset, Deployment
+kubectl expose deployment 			# Creates Service;
+kubectl get deployment
+
+# Pod Related
+kubectl get pods  					# List all Pods;
+kubectl describe pod <podName> 		# Pod Metadata;
+kubectl delete pod <podName> 		# Delete Pod;
+
+# Replicaset Related
+kubectl get rs
+
+# Service Related
+kubectl get service
+
+
+responsibilities of Kubernetes, which are to manage workloads, to provide external access to workloads, to enable scaling, and to enable zero downtime deployments.
+
+Fn + Shift + Up/Down - to scroll page up/down;
+
+Namespace - an important concept, which isolates a part of cluster from other parts;
+	Say, you have your dev and QA env running in same cluster;
+	How do you separate resources of Dev from the resources of QA environment?
+	One of the option is: create a separate namespace for both dev, QA and associate the resources with specific namespace;
+
+
+Label and selectors
+	Labels and selectors are used to link all the resource together;
+
+Annotation
+	Annotations are typically meta information about that specific pod.
+	What was the release Id, what was the build Id, what was the author name, and all that kind of stuff are what are put into annotations.
+
+------------------------------------------------------------------------------------
+GCloud
+	So far, we were using Cloud Shell to deploy our application; 
+	You can actually deploy the application from your terminal as well;
+	To be able to do that, you would need to install 2 simple tools: Gcloud, Kubectl;
+	Gcloud - a command-line interface to Google Cloud;
+	Kubectl - command-line interface for Kubernetes;
+
+	Install Gcloud - https://cloud.google.com/sdk/docs/install
+	Install Kubectl - https://kubernetes.io/docs/tasks/tools/
+
+	Connect to the cluster: 
+
+

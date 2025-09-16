@@ -1,0 +1,153 @@
+What is Dockerfile?
+    Dockerfile is a script containing a series of instructions on how to build the Docker image;
+    Dockerfile --> Build --> Docker Image --> RUN --> Docker Container;
+
+    Build: 
+        docker build -t my-app-image .                                  # -t specifies custom image name;
+        docker build -t my-app-image --build-arg <name>=<value> .       # --build-arg is used to override ARG variable;
+
+    Runtime:
+        docker run -p 8080:8080 my-app-image
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+FROM <image>:<tag> [AS <name>]
+    - It specifies the base image, for the new image;
+    - A valid Dockerfile MUST start with FROM;
+    - We can have multiple FROMs in a Dockerfile; // TODO: https://stackoverflow.com/questions/33322103/multiple-froms-what-it-means
+
+MAINTAINER <name>
+    - It specifies the Author field of the generated images;
+    - It is deprecated, in favor of LABEL;
+
+LABEL <key>=<value> [<key>=<value> ...]
+    - You can add one or more labels to the image;
+    - Use docker inspect command, to view the labels of an image; // docker inspect <imagename>
+    - Eg: LABEL maintainer="dev@someproject.org"	// Used to set email of the Author
+    - You can use Labels to store git commit/version details: https://snyk.io/blog/building-java-container-images-using-jib/
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+RUN
+    - It is executed during build time(image creation time);
+    - It is commonly used to install dependant software packages on top of current image, which creates a new layer by commiting the results;
+    - Dockerfile can have multiple RUN commands;
+    - Eg: RUN yum -y install httpd
+
+CMD
+    - Both CMD and ENTRYPOINT are executed, when intializing a container from image;
+    - There can be only CMD per docker file; If you specify multiple CMD commands, only the last one gets executed;
+    - It can be overriden from CLI;
+        -- If you don't specify any CMD from CLI, CMD specified in Dockerfile gets executed;
+        -- If you specify CMD from CLI, only it is executed and the CMD specified in Dockerfile gets ignored;
+
+    Eg: 
+        > cat Dockerfile 
+          FROM ubuntu
+          CMD ["echo", "Hello World"]
+        > docker build -t cmd-01 .
+        > docker run cmd-01
+          Hello World
+        > docker run cmd-01 env
+          PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+          HOSTNAME=4829c66785c9
+          HOME=/root
+        > docker run cmd-01 uname
+          Linux 
+        > docker run cmd-01 echo "New Hello"    # You can specify additional params to CMD from CLI;
+          New Hello
+
+ENTRYPOINT 
+    - Both CMD and ENTRYPOINT are executed, when intializing a container from image;
+    - We cannot override entrypoint instruction, by adding command line parameter when running docker run command;
+    - Instead, CLI parameters are appended to the entry point instruction;
+
+    Eg:
+      > cat Dockerfile 
+        FROM ubuntu
+        ENTRYPOINT ["echo", "hello world"]
+      > docker build -t ep-01 .
+      > docker run ep-01 
+        hello world
+      > docker run ep-01 uname
+        hello world uname
+      > docker run ep-01 echo test
+        hello world echo test
+
+      # Override entrypoint instruction
+      > docker run --entrypoint uname ep-01
+        Linux
+
+ENTRYPOINT + CMD 
+    Eg: 
+      > cat Dockerfile 
+        FROM ubuntu
+        ENTRYPOINT ["echo", "hello "]
+        CMD ["world"]
+      > docker build -t ep-02 .
+      > docker run ep-02 
+        hello  world
+      > docker run ep-02 Rakesh
+        hello  Rakesh
+      > docker run ep-02 Rakesh Kasd
+        hello  Rakesh Kasd
+
+      # Override entrypoint instruction
+      > docker run --entrypoint uname ep-02
+        Linux
+
+    Eg2: CMD before ENTRYPOINT
+        > cat Dockerfile 
+          FROM ubuntu
+          CMD ["so", "cmd"]
+          ENTRYPOINT ["echo", "cp "]
+        > docker build -t ep-03 .
+        > docker run ep-03
+          cp  echo cmd
+
+    Eg3: CMD before and after ENTRYPOINT
+       > cat Dockerfile 
+         FROM ubuntu
+         CMD ["so"]
+         ENTRYPOINT ["echo", "hello "]
+         CMD ["world"]
+        > docker build -t ep-04 .
+          Error: MultipleInstructionsDisallowed: Multiple CMD instructions should not be used in the same stage because only the last one will be used (line 2)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ARG <name>=<value>
+    - Build-time variables; 
+    - They are available during image creation time only; 
+    - They are not part of the image created; 
+    - However, users can retrieve ARG values from an image using 'docker history' command;
+
+ENV <key>=<value> [<key>=<value> ...]
+    - Run-time variables;
+    - You can use 'env' to print all environment varialbes in a container;
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+EXPOSE <port>
+    - Container listens on the specified port, at runtime;
+    - It doesn't make the ports of the container available to host;
+    - Exposing port 3000 informs Docker which port the container is listening on at runtime. Let’s modify the Docker file and expose the port 3000.
+
+ADD <src> <dest>
+    - Copies specified file/directory to the filesystem of the image at specified path;
+    - It is recommended to use COPY always!
+
+COPY <src> <dest>
+    - Copies specified file/directory to the filesystem of the image at specified path;
+    -	When you run 'docker build .', docker has no access to any files other than Dockerfile in that directory.
+	  - COPY Instruction is used to move the files b/w local file system and container file system.
+	  Syntax: COPY <localPath> <containerPath>
+		  COPY ./ ./ - It copies everything in pwd to the container(which folder?)
+		  localPaht - relative to directory specified in the docker build command.
+		  containerPath - relative to container working directory.
+    	By default, / is the default directory inside container. You can change home directory of container using WORKDIR Instruction.
+
+VOLUME <path>
+  - It is used to create or mount the volume to the Docker container
+
+USER <username>
+    - It specifies the user to use when running RUN, CMD, ENTRYPOINT commands;
+
+WORKDIR <path>
+    - It specifies working directory for RUN, CMD, ENTRYPOINT, COPY, ADD commands;
+    - Syntax: WORKDIR /usr/app
+	  Any following command will be executed relative to this path in the container.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------

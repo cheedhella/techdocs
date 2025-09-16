@@ -1,0 +1,53 @@
+How we create K8s cluster?
+How many OKE clusters we have?
+How to create a k8s cluster on OCI?
+How do we know if nodes are overloaded?
+
+https://oracle.github.io/learning-library/oci-library/oci-hol/OKE/workshops/freetier/index.html?lab=oke
+
+
+You can easily create a Kubernetes cluster on any environment with KubeOne. Check our Getting Started guide for instructions. Alternatively, you can simply use the Kubernetes playground for practising purposes.  https://labs.play-with-k8s.com/
+
+
+https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl
+https://medium.com/@Jordan-B/how-to-deploy-your-first-local-kubernetes-cluster-in-20-minutes-537b7035ce6b
+
+https://riowiraldhani.medium.com/create-manage-cluster-kubernetes-using-eks-a2d7ee00774d
+https://medium.com/@a.abdelfatah.100/create-secure-and-highly-available-kubernetes-cluster-in-aws-with-eks-using-terraform-a33d9a6d9777
+
+get a list of all IPs of the Nodes underlying your cluster, in one line
+	kubectl get node -o=jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'
+
+
+
+https://medium.com/codex/create-kubernetes-cluster-on-aws-eks-6ced4c488e62
+
+https://medium.com/@josephcardillo/understanding-the-kubernetes-control-plane-cluster-101-85e5685d3d6a?source=read_next_recirc---------1---------------------aa8a3802_f414_4951_81d2_5ea91214f989-------
+
+
+If you would like to have a K8s cluster locally, I would recommend using the steps from here: https://github.com/itwonderlab/ansible-vbox-vagrant-kubernetes
+
+
+
+
+# There is no free tier cluster in AWS, Azure; There is a free tier in GCP;
+# If you are interacting with a cluster in GCP from your local, how does the kubectl in your local knows about remote cluster?
+	gcloud container clusters get-credentials in28minutes-cluster --zone us-central1-a --project solid-course-258105
+
+> kubectl get componentstatuses
+You can see that we have two etcd databases; etcd-0 and etcd-1. These are both healthy.
+You can see the controller manager which is healthy,
+you can see the scheduler which is healthy as well.
+So, these are some of the components which are running as part of your Kubernetes master node.
+
+
+> kubectl get componentstatuses
+NAME                 STATUS    MESSAGE                         ERROR
+scheduler            Healthy   ok                              
+controller-manager   Healthy   ok                              
+etcd-0               Healthy   {"health":"true","reason":""}   
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+	kube-api-server, scheduler, etcd and controllers pods in the control-plane nodes.

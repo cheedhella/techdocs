@@ -1,0 +1,650 @@
+// Feature pipeline
+//
+// Shared libraries are defined as groovy scripts in a repository of your choice and "registered" in Jenkins via:
+// Jenkins->Manage Jenkins->Configure System->[Global Pipeline Libraries]
+// Libraries are "imported" by a Jenkinsfile using a name you choose as an alias for the repository you specified
+// in the Jenkins configuration. Groovy files are defined in /vars/... for "global" variables ("functions").
+// Classes can be defined as well and stored in the repository under /src/... (e.g. /src/org/ca/)
+//
+//
+//@Library('build-tools') _
+library 'build-tools'
+
+// STATIC_AGENT_LABEL references jenkins agents that are long-lived. All others are transient agents.
+//
+def STATIC_AGENT_LABEL = "debug"
+def DEFAULT_AGENT_LABEL = "gcp-ate"
+def BLACKDUCK_AGENT_LABEL = "gcp-blackduck"
+def COVERITY_AGENT_LABEL = "gcp-coverity"
+
+def PROJECT_NAME = 'netops-flow'
+def SONARQUBE_PROJECT = 'netops-flow'
+def SONARQUBE_URL = 'https://sonarqube.devops.broadcom.net'
+def SONARQUBE_TOKEN = 'sqp_9b1866a90ad1ad29dcce7a5c0b3c17fb002a5792'
+def MAVEN_SETTINGS_SECRET_FILE = 'maven-artifactory'
+def ARTIFACTORY_CREDENTIALS = 'rtcbuild.artifactory'
+def EXECUTE_ACTION_VERBOSITY = '-vvv'
+def EXTRA_MAVEN_ARGS = ''
+def ver = '0.0.1' // this will be overwritten
+
+def isVersionBuild() {
+    return params.VERSION_BUILD
+}
+
+def check_coverity() {
+  if ( env.BUILD_TYPE == 'pr' ) {
+    exitCode = execute_action_and_set_pr_status( "coverity-check-new-defects", "coverity-quality-gate", failureMessage:"New defects detected (See build log)", extraActionParams:"${env.GENERAL_VARS}", outputMode:"onfailure" )
+  } else if ( params.SCAN_COVERITY == 'new defects' ) {
+    exitCode = execute_action( "coverity-check-new-defects", "${env.GENERAL_VARS}", '' )
+  } else if ( params.SCAN_COVERITY == 'all defects' ) {
+    exitCode = execute_action( "coverity-check-all-defects", "${env.GENERAL_VARS}", '' )
+  } else {
+    println("No coverity validation performed (BUILD_TYPE="+env.BUILD_TYPE+", SCAN_COVERITY="+params.SCAN_COVERITY+")")
+    exitCode = 0
+  }
+  return exitCode
+}
+
+def postCoverityAction() {
+  if ( params.PRESERVE_WORKSPACES ) {
+    echo "!!!!! COVERITY WORKSPACE PRESERVED ( ${env.NODE_NAME}:${COVERITY_WORKSPACE_DIR} )"
+  } else {
+    echo "REMOVING WORKSPACE ( ${env.NODE_NAME}:${COVERITY_WORKSPACE_DIR} )"
+    dir( "${COVERITY_WORKSPACE_DIR}" ) { deleteDir() }
+    dir( "${COVERITY_WORKSPACE_DIR}@tmp" ) { deleteDir() }
+    dir( "${COVERITY_WORKSPACE_DIR}@script" ) { deleteDir() }
+  }
+}
+
+def postBlackduckAction(){
+  if ( params.PRESERVE_WORKSPACES ) {
+    echo "!!!!! WORKSPACE NOT REMOVED ( ${env.NODE_NAME}:${env.BLACKDUCK_WORKSPACE_DIR} )"
+  } else {
+    echo "REMOVING WORKSPACE ( ${env.NODE_NAME}:${env.BLACKDUCK_WORKSPACE_DIR} )"
+    deleteDir()
+    dir( "${BLACKDUCK_WORKSPACE_DIR}" ) { deleteDir() }
+  }
+}
+
+pipeline {
+
+  options {
+    timestamps()
+  }
+
+  environment {
+    LEGACY_BRANCHING = "false"
+    WORKSPACE_DIR = "/builds/workspace/${PROJECT_NAME}/${env.BRANCH_NAME}/${env.BUILD_NUMBER}"
+    GENERAL_VARS = "--var working-dir=${env.WORKSPACE_DIR}"
+    VERSION_VARS = "--var new-version=${params.VERSION} --var story-number=${params.STORY_NUMBER}"
+    COVERITY_WORKSPACE_DIR="/builds/workspace/netops-flow/${env.WORKSPACE_SUFFIX}/${env.BUILD_NUMBER}/coverity"
+    SONAR_REPORT_URL = "${SONARQUBE_URL}/dashboard?id=${SONARQUBE_PROJECT}&pullRequest=${env.PR_NUMBER}"
+    SONAR_VARS = "--var working-dir=${env.WORKSPACE_DIR} --var sonar-key=${SONARQUBE_PROJECT} --var sonar-token=${SONARQUBE_TOKEN} --var pull-request-key=${env.PR_NUMBER} --var pull-request-target=${env.PR_BRANCH_BASE} --var branch=${env.BRANCH_NAME}"
+    BLACKDUCK_WORKSPACE_DIR="${env.WORKSPACE_DIR}/blackduck"
+    BLACKDUCK_VARS="--var working-dir=${env.BLACKDUCK_WORKSPACE_DIR} --var permission-file=${env.BLACKDUCK_WORKSPACE_DIR}/buildtools/common/permissions/blackduck.yml"
+    MAVEN_SETTINGS_FILE = credentials("${MAVEN_SETTINGS_SECRET_FILE}")
+    ARTIFACTORY = credentials("${ARTIFACTORY_CREDENTIALS}")
+    ARTIFACTORY_API_KEY = credentials('rtcbuild@isl-dsdc')
+    MAVEN_USER = "${env.ARTIFACTORY_USR}"
+    MAVEN_PASSWORD = "${env.ARTIFACTORY_PSW}"
+    CITOOL_LOGFILE="/project/builds_netops/build_state/logs/citool.log"
+    RALLY_SERVER="rally1.rallydev.com"
+    RALLY_CREDS=credentials('rtcbuild.rally')
+    RALLY_USER="${env.RALLY_CREDS_USR}"
+    RALLY_APIKEY="${env.RALLY_CREDS_PSW}"
+    RALLY_WORKSPACE="Rally"
+    RALLY_PROJECT="NetOps Value Stream"
+    FAULT_EMAIL_RECIPIENTS="frederick.slama@broadcom.com"
+    GIT_CREDS=credentials('rtcbuild.github.token')
+    GIT_APIKEY="${env.GIT_CREDS_PSW}"
+    BUILD_STATUS_EMAIL_RECIPIENTS="aiops-netops-scrummasters.pdl@broadcom.com, abe.dorr@broadcom.com, frederick.slama@broadcom.com"
+  }
+
+  parameters {
+    booleanParam(name: 'TEST_AND_SCAN_ALL', defaultValue: false, description: 'Perform complete suite of tests and scans')
+    booleanParam(name: 'UNIT_TEST', defaultValue: true, description: 'Enable unit tests')
+    booleanParam(name: 'BUILD_BASE_IMAGE', defaultValue: false, description: 'Build and publish Flow base image')
+    booleanParam(name: 'BUILD_NETOPS_HAZELCAST', defaultValue: false, description: 'Build and publish NetOps Hazelcast')
+    booleanParam(name: 'DISTRO_BUILD', defaultValue: false, description: '`true` to build and publishing the distro / Flow Bundle (ALL relevant steps/stages will be executed)')
+    booleanParam(name: 'SCAN_SONAR', defaultValue: false, description: 'Enable sonar scans (also enables unit tests)')
+    choice( name: 'SCAN_COVERITY', choices: ['disabled', 'new defects', 'all defects'], description: "'new defects' will detect new issues that don't already exist in integration ('all defects' will detect all new and backlog issues)")
+    booleanParam(name: 'SCAN_BLACKDUCK', defaultValue: false, description: 'Perform a blackduck scan (PERMISSION REQUIRED)' )
+    booleanParam(name: 'PUBLISH_HELM', defaultValue: true, description: 'Upload the Flow Helm to Artifactory (DART needs this helm chart, hence likely you want to keep it set)')
+    booleanParam(name: 'PUBLISH_FLOW_IMAGES', defaultValue: false, description: 'Package and upload the Flow images file')
+    booleanParam(name: 'VERSION_BUILD', defaultValue: false, description: '`true` to run version build (this disable any other non-version related job option)')
+    booleanParam(name: 'PUSH_VERSION_CHANGES', defaultValue: false, description: '`true` to publish version changes. Only used if VERSION_BUILD is set')
+    string(name: 'VERSION', defaultValue: '', description: 'the new version (example: 22.2.7). Only used if VERSION_BUILD is set')
+    string(name: 'STORY_NUMBER', defaultValue: '', description: 'the user story for the version release/change (example: US395022). Only used if VERSION_BUILD and PUSH_VERSION_CHANGES are set')
+    booleanParam(name: 'PRESERVE_WORKSPACES', defaultValue: false, description: 'Do not remove build workspace after build is complete (USE WITH CAUTION)')
+  }
+
+  agent {
+    node {
+      label select_agent( DEFAULT_AGENT_LABEL, STATIC_AGENT_LABEL )
+      customWorkspace "/builds/workspace/netops-flow/${env.BRANCH_NAME}/${env.BUILD_NUMBER}"
+    }
+  }
+
+  stages {
+// something similar to the below stage is needed in case two or more jenkins jobs (with the netops jenkins infra) exists.
+//    stage('update-build-status-config') {
+//      steps {
+//        script {
+//          def statusCode = sh(script: "sed -i 's/build-status-directory:.*/build-status-directory: flow-images/g' build/base.conf.yml >& /dev/null", returnStatus: true) as Integer
+//          if (statusCode != 0) {
+//            error("Build failed because it was not possible to update build-status-directory")
+//          }
+//          statusCode = sh(script: "sed -i '/build-artifact-location/s/flow-helm/flow-images/g' build/base.conf.yml >& /dev/null", returnStatus: true) as Integer
+//          if (statusCode != 0) {
+//            error("Build failed because it was not possible to update build-artifact-location")
+//          }
+//        }
+//      }
+//    }
+
+    stage('init') {
+      steps {
+        script {
+          env.BUILD_NUMBER_OVERRIDE = pipelineInit().trim()
+          if (params.VERSION) {
+            ver = params.VERSION
+          } else {
+            ver = sh (script: 'sed -n "s/^  version: \\([0-9.]*\\)/\\1/p" build/versions/integration.conf.yml', returnStdout: true).trim()
+          }
+        }
+      }
+    }
+
+    stage('scm-check') {
+      when { expression { scmWhen() } }
+      steps {
+        script {
+          gitapi.prSetStatus( 'pending', 'scm-check', "Source control validation" )
+          scmCheck( reponame:"ESD/netops-flow", branchname:env.BRANCH_NAME, buildnum:env.BUILD_NUMBER, logfile:env.CITOOL_LOGFILE, debug:true )
+        }
+      }
+    }
+
+    // best effort to avoid kicking the job due to a version build commit
+    stage('check-build-not-needed') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !env.DISTRO_BUILD }
+          not { triggeredBy cause: 'UserIdCause' }
+          changeset pattern: 'build/versions/integration.conf.yml'
+          expression { sh(script: "git diff --name-only | grep -qv version", returnStatus: true) == 1 }
+          expression { sh(script: "git log -1 | grep '.*tkn_version.*'", returnStatus: true) == 0 }
+        }
+      }
+      steps {
+        script {
+          currentBuild.result = 'ABORTED'
+          error('Stopping earlier due to change in integration.conf.yml done by likely a version update build')
+        }
+      }
+    }
+
+    stage('prepare') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { !params.VERSION_BUILD }
+        }
+      }
+      steps {
+        sh 'cp ${MAVEN_SETTINGS_FILE} settings.xml'
+      }
+    }
+
+    // Compile with no-tests and set versions ( only applicable to version builds )
+    stage('set-build-versions') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { params.VERSION_BUILD }
+        }
+      }
+      steps {
+        execute_action('set-build-versions', "${env.VERSION_VARS}", "")
+        execute_action('commit-version-changes', "${env.VERSION_VARS}", "")
+      }
+    }
+
+    stage('pr-status-init') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { env.BUILD_TYPE == "pr" }
+        expression { !params.VERSION_BUILD }
+      }
+      steps {
+        script {
+          gitapi.prSetStatus('pending', 'unit-test');
+          gitapi.prSetStatus('pending', 'sonar-quality-gate');
+          gitapi.prSetStatus('pending', 'build-status');
+        }
+      }
+    }
+
+    stage('base-image-build') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { env.BUILD_TYPE != "pr" }
+        expression { !params.VERSION_BUILD }
+        anyOf {
+          changeset "build/bin/docker/**/*"
+          expression { params.BUILD_BASE_IMAGE }
+          expression { params.DISTRO_BUILD }
+        }
+      }
+      steps {
+        sh "cd build/bin/docker && ./docker-build.sh"
+      }
+    }
+
+    stage('base-image-publish') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { env.BUILD_TYPE != "pr" }
+        expression { !params.VERSION_BUILD }
+        anyOf {
+          changeset "build/bin/docker/**/*"
+          expression { params.BUILD_BASE_IMAGE }
+          expression { params.DISTRO_BUILD }
+        }
+      }
+      steps {
+        sh "cd build/bin/docker && ./docker-push.sh"
+      }
+    }
+
+    stage('netops-hazelcast') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { env.BUILD_TYPE != "pr" }
+        anyOf {
+          expression { params.VERSION_BUILD }
+          expression { params.BUILD_NETOPS_HAZELCAST }
+          expression { params.DISTRO_BUILD }
+        }
+      }
+      steps {
+        script {
+          def paramsToPass = [booleanParam(name: 'VERSION_BUILD', value: Boolean.valueOf("${params.VERSION_BUILD}")),
+                                       booleanParam(name: 'PUSH_VERSION_CHANGES', value: Boolean.valueOf("${params.PUSH_VERSION_CHANGES}")),
+                                       string(name: 'VERSION', value: "${ver}"),
+                                       string(name: 'STORY_NUMBER', value: "${params.STORY_NUMBER}"),
+                                       booleanParam(name: 'UNIT_TEST', value: Boolean.valueOf("${params.UNIT_TEST}"))]
+          def repo = "netops-hazelcast"
+          def branchName = "${env.BRANCH_NAME}"
+          def jobName = "/NetOps/CI Builds/${repo}/${branchName}"
+          def statusCode = sh(script: "curl -XGET 'https://jenkins-netops-02.devops.broadcom.net/job/NetOps/job/CI%20Builds/job/${repo}/job/${branchName}/api/json' --user hk892839:11e4c998e70583e676a44ce85f1b21569e --fail > /dev/null", returnStatus: true) as Integer
+          if (statusCode != 0) {
+            jobName = "/NetOps/CI Builds/${repo}/integration"
+          }
+          build job: jobName, parameters: paramsToPass, propagate: true, wait: true
+        }
+      }
+    }
+
+    stage('compile') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { !params.VERSION_BUILD }
+      }
+      steps {
+        script {
+          execute_action('clean', "--var extra-maven-args='${EXTRA_MAVEN_ARGS}' ${env.GENERAL_VARS}", "${EXECUTE_ACTION_VERBOSITY}")
+          execute_action("compile",
+            "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}' ${env.GENERAL_VARS}",
+            "${EXECUTE_ACTION_VERBOSITY}")
+        }
+      }
+    }
+
+    stage('unit-test') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { !params.VERSION_BUILD }
+          anyOf {
+            expression { env.BUILD_TYPE == "pr" }
+            expression { shouldRunTestOrScanStage(params.UNIT_TEST, params.SCAN_SONAR, env.FIRST_BUILD) }
+            expression { params.DISTRO_BUILD }
+          }
+        }
+      }
+      steps {
+        script {
+            execute_action_and_set_pr_status("unit-test", "unit-test", outputMode: 'always', extraActionParams:"--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}' ${EXECUTE_ACTION_VERBOSITY}")
+        }
+      }
+    }
+
+    stage('sonar') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { !params.VERSION_BUILD }
+          anyOf {
+            expression { env.BUILD_TYPE == "pr" }
+            expression { shouldRunTestOrScanStage(params.SCAN_SONAR, env.FIRST_BUILD) }
+          }
+        }
+      }
+      steps {
+        // Execute actions according to whether the build was triggered by a Pull-Request or Push
+        script {
+          if ( env.BUILD_TYPE == "pr" ) {
+            execute_action("sonar-pullrequest", "${env.SONAR_VARS} --var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'", "${EXECUTE_ACTION_VERBOSITY}")
+            // sonar needs a little time to process the task, for now, let's sleep...
+            sh 'sleep 15'
+            execute_action_and_set_pr_status( "sonar-pullrequest-quality-gate", "sonar-quality-gate", detailsUrl:"${env.SONAR_REPORT_URL}", extraActionParams:"${env.SONAR_VARS} --var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'")
+          } else if ( env.BRANCH_NAME == "integration" ) {
+            execute_action("sonar", "${env.SONAR_VARS} --var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'", "${EXECUTE_ACTION_VERBOSITY}")
+          }
+        }
+      }
+    }
+
+    stage('coverity') {
+      when {
+        allOf {
+          expression { shouldRunTestOrScanStage( params.SCAN_COVERITY != "disabled" ) }
+          expression { isDevBranch() || isReleaseBranch() }
+          expression { !isVersionBuild() }
+        }
+        beforeAgent true
+      }
+      agent {
+        node {
+          label select_agent( COVERITY_AGENT_LABEL, STATIC_AGENT_LABEL )
+          customWorkspace "${env.COVERITY_WORKSPACE_DIR}"
+        }
+      }
+      stages {
+        stage('coverity-prepare') {
+          environment {
+            // These variables need to be re-assigned because the Coverity scan is running on other VMs.
+            ARTIFACTORY = credentials("${ARTIFACTORY_CREDENTIALS}")
+            ARTIFACTORY_API_KEY = credentials('rtcbuild@isl-dsdc')
+            MAVEN_SETTINGS_FILE = credentials("${MAVEN_SETTINGS_SECRET_FILE}")
+            MAVEN_USER = "${env.ARTIFACTORY_USR}"
+            MAVEN_PASSWORD = "${env.ARTIFACTORY_PSW}"
+          }
+          steps {
+            sh 'cp ${MAVEN_SETTINGS_FILE} settings.xml'
+          }
+        }
+        stage('coverity-compile') {
+          steps {
+            checkout_build_tools("${env.COVERITY_WORKSPACE_DIR}")
+            execute_action('clean', "${env.GENERAL_VARS}", '')
+            execute_action('coverity-clean', "${env.GENERAL_VARS}", '')
+            execute_action('coverity-compile', "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}' ${env.GENERAL_VARS}", '')
+          }
+        }
+        stage('coverity-validate') {
+          steps {
+            script {
+              COVERITY_CHECK_EXITCODE = check_coverity()
+            }
+          }
+        }
+        stage('coverity-analyze-commit') {
+          when { expression { env.BUILD_TYPE != 'pr' && COVERITY_CHECK_EXITCODE != 0 } }
+          steps {
+            execute_action('coverity-analyze', "${env.GENERAL_VARS}", '')
+            execute_action('coverity-commit-dev', "${env.GENERAL_VARS}", '')
+          }
+        }
+      }
+      post {
+        always {
+          script {
+            postCoverityAction()
+          }
+        }
+      }
+    }
+
+    stage('blackduck') {
+      when {
+        allOf {
+          expression { params.SCAN_BLACKDUCK == true &&  env.BUILD_TYPE == "dev" && env.BRANCH_NAME != "integration" }
+          expression { !isVersionBuild() }
+        }
+        beforeAgent true
+      }
+      agent {
+        node {
+          label select_agent( BLACKDUCK_AGENT_LABEL, STATIC_AGENT_LABEL )
+          customWorkspace "${env.BLACKDUCK_WORKSPACE_DIR}"
+        }
+      }
+      stages {
+        stage('compile') {
+          steps {
+            checkout_build_tools( "${env.WORKSPACE}" )
+            execute_action( 'blackduck-compile', "${env.BLACKDUCK_VARS}", '' )
+          }
+        }
+        // Step 2. Detect (development branches only)
+        stage('analyze') {
+          steps {
+            execute_action( 'blackduck-detect-dev', "${env.BLACKDUCK_VARS}", "" )
+          }
+        }
+      }
+      post {
+        always {
+          script {
+            postBlackduckAction()
+          }
+        }
+      }
+    }
+
+    stage('publish-artifacts-maven') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+        }
+      }
+      steps {
+        script {
+          if ( env.BRANCH_NAME == "integration" ) {
+            execute_action("publish-artifacts-maven-integration",
+              "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'",
+              "${EXECUTE_ACTION_VERBOSITY}")
+          } else {
+            execute_action("publish-artifacts-maven",
+              "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var branch=${env.BRANCH_NAME} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'",
+              "${EXECUTE_ACTION_VERBOSITY}")
+          }
+        }
+      }
+    }
+
+    stage('publish-artifacts-docker') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+        }
+      }
+      steps {
+        script {
+          def branch_lowercase = BRANCH_NAME.toLowerCase()
+          execute_action("publish-artifacts-docker",
+            "--var artifactory-user=${env.ARTIFACTORY_USR} --var artifactory-pass=${env.ARTIFACTORY_PSW} --var docker-registry-user=${env.ARTIFACTORY_USR} --var docker-registry-pass=${env.ARTIFACTORY_PSW} --var branch-lowercase=${branch_lowercase} --var extra-maven-args='${EXTRA_MAVEN_ARGS}'",
+            "${EXECUTE_ACTION_VERBOSITY}")
+        }
+      }
+    }
+
+    stage('helm-package') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { !params.VERSION_BUILD }
+        }
+      }
+      steps {
+        script {
+          execute_action('helm-package', "--var artifactory-api-key=${env.ARTIFACTORY_API_KEY} --var the-version=${ver}", "${EXECUTE_ACTION_VERBOSITY}")
+          // quick helm template syntax test for the default values
+          sh "helm template helm > /dev/null"
+        }
+      }
+    }
+
+    stage('helm-publish') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          expression { params.PUBLISH_HELM }
+        }
+      }
+      steps {
+        script {
+          execute_action('helm-publish', "--var artifactory-api-key=${env.ARTIFACTORY_API_KEY} --var the-version=${ver}", "${EXECUTE_ACTION_VERBOSITY}")
+        }
+      }
+    }
+
+    stage('flow-images-export') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          anyOf {
+            changeset "helm/tools/**/*"
+            expression { params.PUBLISH_FLOW_IMAGES }
+            changeset "distro/**/*"
+            expression { params.DISTRO_BUILD }
+          }
+        }
+      }
+      steps {
+        script {
+          execute_action('flow-images-export', "--var artifactory-api-key=${env.ARTIFACTORY_API_KEY}", '')
+        }
+      }
+    }
+
+    stage('flow-images-publish') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          expression { params.PUBLISH_FLOW_IMAGES }
+        }
+      }
+      steps {
+        script {
+          execute_action('flow-images-publish', "--var the-version=${ver} --var artifactory-api-key=${env.ARTIFACTORY_API_KEY}", '')
+        }
+      }
+    }
+
+    stage('distro-build') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          anyOf {
+            changeset "distro/**/*"
+            expression { params.DISTRO_BUILD }
+          }
+        }
+      }
+      steps {
+        sh "cd distro && export PATH=\$(pwd)/tools:\$PATH && DEBUG=true ARTIFACTORY_API_KEY=${env.ARTIFACTORY_API_KEY} BRANCH_NAME=${env.BRANCH_NAME} BUILD_NUMBER=${env.BUILD_NUMBER_OVERRIDE} VERSION=${ver} ATE_HELM_FILE_PATH=../helm/${PROJECT_NAME}-${ver}.tgz ATE_IMAGES_FILE_PATH=../helm/tools/flow-images-${env.BRANCH_NAME}-${env.BUILD_NUMBER_OVERRIDE}.tgz ATE_DISTRO_FILE_PATH=workdir/dist/netops-flow-k8s-distribution.tgz ./dist.sh"
+      }
+    }
+
+    stage('distro-publish') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          expression { params.DISTRO_BUILD }
+        }
+      }
+      steps {
+        // output with filename containing build id tag
+        sh "cd distro && DEBUG=true ARTIFACTORY_API_KEY=${env.ARTIFACTORY_API_KEY} ATE_DISTRO_FILE_PATH=workdir/dist/netops-flow-k8s-distribution.tgz OUTPUT_ARTIFACTORY_URL=https://packages.broadcom.net/artifactory/esd-netops-helm-dev-local/netops/${env.BRANCH_NAME}/ate-dist/netops-flow-k8s-distribution-${ver}-${env.BUILD_NUMBER_OVERRIDE}.tgz ./publish.sh"
+        // output with filename containing 'latest' tag
+        sh "cd distro && DEBUG=true ARTIFACTORY_API_KEY=${env.ARTIFACTORY_API_KEY} ATE_DISTRO_FILE_PATH=workdir/dist/netops-flow-k8s-distribution.tgz OUTPUT_ARTIFACTORY_URL=https://packages.broadcom.net/artifactory/esd-netops-helm-dev-local/netops/${env.BRANCH_NAME}/ate-dist/netops-flow-k8s-distribution-latest.tgz ./publish.sh"
+      }
+    }
+
+    // push changes to origin --- version builds only
+    stage('push-version-changes') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { params.VERSION_BUILD }
+          expression { params.PUSH_VERSION_CHANGES }
+        }
+      }
+      steps {
+        execute_action( 'push-version-changes', "${env.VERSION_VARS}", "${EXECUTE_ACTION_VERBOSITY}" )
+      }
+    }
+
+    stage('git-tag') {
+      when {
+        allOf {
+          expression { currentBuild.currentResult == "SUCCESS" }
+          expression { env.BRANCH_NAME == 'integration' }
+          expression { env.BUILD_TYPE != "pr" }
+          expression { !params.VERSION_BUILD }
+          expression { params.DISTRO_BUILD }
+        }
+      }
+      steps {
+        execute_action( "git-tag", "", "" )
+      }
+    }
+
+    stage('fini') {
+      when {
+        expression { currentBuild.currentResult == "SUCCESS" }
+        expression { !params.VERSION_BUILD }
+      }
+      steps {
+        pipelineFini()
+      }
+    }
+  }
+
+  post {
+    always {
+      script {
+        if ( params.PRESERVE_WORKSPACES ) {
+           echo "!!!!! WORKSPACE PRESERVED ( ${env.NODE_NAME}:${env.WORKSPACE_DIR} )"
+        } else {
+           echo "REMOVING WORKSPACE ( ${env.NODE_NAME}:${env.WORKSPACE_DIR} )"
+           deleteDir()
+           dir( "${WORKSPACE_DIR}" ) { deleteDir() }
+        }
+      }
+      dir( "${WORKSPACE_DIR}@tmp" ) { deleteDir() }
+      dir( "${WORKSPACE_DIR}@script" ) { deleteDir() }
+
+      postBuildActions( repoAlias:"netops-flow" )
+    }
+  }
+}

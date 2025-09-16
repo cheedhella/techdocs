@@ -1,0 +1,21 @@
+What is LLM(Large Language Model)?
+    It is a mathematical model that generates text, like filling in the gap for the next word in a sentence;
+
+CPU vs GPU
+    Compared to the traditional CPUs found in your laptop, GPUs have the ability to effortlessly run many parallel computations;
+
+
+
+
+
+
+
+
+
+
+There are tons of Artificial Intelligence (AI) products that leverage LLMs, from Facebook’s Meta AI, Google’s Gemini, Open AI’s ChatGPT, which borrows its name from the Generative Pre-trained Transformer technology under the hood, Microsoft’s CoPilot, among many, many others, covering a wide range of tasks to assist you on.
+
+These models are ‘large’ not only in their size, spanning billions of parameters, but also in the vast amount of data they are trained on. 
+This training involves the analysis of a wide array of text sources, from books and articles to websites and social media posts.
+
+

@@ -1,0 +1,35 @@
+What is Docker Registry?
+    It is a place where you can store your docker images and distribute them to others;
+    Registry can be public OR private;
+
+What is a Docker Repository?
+    Docker Registry can contain multiple repositories;
+    You can view each repository as a folder containing related images OR different versions of a specific image;
+    Repository can be public or private; 
+        In case of private repositories, only authorized people can access the images;
+        In case of public repositories, anyone can access the images;
+
+What is DockerHub?
+    It is free public registry and comes as default for all docker installations;
+
+    Other paid public registries:
+        - Google Container Registry (GCR)               # gcr.io 
+        - Amazon Elastic Container Registry (ECR)
+        - Azure Container Registry (ACR)
+
+    Your organization can also host a private registry;
+------------------------------------------------------------------------------------------------------------------------------------------------
+docker login 
+    - If a repository is secured, you need to login to it first;
+    - Eg: docker login -u <mc895644> -p <token/apikey> <reponame>.usw1.packages.broadcom.com
+    - Docker internally saves the credentials in ~/.docker/config.json;
+
+    - You always need to include Registry and Repository names are part of the image itself; 
+    - Eg: docker.io/<repo-name>/<img_name>:<tag>
+    - If registry is not specified, then docker uses DockerHub as default registry;
+
+    - Everytime you interact with that repository, docker uses the saved credentials;
+        -- docker build gcr.io/my-repo/my-image:tag 
+        -- docker push gcr.io/my-repo/my-image:tag
+        -- docker pull gcr.io/my-repo/my-image:tag
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

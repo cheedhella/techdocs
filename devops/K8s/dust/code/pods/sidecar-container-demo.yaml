@@ -1,0 +1,28 @@
+# sidecar container with busybox image logs a message with timestamp to a file in var-logs volume for every 5 seconds;
+# nginx main container running on port 80, it takes index.html from var-logs volume and displays it;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-container-demo
+spec:
+  containers:
+  - name: sidecar-container
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo echo $(date -u) 'Hi I am from Sidecar container' >> /var/log/index.html; sleep 5;done"]
+    resources: {}
+    volumeMounts:
+    - name: var-logs
+      mountPath: /var/log
+  - name: main-container
+    image: nginx
+    resources: {}
+    ports:
+      - containerPort: 80
+    volumeMounts:
+    - name: var-logs
+      mountPath: /usr/share/nginx/html
+  dnsPolicy: Default
+  volumes:
+  - name: var-logs
+    emptyDir: {}

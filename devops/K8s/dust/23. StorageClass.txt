@@ -1,0 +1,167 @@
+What is StorageClass?
+	StorageClass is used to dynamically create/provision a PV, based on user request(PVC);
+
+Why dynamic provisioning is really needed?
+	Cluster admins can create PVs in advance, matching the exact specs of each PVC;
+	But, without dynamic provisioning, applications can't scale;
+
+Provisioner
+	Local/On-Prem provisioner
+		kubernetes.io/no-provisioner		-> For manually-managed (static) volumes
+		rancher.io/local-path				-> Local volumes (great for Minikube, dev clusters)
+		openebs.io/local					-> Local PVs managed by OpenEBS
+		longhorn.io/longhorn				-> Distributed block storage for Kubernetes
+	Cloud provisioners - Most cloud providers (AWS, GCP, Azure) support dynamic provisioning through drivers;
+		ebs.csi.aws.com						-> CSI driver(replaces kubernetes.io/aws-ebs)
+		pd.csi.storage.gke.io				-> Modern CSI driver for GKE(replaces kubernetes.io/gce-pd)
+		disk.csi.azure.com					-> Azure Disk CSI driver(replaces kubernetes.io/azure-disk)
+	Network Storage provisioner 
+		nfs.csi.k8s.io						-> NFS CSI driver
+		iscsi.csi.k8s.io					-> iSCSI volumes
+	Others 
+		csi-hostpath						-> CSI HostPath plugin (for testing)
+		vsphere.csi.vmware.com				-> vSphere volumes
+		storageos							-> Distributed block storage (StorageOS)
+
+	What is Network Storage?
+		A data storage which is not directly attached to the host machine(k8s node), but accessible over a network(LAN or internet);
+		Types of Network Storage:  NAS(Network Attached Storage), SAN(Storage Area Network), Distributed Storage Systems;
+
+reclaimPolicy
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Example:
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-storage-1
+  annotations: 							# Mark this StorageClass as default.
+		"storageclass.kubernetes.io/is-default-class": "true" 		# You can mark a StorageClass as the default for your cluster. When a PVC does not specify a storageClassName, the default StorageClass is used.
+provisioner: kubernetes.io/aws-ebs  		# Plugin that is responsible for creating volume; 
+parameters:
+  type: gp3                          		# Parameters vary by provisioner
+  fsType: ext4
+reclaimPolicy: Delete              			# What happens when PVC is deleted (Delete or Retain)
+volumeBindingMode: WaitForFirstConsumer  	# Delay provisioning until pod is scheduled
+allowVolumeExpansion: true          		# Allows PVC resizing
+
+
+
+
+#	t specifies name, provisioner, reclaimPolicy and other parameters.
+#	You can't update them, once PV is created.
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+	name: gp2-us-east-1a 					# Name of the StorageClass. Referred in PVC.spec.storageClassName
+	
+provisioner: kubernetes.io/aws-ebs 			# It specifies which volume plugin to use, to dynamically create a PV.
+reclaimPolicy: Delete (default) | Retain 	# It specifies the lifetime of PV(What to do when a Pod releases a PV?)
+parameters:									# Each provisioner will accept different parameters
+	type: gp2
+	fsType: ext4
+	zone: us-east-1a
+	
+
+
+provisioner: rancher.io/local-path
+
+
+Provisioner:
+	Storage classes have a provisioner that determines what volume plugin is used for provisioning PVs.
+
+Reclaim Policy:
+	It can be either Delete or Retain. Default is Delete.
+
+Volume Binding Mode:
+	The volumeBindingMode field controls when volume binding and dynamic provisioning should occur. Immediate is default and specifying the WaitForFirstConsumer mode.
+
+Access Modes:
+	PersistentVolumes support the following access modes:
+	ReadWriteOnce: The Volume can be mounted as a read-write by a single node.
+	ReadOnlyMany: The Volume can be mounted read-only by many nodes.
+	ReadWriteMany: The Volume can be mounted as a read-write by many nodes.
+	PersistentVolumes that are backed by Compute Engine persistent disks don’t support this access mode.
+
+
+PV				-> A piece of storage in the cluster
+PVC				-> A request for storage by a user
+StorageClass	-> A template for dynamically creating PVs
+
+
+
+
+Each StorageClass contains the fields provisioner, parameters, and reclaimPolicy, which are used when a PersistentVolume belonging to the class needs to be dynamically provisioned to satisfy a PersistentVolumeClaim (PVC).
+
+
+such as disk type, IOPS (Input/Output Operations Per Second), and replication factors.
+
+Custom Parameters: Supports backend-specific configurations like disk type, IOPS, or replication.
+
+Reclaim Policies: Defines how storage is handled after release (e.g., Delete, Retain).
+
+Multiple Classes: Allows defining multiple classes for different workloads, such as high-performance SSDs or low-cost HDDs.
+
+ I configured a StorageClass with AWS EBS gp2 for application databases and another with st1 for logs and backups. 
+
+	We know how to create a PV and tell K8s about it, but what if you want fully automated version of that process?
+	It is K8s object which specifies type of storage needed and other parameters, so that K8s provisions a PV dynamically.
+
+
+Storage classes help you manage how persistent volumes (PVs) are dynamically provisioned and bound to persistent volume claims (PVCs). 
+This makes it easier to manage storage in a dynamic and scalable way within a Kubernetes cluster.
+
+
+It specifies parameters like the provisioner, reclaimPolicy, and other settings that determine how a volume is created.
+
+-----------------------------------------------------------------------------------------------------------------------------
+kubectl get storageclasses 						# It lists all storage classes available in the Cluster;
+kubectl describe storageclass <name> 			#
+
+# There can be atmost one default storage class on a cluster. It is used when a PVC doesn't specify a StorageClassName.
+
+# Mark a storage class as default
+kubectl patch storageclass <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+# Mark a storage class as non-default
+kubectl patch storageclass <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+> kubectl get storageclass
+NAME                 PROVISIONER                RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+standard (default)   k8s.io/minikube-hostpath   Delete          Immediate           false                  33d
+RECLAIMPOLICY: What happens to the volume after PVC deletion (Retain, Delete).
+
+VOLUMEBINDINGMODE:
+
+Immediate: Binds the volume as soon as the PVC is created.
+
+WaitForFirstConsumer: Waits until a Pod is scheduled before provisioning.
+
+ALLOWVOLUMEEXPANSION: Whether PVCs using this StorageClass can be resized.
+
+AGE: How long the StorageClass has existed.
+
+
+Why my k8s cluster doesn't have any StorageClass?
+	Usually Minikube, kubeadm, k3s/rke, bare-metal clusters doesn't have any storage classes;
+	To Install on Minikube: minikube addons enable storage-provisioner
+	Kind, Rancher: kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+-----------------------------------------------------------------------------------------------------------------------------
+TODO:
+1. One default storage class per cluster? Below is the o/p in minikube.
+	mcheedhe-mac:build mcheedhe$ kubectl get storageclasses 
+	NAME                 PROVISIONER                AGE
+	standard (default)   k8s.io/minikube-hostpath   51d
+2. name of storageclass should be unique? can we have 2 instances of a storage class?
+3. dir storageclass
+-----------------------------------------------------------------------------------------------------------------------------
+If you set up a Kubernetes cluster on GCP, AWS, Azure, or any other cloud platform, a default StorageClass creates for you which uses the standard persistent disk type.
+
+Persistent Volume Claims
+	A persistent volume claim (PVC) is a request for storage by a user from a PV. Claims can request specific size and access modes (e.g: they can be mounted once read/write or many times read-only);
+	If none of the static persistent volumes match the user’s PVC request, the cluster may attempt to dynamically create a PV that matches the PVC request based on storage class;
+
+https://medium.com/avmconsulting-blog/persistent-volumes-pv-and-claims-pvc-in-kubernetes-bd76923a61f6

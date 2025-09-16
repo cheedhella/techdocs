@@ -1,0 +1,10 @@
+https://www.educative.io/projects/create-single-deployment-using-helm-and-k8s/JEDXwogPOLy
+https://medium.com/@thearaseng/building-a-full-stack-product-app-with-react-spring-boot-and-docker-compose-64a47f4a1080
+https://github.com/thearaseng/react-product-app
+https://codesandbox.io/p/sandbox/bratzelk-spring-boot-hello-world-9zn7kg?file=%2Fpom.xml%3A101%2C1
+https://www.callicoder.com/spring-boot-mysql-react-docker-compose-example/
+https://github.com/callicoder/spring-security-react-ant-design-polls-app
+https://github.com/geowarin/boot-react
+https://www.javainuse.com/react/1
+https://luizcostatech.medium.com/how-to-dockerize-spring-boot-react-apps-1a4aea1acc44
+https://github.com/luizgustavocosta/16-bits-zero-to-hero/blob/main/README.md

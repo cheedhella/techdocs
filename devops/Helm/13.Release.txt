@@ -1,0 +1,187 @@
+What is Release?
+    It is an instance of the chart running in a k8s cluster;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm install [RELEASE_NAME] [CHART] [flags]         
+    RELEASE_NAME                    -> You can give any name to the release;
+    CHART                           -> It could be
+                                        -- Chart reference(<repo-name-in-your-local>/<chart-name>) Eg: mybitnami/nginx
+                                        -- Fully qualified URL; Eg: 
+                                        -- Path to a chart directory;
+                                        -- Path to a packaged chart;
+    
+    It can be used only during the initial installation; After that, you can use helm upgrade, if you want to update it;
+    Eg: helm install mynginx mybitnami/nginx        # http://10.252.22.248 -> Hello World
+
+-n namespace                                                    -> It specifies in which k8s namespace release will be created; If you don't specify, it uses default namespace;
+--create-namespace                                              -> It automatically creates the namespace, if it doesn't exist;
+
+--wait                                                          -> It wait until all k8s resources are in ready state, before marking the release as successful;
+                                                                -> With out this option, If you delete the docker image that the chart is using, installation goes fine; But, pod creation will fail with error ImagePullBackoff error;
+                                                                -> Instead, use this option, so that helm will wait until the installation is completed(defaults to 5 mins) and it validates the installation/upgrade/rolblack;
+                                                                -> Installatin/upgrade/rollback is failed, if any of the resource is failed;
+--timeout                                                       -> With --wait, you can specify timeout; It defaults to 5m 0s;
+--atomic                                                        -> In case of any failure during installation, it deletes the release; 
+                                                                -> If you don't use atomic and in case installation fails, release status is set to failed; You need to delete it, before retrying;
+                                                                -> --wait flag is set automatically, in case of --atomic;
+
+--generate-name                                                 -> You don't have to specify RELEASE_NAME, helm will generate it;
+# You can also provide a name template for generating the release name during the installation;
+--generate-name --name-template="myserver-{{randNumeric 3}}"    -> Eg: myserver-123
+--generate-name --name-template="myserver-{{randAlpha 3}}"      -> Eg: myserver-xyz
+
+# Main purpose of the dry-run is to validate all the necessary configurations before executing it;
+--dry-run                                                       -> It returns release notes and all the manifest files that helm will send to the k8s API server for creating k8s objects;
+
+# values.yaml, which is part of the chart, contains the default configuration; You can override it at the installation time;
+helm install [RELEASE_NAME] [CHART] --set key=value[,key=value]    # List of the configurable parameters
+helm install [RELEASE_NAME] [CHART] -f overrides.yaml              # You can pass a YAML file with values for the parameters;
+        # This makes it easy to deploy the same application with different configurations in different environments, such as development, staging, and production;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm ls                             # List all releases in default namespace;
+helm ls -n <namespace>              # List all releases in specified namespace;
+helm ls --filter 'gin[a-z]+'        # List all releases matching the given pattern in current namespace;
+helm ls -A                          # List all releases in all namespaces;
+
+helm ls --deployed                # List all currently deployed releases
+helm ls --superseded              # List all previously deployed releases
+helm ls --uninstalled             # If you uninstall by keeping history, this command displays the releases that are uninstalled;
+
+# You need to use kubectl, if you want to see the actual k8s resources(deployment, service etc) that got created!
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm upgrade [RELEASE] [CHART] [flags]              # CHART can be either a chart reference, path to chart directory, packaged chart or fully qualified URL;
+                                                    # You can easily upgrade an application to a new revision using this; If something goes wrong, you can easily rollback to previous revision using helm rollback command;
+
+--install                                                   # If the given release already exists on the system, then the upgrade; Otherwise install; CI/CD pipelines use this flag;
+
+--set k1=v1, --set k2=v2                                    # Set is used to provide command line configuration; It overrides the values specified in values.yaml;
+-f override.yaml                                            # You can pass yaml file containing all overrides;
+--reuse-values                                              # You can update the values for an existing release with this command; Existing values will be merged with any values set via --set or -f flags;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm history <release_name> [flags]
+    It prints all the historical revisions of a release;
+    
+    --max <integer>             -> max no of revisions to return in history; Defaults to 256;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm rollback <release_name> <revision_number> [flags]
+    It rolls back the release to specified revision; 
+    If revision is not specified or set to 0, it rolls back to previous revision;
+    Every upgrade or rollback that is completed on a give chart, gets a incremented revision number;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm uninstall <release-name>                     # It removes all k8s objects associated with the release and deletes the release; It will not delete the namespace;
+helm uninstall <release-name> --keep-history      # It removes all k8s objects associated with the release and deletes the release;
+                                                  # It retains the release history, which helps us to rollback to the deleted release, if needed;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm get
+    - It has multiple subcommands, which can be used to get extended information about the release, such as:
+        -- Values used during the release;
+        -- Generated manifest file;
+        -- Release notes;
+        -- Hooks associated with the reelase;
+        -- Metadata of the release;
+    
+helm get values <release_name>                # It returns only "custom values" used during current revision;
+helm get values <release_name> --revision 1   # It returns only "custom values" used during revision 1;
+helm get values <release_name> --all          # It returns all the effective values used during installation/upgradation;
+
+helm get manifest <release_name>              # It returns the manifest files used during current revision;
+helm get manifest <release_name> --revision 1 # It returns the manifest files used during installation/upgradation;
+
+helm get notes <release_name>                 # It returns the release notes; Same notes is printed as the output of install/upgrade;
+
+helm get hooks <release_name>                 # It prints all the hooks associated with the release;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm status <release_name>                            # It prints the status of the latest revision of release; It is same as output of install/upgrade;
+                                                      # It contains: release_name, deploy time, namespace, status(deployed/superseded/uninstalled etc), revision, notes;
+helm status <release_name> --revision 2               # It prints the status of the specified revision of the release;
+helm status <release_name> --show-resources           # IMP: It will list all pods, deployements, services etc related to that release; no need to use kubectl;           
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+Replica Count 
+> kubectl get pods          # Notice only 1 pod is there 
+> helm upgrade app1 stacksimplify/mychart1 --set replicaCount=4
+> kubectl get pods          # Notice there are 4 pods now 
+NAME                             READY   STATUS    RESTARTS   AGE
+app1-mychart1-5769947fbf-6xd9q   1/1     Running   0          15s
+app1-mychart1-5769947fbf-8d2lf   1/1     Running   0          16s
+app1-mychart1-5769947fbf-q6vzd   1/1     Running   0          14s
+app1-mychart1-5769947fbf-sk5pb   1/1     Running   0          17s
+
+> helm ls --deployed
+NAME	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+app1	default  	5       	2024-06-21 04:23:42.632031211 +0000 UTC	deployed	mychart1-0.1.0	1.0.0  
+
+helm ls --uninstalled       # If you uninstall by keeping history, this command displays the releases that are uninstalled;
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm template [NAME]   [CHART]      [flags]
+    'helm install --dry-run' requires access to k8s clsuter;
+    But, if you are in a situation where you don't have access to k8s cluster, use helm template command;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+state of the release (can be: unknown, deployed, uninstalled, superseded, failed, uninstalling, pending-install, pending-upgrade, or pending-rollback)
+
+
+
+StackSimplify
+
+
+helm repo add stacksimplify https://stacksimplify.github.io/helm-charts/        -> GitHub pages; actual repo -> https://github.com/stacksimplify/helm-charts; https://github.com/stacksimplify/helm-masterclass
+helm install app1 stacksimplify/mychart1                        #  curl http://192.168.49.2:31231 -> <p>Application Version: V1</p>
+
+helm ls 
+[root@docker ~]# helm ls
+NAME	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+app1	default  	1       	2024-06-21 03:52:34.249249629 +0000 UTC	deployed	mychart1-0.1.0	1.0.0      
+[root@docker ~]# 
+
+
+helm upgrade app1 stacksimplify/mychart1 --set "image.tag=2.0.0"
+
+> helm ls
+NAME	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+app1	default  	2       	2024-06-21 04:03:16.015816118 +0000 UTC	deployed	mychart1-0.1.0	1.0.0  
+
+> curl http://192.168.49.2:31231            # <p>Application Version: V2</p>
+
+
+
+helm upgrade app1 stacksimplify/mychart1 --set "image.tag=3.0.0"
+helm list --deployed 
+NAME	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART         	APP VERSION
+app1	default  	3       	2024-06-21 04:09:58.846949594 +0000 UTC	deployed	mychart1-0.1.0	1.0.0   
+
+
+> curl http://192.168.49.2:31231            # <p>Application Version: V3</p>
+
+helm upgrade app1 stacksimplify/mychart1 --set "image.tag=4.0.0"
+helm ls
+NAME	NAMESPACE	REVISION	UPDATED                               	STATUS  	CHART         	APP VERSION
+app1	default  	4       	2024-06-21 04:12:37.71352064 +0000 UTC	deployed	mychart1-0.1.0	1.0.0
+> curl http://192.168.49.2:31231            # <p>Application Version: V4</p>
+

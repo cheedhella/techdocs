@@ -1,0 +1,417 @@
+
+
+
+
+
+
+
+
+
+
+What is Jenkins?
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Install Jenkins 
+    mkdir -p /root/code/devops/jenkins/jenkins_home
+    chmod 777 /root/code/devops/jenkins/jenkins_home
+    docker run -d -p 8080:8080 -p 50000:50000 -v /root/code/devops/jenkins/jenkins_home:/var/jenkins_home jenkins/jenkins      
+                # Jenkins run on port 8080 and jenkins master and slave nodes communicate using port 50000;
+                # -v mounts a folder on host in the container;
+                # docker uses /var/jenkins_home folder inside the container to store builds;
+                # To persist users/builds/jobs/config across container restarts, mount a folder on host in the container;
+    > docker exec <container_id> cat  /var/jenkins_home/secrets/initialAdminPassword
+      5fbea6f09dd44a4d86e29b3a81592270                  # Intial password 
+    > Goto http://10.252.21.233:8080/ and login using intial password and create admin user; // cheedhella/Welcome123
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Create multi-branch pipeline 
+    1. New Item -> Multibranch pipelien -> give it a name;
+    2. Build COnfiguration -> by Jenkinsfile -> jenkins/Jenkinsfile
+    3. Manage Jenkins -> Tools
+       mvn3, jdk17
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Setup GitHub Repo 
+    https://github.com/cheedhella/jib-demo
+    cheedhella 
+
+Creating Git Credentials in Jenkins
+    1. Dashboard -> Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials;
+    2. Select Username with Password, scope as Global, enter username and password, GIT_REPO as id;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Setup DockerHub Repo 
+    https://hub.docker.com/
+
+Creating Git Credentials in Jenkins
+    1. Dashboard -> Manage Jenkins -> Credentials -> System -> Global credentials (unrestricted) -> Add Credentials;
+    2. Select Username with Password, scope as Global, enter username and password, DOCKER_HUB_CREDENTIALS as id;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+http://10.252.21.233:8080/manage/credentials/store/system/domain/_/
+    
+
+
+
+
+
+https://www.baeldung.com/ops/jenkins-pipeline-git-checkout-credentials - configure jenkins with SSH key of git-repo;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+New Item
+    Type of Plugins 
+        Fresstyle 
+            - Simple, single tasks; Eg: run tests;
+        Pipeline 
+            - whole delivery cycle; Eg: test, build, package etc;
+            - For a single branch;
+        Multi-branch Pipeline
+            - 
+
+Manage Jenkins 
+    - Manage Plugins 
+        -- Add/update/delete plugins;
+    - Credentials
+        -- It is used to store and manage credentials centrally; 
+        -- Scope 
+            -- It supports 2 types of scope: Global and System; Scope specifies where this crednetials are meant to be used;
+                -- Global 
+                    -- Accessible everywhere;
+                    -- Credentials are meant to be used by Jobs;
+                -- System 
+                    -- It is available only on jenkins server; Not visible on worker nodes/jobs;
+                    -- These are used by the jenkins, for eg, for connecting to the github etc;
+        -- Types 
+            -- Username with password 
+            -- SSH username with private key 
+            -- Secret file 
+            -- Secret text 
+            -- X.509 Client certificate 
+            -- Certificate 
+
+            -- Depending on plugins you installed, you will see more types. For eg: GitHub APp etc;
+        -- ID 
+            -- It is used to the credentials everywhere;
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Create multi-branch pipeline and connect it with GIT repo 
+    My Item -> name: my-pipeline and click on multi-branch pipeline;
+    General -> Branch Source = Project you want to build; 
+            -> Behaviors => Add => Filter by name(with regular expression) = As pipeline is mult-branch, select .* to select all branches; // It is java regular expression;
+    Build Configuration -> 
+
+
+<auth>
+				     <username>cheedhella</username>
+				  </auth>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://jenkins-netops-02.devops.broadcom.net/job/NetOps/job/IFM/job/IFM_AUTOMATION/job/F_US908857-CreateIFMAutomation/ - Ask poorna on what is this?
+
+
+docker container exec -it JENKINS_CONTAINER_ID bash then once connected :
+cat /var/jenkins_home/secrets/initialAdminPassword
+it'll show up the password you're looking for.
+
+What is CI/CD pipeline?
+    It automates all steps such as build, test, deploy;
+
+What is Jenkins pipeline?
+    It is a continous delivery pipeline;
+    The definition of a Jenkins Pipeline is written into a text file (called a Jenkinsfile) which in turn can be committed to a project’s source control repository.
+    The Jenkinsfile specifies the steps that should be taken at each stage of the pipeline, and can also specify when and how the pipeline should be triggered.
+    This is the foundation of "Pipeline-as-code"; 
+
+What is Continous Delivery?
+    It ensures that the software is always in a production-ready state;
+    What does it mean?
+    It means that every time a change is made to the code, we need 
+    the software team must work in such a way that these changes are built quickly and tested using various automation tools after which the build is subjected to production.
+
+What is CI/CD?
+    Continous Integration 
+        - It is a software development practice in which developers can push code changes to a central repository multiple times a day;
+        - every time a developer commits code to a repository, the build and tests run.
+        With CI, you might have a single package artifact, 
+    Continous Delivery
+        - build, test, deploy;
+        Each commit will trigger the automated build, test the functionality, and deploy the application to the respective environments. We can append the manual push-button to deploy to the production environment to confirm if the current state matches with the desired state, which will reduce the application lifecycle and deliver values faster.
+        - Continuous delivery typically automates the deployment of the build artifact or code to a test environment where teams like quality assurance (QA) can run various tests against the deployed code.
+        - All types of code can be deployed using CD and the CD process can go to testing environments, QA/User Acceptance Testing (UAT environments), and production environments. 
+        you can take the leap and automatically push to production, which is continuous deployment.
+
+
+
+
+What is JenkinsX?
+    If we are about to start working on a new project, Jenkins X will create the structure and the required files. 
+    If we need a k8s cluster with all the tools selected, installed, and configured, Jenkins X will do that;
+    If we need to create Git repositories, set webhooks, and create continuous delivery pipelines, all we need to do is execute a single jx command. 
+    The list of what Jenkins X does is vast, and it grows every day.
+
+
+
+
+    CI, short for continuous integration, is a software development practice in which all developers merge code changes in a central repository multiple times a day.
+
+
+
+
+What is Jenkinsfile?
+    Instead of you creating and configuring jobs on Jenkins UI, you script that configuration as a file; // Pipeline as a code, part of Infrastructure as a code concept;
+    So, we create Jenkinsfile for every repository, in your code;
+
+    Jenkins pipeline can be written as scripted or declarative pipeline;
+    scritped pipeline 
+        - It allows us to write whole jenkins file using groovy script;
+        - But, it requires groovy knowledge;
+    Declarative pipeline 
+        - Not as powerful as scripted pipeine;
+
+Basic Jenkinsfile
+    It can be written as scripted pipeline or declarative pipeline;
+    
+    In case of scripted pipeline, it allows us to write whole file using groovy script;
+    It looks like below:
+    node {
+        // groovy script - It has some learning curve, difficult to start; so, recently declarative pipeline support is added;
+    }
+
+    scripted pipeline
+        - It is not as powerful as scripted pipeline; Though, you are not limited in any way, and easier to start with;
+        - It has pre-defined structure;
+    pipeline {
+        agent any                   # It specifies where to run this script; Run it on any agent that is available;
+        triggers {
+            cron('5 0 * * *')       # Minute Hour Day_Of_Month Month Day_Of_Week; * indicates all values are valid; 
+                                    # dash represents range of values; For example, a job that runs every hour from 9:00 a.m. to 5:00 p.m. would have 9-17 in the second field;
+                                    # Intervals are specified with a slash /. A job that runs every 15 minutes has H/15 in the first field; H tells Jenkins to pick a minute based on a hash of the job name;
+                                    # If you wanted a job to run every 15 minutes, from the start of the hour, you could configure it as 0/15;
+                                    # H/15 * * * *      -> Every fifteen minutes (perhaps at :07, :22, :37, :52):
+                                    # H(0-29)/10 * * * *  -> Every ten minutes in the first half of every hour (three times, perhaps at :04, :14, :24)
+                                    # H H 1,15 1-11 *       -> Once a day on the 1st and 15th of every month except December;
+                                    # 0 * * * *             -> Build every hour at the beginning of the hour    -> Hourly
+                                    # 0 0 * * *             -> Build every day at midnight                      -> Daily
+                                    # 0 0 * * 0             -> Build every week at midnight on Sunday morning   -> @weekly
+                                    # 0 0 1 * *             -> Build every month at midnight of the first day of the month -> @monthly
+        }
+        stages {                    # This is where whole work happens; you can have as many stages as you want;
+            stage ("build") {
+                steps {
+                    echo 'building the application'
+                }
+            }
+            stage ("test") {
+                steps {
+                    echo 'testing the application'
+                }
+            }
+            stage ("deploy") {
+                steps {
+                    echo 'deploying the application'
+                }
+            }
+        }
+    }
+
+pipeline {          # 
+    agent any       # Agent signifies where the Jenkins build job should run. Jenkins supports a wide variety of agents. d
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+}
+
+Once you create Jenkinsfile, create a pipeline;
+    Login to jenkins UI, create a new job with some name and type as multi branch pipeline, select the source repo, provide credentials, specify the branch or all branches, location of jenkinsfile;
+    It found the Jenkinsfile in only dev branch;  
+
+--------------------
+Another thing that you can do in Jenkinsfile is that at the end of it you can define post attribute;
+What it does is: it executes some kind of logic or scripts, after all stages of completed;  // Run something after all stages are completed;
+You can define various conditions, based on which you want to run your scripts;
+For eg, 
+always -> this section is executed no matter what happened, whether build failed or succeded; This can be used to email build condition to team;
+success -> Executed only when the build is succeded;
+failure -> What to do only when build is failed;
+There are a couple of more conditions:  build status, build status changed;
+--------------------
+expressions or conditionals for each stage
+    For eg, if you want to run tests only on development branch, you don't want to run tests on feature branch builds or other builds;
+        test {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev' // BRANCH_NAME is env varialbe that is available out of the box, which you can use to get current branch;
+                    BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                echo 'testing the application'
+            }
+        }
+
+    For eg, build only when there are code changes;
+        CODE_CHANGES = areCodeChangesThere(); // areCodeChangesThere() is a groovy script that checks if there are any code changes and retrusn true/false;
+        ....
+        build {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev' && CODE_CHANGES == true
+                }
+            }
+            steps {
+                echo 'building the application'
+            }
+        }
+--------------------
+Environment variables
+    As you just saw, jenkins provides some environment variables, like BRANCH_NAME, out-of-box for you to use in Jenkinsfile;
+    how do you know what variables are available from jenkins? Navigate to <jenkins_url>/env-vars.html
+
+    In addition to the jenkins provided environment varialbles, you can define your own environment variables;
+    pipeline {
+        agent any
+        environment {       # define custom environment variables, available to all stages in the pipeline;
+            NEW_VERSION = '1.3.0'
+        }
+        stages {
+            stage("build") {
+                steps {
+                    echo 'building version ${NEW_VERSION}'
+                }
+            }
+        }
+
+    }
+--------------------
+Using credentials in Jenkinsfile
+    If you want to connect to the development server to push the newly build artifact?
+    1. YOu can define credentials in jenkins UI
+    2. credentials("credentialsId") binds the credentials to your env variable;
+    3. crednetials binding plugin - a separate plugin that you need to install in jenkins;
+
+
+pipeline {
+   environment {   
+	ARTIFACT_URL="https://artifactory-lvn.broadcom.net/artifactory/esd-netops-maven-virtual/"
+	EMAIL_TO = 'sounak.saha@broadcom.com'
+    }
+	agent { 
+	    label "ifm-build" 
+	} 
+
+   stages {  
+  
+	stage('Compile and Juint for Grapgh SDK') {
+        steps {
+            sh "mvn clean test -f pomsdk.xml"
+        }
+    }
+	stage('Deploy the package Grapgh SDK') {
+        steps {
+            sh "mvn deploy -f pomsdk.xml -DaltDeploymentRepository=central::default::${env.ARTIFACT_URL}"
+        }
+    }
+
+	stage('Compile and Juint for Grapgh API') {
+        steps {
+            sh "mvn clean test -f pomapi.xml"
+        }
+    }
+	stage('Deploy the package Grapgh API') {
+        steps {
+            sh "mvn deploy -f pomapi.xml -DaltDeploymentRepository=central::default::${env.ARTIFACT_URL}"
+        }
+    }
+	
+  }
+  post {
+		success{
+			emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+		
+		}
+        failure {
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        }
+        unstable {
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Unstable build in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        }
+        changed {
+            emailext body: 'Check console output at $BUILD_URL to view the results.', 
+                    to: "${EMAIL_TO}", 
+                    subject: 'Jenkins build is back to normal: $PROJECT_NAME - #$BUILD_NUMBER'
+        }
+    }
+}
+
+
+
+Reference:
+    https://www.youtube.com/watch?v=7KCS70sCoK0
+    https://www.baeldung.com/ops/jenkins-job-schedule
+    https://stackoverflow.com/questions/12472645/how-do-i-schedule-jobs-in-jenkins
+
+// Pull
+steps {
+    git branch: 'master'
+    url: 'https://github.com/devopsjourney1/helloworld.git'
+}
+// Build
+steps {
+    sh '''
+    docker build -t mywebappp:${BUILD_NUMBER}
+    '''
+}
+// Test 
+steps {
+    sh '''
+    docker run -it mywebappp:${BUILD_NUMBER}
+    curl localhost:5000
+    '''
+}
+// Package 
+steps {
+    sh '''
+    docker push devopsjourney/mywebapp:${BUILD_NUMBER}
+    '''
+}
+// Deploy  
+steps {
+    sh '''
+    echo "Code to deploy"
+    '''
+}
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Build Tools  -> https://github.gwd.broadcom.net/ESD/NetOps-BuildTools
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IFM Pipeline Stages 
+
+#1: Setup
+gitapi.prSetStatus('pending', 'unit-test' );
+gitapi.prSetStatus('pending', 'unit-test' );
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------

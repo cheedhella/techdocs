@@ -1,0 +1,273 @@
+
+
+
+
+What is Ansible?
+    It is configuration management tool; It is free, open-source and owned by RedHat;
+
+What is Configuration Management?
+    People typically think of configuration management in terms of moving files around, installing software, or maybe creating a database; 
+    But Ansible can do so much more:
+        Infrastructure Automation: To manage, create, and deploy infrastructure;
+        Cloud Automation: To automate resource creation and service management in many clouds including Azure;
+        Container Automation: To deploy and manage containers with Ansible;
+        Application Management: To install, update, and manage applications on a server;
+        Software-Defined Networking: To define what a network looks like both on-prem and in the cloud with code;
+
+Ansible VS Terraform
+    - Terraform is a tool for provisioning infrastructure(Infrastructure as Code) - used to create virtual machines, virtual networks etc;
+      Ansible is can be used for configuration management, along with provisioning infrastructure;
+    - Ansible is procedural rather than declarative;
+      In ansible, we define what we want to do and ansible go through each and every step and does that; Ansible doesn’t manage any state; So, we need to keep track of created resources using tags or other properties;
+      In terraform, we specify what state we want to achieve and it makes sure we are at that state by creating, modifying or destroying the resources;
+
+    - Bottom Line
+      Personally, I recommend terraform for provisioning the infrastructure, and Ansible for configuring the software;
+
+Ansible VS Other Configuration Management tools
+    There exists many other configuration management tools such as Chef, Puppet, Salt, CFEngine and so on; What makes Ansible so different?
+    The answer is simplicity. Tools like Chef and Puppet use actual programming languages(like Ruby) to write automation instructions;
+    Ansible, on the other hand, doesn’t use a programming language but a much simpler markup language called YAML;
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+What about Licenses? What about configuration? restart needed post configuration?
+
+
+Open Source, Free, agentless(agentless, which means it does not require any software or agents to be installed on the managed nodes.)
+Ansible uses a declarative language called YAML to define automation tasks, which makes it easy to read and understand.
+Continuous delivery: Ansible can be used to continuously deliver complex software. It can perform zero-downtime rolling updates and ensure that the system remains in the desired state.
+
+Purpose of Ansible?
+    Provisioning
+
+
+Ansible’s three prominent use cases are the following:
+
+Provisioning
+Configuration management
+Application deployment
+
+
+With Ansible, we can deploy our IaC on-premise and on the most well-known public cloud provider.
+
+
+What is Playbook?
+    An Ansible Playbook is a blueprint of automation tasks that are executed with limited manual effort across an inventory of IT solutions. 
+    Playbooks tell Ansible what to do and how to do it. They are written in YAML and can be used to automate a wide range of tasks, from simple configuration management to complex application deployments. 
+    Playbooks can be executed on a single node or multiple nodes at the same time, making it easy to manage infrastructure at scale.
+
+Modularity: Ansible uses modules to break down complex tasks into smaller, more manageable pieces.
+
+
+
+
+
+Components of Ansible:
+    Inventory File 
+
+    Group vars and Host vars 
+
+    Playbook 
+      A playbook is a file containing a series of tasks that Ansible will execute on the target servers. 
+
+    Roles 
+
+    Modules 
+
+    Tasks 
+
+    Facts 
+
+    Templates 
+
+    Configuration Files 
+
+    SSH 
+
+------------------------
+Inventory 
+  inventory file is a plain text file that lists hostnames or IP addresses of machines that Ansible will manage.
+  By default, Ansible looks for inventory file at /etc/ansible/hosts. You can create file manually or use ansible-inventory command to generate it.
+
+  Once you have defined your inventory file, you can test that Ansible is able to connect to your hosts by running following command −
+  ansible all -m ping
+
+
+
+
+
+
+
+
+
+https://www.tutorialspoint.com/how-to-install-and-configure-an-ansible-control-node
+
+192.168.2.30 ansible_user=vagrant ansible_ssh_pass=vargrant
+
+
+
+Ansible loads the configuration from the ansible.cfg file located in the following locations. The file precedence is as per the order given below.
+
+ANSIBLE_CONFIG env variable
+./ansible.cfg (current directory)
+~/.ansible.cfg (home directory)
+/etc/ansible/ansible.cfg 
+Open /etc/ansible/ansible.cfg  file and add the following.
+
+[defaults]
+inventory = /etc/ansible/inventory.ini
+host_key_checking = False
+
+    
+
+
+Controlled Node 
+    > ssh -i ~/.ssh/your-key user@your-server-ip-address
+
+    > 
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDFap114wphopJNrL3jK3x38j9Sr3+ysWn/ocNWAK65i4cl1SsHFiWbTLTpyOmr1CJtp+gDSaSu+ih24WDuf2NmqAsBNlz5qumxeB1mQtKjFTtm84lT9hl7yPFshYShqqJiKQX36JKBQZcck3MWjkL0s5YLqXu8ck733jX0UsPun1ObrlZ129jKAJMSQ3f+EKVWsA8trH8T477Z4EOK2UflDFZm1ql4Z1rPZ3vkzj30rIwZjxoZ+b825NtY/mng9mjkz+w75wTrsxCMqOueSDWU6YSEWp97NHgx4PKC+lnGww+wWZKeByE9+il87aqJTATP0+4ka1lYuaiRpXGEP1781O+DLS5SpbzB8cWWB4Cq7hqyOqkNaZzT9IvM5lhGYWa1Hkem3eNZLPhS3T+Zaa58Z5d/+sKRMt4zqHJrUVEUzDMSJIe9LI2ksTu/irnip/VEbi0Jq4mAqYt3DmWwVUHKyWfOxW8UjpEhoYhbvMmx0BE3nO3+o3Oqdq17RV+VdRwDj+ZKOGTdfoMCAnwaHfRNkNxoO8n/cO2h+RjkpfdIJogf6EeRmBXA45TaRbyf3mtTsRKQPvJREyO/vFqeV2w/83uRylINroYhEBx+022SF/6iY4ZmEXA7Sj/bsEXtno1q8o1aZuV7OgimAPg/wiyMmsvJpFGulgFllDfV/B1FTQ== 
+
+
+https://www.cyberciti.biz/faq/how-to-set-up-ssh-keys-on-linux-unix/
+
+
+SSH                    // Pro: machine-to-machine auth, one time setup! 
+Create a new SSH Key
+cd C:\Users\Administrator\
+mkdir .ssh
+cd .ssh
+echo adsf >>  git_rsa         # Ignore the error, check if git_rsa file is created!
+cd C:\dev\tools\Git\usr\bin
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/git_rsa -C "mallikarjuna-rao.cheedhella@broadcom.com"         # Choose passcode as empty!
+Tell your system to use above private key, when talking to github!
+echo asdf >> C:\Users\Administrator\.ssh\config
+Put below in C:\Users\Administrator\.ssh\config and save the file!
+    host github.gwd.broadcom.net 
+    Hostname github.gwd.broadcom.net 
+    IdentityFile ~/.ssh/git_rsa 
+    User git
+Add your public key to your GitHub account
+Go to https://github.gwd.broadcom.net/settings/keys
+Click "New SSH key"
+Title: git_dc_key
+Key: paste the content of C:\Users\Administrator\.ssh\git_rsa.pub
+
+
+Ansible should be able to communicate with the server without any password.
+
+To set up password-less authentication, login to the node:
+> ssh-keygen        # By doing this, the public key, private key, and known_hosts files are saved in the path — /home/ubuntu/.ssh/
+> cat /home/ubuntu/.ssh/id_rsa.pub # It contains public key - Now copy the id_rsa.pub key as this will be helpful for us to communicate with the server.
+
+> Login to controlled node 
+>  vim ~/.ssh/authorized_keys # If you already see a key in the authorized_keys file, remove it and paste the first server key into this file.
+
+
+# Let's try to connect to the target server from controlled node 
+ ssh 172.31.13.142
+ 
+  
+
+
+Ansible Config File 
+    To avoid specifying the inventory and key file options every time we run Ansible, let’s create an Ansible configuration file.
+
+[defaults]
+ remote_user = ec2-user
+ inventory = inventory
+ private_key_file = ~/.ssh/id_rsa
+
+
+ Run Playbook 
+    ansible-playbook -i inventory deploy-techmax.yaml
+
+Create inventory file at location /etc/ansible/hosts which is by default location of file. Ansible hosts file is a configuration file that contains a list of hosts or servers. Add the IP addresses of the servers also add private key file location to use for authentication.
+
+
+https://www.padok.fr/en/blog/prometheus-monitoring-ansible
+https://opensource.com/article/18/3/how-use-ansible-set-system-monitoring-prometheus - Example 13: templates/prometheus.yaml.j2
+
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+  external_labels:
+      monitor: 'codelab-monitor'
+
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: 'nodes'
+    static_configs:
+{% for hostname, ip in client_information_dict.iteritems() %}
+      - targets: ['{{ ip }}']
+        labels: {'host': '{{ hostname }}' }
+{% endfor %}
+
+
+
+sudo apt-get update 
+sudo apt install python3
+mkdir basic-http-server 
+sudo apt-get install -y apache2
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+
+-i inventory : specifies the list of servers to check in with.
+-m ping : instructs Ansible to use the "ping" module to test connectivity.
+all : targets all servers in the inventory.
+
+
+
+- hosts: nginxservers
+  become: yes           # yes: This ensures tasks are executed with elevated privileges (usually as root) to perform actions like installing software.
+  tasks:                # sequence of actions to be carried out
+
+    - name: update                      # Refreshes the package lists to ensure Ansible has the latest information about available software.
+      apt: update_cache=yes             
+
+    - name: Install Nginx
+      apt: name=nginx state=latest      # Uses the apt module to install the Nginx web server, specifically requesting the latest version
+
+      notify:
+        - restart nginx                 # Triggers the “restart nginx” handler if any changes are made during installation.
+
+  handlers:                             # Event handlers - This section defines tasks that should be executed only when notified by other tasks:
+    - name: restart nginx 
+      service: name=nginx state=reloaded        # This handler gracefully reloads the Nginx configuration to apply any changes made during installation.
+
+
+
+# metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+
+
+
+
+
+[graph_store_api_service]
+GAS ansible_host=10.2.2.2
+
+
+scrape_configs:
+  - job_name: "GAS"
+    static_configs:
+      - targets: ["10.2.2.2:9090"]
+
+
+ifm_vars.yml
+GRAPH_CLUSTER_URL: "neo4j://{{ hostvars[groups['graphdb_neo4j'][0]].ansible_host }}:7687"
+
+provisioning/ansible-pre-tasks.yml
+
+
+- name: Replace "KAFKA_BOOTSTRAP_SERVERS" property value in ifm_vars.yaml file  ansible.builtin.lineinfile:    path: "ifm_vars.yaml"    search_string: 'KAFKA_BOOTSTRAP_SERVERS: '    line: "KAFKA_BOOTSTRAP_SERVERS: \"{{ kafka_brokers }}\""  delegate_to: localhost  become: yesrun_once: truewhen: groups['kafka'] | length > 0delegate_to: localhost

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mynginx
+  name: mynginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mynginx
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: mynginx
+    spec:
+      containers:
+        - image: nginx
+          name: mynginx
+          resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-ingress-svc
+spec:
+  selector:
+    app: mynginx
+  ports:
+    - name: web
+      port: 80
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress-by-domain
+spec:
+  rules:
+    - host: www.mcwebsite.com
+      http:
+        paths:
+          - path: /*
+            pathType: Prefix
+            backend:
+              service:
+                name: my-ingress-svc
+                port:
+                  number: 80

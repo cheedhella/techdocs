@@ -1,0 +1,534 @@
+Pod
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-88ssc
+      readOnly: true
+
+
+kubectl delete -l app=nginx,tier=backend        # YOu can delete resources by labels;
+
+
+Kubernetes uses Docker as its default container runtime, which is the low-level technology that pulls images and starts and stops containers. 
+However, Kubernetes has a pluggable container runtime interface (CRI) that makes it easy to swap-out Docker for a different container runtime.
+
+
+https://srinirallabandi.medium.com/how-to-install-a-kubernetes-cluster-on-rhel-8-e35fc0d48efe - cluster setup
+https://swapnasagarpradhan.medium.com/install-a-kubernetes-cluster-on-rhel8-with-conatinerd-b48b9257877a
+
+
+Kubernetes uses Docker as its default container runtime, which is the low-level technology that pulls images and starts and stops containers. However, Kubernetes has a pluggable container runtime interface (CRI) that makes it easy to swap-out Docker for a different container runtime.
+In the future, Docker might be replaced by containerd as the default container runtime in Kubernetes, but more on containerd later in the course
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+# Commands
+----------
+> kubectl run mynginx0 --image=nginx					# Create pod and deployment named mynginx, with 1 container inside it using nginx image;
+deployment.apps/mynginx0 created
+
+> kubectl get deployments
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+mynginx0   1/1     1            1           10s
+
+> kubectl get pods -o wide
+NAME                       READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+mynginx0-98598fbb8-6fxfw   1/1     Running   0          100s   172.17.0.6   minikube   <none>           <none>
+
+# List all pods - namespace, pod name, pod IP address;
+> kubectl get pods -o jsonpath='{range .items[*]}{.metadata.namespace}{"/"}{.metadata.name}{","}{.status.podIP}{"\n"}{end}'
+default/kuard,172.17.0.6
+default/mynginx-7b7ddb9564-xgl9x,172.17.0.5
+
+> kubectl describe pod mynginx0-98598fbb8-762dn 	# More details about the pod! 
+
+# List all Containers running in a Pod
+> kubectl get pod -o="custom-columns=Pod ID:.metadata.uid,Pod Name:.metadata.name,Container Id:.status.containerStatuses[*].containerID,Container Image:.spec.containers[*].image"
+Pod ID                                 Pod Name                   Container Id                                                                Container Image
+c450bf9b-6b2b-44ab-88f7-b51fcf9d8e51   kuard                      docker://7679aa88cf7c4de5d5a868aed2c9df482fcf0c5779fd9ffc7c8c766138c67e80   gcr.io/kuar-demo/kuard-amd64:blue
+8e814b10-88d8-4150-ba7c-b853204ec28a   mynginx-7b7ddb9564-xgl9x   docker://3f2fb19ae99eb749e732a7506822cd3d688de1039b112621250afaf5b7df4e45   nginx
+
+# Fetch selective information of a Pod
+> kubectl get pod -o=custom-columns=POD_NAME:.metadata.name,IP:.status.hostIP --namespace=${NAMESPACE}
+POD_NAME                    IP
+mynginx0-98598fbb8-762dn    192.168.59.100
+mynginx1-5665fc7444-lwdfj   192.168.59.100
+
+# kubectl exec - it is used to get shell access to a pod;
+> kubectl exec -it mynginx0-98598fbb8-762dn -- /bin/bash
+
+# Get the port that container in a pod is listening on - it works only if your container base image supports netstat;
+> kubectl exec my-nignx-pod -- netstat -tulpn
+
+> kubectl delete pod mynginx0-98598fbb8-6fxfw
+pod "mynginx0-98598fbb8-6fxfw" deleted
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - naked pod creation!
+-----------------------------
+> kubectl run mynginx1 --image=nginx --generator=run-pod/v1 							# It just creates pod, it won't create any deployment;
+pod/mynginx1 created
+
+> kubectl run mykuard --generator=run-pod/v1 --image=gcr.io/kuar-demo/kuard-amd64:1
+pod/mykuard created 
+
+> kubectl get deployments
+No resources found
+
+> kubectl get pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+mynginx1   1/1     Running   0          7m30s   172.17.0.5   minikube   <none>           <none>
+mykuard    1/1     Running   0          7s      172.17.0.6   minikube   <none>           <none>
+
+# mykuard Pod is up, but http://172.17.0.5:80 is accessible only inside the cluster!
+# mykuard Pod is up, but http://172.17.0.6:8080 is accessible only inside the cluster!
+
+> kubectl port-forward mynginx1 8081:81 				# By default, nginx runs on port 80; It redirects requests on localhost:8080 to port 80 on mynginx1 pod;
+> kubectl port-forward mykuard 8081:8080 				# By default, kuard runs on port 8080; It redirects requests on localhost:8081 to port 8080 on mykuard pod;
+
+http://localhost:8080 									# You should see nginx home page!
+http://localhost:8081/ 									# You should see kuard home page!
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - Creating multiple containers in one Pod!
+-------------------------------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/pods01.yaml 
+pod/twocontainerpodeg created
+
+> kubectl get deployments
+No resources found.
+
+> kubectl get pods -o wide
+NAME                READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+twocontainerpodeg   2/2     Running   0          3m1s   172.17.0.7   minikube   <none>           <none>
+
+> kubectl get po,svc,deploy
+NAME            READY   STATUS    RESTARTS   AGE
+pod/webserver   2/2     Running   0          3m6s
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.12.0.1    <none>        443/TCP   107m
+
+# How to verify if 2 containers that are running in the same pod?
+> kubectl describe pod twocontainerpodeg
+> kubectl get pod -o="custom-columns=Pod ID:.metadata.uid,Pod Name:.metadata.name,Container Id:.status.containerStatuses[*].containerID,Container Image:.spec.containers[*].image"
+Pod ID                                 Pod Name            Container Id               												  Container Image
+ab2bd477-b206-4e8b-bd87-4a2a27754c14   twocontainerpodeg   docker://7c80ed198890c14b59c5da390a010,docker://2481f3c23436a85fade988557  nginx:latest,afakharany/watcher:latest
+
+# Use -c option, if you want to refer to a specific container!
+
+> kubectl exec -it twocontainerpodeg -c mywebwatcher -- /bin/bash
+
+root@twocontainerpodeg:/# cat /etc/hosts
+# Kubernetes-managed hosts file.
+127.0.0.1	localhost
+::1	localhost ip6-localhost ip6-loopback
+fe00::0	ip6-localnet
+fe00::0	ip6-mcastprefix
+fe00::1	ip6-allnodes
+fe00::2	ip6-allrouters
+172.17.0.7	twocontainerpodeg
+
+root@webserver:/# exit
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - How multiple containers in one Pod communicate using shared volume?
+----------------------------------------------------------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/pods02.yaml
+
+> kubectl get po,svc,deploy
+NAME      READY   STATUS    RESTARTS   AGE
+pod/mc1   2/2     Running   0          16s
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   56m
+
+> kubectl get pods -o wide
+NAME   READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+mc1    2/2     Running   0          52s   172.17.0.5   minikube   <none>           <none>
+
+
+> kubectl exec mc1 -c 1st -- /bin/cat /usr/share/nginx/html/index.html
+Thu Apr 28 02:13:04 UTC 2022
+Thu Apr 28 02:13:05 UTC 2022
+
+> kubectl exec mc1 -c 2nd -- /bin/cat /html/index.html
+Thu Apr 28 02:13:38 UTC 2022
+Thu Apr 28 02:13:39 UTC 2022
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - How multiple containers in one Pod communicate using IPC?
+------------------------------------------------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/mc1.yaml 
+pod/mc1 created
+
+> kubectl get pod -o wide
+NAME                        READY   STATUS      RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+mc1                         0/2     Completed   0          26s   172.17.0.6   minikube   <none>           <none>
+
+> kubectl logs mc1 -c myproducer
+Produced: 44
+Produced: c9
+Produced: fb
+
+> kubectl logs mc1 -c myconsumer
+Consumed: 44
+Consumed: c9
+Consumed: fb
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+In most cases, there will be one container per pod; We could have multiple container per pod;
+There are few patterns for multi-container pods:
+	- init container pattern
+	- Sidecar Container Pattern
+	- Adapter Container Pattern
+	- Ambassador Container Pattern
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+init container pattern
+	- Init Containers are the containers that should be started before the startup of the main container in the pod;
+	- All the init Containers are started sequentially and if there is an error while starting a init container, pod will be 
+	  restarted, which means all init containers are started again;
+
+# Demo 1 - init containers
+------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/init-container-demo-1.yaml
+pod/mc2 created
+
+
+# Demo 2 - init containers
+------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/init-container-demo-2.yaml
+pod/init-container-demo created
+
+> kubectl get pods -o wide
+NAME                        READY   STATUS    RESTARTS      AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+init-container-demo         1/1     Running   0             9m36s   172.17.0.8   minikube   <none>           <none>
+
+> kubectl port-forward init-container-demo 8086:80
+
+http://localhost:8086 				# Hi I am from Init container
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sidecar Container Pattern
+	Imagine you have a pod with a single container working very well and you want to add some functionality to it without touching or changing, how can you do that?
+	Sidecar container pattern really helps in this situation;
+
+	Sidecar containers are the containers that should run along with the main container in the pod;
+	Sidecar containers enhances the functionality of main containers without changing it;
+
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/sidecar-container-demo.yaml 
+pod/sidecar-container-demo created
+
+> kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+sidecar-container-demo   2/2     Running   0          13s   172.17.0.3   minikube   <none>           <none>
+
+> kubectl port-forward sidecar-container-demo 8087:80
+
+http://localhost:8087 				# You will see page that provides latest logs every time you refresh!
+
+
+# Another approach
+> kubectl exec -it sidecar-container-demo -c main-container -- /bin/sh
+> apt-get update && apt-get install -y curl
+> curl localhost
+echo Fri Apr 29 09:25:36 UTC 2022 Hi I am from Sidecar container
+echo Fri Apr 29 09:25:41 UTC 2022 Hi I am from Sidecar container
+echo Fri Apr 29 09:25:46 UTC 2022 Hi I am from Sidecar container
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ambassador Container Pattern
+https://medium.com/bb-tutorials-and-thoughts/kubernetes-learn-ambassador-container-pattern-bc2e1331bd3a
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Adapter Container Pattern
+https://medium.com/bb-tutorials-and-thoughts/kubernetes-learn-adaptor-container-pattern-97674285983c
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - How multiple containers in one Pod communicate using localhost?
+------------------------------------------------------------------------
+# In this example, we will create 2 containers in 1 pod;
+# First one is nginx container that works as a reverse proxy for a simple web application running in second container;
+# What is reverse proxy? TODO: https://medium.com/globant/understanding-nginx-as-a-reverse-proxy-564f76e856b2
+
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/mc3-1.yaml 
+configmap/mc3-nginx-conf created
+
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/pods/mc3-2.yaml 
+pod/mc3 created
+
+> kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+mc3     2/2     Running   0          3m7s   172.17.0.6   minikube   <none>           <none>
+
+# It takes requests on port 80 and forwards them to localhost:5000
+
+# Way #1
+> kubectl port-forward mc3 8085:80
+Forwarding from [::1]:8085 -> 80
+Forwarding from 127.0.0.1:8085 -> 80
+
+http://localhost:8085 			# Hello world!
+
+
+# Way 2
+> kubectl expose pod mc3 --type=NodePort --port=80
+service/mc3 exposed
+
+> kubectl describe service mc3
+NodePort:                 <unset>  32383/TCP
+
+# http://localhost:30967 is not working, why?
+
+> minikube ip
+192.168.59.100
+
+>  minikube service  mc3 --url
+http://192.168.59.100:30967
+
+http://192.168.59.100:30967 		# Hello world!
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Docker is the most common container runtime used in a Kubernetes Pod, but Pods support other container runtimes as well.
+
+If the pod fails to start indefinitely, we can use the kubectl describe command to know what went wrong.
+
+It’s also worth noting that a pod will have all containers up or none of them. Your pods will not be considered healthy until all containers that run within them are ready to 
+go, so you can’t have one healthy container and one unhealthy container in the same pod. The pod deployment will fail if this happens.
+
+
+// Evenly distribution of pods across Nodes
+https://medium.com/geekculture/kubernetes-distributing-pods-evenly-across-cluster-c6bdc9b49699?source=read_next_recirc---------3---------------------f5c9cae3_9c18_4cb3_a629_e0d989a457e9------- 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Pod Life Cycle
+	https://kubernetes.io/docs/concepts/workloads/pods/pod/
+	https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+	https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
+
+
+----------------------------------------------------------------------------------------
+Restart Policy
+	estart policy, which defines what to do with a container when it terminates, or a liveness probe, which defines an action to detect if a process in a container is still alive from the application’s perspective, such as a web server responding to HTTP requests.
+kubectl run --restart=Never --image=gcr.io/kuar-demo/kuard-amd64:blue kuard
+
+Kuberbetes will attempt to restart a failing pod by default.
+If the pod fails to start indefinitely, we can use the kubectl describe command to know what went wrong.
+
+# Pod Definition
+apiVersion: v1
+kind: Pod
+metadata:
+	name: my-pod
+spec:
+	affinity: 
+		nodeAffinity: NodeAffinity			# 
+		podAffinity: PodAffinity			# 
+		podAntiAffinity: PodAntiAffinity	# 
+	tolerations:
+		- key:
+		  value:   
+		  operator:
+		  effect:
+		  tolerationSeconds:
+  	nodeName: <nodeName>					# If not empty, Scheduler schedules this Pod onto that Node.
+  	nodeSelector: 							# Scheduler schedules this Pod on a Node which has all the labels specified using this.
+		label1: value1				
+   	containers:
+  		- name: c1
+    	  image: nginx
+   	restartPolicy:					# Restart policy for all containers within the pod. One of Always, OnFailure, Never. Default to Always.
+   	volumes:						# List of volumes that can be mounted by containers belonging to the pod.
+   	
+status:								# Most recently observed status of the pod. This data may not be up to date. It's Read-only.
+	PodStatus
+
+pod.spec.containers[].ports, provides a list of ports that get exposed by the container. You don’t really need to specify this list—even if it’s empty, as long as your containers are listening on the port, they’ll still be available for network access. This just provides some extra information to Kubernetes.
+--------------------------------------------------------------------------------------
+
+kubectl get pods -w --namespace default
+
+
+
+Multicontainer Pods 
+	- For example, we could have our primary nginx container running alongside another container that periodically pulls a github repository to update the website that nginx is serving.
+	- In this case, the primary container is nginx, which is serving our website, and the container that is getting the code from github is there just to help this pod serve its main function.
+
+https://kubebyexample.com/learning-paths/application-development-kubernetes/lesson-3-networking-kubernetes/exposing
+
+
+
+https://www.educative.io/courses/practical-guide-to-kubernetes/operating-replicasets - replicaset self healing, remove label, new pod gets created, add label back, one of pod gets deleted;
+
+
+
+pod environment variables;
+
+
+pod resource limits 
+resources:
+          limits:
+            memory: "256Mi"  # Maximum memory allowed
+            cpu: "200m"       # Maximum CPU allowed (200 milliCPU)
+          requests:
+            memory: "128Mi"  # Initial memory request
+            cpu: "100m"       # Initial CPU request
+    resources: This section is used to define resource requests and limits for the container.
+    limits: Specifies the maximum amount of CPU and memory that the container is allowed to use. In this example, the container is limited to a maximum of 256 MiB of memory and 200 milliCPU (0.2 CPU cores).
+    requests: Specifies the initial amount of CPU and memory that the container requests when it starts. In this example, the container requests 128 MiB of memory and 100 milliCPU (0.1 CPU cores) initially.
+
+POD_NAME=$(kubectl get pods -o name \
+    | tail -1)
+kubectl label $POD_NAME service-  Please note the - at the end of the name of the label. It is the syntax that indicates that a label should be removed.
+kubectl describe $POD_NAME
+
+kubectl get pods --show-labels
+kubectl label $POD_NAME service=go-demo-2
+
+
+
+
+	- Load Balancing 
+	  k8s can automatically distribute traffic across multiple replicas, ensuring that the workload is evenly balanced;
+	- Rolling updates
+	  K8s allows you to update your applications, without any downtime;
+	  By gradually replacing old replicas with new ones, it ensures that the application remains available throughout the update process;
+
+
+
+# Scale 
+kubectl scale --replicas=3 -f replicaset.yaml		# This tells Kubernetes to create the number of replicas you define, regardless of the value configured in the original manifest file.
+kubectl autoscale rs replicaset-name --max=3 		# This tells Kubernetes to use the Horizontal Pod Autoscaler to increase the number of replicas automatically (up to the maximum you defined) as CPU load increases.
+
+Deployment	When deploying a standard application in production.
+ReplicationController	When using older manifests that only support ReplicationController.
+DaemonSet	When you need to run Pod copies on specific nodes.
+Running Pods manually	When running multiple Pods for testing purposes.
+Jobs	When you need to run multiple Pods as part of a Kubernetes Job.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Rep
+
+
+4. How do you scale the number of replicas managed by a ReplicaSet?
+You change the number in the ‘replica’ field in the ReplicaSet’s instructions. 
+If you want more replicas, you increase the number; if you want fewer, you decrease it.
+
+
+What is pod template in Replicaset?
+	The Pod template is like a blueprint for the Pods managed by the ReplicaSet. 
+	It defines what each replica looks like, such as which container images to use, resource limits, and more
+
+
+
+
+    
+
+
+    
+    
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-probe-demo
+  labels:
+    probeType: liveness
+spec:
+  containers:
+  - name: liveness-probe-c1
+    image: busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+host: The host name to connect to. It defaults to the pod IP; instead, you may want to set "Host" in httpHeaders.
+scheme: The scheme to use for connecting to the host (HTTP or HTTPS); it defaults to HTTP.
+path: The path to access on the HTTP server; it defaults to /.
+httpHeaders: The custom headers you can set in the request; HTTP allows repeated headers.
+port: The name or number of the port to access on the container; this number must be in the 1 to 65535 range.
+
+
+
+    
+    sends traffic A startup probe allows Kubernetes to wait until the service is active before sending it traffic.
+    - 
+    This can be used to adopt liveness checks on slow starting containers, avoiding them getting killed by the kubelet before they are up and running.
+
+    startupProbe:
+  httpGet:                  # If the endpoint returns a success code, the container is considered alive. 
+    path: /healthz 
+    port: liveness-port
+  failureThreshold: 3      # If failureThreshold is set to 3 and periodSeconds is set to 10, it gives the container 30 x 10 = 300 seconds to startup before it fails;
+  periodSeconds: 10
+
+Liveness Probe
+
+    will automatically restart the container if it is set to Always or OnFailure.
+
+    If the configured liveness probe is successful, no action is taken, and no logs are recorded. If it fails, the event is logged, and 
+    the kubelet kills the container according to the configured restartPolicy.
+
+
+
+Killercoda
+Play with Kubernetes
+https://killercoda.com/playgrounds/scenario/kubernetes
+https://labs.play-with-k8s.com/
+
+Status 
+
+
+
+Kubelet restarts the Pod, if liveness probe fails;
+
+https://kubebyexample.com/learning-paths/application-development-kubernetes/lesson-4-customize-deployments-application-2
+
+
+
+
+Horizontal Pod Autoscaler
+Vertical Pod Autoscaler 
+K8s Service Discovery
+K8s Service Load Balancer 
+
+
+
+setup k8s control and worker node scripts - https://medium.com/@dahmearjohnson/a-simple-kubernetes-deployment-eabc0a5a91dc

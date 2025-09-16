@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-node-port-svc
+spec:
+  type: NodePort
+  selector:             # This service is for all the pods with label: app: my-node-port-pod 
+    app: my-node-port-pod
+  ports:
+    - nodePort: 30038   # It exposes the Service to external world; External applications can reach the service using <nodeIP>:<nodePort>; It routes the request to port;
+                        # It is applicable only for NodePort and LoadBalancer types;
+                        # If not specified, k8s picks a port b/w 30000-32767;
+      port: 80          # It exposes the Service within the Cluster by using this port; Applications within the cluster can send requests to this Service using this port; Mandatory Param;
+                        # Service selects a Pod based on label selectors specified and forwards the incoming request to a Pod, which further forwards the request to a container accepting requests on specified targetPort;       
+      targetPort: 80 	  # Container should accept requests on this port; Defaults to port;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-first-deployment
+  labels:
+    app: webtesting
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-node-port-pod
+  template:
+    metadata:
+      labels:
+        app: my-node-port-pod
+    spec:
+      containers:
+        - name: webtesting
+          image: 'sandeepbaldawa/webserver-testing:v1'
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always

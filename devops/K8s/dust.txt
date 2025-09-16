@@ -1,0 +1,95 @@
+Pods: Basic deployable units in Kubernetes.
+Deployments: Manage stateless applications.
+Services: Network abstraction to expose pods.
+Namespaces: Logical partitions for resources.
+ReplicaSets, StatefulSets, DaemonSets: Managing different workloads.
+ConfigMaps & Secrets: Storing configuration data.
+Kubernetes architecture: Nodes, control plane, etc.
+
+Stateful applications (using StatefulSets).
+Persistent storage in Kubernetes.
+Network policies and service meshes (e.g., Istio).
+Kubernetes security (RBAC, Network Policies, Pod Security Policies).
+CI/CD with Kubernetes (e.g., using Jenkins, GitLab, or ArgoCD).
+
+If you’re looking for a formal path, consider pursuing the Certified Kubernetes Administrator (CKA) or Certified Kubernetes Application Developer (CKAD) exams.
+
+CKA: Focuses on administration (deployments, networking, security).
+CKAD: Focuses on application development within Kubernetes.
+
+
+any Kubernetes platform – for example, Red Hat OpenShift, VMware Tanzu, SUSE Rancher, AWS EKS, Azure AKS, Google GKE, OSS Kubernetes – the simplest way to add Istio service mesh is Solo.io Gloo Mesh. 
+
+
+
+Blue-green and canary deployments
+
+Multi-cluster management
+
+Disaster recovery and backups
+
+🛡️ 7. Focus on Security
+Pod Security Standards
+
+Network policies
+
+Secrets management (e.g., Vault)
+
+Image scanning (e.g., Trivy)
+
+Admission controllers & OPA/Gatekeeper
+
+📜 8. Get Certified (Optional but Recommended)
+CKA (Certified Kubernetes Administrator) – Operations-focused
+
+CKAD (Certified Kubernetes Application Developer) – Developer-focused
+
+CKS (Certified Kubernetes Security Specialist) – Security-focused
+
+
+
+kubectl
+
+kustomize
+
+helm
+
+stern (for pod logs)
+
+lens (GUI for Kubernetes)
+
+telepresence (local dev in a cluster)
+
+
+
+Deploy containerized applications using Kubernetes pods
+Implement service discovery for inter-application communication
+Organize and isolate resources using Kubernetes namespaces
+Scale applications using Kubernetes Deployments
+Deploy databases using StatefulSets and manage storage with Persistent Volumes
+Separate configuration from code using ConfigMaps and Secrets
+Implement automatic scaling with Horizontal Pod Autoscaler (HPA)
+Manage external access to services using Ingress Controllers
+Streamline application deployment using Helm Charts
+Automate complex application management with Kubernetes Operators
+Deploy a Kubernetes cluster to Amazon Web Services (AWS)
+Understand and apply Kubernetes' self-healing and resilience features
+Perform rolling updates and rollbacks for zero-downtime deployments
+Implement health checks using Liveness and Readiness probes
+Use the Kubernetes CLI and VS Code extensions for efficient cluster management
+
+Ingress 
+Storage 
+Networking 
+Security 
+Monitoring Tools 
+Administration
+Taints & Tolerations 
+
+K8s for Administrators: HA deployment, K8s scheduler, Logging, Monitoring, Maintanance, Application Lifecycle, Security, Troubleshooting, ;
+K8s for Developers: design, build cloud native applications; ConfigMaps, SecretMaps, Readiness, Services, service accounts, readiness and liveness probes, logging and monitoring jobs; 
+
+
+
+Use code 30KK to get 30% OFF site-wide on any Linux Foundation Certification.
+https://techdocs.broadcom.com/us/en/ca-enterprise-software/it-operations-management/dx-netops/24-3/dx-netops-cloud-native-virtual-network-assurance/deploy-cloud-native-virtual-network-assurance/configure-kubernetes-cluster.html

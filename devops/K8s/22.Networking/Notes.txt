@@ -1,0 +1,5 @@
+
+
+
+
+pod networks, service networks, cluster IPs, container ports, host ports, node ports… 

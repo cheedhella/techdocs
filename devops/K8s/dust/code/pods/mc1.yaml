@@ -1,0 +1,29 @@
+# All containers in a Pod share the same IPC namespace, which means they can also communicate with each other using standard IPC meachanisms 
+# such as SystemV semaphores or POSIX shared memory;
+
+# In this example, we define a Pod with 2 containers; We use same docker image for both containers;
+# First container, myproducer, creates standard Linux message queue, writes a number of random messages and then writes a special exit message;
+# Second container, myconsumer, opens the above message queue for reading and reads messages until it receives the exit message;
+# We are setting the restart policy to Never, so that Pod stops after termination of both containers;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc1
+spec:
+  containers:
+    - name: myproducer
+      image: allingeek/ch6_ipc
+      command:
+        - ./ipc
+        - '-producer'
+    - name: myconsumer
+      image: allingeek/ch6_ipc
+      command:
+        - ./ipc
+        - '-consumer'
+  restartPolicy: Never
+
+# One of the Major problem with this is, container dependencies and start up order;
+# All containers in a Pod are started in parallel and there is no way to define that one container must be started after other container;
+# In this case, if the 2nd container finishes starting before the first one, then the 2nd will container will fail, as it expects that message queue should already exists;
+# Solution to this problem is: use init containers;

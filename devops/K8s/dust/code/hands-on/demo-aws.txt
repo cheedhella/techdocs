@@ -1,0 +1,178 @@
+Now, it's time to deploy the all services in AWS Cloud!
+Note: Don't leave the cluster running overnight; you will get charged by the hour; If you forget to delete the resources, you will be continued to charged;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Goal #1: Setup a cluster with 3 worker nodes, using EKS;
+	- eksctl is a command line tool that is used to work with AWS EKS;
+	- We setup an ec2 instance(named bootstap instance), install eksctl on it and use it purely to issue command line instructions;
+	  You could do the same from your laptop(windows/mac), but it is fairly complex;
+		-- Setup EC2 instance
+			Instances -> Launch an instance(name - bootstap-instance) -> choose OS(Amazon linux 2) -> t2.micro -> default storage is fine -> add tag(Name: Bootstrap) 
+			-> create a new security group & default rule allows any computer to ssh to this instance -> Review and launch instance;
+			If you've launched the instance before, you need to create a key pair, this is effectively your login key; 
+			Grab the IP address of that instance and ssh onto it;
+			> ssh -i <eks-demo.pem> ec2-user@<ip-address>  # If you get any error, try this: chmod 700 <eks-demo.pem> 
+		-- Install eksctl on it
+			https://github.com/DickChesterwood/k8s-fleetman/blob/master/_course_files/Chapter%2013%20AWS/install-eks.txt
+		-- All ec2 instances comes with AWS CLI, by default; Update the version;
+		-- Configure AWS CLI:
+			-- Create Group
+				AWS UI -> Services -> Search for IAM -> Groups -> Create new Group with policy: EC2FULLAccess, IAMFullAccess and other policies describe in confluence; 
+			-- Create AWS user, Access Type as Programmatic Access;
+			-- Copy the Access Key ID, Secret Access Key;
+			-- Go to command line -> aws configure -> enter the access key id and secret access key, region you choose when asked;
+		-- To test if it setup is fine, run this command: aws eks list-clusters 			# To list all clusters;
+		-- install kubectl, whichever version you choose, it should match with the version of kubectl in the cluster;
+		-- create cluster: eksctl create cluster --name fleetman --nodes-min=3
+		> kubectl get all 		# You should see kubernetes service running;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Changes needed to yaml files:
+	1. Remove NodePort in all files, as NodePort is intended to use only in development environments; Change type to LoadBalancer;
+	2. Instead of 7.storage.yaml, use aws-storage.yaml;
+
+Deploy all files; 
+Goto UI -> Services -> find the service belong to your webapp deployment -> select it and copy it's DNS name;
+
+It's very ugly, and you can access your service using it;
+But, definitely it is not something that you publish it to your customers;
+If you have a very short name, you can configure that domain name to be an alias to ELB name;
+
+Say, you have registered a domain named dickchesterwood.io;
+Under Services -> look for route53 service; It is a DNS management service, you can register your domain name using it;
+Create recordset such as fleetman.chesterwood.io, select UI load balancer while creating it;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Requirement: In the event of Node(or Availability Zone) failure, make sure application is accessible;
+
+It doesn't matter if reports from vehicles have stopped coming in, as long as the service event is eventually restored;
+But, within a few minutes, we should see reports coming in again;
+
+How do we know which pod is running on which Node? 
+	kubectl get pods -o wide
+
+You can kill a node: Goto instance -> find which node is having webapp pod and terminate it;
+Underlying replicaset quickly brings up that pod in another node; In that short gap, if you try to access, you will see a spinner/loading;
+
+If you refresh again the instances page, you would see a new instance is up, in place of the dead node;
+But, that is not because of rs/k8s, but because of auto scaling group;
+Click on Auto Scaling Group -> select the group -> check activity history, to find what happened;
+
+But, because another node is available doesn't mean that k8s is going to shift some of existing pods to that Node;
+
+Solution to above requirement is: increase the number of replicas to 2;
+Given that, we have each node in a separate availability zone, we have a high resilent system;
+
+You can't have replicas for queue pod, b/c it stores data and it is stateful; 
+If you replicate it, you're going to end up with a kind of a split brain situation, where half the data is in one part, half the data is in the other part;
+Really what you're aiming for with any pod is to make it stateless, so it's not holding data;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Requirement: make queue and mongoDB pods stateless;
+
+Luckly, ActiveMQ supports replication; You could work quite hard to configure that so that you can run multiple instances of that pod;
+An easier way could be look to your cloud provider and see if they have a hosted service that does the same job that your pod was doing;
+Amazon do indeed have a managed mass message broker service for Apache ActiveMQ.
+You would configure an Amazon MQ instance in your Amazon account, and that would give you a URL for a queue, and then you would just have 
+to re-engineer your code so it works with this hosted queue and you can get rid of queue pod entirely;
+
+It's the same story with MongoDB;
+Amazon have a very simple NoSQL data store called SimpleDB, which I think would meet the requirements quite well.
+Failing that, there's Amazon DynamoDB, a more complicated database.
+Or they have a hosted version of MySQL;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Delete the cluster, using EKS
+	eksctl delete cluster <cluster-name>
+	If you use EKS, volumes created dynamically by PVC are not deleted, when the cluster deleted; Make sure you delete it manually;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+If you are not planning to do any furthe work, stop the bootstrap instance;
+Because, bootstrap instance has a volume, you will be charged minimum for that;
+If you are not fine with it, terminate bootstrap instance as well;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+We are gong to create 4 node cluster: 1 master, 3 worker nodes;
+Node #1: API gateway;
+Node #2: position simulator, queue;
+Node #3: position tracker, mongodb;
+Master Node:
+	Master node is responsible for scheduling the pods on to Nodes;
+	We are going to issue kubectl commands to this node;
+
+What if Node #1 goes down? we want
+	Users still can access UI, but they don't see any data;
+	One of the requirement is to make sure one instance of the API gateway is running at all times;
+	If the API gateway goes down, master node should detect this and will schedule a new instance of that pod on one of the surviving nodes;
+	But, as an architect, we can design the system to be resilent to node failures;
+
+
+
+There are many tools to setup a cluster in the cloud; But, there are 2 by far most popular tools: Kops and EKS;
+KOPS: It helps you to create, destroy, upgrade and maintain production-grade, highly available k8s cluster from command line; 
+You could use it with many cloud providers such as AWS, GCE etc;
+
+KOPS vs EKS
+	- One major difference is: 
+	  In case of KOPS, master node EC2 instance appear in your account, just like other nodes;
+	  So, an administrator can kill and restart the master node;
+	  Even without master node, the worker nodes will continue to work just fine;
+	  
+	  In case of EKS, you have no visibilit of it; It runs in the background; It is protected by Amazon;
+	  Some administrators don't like it; But, administrator has less to worry about it, as it is managed by Amazon;
+
+	  It's possible that more than half of the projects in the world on Kubernetes now are using EKS;
+
+	  In case of KOPS, you could have more than 1 master;
+	  EKS - Amazon hosted version of k8s;
+
+
+
+Eks integrates very cleanly with another AWS service called fargate. 
+This is a relatively new service provided by AWS that allows you to run your containers with no service at all. It's a so called serverless service. 
+Well, actually, there are servers but it's just that you don't see them.
+
+
+
+
+
+
+We are going to setup a EBS volume and link that to any pods that need it;
+
+
+
+
+We're not really going to have to create any EC2 instances, or load balances or auto-scale groups because Kubernetes is going to do all of that for us.
+
+
+When we're going to production on a cloud environment, we're going to create several nodes, and a node is a physical server in our system.
+As we're planning to deploy onto Amazon Web Services, a node in AWS is called an EC2 instance.
+
+Typically in Kubernetes we're going to have multiple nodes in a so-called cluster.
+As we have multiple nodes, we can deploy just part of the system to each of the nodes.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://568176806219.signin.aws.amazon.com/console 
+		Username: terraform
+
+EKS is not supported in every single region; To check which region supports it, search for EKS in the search bar;
+Clicke on Region in the top right corner, you will see list of all regions where it is supported;
+
+eksctl - a command line tool to work with AWS EKS;
+
+
+
+
+
+
+
+
+
+bootstap-instance is not part of the cluster, but it is used to issue commands to  
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

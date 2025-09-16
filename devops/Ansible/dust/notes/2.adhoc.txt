@@ -1,0 +1,104 @@
+What is Adhoc command?
+    It is useful for occasional tasks, not meant for reusability;
+    For eg, if you want to restart a service on multiple hosts, you can easily achieve this with a single command;
+
+Syntax:
+    ansible [host-pattern] -m [module] -a "[module options]" -i "[inventory]"
+
+Examples:
+    ansible all -m ping                                                                             # Connectivity testing, by pinging all nodes
+    ansible all -m ansible.builtin.service -a "name=httpd state=started"                            # Ensure service is started on all webservers
+    ansible localhost -m stat -a "path=/ansible"                                                    # retrieves facts about directories
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+When are ad-hoc commands useful?
+    Rebooting servers
+    Managing services
+    Managing files
+    Fact gathering
+    Connectivity testing 
+
+ansible localhost -m file -a "path=/test state=directory"                   # Create the /test directory with Ansible
+
+
+
+ping
+    ping module tests connectivity; 
+    It does not use ICMP and requires Python on the remote-node; 
+    It does not require any additional arguments;
+    > ansible localhost -m ping
+
+stat
+    The stat module retrieves facts about the /ansible directory; It is similar to the Linux/Unix stat command;
+    > ansible localhost -m stat -a "path=/ansible"
+
+Copy
+    Use the copy module to copy info.md to to-dos.md.
+    > ansible localhost -m copy -a "src=/ansible/info.md dest=/ansible/to-dos.md"
+
+    Run the copy command twice. Notice Ansible returns a CHANGED status after the first run and SUCCESS status after the second.
+
+Replace
+    Use the replace module to update the to-dos.md file.
+    ? ansible localhost -m replace -a "path=/ansible/to-dos.md regexp='^\[\s' replace='[x'"
+    The regular expression matches the start of line ^ followed by a [ and a space character \s. It then replaces the match with [x. The result is a checkbox in the markdown file.
+
+Debug and lookup
+    Use the debug module with the lookup plugin to get the contents of the to-dos.md file.
+    > ansible localhost -m debug -a "msg={{lookup('file', '/ansible/to-dos.md') }}"
+     debug module is used for debugging variables or expressions and the lookup plugin allows Ansible to access data from outside sources.
+
+File
+    Use the file module to remove the to-dos.md file by setting the state parameter to absent.
+    > ansible localhost -m file -a "path=/ansible/to-dos.md state=absent"
+
+file: To add and remove directories.
+stat: To retrieve facts about directories.
+copy: To copy files.
+replace: To update files.
+Debug: To debug variables and expressions.
+lookup: A plugin to access data from outside sources.
+
+ad-hoc commands, idempotency, Ansible commands, and modules.
+
+
+
+
+Fact gathering
+Managing files and/or services
+Rebooting servers
+    An alternative to playbook is ad-hoc commands.
+    Ansible ad-hoc command uses the ansible command-line tool to automate a task on managed nodes. 
+    These tasks avoid using playbooks and use modules to perform any operation quickly on nodes.
+
+Different ad-hoc command types and what they do:
+    file: Add and/or remove directories
+    ping: Test connectivity
+    stat: Retrieve facts about directories
+    copy: Copy files
+    replace: Update files
+    debug: Debug variables and expressions
+    lookup: A plugin to access data from outside sources
+
+
+    It is a tool for automating: software provisioning, configuration management, application deployment, infrastructure as code;
+    
+    Tools like Terraform use the Infrastructure as Code approach to create virtual machines, virtual networks, some serverless features, and so on;
+    But what about the configuration needed to then apply to those infrastructures? You need a way to automate the configuration of the resource;
+
+    Ansible can configure any resource on a server through its idempotent playbooks and even run ad-hoc scripts;
+
+
+    
+How do Ansible ad-hoc commands differ from scripting commands?
+    Ansible ad-hoc commands idempontent code.
+
+If the following ad-hoc Ansible command was run twice, what would be the result of the second run? ansible localhost -m file -a "path=/ansible state=directory"
+    Unchanged status - Ansible would return a status of unchanged because it detected the directory already existed
+
+
+
+
+
+
+ansible-inventory --list -y
+ansible all -b -m apt -a "name=vim state=latest" 

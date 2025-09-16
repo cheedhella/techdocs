@@ -1,0 +1,69 @@
+# Setup VM on Mac;
+# Setup GIT Repo on Mac;
+# Share it with VM, so that you can do changes locally and test it on VM;
+# Install Docker on VM;
+ 
+1. Install Multipass;
+    > brew install multipass
+    > multipass version
+    > multipass find            # Notice that multiple includes Ubuntu 22.04 LTS Jammy Jellyfish image
+
+2. Launch ubuntu VM
+    > multipass launch 22.04 -n my-ubuntu-vm -c 2 -m 4G -d 50G       # It doesn't install GUI!
+    > multipass shell                                           # Connect to ubuntu shell
+    $ sudo apt update
+    $ sudo apt install ubuntu-desktop xrdp -y                   # Install GUI
+    $ sudo passwd ubuntu                                        # Reset ubuntu password!
+    $ ip a                                                      # Identify it's IP
+
+3. Enable SSH from your local to VM without password
+    > ls -al ~/.ssh                                             # Check if you already have a ssh key-pair; You will find id_rsa, id_rsa.pub files;
+    > ssh-keygen                                                # if not, Generate ssh key-pair in your local;
+    > cat ~/.ssh/id_rsa.pub                                     # Copy your public key;
+    $ sudo apt install openssh-server                           # Install ssh server in VM, if it is not already!
+    $ vi ~/.ssh/authorized_keys                                 # Paste your public key; Use enter to separate multiple keys;
+    > ssh -T <user>@<vm-ip>                                     # Test it!
+
+5. Create GIT repository for ansible code in your local
+    Login to https://github.com/
+    In the upper-right corner, click the + and then click New repository;
+    Type a name for the repository and an optional description;
+    Make the repository public;
+    Optionally, Check the box Initialize this repository with a README, Select a license file and gitignore;
+    Click Create repository;
+
+6. Clone the Repo!
+    Configure SSH keys, if you want to clone over SSH!
+    git clone https://github.com/cheedhella/ansible.git
+
+7. Get and configure access token, so that you can push!
+    Login to https://github.com -> User Icon -> Settings -> Developer Settings -> Personal Access Token -> Create New Token; Save the token;
+    While pushing your changes for the first time, it asks for username and password; username -> github acccount name, password -> access token;
+    
+    username: cheedhella
+    access token: 
+
+8. Mount your local folder on VM                                # multipass mount /path-to-local-folder <name-of-vm>:/path-on-vm   # Use 'multipass list' to find vm name;
+    > pwd                                                       # /Users/mcheedhe/Data/Technical/Devops/Ansible/code
+    > ls                                                        # ansible
+    > multipass mount ansible my-ubuntu-vm:ansible-repo          
+    > multipass shell
+    $ ls                                                        # you would find a folder named ansible-repo;
+
+9. Setup DockerHub
+    Login to https://hub.docker.com/  Docker ID: cheedhella, Password: CHmal@123
+
+10. Install Docker in VM
+    > sudo apt-get update
+    > sudo apt install docker.io
+    > sudo snap install docker                                  # Install packages that docker depends on!
+    > sudo docker — version
+    > sudo docker run hello-world                               # Pulls hello-world image 
+    > sudo docker images                                        # Test if image is there or not!
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Misc 
+    multipass unmount my-ubuntu-vm                       # Use multipass unmount vm_name to remove the mounting.
+    multipass stop my-test-vm
+    multipass delete my-test-vm
+    multipass purge

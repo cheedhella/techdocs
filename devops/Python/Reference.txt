@@ -1,0 +1,26 @@
+Datatypes: boolean, int, float, string, f-string; None;  Cascaded, Tuple assignment;
+Operators:
+Flow: if-else, for;
+Functions and Modules;
+Data Structures (lists, tuples, dictionaries, sets, tuples); Operations on them;
+Functions, Modules;
+Object-Oriented Programming (OOP) (classes & objects)
+File Handling;
+
+
+// f-string
+name = "Alice"
+print(f"Hello, {name}")
+
+Set:
+Unordered collection of unique elements.
+
+s = {1, 2, 3}
+Tuple:
+Ordered and immutable sequence of elements.
+
+t = (1, 2, 3)
+
+
+https://www.coursera.org/resources/python-basics-cheat-sheet
+https://www.educative.io/courses/learn-to-code-python-for-absolute-beginners/inside-the-string 

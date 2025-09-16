@@ -1,0 +1,50 @@
+What is namespace?
+    You can use namespaces to logically organize all objects in the cluster into groups and isolate them from one another;
+    For eg, you can have a separate namespace for each environment: dev, qa, staging, prod etc;
+    Not all objects that you create, have a namespace; But, most of the objects are assocaited with a namespace - except Namespaces, Nodes and PersistentVolumes;
+    Events are an exception: they may or may not have a namespace, depending on the object the event is about;
+
+	kubectl api-resources --namespaced=true 			# List all namespaced resources;
+	kubectl api-resources --namespaced=false 			# List all resources that are not associated with namespace;
+
+Purpose of Namespaces?
+	- Grouping and Isolation
+	  If you have several environments(dev, qa, staging, prod) working on the same cluster, you can use namespaces to create separation between them;
+	  Activity in one namespace never affects the other namespaces;
+
+	- Access Control(RBAC)
+	  You can use Network Policies to control traffic in and out of a particular namespace;
+	  You can define separate RBAC rules for each namespace, ensuring that only authorized roles can access the resources in that namespace;
+	
+	- Resource control
+	  you can define resource limits at the namespace level, ensuring each namespace has access to a certain amount of CPU and memory, storage resources;
+	  If a microservice with memory leak begins to demand more resources than expected would possibly drag all PROD to degradation of services;
+
+Default namespaces
+    By default, each newly created cluster will have 4 namespaces: default, kube-system, kube-public, kube-node-lease;
+    - default 
+        -- This namespace is used, when no other namespace is specified;
+    - kube-system 
+        -- It contains all components that are needed for k8s to function properly: like API server, controller, scheduler, etcd, kube-proxy and add-ons like DNS, dashboard;
+        -- Avoid putting anything personal in this namespace;
+    - kube-public 
+        -- It is available in clusters created using kubeadm;
+        -- It holds all obects that can be read by all users(without authentication);
+        -- It contains a ConfigMap which holds cluster information;
+    - kube-node-lease
+        -- It holds Lease objects, one per each node, with node name; All are stored in etcd; 
+        -- Kublet running on each node makes a call to API Server to update the lease object (for every 10 secs) to signal it's health; 
+        -- Controller on the master node monitors these leases to detect node failures; Controller marks the node as NotReady, if the lease is not updated for leaseDurationSeconds(usually 40 secs);
+
+        -- kubectl get lease -n kube-node-lease         # List all leases 
+        -- kubectl get lease <node-name> -n kube-node-lease -w      # Watch the lease updates in real time;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get namespaces                                                  # List all namespaces 
+kubectl create namespace <mynamespace> 	                                # Create a namespace
+kubectl delete namespace <mynamespace> 	                                # Delete a namespace; Delting a namespace would delete all the resources in it;
+
+kubectl create deployment mynginx --image=nginx -n <mynamespace>  	    # How to use a namespace? You can specify the namespace while creating a deployment;
+kubectl get deployments -n <mynamespace>                                # Get all deployments in a namespace;
+kubectl get deployments —-all-namespaces 								# Get deployments from all namespaces;
+kubectl get all -n <namespace>                                          # Get all objects in the namespace;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

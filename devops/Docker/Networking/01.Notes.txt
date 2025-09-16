@@ -1,0 +1,116 @@
+What is Networking?
+    Single Server can be converted into multiple systems using docker;
+    Both Client and Server can be on same node or different nodes;
+    Communication b/w clietn and server can be through unix sockets OR REST API;
+
+Purpose of Networking?
+
+Type of Network Driver
+    - Default/Bridge network
+    - host 
+    - null
+    - macvlan 
+    - ipvlan 
+    - overlay 
+    - custom driver 
+
+Creating image with network utilities inside 
+Adding multiple hosts on same bridge 
+Creating customized network 
+Macvlan network driver
+ipvlan L2/L3 mode network driver 
+overlay network driver 
+
+> docker info                                               # It shows all network devices avaiilable;
+  Network: bridge host ipvlan macvlan null overlay
+
+> service docker status 
+Redirecting to /bin/systemctl status docker.service
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2024-09-27 17:44:46 UTC; 1 day 2h ago
+     Docs: https://docs.docker.com
+ Main PID: 2463 (dockerd)
+    Tasks: 83
+   Memory: 186.5M
+   CGroup: /system.slice/docker.service
+           ├─  2463 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+           ├─195645 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 32768 -container-ip 192.168.49.2 -container-port 22
+           ├─195652 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 32769 -container-ip 192.168.49.2 -container-port 2376
+           ├─195659 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 32770 -container-ip 192.168.49.2 -container-port 5000
+           ├─195666 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 32771 -container-ip 192.168.49.2 -container-port 8443
+           ├─195671 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 32772 -container-ip 192.168.49.2 -container-port 32443
+           ├─329378 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8080 -container-ip 172.17.0.2 -container-port 8080
+           └─329383 /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 8080 -container-ip 172.17.0.2 -container-port 8080
+
+Sep 28 17:19:45 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:19:45.740919076Z" level=info msg="ignoring event" container=4f33fe51fd6aa835283cecd6d83b21d2ebdc96660e1791992e74614bac4c306a module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:23:15 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:23:15.911957061Z" level=info msg="ignoring event" container=8d797a692b60003a86edd3c0b07ada74d2f3cbe3297b8889d712e96ec81d2ece module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:30:05 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:30:05.887684693Z" level=info msg="ignoring event" container=bf2afaed2688bfcafac97c47ce60cfdf5971d54ee5d0c282596cbb4f5d55a8f3 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:30:16 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:30:16.454699773Z" level=info msg="ignoring event" container=2e92b2c0295cb4145a31f31d04b71b0027e899d472d1c69fc779f194e050f680 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:30:30 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:30:30.458524849Z" level=info msg="ignoring event" container=4fdc5228e1e5e08c54e61250f228c3245de4fc73866a875c06734a1d0ee66432 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:30:33 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:30:33.267224125Z" level=info msg="ignoring event" container=3ca5c36ed777542efd126a0da24e7fd494bd27aef4864d2a3112d9975ec50057 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:34:17 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:34:17.641262324Z" level=info msg="ignoring event" container=6acec1b4811c076a23d3963249dfcb728734b83801c5343210b24851ef69d3e6 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:34:22 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:34:22.018388752Z" level=info msg="ignoring event" container=affd848da4bd77ab6a523512fa5bbf3810b848e56a6e0b6d5f658a1f9454a14b module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:39:04 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:39:04.268362594Z" level=info msg="ignoring event" container=aca18a9b43f024dca064372a4c3f450628788c4c9c67dc3c79a6497e88f14062 module=libcontainerd namespace=moby topic=/tasks/del>
+Sep 28 17:39:46 netops-rl8-1965 dockerd[2463]: time="2024-09-28T17:39:46.019253589Z" level=info msg="ignoring event" container=9d666feab1e0927bb495b65d06c69f88daffe5771c00bad1eb13fa2f46fc0183 module=libcontainerd namespace=moby topic=/tasks/del>
+[root@netops-rl8-1965 ep]# q
+
+
+> cd /run/docker/
+[root@netops-rl8-1965 docker]# ls
+containerd  libnetwork  metrics.sock  netns  plugins  runtime-runc  swarm
+[root@netops-rl8-1965 docker]# 
+
+
+ls libnetwork/
+cf0902aea688.sock
+
+
+Docker create unix socket to communicate, when docker daemon is started;
+Verify it usng netstat and lsof commands:
+# netstat -anp | grep docker
+unix  2      [ ACC ]     STREAM     LISTENING     20890    1/systemd            /run/docker.sock
+unix  2      [ ACC ]     STREAM     LISTENING     31912    2463/dockerd         /var/run/docker/metrics.sock
+1st col: Protocol
+2nd col: Reference count or no of times that is referred;
+2rd col: In case of docker, ACC is the flag set for docker.sock;
+4th col: Socket type -> UDP - DGRAM, TCP-STREAM;
+5th col: State of the socket - LISTENING, CONNECTED state;
+6th col: I-Node details;
+7th col: PID shows the dockerd process-id details;
+8th col: Path of socket in /var/run and /run/docker 
+
+
+lsof shows the details of all open sockets;
+lsof -U | grep docker -> 
+dockerd     2463    root    3u  unix 0xffff990ec41e3600      0t0   31912 /var/run/docker/metrics.sock type=STREAM
+dockerd     2463    root    4u  unix 0xffff990ec2f37600      0t0   20890 /run/docker.sock type=STREAM
+
+lsof -p <process-id-of-dockerd>
+
+
+
+
+
+When docker is installed, docker server by default creates a network interface called docker0;
+It is used by docker containers to communicate with each other and with outside world;
+Since this interface is bridge device, use brctl command to check if docker0 is configured;
+use ifconfig, to check if docker0 interface is available;
+
+
+
+iptables -> In linux, we use iptables to write rule and action for different packets arriving;
+iptables -t nat -L -> Check all rules applied for docker to act;
+
+for sending traffic, use pingc comand;
+for capturing packet, use tcpdump or wireshark;
+
+When docker is iinstalled, by default 3 drivers are initialized;
+# docker network ls
+NETWORK ID     NAME       DRIVER    SCOPE
+927c42e4cf55   bridge     bridge    local
+d5c818705cbe   host       host      local
+e0f6c0ee010b   none       null      local
+
+To view details of each network, use docker inspect cmmmand;
+docker inspect bridge

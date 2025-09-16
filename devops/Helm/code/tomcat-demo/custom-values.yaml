@@ -1,0 +1,4 @@
+tomcatPassword: Welcome123
+service:
+   type: NodePort
+   nodePort: 30007

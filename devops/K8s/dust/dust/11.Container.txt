@@ -1,0 +1,137 @@
+kubectl exec -it sharevol -c c2 -- bash
+cat /tmp/data/data
+
+
+
+kubectl logs <myPod> -f
+  check the logs of our container using the pod name
+  -f flag is to follow the logs on the container. That is, the log keeps updating in real-time
+
+What is a Container?
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+# Container Definition
+
+name: c1                            # Name of the container, must be unique with in a Pod. You can't update it, once container is created.
+image: nginx:1.10                   # Name and tag of Docker Image.
+imagePullPolicy: Always                 # Image Pull Policy: It can be Always, Never, IfNotPresent.
+                                        # Defaults to Always if tag is :latest. Otherwise, IfNotPresent.
+                                        # Always - always pull the image from docker registry
+                                        # IfNotPresent - pull only if that image is not present in local cache
+                                        # Otherwise -  
+env:                                # List of environment variables to set in the Container.
+  - name: JDK_VERSION
+    value: "1.8"
+  - name: Ext_VERSION
+    value: "6.0.2"
+
+command:                            # It overrides the default command provided by docker image.
+  - "/usr/bin/myprog"               # Command provided is not executed within a shell. 
+  - "--host-port=asdf:2323"         # If you want to execute a command in a shell, do this: 
+                                    #       command: ["/bin/sh"]
+                                    #       args: ["-c", "while true; do echo hello; sleep 10;done"]
+
+args:                           # It defines arguments to the above command. 
+                                # If you define args without a command, default command is used with new args.
+
+lifecycle:
+  postStart:                                                      # Called immediately after a container is created. If the handler fails, container
+    exec:                                                         # is terminated and restarted according to restart policy of ???.
+      command: ["/bin/sh", "-c", "Hello from postStart handler"]
+  preStop:                                                        # Called immediately before a container is terminated. Reason for the termination 
+    exec:                                                         # is passed to the Handler. Container is terminated, regardless of the outcome 
+      command: ["/usr/sbin/nginx","-s","quit"]                    # of the handler.
+
+ports:                                   # List of ports to expose from the container.
+  - containerPort: 81                    # It specifies which port to expose on the pod's IP address. 0 < x < 65536 
+    hostPort: 82                         # It specifies which port to expose on the host.
+    protocol: TCP                        # It can be TCP, UDP. Defaults to TCP.
+
+volumeMounts:                 # It mounts specified volume at the specified location inside the Container.
+  - mountPath: /var/data      # Container location where the volume is mounted. Anything written to this volume is saved at this path in the container.
+    name: jenkins-home        # Name of the volume(as per Pod.volumes section)
+    readOnly: true
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+readinessProbe:                          # It specifies when to restart the container.
+  httpGet:                               # https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    path: /login                         # https://learning.oreilly.com/library/view/pro-devops-with/9781484238974/html/464715_1_En_5_Chapter.xhtml
+    port: 90
+  periodSeconds: 11
+  timeoutSeconds: 4
+  successThreshold: 3
+  failureThreshold: 3
+
+
+spec:
+      containers:
+      - name: master
+        image: jenkins/jenkins:tls
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        readinessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 2
+          failureThreshold: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1500Mi
+          requests:
+            cpu: 500m
+            memory: 1500Mi
+      volumes:
+      - name: jenkins-home
+        gcePersistentDisk:
+          pdName: jenkins-home
+          fsType: ext4
+          partition: 1
+-----------------------------------------
+echo Hello shell demo > /usr/share/nginx/html/index.html
+kubectl exec -it my-deployment-5cc67ccddb-dbkt5 -- /bin/bash
+apt-get update && apt-get install curl
+any docker image with curl and nginx installed?
+curl localhost
+"ports": [
+                                {
+                                    "containerPort": 80,
+                                    "protocol": "TCP"
+                                }
+                            ]
+
+ContainerPort is used to decide which of the container's ports should be used by the service in case a container has multiple ports.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-nginx-pod
+spec:
+# It claims emptyDir volume and names it my-nginx-pod-vol1
+  volumes:
+  - name: my-nginx-pod-vol1
+    emptyDir: {}
+  containers:
+  - name: my-nginx-pod-c1
+    image: nginx
+# volumeMounts: it specifies the mount path(anything written to specified volume is saved at this path in the container).
+    volumeMounts:
+    - name: my-nginx-pod-vol1
+      mountPath: /usr/share/nginx/html
+
+
+# List all containers in a Pod
+kubectl get pods emptydir-pod -o jsonpath='{.spec.containers[*].name} '
+
+# Shell into a running container, when Pod has more than 1 container
+kubectl exec -it emptydir-pod --container emptydir-c1 -- /bin/bash
+It is generally considered a bad practice to use the :latest tag in any staging or production deployment, simply because of the uncertainty of what it references.

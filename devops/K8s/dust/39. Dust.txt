@@ -1,0 +1,1247 @@
+"Dhttps://enterprisersproject.com/article/2021/3/kubernetes-autoscaling-explanation
+
+https://awkwardferny.medium.com/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c
+
+https://platform9.com/blog/building-a-complete-stack-ingress-controllers/
+
+    A Service will help us in scaling, auto-healing and proxying the traffic to backing pods, that are distributed throughout the cluster.
+    But, there are some advanced routing scenarios that are not addressed by Service.
+    
+    What is Ingress?
+
+Ingress gives you a way to route requests to services based on the request host or path, centralizing a number of services into a single entrypoint.
+    
+
+    Ingress helps us in custom proxying and load balancing to Services.
+Examples of this include:
+
+content-based routing, e.g., routing based on HTTP method, request headers, or other properties of the specific request
+resilience, e.g., rate limiting, timeouts
+support for multiple protocols, e.g., WebSockets or gRPC
+authentication
+
+    To that end, Kubernetes has added an ingress resource, which allows for custom proxying and load balancing to a back service.
+
+
+Kubernetes offers an ingress resource and controller that is designed to expose Kubernetes services to the outside world. 
+You can do it yourself, of course, but many tasks involved in defining ingress are common across most applications for a particular type of ingress, such as a web application, CDN, or DDoS protector. You can also write your own ingress objects.
+
+The ingress object is often used for smart load balancing and TLS termination. 
+Instead of configuring and deploying your own NGINX server, you can benefit from the built-in ingress. 
+If you need a refresher, hop on to Chapter 6, Using Critical Kubernetes Resources, where we discussed the ingress resource with examples.
+
+In this section, we will introduce Ingress, a resource that makes your Services work as a group. More than that, we could easily pack our service union as an API server while we set Ingress rules to recognize the different URLs, and then ingress controller works for passing the request to specific Services based on the rules.
+
+What is Ingress Controller?
+  An ingress controller is responsible for reading the Ingress Resource information and processing that data accordingly. 
+  Different ingress controllers have extended the specification in different ways to support additional use cases.
+
+  Ingress Controllers can technically be any system capable of reverse proxying, but the most common is Nginx. A full example Nginx Ingress Controller (and LoadBalancer service) is as follows. Please note that if you are not on a provider that supports LoadBalancer services (ie. bare-metal), you can create a NodePort Service instead and point to your nodes with an alternative solution that fills that role — a reverse proxy capable of routing requests to the exposed NodePort for the Ingress Controller on each of your nodes.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
+https://itnext.io/kubernetes-ingress-controllers-how-to-choose-the-right-one-part-1-41d3554978d2
+https://learning.oreilly.com/library/view/kubernetes-cookbook-2nd/9781788837606/9b45e969-8031-4a29-806a-d1cb0fb25203.xhtml
+
+https://learning.oreilly.com/videos/kubernetes-recipes/9781788831901/9781788831901-video3_3
+https://learning.oreilly.com/library/view/kubernetes-in-7/9781789130881/video3_4.html
+https://learning.oreilly.com/library/view/develop-and-operate/9781789135206/video2_3.html
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Here comes an example to demonstrate how to work with Ingress. We would run up two Deployments and their Services, and an additional Ingress to expose them as a union. In the beginning, we would add a new hostname in the host file of Kubernetes master. It is a simple way for our demonstration. If you work on the production environment, a general use case is that the hostname should be added as a record in the DNS server:
+
+
+
+
+
+What is the difference between a ReplicaSet and a DaemonSet in Kubernetes?
+
+A ReplicaSet manages a specified number of replicas for a generic application. A DaemonSet, on the other hand, ensures that a copy of your app runs on every node in the cluster.
+
+
+
+
+
+mcheedhe-mac:1.Pod mcheedhe$ kubectl create -f my-nginx-pod.yaml 
+The Pod "my-nginx-pod" is invalid: spec.containers[0].volumeMounts[0].name: Not found: "my-nginx-pod-c1-data"
+
+
+Cluster -> Node -> Deployment -> Pod -> Containers
+
+What is K8s Cluster?
+	A Cluster is made up of one Master(apiServer) and set of Slave/Worker nodes.
+	In Production, these run in a distributed setup on multiple nodes. 
+	For testing, you can run all the nodes on the same machine (physical or virtual).
+	https://kubernetes.io/docs/concepts/architecture/master-node-communication/
+
+What is Node?
+	In production, a node will likely be either a physical machine in a datacenter or virtual machine hosted on a cloud provider like Google Cloud Platform. You can view each machine as a set of CPU and RAM resources that can be utilized.
+
+	A Node can have multiple pods.
+	Kubernetes master handles scheduling the pods across the Nodes in the cluster, by taking available resources on each Node into account.
+
+Volume
+	https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-volumes-example-nfs-persistent-volume.html
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/2f5e901d-4ced-4f7a-afdd-d38724c339aa.xhtml
+Namespace
+Persistent Volume
+	https://medium.com/google-cloud/kubernetes-101-pods-nodes-containers-and-clusters-c1509e409e16
+Replication Controller
+	https://www.stratoscale.com/blog/kubernetes/manage-pods-replication-controllers-kubernetes/
+	https://coreos.com/kubernetes/docs/latest/replication-controller.html
+ReplicaSet
+	ReplicaSets in particular create and destroy Pods dynamically (e.g. when scaling out or in).
+
+Deployment
+StatefulSet
+DaemonSet
+Job
+ConfigMap
+	https://matthewpalmer.net/kubernetes-app-developer/articles/ultimate-configmap-guide-kubernetes.html
+	https://matthewpalmer.net/kubernetes-app-developer/articles/configmap-example-yaml.html
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/db6cd998-8bc8-444c-9da5-27f6a131bf35.xhtml
+
+Resource
+	https://kubernetes.io/docs/reference/kubectl/cheatsheet/#viewing-finding-resources
+	https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/
+	https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/
+	https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/
+	https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/
+	https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+	https://kubernetes.io/docs/reference/kubectl/cheatsheet/#updating-resources
+	https://kubernetes.io/docs/reference/kubectl/overview/#resource-types
+	https://cloud.google.com/blog/products/gcp/kubernetes-best-practices-resource-requests-and-limits
+	https://dzone.com/articles/kubernetes-resource-usage-how-do-you-manage-and-mo
+
+
+
+https://www.stratoscale.com/blog/kubernetes/container-orchestration-kubernetes-12-key-features/?ban=blog_banner2
+
+
+minikube hello world 
+	https://containerjournal.com/2018/12/07/using-minikube-for-kubernetes-clusters/
+	https://rominirani.com/tutorial-getting-started-with-kubernetes-with-docker-on-mac-7f58467203fd
+	https://medium.com/@felipedutratine/kubernetes-on-local-with-minikube-tutorial-413475d587e6
+	https://www.codeproject.com/Articles/1185089/An-Introduction-to-Kubernetes-with-Minikube
+	https://richardroseblog.wordpress.com/2017/11/01/minikube-creating-a-cluster/
+
+Ingress
+	Using the concepts described above, you can create a cluster of nodes, and launch deployments of pods onto the cluster. There is one last problem to solve, however: allowing external traffic to your application.
+	By default, Kubernetes provides isolation between pods and the outside world. If you want to communicate with a service running in a pod, you have to open up a channel for communication. This is referred to as ingress.
+	There are multiple ways to add ingress to your cluster. The most common ways are by adding either an Ingress controller, or a LoadBalancer. The exact tradeoffs between these two options are out of scope for this post
+	
+	https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
+	https://matthewpalmer.net/kubernetes-app-developer/articles/multi-container-pod-design-patterns.html
+	https://medium.com/google-cloud/kubernetes-nodeport-vs-loadbalancer-vs-ingress-when-should-i-use-what-922f010849e0
+	https://medium.com/google-cloud/understanding-kubernetes-networking-services-f0cb48e4cc82
+	https://hackernoon.com/expose-your-kubernetes-service-from-your-own-custom-domains-cc8a1d965fc
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/25d5d85e-6915-42a1-917e-a08e1280770b.xhtml
+	https://medium.com/avmconsulting-blog/nginx-ingress-controller-in-kubernetes-8eb14f737f7b
+	https://medium.com/avmconsulting-blog/ingress-service-types-in-kubernetes-3e9b68b78307
+	
+
+
+Labels and selectors
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/871123fa-1d7a-439c-acb8-a38ee1035443.xhtml
+
+nginx and busybox images
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.linux.com/news/learn/chapter/Intro-to-Kubernetes/2017/4/keeping-state-and-networking-kubernetes
+https://speakerdeck.com/thockin/illustrated-guide-to-kubernetes-networking
+https://kubernetesbootcamp.github.io/kubernetes-bootcamp/1-1.html
+https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/
+https://kubernetes.io/docs/tasks/access-application-cluster/list-all-running-container-images/
+
+docker/tcuser - where is it configued? ~/.minikube/machines/minikube/config.json 
+
+ There are 2 types of nodes in K8s cluster: master and slave/worker.
+ 	Master: It controls the slaves and exposes k8s APIs.
+ 	Slave: Our application runs on the slave nodes.
+
+Kubernetes-as-a-service cloud solutions available
+	Google Cloud's Kubernetes Engine, Azure Kubernetes Service (AKS), and Amazon Elastic Container Service for Kubernetes (Amazon EKS)
+
+
+
+  there are two types of machines: master and nodes (also called worker nodes). Our application runs on the nodes, whereas the master controls the nodes and exposes the K8s APIs.
+
+
+mcheedhe-mac:~ mcheedhe$ kubectl version
+Client Version: version.Info{Major:"1", Minor:"13", GitVersion:"v1.13.3", GitCommit:"721bfa751924da8d1680787490c54b9179b1fed0", GitTreeState:"clean", BuildDate:"2019-02-01T20:08:12Z", GoVersion:"go1.11.5", Compiler:"gc", Platform:"darwin/amd64"}
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+	When you run kubectl, the .kube/config file is read in your home directory, thus telling which cluster you want to connect to using --context=<cluster-name>
+	What your error output is telling you is that it is unable to find a listening kubernetes API endpoint upon which to run those commands. It is looking for a cluster at localhost:8080
+	This endpoint will vary depending on how and where you installed Kubernetes.
+
+
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/285367d4-6e8b-4b53-87e5-dd5497ac3d2f.xhtml
+Uninstall Kubernetes
+	minikube stop;
+	minikube delete;
+	rm -rf ~/.minikube ~/.kube;
+	brew uninstall kubectl;
+	brew cask uninstall minikube;
+
+
+
+    Workload: These resources are used to manage and run your containers on the cluster. For example: deployments, pods, job, and replicaset. 
+    Discovery and load-balancing: These resources are used to combine your workloads together into an externally accessible, load-balanced service. For example: service and ingress.
+    Config and storage: These resources are used to inject initialization data into your applications, and to persist data that is external to your container. For example: config map, secret, and volume.
+    Cluster: These objects define how the cluster itself is configured; these are typically used only by cluster operators.
+    Metadata: These resources are used to configure the behavior of other resources within the cluster. For example: network policy and namespaces.
+Kubernetes
+	- container management and orchestration(automatic deployment, maintanance and scaling)
+Features
+	Traffic Load Balancing, Self-Healing (automatic restarts), Scheduling, Scaling, and Rolling Updates.
+
+Kubernetes Objects
+	Node
+	Pods 
+		- basic scheduling unit in Kubernetes is a pod
+		- 
+		- A pod consists of one or more containers
+	Services
+	Volumes
+	Namespaces
+	Deployment
+
+Master-Slave Architecture
+
+Setting up a Kubernetes cluster
+	https://blog.codeship.com/getting-started-with-kubernetes/
+
+Monolithic vs micro services
+https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/92660981-821c-4089-89bb-f0eb541f1fc3.xhtml
+
+https://techbeacon.com/enterprise-it/47-advanced-tutorials-mastering-kubernetes
+http://christianposta.com/slides/docker/generated/day2.html
+https://github.com/kubernetes/examples
+https://www.baeldung.com/spring-boot-minikube
+https://github.com/tech-uprise/Kubernetes-Using-Minikube
+
+1. Setup Kubernetes enviromnet for development
+2. Packaging your code to run in Kubernetes
+3. How do you run the Pod in Kubernetes
+4. Understanding RBAC(Role-Based Access), Securing pods and logins
+5. Monitoring the Kubernetes cluster
+6. Deploying the application in the cloud
+
+Docker Installation
+
+Minikube Installation
+
+Kubectl Installation 
+Kubectl Installation(on Mac)
+	curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl
+	chmod +x kubectl
+	sudo mv kubectl /usr/local/bin/
+	// another way
+	brew install kubernetes-cli
+	kubectl version
+
+deployments, pods, job, replicaset
+	These resources are used to manage and run containers on the cluster.
+service, ingress
+	These resources are used to combine your workloads together into an externally accessible, load-balanced service.
+config map, secret, and volume
+	These resources are used to inject initialization data into your applications, and to persist data that is external to your container.
+Cluster
+	These objects define how the cluster itself is configured; these are typically used only by cluster operators.
+network policy, namespaces
+	These resources are used to configure the behavior of other resources within the cluster.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Setting up the Kubernetes cluster on macOS by minikube
+	Kubernetes consists of combination of multiple open source components. These are developed by different parties, making it difficult to find and download all the related packages and install, configure, and make them work from scratch.
+
+	Fortunately, there are some different solutions and tools that have been developed to set up Kubernetes clusters effortlessly. Therefore, it is highly recommended you use such a tool to set up Kubernetes on your environment.
+
+	The following tools are categorized by different types of solution to build your own Kubernetes:
+
+	    Self-managed solutions that include:
+	        minikube
+	        kubeadm
+	        kubespray
+	        kops
+	    Enterprise solutions that include:
+	        OpenShift (https://www.openshift.com)
+	        Tectonic (https://coreos.com/tectonic/)
+	    Cloud-hosted solutions that include:
+	        Google Kubernetes engine (https://cloud.google.com/kubernetes-engine/)
+	        Amazon elastic container service for Kubernetes (Amazon EKS, https://aws.amazon.com/eks/)
+	        Azure Container Service (AKS, https://azure.microsoft.com/en-us/services/container-service/)
+
+	A self-managed solution is suitable if we just want to build a development environment or do a proof of concept quickly.
+
+	By using minikube (https://github.com/kubernetes/minikube) and kubeadm (https://kubernetes.io/docs/admin/kubeadm/), we can easily build the desired environment on our machine locally; however, it is not practical if we want to build a production environment.
+
+	By using kubespray (https://github.com/kubernetes-incubator/kubespray) and kops (https://github.com/kubernetes/kops), we can also build a production-grade environment quickly from scratch.
+
+	An enterprise solution or cloud-hosted solution is the easiest starting point if we want to create a production environment. In particular, the Google Kubernetes Engine (GKE), which has been used by Google for many years, comes with comprehensive management, meaning that users don't need to care much about the installation and settings. Also, Amazon EKS is a new service that was introduced at AWS re: Invent 2017, which is managed by the Kubernetes service on AWS.
+
+	Kubernetes can also run on different clouds and on-premise VMs by custom solutions. To get started, we will build Kubernetes using minikube on macOS desktop machines in this chapter.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ports-targetport-nodeport-service.html
+
+
+Containers are stateless after all. You need to create some sort of persistent storage, or use a 3rd party DBaaS. But, that’s all the craze now anyhow, with services such as AWS RDS and MongoDB Atlas.
+
+
+https://www.linux.com/learn/rolling-updates-and-rollbacks-using-kubernetes-deployments
+
+PODs are the basic scheduling units of Kubernetes. A POD consists of at least one or more containers, which are co-located on the same node, so that they can share resources. Such resources include IP addresses (in fact, one physical IP is assigned to each POD so no port conflicts arise between them) and local disk resources which are assigned to all containers of the POD. The nodes run one or more pods. A pod is a higher-level abstraction on containers, and each pod can contain a set of colocated containers. Each pod has its own IP address and can communicate with the pods in other nodes. The storage volumes can be local or network-attached.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+What is kube-dns?
+	It is the authoritative name server for the cluster domain (cluster.local) and it resolves external names recursively. 
+	Short names that are not fully qualified, such as myservice, are completed first with local search paths.
+
+What is kube-proxy?
+	kube-proxy manages the forwarding of traffic addressed to the virtual IP addresses (VIPs) of the cluster’s Kubernetes Service objects to the appropriate backend pods
+
+kubeadm also creates a ‘kube-system’ namespace for system components.
+
+From our experience we’ve choose to adopt the practice of using 1 namespace x microservice; 
+But it has a lot to do and directly related with the amount of microservices, dev teams;
+
+
+Resource Limits: CPU & memory limits per app/microservice (1 x ns) -> Nice to have in PROD to avoid buggy apps/process to use all of the cluster/namespace resources.
+Monitoring: Prometheus + Grafana allow us to filter metrics and dashboard views per namespace.
+Centralized Logs & Alert based on logs: Elastic Fluent Kibana (EFK) -> logs filters -> filter logs with more ease per app/microservice (1 x namespace).
+Operations: Automation, maintenance and deployment (Jenkins / Spinnaker).
+Incident Management: Simplifies troubleshooting issues and allows K8s dashboard segregated view per namespace.
+
+
+
+Namespaces help pod-to-pod communication using the same namespace.
+
+Namespaces are virtual clusters that can sit on top of the same physical cluster.
+
+They provide logical separation between the teams and their environments.
+
+namespaces let you apply policies to different parts of a cluster. For example, you can define resource policies to limit resource consumption. 
+
+
+Apply policies to cluster segments—Kubernetes namespaces let you apply policies to different parts of a cluster. For example, you can define resource policies to limit resource consumption. You can also use container network interfaces (CNIs) to apply network policies that define how communication is achieved between pods in each namespace. Learn more about Kubernetes networking.
+Apply access controls—namespaces let you define role-based access control (RBAC). You can define a role object type and assign it using role binding. The role you define is applied to a namespace, and RoleBinding is applied to specific objects within this namespace. Using this technique can help you improve the security of your cluster.
+
+
+Namespaces provide a logical separation between the environments.
+Namespaces are only hidden from each other but are not fully isolated from each other.
+One service in a Namespace can talk to another service in another Namespace if the target and sources are used with the full name which includes service/object name followed by Namespace.
+
+
+Each context has three parameters: cluster, namespace, and user;
+> kubectl config current-context 						# Dispaly current context
+minikube
+
+> kubectl config get-contexts 							# List of all contexts 
+CURRENT   NAME       CLUSTER    AUTHINFO   NAMESPACE
+*         minikube   minikube   minikube   default
+
+> kubectl config use-context <context-name>  			# To switch the context
+
+> kubectl config set-context <context-name||--current> [--cluster=cluster_nickname] [--user=user_nickname] [--namespace=namespace] 		# Update context information
+
+
+
+- 'minikube start' sets the current context to minikube;
+- If you create a cluster, using gcloud container cluster create command, current context is automatically gets changed to that cluster;
+
+https://linuxhint.com/kubectl-get-current-context/
+
+Namespace
+	https://blog.couchbase.com/kubernetes-namespaces-resource-quota-limits-qos-cluster/
+	https://dzone.com/articles/kubernetes-resource-usage-how-do-you-manage-and-mo
+	https://www.tutorialspoint.com/kubernetes/kubernetes_namespace.htm
+	https://dzone.com/articles/the-why-and-how-of-kubernetes-namespaces
+	https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+	https://kubernetes.io/docs/tasks/administer-cluster/namespaces/
+	https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/
+	http://kubernetesbyexample.com/ns/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+scaling storage this way is also difficult—if the Pod requires more storage, you'll have to destroy the Pod (so it doesn't write anything to the Volume, create a new Volume, copy contents from the old Volume to the new, and then restart the Pod).
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+The medium backing a volume and its contents are determined by the volume type:
+
+node-local types such as emptyDir or hostPath
+file-sharing types such as nfs
+cloud provider-specific types like awsElasticBlockStore, azureDisk, or gcePersistentDisk
+distributed file system types, for example glusterfs or cephfs
+special-purpose types like secret, gitRepo
+A special type of volume is PersistentVolume, which we will cover elsewhere.
+
+
+A Pod specifies what volumes it will access, and where the volume will be placed in the containers.
+The Kubernetes user must specify volume mounting for each container in a Pod.
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------
+
+What is Stateless Pod?
+	Pods that don't have any kind of state that needs to be stored.
+	Data is stored/retrieved in/from external storages provided by cloud providers(Databases, Object stores such as AWS S3 etc).
+
+What is Stateful Pod?
+	Pods that have state/need to store data.
+	Require persistent filesystem across pod termination/recreation.
+
+Network Storage Technology
+	Network Block Devices
+		Fast, Fixed-size, can be used by only one pod at a time.
+		Eg: AWS Elastic Block Devices, AzureDisk etc
+	Network File Systems
+		Slower than block devices, can be used by many Pods at a time.
+		Eg: AWS Elastic File System, Azure Files etc
+
+PersistentVolume – the low level representation of a storage volume
+Volume Driver – the code used to communicate with the backend storage provider
+Pod – a running container that will consume a PersistentVolume
+PersistentVolumeClaim – the binding between a Pod and PersistentVolume
+StorageClass – allows for dynamic provisioning of PersistentVolumes
+
+ StatefulSets, or StorageClass 
+
+What is Persistent Volume Claim(PVC)?
+	It is a request to create a PV for you and you attach PVs to your pods via a PVC.
+	Claims can request specific size and access modes (e.g., can be mounted once read/write or many times read-only).
+	// one of defined characteristics like class, size, and access mode (ROX, RWO, and RWX).
+	// It is similar to a pod. Pods can be used to request resources such as CPU and Memory. 
+
+	a persistent volume (PV) is the "physical" volume on the host machine that stores your persistent data. A persistent volume claim (PVC) is a request for the platform to create a PV for you, and you attach PVs to your pods via a PVC.
+
+What is Persistent Volume?
+	A Container’s file system lives only as long as the Container does. So when a Container terminates and restarts, filesystem changes are lost. 
+	For more consistent storage that is independent of the Container, you can use a Volume. 
+
+	PVs are volume plugins like Volumes, but have a lifecycle independent of any individual pod that uses the PV.
+
+	With all of these containers coming and going within the cluster and landing on different machines, it’s difficult to understand how you should manage the files and storage you want to be associated with your containers.
+	Can be provided as a file system to K8s Pods.
+	Lifecycle is independent from pods.
+	Can be accessed by multiple pods at once.
+
+What is StorageClass?
+	Each StorageClass contains the fields provisioner, parameters, and reclaimPolicy
+
+
+emptyDir
+	An emptyDir volume is first created, when the Pod is assigned to a Node and it exists as long as that Pod is running on that Node.
+	As the name says, it is initially empty. Containers in the Pod can all read and write the same files in the emptyDir volume, though 
+	that volume can be mounted at the same or different paths in each Container. 
+	When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever.
+	Note: A Container crashing does NOT remove a Pod from a node, so the data in an emptyDir volume is safe across Container crashes.
+
+
+
+
+
+managing PersistentVolumes and PersistentVolumeClaims
+ConfigMap
+
+Secrets
+	K8s uses the Secret configuration type for secure data, such as database passwords and certificates. 
+	It can be attached to a Pod via a Volume and mounted into a running container for use.
+
+
+
+To use storage in a cluster, you must create a persistent volume claim, a persistent volume and a physical storage instance. 
+When you delete the cluster, you have the option to delete related storage instances.
+
+https://www.tutorialspoint.com/kubernetes/kubernetes_volumes.htm
+http://kubernetesbyexample.com/volumes/
+https://console.bluemix.net/docs/containers/cs_storage_basics.html
+https://blog.bigbinary.com/2017/04/12/using-kubernetes-persistent-volume-for-persistent-data-storage.html
+https://kubernetes.io/docs/concepts/storage/volumes/
+	https://portworx.com/tutorial-kubernetes-persistent-volumes/
+	https://medium.com/@zhimin.wen/persistent-volume-claim-for-statefulset-8050e396cc51
+	https://kubernetes.io/docs/concepts/storage/storage-classes/
+	https://portworx.com/basic-guide-kubernetes-storage/
+	https://docs.okd.io/latest/architecture/additional_concepts/storage.html#persistent-volume-claims
+	https://akomljen.com/kubernetes-persistent-volumes-with-deployment-and-statefulset/
+
+
+
+
+ConfigMap - regular data
+
+Secret - encoded data
+
+Container Stroage vs Volume vs PersistentVolume vs ConfigMap vs Secret
+
+
+Multiple Pods can access the same Volume, but you need to take care of locking.
+
+
+	The hostPath declares  With this specification, a directory called sharedPodDir will be created in /var on the Node hosting the Pod.
+
+
+https://learning.oreilly.com/library/view/kubernetes-cookbook-2nd/9781788837606/f785b210-1e3d-4c07-b6bf-1f88a71f4de1.xhtml
+https://learning.oreilly.com/library/view/mastering-kubernetes/9781788999786/b3b04fa5-c848-463e-a183-ce29d2d141a0.xhtml
+https://learning.oreilly.com/library/view/getting-started-with/9781788994729/739118c7-6afd-4ec8-81bf-ce58822f74f9.xhtml
+https://learning.oreilly.com/library/view/kubernetes-cookbook-2nd/9781788837606/aab43dd4-4dab-4843-bbb0-242ed8090197.xhtml
+https://learning.oreilly.com/library/view/mastering-kubernetes/9781788999786/b77465a4-148d-4a2f-bce2-9d47a502ed16.xhtml
+
+
+volume can be mounted at the same or different paths in each Container.
+This emptyDir volume allows users to mount multiple paths in each container.
+
+
+hostPath
+	which mounts a directory from the host node's filesystem into a Pod.
+	A local volume can represent mounted local storage devices such as partitions, directories or disks.
+
+
+hostPath − This type of volume mounts a file or directory from the host node’s filesystem into your pod.
+
+
+
+
+-------------------------------------------------------------------
+List Storage classes available in your cluster
+	kubectl get storageclasses
+	NAME                 PROVISIONER                AGE
+	standard (default)   k8s.io/minikube-hostpath   7d18h
+
+Mark a StorageClass as default:
+	kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+Mark the default StorageClass as non-default:
+	kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+kubectl get storageclasses
+NAME                 PROVISIONER            AGE
+standard (default)   kubernetes.io/gce-pd   1h
+
+kubectl get pv
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+	
+
+
+	PersistentVolume object represents a physical piece of storage in your cluster.
+	A persistent volume on the other hand is a first class object with its own lifecycle, which you can either manage manually or automatically(dynamically provisioned).
+
+Persistent Volumes API resource solves this problem where PVs have lifecycle independent of the Pods and not created when Pod is spawned. PVs are units of storage provisioned in advance, they are Kubernetes objects backed by vSphere storage. PVs are created, deleted using kubectl commands.
+
+	request for the Storage.
+	Kubernetes object that allows us to express a request for PersistentVolume to be used in a pod. When we request a persistent volume, we only need to request the amount of storage we require and optionally a storage class (see the next section). PersistentVolumeClaim is normally embedded within a pod spec. When a pod is scheduled, its PersistentVolumeClaim is matched to a particular PersistentVolume that is big enough to fulfill the requested amount of storage. PersistentVolume is bound to its requesting PersistentVolumeClaim, so that even if a pod is rescheduled, the same underlying volume will be attached to the pod.
+
+Lifecycle of PersistentVolume?
+
+
+If you're using Kubernetes on Amazon Web Services, Google Compute Engine, or Microsoft's Azure, the public offerings all have storage classes predefined and available for use. You can see the default storage classes and how they are defined in the documentation at https://kubernetes.io/docs/concepts/storage/storage-classes/. If you are using Minikube locally to try things out, it also comes with a default storage class defined, which uses the volume type of HostPast.
+
+
+
+
+capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  awsElasticBlockStore:
+    volumeID: <your-volume-id>
+    fsType: ext4
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+   - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: normal
+  nfs:
+    path: /tmp
+    server: 172.17.0.8
+
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  vsphereVolume:
+    volumePath: "[DATASTORE] kubevols/redis-master"
+    fsType: ext4
+There are several sections: capacity, volume mode, access modes, reclaim policy, storage class, and the volume type (nfs in the example).
+
+kubectl describe pvc pvc0001
+
+
+Each pod uses a persistent volume claim to bind to storage from the cluster of a particular size, access mode, and volume mode. The claim can also use a selector to only match volumes with a specific set of labels. On receiving a claim, the cluster will search for an existing persistent volume with which to fulfil the request. Cluster administrators can pre-allocate persistent volumes for the cluster, known as static provisioning, however, this requires prior knowledge of storage requirements as a whole.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+Once you create PV and PVC, in order to use the PV in a Container, PVC must be declared as volume in the Pod definition 
+and then the containers in the Pod can mount it.
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: the-pod
+spec:
+  containers:
+    - name: the-container
+      image: some-image
+      volumeMounts:
+      - mountPath: "/mnt/data"
+        name: persistent-volume
+  volumes:
+    - name: persistent-volume
+      persistentVolumeClaim:
+        claimName: storage-claim
+
+        ReadOnlyMany 							# Volume can be mounted as read-only by many nodes
+		ReadWriteOnce 						# Volume can be mounted as read-write by a single node
+		ReadWriteMany 						# Volume can be mounted as read-write by many nodes
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+// create storage class with Premium and Standard ZRS
+# cat chapter12/storageclass.yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: fastzrs
+provisioner: kubernetes.io/azure-disk
+parameters:
+  skuName: Premium_ZRS
+  location: centralus
+
+---
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: slowzrs
+provisioner: kubernetes.io/azure-disk
+parameters:
+  skuName: Standard_ZRS
+  location: centralus
+
+// create the storage class
+# kubectl create -f chapter12/storageclass.yaml
+storageclass.storage.k8s.io/fastzrs created
+storageclass.storage.k8s.io/slowzrs created
+
+
+It specifies whether to expose the PV inside the container?
+								# fileSystem - exposed as a mounted file system. Default.
+								# block - exposed as a block device.
+	 
+	
+	
+	
+
+	This feature allows persistent volumes to be exposed inside containers as a block device instead of as a mounted file system.
+	path: "/tmp/data"
+
+
+
+https://supergiant.io/blog/persistent-storage-with-persistent-volumes-in-kubernetes/
+Different Cloud Providers?
+	Amazon EBS
+	Azure Disk
+	Cinder
+	Fibre Channel
+	GCE PD
+	iSCSI
+	Local volumes
+	RBD (Ceph)
+	Vsphere
+gitRepo or secret
+
+	# Currently, only NFS and HostPath support recycling. AWS EBS, GCE PD, Azure Disk, and Cinder volumes support deletion.
+
+https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/storage/persistent-volumes/
+-----------------------------------------------------------------------------------------------------------------------------
+DUST:
+A PVC-to-PV binding is a one-to-one mapping; this means when a Pod is rescheduled, the same PV would be associated with the Pod.
+
+	When none of static PVs match a PVC, K8s may try to dynamically provision a PV specially for the PVC.
+		For dynamic provisioning, PVC must specify a StorageClass that is created by the cluster administrator.
+		PVC with empty StorageClass are provisioned statically.
+		--
+		It allows storage volumes to be created on-demand.
+		With out dynamic provisioning, cluster administrators have to manually make calls to cloud or storage provider to create new storage volumes and then create PVs to represent them in K8s.
+		It eliminates the need for cluster administrators to pre-provision storage, it automatically provisions storage when it is requested by users.
+		--
+		Cluster Administrator can configure the cluster that all claims are dynamically provisioned even if no storage class is specified by marking a StorageClass as default.
+		He can mark a StorageClass as default by adding is-default-class annotation to it.
+		Note that there can be atmost one default StorageClass per cluster.
+		---
+		In a multi-zone cluster, pod can be spread across zones in a region.
+		Single-zone storage backends should be provisioned in the zones where pods are scheduled and can be accomplished by setting the VolumeBindingMode.
+
+Amazon EBS provisions Block storage on AWS, but there are other types of storage, namely file and object storage. We will be using block storage here because it provides the lowest latency, and is suitable for use with our Elasticsearch database.
+
+
+For example, here the volume must match the label release: "stable" and also have a label with either capacity: 80 Gi or capacity: 100 Gi. Imagine that we have several other volumes provisioned with capacities of 200 Gi and 500 Gi. We don't want to claim a 500 Gi volume when we only need 80 Gi.Kubernetes always tries to match the smallest volume that can satisfy a claim, but if there are no 80 Gi or 100 Gi volumes then the labels will prevent assigning a 200 Gi or 500 Gi volume and use dynamic provisioning instead.
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+volume plugin/provisioner such as Amazon EBS, Google Persistent Disk, Azure Disk Storage, Flocker, NFS, Local etc.
+parameters: 						
+  type: gp2
+  fsType: ext4 
+  zone: us-east-1a
+mountOptions: 						# If the provisioner doesn't support mount options, provisioning will fail.
+volumeBindingMode: 					# It specifies when volume binding and provisioning should occur.
+									# It defaults to immediate, which indicates volume binding and provisioning are 
+									# occurred once PVC is created. 
+
+Node-specific Volume limits
+	Most Cloud providers like Google, amazon, microsoft have a limit on howmany volumes can be attached to a Node.
+	Otherwise, Pods scheduled on a Node could struck waiting for volumes to attach.
+	You can change this limit by setting the value of KUBE_MAX_PD_VOLS environment variable, and then staring the scheduler.
+
+
+For storage backends that are topology-constrained and not globally accessible from all nodes in the cluster, PersistentVolumes will be bound or provisioned without knowledge of Pod's scheduling requirements - and may 
+result in unschedulable pods.
+When the cluster operator specifies WaitForFirstConsumer volume binding mode, it is no longer necessary to restrict
+provisioning to specific topologies in most cases. If still required, allowedTopologies can be specified.
+This example demonstrates how to restrict topology of the provisioned volumes to specific zones and should be used as a 
+replacement for the zone and zones parameters for the supported plugins.
+
+
+
+
+
+
+
+--type=LoadBalancer --port=8080
+
+kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+
+
+kubectl get nodes
+kubectl get pods
+
+kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.10
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+minikube service hello-minikube --url 		# 
+kubectl delete service mynginx
+kubectl delete deployment hello-minikube
+
+ kubectl get pods
+NAME                       READY   STATUS              RESTARTS   AGE
+mynginx-6b78685d4d-24ffz   0/1     ContainerCreating   0          15s
+
+
+Check if virtualization is supported on your system?
+
+
+https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/
+https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/
+
+
+Minikube usually uses a Virtual Machine image which contains a full Kubernetes distribution. This works quite well, but as you'll see, it can be a pain to set up. 
+You don't need to install Docker to use minikube, as minikube ships with its own Docker installation inside it.
+because minikube is a docker container, it is much more likely to run without problems. 
+
+
+Go straight to the video called "Installing kubectl and minikube".
+
+Once minikube is installed, ensure Docker is running
+
+Now start minikube with the command "minikube start --memory 4096 --driver docker". Actually, you don't need the --driver argument, because the docker driver becomes the default when you have Docker running. But let's include it to remind ourselves what is happening.
+
+
+
+
+
+
+
+
+
+	TODO: What happens when minikube is started? how it creates ~/.kube/config?
+	TODO: minikube start has many options that can be used to configure the cluster that is launched.
+	TODO: It is also possible to create the cluster directly on the host.
+
+													
+
+minikube status										# Check status of minikube(running or not), VM IP Address
+													mcheedhe-mac:1.Pod mcheedhe$ minikube status
+													host: Running
+													kubelet: Running
+													apiserver: Running
+													kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.101
+minikube delete										# Delete the cluster and the VM
+minikube dashboard 									# Web-based UI for managing clusters and the applications in it
+													# dashboard is intended for commands that don't require root access.
+													# Kubernetes dashboard allows you to view your applications in a UI. 
+
+minikube service my-service 
+			If you're using minikube, you can access the Service via the minikube service [-n NAMESPACE] [--url] NAME command. 
+			In this example, this is minikube service nginx-nodeport.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Enable Ingress add-on in minikube
+	1. Check if ingress add-on is already enabled or not: 'minikube addons list'
+	2. Enable ingress, if not enabled already: minikube addons enable ingress
+	3. Verify if last step worked using: 'minikube addons list'
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+When you run 'minikube start', it starts a new VM on host. That VM will act as a Node.
+We use that Node to create few k8s objects. 
+
+docker/tcuser
+https://medium.com/devopslinks/deploying-multi-node-kubernetes-environment-in-your-local-machine-a66a1eb82e36
+https://medium.com/@xcoulon/deploying-your-first-web-app-on-minikube-6e98d2884b3a
+https://stackoverflow.com/questions/51687893/how-do-i-get-the-minikube-nodes-in-a-local-cluster
+
+Getting user and password for minikube in Mac.
+cat ~/.minikube/machines/minikube/config.json
+
+Loggin on SSH
+ssh -i ~/.minikube/machines/minikube/id_rsa docker@$(minikube ip)
+
+
+minikube addons list
+	Minikube has a set of built-in addons that can be enabled, disabled and opened in the local Kubernetes environment.
+minikube addons enable heapster
+	Enable an addon, for example, heapster	
+
+The kubectl config file (found at ~/.kube/config by default) defines contexts. A context links to a cluster and a user object. The cluster defines how. The minikube start command creates a kubectl context pointing to the API server running within the Minikube VM, and is correctly configured with a user that will allow access to Kubernetes.
+
+
+It starts a Kubernetes VM stet, and then configures the kubectl configuration (~/.kube/config)
+	
+    kubectl config use-context minikube
+
+
+TODO: how to create additional contexts and switch to it?
+
+Minikube Installation(on Mac)
+	// Usually this needs to be installed inside VM?
+	curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 && chmod +x minikube
+	sudo mv minikube /usr/local/bin/
+
+	// another way
+	brew cask install minikube // TODO: what is cask?
+
+	// starngi n g it - from host machine?
+	minikube start
+	minikube start --vm-drive=xhyve --kubernetes-version="v1.6.4" --cpus=2 --memory=1024 --disk-size=8g
+	minikube status
+	minikube stop
+	minikube delete
+
+
+Deploying the Hello World app on k8s                                                        
+	Let's deploy the Hello World Docker image we built earlier to the K8s cluster we just created. To create a deployment and service, you need to create a mainfest file with all the details about the deployment and service, and then feed it to K8s using the kubctl command. In the mainfest file, you need to provide the remote URL of the Docker image for K8s to pull and run the images. K8s can pull images from the public Docker registry (that is, Docker Hub) or private docker registries.
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/4ca93e34-cc8b-40ca-8739-556e7646fe64.xhtml
+	https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/f8c451c0-7379-40fd-b4a7-4e8045409002.xhtml
+
+Minikube Features?
+	It support Kubernetes features such as:
+		- DNS
+		- NodePorts // for external connectivity
+		- ConfigMaps and secrets
+		- Dashboards
+		- Container runtime: Docker, rkt, CRI-O
+		- Enabling CNI(Container Network Interface)
+		- Ingress	// for load balacing
+
+https://kubernetes.io/docs/reference/kubectl/overview/
+http://gist-reveal.it/bit.ly/k8s-miniarch#/k8s-controllers
+http://gist-reveal.it/bit.ly/k8s-minidev#/local-development-with-minikube
+https://www.codeproject.com/Articles/1185089/An-Introduction-to-Kubernetes-with-Minikube
+https://richardroseblog.wordpress.com/2017/11/01/minikube-creating-a-cluster/
+https://opensource.com/article/18/10/getting-started-minikube
+
+minikube version                # minikube version: v0.22.3
+kubectl version --client        # Client Version: version.Info{Major:"1", Minor:"8", GitVersion:"v1.8.1", 	
+								GitCommit:"f38e43b221d08850172a9a4ea785a86a3ffa3b3a", GitTreeState:"clean", BuildDate:"2017-10-12T00:45:05Z", GoVersion:"go1.9.1", Compiler:"gc", Platform:"darwin/amd64"}
+
+minikube dashboard # Mikikube offers a simple dashboard GUI for managing the Kubernetes cluster
+minikube service nginx-node
+minikube service kubernetes-dashboard --namespace=kube-system
+
+kubectl run unicorn-worker --image=sadfasdf.amazonaws.com/signin_service/unicorn:10.2 --port=80
+kubectl describe pod unicorn-worker
+// pull image from ECR on AWS
+//	image: ACCOUNT.dkr.ecr.REGION.amazonaws.com/imagename:tag
+
+// Creating a simple service on local minikube
+kubectl run nginx-node --image=nginx --port=80
+kubectl get pod
+kubectl get deployment
+kubectl expose deployment nginx-node --type=NodePort
+kubectl get service
+kubectl describe service nginx-node
+minikube service nginx-node
+
+//  Creating a simple service on AWS Kubernetes
+kubectl run nginx-node --image=nginx --port=80
+kubectl get pod
+kubectl get deployment
+kubectl expose deployment nginx-node --type=LoadBalancer
+kubectl get service
+kubectl describe service nginx-node
+minikube service nginx-node
+
+// Minikube addon - Heapster
+minkube addons enable heapster
+minikube service monitoring-grafana --namespace=kube-system
+
+// HPA - Horizontal Pod Autoscaling
+kubectl run nginx-node --image=nginx --port=80 --limits='cpu=20m'
+kubectl expose deployment nginx --type=NodePort 
+minikube service nginx
+kubectl autoscale deployment nginx --min=1 --max=5 --cpu-percent=20
+kubectl get hpa (horizontalpodautoscalers)
+
+kubectl exec nginx-ads3242r2324 -it bash
+	# apt-get update && apt-get install stress
+	# stress --cpu=100 --io=100 --vm=10 -i 100
+kubectl get hpa // scale out, scale in
+
+// Minikube addon - Ingress
+kubectl run nginx-node --image=nginx --port=80 
+kubectl expose deployment nginx --type=NodePort 
+kubectl run php-apache --image=webdevops/php-apache --port=80
+kubectl expose deployment php-apache --type=NodePort
+
+kubectl create -f ingress_example.yaml
+kubectl get ingress
+LoadBalancer -> Service -> pod -> Server : L4 load balancer (TCP)
+LoadBalancer -> ingress service -> ingress pod -> pod -> Server : L7 load balancer (HTTP)
+
+kubectl run kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8080
+	We want to run the app on a specific port so we add the --port parameter:
+
+
+---------
+
+What is minikube?
+	Minikube runs a single-node Kubernetes cluster inside a VM on your laptop for users looking to try out Kubernetes or develop with it day-to-day.
+
+Install minikube
+	https://medium.com/@duruldalkanat/kubernetes-installation-with-minikube-101-hello-world-996a1146d54d
+	https://medium.com/containers-101/local-kubernetes-for-mac-minikube-vs-docker-desktop-f2789b3cad3a
+
+
+
+
+
+The following objects represent Kubernetes workloads. 
+You can trigger a rolling update on these workloads by updating their Pod Template:
+    DaemonSets
+    Deployments
+    StatefulSets
+
+
+
+What is DaemonSet?
+  More than ReplicaSet, the Kubernetes DaemonSet guarantees that the specified set is running on every node in the cluster. 
+  That said, a subset of ReplicaSet on every node.
+    Finally, we will look at DaemonSets, which allow programs to be run on every node in our Kubernetes cluster.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+Resource limits such as CPU and RAM are shared between all containers in the pod.
+Docker is the most common container runtime used in a Kubernetes Pod, but Pods support other container runtimes as well.
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://kubernetes.io/docs/concepts/services-networking/network-policies/ - Network Policies
+  
+What is Name Space?
+  It is used to isolate a part of the cluster from other part; It is a way to separate resource dev, qa, preprod, prod environments;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+Initially we create a Deployment; It implicitly creates Deployment, Replicaset, Pod;
+Cluster is a collection of Nodes;
+Node is a collection of Pods;
+Pod is a collection of Containers;
+
+
+
+
+What is Monolithic Service?
+  All the components of an application are packaged together and deployed.
+
+What is a Micro Service?
+  It structures an application as a collection of small autonomous services.
+  Advantages: scaling, independant deployment etc.
+  
+  https://dzone.com/articles/what-is-microservices-an-introduction-to-microserv
+  https://www.tatvasoft.com/blog/the-difference-between-micro-services-and-web-services/
+
+What is Continous Integration, Continous Deployment, Continuous Delivery?
+  https://stackoverflow.com/questions/28608015/continuous-integration-vs-continuous-delivery-vs-continuous-deployment
+  https://stackify.com/continuous-delivery-vs-continuous-deployment-vs-continuous-integration/
+
+
+----------------------------------------------------------------------
+What is kube-proxy?
+    It is a process that runs on all the Nodes in the Cluster.
+    It takes care routing/proxying the request between Service(Virtual IP) and Pods. It also routes the request from external internet to Service.
+    // The kube-proxy watches any update of service and endpoints and updates iptables rules accordingly (if using default iptables proxy-mode).
+    It is not applicable for Services of type ExternalName.
+
+    There are 3 types of proxy modes: userspace, iptables, ipvs.
+    https://stackoverflow.com/questions/36088224/what-does-userspace-mode-means-in-kube-proxys-proxy-mode
+    https://learning.oreilly.com/library/view/getting-started-with/9781788994729/95ea51f2-56fa-43c9-9c90-105e83f51a53.xhtml
+----------------------------------------------------------------------
+kind: Service
+apiVersion: v1
+metadata:
+  name: my-service
+spec:
+  type: ExternalName, ClusterIP, NodePort, and LoadBalancer.
+  clusterIP: <>     # Valid values: None, Empty string(""), valid IP address
+  externalName:
+  externalIPs:
+  externalTrafficPolicy:
+  loadBalancerIP:
+  ports:
+    - name:               # Name of the port
+      port:               # It exposes the Service within the Cluster by using this port. 
+                          # Other applications within the cluster can send requests to this Service using this port.
+      nodePort:           # Applicable for only when the type is NodePort or LoadBalancer.
+                          # It exposes the Service outside the Cluster by using node's IP address and nodePort.
+                          # If not specified, K8s will allocate a node port randomly.
+      targetPort:         # Service selects a Pod based on label selectors specified and forwards the incoming request to a Pod, which 
+                          # further forwards the request to a container accepting requests on this port.
+                          # For Service to work, underlying Containers need to be configured to listen for requests on this port.
+----------------------------------------------------------------------
+
+To access something inside the cluster, there ae a couple of different options available to,
+
+Cluster IP service with Ingress-Nginx
+Above both approach will require to write config file, In case if you want to access a pod without writing a config file then it comes to third option.
+
+Port Forward: We can run a command at our terminal that tells our kubernets cluster to port-forward a port off a very specific pod inside of our cluster when we use this port forwarding thing that's going to cause our cluster to essentially behaves as though it has a node port service running inside it. It's going to expose this pod or a very specific port on it to the outside world and allow us to connect to it directly from our local machine.
+----------------------------------------------------------------------
+
+
+get the external Port (the "nodePort") of myservice corresponding to the internal port 1234
+   kubectl get svc myservice -o=jsonpath='{.spec.ports[?(@.port==1234)].nodePort}'
+
+
+kubectl get svc --all-namespaces -o go-template='{{range .items}}{{ $save := . }}{{range.spec.ports}}{{if .nodePort}}{{$save.metadata.namespace}}{{"/"}}{{$save.metadata.name}}{{" - "}}{{.name}}{{": "}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
+  <namespace>/<service name> - <nodeport name>: <nodeport>
+
+  
+kubectl get svc --all-namespaces -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}'
+  This gets all services in all namespaces, and does basically: "for each service, for each port, if nodePort is defined, print nodePort".
+
+----------------------------------------------------------------------                        
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------
+kubectl create -f my-service.yaml                         # Create Service
+kubectl get services                                      # Get the list of services running in the cluster
+kubectl get service <service-name> --watch                # Get the external IP of a Service of type LoadBalancer
+curl http://<EXTERNAL-IP>
+kubectl delete service my-service                         # Delete Service
+
+kubectl expose deployment my-deployment --type=NodePort   # 
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+Service Discovery
+Kubernetes supports the following two modes of service discovery:
+Environment variable
+DNS
+Service environment details can be set based on the following format. Service name needs to be in uppercase.
+{SVCNAME}_SERVICE_HOST
+{SVCNAME}_SERVICE_PORT
+When using environment variables for service discovery, it is a mandate that the services must be created prior to the pods which want to access those services.
+DNS server creates a set of records for each service discovered via watching Kubernetes APIs.
+Services of type ExternalName can only be accessed through DNS server.
+----------------------------------------------------------------------
+---------------------------------------------------------------------
+    https://learning.oreilly.com/library/view/kubernetes-up-and/9781491935668/ch07.html
+
+By default, K8s will expose 7 environment variables for each Service. 
+In most cases, the first two allow us to use the kube-dns add-on to carry out service discovery for us:
+    ${SVCNAME}_SERVICE_HOST     // printenv | grep SERVICE
+    ${SVCNAME}_SERVICE_PORT
+    ${SVCNAME}_PORT
+    ${SVCNAME}_PORT_${PORT}_${PROTOCAL}
+    ${SVCNAME}_PORT_${PORT}_${PROTOCAL}_PROTO
+    ${SVCNAME}_PORT_${PORT}_${PROTOCAL}_PORT
+    ${SVCNAME}_PORT_${PORT}_${PROTOCAL}_ADDR
+
+With the DNS server enabled, the pods in the same cluster and the same namespace as the Services can access Services via their DNS records.
+
+CoreDNS GA was introduced in Kubernetes 1.11 and is now the default option in Kubernetes. 
+Before this, the kube-dns add-on was in charge of DNS-based service discovery.
+
+The DNS server creates DNS records for newly created services by watching the Kubernetes API. 
+The DNS format for the cluster IP is $servicename.$namespace and the port is _$portname_$protocal.$servicename.$namespace. 
+The spec of the clusterip_chk pod will be similar to the environment variables one. 
+Change the URL to http://nginx-service.default:_http_tcp.nginx-service.default/ in our previous example, and they should work exactly the same.
+--------
+Service also helps you to expose a Pod to the outside world(outside cluster).
+There are 4 different ways:
+
+
+
+LoadBalancer
+    Creates an external load balancer in the current cloud (if supported) and assigns a fixed, external IP to the Service. Superset of NodePort.
+    It means means that the Service uses the default load balancer of your cloud provider.
+
+ExternalName
+    Exposes the Service using an arbitrary name (specified by externalName in the spec) by returning a CNAME record with the name. No proxy is used.
+
+--------
+One Service could expose multiple ports.
+
+
+http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/
+
+What is EndPoint?
+
+
+One service per pod? per group of pods? per node?
+
+
+It defines a logical set of Pods and a policy by which to access them.
+
+It provides a reliable cluster-wide IP address also called a virtual IP (VIP), as well as a reliable port that's unique in the whole cluster. 
+The pods that the Kubernetes service is proxying are determined by the selector defined in the service specification. 
+Selectors are always based on labels. Every Kubernetes object can have zero to many labels assigned. 
+In our case, the selector is app=web, that is, all pods that have a label called app with a value of web are proxied.
+
+The set of Pods targeted by a Service is usually determined by a LabelSelector.
+
+This is where Kubernetes services come into play. They are meant to provide stable endpoints to ReplicaSets or Deployments
+
+ Services enable a loose coupling between dependent Pods. 
+
+Although each Pod has a unique IP address, those IPs are not exposed outside the cluster without a Service. 
+Services allow your applications to receive traffic. Services can be exposed in different ways by specifying a type in the ServiceSpec:
+
+-----------------------------------------
+The job of kube-proxy is to proxy communication from a service endpoint back to the corresponding pod that is running the actual application.
+
+kube-proxy architecture
+
+Membership of the service load balancing pool is determined by the use of selectors and labels. 
+Pods with matching labels are added to the list of candidates where the service forwards traffic. 
+A virtual IP address and port are used as the entry points for the service, and the traffic is then forwarded to a random pod on a target port defined by either K8s or your definition file.
+
+
+Keeping the mapping between the VIP and the pods up-to-date is the job of kube-proxy, a process that runs on every node, which queries the API server to learn about new services in the cluster.
+
+Kubernetes offers a DNS cluster addon Service that automatically assigns dns names to other Services. You can check if it’s running on your cluster:
+
+$ kubectl get services kube-dns --namespace=kube-system
+
+-----------------------------------------
+Service Discovery
+    Service discovery in Kubernetes can be achieved via the cluster DNS (recommended) or via environment variables on the nodes.
+
+Service
+  https://kubernetes.io/docs/concepts/services-networking/service/
+  https://www.stratoscale.com/blog/kubernetes/kubernetes-exposing-pods-service/
+  https://blog.openshift.com/kubernetes-services-by-example/
+  https://cloud.google.com/kubernetes-engine/docs/concepts/service
+  https://www.aquasec.com/wiki/display/containers/Kubernetes+Services+101
+  https://coreos.com/kubernetes/docs/latest/services.html
+  https://matthewpalmer.net/kubernetes-app-developer/articles/service-kubernetes-example-tutorial.html
+  https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-networking-guide-beginners.html
+
+The ClusterIP could be defined within your cluster, though most of the time we don't explicitly use the IP address to access clusters. Using .spec.clusterIP can do this for us.
+
+Service
+  clusterIP: None # When you see None for clusterIP, it is an indication to the kube-proxy that this service is Headless.
+    - https://www.quora.com/What-is-the-use-of-a-headless-service-in-Kubernetes
+    https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+    https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
+    https://learning.oreilly.com/library/view/blockchain-for-enterprise/9781788479745/ba3d4de7-de8a-4cb8-8a4b-adfa46321d60.xhtml
+
+What is a Service?
+  You should always use a Service, if you want to expose a pod to the rest of the cluster, in order to provide proper level of abstraction since individual pods will come and go.
+
+
+  It also
+   services use the pod labels to select a group of pods that they interact with. Your pods will typically have labels for the application name, role, environment, version, etc. Each of these can be combined in order to select all pods with a certain role, a certain application, or a more complex query.
+
+   Service discovery assigns a stable IP address and DNS name to the service, and load balances traffic in a round-robin manner to network connections of that IP address among the pods matching the selector (even as failures cause the pods to move from machine to machine).
+
+   By default a service is exposed inside a cluster (e.g. back end pods might be grouped into a service, with requests from the front-end pods load-balanced among them), but a service can also be exposed outside a cluster (e.g. for clients to reach frontend pods)
+
+Load Balancing
+  https://learning.oreilly.com/library/view/mastering-kubernetes/9781788999786/253b1a0e-89e7-427c-8ef5-0656a33a73f6.xhtml
+  kubectl expose rc example --port=8765 --target-port=9376 \--name=example-service --type=LoadBalancer 
+
+ImagePullBackOffThe Kubernetes statuses ErrImagePull and ImagePullBackOff are both related to problems pulling a container image, but they occur at different stages of the retry process.
+
+ErrImagePull - Kubernetes tried to pull the image and failed immediately.
+	This could be due to:
+		- Wrong image name or tag
+		- Image doesn't exist in the registry
+		- Private registry without credentials
+		- Network issues
+
+ImagePullBackOff
+	Kubernetes backed off from retrying after one or more ErrImagePull failures.
+	It’s a wait-and-retry loop to avoid hammering the registry with requests.
+	

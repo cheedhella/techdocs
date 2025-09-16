@@ -1,0 +1,36 @@
+  ansible.builtin.debug:
+        msg: "{{ item }}"
+      register: result
+      delegate_to: localhost
+      run_once: true
+      with_inventory_hostnames:
+
+
+---
+- name: Test
+  hosts: localhost
+
+  tasks: 
+    - name: Show all the hosts in the inventory
+      ansible.builtin.debug:
+        msg: "{{ item }}"
+      loop: "{{ groups['UP'] }}"
+      register: result
+
+
+      docker_container:
+    name: "C{{ item }}"
+    image: "{{ image_name }}:{{ image_tag }}"
+    recreate: yes
+    detach: yes
+    tty: yes
+    interactive: yes
+  with_sequence: count="{{ number_of_container_to_deploy }}"  
+
+---
+- name: Allow eth1 port 5432 access to Web servers
+  ufw: rule=allow interface=eth1 direction=in port=5432 proto=tcp src={{ item }}
+  with_items:
+    {% for host in groups['webservers'] %}
+      - "{{ hostvars[host]['ansible_eth1']['ipv4']['address'] }}"
+    {% endfor %}

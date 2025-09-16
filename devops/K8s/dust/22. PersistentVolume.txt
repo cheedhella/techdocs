@@ -1,0 +1,358 @@
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+In previous examples(emptyDir and hostPath), there are 2 different tasks;
+Creating k8s volume: this is infrastructure task; Creating k8s Pod: this is a development task;
+The problem with above approach is creation of Volume and Pod are tightly coupled(defined in the Pod configuration);
+Often, these are different type of tasks, that are often managed by different teams;
+We can decouple this configuration using PersistentVolume (infrastructure task) and PersistentVolumeClaim (development task);
+
+What is Persistent Volume?
+	It is a piece of storage in the cluster, that has been provisioned by an cluster administrator OR dynamically provisioned using StorageClass;
+	It abstracts away different type of storages; 
+	It has a lifecycle that is independent of any Pod that uses it; Event if you shutdown or terminate the Pod, 
+
+What is Peristent Volume Claim?
+	A Persistent Volume Claim is a request for storage by a user. It describes the size, access mode, and optionally the StorageClass.
+
+	A PersistentVolumeClaim (PVC) is a request for storage by a user. It is similar to a Pod. Pods consume node resources and PVCs consume PV resources. Pods can request specific levels of resources (CPU and Memory). Claims can request specific size and access modes (e.g., they can be mounted once read/write or many times read-only).
+
+	How PV and PVC Work Together
+		Admin creates a PV (or Kubernetes provisions one dynamically).
+		User creates a PVC requesting specific storage.
+		Kubernetes matches the PVC with an appropriate PV (based on size, access mode, etc.).
+		The PVC is bound to the PV.
+		Pods use the PVC to access the persistent storage.
+
+		In order for a Pod to start using these volumes, it must request a volume by issuing a persistent volume claim (PVC). PVCs describe the storage capacity and characteristics a pod requires, and the cluster attempts to match the request and provision the desired persistent volume.
+
+Is 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo
+# First, Infra team provisions the PV;
+> kubectl apply -f pv-demo-p1.yaml 
+persistentvolume/my-pv created
+
+> kubectl get pv
+NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+my-pv   1Gi        RWO            Retain           Available           mc-pv-sc                9s
+
+# Dev team doesn't need to know how PV is provisioned; They just need a ReadWriteOnce 1Gi volume and they need to get the corresponding storage class name;
+> kubectl apply -f pvc-demo-p1.yaml 
+persistentvolumeclaim/my-pvc created
+pod/pvc-demo-p1 created
+
+>  kubectl get pods
+NAME                 READY   STATUS    RESTARTS        AGE
+pvc-demo-p1          1/1     Running   0               14s
+
+> kubectl exec pvc-demo-p1 -- sh -c "echo 'Hello World' > /data/hello.txt"
+
+> kubectl exec pvc-demo-p1 -- cat /data/hello.txt
+Hello World
+
+> kubectl get pv
+NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            STORAGECLASS   REASON   AGE
+my-pv   1Gi        RWO            Retain           Bound    default/my-pvc   mc-pv-sc                9m38s
+
+> kubectl get pvc
+NAME     STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+my-pvc   Bound    my-pv    1Gi        RWO            mc-pv-sc       8m29s
+
+
+> kubectl delete -f pvc-demo-p1.yaml 
+persistentvolumeclaim "my-pvc" deleted
+pod "pvc-demo-p1" deleted
+
+> kubectl get pv
+NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM            STORAGECLASS   REASON   AGE
+my-pv   1Gi        RWO            Retain           Released   default/my-pvc   mc-pv-sc                59m
+
+> kubectl apply -f pvc-demo-p1.yaml 
+persistentvolumeclaim/my-pvc created
+pod/pvc-demo-p1 created
+
+> kubectl get pods
+NAME                 READY   STATUS    RESTARTS        AGE
+pvc-demo-p1          0/1     Pending   0               46m
+
+> kubectl get events
+LAST SEEN   TYPE      REASON               OBJECT                         MESSAGE
+3m50s       Warning   ProvisioningFailed   persistentvolumeclaim/my-pvc   storageclass.storage.k8s.io "mc-pv-sc" not found
+57m         Warning   FailedScheduling     pod/pvc-demo-p1                0/1 nodes are available: 1 pod has unbound immediate PersistentVolumeClaims.
+
+# PV was released, but it is not yet available for another claim as previous claimant's data remains on the volume;
+# An administrator need to manually reclaim the volume:
+> kubectl patch pv my-pv  -p '{"spec":{"claimRef": null}}'
+persistentvolume/my-pv patched
+
+# Once patched, PV status changes to Available; Now, the pod starts up fine!
+> kubectl get pv
+NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+my-pv   1Gi        RWO            Retain           Available           mc-pv-sc                78m
+
+> kubectl get pods
+NAME                 READY   STATUS    RESTARTS     AGE
+pvc-demo-p1          1/1     Running   0            3m56s
+
+> kubectl get pv
+NAME    CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM            STORAGECLASS   REASON   AGE
+my-pv   1Gi        RWO            Retain           Bound    default/my-pvc   mc-pv-sc                72m
+
+# Data written by previous Pod is available to this Pod!
+> kubectl exec pvc-demo-p1 -- cat /data/hello.txt
+Hello World
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> kubectl apply -f sc-demo-p1.yaml 
+storageclass.storage.k8s.io/sc-1 created
+persistentvolumeclaim/sc-pvc-1 created
+pod/sc-demo-p1 created
+
+
+> kubectl get pv,pvc,sc
+NAME                     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM            STORAGECLASS   REASON   AGE
+persistentvolume/my-pv   1Gi        RWO            Retain           Released   default/my-pvc   mc-pv-sc                118m
+
+NAME                             STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/sc-pvc-1   Pending                                      sc-1           36s
+
+NAME                                             PROVISIONER                RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+storageclass.storage.k8s.io/sc-1                 microk8s.io/hostpath       Delete          Immediate           false                  36s
+storageclass.storage.k8s.io/standard (default)   k8s.io/minikube-hostpath   Delete          Immediate           false                  34d
+
+> 
+
+
+
+
+https://codeburst.io/kubernetes-storage-by-example-part-2-a8fbebf82c23
+
+kubectl exec storage-class -- sh -c "echo \"Hello World\" > /data/hello.txt"
+kubectl exec storage-class -- cat /data/hello.txt
+
+
+
+ But it is not yet available for another claim because the previous claimant’s data remains on the volume. An administrator can manually reclaim the volume with the following steps.
+
+ The reclaim policy for a PersistentVolume tells the cluster what to do with the volume after it has been released of its claim.
+
+
+Once bound, PersistentVolumeClaim binds are exclusive, regardless of how they were bound. A PVC to PV binding is a one-to-one mapping.
+
+
+
+kubectl delete pod --all / pod-name
+kubectl delete pvc --all / pvc-name
+kubectl delete pv --all / pv-name
+
+
+An awsElasticBlockStore volume mounts an Amazon Web Services (AWS) EBS Volume into your Pod. 
+
+
+What is Persistent Volume?
+	A persistent volume is like an external hard drive - you can plug it in and save your data on it;
+
+Why is do we need Persistent Volume?
+	why we needed this object? Why not use the storage provided by your local machine or by any of the cloud providers?
+	Applications that directly use specific storage systems like Amazon S3, Azure File, Block storage, etc., create an unhealthy dependency. 
+	What if you would like to move to another cloud provider, it would be difficult because of the tight coupling between the storage provider and application.
+
+	Kubernetes is trying to change this by creating an abstraction called Persistent Volume, allowing cloud-native applications to connect to a wide variety of cloud storage systems without creating an explicit dependency with those systems.
+
+
+
+Persistent Volumes — These are meant for long-term storage and are independent of the Pod/Node life-cycle. These can be cloud volumes (like gcePersistentDisk, awsElasticBlockStore, azureFile or azureDisk, etc.), NFS (Network File Systems), or Persistent Volume Claims (a series of abstraction to connect to the underlying cloud provided storage volumes)
+
+-----------------------------------------------------------------------------------------------------------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data
+
+
+What is PersistentVolumeClaim?
+	It is a K8s object that allows a Pod to express a request for PersistentVolume.
+-----------------------------------------------------------------------------------------------------------------------------
+Life cycle of PersistentVolume?
+	It has 5 phases:  Provisioning, Binding, Using, Releasing, Recycling, Reclaiming
+
+	Provisioning 
+		A PersistentVolume is provisioned in 2 ways: static, dynamic;
+		Static Provisioning
+			Cluster administrator interacts with the Cloud Provider manually to provision storage and creates PV to represent 
+			it in K8s, which is made available for consumption.
+			One problem with this approach is, Say, we have 2 PVCs - one requesting 10 GB and the other 40 GB. If we register 
+			2 PVs, each of size 25GB, then only the 10 GB PVC would succeed, even though there is enough storage space for 
+			both PVCs.
+		Dynamic Provisioning
+			When none of static PVs match a PVC, K8s dynamically provisions a PV.
+
+	Binding
+		Once a PV is provisioned, it is assigned to a Pod(bound to a PVC).
+
+	Using
+		Once bonded, a Pod can start read/write data to the storage backing the PV.
+	
+	Releasing, Recycling
+		When a Pod no longer needs a PV, you can simply delete the PVC.
+
+		What happens to the data stored in PV, when you delete a PVC?
+			It depends on PersistentVolume.persistentVolumeReclaimPolicy
+			If set to Retain, PV is simply released/unbounded from PVC and PV(and data in the storage) is retained. # Releasing
+			If set to Delete, it deletes PV(and data in the storage) as well. 	# Recycling
+
+		What happens to the data stored in PV, when you delete a PV?
+			When you no longer need a PV, you can delete it.
+			But because the actually data is stored externally, the data will remain in the storage media.
+-----------------------------------------------------------------------------------------------------------------------------
+# PersistentVolume Definition
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:  
+	name: pv1
+spec:  
+	storageClassName: <name> 	# Using this, you can specify what type of PV you want to create. 
+								# If empty, it doesn't belong to any storage class??
+								# A PV of a particular storage class can only be bound to PVCs requesting that class.
+
+	capacity:    				# Currently, it supports only storage size. 5Gi - 5GB
+		storage: 5Gi
+
+	accessModes: 				# There are 3 modes: ReadOnlyMany, ReadWriteOnce, ReadWriteMany
+		- ReadWriteOnce			# Each storage provider supports a different set of above 3 modes.
+								# Using this, you can specify all possible modes this PV can be mounted.
+
+	volumeMode: filesystem 		# Possible values: filesystem(default), block
+								# In some cases, a container needs direct access to raw block of storage, as file system layer 
+								# introduces unneeded overhead. For example, database prefers to organize data directly on 
+								# the underlying storage. 
+								# In means I/O requests to block storage go straight to the underlying block storage and 
+								# don't pass though the file system drivers. This is faster, in theory, but in practice it 
+								# can actually decrease performance if your applications benefit from filesystem buffering.
+
+	persistentVolumeReclaimPolicy: Retain | Delete 	# What happens to a PV, when the Pod releases it?
+		https://learning.oreilly.com/library/view/mastering-kubernetes/9781788999786/8c83009e-82b7-477f-93a9-5927179ff0dd.xhtml
+-----------------------------------------------------------------------------------------------------------------------------
+# PersistentVolumeClaim Definition
+#	A claim must specify access modes and storage capacity.
+#	Note that, a PVC doesn't metion volumes by name. Matching is done by K8s based on storage class, capacity and selectors.
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+	name: pvc0001
+spec:
+	accessModes: 				# It specifies what access modes PV should support?
+	  - ReadOnlyMany
+		ReadWriteOnce
+		ReadWriteMany
+	resources: 					# It specifies minimum resources that PV should have.							 
+	    requests:
+	    	storage: 10Gi 			
+	volumeMode: filesystem (default) | block 	# It specifies volume mode of required PV.
+	selector:
+	  	matchLabels:			# PVs having specified labels are only considered.
+	    	version: "stable"  
+		matchExpressions:		# PVs whose capcacity is either 25G or 50G are considred
+	      - key: capacity  
+	    	operator: In  
+	    	values: [25Gi, 50Gi]
+	  storageClassName: "name" 	# It specifies the type of PV required.
+	  							# If not specified, only PVs that don't specify a storage class are bound to it.
+
+ReadWriteOnce (RWO)	Mounted as read-write by a single node
+ReadOnlyMany (ROX)	Mounted as read-only by many nodes
+ReadWriteMany (RWX)	Mounted as read-write by many nodes
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+TODO:
+filesystem vs block volumemode?
+	https://kubernetes.io/blog/2019/03/07/raw-block-volume-support-to-beta/
+	filesystem storage - used by storage systems such as hard drives, NAT(Network Attached Storage) etc.
+	block storage - used by SAN(Storage Area Network) storage systems.
+		Each block of volume is treated as an individual hard drive and formatted with required file system. 
+		These blocks are controlled by server based operating systems.
+	
+mountOptions?
+	mountOptions: 				# Not all volume types support mount options.
+      - hard
+      - nfsvers=4.1
+
+nodeAffinity: VolumeNodeAffinity 	# NodeAffinity defines constraints that limit what nodes this volume can be accessed 
+    								# from. This field influences the scheduling of pods that use this volume.
+
+https://learning.oreilly.com/library/view/mastering-kubernetes/9781788999786/87ea14a0-ee90-42d9-b0c6-30cf8d6d814d.xhtml
+https://learning.oreilly.com/library/view/kubernetes-in-action/9781617293726/kindle_split_017.html
+https://learning.oreilly.com/library/view/hands-on-cloud-development/9781786462374/2f4faa67-5875-4f90-bc6e-cc042be75b48.xhtml
+https://learning.oreilly.com/library/view/kubernetes-patterns/9781492050278/ch11.html
+https://supergiant.io/blog/persistent-storage-with-persistent-volumes-in-kubernetes/
+https://spotinst.com/blog/2018/04/14/stateful-kubernetes-intro/
+-----------------------------------------------------------------------------------------------------------------------------
+
+What is a K8s Volume?
+	Pods are ephemeral(short-lived) - they come and go frequently; What if you have data that you must keep even if the POD is recreated? 
+	This requirement means that we need to make the POD and its associated data loosely coupled — this would allow data to exist independent of any POD;
+	This data is called a Kubernetes Volume;
+
+
+	, and it helps persist state across multiple PODs. 
+
+
+Persistent Volumes — These are meant for long-term storage and are independent of the Pod/Node life-cycle. These can be cloud volumes (like gcePersistentDisk, awsElasticBlockStore, azureFile or azureDisk, etc.), NFS (Network File Systems), or Persistent Volume Claims (a series of abstraction to connect to the underlying cloud provided storage volumes)
+
+
+
+
+
+
+	A directory that is accessible to all running containers in a Pod.
+	Data in volumes remains safe even if the container crashes(as oppossed to container-local filesystem).
+	Pod definition(spec.volumes) specifies what all Volumes it want to create.
+
+K8s Volume Types
+	- Node-local volumes
+		-- emptyDir
+		-- hostPath
+	- Network volumes
+		-- nfs
+		-- glusterfs
+		-- cephfs
+	- Cloud provider volumes
+		-- awsElasticBlockStore  
+		-- azureDisk
+		-- gcePersistentDisk
+	- Special purpose volumes
+		-- secret
+		-- gitRepo
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+	It declares the path on the host Node that is the location of this shared directory.
+	hostPath: /var/sharedPodDir -> It creates a directory called sharedPodDir in /var on the Node hosting the Pod.
+
+	life of hostPath Volume?
+	https://learning.oreilly.com/library/view/devops-with-kubernetes/9781789533996/dbcfee51-6b94-489c-80c2-46a4e5e27066.xhtml

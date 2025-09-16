@@ -1,0 +1,36 @@
+richardchesterwood/k8s-fleetman-webapp-angular
+richardchesterwood/k8s-fleetman-position-tracker
+richardchesterwood/k8s-fleetman-api-gateway
+richardchesterwood/k8s-fleetman-queue
+richardchesterwood/k8s-fleetman-position-simulator
+
+The system that we're deploy in this course is some kind of transport company that needs to track it's vehicles as they move around the country;
+Every vehicle is equipped with GPS, which periodically, maybe every 10 seconds or so, reports it's current position to our central server;
+We are going to have many of these vehicles out there constantly reporting their positions;
+
+k8s-fleetman-position-simulator
+	- Difficulity is we don't have any real vehicles; So, we can have a microservice to simulate it;
+	- As the name suggests, this microservice is going to simulate those vehicles moving around the country;
+
+k8s-fleetman-queue
+	- It allows us to send data across the system without coupling the microservice together; In this case: position-simulator and position-tracker;
+
+k8s-fleetman-position-tracker
+	- It's job is to read data from the queue and do various calculations(like calculating speed of the vehicles) on the positions and store it some DB;
+
+k8s-fleetman-webapp-angular
+	- UI application;
+
+k8s-fleetman-api-gateway
+	It is definitely a bad design if we allow webapp-angular to directly talk to position-tracker;
+	Reason being, backend system is going to change constantly, as we reengineer it;
+	It could happen that, we will split position-tracker into multiple microservices over the time;
+	Sometimes, you realise 2 of the microservices are too small and needs to be merged;
+	So, there is a constant flux in the backend;
+
+	If we allow frontend to talk directly to backend, any time there is in backend, frontend needs to updated;
+	API gateway will be single point of entry to the application;
+	It's job is to delegates/maps the calls to appropriate microservices;
+
+	so, when we split a microservice into 2, it's all about fixing api-gateway; UI requires no changes;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

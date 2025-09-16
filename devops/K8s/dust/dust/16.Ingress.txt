@@ -1,0 +1,48 @@
+What is Ingress?
+	There are some limitations with LoadBalancer service;
+	You can't configure the loadbalancer terminate https traffic;
+	You can't do virtual hosts or path-based routing; So, you can't use a single load balancer to proxy to multiple services;
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Demo - Use Ingress for routing by domain name
+---------------------------------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/ingress/my-ingress.yaml 
+deployment.apps/mynginx created
+service/my-ingress-svc created
+ingress.networking.k8s.io/my-ingress-by-domain created
+
+> kubectl get services
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+kubernetes       ClusterIP   10.96.0.1       <none>        443/TCP   23h
+my-ingress-svc   ClusterIP   10.98.172.254   <none>        80/TCP    19s
+
+> kubectl get ing
+NAME                   CLASS    HOSTS               ADDRESS   PORTS   AGE
+my-ingress-by-domain   <none>   www.mcwebsite.com             80      4m55s
+
+
+https://brunodelb.medium.com/kubernetes-use-ingress-for-routing-by-domain-name-bc868c01fe24 - not working 
+
+https://codeburst.io/kubernetes-ingress-simply-visually-explained-d9cad44e4419 - try this
+https://awkwardferny.medium.com/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c
+https://thenewstack.io/kubernetes-ingress-for-beginners/
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+	 When using an Ingress you create your services as type NodePort and let the ingress controller figure out how to get traffic to the nodes. There are ingress controller implementations for GCE load balancers, AWS elastic load balancers, and for popular proxies such as nginx and haproxy.
+
+
+
+References:
+
+TODO:
+	https://awkwardferny.medium.com/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c
+	https://itnext.io/save-on-your-aws-bill-with-kubernetes-ingress-148214a79dcb
+	https://medium.com/google-cloud/understanding-kubernetes-networking-ingress-1bc341c84078
+	https://medium.com/@Oskarr3/setting-up-ingress-on-minikube-6ae825e98f82
+	https://medium.com/hackernoon/setting-up-nginx-ingress-on-kubernetes-2b733d8d2f45

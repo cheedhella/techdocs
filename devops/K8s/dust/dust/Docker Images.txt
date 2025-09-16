@@ -1,0 +1,9 @@
+nginx
+busybox
+
+influxdb - Time Series Database
+	Time Series Database - Database that is optimized for analyzing time series data.
+	Time Series Data - anything that changes along with time(day/month etc). Eg: Weather forecast, no of daily/monthly users etc.
+	https://blog.timescale.com/what-the-heck-is-time-series-data-and-why-do-i-need-a-time-series-database-dcf3b1b18563/
+
+logstash

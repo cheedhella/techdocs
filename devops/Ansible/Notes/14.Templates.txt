@@ -1,0 +1,54 @@
+
+
+Ansible templates allow you to create files dynamically by interpolating variables or using logical expressions such as conditionals and loops.
+
+Jinja2 templating. This tool allows you to dynamically generate configuration files
+Templates in Ansible are processed by the template module using Jinja2. This module takes a template file, processes it, and deploys the output file to a specified location on the remote hosts.
+
+Key Features of Jinja2:
+
+Variables: Inject data into templates.
+Filters: Modify the appearance of variables within the template (e.g., capitalization).
+Control Structures: Use conditions and loops in templates to influence content generation.
+
+
+Jinja2 templates combine plain text files and special syntax to define and substitute dynamic content, embed variables, expressions, loops, and even conditional statements to generate complex output. 
+According to the documentation, expressions are enclosed in double curly bra
+
+
+
+
+// test.conf.j2
+My favourite color is {{ favourite_color }}
+
+{% if age > 18 %}
+You are an adult, and you can vote in the voting center: {{ voting_center }}
+{% else %}
+Sorry, you are minor and you can’t vote yet.
+{% endif %}
+
+A list of fruits:
+{% for fruit in fruits %}
+ - {{ fruit }}
+{% endfor %}
+
+
+
+// test_templates_playbook.yml
+- name: Playbook to test templates
+  hosts: localhost
+  vars:
+    favourite_color: blue
+    age: 21
+    voting_center: ab456-g
+    fruits:
+      - banana
+      - apple
+      - mango
+      - pear
+  tasks:
+    - name: Template test
+      template:
+        src: test.conf.j2
+        dest: test.conf
+

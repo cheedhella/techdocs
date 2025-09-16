@@ -1,0 +1,28 @@
+What is HorizontalPodAutoscaler?
+	Sometimes hardcoding the number of replicas is not ideal;
+
+
+
+What if the load on a container increases drastically?
+	Usually, we will have a promoteus alert, regarding resource utilization; We also have customers complaining about slowness;
+	How can k8s know about it? How can k8s can be smart enough to react to the situation?
+		k8s has a process called metrics server, which runs kube-system namespace; It monitors the cpu and memory utilization of it's pods and nodes;
+		It gathers it time to time and writes it to API server;
+
+
+
+
+Cluster Autoscaler allows us to scale cluster nodes when they become full;
+HPA allows us to scale pods when their resource utilization goes over a threshold;
+
+
+kubectl top nodes 		-> Resource utilization of each node;
+kubectl get pods 		-> Resource utilization of each pod;
+
+kubectl autoscale deploy/my-deployment --cpu-percent=95 --min=1 --max=10 		// 
+
+you can also specify different scale up and sclae down policies;
+https://www.youtube.com/watch?v=FfDI08sgrYY
+
+
+Kubernetes Event-Driven Autoscaling

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:3.6.5-jessie
+        volumeMounts:
+          - name: mongo-persistent-storage
+            mountPath: /data/db                      # MongoDB write data to any folder at /data/db directory; So, mount your volume here;
+
+# We can store data any folder on VirtualBox OR any external volume;            
+#      volumes:
+#        - name: mongo-persistent-storage
+#          hostPath:
+#            path: /c/path-on-virtual-box
+#            type: DirectoryOrCreate  
+      volumes:
+        - name: mongo-persistent-storage
+          persistentVolumeClaim:                    # With PVC, when we move from one cloud provider to another(OR minikube to aws), we don't have to change this workload;
+            claimName: mongo-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: fleetman-mongodb              # position-tracker looks for a service with this name; If you want to change this, fix application-*.properties in position-tracker project;
+spec:
+  type: ClusterIP
+  selector:
+    app: mongodb
+  ports:
+    - name: mongoport
+      port: 27017                   # MongoDB listens on port 27017 for connections;

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim                   # It specifies, what do we want? We need storage of size 20Gb, with specified access modes;
+metadata:
+  name: mongo-pvc
+spec:
+  storageClassName: mylocalstorage            # Optional; At runtime, k8s finds a PV with this storage class, access modes and size;
+  accessModes:
+    - ReadWriteOnce
+  resources:                                  # We are asking k8s to find a PersistentVolume of size 20GB; K8s searches for any PersistentVolume that is of atleast 20GB in size;
+    requests:                                 # It doesn't refer the PV name anywhere; That allows cluster administrator to procure storage separately;
+      storage: 20Gi 
+---
+apiVersion: v1
+kind: PersistentVolume                        # It tells how to procure volume? whether host or EBS etc?
+metadata:
+  name: local-storage
+spec:
+  storageClassName: mylocalstorage            # It gives each storage a name and is used to link PV and PVC; Optional;
+  capacity:                                   # Size of the volume
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:                                   # Volume created on host;
+    path: "/mnt/some/directory/structure/"
+    type: DirectoryOrCreate

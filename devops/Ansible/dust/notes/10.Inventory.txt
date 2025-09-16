@@ -1,0 +1,21 @@
+The default path for an Ansible inventory is /etc/ansible/hosts.
+
+client240.mgr.example.org
+client241.mgr.example.org
+client242.mgr.example.org
+client243.mgr.example.org ansible_ssh_private_key_file=/etc/ansible/some_ssh_key
+
+[mygroup1]
+client241.mgr.example.org
+client242.mgr.example.org
+
+[mygroup2]
+client243.mgr.example.org
+
+[all:vars]
+ansible_ssh_private_key_file=/etc/ansible/my_ansible_private_key
+
+
+ansible all -m ping
+ansible mygroup1 -m ping
+ansible client240.mgr.example.org -m ping

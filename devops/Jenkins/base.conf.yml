@@ -1,0 +1,627 @@
+settings:
+  # Maven Settings
+  maven3.0.4:
+    M2: /builds/apache-maven-3.0.4/bin
+    M2_HOME: /builds/apache-maven-3.0.4
+  maven3.5.0:
+    M2: /builds/apache-maven-3.5.0/bin
+    M2_HOME: /builds/apache-maven-3.5.0
+  maven3.6.3:
+    M2: /builds/apache-maven-3.6.3/bin
+    M2_HOME: /builds/apache-maven-3.6.3
+  maven3.8.5:
+    M2: /builds/apache-maven-3.8.5/bin
+    M2_HOME: /builds/apache-maven-3.8.5
+  maven-ttl: 240
+
+  # Linux Settings
+  maven-path: /builds/apache-maven-3.8.5/bin
+  ansible-location: /project/builds_netops/tools/netops-ansible/integration/latest/netops-ansible.zip
+  node-path: /builds/node-v14.17.0-linux-x64/bin
+  java-version: 17.0.10
+  java-home-path: /builds/jdk-17.0.10+7
+  java-font-path: /usr/share/fonts
+  default-path: /usr/lib64/qt-3.3/bin:/root/perl5/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+  path: '{{node-path}}:{{java-home-path}}:{{java-home-path}}/bin:{{default-path}}'
+
+  # Artifact Information
+  artifactory-server: artifactory-lvn.broadcom.net
+  maven-repository: .m2/repository
+  base-artifact-location: /project/builds_ifm
+  build-status-repo: git@github.gwd.broadcom.net:ESD/NetOps-BuildStatus.git
+  build-status-branch: master
+  build-status-directory: ifm
+  build-artifact-cleanup-cmd: echo "Override in branch specific configuration to perform artifact cleanup"
+  build-artifact-location: '{{base-artifact-location}}/integration_builds/ifm/{{branch}}/{{build-number}}'
+  ansible-zip-path: /project/builds_netops/tools/netops-ansible/integration/latest
+
+  # Sonar Information
+  sonar-server: sonarqube.broadcom.net
+  sonar-project: ESD-IFM-01
+  sonar.projectKey: ESD-IFM-01
+  sonar-project-name: ESD-IFM-01
+  sonar-branch-name: '{{branch}}'
+  sonar-pullrequest-target: '{{pull-request-target}}'  
+  
+  # Coverity
+  coverity-tool-cmd: ./buildtools/common/scripts/covtool.pl
+  coverity-build-cmd: /builds/coverity/bin/cov-build
+  coverity-analyze-cmd: /builds/coverity/bin/cov-analyze
+  coverity-commit-cmd: /builds/coverity/bin/cov-commit-defects
+  coverity-stream: 'IFM_integration_24.3.1'
+  coverity-dev-project: 'AOD-NetOps_IFM'
+  coverity-dev-stream: 'IFM_integration_24.3.1'
+  coverity-dev-triagestore: 'AOD-NetOps_IFM-TS'
+  coverity-dev-componentmap: 'AOD-NetOps_IFM-CM'
+  coverity-host: cov-esd-01.devops.broadcom.net
+  coverity-url: 'https://{{coverity-host}}:8443'
+  coverity-cert: /builds/coverity/certs/DigiCertCA.crt
+  coverity-auth-file: /builds/coverity/auth-key.txt
+  coverity-out-dir: .cov_out
+  coverity-description: '{{branch}} {{build-number}}'
+
+  # Blackduck
+  blackduck-tool-cmd: ./buildtools/common/scripts/bdtool.pl
+  blackduck-out-dir: .blackduck
+  blackduck-server-url: https://broadcom-sw.app.blackduck.com
+  blackduck-server-token: YTBkODQxZTMtYjY5Ni00Mzg4LTlhOWMtYTUxNTdkNzU2ZjlhOmFiMGI5M2E5LThkMTktNDY0MC04OTczLWI0NjEzMTc2MDg4ZA==
+  blackduck-project-name: AOD-NetOps-IFM
+  blackduck-project-version: '24.3.1'
+  #blackduck-project-version-pom: 1.0
+  blackduck-properties: .blackduck.properties
+  blackduck-exclude-dirs: i18n,gulp,cache,.m2
+ 
+
+  # Docker
+  docker-registry: esd-netops-docker-dev-local.artifactory-lvn.broadcom.net
+
+  # Playbook application properties file paths
+  AGS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/alarm_generator_service/templates/application.yml
+  EGS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/event_generator_service/templates/application.yml
+  FIS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/fault_isolation_service/templates/application.yml
+  TS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/topology_service/templates/application.yml
+  CS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/connection_service/templates/application.yml
+  TGQ_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/graph_store_api_service/templates/application.yml
+  GAS_INPUT_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/graph_store_api_service/templates/graph-api-config.yml
+  GST_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/graphdb_neo4j/templates/application.yml
+  GS_CDC_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/graph_cdc_service/templates/application.yml
+  ACS_CONFIG_FILE_PATH: ifm-playbook/provisioning/roles/netops_alarm_consumer/templates/application.yml
+  GST_TEMPLATES_PATH: ifm-playbook/provisioning/roles/graphdb_neo4j/templates/.cypher
+  NEO4J_CONF_PATH: ifm-playbook/provisioning/roles/graphdb_neo4j/conf/
+
+  # Netops-Kafka
+  KAFKA_ANSWERS_PROPS_PATH: "https://github.gwd.broadcom.net/raw/ESD/netops-kafka/integration/netops-kafka-installer/core/config/answers.properties"
+  
+  # Prometheus  
+  PROMETHEUS_VERSION: "2.52.0"
+  PROMETHEUS_ARCHIVE_NAME: "prometheus-{{ PROMETHEUS_VERSION }}.linux-386"
+
+actions:
+
+  # Common actions ###############################################
+
+  clean:
+    - remove-files:
+      - "{{maven-repository}}/com/ca/ifm"
+
+  set-started-build-number:
+    - build-number:
+        increment: true
+        update-source: true
+        phase: started
+
+  set-finished-build-number:
+    - build-number:
+        get-from: config
+        update-source: true
+        phase: finished
+
+  set-spin-number:
+    - build-number:
+        increment: true
+        update-source: true
+
+  compile:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: clean install
+        java_params: -Xms512M -Xmx2048M
+        params: -s settings.xml -gs settings.xml -ntp -B -U -e -Dmaven.test.failure.ignore=true -Djava.awt.headless=true -DskipTests -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+        
+
+  package:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: package
+        params: -s settings.xml -gs settings.xml -ntp -B -U -e -Dmaven.test.failure.ignore=true -Djava.awt.headless=true -DskipTests -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+
+  post-build-actions:
+    - command: |
+        echo "Override in branch specific configuration to perform post build actions"
+  # Unit Test Actions ###################################
+
+  unit-tests:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: test
+        java_params: -Xms512M -Xmx2048M
+        params: -s settings.xml -gs settings.xml -ntp -B -U -e -Dmaven.clean.failOnError=true -Dspring.profiles.active=test -Pcoverage -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}} 
+
+  stop-embedded-neo4j:
+    - command: |
+         docker ps | grep 'tini -g -- /startup' | awk '{ print $1 }' | xargs -r docker rm -f
+         
+  start-embedded-neo4j:
+    - command: |
+         docker pull esd-netops-docker-dev-local.packages.broadcom.net/netops/ifm-neo4j:5.22
+         docker run -d --net="host" -v/builds/workspace/IFM/:/builds/workspace/IFM -p7687:7687 -p7474:7474 --env NEO4J_AUTH=neo4j/interOP@123 esd-netops-docker-dev-local.packages.broadcom.net/netops/ifm-neo4j:5.22
+  # Upload stage no need of test run
+  upload-artifacts:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: deploy -gs settings.xml
+        params: -ntp -B -U -DskipTests -DaltDeploymentRepository=central::default::https://usw1.packages.broadcom.com/artifactory/esd-netops-maven-virtual/ -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+
+
+  upload-common-release-artifacts:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: common/ifm-common/pom.xml
+        goals: deploy -gs settings.xml
+        params: -ntp -B -U -DskipTests -Drevision=24.3.1.{{build-number}}-release -DaltDeploymentRepository=central::default::https://usw1.packages.broadcom.com/artifactory/esd-netops-maven-virtual/ -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+
+  
+  # Sonar actions for branches (non-master/integration)
+
+  sonar:
+    - java: '{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: sonar:sonar -gs settings.xml
+        params: -ntp -B -Dmaven.wagon.httpconnectionManager.ttlSeconds={{maven-ttl}} -e -fn -Dsonar.host.url=https://{{sonar-server}}
+                               -Dsonar.projectName="{{sonar-project-name}}"
+                               -Dsonar.projectKey="{{sonar.projectKey}}"
+                               -Dsonar.login={{sonar-token}}
+                               -Dsonar.branch.name={{sonar-branch-name}}
+                               -Dsonar.scm.provider=git
+                               -Dsonar.links.ci=https://{{sonar-server}}/viewLog.html?buildId={{build-id}}
+                               -Dsonar.links.scm={{vcs-root}}
+                               -Dsonar.visualstudio.enable=false
+                               -Dsonar.visualstudio.skipIfNotBuilt=true
+                               -Dsonar.skipDesign=false
+                               -Dsonar.user.home=.
+                               -Dmaven.test.failure.ignore=true
+                               -DargLine="-XX:+UseCompressedOops"                               -Dsonar.exclusions=org/**/*.java,com/rsa/**/*.java,**/autogenerated/**/*.java,com/ca/im/internal/examples/**/*.java,**/integrationtests/**/*.java,**/apache/**/*.java,**/easymock/util/*.java,**/test/**/*.java,**/*.js,**/*.css,**/*.scss,**/*.xml,**/*.jsp,**/*.html,**/ifm/constants/*.java,**/ifm/enums/*.java,**/ifm/model/**/*.java,**/SATConnectionHandler.java,**/PotentialConnectionPruner.java,**/RemoteDeviceLink.java
+                               -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml,target/site/jacoco-st/jacoco.xml
+                               -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+        java_params: -Xms1536m -Xmx1536m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:+DisableExplicitGC -XX:+UseCompressedOops
+
+  sonar-pullrequest:
+    - java: '{{java-home-path}}'
+    - command: |
+        export JAVA_HOME='{{java-home-path}}'
+    - maven:
+        pom: pom.xml
+        goals: sonar:sonar -gs settings.xml
+        params: -ntp -B -Dmaven.wagon.httpconnectionManager.ttlSeconds={{maven-ttl}} -e -fn -Dsonar.host.url=https://{{sonar-server}}
+                               -Dsonar.projectName="{{sonar-project-name}}"
+                               -Dsonar.projectKey="{{sonar.projectKey}}"
+                               -Dsonar.login={{sonar-token}}
+                               -Dsonar.pullrequest.key={{pull-request-key}}
+                               -Dsonar.pullrequest.branch={{sonar-branch-name}}
+                               -Dsonar.pullrequest.base={{sonar-pullrequest-target}}
+                               -Dsonar.scm.provider=git
+                               -Dsonar.links.ci=https://{{sonar-server}}/viewLog.html?buildId={{build-id}}
+                               -Dsonar.links.scm={{vcs-root}}
+                               -Dsonar.visualstudio.enable=false
+                               -Dsonar.visualstudio.skipIfNotBuilt=true
+                               -Dsonar.skipDesign=false
+                               -Dsonar.user.home=.
+                               -Dmaven.test.failure.ignore=true
+                               -Dsonar.java.skipUnchanged=false
+                               -DargLine="-XX:+UseCompressedOops"                               -Dsonar.exclusions=org/**/*.java,com/rsa/**/*.java,**/autogenerated/**/*.java,com/ca/im/internal/examples/**/*.java,**/integrationtests/**/*.java,**/apache/**/*.java,**/easymock/util/*.java,**/test/**/*.java,**/*.js,**/*.css,**/*.scss,**/*.xml,**/*.jsp,**/*.html,**/ifm/constants/*.java,**/ifm/enums/*.java,**/ifm/model/**/*.java,**/SATConnectionHandler.java,**/PotentialConnectionPruner.java,**/RemoteDeviceLink.java
+                               -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco-ut/jacoco.xml,target/site/jacoco-it/jacoco.xml,target/site/jacoco-st/jacoco.xml
+                               -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+        java_params: -Xms1536m -Xmx1536m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:+DisableExplicitGC -XX:+UseCompressedOops
+
+  sonar-fetch-coverage:
+    - command: |
+        echo "Collecting code coverage results"
+        jar xvf {{build-artifact-location}}/codecoverage-unit.zip
+        jar xvf {{build-artifact-location}}/codecoverage-integration.zip
+        jar xvf {{build-artifact-location}}/codecoverage-stress.zip
+        find . -type f -name jacoco\*
+  sonar-quality-gate:
+    - command: |
+        sleep 120
+    - validate-sonar-quality-gate:
+        - url: 'https://{{sonar-server}}/api/project_branches/list?project={{sonar-project}}'
+          token: '{{sonar-token}}'
+          branch: '{{sonar-branch-name}}'
+          
+  sonar-quality-gate-pr:
+    - command: |
+        export JAVA_HOME='{{java-home-path}}'
+        sleep 120
+    - validate-sonar-quality-gate:
+        - sonar-server: '{{sonar-server}}'
+          sonar-project: '{{sonar-project}}'
+          token: '{{sonar-token}}'
+          pull-request: "{{pull-request-key}}"
+          
+  sonar-cleanup:
+    - cleanup-sonar-branches:
+        - git-branch-file: 'branches.txt'
+          token: '{{sonar-token}}'
+          list-branch-url: 'https://{{sonar-server}}/api/project_branches/list?project={{sonar-project}}'
+          delete-branch-url-base: 'https://{{sonar-server}}/api/project_branches/delete?project={{sonar-project}}&branch='
+
+  # Coverity actions #########################################
+  coverity-clean:
+    - command: |
+        rm -rf {{coverity-out-dir}}
+  coverity-compile:
+    - java: '{{java-home-path}}'
+    - maven:
+       wrapper-command: '{{coverity-build-cmd}} --dir {{coverity-out-dir}}'
+       pom: pom.xml
+       goals: clean compile -gs settings.xml
+       params: -ntp -B -Dmaven.wagon.httpconnectionManager.ttlSeconds={{maven-ttl}} -e -Dmaven.test.failure.ignore=true -Djava.awt.headless=true -DskipTests -Dmaven.test.skip=true -Dmaven.repo.local={{maven-repository}} -Drepo.username={{artifactory-user}} -Drepo.password={{artifactory-pass}} {{extra-maven-args}}
+
+  coverity-analyze:
+    - command: |
+        {{coverity-analyze-cmd}} --dir {{coverity-out-dir}} --tu-pattern "! file('.*/test/.*')" --strip-path=`pwd`
+  coverity-commit:
+    - command: |
+        {{coverity-commit-cmd}} --dir {{coverity-out-dir}} --stream {{coverity-stream}} --url {{coverity-url}} --certs {{coverity-cert}} --auth-key-file {{coverity-auth-file}} --description "{{coverity-description}}"
+  coverity-commit-dev:
+    - command: |
+        {{coverity-tool-cmd}} --verbose --stream-triagestore {{coverity-dev-triagestore}} --stream-component-map {{coverity-dev-componentmap}} --stream-description 'Development branch scan' --cov-host {{coverity-host}} add-stream '{{coverity-dev-project}}:{{coverity-dev-stream}}'
+        {{coverity-commit-cmd}} --dir {{coverity-out-dir}} --stream {{coverity-dev-stream}} --url {{coverity-url}} --certs {{coverity-cert}} --auth-key-file {{coverity-auth-file}} --description "{{coverity-description}}"
+  coverity-check-new-defects:
+    - command: |
+        {{coverity-tool-cmd}} --properties-file .covtool.properties --cov-dir {{coverity-out-dir}} --cov-host {{coverity-host}} --cov-ref-stream {{coverity-stream}} detect-new-defects
+  # Blackduck actions ##########################################
+  blackduck-clean:
+    - command: |
+        rm -rf {{blackduck-out-dir}}
+  blackduck-detect:
+    - java: '{{java-home-path}}'
+    - command: |
+        {{blackduck-tool-cmd}} --verbose --skip-dirs {{blackduck-exclude-dirs}} --detect-properties-file {{blackduck-properties}} --detect-tools DETECTOR,SIGNATURE_SCAN --ignore-detect-failures --dir-size-limit 20G --blackduck-server-url {{blackduck-server-url}} --blackduck-server-token {{blackduck-server-token}} --blackduck-output-dir {{blackduck-out-dir}} --project-name {{blackduck-project-name}} --project-version {{blackduck-project-version}} --maven-exec-path {{maven-path}}/mvn --maven-m2-dir {{maven-repository}} scan {{working-dir}}
+  blackduck-detect-dev:
+    - permission:
+        file: "{{permission-file}}"
+        path: "allow/dev-branches"
+        item: "{{branch}}"
+    - java: '{{java-home-path}}'
+    - command: |
+        {{blackduck-tool-cmd}} --verbose --skip-dirs {{blackduck-exclude-dirs}} --detect-properties-file {{blackduck-properties}} --detect-tools DETECTOR,SIGNATURE_SCAN --ignore-detect-failures --dir-size-limit 20G --blackduck-server-url {{blackduck-server-url}} --blackduck-server-token {{blackduck-server-token}} --blackduck-output-dir {{blackduck-out-dir}} --project-name {{blackduck-project-name}} --project-version-from-pom {{blackduck-project-version-pom}} --project-version-suffix="_{{branch}}" --maven-exec-path {{maven-path}}/mvn --maven-m2-dir {{maven-repository}} scan {{working-dir}}
+# Playbook actions ############################################
+
+  download_thirdparty:
+    - command: |
+        echo "Downloading thirdparty binaries"
+        mkdir {{THIRDPARTY_BINARIES}}
+        cp ifm-playbook/target/thirdparty-jars/* {{THIRDPARTY_BINARIES}}/.
+        cd {{THIRDPARTY_BINARIES}}
+        curl -L -O https://dist.neo4j.org/neo4j-enterprise-5.22.0-unix.tar.gz
+        curl -L -O https://github.com/hazelcast/hazelcast/releases/download/v5.4.0/hazelcast-5.4.0-slim.tar.gz
+        curl -L -o adoptopenjdk_openjdk17.0.10.tar.gz https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jdk_x64_linux_hotspot_17.0.10_7.tar.gz
+        curl -L -O https://github.com/prometheus/prometheus/releases/download/v{{ PROMETHEUS_VERSION }}/{{ PROMETHEUS_ARCHIVE_NAME }}.tar.gz
+
+  mv_files_to_zip:
+    - command: |
+        echo "Download kafka answers.properties"
+        curl -k {{KAFKA_ANSWERS_PROPS_PATH}} -H "accept: application/raw" -H "Authorization: token {{GITHUB_TOKEN}}" -o ifm-playbook/kafka-answers.properties
+        echo "Download Netops Alarm Consumer answers.properties"
+        echo "Move downloaded files to specific folder to zip..."
+        mv ifm-playbook/ansible.cfg {{TARGET_FOLDER}}
+        mv ifm-playbook/kafka-answers.properties {{TARGET_FOLDER}}
+        mv ifm-playbook/ifm-install.yaml {{TARGET_FOLDER}}
+        mv ifm-playbook/ifm-uninstall.yaml {{TARGET_FOLDER}}
+        mv ifm-playbook/ifm-upgrade.yaml {{TARGET_FOLDER}}
+        mv ifm-playbook/inventory {{TARGET_FOLDER}}
+        mv ifm-playbook/README.md {{TARGET_FOLDER}}
+        mv ifm-playbook/provisioning {{TARGET_FOLDER}}
+        mv NOTICE.txt {{TARGET_FOLDER}}
+  copy_config_files:
+    - command: |
+        echo "Copying IFM Services Config Files to Playbook Package"
+        cp alarm-generator-service/src/main/resources/application.yml {{AGS_CONFIG_FILE_PATH}}
+        cp fault-isolation-service/src/main/resources/application.yml {{FIS_CONFIG_FILE_PATH}}
+        cp topology-service/src/main/resources/application.yml {{TS_CONFIG_FILE_PATH}}
+        cp connection-service/src/main/resources/application.yml {{CS_CONFIG_FILE_PATH}}
+        cp event-store/event-generator-service/src/main/resources/application.yml {{EGS_CONFIG_FILE_PATH}}
+        cp graph-store/graph-store-api-service/src/main/resources/application.yml {{TGQ_CONFIG_FILE_PATH}}
+        cp graph-store/graph-store-api-service/src/main/resources/graph-api-config.yml {{GAS_INPUT_CONFIG_FILE_PATH}}
+        cp graph-store/graph-store-transaction/src/main/resources/application.yml {{GST_CONFIG_FILE_PATH}}  
+        cp graph-store/graph-store-neo/src/main/resources/.cypher {{GST_TEMPLATES_PATH}}
+        mkdir {{NEO4J_CONF_PATH}}
+        cp graph-store/graph-store-neo/src/main/resources/apoc.conf {{NEO4J_CONF_PATH}}
+        cp graph-store/graph-store-neo/src/main/resources/neo4j.conf {{NEO4J_CONF_PATH}}
+        cp graph-store/graph-store-cdc-service/src/main/resources/application.yml {{GS_CDC_CONFIG_FILE_PATH}}
+        cp netops-alarm-consumer/netops-alarm-consumer-server/src/main/resources/application.yml {{ACS_CONFIG_FILE_PATH}}
+        cp -r netops-alarm-consumer/netops-alarm-consumer-server/src/main/resources/sql {{IFM_JARS}}/.
+        echo "Copying EGS/event-metadata-repository folder to {{IFM_JARS}} folder"
+        zip -r event-metadata-repository.zip event-store/event-metadata-repository/*
+        mkdir {{IFM_JARS}}
+        mv event-metadata-repository.zip {{IFM_JARS}}/.
+        
+# Update Service Properties Actions ################################
+  update-ags-application-properties:
+    - command: |
+        echo "Replacing values with env in alarm_generator_service application.yml"
+        sed -i '/spring:/i \server:   \n  port: \"\{\{ ags_server_port \}\}\" \n' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/auto-offset-reset:.*/auto-offset-reset: \"\{\{ INVENTORY_CONSUMER_OFFSET_RESET \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/enable-auto-commit:.*/enable-auto-commit: \"\{\{ INVENTORY_CONSUMER_AUTO_COMMIT \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/compression-type:.*/compression-type: \"\{\{ KAFKA_PRODUCER_COMPRESSION_TYPE \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"alarm-service-\{\{ inventory_hostname \}\}\" /g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/spring/{N;N;/name:/s/$/-\{\{ inventory_hostname \}\}/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}}' {{AGS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}}' {{AGS_CONFIG_FILE_PATH}}
+
+  update-egs-application-properties:
+    - command: |
+        echo "Replacing values with env in event_generator_service application.yml"
+        sed -i '/spring:/i \server:   \n  port: \"\{\{ egs_server_port \}\}\" \n' {{EGS_CONFIG_FILE_PATH}} 
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{EGS_CONFIG_FILE_PATH}}
+        sed -i 's/auto-offset-reset:.*/auto-offset-reset: \"\{\{ INVENTORY_CONSUMER_OFFSET_RESET \}\}\"/g' {{EGS_CONFIG_FILE_PATH}} 
+        sed -i 's/enable-auto-commit:.*/enable-auto-commit: \"\{\{ INVENTORY_CONSUMER_AUTO_COMMIT \}\}\"/g' {{EGS_CONFIG_FILE_PATH}} 
+        sed -i 's/compression-type:.*/compression-type: \"\{\{ KAFKA_PRODUCER_COMPRESSION_TYPE \}\}\"/g' {{EGS_CONFIG_FILE_PATH}} 
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{EGS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"event-service-\{\{ inventory_hostname \}\}\" /g' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/content-directory:.*/c\      content-directory: file:\{\{ egs_dest_path \}\}\/event-metadata-repository' {{EGS_CONFIG_FILE_PATH}}
+        sed -i 's/load-content-on-service-start:.*/load-content-on-service-start: true/g' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/spring/{N;N;/name:/s/$/-\{\{ inventory_hostname \}\}/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}' {{EGS_CONFIG_FILE_PATH}}
+  update-fis-application-properties:
+    - command: |
+        echo "Replacing values with env in fault_isolation_service application.yml"
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/auto-offset-reset:.*/auto-offset-reset: \"\{\{ INVENTORY_CONSUMER_OFFSET_RESET \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/enable-auto-commit:.*/enable-auto-commit: \"\{\{ INVENTORY_CONSUMER_AUTO_COMMIT \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/compression-type:.*/compression-type: \"\{\{ KAFKA_PRODUCER_COMPRESSION_TYPE \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/port: 8080/port: \"\{\{ fis_server_port \}\}\"/g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i 's/instance-name.*/instance-name: \"fis-service-\{\{ inventory_hostname \}\}\" /g' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/spring/{N;N;/name:/s/$/-\{\{ inventory_hostname \}\}/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+        sed -i '/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}' {{FIS_CONFIG_FILE_PATH}}
+  update-ts-application-properties:
+    - command: |
+        echo "Replacing values with env in topology_service application.yml"
+        sed -i '/server:/{N;s/port:.*/port: \"\{\{ TS_HTTP_PORT \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;s/enabled:.*/enabled: \"\{\{ ifm_enable_ssl \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;s/key-store:.*/key-store: \"\{\{ ts_keystore_path \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ ifm_ssl_keystore_password_enc \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;N;s/key-alias:.*/key-alias: \"\{\{ IFM_SSL_KEYSTORE_ALIAS \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/auto-offset-reset:.*/auto-offset-reset: \"\{\{ INVENTORY_CONSUMER_OFFSET_RESET \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/enable-auto-commit:.*/enable-auto-commit: \"\{\{ INVENTORY_CONSUMER_AUTO_COMMIT \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/max-poll-records:.*/max-poll-records: \"\{\{ INVENTORY_CONSUMER_MAX_RECORDS \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/fetch-max-wait:.*/fetch-max-wait: \"\{\{ INVENTORY_CONSUMER_MAX_WAIT_MS \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"ts-service-\{\{ inventory_hostname \}\}\" /g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/inventory-processor-batch-size:.*/inventory-processor-batch-size: \"\{\{ INVENTORY_PROCESSOR_BATCH_SIZE \}\}\"/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/spring/{N;N;/name:/s/$/-\{\{ inventory_hostname \}\}/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}}' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${TS_LIVE_TOPIC:.*/\{\{ live_inventory_topic_name \}\}/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${FULL_SYNC_TOPIC:.*/\{\{ full_inventory_topic_name \}\}/g' {{TS_CONFIG_FILE_PATH}}
+        sed -i 's/${CONTROL_TOPIC:.*/\{\{ ts_control_topic_name \}\}/g' {{TS_CONFIG_FILE_PATH}}
+
+  update-cs-application-properties:
+    - command: |
+        echo "Replacing values with env in connection_service application.yml"
+        sed -i '/server:/{N;s/port:.*/port: \"\{\{ CS_HTTP_PORT \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;s/enabled:.*/enabled: \"\{\{ ifm_enable_ssl \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;s/key-store:.*/key-store: \"\{\{ cs_keystore_path \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ ifm_ssl_keystore_password_enc \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;N;s/key-alias:.*/key-alias: \"\{\{ IFM_SSL_KEYSTORE_ALIAS \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/auto-offset-reset:.*/auto-offset-reset: \"\{\{ INVENTORY_CONSUMER_OFFSET_RESET \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/enable-auto-commit:.*/enable-auto-commit: \"\{\{ INVENTORY_CONSUMER_AUTO_COMMIT \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/max-poll-records:.*/max-poll-records: \"\{\{ INVENTORY_CONSUMER_MAX_RECORDS \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/fetch-max-wait:.*/fetch-max-wait: \"\{\{ INVENTORY_CONSUMER_MAX_WAIT_MS \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"cs-service-\{\{ inventory_hostname \}\}\" /g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/inventory-processor-batch-size:.*/inventory-processor-batch-size: \"\{\{ INVENTORY_PROCESSOR_BATCH_SIZE \}\}\"/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/spring/{N;N;/name:/s/$/-\{\{ inventory_hostname \}\}/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}}' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${CS_TOPIC:.*/\{\{ live_connection_topic_name \}\}/g' {{CS_CONFIG_FILE_PATH}}
+        sed -i 's/${CONTROL_TOPIC:.*/\{\{ ts_control_topic_name \}\}/g' {{CS_CONFIG_FILE_PATH}}
+
+  update-graph-store-api-service-properties:
+    - command: |
+        echo "Replacing values with env in graph-store-api-service (graphstore) application.yml"
+        sed -i '/server:/{N;s/port:.*/port: \"\{\{ GS_API_HTTP_PORT \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;s/enabled:.*/enabled: \"\{\{ ifm_enable_ssl \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;s/key-store:.*/key-store: \"\{\{ gas_keystore_path \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ ifm_ssl_keystore_password_enc \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;N;s/key-alias:.*/key-alias: \"\{\{ GAS_SSL_KEYSTORE_ALIAS \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"gs-service-\{\{ inventory_hostname \}\}\"/g' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}}' {{TGQ_CONFIG_FILE_PATH}}
+        sed -i 's/${CONTROL_TOPIC:.*/\{\{ ts_control_topic_name \}\}/g' {{TGQ_CONFIG_FILE_PATH}}
+
+  update-graph-store-transaction-properties:
+    - command: |
+        echo "Replacing values with env in graph-store-transaction application.yml"
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/security.protocol:.*/security.protocol: \{\{ KAFKA_SECURITY_PROTOCOL \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/ssl.truststore.location:.*/ssl.truststore.location: \{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/ssl.truststore.password:.*/ssl.truststore.password: \{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/ssl.keystore.location:.*/ssl.keystore.location: \{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/ssl.keystore.password:.*/ssl.keystore.password: \{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}/g' {{GST_CONFIG_FILE_PATH}}
+        sed -i 's/ssl.key.password:.*/ssl.key.password: \{\{ KAFKA_SSL_KEY_PASSWORD \}\}/g' {{GST_CONFIG_FILE_PATH}}
+
+  update-graph-store-cdc-properties:
+    - command: |
+        echo "Replacing values with env in graph-store-cdc application.yml"
+        sed -i '/server:/{N;s/port:.*/port: \"\{\{ GS_CDC_HTTP_PORT \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;s/enabled:.*/enabled: \"\{\{ ifm_enable_ssl \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;s/key-store:.*/key-store: \"\{\{ gs_cdc_keystore_path \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ ifm_ssl_keystore_password_enc \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;N;s/key-alias:.*/key-alias: \"\{\{ IFM_SSL_KEYSTORE_ALIAS \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i 's/${HAZELCAST_INSTANCE_NAME:.*/\"graph-cdc-service-\{\{ inventory_hostname \}\}\"/g' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/security:/{N;s/protocol:.*/protocol: \"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/;}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;s/trust-store-location:.*/trust-store-location: \"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;s/trust-store-password:.*/trust-store-password: \"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;s/key-store-location:.*/key-store-location: \"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+        sed -i '/kafka:/{N;N;N;N;N;/ssl:/{N;N;N;N;N;s/key-password:.*/key-password: \"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/;}}' {{GS_CDC_CONFIG_FILE_PATH}}
+
+  update-alarm-consumer-service-properties:
+    - command: |
+        echo "Replacing values with env in alarm-consumer-service application.yml"
+        sed -i '/server:/{N;s/port:.*/port: \"\{\{ ACS_HTTP_PORT \}\}\"/;}' {{ACS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;s/enabled:.*/enabled: \"\{\{ ifm_enable_ssl \}\}\"/;}}' {{ACS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;s/key-store:.*/key-store: \"\{\{ acs_keystore_path \}\}\"/;}}' {{ACS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;s/key-store-password:.*/key-store-password: \"\{\{ ifm_ssl_keystore_password_enc \}\}\"/;}}' {{ACS_CONFIG_FILE_PATH}}
+        sed -i '/server:/{N;N;/ssl:/{N;N;N;N;s/key-alias:.*/key-alias: \"\{\{ IFM_SSL_KEYSTORE_ALIAS \}\}\"/;}}' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_BOOTSTRAP_SERVERS:.*/\"\{\{ KAFKA_BOOTSTRAP_SERVERS \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${KAFKA_SECURITY_PROTOCOL:.*/\"\{\{ KAFKA_SECURITY_PROTOCOL \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${SSL_TRUST_STORE_LOCATION:.*/\"\{\{ HOST_KAFKA_SSL_TRUST_STORE_LOCATION \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${SSL_TRUST_STORE_PASSWORD:.*/\"\{\{ KAFKA_SSL_TRUST_STORE_PASSWORD \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${SSL_KEY_STORE_LOCATION:.*/\"\{\{ HOST_KAFKA_SSL_KEY_STORE_LOCATION \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${SSL_KEY_STORE_PASSWORD:.*/\"\{\{ KAFKA_SSL_KEY_STORE_PASSWORD \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${SSL_KEY_PASSWORD:.*/\"\{\{ KAFKA_SSL_KEY_PASSWORD \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${EM_DB_HOST:.*/\"\{\{ pc_host_ip \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${EM_DB_PASSWORD.*/\"\{\{ pc_mysql_password \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${NETOPS_KAFKA_ALARM_CONSUMER_GROUP_ID:.*/\"\{\{ NETOPS_KAFKA_ALARM_CONSUMER_GROUP_ID \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${NETOPS_SPECTRUM_ALARM_TOPIC:.*/\"\{\{ NETOPS_SPECTRUM_ALARM_TOPIC \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${NETOPS_ITEMCONDITION_SCHEMAMGMT_RESOURCES:.*/\"\{\{ ACS_SQL_PATH \}\}\"/g' {{ACS_CONFIG_FILE_PATH}}
+        sed -i 's/${NETOPS_CONDITION_CHANGE_TOPIC:.*/\{\{ live_inventory_topic_name \}\}/g' {{ACS_CONFIG_FILE_PATH}}
+
+  update-hazelcast-properties:
+    - command: |
+        sed -i 's/${HAZELCAST_CLUSTER_NAME:.*/\"\{\{ HAZELCAST_CLUSTER_NAME \}\}\"/g' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i 's/${HAZELCAST_HOSTS:.*/\"\{\{ HAZELCAST_HOSTS \}\}\"/g' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/authentication:/{N;s/${HAZELCAST_AUTH_USERNAME:.*/\"\{\{ HAZELCAST_AUTH_USERNAME \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/authentication:/{N;N;s/${HAZELCAST_AUTH_PASSWORD.*/\"\{\{ HAZELCAST_AUTH_PASSWORD \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/authentication:/{N;N;N;s/${HAZELCAST_AUTH_TOKEN:.*/\"\{\{ HAZELCAST_AUTH_TOKEN \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+  update-graphql-properties:
+    - command: |
+        sed -i '/store:/{N;s/${GRAPH_CLUSTER_URL:.*/\"\{\{ GRAPH_CLUSTER_URL \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/store:/{N;N;s/${GRAPH_CLUSTER_USER:.*/\"\{\{ GRAPH_CLUSTER_USER \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/store:/{N;N;N;s/${GRAPH_CLUSTER_PASS:.*/\"\{\{ GRAPH_CLUSTER_PASS \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        sed -i '/store:/{N;N;N;N;s/${GRAPH_CLUSTER_DATABASE:.*/\"\{\{ GRAPH_CLUSTER_DBPASS \}\}\"/;}' {{CONFIG_FILE_PATH_TEMP}}
+        
+# Version update actions ######################################
+
+  set-build-versions:
+    - command: |
+        echo "WHOAMI: $(whoami)"
+        echo "HOSTNAME: $(hostname)"
+        echo "PWD: $(pwd)"
+        echo "MAVEN REPOSITORY: {{maven-repository}}"
+        echo "Setting build/versions/integration.conf.yml version to: {{new-version}}"
+        sed -i "0,/version: [0-9.]*/s//version: {{new-version}}/" build/versions/integration.conf.yml
+  commit-version-changes:
+    - command: |
+        echo "WHOAMI: $(whoami)"
+        echo "HOSTNAME: $(hostname)"
+        echo "PWD: $(pwd)"
+        echo "MAVEN REPOSITORY: {{maven-repository}}"
+        echo "Committing the following files: "
+        git status
+        git commit -a -m "{{story-number}} - version updated for {{new-version}}"
+        git status
+  push-version-changes:
+    - command: |
+        echo "WHOAMI: $(whoami)"
+        echo "HOSTNAME: $(hostname)"
+        echo "PWD: $(pwd)"
+        echo "MAVEN REPOSITORY: {{maven-repository}}"
+        
+        echo "Pushing commit to checked out branch"
+        git push -u origin HEAD:{{branch}}

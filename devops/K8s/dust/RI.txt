@@ -1,0 +1,5 @@
+What is saasdevresponsys, saasqaresponsys, saaspreprodresponsys, saasprodresponsys;
+How we create K8s cluster?
+How many OKE clusters we have?
+Where are the node configurations defined?
+

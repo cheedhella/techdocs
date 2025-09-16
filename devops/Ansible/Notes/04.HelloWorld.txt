@@ -1,0 +1,156 @@
+# 
+
+
+
+
+> ansible-playbook p0.yml 
+
+
+
+
+// controlled node 
+[root@netops-rl8-1892 ~]# ls
+p0.conf.j2  p0.yml
+
+
+> cat p0.yml 
+- name: Playbook to test templates
+  hosts: 10.252.21.155
+  vars:
+    favourite_color: blue
+    age: 21
+    voting_center: ab456-g
+    fruits:
+      - banana
+      - apple
+      - mango
+      - pear
+  tasks:
+    - name: Template test
+      template:
+        src: p0.conf.j2
+        dest: p0.conf
+
+
+> cat p0.conf.j2 
+My favourite color is {{ favourite_color }}
+
+{% if age > 18 %}
+You are an adult, and you can vote in the voting center: {{ voting_center }}
+{% else %}
+Sorry, you are minor and you can’t vote yet.
+{% endif %}
+
+A list of fruits:
+{% for fruit in fruits %}
+ - {{ fruit }}
+{% endfor %}
+
+
+> ansible-playbook p0.yml
+
+PLAY [Playbook to test templates] *******************************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************************************************************************************************************
+ok: [10.252.21.155]
+
+TASK [Template test] ********************************************************************************************************************************************************************************************************************************
+changed: [10.252.21.155]
+
+PLAY RECAP ******************************************************************************************************************************************************************************************************************************************
+10.252.21.155              : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// target/managed node 
+> pwd
+/root/templates
+
+> ls
+p0.conf.j2
+
+> cat p0.conf.j2 
+My favourite color is {{ favourite_color }}
+
+{% if age > 18 %}
+You are an adult, and you can vote in the voting center: {{ voting_center }}
+{% else %}
+Sorry, you are minor and you can’t vote yet.
+{% endif %}
+
+A list of fruits:
+{% for fruit in fruits %}
+ - {{ fruit }}
+{% endfor %}
+
+
+> pwd
+/root
+
+
+> cat p0.conf 
+My favourite color is blue
+
+You are an adult, and you can vote in the voting center: ab456-g
+
+A list of fruits:
+ - banana
+ - apple
+ - mango
+ - pear
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ansible-playbook playbook_nginx_install.yaml --connection=local
+
+
+
+https://www.educba.com/ansible-debug/
+
+
+
+
+
+[root@netops-rh8-1881 ~]# cd /root/
+[root@netops-rh8-1881 ~]# mkdir templates
+[root@netops-rh8-1881 ~]# cd templates/
+[root@netops-rh8-1881 templates]# vi p0.conf.j2
+[root@netops-rh8-1881 templates]# 
+[root@netops-rh8-1881 templates]# 
+[root@netops-rh8-1881 templates]# 
+[root@netops-rh8-1881 templates]# 
+[root@netops-rh8-1881 templates]# ls
+p0.conf.j2
+[root@netops-rh8-1881 templates]# pwd
+/root/templates
+[root@netops-rh8-1881 templates]# ls
+p0.conf.j2
+[root@netops-rh8-1881 templates]# cd ..
+[root@netops-rh8-1881 ~]# cd /tmp/
+ansible/                                                                 .ICE-unix/                                                               tmp.lacework.S48et5/
+ansible.7delbh5ljust/                                                    packer-provisioner-ansible-local/                                        tmp.lacework.X9qJ9W/
+.config/                                                                 systemd-private-88599ebdf79e40c4b32df03dc158b934-chronyd.service-1gcI63/ .X11-unix/
+.font-unix/                                                              .Test-unix/                                                              .XIM-unix/
+hsperfdata_root/                                                         tmp.lacework.5nfUL1/                                                     
+[root@netops-rh8-1881 ~]# cd /tmp/ansible
+[root@netops-rh8-1881 ansible]# ls
+Makefile  README.md  ansible.cfg  base.yml  buildtools-ansible.tgz  configurations  deploy.yml  devtest.yml  group_vars  helmdart.yml  installAnsible.bash  inventory  inventory.dev  inventory.example  roles  runAnsible.bash  seed.yml
+[root@netops-rh8-1881 ansible]# cd ..
+[root@netops-rh8-1881 tmp]# 
+[root@netops-rh8-1881 tmp]# 
+[root@netops-rh8-1881 tmp]# cd ~
+[root@netops-rh8-1881 ~]# ls
+p0.conf  pre-shutdown.log  templates  tools
+[root@netops-rh8-1881 ~]# cat p0.conf 
+My favourite color is blue
+
+You are an adult, and you can vote in the voting center: ab456-g
+
+A list of fruits:
+ - banana
+ - apple
+ - mango
+ - pear
+[root@netops-rh8-1881 ~]# 
+
+
+
+

@@ -1,0 +1,5 @@
+But when you need to perform a lot of deployment work or multiple tasks that can repeat many times over, then consider using Ansible roles.
+
+Using Ansible roles is good practice because the content in roles can be reused and shared with others. You’ll see how Ansible roles work in action by creating an Ansible-playbook to deploy Apache Tomcat service on your remote node. But first, you’ll create an Ansible role folder.
+
+https://adamtheautomator.com/ansible-playbook-example/

@@ -1,0 +1,15 @@
+K8s Installation
+	Step 1: k8sversion=`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`
+	Step 2: curl -LO https://storage.googleapis.com/kubernetes-release/release/$k8sversion/bin/darwin/amd64/kubectl
+	Step 3: chmod +x ./kubectl
+	Step 4: sudo mv ./kubectl /usr/local/bin/kubectl
+
+	# TODO: kubernetes-cli vs kubectl 
+	# TODO: Does kubernetes-cli install kubectl as well?
+	# TODO: kubectl is same as k8s?
+	 The client version is the kubectl version; the server version is the Kubernetes version installed on the master.
+
+Minikube Installation
+	Step 1: curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+	Step 2: chmod +x ./minikube
+	Step 3: sudo mv ./minikube /usr/local/bin/

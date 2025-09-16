@@ -1,0 +1,32 @@
+# Shared volumes in a Kubernetes Pod
+# Shared volume could be a directory on the host that is shared with all containers within a pod;
+# Data in shared volume survive container restarts, but have same lifetime as the pod;
+# It means the volument(and the data it holds) exists as long as the pod exists;
+# If the pod is deleted for any reason, even with an identical replacement, shared volume is destoryed and created anew;
+
+# In this case, for every 1 sec, debinar container writes current date and time to index.html, which is located in shared volume;
+# When the user makes an HTTP request to the Pod, the nginx server reads this file and transfers it back to the user in response to the request;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc1
+spec:
+  volumes:
+    - name: myvolume                      # Creates volume of name myvolume; It is of type emptyDir; As name suggests, it is empty initially;
+      emptyDir: {}
+  containers:
+    - name: 1st                           # 1st container runs nginx server and has shared volume mounted to /usr/share/nginx/html dir;
+      image: nginx
+      volumeMounts:
+        - name: myvolume
+          mountPath: /usr/share/nginx/html
+    - name: 2nd                           # 2nd container uses debian image and has shared volume mounted to /html dir;
+      image: debian
+      volumeMounts:
+        - name: myvolume
+          mountPath: /html
+      command:
+        - /bin/sh
+        - '-c'
+      args:
+        - while true; do date >> /html/index.html; sleep 1; done

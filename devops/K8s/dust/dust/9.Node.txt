@@ -1,0 +1,34 @@
+What is a Node?
+	In Production, It could be either a physical machine in a datacenter OR a virtual machine hosted on cloud provider like Google Cloud Platform.
+
+
+
+	https://www.containiq.com/post/kubernetes-node
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+You can view each machine as a set of CPU and RAM resources that can be utilized. 
+In this way, any machine can substitute any other machine in a Kubernetes cluster.
+
+
+
+nodes come pre-populated with a standard set of labels. As of Kubernetes v1.4 these labels are
+kubernetes.io/hostname
+failure-domain.beta.kubernetes.io/zone
+failure-domain.beta.kubernetes.io/region
+beta.kubernetes.io/instance-type
+beta.kubernetes.io/os
+beta.kubernetes.io/arch
+
+
+https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

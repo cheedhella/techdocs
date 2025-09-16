@@ -1,0 +1,22 @@
+# Data in a emptyDir is shared b/w all containers in that Pod;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ed-demo-p3
+spec:
+  containers:
+    - name: busybox-a
+      command: ['tail', '-f', '/dev/null']
+      image: busybox
+      volumeMounts:
+        - name: cache
+          mountPath: /cache
+    - name: busybox-b
+      command: ['tail', '-f', '/dev/null']
+      image: busybox
+      volumeMounts:
+        - name: cache
+          mountPath: /cache
+  volumes:
+    - name: cache
+      emptyDir: {}

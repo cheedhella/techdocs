@@ -1,0 +1,86 @@
+
+
+
+Create Environment Variables.
+Get AWS Caller Information.
+Install boto and boto3.
+
+Before you connect to AWS, you’ll need the following:
+Active AWS account
+Access Key
+Secret Access Key for an existing IAM user in the AWS account
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ansible uses AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to authenticate to AWS.
+Once you have acquired the keys, you can create the environment variable with the export command within the container.
+
+# replace <Access Key> with your access key Id
+export AWS_ACCESS_KEY_ID='<Access Key>'
+
+# replace <Secret Access Key> with your secret access key
+export AWS_SECRET_ACCESS_KEY='<Secret Access Key>'
+
+# Verify that the connection to AWS is established
+ansible localhost -m aws_caller_info
+
+# In case of error, 
+# "_Failed to import the required Python library (botocore or boto3)"
+pip3 install boto3
+pip3 install boto
+
+# re-execute
+ansible localhost -m aws_caller_info
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+FROM ubuntu:latest
+
+RUN apt-get update; \
+    apt install -y openssh-client; \
+    apt install -y python3-pip
+
+RUN pip3 install --upgrade pip; \
+    pip3 install "ansible==2.9.12"; \
+    pip3 install boto; \
+    pip3 install boto3
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+We have explored different Ansible Modules for connecting to both AWS and Azure.
+
+Both of them require accounts and security keys to be set up to connect with them. We exposed these keys as Environment variables within the ansible container.
+
+Once exposed, you used Ansible to connect and create resources to verify that the connection works.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A journey of a thousand miles begins with a single step.
+
+    
+
+
+                    # Once connected to the cloud, we will dive into some basic Ansible ad-hoc commands and playbooks before deploying an Ansible environment
+    Deploy Infrastructure on AWS and Azure
+
+How do I use Ansible?
+    Issue Commands
+    Develop Playbooks
+    Leverage static and dynamic Inventories
+    Manage Roles
+    Create a Release Pipeline with Github Actions
+
+By the end of this course, you will manage and automate your infrastructure and code’s deployment by integrating Ansible with Github Actions.
+
+
+        
+        
+ansible-playbook playbook/p1.yaml --syntax-check            # Run the below ansible-playbook command to verify the playbook (apache.yml) to catch syntax errors (--syntax-check) and other problems.
+                                                            # Remember always to do this syntax check before you run your Ansible playbook. Doing so lets you avoid accidentally messing things up with your project.
+ansible-playbook playbook/p1.yaml                           # Run the command below to execute the Ansible playbook;
+
+
+
+        
+
+
+

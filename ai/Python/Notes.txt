@@ -1,0 +1,71 @@
+Python VS Anaconda 
+    Python: A lightweight programming language used for general-purpose programming, with package management via pip and basic environment tools like venv.
+    Anaconda: A Python distribution for data science and machine learning, bundling Python, popular libraries, Jupyter Notebook, and the conda manager for easier package and environment management.
+    Use Python for general programming and Anaconda for data-focused workflows.
+
+Anaconda 
+    It is an open-source distribution of the Python and R programming languages, which are used for data science, machine learning, and artificial intelligence applications.
+    It includes over 250 popular data science packages and management tools for simplifying package installation and deployment.
+
+Conda 
+    Anaconda comes with its own package, environment, and dependency management system called "conda."
+
+Install Python
+    1. Download latest version from: https://www.python.org/downloads/
+    2. Open the downloaded .pkg file and follow the installer prompts;
+    3. Verify the installation: python3 --version       # Python 3.13.4
+
+
+Run .py 
+    - Open command pallete: Cmd + Shift + P
+    - Type: Python: Select Interpreter
+    - Choose the correct Python 3.x interpreter (usually /usr/local/bin/python3 or similar); This ensures  VS Code uses the right version of Python when running your code.
+    - Run Your Python Code
+    - Open main.py.
+        Click the green "Run" button in the top-right corner.   
+        Or press Ctrl + Option + N (if you have the Code Runner extension).
+
+Jupiter Notebook file 
+    A Jupyter Notebook file is a special kind of document used to write and run code interactively, especially for data science, machine learning, and scientific computing.
+    It lets you combine code, output, markdown (text), math (LaTeX), and visualizations in one document.
+    A .ipynb file typically contains:
+        Code Cell	    - Python (or other language) code
+        Markdown Cell	- Rich-text, headings, bullet points
+        Output Cell	    - Results of code (e.g., plots, tables)
+    To run it, you need to create a environment;
+
+
+
+You can use VSC to execute .py files, jupiter notebook files;
+
+
+
+Conda command 
+Installed with Miniconda. It can be used to manage both packages and virtual environments. Generally used for data science projects.
+
+conda create -p mcenv python==3.12       # It creates a environment; mcenv is environment name; It uses 3.12 version of python;
+conda activate mcenv
+
+
+conda create -n myenv python=3.10
+conda activate myenv
+conda install numpy
+pip install some_package_not_in_conda
+
+Python libraries:
+    Scientific computing (NumPy & SciPy)
+    Machine learning (TensorFlow & PyTorch)
+    Web development (Django & Flask)
+    Data manipulation and cleaning (pandas)
+
+
+NumPy, SciPy, TensorFlow
+
+conda create -n mlenv python=3.10
+conda activate mlenv
+conda install numpy pandas scikit-learn matplotlib jupyter
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+Start with conda, and use pip only when you need a package not available in conda channels. This gives you the stability of conda with the breadth of pip.
+
+
+

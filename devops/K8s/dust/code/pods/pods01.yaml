@@ -1,0 +1,18 @@
+# We have nginx web server running and we need to analyze its logs in real-time;
+# watcher container developed by other people will make GET requests to the web server to fetch the logs;
+# However, we want to eliminate any network latency so that the watcher can analyze logs the moment they are available;
+# A solution for this is to place both containers on the same pod;
+
+# Having both containers on the same pod allows them to communicate through the loopback interface (ifconfig lo) as if they were two processes running on the same host;
+apiVersion: v1
+kind: Pod
+metadata:
+  name: twocontainerpodeg
+spec:
+  containers:
+    - name: mynginx             # Name of the container!
+      image: 'nginx:latest'
+      ports:
+        - containerPort: 80
+    - name: mywebwatcher
+      image: 'afakharany/watcher:latest'

@@ -1,0 +1,25 @@
+https://medium.com/techbeatly/kubernetes-networking-fundamentals-d30baf8a28c8
+
+https://platform9.com/blog/building-a-complete-stack-ingress-controllers/
+https://awkwardferny.medium.com/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c
+https://hitesh-pattanayak.medium.com/services-in-kubernetes-79df5b9b94df
+https://stackoverflow.com/questions/65516359/how-to-connect-kubernetes-pod-server-on-guest-os-from-host-os
+https://medium.com/avmconsulting-blog/external-ip-service-type-for-kubernetes-ec2073ef5442
+
+
+https://medium.com/@contactkumaramit9139/step-by-step-guide-to-deploy-spring-boot-microservices-to-kubernetes-k8s-d827c1a4908?source=read_next_recirc---------1---------------------6ad781ce_aca1_4b73_9188_8b3e41e56bbc-------
+
+
+k8s Architecture
+https://aleqxan.medium.com/about-kubernetes-architecture-3-debugging-daf12931403f?source=read_next_recirc---------0---------------------6ad781ce_aca1_4b73_9188_8b3e41e56bbc-------
+
+
+ELK Stack in k8s using Helm
+	https://medium.com/kocsistem/elk-stack-in-kubernetes-using-helm-52398564f7fc?source=read_next_recirc---------3---------------------c9d5c14f_adcf_4a07_a4fa_57af0ac278f5-------
+	
+	https://medium.com/avmconsulting-blog/deploying-applications-using-kubernetes-helm-charts-eb0f83ccb6ed?source=post_page-----820f3cec7170----4----------------------------
+
+
+Logging
+	https://logz.io/blog/a-practical-guide-to-kubernetes-logging/
+	

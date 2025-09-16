@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ed-demo-p2
+spec:
+  containers:
+    - image: nginx
+      name: ed-demo-p2-c1
+      volumeMounts:
+        - mountPath: /cache
+          name: ed-demo-p2-v1
+  volumes:
+    - name: ed-demo-p2-v1             # 
+      emptyDir:
+        medium: Memory                # K8s mounts a tmpfs (RAM-backed filesystem); 
+                                      # While tmpfs is very fast, be aware that, unlike disks, tmpfs is cleared on node reboot; 
+                                      # Any files you write count against your container’s memory limit;

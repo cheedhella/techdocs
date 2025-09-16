@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ed-demo-p1
+spec:
+  containers:
+    - image: nginx
+      name: ed-demo-p1-v1
+      volumeMounts:                   # Array of volumes that this container needs;
+        - mountPath: /data            # Volume named ed-demo-p1-v1 will be mounted at /data inside this Container;
+          name: ed-demo-p1-v1
+  volumes:
+    - name: ed-demo-p1-v1             # Name of volume;
+      emptyDir: {}                    # {} object indicates to use default options(i.e, disk based storage);

@@ -1,0 +1,99 @@
+Built-in Objects 
+    .(Root), .Release, .Chart, .Values, .Capabilities, .Template, .Files;
+    These objects that are passed to every template by template engine;
+    Each object contains a set of key-vaue pairs, where each value could be another object or function;
+    Eg: .Release.Name is an object and .Files has few functions;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Root object 
+    - Top level helm object;
+    - It contains 7 objects: Release, Chart, Values, Capabilities, Template, Files, Subcharts;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Chart object 
+    - We can acees any data from Chart.yml file;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Values object 
+    - By default, it is an empty object;
+    - It contains values from values.yml and if any user supplied values(using -f or --set ) that can be passed to templates; 
+    
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Release object 
+    - It provides information about release;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Capabilities Object 
+    - It provides information about what capabilities the k8s cluster supports;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Template Object 
+    - It contains info about currently executed template;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Files Object 
+    - It provides access to all non-special files in a chart;
+    - We can use it to access files in the charts folder;
+    - We can't use it to access templates;
+
+> cat config1.ini 
+msg1 = Hello from config1.ini Line1
+msg2 = Hello from config1.ini Line2
+msg3 = Hello from config1.ini Line3
+
+> cat config-files/myconfig2.toml 
+appName: myapp2
+appType: db 
+appConfigEnable: true 
+
+> cat config-files/myconfig3.toml 
+
+
+{{/* .Files Object Demo */}}
+File Get: {{ .Files.Get "myconfig1.ini" }}          # Prints the content of the file specified 
+File Glob as Config: {{ (.Files.Glob "config-files/*").AsConfig }}           # Returns file body as YAML map
+File Glob as Secret: {{ (.Files.Glob "config-files/*").AsSecrets }}          # Returns file body as base-64 encoded string
+File Lines: {{ .Files.Lines "myconfig1.ini" }}          # It iterates over file content line by line and prints as single line;
+File Glob: {{ .Files.Glob "config-files/*" }}          # It is useful iterate over file content line by line;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+    helm install mybuiltinobj1 . --dry-run --set x=21
+    
+    helm install mybuiltinobj1 . --dry-run --set y1.y2=22
+
+
+Release Name: {{ .Release.Name }}
+Chart Name: {{ .Release.Chart }}
+Namespace: {{ .Release.Namespace }}
+IsInstall: {{ .Release.IsInstall }}
+IsUpgrade: {{ .Release.IsUpgrade }}
+Revision: {{ .Release.Revision }}  # 1 for install, incremented every time you run upgrade;
+
+
+
+> helm create builtin-objects-demo 
+> cd builtin-objects-demo 
+> cat templates/NOTES.txt
+{{/* Root Object Demo */}}
+Root Object: {{ . }}
+
+> helm install myapp01 . --dry-run 
+
+
+Insdie with, range blocks dot refers to current context object; In other blocks, it refers to root object; 
+
+Release Service: {{ .Release.Service }}
+Values: Values passed into the environment.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+.Template Object 
+
+    
+
+{{/* .Template Object Demo */}}
+Template Name: {{ .Template.Name }} // It could be NOTES.txt or any other yaml file 
+Template Base Path: {{ .Template.BasePath }}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

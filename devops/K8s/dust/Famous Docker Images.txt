@@ -1,0 +1,18 @@
+BusyBox Image
+	It is an open source project, that provides simple implementations of nearly 400 commonly used commands such as: ls, mv, ln, mkdir, more, ps, gzip, bzip2, tar, grep etc;
+	Busybox comes pre-installed in Ubuntu 18.04; You can manually install it, wherever you want: sudo apt get install busybox
+
+Kuard
+	gcr.io/kuar-demo/kuard-amd64:1
+	An image from kubernetes up and running book;
+	It’s an excellent tool if you want to understand the what Kubernetes is doing when running your pods;
+	https://github.com/kubernetes-up-and-running/kuard
+
+
+Playing it safe is the riskiest choice of all!
+
+
+$ kubectl create deploy ghost --image=ghost --replicas=2
+First, we create a deployment based on the ghost image (ghost is a free and open source blogging platform) and specify two replicas :
+
+k8s.gcr.io/test-webserver

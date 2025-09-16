@@ -1,65 +1,75 @@
 What is Zustand? 
     - It is a state management library for React Applications;
+    - There are many state management libraries available: Redux, Redux Toolkit, Context API, Zustand etc;
+    - It is built on top of the Context API and uses the concept of stores to manage state;
+    - A store is a container for a specific piece of state and any functions that modify that state;
+    - You can create as many stores as you need, and they can be used throughout your application;
 
-    - In earlier times, states are managed by passing data down to various components;
-    - But, this method became inefficient, as the complexity of applications grew;
-    - To solve this, various state management libraries came into picture;
-
-    - There are many state managers for React Applications: Redux, Redux Toolkit, Context API etc;
-    - Zustnad is small, fast, easy to use(even with complex state structures); 
-    - It is built on top Context API and utilizes the power of modern JS features such as proxies and generators;
-    - Additionally, it gives developers the freedom to expand its capabilities using plugins and middleware;
+Why is it needed - State Management Library vs useState?
+    - When a component creates state using useState(), it is owned by that component; 
+    - If you want to share that state with child components, then you need to pass that to child components;
+    - If you want to share that state with grand children, then you need to pass it child first and child needs to pass it to grand children;
+    - If you want to share that state with sibiling or other components, then you need to find a way;
+    - With state management library, any component can store the state in the global store, which acts as a single source of truth and any other component can access it;
 
 Why Zustand?
-    - State is centralized and shared between components; // Eg: CounterStore is shared b/w CounterDisplay and CounterButtons components;
-    - State is immutable -> When updating the state, you create a new state object rather than modifying the existing state directly;
-        TODO: What happens if it is not immutable? 
-    - Actions can be async;
-        Actions in zustand also support asynchronicity. In fact, according to Zustand docs, zustand does not care if your action is asynchronous or not.
-        We can perform an asynchronous function in an action. For example, we can make an HTTP request to an endpoint from our action and update the state with
-         the result from the HTTP call.
-         const useCounter = create((set) => {
-            return {
+    - Simple 
+        -- State logic stays clean and readble;
+    - Central/Global State 
+        - State is centralized and shared between components;
+        - If a component updates the state, then other components which uses that state also gets re-rendered;
+    - Immutability  
+        - When updating the state using set(), always pass a new state object, rather than modifying the existing state directly;
+        - When you pass a new state object to set(), zustand merges it into the store; old state object in the store remains intact;
+        - Why is it important?
+            -- Zustand uses shallow comparation, to check if the part of state they subscribed to has changed;
+            -- If you update the old state directly, Zustand doesn't that anything changed and components might not re-render correctly;
+    - Scalability
+        -- You can split the state into multiple stores OR keep everyting in one place; 
+    - Async friendly
+        -- Actions inside the state can synchrounous or asynchronous, without any additional libraries;
+        -- For example, we can make an HTTP request to an endpoint from our action and update the state with the response;
+            import { create } from 'zustand'
+            import axios from 'axios'
+            const useCounter = create((set) => ({
                 counter: 0,
                 incrCounter: async () => {
-                    const { data } = await axios.get("/counter");
-                    set({
-                        counter: data.counter,
-                    });
+                    const { data } = await axios.get("/counter")
+                    set({ counter: data.counter })
                 },
-            };
-        });
+            }));
+    - TypeScript support
 
 
+
+
+
+
+
+
+If you have nested state (like an object), you must also create a new object instead of mutating:
+const useUserStore = create((set) => ({
+  user: { name: 'Alice', age: 25 },
+
+  updateName: (newName) =>
+    set((state) => ({
+      user: { ...state.user, name: newName }, // copy + override
+    })),
+}))
+    
 
 
     - Small, fast, scalable, immutable, transient updates for often occurring state changes, memorized selectors, integration with immer;
     - Create and update complex state structures, handle asynchronous actions, share state between components;
     
-    - Zustand renders components only on changes to the value of the state. Changes in the state can often be handled without having to re-render a component.
-    - State management is centralized and updated via simple defined actions.
-
-Zustand VS Redux
-    - You can create a state with less boilerplate code;
-    - Components can access or update the state without the need for complex providers and context setup;
-    - Components can access state without wrapping it in hooks and props;
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-Zustand is a state management library for React applications, that allows you to manage state in a simple and intuitive way;
-It is built on top of the Context API and uses the concept of stores to manage state;
-A store is a container for a specific piece of state and any functions that modify that state;
-You can create as many stores as you need, and they can be used throughout your application;
 
 
 
 npm install zustand
 
-
-
-It isolates the state from component lifecycle;
-The store will share the state wherever used, which means if the same state has been accessed in two different components and one component updates the state, the second component will also re-render.
 
 
 
@@ -126,3 +136,6 @@ You can easily use async/await inside the hook and simply call set() whenever th
 
 TypeScript, Middlewares, Firebase, Immer, Persistencia, Slices Pattern, JWTs, Autenticación, Interceptores y más
 Lots of time was spent to deal with common pitfalls, like the dreaded zombie child problem, React concurrency, and context loss between mixed renderers. It may be the one state manager in the React space that gets all of these right.
+
+
+

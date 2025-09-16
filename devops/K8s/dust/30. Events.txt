@@ -1,0 +1,21 @@
+What is Event?
+	Events are resource types that are created automatically by all core components and extensions in a cluster through the API Server;
+	It shows what is happening in the cluster, whenever there is a state change; Events are invaluble resource in debugging any issues in the cluster;
+	For eg, why the system cannot pull the docker image or why some pods were evicted from the cluster?
+	K8s retains the events only for a short time;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> kubectl describe <resource-name> 			# It lists some of the latest events related to that Resource;
+> kubectl get events 						# It lists all events happened in the cluster;
+> kubectl get events --watch 				# It is used to watch the events;
+
+> kubectl get events --field-selector type=Warning 													# Show only warnings;
+> kubectl get events --field-selector type!=Normal 													# Show events that are not Normal;
+> kubectl get events --field-selector involvedObject.kind!=Pod 										# Skip Pod events;
+> kubectl get events --field-selector involvedObject.kind=Node,involvedObject.name=minikube 		# Events for a single node named “minikube”
+> kubectl get events -o json 																		# Get events as json;
+
+> kubectl get events --sort-by=.lastTimestamp 														# Latest event first!
+> kubectl get events --sort-by=.metadata.creationTimestamp
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

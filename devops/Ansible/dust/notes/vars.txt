@@ -1,0 +1,24 @@
+Perhaps you have a value you need to reference in multiple playbooks. 
+You’d prefer not to update that value in each playbook individually. This would be a great case for a variable. 
+That variable would look something like what you see in the following code snippet.
+
+Variables are defined under the vars: keyword, and the value is defined right under it.
+Once you define a variable, you can reference it in a playbook using double curly brackets: {{ }}
+
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    resourceGroup: Dev10
+    name: nobsstorage
+
+tasks:
+  - name: No-BS-Storage
+    azure_rm_storageaccount:
+      resource_group: "{{ resourceGroup }}"
+      name: "{{ name }}"
+      type: Standard_GRS
+
+
+Another way to define variables and playbooks, etc. is Ansible Galaxy roles, which is more of an advanced topic;

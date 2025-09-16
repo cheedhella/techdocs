@@ -1,0 +1,64 @@
+What is Image?
+	It is a package which contains everything(OS, dependant libraries, code etc) to run an application;
+
+What is Container?
+	Container is an instance of image;
+	Containers are stateless and immutable - it makes containers reliable, scalable, easier to manage;
+		immutable - You can't make any changes to a running container; If you need a change, create new image and redeploy it;
+		stateless - All the state should be stored externally(in a volume or database), so that if a container crashes or restarts, it don't lose any data; It makes containers replacable and scalable;
+
+What is Pod?
+	It is a group of Containers deployed on the same host/VM;
+	All containers in a Pod share the network space(IP addresses), port space, CPU, memory, storage(volumes) and secrets, lifecycle;
+	Pod is the atomic unit of replication in K8s (When a Pod is scaled up/down, a pod is added/removed - as opposed to containers);
+
+	Each Pod is assigned a unique IP address; All containers running inside that pod share that IP address, thus they need to be run on different ports;
+	Containers within the same pod may access each other by using the localhost address;
+	Rest of the pods in the k8s cluster can reach that pod using that IP address;
+
+	A container can communicate with another container in the same pod, using localhost;
+	A container can communicate with another container in a different pod in the same Node, using IP address;
+	A container can communicate with another container in a different pod in a different Node but same cluster, How?
+
+	You can't deploy a bare Container, without creating a Pod;
+	Instead of creating a Pod directly(naked pod), it is recommended to create it using: Deployment, StatefulSet, DaemonSet, Job;
+	Pods are not rescheduled automatically, when they die;
+
+Lifecycle?
+	Pending - Pod is accepted but yet to find a node which has enough resources as per specification;
+	Running	- Containers are executing;
+	Succeeded - All containers exited successfully (used in Jobs);
+	Failed - One or more containers exited with an error;
+	Unknown - The state cannot be determined;
+	ContainerCreating - Pod struck at ContainerCreating; // Check: kubectl describe pod <pod-name>
+
+	Pod Status 
+	ImagePullBackOff 	- indicates a problem in fetching the specified image from registry;
+	CrashLoopBackOff 	- By default, restartPolicy of a Pod is Always, so it always tries to restart with exponential backoff on failure;
+						  This state means that the Pod startup failed and is in waiting, before retrying the start again;
+	Terminated			- Indicates that the container completed its execution and has stopped running. 
+
+Attach handlers to Lifecycle events
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl create -f <manifest.yaml>
+kubectl get pods 
+kubectl describe pod <pod_name>
+kubectl get pod -o "" 
+kubectl exec <pod_name> --container <container_name> -- <command> <args> 
+kubectl exec -it <pod_name> --container <container_name> -- bash 
+kubectl delete -f <manifest.yaml>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pod Scheduling 
+	Master node is responsible for when and where to deploy a Pod;
+	Resource Requirements 
+	kubectl port-forward <pod-name>
+		Any application running in a Pod is accessible only with in that cluster;
+		kubectl port-forward <pod-name> <port-to-forward>:<local-port>. # Now, you can access this app on localhost:8080, requests are forwarded to 5001
+
+
+	You can have more than 1 container in a Pod; But, it doesn't make senese 2 separate microservices with distinct roles and responsibilities running in same pod;
+	Running 2 distinct containers in same Pod implies they need to be created and terminated at same time; They need to scaled up and down at the same time;
+
+	kubectl logs -f <pod> <container-name>
+	

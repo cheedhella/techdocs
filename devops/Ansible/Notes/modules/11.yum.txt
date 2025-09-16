@@ -1,0 +1,17 @@
+Yum Module 
+
+
+- name: install nginx
+  yum:
+    name: nginx                     # Name of the package to install: {{ package_name }}-{{ package_version }}-{{ package_release }}
+    state: present                  # Do nothing, if package(any version) already installed on managed host 
+    update_cache: true              # Before install/update, always update cache; It forces yum to check if the package cache is out of date and it update it if needed.
+  become: true                      # Run as root or super user;
+
+
+Setting state: latest will install the latest version of a package, or update a package that is already installed where a newer version is available.
+
+https://www.toptechskills.com/ansible-tutorials-courses/ansible-yum-module-tutorial-examples/
+
+
+ansible-playbook playbook_nginx_install.yaml --connection=local

@@ -1,0 +1,189 @@
+What is ingress?
+    Each application in the cluster runs on a different port;
+    We can't expect the users to know the port of each service running in the cluster;
+
+    Ingress is a k8s resource that exposes services running in the cluster to external world;
+    It routes HTTP/HTTPS traffic to origin services based on various creteria;
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+1. An Introduction to Kubernetes Ingress: Understanding the basics of Ingress and its role in Kubernetes networking.
+
+2. Ingress Controllers: Exploring different types of Ingress controllers and how they integrate with Kubernetes clusters.
+
+3. Routing Traffic with Ingress Rules: Leveraging Ingress resources to define routing rules and manage traffic flow.
+
+4. Securing Ingress with TLS: Implementing Transport Layer Security (TLS) encryption for secure communication.
+
+5. Advanced Ingress Features: Delving into advanced capabilities such as path-based routing, rewrite rules, and load balancing.
+
+    Each application can be reached through a different port;
+    We cannot expect users to know the port of each service in our cluster;
+    Note: Ingress objects manage external access to the applications running inside a Kubernetes cluster.
+
+Ingress VS Services 
+    - While it might seem that we have already accomplished that through Kubernetes Services, they do not make the applications truly accessible. 
+    - We still need forwarding rules based on paths and domains, SSL termination, and a number of other features.
+    - It is not recommended to publish fixed ports through Services. This method is likely to result in conflicts or, at the very least, create the additional burden of carefully keeping track of which port belongs to which Service. 
+
+    - NodePort and LoadBalancer let you expose a service by specifying that value in the service’s type. 
+      Ingress, on the other hand, is a completely independent resource to your service. You declare, create and destroy it separately to your services.
+      This makes it decoupled and isolated from the services you want to expose. It also helps you to consolidate routing rules into one place.
+        The one downside is that you need to configure an Ingress Controller for your cluster. But that’s pretty easy!
+
+
+
+In a more traditional setup, we’d probably use an external proxy and a load balancer. 
+Ingress provides an API that allows us to accomplish these things. It also has a few other features we expect from a dynamic cluster.
+
+
+Ingress controller
+    - We need a mechanism that will accept requests on predefined ports (e.g., 80 and 443) and forward them to Kubernetes Services. 
+    - It should be able to distinguish requests based on paths and domains and be able to perform SSL offloading.
+
+    - Kubernetes itself does not have a ready-to-go solution for this. Unlike other types of controllers that are typically part of the kube-controller-manager binary, Ingress controllers need to be installed separately. Instead of a controller, kube-controller-manager offers an Ingress resource that other third-party solutions can utilize to provide requests forwarding and SSL features. In other words, Kubernetes only provides an API, and we need to set up a controller that will use it.
+    - Fortunately, the community already built a myriad of Ingress controllers. We won’t evaluate all of the available options since that would require a lot of space and mostly depend on our needs and hosting vendor.
+
+
+Enabling ingress on k3d
+    - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+    - kubectl get pods --namespace=ingress-nginx
+    By default, the Ingress controller is configured with only two endpoints.
+        If we’d like to check controller’s health, we can send a request to /healthz.
+        nohup kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 3000:80 --address 0.0.0.0 > /dev/null 2>&1 &
+        # Please wait for a few seconds before running the next command 
+        curl -i "0.0.0.0:3000/healthz"
+        --
+        The Ingress controller has a default catch-all endpoint that is used when a request does not match any of the other criteria. 
+        Since we haven’t created any Ingress resource, this endpoint should provide the same response to all requests except /healthz.
+        curl -i "0.0.0.0:3000/something"        # Give HTTP 404 errror 
+
+    
+Ingress is a Kubernetes resource that provides external access to services within a cluster. 
+It acts as a traffic controller, allowing you to route HTTP and HTTPS traffic to different services based on various criteria. 
+
+how to efficiently manage inbound traffic to your applications
+
+
+What is a Proxy?
+
+What is a Load Balancer?
+
+We often want to associate each application with a different domain or sub-domain. 
+
+
+
+SSL certificates#
+    Lastly, we should be able to make some (if not all) applications at least partly secure by enabling HTTPS access. 
+    This means that we should have a place to store our SSL certificates. 
+    We could put them inside our applications, but that would only increase the operational complexity. 
+    Instead, we should aim towards SSL offloading somewhere between clients and the applications. 
+    Luckily for us, Kubernetes has a solution for all these.
+
+SSL Offloading 
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+
+kubectl get pods --namespace=ingress-nginx
+
+kubectl get pods -n ingress-nginx \
+    | grep ingress
+
+nohup kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 3000:80 --address 0.0.0.0 > /dev/null 2>&1 &
+
+# Please wait for a few seconds before running the next commands 
+curl -i "0.0.0.0:3000/healthz"
+
+curl -i "0.0.0.0:3000/something"
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+In Kubernetes, an Ingress is an object that allows access to your Kubernetes services from outside the Kubernetes cluster. 
+You configure access by creating a collection of rules that define which inbound connections reach which services.
+
+This lets you consolidate your routing rules into a single resource. 
+For example, you might want to send requests to example.com/api/v1/ to an api-v1 service, and requests to example.com/api/v2/ to the api-v2 service. 
+With an Ingress, you can easily set this up without creating a bunch of LoadBalancers or exposing each service on the Node.
+
+
+There are multiple ways to install nginx ingress controller:
+    1. Using kubectl 
+    2. Using helm chart 
+    3. Using addons (eg for minikube)
+
+
+
+2. Install using Helm chart  - https://kubernetes.github.io/ingress-nginx/deploy/
+    helm show values ingress-nginx --repo https://kubernetes.github.io/ingress-nginx        # Show full list of values that you can set;
+    helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace   # 
+
+    kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=120s
+
+    kubectl get pods --namespace=ingress-nginx
+
+
+    # Let's create a simple web server and the associated service:
+    kubectl create deployment demo --image=httpd --port=80
+    kubectl expose deployment demo
+    # Then create an ingress resource. The following example uses a host that maps to localhost:
+    kubectl create ingress demo-localhost --class=nginx --rule="demo.localdev.me/*=demo:80"
+    # Now, forward a local port to the ingress controller:
+    kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
+
+    # At this point, you can access your deployment using curl:
+    > curl --resolve demo.localdev.me:8080:127.0.0.1 http://demo.localdev.me:8080
+
+    ingress-nginx is an Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
+
+
+
+
+What is Load Balancer?
+    A load balancer is a device that sits in front of a group of servers and distributes incoming traffic evenly across them.
+
+What is a Reverse Proxy?
+    Load Balancer 
+        - It is a service that sits in front of a group of servers, distributes incoming HTTP requests evenly across all servers and subsequently returning the server's response to the client;
+    Security 
+        - With reverse proxy in place, attackers are unaware of IP Address of origin servers;
+          They only the IP Address of proxy server, which will have tighter security to fend off a cyber attack;
+    Caching
+        - It can cache the response, resulting in faster performance;
+    SSL Termination 
+        - It can be configured to decrypt all incoming requests and encrypt all outgoing responses, freeing up valuable resources on the origin server;
+
+
+
+        A reverse proxy can be configured to decrypt all incoming requests and encrypt all outgoing responses, freeing up valuable resources on the origin server.
+
+
+
+    A reverse proxy is a service that sits in front of one or more web servers to intercept and inspect incoming client requests before forwarding them to the web server and subsequently returning the server’s response to the client. 
+    Reverse Proxy = Load Balancer + Caching + Security + SSL acceleration;
+        Load balancing: 
+            A load balancer can balance traffic from layer 3 upwards to layer 7, but a reverse proxy is HTTP specific.
+            Reverse proxy is specific to web servers; Load balancers however can deal with a lot of other protocols. While the web (HTTP) is the big idea nowadays, things like DNS, mail (SMTP, IMAP), etc. can be load balanced as well.
+        Caching: it can cache content from the web server(s) behind it and thereby reduce the load on the web server(s) and return some static content back to the requester without having to get the data from the web server(s)
+        Security: it can protect the web server(s) by preventing direct access from the internet; it might do this through simple means by just obfuscating the web server(s) or it may have some more active components that actually review inbound requests looking for malicious code.
+        SSL acceleration: when SSL is used; it may serve as a termination point for those SSL sessions so that the workload of dealing with the encryption is offloaded from the web server(s);
+        compression: Compressing server responses before returning them to the client (for instance, with gzip) reduces the amount of bandwidth they require,
+
+        .
+
+
+Rancher Desktop
+Rancher Desktop provides Kubernetes and Container Management on the desktop. Kubernetes is enabled by default in Rancher Desktop.
+
+Rancher Desktop uses K3s under the hood, which in turn uses Traefik as the default ingress controller for the Kubernetes cluster. To use Ingress-Nginx Controller in place of the default Traefik, disable Traefik from Preference > Kubernetes menu.
+
+Once traefik is disabled, the Ingress-Nginx Controller can be installed on Rancher Desktop using the default quick start instructions.
+
+
+
+https://artifacthub.io/packages/helm/bitnami/nginx-ingress-controller

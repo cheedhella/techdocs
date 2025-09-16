@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-demo-pod-4
+spec:
+  containers:
+    - name: mybusybox
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "env" ]   # command: [ "/bin/echo", "k1: $(k1), k2: $(k2)" ]
+      env:
+        - name: K1
+          valueFrom:
+            configMapKeyRef:
+              name: cm2
+              key: k1
+        - name: USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: cm5
+              key: username

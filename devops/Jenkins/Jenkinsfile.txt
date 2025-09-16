@@ -1,0 +1,87 @@
+Eg:
+pipeline {
+    agent any
+    stages {
+        stage('Stage 1') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Stage 2') {
+            steps {
+                input('Do you want to proceed?')
+            }
+        }
+        stage('Stage 3') { // Steps are executed based on the condition; Condition must be defined at the stage level;
+            when {
+                not {
+                        branch 'master'
+                }
+            }
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('Stage 4') {      // parallel is used to run 2 stages in parallel. A stage can have either steps OR parallel, but not both; parallel can't contain another parallel;
+            parallel { 
+                stage('Unit Test') {
+                    steps {
+                        echo "Running the unit test..."
+                    }
+                }
+                stage('Integration test') {
+                    agent {         // Stage specific agent
+                        docker {
+                            reuseNode true
+                            image 'ubuntu'
+                        }
+                    }
+                    steps {
+                        echo "Running the integration test..."
+                    }
+                }
+            }
+        }
+    }
+}
+
+pipeline 
+    - It is a mandatory block;
+    - It encapsulates the entire configuration of a declarative pipeline;
+
+Agent 
+    - There are 2 types of nodes: Master and Agent; 
+    - Master node acts as a control node and serves the Jenkins UI;
+    - When you create a Jenkins Job, Master procures a agent, runs all the steps defined in the pipeline on it;
+    - Jenkins supports wide variety of agents;
+    - UI:
+      Manage Jenkins -> Set up node -> Nodes: Add/Remove/Delete nodes procured by you;
+      Manage Jenkins -> Set up node -> Cloud: Configure Jenkins to procure cloud instances as agents on-demand;
+
+    - You can allot an agent to run entire pipeline OR specific agents can be allotted to execute each stage within a pipeline;
+
+    - Any 
+        -- Run the pipeline on any available agent;
+    - None 
+        -- It indicates there is no global agent; Each stage must specify its own agent;
+    - label 
+        -- Run the pipeline on any available agent with specified label;
+    - docker
+        -- It uses docker container as execution environment for the pipeline or a specific stage;
+
+stages 
+    - It contains all the work/steps that need to be carried out;
+
+steps 
+    - There must be atleast one step in steps directive;
+    - All steps are executed in a sequence;
+
+        
+        Used to run There is 
+When you create a Jenkins job, you have to assign an agent to it.
+
+
+
+    
+    
+          # Agent signifies where the Jenkins build job should run. Jenkins supports a wide variety of agents. d

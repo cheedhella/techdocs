@@ -1,0 +1,126 @@
+Docker
+	Docker is a platform/ecosystem, which enables developers to automate the deployment of applications; 
+    In other words, it is used to manage(create/publish/run/update) containerized applications;
+	Ecosystem = Docker Engine(Docker Client + Docker Server) + Docker Images + Docker Hub + Docker Compose;    
+
+Image or Containerized application
+    A package that contains everything the application needs to run - application code along with it's dependencies(runtime like java, libraries, environment variables, configuration etc);
+    It can be run on any system where Docker Engine is installed;
+    Images consist of a base image and layers containing changes;
+
+Container 
+    It is an instance of an docker image OR a running program OR simply a process;
+    You can run as many as instances of an image;
+    Containers are isolated from one another and from the host system; No communication from this process to other processes
+    When you create a container, docker creates a set of namespaces for that container: 
+        - PID namespace 
+            -- Typically, you run only one process per container;
+            -- But, of course, if you want, you could spin up another process;
+            -- These processes can talk to each other as living in the same namespace and they share the secrets;
+            -- Without docker, all processes running on a host share all the resources;
+        - Network namespace 
+            -- Each container gets its isolated network namespace, enabling independent network configurations and avoiding interference between containers;
+        - IPC Namespace
+            -- Containers have separate IPC namespaces, providing isolation for inter-process communication.
+        - MNT Namespace
+            -- Containers have their own mount namespace, ensuring that file systems are isolated and can be managed independently.;
+        - UTS Namespace
+            -- Containers have their own UTS namespace, allowing each container to have a unique hostname;
+        - USER Namespace
+            -- Isolate the user IDs and group IDs of processes in a container;
+            -- This means that processes in one container cannot see the user IDs and group IDs of processes in another container;
+  
+Namespace 
+    In a general computing environment, all processes running on a host share the resources, thus creating potential conflicts and challenges in resource managemnt;
+    Namespace is a feature of linux kernel, which partitions the host resources, such that one set of processes sees one set of resources, while another set of processes sees a different set of resources;
+
+Cgroups 
+    It is used to allot these resources to a container: CPU, Memory, Network Bandwidth, Disk, Priority;
+
+Layer 
+    While creating an image, ADD, RUN, COPY instructions create a new layer, thus impacting the size, while other instructions doesn't impact the size;
+
+    Why Layering?
+        - Layer, mere collection of files and directories, is identified by digest <algorithm>:<hash value>;
+        - Separating the layers from images allows multiple images to refer the same layer;
+        - Thus, the layer used for multiple images is stored only once on disk;
+
+    Once you create an image, you can't modify layers in it; Layers in an image are read-only; 
+    Instead, you can create another image from any layer you want;
+
+    A Docker image is just a bunch of loosely-connected read-only layers with each layer comprising one or more files. 
+
+    Multiple images can and do share layers. This leads to efficiencies in space and performance.
+
+    Docker on Linux supports many storage drivers. 
+    Each one is free to implement image layering, layer sharing, and copy-on-write (CoW) behaviour in its own way. However, the overall result and user experience is essentially the same.
+
+
+Docker Engine
+    Docker uses client-server architecture;
+    Docker Engine = Docker Client(docker CLI) + Docker Server(Docker Daemon/dockerd);
+    Docker client and server can run on same VM OR you can connect docker client to a remote docker server;
+
+Docker Client
+    It takes the command from user and delegates it to Docker Server;
+    One Docker CLI can be used to interact with multiple Docker Servers; 
+    For eg, you can use same docker CLI to control a local docker server and to control a remote docker server running in the cloud;
+    Docker Contexts allow the client to switch between Docker Servers;
+
+    > docker context ls
+    > docker context use <>
+
+Docker Server/dockerd/Docker Host
+    It is a program that manages all docker objects: such as images, containers, networks, volumes etc;
+    It exposes REST APIs for requests from client such as: docker build, docker push, docker pull, docker run etc;
+
+Docker Registry 
+    It is a centralized repository(like maven repository), could be private or public, for storing and sharing docker images/extensions/plugins;
+    Docker Hub is the default public registry, where we can find vast collection of images;
+    Organizations can also set up private registries to store proprietary images securely;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is Image?
+	It is a package that contains everything needed to run an application: OS, Runtime(jdk etc), code, libraries, environment variables, configuration files etc;
+	Often, we create an image from another image as base image;
+
+What is Unused Image?
+	An image that was never used to create a container, but has a tag;
+	
+What is Dangling Image?
+	When you create a new build of an image, the old ones you have become the dangling ones; 
+	They are untagged and displays "<none>" on its name, when you run docker images;
+	They no longer serve any purpose and consume disk space;
+Dangling images#
+	A dangling image is an image that is no longer tagged and appears in listings as <none>:<none>. A common way they occur is when building a new image and giving it a tag that already exists. When this happens, Docker will build the new image, notice that an existing image already has the same tag, remove the tag from the existing image, and give it to the new image.
+
+What is a Tag?
+	Every image you build will have unique ID assigned; However, it is impractical to remember and refer to these IDs;
+	Tags provide a meaningful name to the images, thus making it easier to refer it;
+
+	// username -> docker hub username or namespace;
+	Tag image during build: docker build -t username/image_name[:tag] . 		
+	Tag image after build: 
+		- docker build <imageId> username/image_name[:tag]
+		- docker tag src_username/src_image_name[:src_tag] target_username/target_image_name[:target_tag] 
+
+	Tag is optional and If you don't specify a tag during tagging, it defaults to latest;
+	Even old release can be tagged as latest; A tag can be reused to point to another version of the image;
+	It is the responsibility of the developer to make sure latest always point to the latest stable release of the image;
+
+    An important point about image tags: a single image can have as many tags as you want. This is because tags are arbitrary alpha-numeric values that are stored as metadata alongside the image.
+
+
+    problem with tags - tags are mutable!
+        you have an image called golftrack:1.5 that has a bug. That image is being used by containers in your production environment. You create a new version of the image that includes a fix. Then comes the mistake; you build and push the fixed image back to its repository with the same tag as the vulnerable image! This overwrites the original image and leaves you without a great way of knowing which of your production containers are using the vulnerable image and which are using the fixed image. They both have the same tag!
+        This is where image digests come to the rescue.
+
+Image Digest 
+    all images get a cryptographic content hash.
+     we’ll refer to this hash as the digest. 
+     As the digest is a hash of the contents of the image, it’s impossible to change the contents of the image without creating a new unique digest. 
+     To put it another way, you cannot change the content of an image and keep the old digest. This means digests are immutable and provide a solution to the problem that we just talked about.
+
+     docker image rm alpine:latest
+$ docker image pull alpine@sha256:9a839e63da...9ea4fb9a54 # Pulling an image using the digest#
+
+

@@ -1,0 +1,228 @@
+What is Service?
+    Each Pod in the K8s Cluster has a unique IP address; 
+    But, Pod is not permanent, it gets recreated(for many reasons), possibly with a different IP, on same or different Node;
+    So, we can't depend on this IP for inter-pod communication OR external communication;
+    That is where Service comes into picture;
+
+    Service exposes an always available URL(called cluster IP) to applications running in one or more pods, even when one of the pod is down OR it is being upgraded;
+    It load balances the requests among all running pods;
+
+    The set of Pods that Service is proxying are determined by the label selectors defined in the Service definition;
+
+Service provides access to the Pods from inside the cluster(through kube proxy) and from outside the cluster(through kube dns);
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+K8s supports 4 type of Services: ClusterIP, NodePort, LoadBalancer, External IP;
+
+ClusterIP
+    - You could have multiple front-end pods, multiple backend pods and multiple redis pods;
+    - ClusterIP allows one pod type to communicate to another Pod type, within the cluster; // inter-pod communication
+
+NodePort
+    - It exposes the applications running in a Pod to the external world;
+    - It internally creates a ClusterIP service; It routes all it's requests to that ClusterIP Service;
+    - Cons
+      -- You could expose only one service per port; You could use only ports from 30000 to 32767;
+      -- If your node IP address changes, you need to deal with that;
+         So, this is not a recommended approach to expose a service to external world;
+         This is useful in cases when your service need not to be always available, or you are very cost sensitive;
+
+LoadBalancer
+    - It is a standard way of exposing the applications running in a Pod to the external world;
+    - It internally uses a cloud provider's load balancer; // If you use AWS, it internally creates AWS ELB (Elastic LoadBalancer);
+    - Load Balancer will be assigned an external IP address; You will be charged for this;
+    - All traffic(HTTP, TCP, UDP, Websockets etc) on any port that you specify will be forwarded to the service;
+
+External IP
+    - You can use External IP, if you want to get the full control of IP that you use;
+      You can use IP that belongs to your ASN instead of a cloud provider’s ASN;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# NodePort Service Demo
+-----------------------
+> kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/service/s1/my-node-port-svc.yaml 
+service/my-node-port-svc created
+deployment.apps/my-first-deployment created
+
+> kubectl get services
+NAME               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+kubernetes         ClusterIP   10.96.0.1     <none>        443/TCP        2m38s
+my-node-port-svc   NodePort    10.98.13.76   <none>        80:30038/TCP   2m
+
+> kubectl describe svc my-node-port-svc
+Name:                     my-node-port-svc
+Namespace:                default
+Labels:                   <none>
+Annotations:              kubectl.kubernetes.io/last-applied-configuration:
+                            {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"my-node-port-svc","namespace":"default"},"spec":{"ports":[{"nodeP...
+Selector:                 app=my-node-port-pod
+Type:                     NodePort
+IP:                       10.98.13.76
+Port:                     <unset>  80/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  30038/TCP
+Endpoints:                172.17.0.3:80,172.17.0.5:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+
+> kubectl get deployments
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+my-first-deployment   2/2     2            2           114s
+
+> kubectl get pods -o wide
+NAME                                  READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+my-first-deployment-799f69566-clrd8   1/1     Running   0          4m49s   172.17.0.5   minikube   <none>           <none>
+my-first-deployment-799f69566-vnpv5   1/1     Running   0          4m49s   172.17.0.3   minikube   <none>           <none>
+
+
+// Approach #1 - Access from external system!
+> http://192.168.59.100:30038     # This is a simple static website version1!
+
+> minikube ip         # Identify the NodeIP on which your pods are running on!
+192.168.59.100
+
+> curl 192.168.59.100:30038     <NodeIP:NodePort>
+<html>
+<h1>Hello World!</h1>
+  <p>This is a simple static website version1!</p>
+</html>
+
+// Approach #2 - Access inside cluster!
+> minikube ssh
+# curl 10.98.13.76:80         <ClusterIP:Port> or <ServiceIP:Port>
+<html>
+<h1>Hello World!</h1>
+  <p>This is a simple static website version1!</p>
+</html>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ClusterIP Service Demo 
+------------------------
+    https://medium.com/the-programmer/working-with-clusterip-service-type-in-kubernetes-45f2c01a89c8
+
+> kubectl create -f my-cluster-ip-svc.yaml 
+service/wildfly-service created
+replicaset.apps/wildfly-rs created
+
+> kubectl get services
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+kubernetes        ClusterIP   10.96.0.1        <none>        443/TCP    114m
+wildfly-service   ClusterIP   10.110.221.137   <none>        8080/TCP   33s
+
+> kubectl get pods -o wide -l app=wildfly-rs-pod
+NAME               READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+wildfly-rs-m8xf2   1/1     Running   0          49m   172.17.0.5   minikube   <none>           <none>
+wildfly-rs-mp4cs   1/1     Running   0          49m   172.17.0.3   minikube   <none>           <none>
+
+> TODO: https://github.com/arun-gupta/kubernetes-java-sample
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# LoadBalancer Service Demo
+---------------------------
+> kubectl apply -f my-load-balancer-svc.yaml 
+deployment.apps/my-load-balancer-svc created
+
+> kubectl get services
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   18h
+
+> kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE    IP           NODE       NOMINATED NODE   READINESS GATES
+my-load-balancer-svc-6755976cfc-5mvsf   1/1     Running   0          2m2s   172.17.0.5   minikube   <none>           <none>
+my-load-balancer-svc-6755976cfc-7m9kl   1/1     Running   0          2m2s   172.17.0.8   minikube   <none>           <none>
+my-load-balancer-svc-6755976cfc-hfhck   1/1     Running   0          2m2s   172.17.0.7   minikube   <none>           <none>
+my-load-balancer-svc-6755976cfc-t69mq   1/1     Running   0          2m2s   172.17.0.6   minikube   <none>           <none>
+my-load-balancer-svc-6755976cfc-w6njs   1/1     Running   0          2m2s   172.17.0.9   minikube   <none>           <none>
+
+> kubectl expose deployment my-load-balancer-svc --type=LoadBalancer --name=my-lb-svc
+service/my-lb-svc exposed
+
+> kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP          18h
+my-lb-svc    LoadBalancer   10.105.162.40   <pending>     8080:30386/TCP   88s
+
+// If you are using minikube, External IP of load balancer is always pending;
+// To get around it, you need to enable metallb extension;
+
+> minikube addons enable metallb
+    ▪ Using image metallb/speaker:v0.9.6
+    ▪ Using image metallb/controller:v0.9.6
+🌟  The 'metallb' addon is enabled
+
+// Once the addon is enabled, we can see that there are two components that are up and running in the cluster under metallb-system namespace;
+// Controller and Speaker are those two components;
+// The controller helps in the IP address assignment, whereas the speaker advertises layer -2 address;
+> kubectl get pods -n metallb-system
+NAME                          READY   STATUS    RESTARTS   AGE
+controller-7dd4bdf68f-l5px5   1/1     Running   0          2m23s
+speaker-nbdxz                 1/1     Running   0          2m23s
+
+// Once we enable it, we need to configure it;
+// It will prompt for the IP Address range. As my minikube host IP is 192.168.99.100, I have given the range as below:
+>  minikube addons configure metallb
+-- Enter Load Balancer Start IP: 192.168.59.110
+-- Enter Load Balancer End IP: 192.168.59.120
+    ▪ Using image metallb/speaker:v0.9.6
+    ▪ Using image metallb/controller:v0.9.6
+✅  metallb was successfully configured
+
+> minikube ip
+192.168.59.100
+
+// Now, you will see, service has a external IP assigned;
+> kubectl get services
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)          AGE
+kubernetes   ClusterIP      10.96.0.1       <none>           443/TCP          19h
+my-lb-svc    LoadBalancer   10.100.245.58   192.168.59.110   8080:32068/TCP   98s
+
+> http://192.168.59.110:8080    # http://<external-ip>:<port>
+Hello Kubernetes!
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ExternalIP Service Demo
+-------------------------
+    https://medium.com/avmconsulting-blog/external-ip-service-type-for-kubernetes-ec2073ef5442
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+References
+    https://medium.com/the-programmer/services-in-kubernetes-844ac2e69c6d - Cluster IP
+    https://medium.com/avmconsulting-blog/external-ip-service-type-for-kubernetes-ec2073ef5442 - Load Balancer & External IP
+    https://faun.pub/metallb-configuration-in-minikube-to-enable-kubernetes-service-of-type-loadbalancer-9559739787df
+    https://medium.com/codex/access-application-externally-in-kubernetes-cluster-using-load-balancer-service-d1b7858d51
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+LoadBalancer will use an IP from a provider's pool, for eg, AWS VPC CIDR;
+LoadBalancer internally creates NodePort and ClusterIP;
+
+ExternalName: something like a DNS-proxy – in response to such a Service will return a record taken via CNAME of the record specified in the externalName
+
+What is Headless Service?
+    https://learning.oreilly.com/library/view/kubernetes-for-developers/9781788834759/1d7b03e7-eb9b-477e-a1ab-bd11c18836ff.xhtml
+    For headless service (exposed with a single service IP) not requiring load balancer, the cluster IP (spec.clusterIP)should be specified as None.
+    
+    Once this service is created using kubectl, you'll be able to access the deployment pods through the service IP or service name if you are inside a pod on this namespace.
+
+
+
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-demo-2-api
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    type: api
+    service: go-demo-2
+
+
+
+How Service works?
+A user sends a request to one of the nodes of the cluster. That request is received by a Service and load balanced to one of the associated Pods. 
+It’s a bit more complicated than that, with iptables, kube DNS, kube proxy, and a few other things involved in the process. 
+We explored them in more detail in the “Using Services To Enable Communication Between Pods” chapter. T
+
+
+What is Headless Service?
+A headless service is a Kubernetes service that doesn't assign a cluster IP. Instead, it provides a stable DNS entry for each pod in the StatefulSet. This allows direct access to individual pods, crucial for applications requiring specific pod-to-pod communication, such as distributed databases or peer-to-peer networks. For example, in a Cassandra cluster deployed as a StatefulSet, each Cassandra node needs a unique identity and the ability to communicate directly with other nodes. A headless service provides this by creating DNS records for each pod.

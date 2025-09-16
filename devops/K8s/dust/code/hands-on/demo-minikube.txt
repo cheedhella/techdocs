@@ -1,0 +1,157 @@
+# Make sure minikube is running with 4GB RAM;
+# It doesn't matter in which order you deploy the services;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #1: Deploy the queue and make sure it is working by visiting the admin console for the queue;
+----------------------------------------------------------------------------------------------------
+> kubectl apply -f 1.fleetman-queue.yaml
+deployment.apps/fleetman-queue-deployment created
+service/fleetman-queue-service created
+
+> kubectl get pods
+NAME                                         READY   STATUS              RESTARTS   AGE
+fleetman-queue-deployment-6497d9b566-2hv8p   0/1     ContainerCreating   0          60s
+
+> kubectl get svc
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                          AGE
+fleetman-queue-service   NodePort    10.108.242.105   <none>        8161:30010/TCP,61616:31797/TCP   78s
+kubernetes               ClusterIP   10.96.0.1        <none>        443/TCP                          173m
+
+> minikube ip
+192.168.59.101
+
+> http://192.168.59.101:30010 -> Click on 'Manage ActiveMQ Broker' -> Login using admin/admin -> Click on Queues;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #2: Deploy Position Simulator!
+-------------------------------------
+> kubectl apply -f 2.fleetman-position-simulator.yaml 
+deployment.apps/fleetman-position-simulator-deployment created
+service/fleetman-webapp-service created
+
+> kubectl get svc
+NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                          AGE
+fleetman-queue            NodePort    10.99.72.176   <none>        8161:30010/TCP,61616:32737/TCP   7m40s
+fleetman-webapp-service   NodePort    10.106.103.5   <none>        80:30080/TCP                     51m
+kubernetes                ClusterIP   10.96.0.1      <none>        443/TCP                          5h4m
+
+# Once this pod is UP, you should see a queue named positionQueue in the ActiveMQ admin portal, with non-zero Message Enqueued;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #3: Deploy Position Tracker!
+-----------------------------------
+> kubectl apply -f 3.fleetman-position-tracker.yaml 
+deployment.apps/fleetman-position-tracker-deployment created
+service/fleetman-position-tracker created
+
+> kubectl get svc
+NAME                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                          AGE
+fleetman-position-tracker   ClusterIP   10.100.158.248   <none>        8080/TCP                         15s
+fleetman-queue              NodePort    10.99.72.176     <none>        8161:30010/TCP,61616:32737/TCP   9m24s
+fleetman-webapp-service     NodePort    10.106.103.5     <none>        80:30080/TCP                     53m
+kubernetes                  ClusterIP   10.96.0.1        <none>        443/TCP                          5h5m
+
+# Once this pod is UP, you should see 1 consumer in the ActiveMQ admin portal, with non-zero Message Dequeued;
+-------------------
+# We can also access rest interface to this microservice;
+# To test it, change the type of service to NodePort and expose it on nodePort 30020;
+
+> minikube ip
+192.168.59.101
+
+http://192.168.59.101:30020/vehicles/City%20Truck GET
+<vehiclePosition>
+<name>City Truck</name>
+<lat>53.37754449807107448577880859375</lat>
+<longitude>-1.46968759596347808837890625</longitude>
+<timestamp>2022-05-11T18:20:26.364Z</timestamp>
+<speed>2.531213237691925026136</speed>
+</vehiclePosition>
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #4: API Gateway!
+-----------------------
+> kubectl apply -f 4.fleetman-api-gateway.yaml 
+deployment.apps/fleetman-api-gateway-deployment created
+service/fleetman-api-gateway-service created
+
+http://192.168.59.101:30020/  		# Once API Gateway is brought up, you should see this: "Fleetman API Gateway at Wed May 11 18:38:56 GMT 2022"
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #5: UI Application!
+--------------------------
+> kubectl apply -f 5.fleetman-webapp-angular.yaml 
+deployment.apps/fleetman-webapp-angular-deployment created
+service/fleetman-webapp created
+
+http://192.168.59.101:30080/ 		# You should see the UI;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get all
+NAME                                                          READY   STATUS    RESTARTS   AGE
+pod/fleetman-api-gateway-deployment-6778674ddc-vhms7          1/1     Running   0          31m
+pod/fleetman-position-simulator-deployment-754f87f57f-6kbpd   1/1     Running   0          27m
+pod/fleetman-position-tracker-deployment-7559789998-hxr68     1/1     Running   0          38m
+pod/fleetman-queue-deployment-6497d9b566-4qlq8                1/1     Running   0          3h15m
+pod/fleetman-webapp-angular-deployment-7747b7f5bf-hncw6       1/1     Running   0          11m
+
+NAME                                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                          AGE
+service/fleetman-api-gateway        ClusterIP   10.107.95.149    <none>        8080/TCP                         16m
+service/fleetman-position-tracker   ClusterIP   10.97.225.113    <none>        8080/TCP                         2m47s
+service/fleetman-queue              NodePort    10.99.72.176     <none>        8161:30010/TCP,61616:32737/TCP   3h15m
+service/fleetman-webapp             NodePort    10.104.137.196   <none>        80:30080/TCP                     11m
+service/kubernetes                  ClusterIP   10.96.0.1        <none>        443/TCP                          8h
+
+NAME                                                     READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/fleetman-api-gateway-deployment          1/1     1            1           31m
+deployment.apps/fleetman-position-simulator-deployment   1/1     1            1           27m
+deployment.apps/fleetman-position-tracker-deployment     1/1     1            1           38m
+deployment.apps/fleetman-queue-deployment                1/1     1            1           3h15m
+deployment.apps/fleetman-webapp-angular-deployment       1/1     1            1           11m
+
+NAME                                                                DESIRED   CURRENT   READY   AGE
+replicaset.apps/fleetman-api-gateway-deployment-6778674ddc          1         1         1       31m
+replicaset.apps/fleetman-position-simulator-deployment-754f87f57f   1         1         1       27m
+replicaset.apps/fleetman-position-tracker-deployment-7559789998     1         1         1       38m
+replicaset.apps/fleetman-queue-deployment-6497d9b566                1         1         1       3h15m
+replicaset.apps/fleetman-webapp-angular-deployment-7747b7f5bf       1         1         1       11m
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+release1 vs release2 vs release 3
+	In release1, all data generated is stored in-memory and eventually pod gets out-of-memory soon; If you restart the pods, all historical data is gone!
+	In release3, position-tracker is responsible for calculating the speeds of vehicles and for storing histories of the vehicles, in a mongo db;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Step #6: Bring up MongoDB deployment!
+---------------------------------------
+> kubectl apply -f mongo-stack.yaml 
+deployment.apps/mongodb-deployment created
+service/fleetman-mongodb created
+
+# Now, try restarting position-tracker pod, you should see Fleet Manager UI picking up the history from MongoDB;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+But, that's not enough! If the MongoDB container dies, ofcourse it gets restarted, but, data will die with it;
+> kubectl delete -f <mongo-db-pod>
+
+
+In this step, we are going to deploy a MongoDB container, which stores all of the data in some kind of directory, inside the Mongo container;
+Now, the requirement is to store the history of vehicles permanently;
+For that, we will setup a Persistent Volume, and instruct MongoDB to store data in that, where data is stored permanently;
+Persistent Volume could be any storage such as AWS EBS(Elastic Block Storage) etc;
+
+> kubectl apply -f 7.storage.yaml 
+persistentvolumeclaim/mongo-pvc created
+persistentvolume/local-storage created
+
+> kubectl get pvc
+NAME        STATUS   VOLUME          CAPACITY   ACCESS MODES   STORAGECLASS     AGE
+mongo-pvc   Bound    local-storage   20Gi       RWO            mylocalstorage   2m28s
+
+> kubectl get pv
+NAME            CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM               STORAGECLASS     REASON   AGE
+local-storage   20Gi       RWO            Retain           Bound    default/mongo-pvc   mylocalstorage            108s 		# This PV is bound to mongo-pvc PVC;
+
+> minikube ssh
+
+$ cd /mnt/some/directory/structure/
+
+$ ls
+WiredTiger	   WiredTiger.wt     collection-0-3864098514482131820.wt  diagnostic.data
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://github.com/DickChesterwood/k8s-fleetman/tree/release2 - Code for above docker images;

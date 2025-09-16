@@ -1,0 +1,5 @@
+ install yamllint to verify your YAML syntax.
+ sudo apt install yamllint
+yamllint your_file.yaml
+
+kubectl port-forward --address 0.0.0.0 service/nginx-service 80:80
