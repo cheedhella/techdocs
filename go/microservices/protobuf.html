@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Protocol Buffer</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is Data Format?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is a way of representing data; There are many types of data formats;</li>
+         <li><b>Text format</b>: CSV, XML, JSON;</li>
+         <li><b>Binary format</b>: Avro, Protobuf;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. What is Protocol Buffer?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is a language-neutral, platform-neutral data format(developed by Google);</li>
+         <li>It enables our web applications to exchange data faster;</li>
+         <li>gRPC uses protobuf as it's default serialization format;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Key features of Protocol Buffer?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Provides Schema definition langauge</b>
+            <ul>
+               <li>Protobuf uses schema to define the structure of the data to be serialized;</li>
+               <li>This schema is defined in a language-agnostic format and serves as a contract between systems;</li>
+            </ul>
+         </li>
+         <li><b>Uses Binary Format</b>
+            <ul>
+               <li>Protobuf serializes data into a binary format, which is more compact compared to human-readable
+                  formats like JSON or XML;</li>
+               <li>This results in smaller payload sizes, making it more efficient;</li>
+            </ul>
+         </li>
+         <li><b>Multiple Language Support</b>
+            <ul>
+               <li>Protobuf provides compilers for multiple languages;</li>
+               <li>It allows you to implement systems in different languages;</li>
+               <li>As long as they share a common schema, data can be serialized and deserialized;</li>
+            </ul>
+         </li>
+         <li><b>Backward and Forward Compatibility</b>
+            <ul>
+               <li>New fields can be added to messages without breaking compatibility with existing code;</li>
+               <li>Unknown fields are ignored, and missing fields are treated as having default values;</li>
+               <li>As long as they share a common schema, data can be serialized and deserialized;</li>
+            </ul>
+         </li>
+         <li><b>High Performance</b>
+            <ul>
+               <li>Binary format and code generation contribute to faster serialization and deserialization;</li>
+               <li>Also with server compression turned on, Protobuf payload size becomes even smaller;</li>
+            </ul>
+         </li>
+         <li><b>Extensible</b>
+            <ul>
+               <li>Protobuf supports extending existing message types, allowing for the addition of new fields without
+                  modifying the original message definition;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. How it works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>You define schema(structure of data) in a .proto file;</li>
+         <li>From that, you can generate code for multiple languages (e.g., C++, Java, Python, Go, Rust, etc) using
+            protoc compiler;</li>
+         protoc - python_out=. User.proto
+         <li></li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>Why do we need field tags or field numbers?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>When Protobuf serializes data, it does not store field names like id/username (that would waste space);
+         </li>
+         <li>Instead, it uses the field number in the binary format to identify which field is which during serialization and deserialization;</li>
+         <li>Each field in a message must have a unique field number;</li>
+         <li>If you remove a field, mark its number as reserved so future versions don’t break backward compatibility;
+         </li>
+      </ul>
+   </div>
+
+   <br /><br />
+   <div class="code-block">
+      <div class="code-block-title">Presence Tracking Example</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>
+message User {
+  string id = 1;
+  string username = 2;
+  reserved 3; // removed field 3 and reserved it to avoid collisions
+}
+</code></pre>
+   </div>
+
+
+   It is particularly designed to be efficient in terms of both size and speed, making it suitable for communication
+   protocols and data storage.
+   Protobuf also provides support for versioning, allowing for changes to the schema without breaking compatibility with
+   existing clients or servers. Additionally, Protobuf messages are extensible, meaning that new fields can be added to
+   a message without breaking backward compatibility.
+
+   <div class="question"><strong>2. Protobuf vs JSON</strong></div>
+   <div class="answer">
+      <ul>
+         <li>Small Initial stack and resizable
+            <ul>
+               <li>A goroutine starts with a very small stack (about 2 KB) and it grows or shrinks dynamically as needed
+                  by the workload; Where as regular OS threads starts with a large fixed stack (often 1 MB);</li>
+            </ul>
+         </li>
+         <li>User space scheduling and M:N modeling
+            <ul>
+               <li>goroutines are scheduled in the user space(rather than kernel space) by go runtime; <br /> So,
+                  swiching b/w goroutines is faster - as there is no need to enter kernel mode, only minimal state(like
+                  program counter, stack pointer etc) needs to be saved/restored;</li>
+               <li>Goroutines are multiplexed onto OS threads - It means thousands of goroutines can run on just a
+                  handful of threads, thus taking less memory and CPU;</li>
+            </ul>
+         </li>
+         <li>Efficient communication via channels
+            <ul>
+               <li>Instead of shared memory and locks, Goroutines use channels to communicate(exchange data) with each
+                  other;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Protobuf Scalar types</strong></div>
+   <div class="answer">
+      <ul>
+         <li>double: A double-precision floating-point number.</li>
+         <li>float: A single-precision floating-point number.</li>
+         <li>int32: A signed 32-bit integer.</li>
+         <li>int64: A signed 64-bit integer.</li>
+         <li>uint32: An unsigned 32-bit integer.</li>
+         <li>uint64: An unsigned 64-bit integer.</li>
+         <li>sint32: A signed 32-bit integer encoded as a zigzag-encoded 32-bit integer.</li>
+         <li>sint64: A signed 64-bit integer encoded as a zigzag-encoded 64-bit integer.</li>
+         <li>fixed32: An unsigned 32-bit integer, encoded as a fixed-width 32-bit value.</li>
+         <li>fixed64: An unsigned 64-bit integer, encoded as a fixed-width 64-bit value.</li>
+         <li>sfixed32: A signed 32-bit integer, encoded as a fixed-width 32-bit value.</li>
+         <li>sfixed64: A signed 64-bit integer, encoded as a fixed-width 64-bit value.</li>
+         <li>bool: A boolean value.</li>
+         <li>string: A string of UTF-8 characters.</li>
+         <li>bytes: A sequence of bytes.</li>
+      </ul>
+   </div>
+
+   Protobuf also supports more complex types like enums, nested messages, and repeated fields to represent more complex
+   data structures.
+
+   <div class="question"><strong>proto2 vs proto3</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Rules</b>
+            <ul>
+               <li>proto2:
+                  <ul>
+                     <li>It supports required, optional, repeated(for multiple values like array/list); </li>
+                  </ul>
+               </li>
+               <li>proto3:
+                  <ul>
+                     <li>required is removed, as it is problematic for backward and forward compatibility;</li>
+                     <li>All fields are optional by default;</li>
+                     <li>It still supports optional keyword and repurposed it for presence tracking;</li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+         <li><b>Default values</b>
+            <ul>
+               <li>proto2:
+                  <ul>
+                     <li>You can explicitly specify default values; Eg: optional int32 age = 1 [default = 18];</li>
+                  </ul>
+               </li>
+               <li>proto3:
+                  <ul>
+                     <li>Defaults are implicit; No custom/explicit defaults are allowed;</li>
+                     <li>int32 → 0, bool → false, string → "", message → not set, repeated → empty list</li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+         <li><b>Enums</b>
+            <ul>
+               <li>proto2:
+                  <ul>
+                     <li>Enums can start with any integer;</li>
+                  </ul>
+               </li>
+               <li>proto3:
+                  <ul>
+                     <li>Enums must have a value 0 defined as the first element;</li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+         <li><b>Presence Tracking in protoc3: int32 age = 2 VS optional int32 age = 2;</b>
+            <ul>
+               <li>int32 age = 2
+                  <ul>
+                     <li>If you don't set it, it defaults to 0 implicitly;</li>
+                     <li>But, no presence tracking for scalar types - You cannot tell if the field was explicitly set to
+                        0 or if it was never set at all;</li>
+                  </ul>
+               </li>
+               <li>optional int32 age = 2
+                  <ul>
+                     <li>If you don't set it, it defaults to 0 implicitly;</li>
+                     <li>But, you can do presence tracking;</li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+   </div>
+
+   <br /><br />
+   <div class="code-block">
+      <div class="code-block-title">Presence Tracking Example</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>
+// int32 age = 2
+msg = Person()
+print(msg.age)        # 0 (default)
+print(msg.HasField("age"))  # ❌ raises error (not supported)
+
+// optional int32 age = 2
+msg = Person()
+print(msg.age)        # 0 (default)
+print(msg.HasField("age"))  # False  (not set)
+
+msg.age = 0
+print(msg.age)        # 0
+print(msg.HasField("age"))  # True  (explicitly set)
+
+</code></pre>
+   </div>
+
+   <br /><br />
+   <div class="code-block">
+      <div class="code-block-title">Hell World</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+    for i := 0; i < 3; i++ {
+        fmt.Println(msg, i)
+        time.Sleep(500 * time.Millisecond)
+    }
+}
+
+func main() {
+    go printMessage("goroutine") // run concurrently with main goroutine
+    printMessage("main")         // run in main goroutine - It is possible main routine can finish and die before child goroutine;
+}
+
+<b>Output:</b>
+main 0
+goroutine 0
+main 1
+goroutine 1
+goroutine 2
+main 2
+
+</code></pre>
+   </div>
+
+   <br />
+   <div class="code-block">
+      <div class="code-block-title">Hell World 2</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>package main
+
+import (
+    "fmt"
+)
+
+func printMessage(msg string) {
+   fmt.Println(msg)
+}
+
+func main() {
+    go printMessage("first") 
+    printMessage("second")         // <b>It is possible main routine can finish and die before child goroutine;</b>
+}
+
+<b>Output:</b>
+second
+
+</code></pre>
+   </div>
+
+   <br />
+   <div class="code-block">
+      <div class="code-block-title">Hell World 3</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+   fmt.Println(msg)
+}
+
+func main() {
+    go printMessage("first") 
+    time.Sleep(1 * time.Millisecond) // <b>sleep for 1 second, so that child thread finishes - This is not the best way to do it; Instead use WaitGroups;</b>
+    printMessage("second")
+}
+
+<b>Output:</b>
+first
+second
+
+</code></pre>
+   </div>
+   <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

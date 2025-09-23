@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package proto_user;
+option go_package = "example.com/myapp/usr;usr";
+import "address.proto";
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+  repeated proto_address.Address addresses = 4;
+}

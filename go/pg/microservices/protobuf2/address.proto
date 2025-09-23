@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+// It is not go package name, it is a namespace used by protobuf files; another protobuf can import it;
+package proto_address;
+option go_package = "example.com/myapp/adr;adr";
+
+message Address {
+  string address = 1;
+  string pin = 2;
+}
+
+/*
+go_package contains 2 things: import_path(before ;) and go package name(after ;);
+import_path: It specifies path where to save the generated code;
+packge name: package name used in client code;
+
+To compile:
+>  protoc --go_out=. user.proto address.proto
+
+It creates example.com/myapp/usr/user.pb.go, example.com/myapp/adr/address.pb.go
+Clients can import them and use it;
+*/

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>How Protocol Buffer works?</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. How it works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>you just defined a schema, generated Go code, and used Protobuf to serialize and deserialize structured
+            data.</li>
+         <li><b>Install Protobuf</b>
+            <ul>
+               <li>Install protoc: brew install protobuf (Mac); check protoc --version;</li>
+               <li>Install protobuf for go: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest</li>
+               <li>Install protobuf for gRPC: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest</li>
+               <li>By default, Go installs binaries to $GOPATH/bin; Add protoc to path;</li>
+               <li>Edit ~/.zshrc; export PATH="$PATH:$(go env GOPATH)/bin"; reload: source ~/.zshrc; Test: which
+                  protoc-gen-go</li>
+            </ul>
+         </li>
+         <li><b>Define Schema</b>
+            <ul>
+<li>It acts as a contract b/w Client and Server;</li>
+            </ul>
+         </li>
+         <li><b>Compile Schema</b>
+            <ul>
+
+            </ul>
+         </li>
+         <li><b>Generate Code</b>
+            <ul>
+               <li>gRPC compiler takes .proto file and generates code for both client and server; </li>
+               <li>Generated code contains: Classes for the message, client stub and server interace;</li>
+               <li>Client stub/inteface -> It allows you to call remote methods as if they are local;</li>
+               <li>server interface -> It is an abstract class the server must implement to handle the incoming requests;</li>
+            </ul>
+         </li>
+         <li><b>Serialize Data on sender side</b>
+            <ul>
+<li>When a client calls a remote method, the generated code uses Protobuf to serialize the data into a compact binary format.</li>
+<li>This binary data is then sent over the network using HTTP/2.</li>
+            </ul>
+         </li>
+         <li><b>DeSerialize Data on receiver side</b>
+            <ul>
+               <li> The server receives the binary data and uses the generated Protobuf code to deserialize it back into a usable object. </li>
+               <li></li>
+
+            </ul>
+         </li>
+
+         <li>
+            <pre>
+syntax = "proto3";
+
+package example;
+
+// This tells protoc where to put generated Go code
+option go_package = "example.com/myapp/pb;pb";
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
+}
+</pre>
+         </li>
+         // protoc compiler generates the language specific code;
+         protoc - python_out=. your_proto_file.proto
+         protoc --go_out=. User.proto # This will generate User.pb.go in the pb package defined by go_package.
+         # protoc --go_out=. --go-grpc_out=. user.proto # user_grpc.pb.go → gRPC service stubs (if you defined services
+         in the .proto)
+
+         protoc --go_out=. user.proto address.proto
+
+         // The generated code includes classes for each message type, as well as methods for serialization and
+         deserialization
+         class Person:
+         def __init__(self):
+         self.name = ""
+         self.id = 0
+         self.has_ponycopter = False
+
+         def serialize_to_bytes(self):
+         # Serialization logic
+
+         def parse_from_bytes(self, data):
+         # Deserialization logic
+
+         // Serialization
+         person = Person()
+         person.name = "John Doe"
+         person.id = 123
+         person.has_ponycopter = True
+         serialized_data = person.serialize_to_bytes()
+
+         // Deserialization
+         new_person = Person()
+         new_person.parse_from_bytes(serialized_data)
+         print(new_person.name) # Output: John Doe
+         print(new_person.id) # Output: 123
+         print(new_person.has_ponycopter) # Output: True
+
+         # Run it
+         go mod init example.com/myapp
+         go mod tidy
+         go run writer.go
+         go run reader.go
+
+         # Output:
+         Serialized data: 0a03313233120... # (binary bytes, hex format)
+         Deserialized User: id:"123" username:"alice" age:25
+
+
+      </ul>
+   </div>
+
+
+
+
+   <br /><br />
+   <div class="code-block">
+      <div class="code-block-title">Presence Tracking Example</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>
+
+</code></pre>
+   </div>
+
+   <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

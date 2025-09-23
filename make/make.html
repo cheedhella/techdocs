@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Make</title>
+      <link rel="stylesheet" href="../../resources/css/styles.css" />
+      <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+   </head>
+   <body>
+      <div class="question"><strong>1. What is goroutine?</strong></div>
+      <div class="answer">
+         <ul>
+            <li>It is a function that runs concurrently(or in the background) with other functions, when invoked using go keyword;</li>
+         </ul>
+      </div>
+
+      How to install make?
+    > x-code-select --install                   # Mac
+    > sudo apt-get install build-essential      # Linux; It installs make, gcc;
+    > make -v 
+
+What is make?
+    GNU Make is a build automation tool that automatically builds executable programs and libraries from source code by reading files called Makefiles.
+
+Why Use GNU Make?
+    Efficiency: Only rebuilds what's necessary.
+    Portability: Works on many platforms.
+    Flexibility: Can manage complex builds (even in large projects).
+    Extensibility: Can invoke shell commands, define patterns, and more.
+
+    Makefiles can be written to work across platforms if they avoid OS-specific behavior (e.g., file paths, shell commands).
+
+What Makes make some what Cross-Platform?
+    - GNU Make itself is available on:
+        Linux and other Unix-like systems (macOS, BSD, etc.)
+        Windows (via environments like MSYS2, Cygwin, WSL, or MinGW)
+    - Makefiles can be written to work across platforms if they avoid OS-specific behavior (e.g., file paths, shell commands)
+
+What Breaks Cross-Platform Compatibility?
+    Shell Commands - rm, cp, mv work on Unix/Linux/macOS; On Windows, these don’t exist in CMD or PowerShell;
+    File Paths - /usr/bin/ vs C:\Program Files\,  Unix uses /, Windows uses \
+    Tools/Compilers - gcc, clang, etc., may not be available on Windows without special setup
+    Line Endings - Windows uses CRLF (\r\n), Unix uses LF (\n) — can affect scripts and Makefile behavior
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+1. Rules
+    - It defines how to build a file(target) from one or more dependencies, using a set of commands(called recipes);
+    - There are many types of Rules: Explicit Rules, Pattern Rules, Suffix Rules, Static Pattern Rules, Phony Rules, Implicit Rules, Empty Rules;
+    - Syntax:
+        target: dependencies
+            commands to build the target 
+
+2. Explicit Rule
+    Define exactly how to build a specific target from specific dependencies;
+    Eg:
+    main.o: main.c                      # main.o is the target, it depends on main.c
+        gcc -c main.c -o main.o         # This command tells how to build main.o from main.c 
+
+3. Pattern Rules
+    Use wildcards (%) to define generic rules for multiple targets;
+    Eg:
+    %.o: %.c                   # %.o -> pattern for any object file; %.c - pattern for matching corresponding .c file;
+        gcc -c $< -o $@        # $@ -> matches target; $< -> matches first dependency;  $^ -> matches all dependencies;
+
+4. Static Pattern Rules
+    Apply a pattern rule to a specific set of files;
+    Eg:
+    objects = main.o utils.o
+    $(objects): %.o: %.c
+        gcc -c $< -o $@
+
+5. Phony Rules
+    Used for targets that don’t represent actual files, usually for commands like clean, install etc;
+    Eg:
+    .PHONY: clean
+    clean:
+        rm -f *.o myapp
+6. Implicit Rules
+    Generic built-in rules that make already knows, even if you don't define them;
+    If you don’t define a rule for a target, make will try to use a default rule that matches the file type;
+    make -p -> lists all implicit rules;
+        | Target | Source      | Command Used                  |
+        | ------ | ----------- | ----------------------------- |
+        | `.o`   | `.c`        | `$(CC) -c $(CFLAGS)`          |
+        | `.o`   | `.cpp`      | `$(CXX) -c $(CXXFLAGS)`       |
+        | `.c`   | `.y` (Yacc) | `yacc` + `cc`                 |
+        | `.c`   | `.l` (Lex)  | `lex` + `cc`                  |
+        | `.out` | `.c`        | `cc file.c` → creates `a.out` |
+        | `prog` | `.o`        | `cc -o prog file.o`           |
+    Variables used by implicit rules:
+        | Variable   | Purpose              | Default (usually) |
+        | ---------- | -------------------- | ----------------- |
+        | `CC`       | C compiler           | `cc` or `gcc`     |
+        | `CXX`      | C++ compiler         | `g++`             |
+        | `CFLAGS`   | C compiler flags     | *(empty)*         |
+        | `CPPFLAGS` | C preprocessor flags | *(empty)*         |
+        | `LDFLAGS`  | Linker flags         | *(empty)*         |
+    You can write your own rule to override the built-in one:
+        Eg:
+        %.o: %.c
+            gcc -Wall -c $< -o $@
+    You can also disable all implicit rules:
+        .SUFFIXES:
+
+7. Empty Rules
+    Rules with no commands, used for dependency tracking;
+    Eg: 
+    all: main.o utils.o         # target depends on one or more files;
+
+    Eg2:
+    .PHONY: build compile link
+    build: compile link         # target depends on one or more targets;
+    compile:
+        @echo Compiling source files...
+    link:
+        @echo Linking object files...
+
+    Dependencies are executed from left to right, one at a time, unless make decides it can run them in parallel.
+    To force strict sequential execution, you can chain them in the recipe instead:
+    Eg:
+    build:
+        $(MAKE) compile
+        $(MAKE) link
+
+8. Automatic Dependency Checking
+    Make checks file timestamps. If any dependency is newer than the target, the rule runs.
+
+9. Variables 
+    Variables reduce repetetion;
+    
+    Eg:
+    CC = gcc
+    CFLAGS = -Wall -g
+    main.o: main.c
+        $(CC) $(CFLAGS) -c main.c
+
+10. Conditional Logic
+    You can write platform-aware or config-based logic in Makefiles using ifeq, ifdef, etc.
+    Eg:
+        ifeq ($(OS),Windows_NT)
+            RM = del /Q
+        else
+            RM = rm -f
+        endif
+
+        clean:
+            $(RM) *.o myprogram
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+🛠️ GNU Make can be cross-platform if you write your Makefiles portably, but for robust cross-platform development, consider using tools like CMake.
+
+
+
+
+
+How to Improve Cross-Platform Compatibility?
+// Use portable commands and define platform-specific logic in the Makefile:
+ifeq ($(OS),Windows_NT)
+    RM = del /Q
+else
+    RM = rm -f
+endif
+
+clean:
+    $(RM) *.o myprogram
+
+Dependency management; Passing macro inside makefile; One make calling another make; Access environment variables inside makefile; 
+C++ vs Clang++;
+
+Use CMake to generate platform-specific build files.
+
+
+
+
+Pair cross-platform compilers with CMake (a build system) to:
+
+Write one set of build instructions
+
+Compile your project on any OS or architecture
+
+✅ Portability: Build once, run anywhere.
+
+
+      <div class="question"><strong>2. goroutine VS OS/Java threads?</strong></div>
+      <div class="answer">
+         <ul>
+            <li>Small Initial stack and resizable
+               <ul>
+                  <li>A goroutine starts with a very small stack (about 2 KB) and it grows or shrinks dynamically as needed by the workload; Where as regular OS threads starts with a large fixed stack (often 1 MB);</li>
+               </ul>
+            </li>
+            <li>User space scheduling and M:N modeling
+               <ul>
+                  <li>goroutines are scheduled in the user space(rather than kernel space) by go runtime; <br/> So, swiching b/w goroutines is faster - as there is no need to enter kernel mode, only minimal state(like program counter, stack pointer etc) needs to be saved/restored;</li>
+                  <li>Goroutines are multiplexed onto OS threads - It means thousands of goroutines can run on just a handful of threads, thus taking less memory and CPU;</li>
+               </ul>
+            </li>
+            <li>Efficient communication via channels
+               <ul>
+                  <li>Instead of shared memory and locks, Goroutines use channels to communicate(exchange data) with each other;</li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+      
+      <div class="code-block">
+         <div class="code-block-title">Hell World</div>
+         <button class="copy-btn">Copy</button>
+         <pre><code>package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func printMessage(msg string) {
+    for i := 0; i < 3; i++ {
+        fmt.Println(msg, i)
+        time.Sleep(500 * time.Millisecond)
+    }
+}
+
+func main() {
+    go printMessage("goroutine") // run concurrently with main goroutine
+    printMessage("main")         // run in main goroutine - It is possible main routine can finish and die before child goroutine;
+}
+
+<b>Output:</b>
+main 0
+goroutine 0
+main 1
+goroutine 1
+goroutine 2
+main 2
+
+</code></pre>
+      </div>
+
+      <script src="../../resources/js/codeblock.js"></script>
+   </body>
+</html>
