@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Introduction</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is SNMP?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is used to monitor(health and performance metrics) and configure network devices such as routers,
+            switches, servers, printers, wireless access points and firewalls;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. New Terms</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>SNMP Agent</b>
+            <ul>
+               <li>It is a software that is installed on the network device;</li>
+               <li>SNMP Polling - It takes the request from SNMP manager, it polls the device for information(status and
+                  performance), stores it in a local databased called MIB and responds to it;</li>
+               <li>SNMP Traps - It is agent initiated command, through which agent informs manager of specific events;
+                  For eg, CPU utilization on a specific device exceeds 80 percent for one minute;</li>
+            </ul>
+         </li>
+         <li><b>SNMP Manager or NMS(Network Mangement System)</b>
+            <ul>
+               <li></li>
+            </ul>
+         </li>
+         <li><b>MIB</b> - Management Information Base;
+            <ul>
+               <li>It is a structured database of information about a network device, such as: CPU usage, Iface status, number of packets transmitted;</li>
+            </ul>
+         </li>
+         <li><b>OID</b> - Object Identifier;
+            <ul>
+               <li>It is a path, which uniquely identifies a metric OR setting in MIB tree;</li>
+               <li>Examples:
+                  <ul>
+                     <li>.1.3.6.1.2.1.1.1.0 → sysDescr (device description)</li>
+                     <li>.1.3.6.1.2.1.1.3.0 → sysUpTime (time since last reboot)</li>
+                     <li>1.3.6.1.2.1.2.2.1.2.X → ifDescr (interface name, where X = interface index)</li>
+                     <li>.1.3.6.1.2.1.2.2.1.8.X → ifOperStatus (interface up/down status)</li>
+                  </ul>
+               </li>
+               <li>Instead of raw numbers, managers can use human readable names; Eg: iso.org.dod.internet.mgmt.mib-2.system.sysDescr.0;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   SNMP managers can use a Set command to change configurations on a managed device.
+   It works in a client-server model:
+
+   SNMP Manager → The client, which requests information.
+
+   SNMP Agent → The server, running on the managed device, which provides the information.
+
+   It is used to retrieve the value of a specific piece of information (object) from an SNMP agent.
+
+   The information is defined in a MIB (Management Information Base), where each parameter is identified by an OID
+   (Object Identifier).
+
+   <pre>
+Example of MIB tree:
+iso (1)
+ └─ org (3)
+      └─ dod (6)
+           └─ internet (1)
+                ├─ directory (1)
+                ├─ mgmt (2)
+                │    └─ mib-2 (1)
+                │         ├─ system (1)
+                │         ├─ interfaces (2)
+                │         └─ ip (4)
+                ├─ private (4)
+                └─ experimental (3)
+
+Each node has a number → OID is just the sequence of numbers from root to that node.
+Example: 1.3.6.1.2.1.1.5
+   Breakdown:
+   1 → iso
+   3 → org
+   6 → dod
+   1 → internet
+   2 → mgmt
+   1 → mib-2
+   1 → system
+   5 → sysName (the name of the device)
+   </pre>
+
+   <div class="question"><strong>2. Type of MIBs?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>Standard MIBs - Defined by standards (RFCs). E.g., MIB-II</li>
+         <li>Private MIBs - Defined by vendors for their devices. E.g., Cisco, HP</li>
+         <li>Experimental MIBs - For testing or new features</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. How SNMP works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is used to monitor(health and performance metrics) and configure network devices such as routers,
+            switches, servers, printers and firewalls;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. SNMP operations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>GET</b> - It is used to retrieve a single object;
+            <ul>
+               <li>SNMP Manager sends a GET request to an SNMP Agent, asking for the value of a specific OID;</li>
+               <li>SNMP Agent looks up the requested OID in its MIB; Agent responds with the current value of that
+                  object;</li>
+               <li>For eg, If manager want to know the uptime of a router, it sends a GET request with OID
+                  1.3.6.1.2.1.1.3.0 and Agent responds with "1234567" (number of timeticks since last reboot);</li>
+            </ul>
+         </li>
+         <li><b>GET-NEXT</b> - It is used to retrieve next OID in the MIB tree; It allows you to walk through all
+            objects in the MIB tree;
+            <ul>
+               <li>Manager sends a GET-NEXT request with a OID; Agent responds with the next valid OID and its value;
+               </li>
+            </ul>
+         </li>
+         <li><b>GET-BULK</b> - Give me the next N OIDs in one response(supported in SNMP v2 and v3);
+            <ul>
+               <li>It’s used to retrieve large amounts of data in fewer requests, especially when walking tables (like
+                  interface lists, routing tables etc);</li>
+               <li>GET-BULK request has 2 key parameters:
+                  <ul>
+                     <li>non-repeaters
+                        <ul>
+                           <li>Number of OIDs in the request that should be treated as simple GET-NEXT (only one value
+                              returned);</li>
+                           <li>Useful for scalar objects (like sysUpTime)</li>
+                        </ul>
+                     </li>
+                     <li>max-repetitions
+                        <ul>
+                           <li>The number of "next OIDs" you want for the repeating part;</li>
+                           <li>Determines how many rows of table data you’ll fetch at once;</li>
+                           Non-repeaters: Specifies the number of variables to retrieve using simple GetNext operations.
+                           Max-repetitions: Indicates maximum iterations for repeating variables.
+                           https://www.dpstele.com/blog/what-is-a-snmp-getbulk-request.php
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+         <li><b>SET</b>
+            <ul>
+               <li>Manager sends a SET request to AGENT, specifying OID and new value;</li>
+               <li>Agent checks if OID is writable; If valid, Agent updates the value and responds with confirmation;
+               </li>
+               <li>It is useful for: updating configuration, resetting counters, changing system description or names
+                  etc;</li>
+               <li>Many devices disable SET by default or allow it only with strong authentication(SNMPv3 with
+                  encryption);</li>
+               <li>Older SNMP versions (v1/v2c) relied on simple community strings like "private" (default write
+                  access), which is insecure;</li>
+            </ul>
+         </li>
+         <li><b>TRAP</b>
+            <ul>
+               <li>It allows the devices to alert the manager without waiting to be polled;</li>
+               <li>Eg: Interface going down/up, device rebooted, High CPU or memory usage, security alerts etc;</li>
+               <li>In case of any event, agent sends a trap to the manager's trap listener(usually on UDP port 162);
+               </li>
+            </ul>
+         </li>
+         <li><b>LISTEN</b>
+            <ul>
+               <li>It is like a trap, but requires an acknowledgment from the manager (more reliable);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. SNMP Versions</strong></div>
+   <div class="answer">
+      <ul>
+         <li>SNMPv1 – First version, simple but weak security (community strings like “public” or “private”);</li>
+         <li>SNMPv2c – Adds more operations (GETBULK), still weak security;</li>
+         <li>SNMPv3 – Most secure; adds authentication and encryption;</li>
+      </ul>
+   </div>
+
+
+   GET – Manager asks the agent for a value (e.g., “What’s the CPU usage?”).
+
+   SET – Manager changes a value on the agent (e.g., “Shut down this interface”).
+
+   GETNEXT – Manager retrieves the next variable in the MIB tree.
+
+   GETBULK – Retrieve large blocks of data efficiently (SNMPv2+).
+
+   TRAP – Agent sends an unsolicited alert to the manager (e.g., “Link down!”).
+
+   INFORM – Like a trap, but requires acknowledgment from the manager.
+
+   SNMP (Simple Network Management Protocol) works using a client-server model where an SNMP Manager (the client)
+   communicates with SNMP Agents (servers) running on network devices like routers and printers to monitor and control
+   them. Agents collect device information, store it in a Management Information Base (MIB), and respond to manager
+   requests or send unsolicited notifications called traps to the manager to report events. This process allows network
+   administrators to collect data, detect faults, and optimize performance from a single, centralized platform.
+
+
+
+   <div class="question"><strong>2. goroutine VS OS/Java threads?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>Small Initial stack and resizable
+            <ul>
+               <li>A goroutine starts with a very small stack (about 2 KB) and it grows or shrinks dynamically as needed
+                  by the workload; Where as regular OS threads starts with a large fixed stack (often 1 MB);</li>
+            </ul>
+         </li>
+         <li>User space scheduling and M:N modeling
+            <ul>
+               <li>goroutines are scheduled in the user space(rather than kernel space) by go runtime; <br /> So,
+                  swiching b/w goroutines is faster - as there is no need to enter kernel mode, only minimal state(like
+                  program counter, stack pointer etc) needs to be saved/restored;</li>
+               <li>Goroutines are multiplexed onto OS threads - It means thousands of goroutines can run on just a
+                  handful of threads, thus taking less memory and CPU;</li>
+            </ul>
+         </li>
+         <li>Efficient communication via channels
+            <ul>
+               <li>Instead of shared memory and locks, Goroutines use channels to communicate(exchange data) with each
+                  other;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+   Use Walk instead of Get to loop through a whole MIB branch.
+   <div class="code-block">
+      <div class="code-block-title">Hell World</div>
+      <button class="copy-btn">Copy</button>
+      <pre><code>package main
+
+import (
+	"fmt"
+	"log"
+
+	g "github.com/gosnmp/gosnmp"
+)
+
+func main() {
+	// Configure the SNMP client
+	snmp := &g.GoSNMP{
+		Target:    "192.168.1.1", // Replace with your device IP
+		Port:      161,
+		Community: "public",      // SNMP community string (like a password)
+		Version:   g.Version2c,   // Can be Version1, Version2c, or Version3
+		Timeout:   g.Default.Timeout,
+		Retries:   1,
+	}
+	
+	// Connect to the SNMP agent
+	err := snmp.Connect()
+	if err != nil {
+		log.Fatalf("Error connecting: %v", err)
+	}
+	defer snmp.Conn.Close()
+
+	// Example OID: sysDescr.0 (device description)
+	oid := ".1.3.6.1.2.1.1.1.0"  
+
+	// Perform GET
+	result, err := snmp.Get([]string{oid})
+	if err != nil {
+		log.Fatalf("SNMP GET error: %v", err)
+	}
+
+	// Print results
+	for _, variable := range result.Variables {
+		switch variable.Type {
+		case g.OctetString:
+			fmt.Printf("%s: %s\n", variable.Name, string(variable.Value.([]byte)))
+		default:
+			fmt.Printf("%s: %v\n", variable.Name, variable.Value)
+		}
+	}
+}
+
+<b>If run against a Cisco router, you might see::</b>
+.1.3.6.1.2.1.1.1.0: Cisco IOS Software, C2900 Software (C2900-UNIVERSALK9-M) ...
+
+
+</code></pre>
+   </div>
+
+   <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
