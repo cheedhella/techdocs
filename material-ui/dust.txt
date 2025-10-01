@@ -1,0 +1,11 @@
+Component styling
+Pseudo classes
+classes 
+DOM 
+nested selectors
+Auto complete
+Multi selector 
+Date selector 
+
+Data grid 
+Every UI component renders in 2 core ways: 
