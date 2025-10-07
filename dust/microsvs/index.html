@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Microservices</title>
+        <link rel="stylesheet" href="./resources/css/styles.css" />
+        <link rel="stylesheet" href="./resources/css/highlight.min.css" />
+        <script src="./resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-container">
+            <div class="main-grid-item main-grid-item-1">
+                <img src="./resources/imgs/gears.gif" alt="" srcset="" />
+                <h2>Microservices</h2>
+            </div>
+            <div class="main-grid-item main-grid-item-2">
+                <section>
+                    <ol>
+                        <li>Microservices Concepts
+                            <ul>
+                                <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
+                                <li><a href="./src/basics/deploy-aws.html">How to deploy a Microservice in AWS?</a></li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+            </div>
+            <div class="main-grid-item main-grid-item-3">
+                Principles Used to Design Microservice Architecture
+
+The principles used to design Microservices are as follows:
+
+Independent & Autonomous Services
+Scalability
+Decentralization
+Resilient Services
+Real-Time Load Balancing
+Availability
+Continuous delivery through DevOps Integration
+Seamless API Integration and Continuous Monitoring
+Isolation from Failures
+Auto -Provisioning
+
+Design Patterns of Microservices
+
+Aggregator
+API Gateway
+Chained or Chain of Responsibility
+Asynchronous Messaging
+Database or Shared Data
+Event Sourcing
+Branch
+Command Query Responsibility Segregator
+Circuit Breaker
+
+                <section>
+                    Design Patterns
+                    <ul>
+                        <li><a href="./src/dp/communication.html">Communication</a></li>
+                        <li>
+                            <b>Multi-container or container orchestration Patterns</b>
+                            <ul>
+                                <li><a href="./src/dp/sidecar.html">Sidecar Pattern</a></li>
+                                <li><a href="./src/dp/ambassador.html">Ambassador Pattern</a></li>
+                                <li><a href="./src/dp/adapter.html">Adapter Pattern</a></li>
+                                <li><a href="./src/dp/workqueue.html">Work Queue Pattern</a></li>
+                                <li><a href="./src/dp/adapter.html">Self Awareness Pattern</a></li>
+                                <li><a href="./src/dp/adapter.html">Scatter/gather Pattern</a></li>
+                                <li><a href="./src/dp/adapter.html">Custom Controller Pattern</a></li>
+                                <li><a href="./src/dp/init-container.html">Init Container Pattern</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <ul>
+                        <li>
+                            <b>Event-Driven Microservices</b>
+                            <b>Service Autonomy Patterns</b>
+                            <ul>
+                                <li>If services are autonomous, then operational issues in one service should have no impact on the functionality of other services</li>
+                            </ul>
+                            <ul>
+                                <li><a href="./src/dp/db-per-svc.html">DB Per Service Pattern</a></li>
+                                <li><a href="./src/dp/saga.html">Saga Pattern</a></li>
+                                <li><a href="./src/dp/ddd.html">DDD</a></li>
+                                <li><a href="./src/dp/cqrs.html">CQRS</a></li>
+                                <li><a href="./src/dp/event-sourcing.html">Event Sourcing Pattern</a></li>
+                                <li><a href="./src/dp/competing-consumers.html">Competing Workers/Consumers Pattern</a></li>
+                                <li>how to use the Saga, API Composition, and CQRS patterns to design operations that span multiple services</li>
+
+                                Application integration patterns for microservices: Fan-out strategies
+                                <li><a href="./src/dp/fanout.html">Fan-out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <b>Patterns</b>
+                            <ul>
+                                <li><a href="./src/dp/service-mesh.html">Service Mesh</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>Fault tolerant - Fault tolerance is the property that enables a system to continue operating properly in the event of the failure of some of its components.                        </li>
+                        <li>Resilency
+                            <ul>
+                                <li><a href="./src/dp/timeout.html">Timeout design pattern</a></li>
+                                <li><a href="./src/dp/circuit-breaker.html">Circuit Breaker design pattern</a></li>
+                                <li><a href="./src/dp/retry.html">Retry Design Pattern</a></li>
+                                <li><a href="./src/dp/bulkhead.html">Bulkheads Design Pattern</a></li>
+                                Deadlines
+                                Rate Limiters
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <li><a href="./src/dp/d-log.html">Distributed Logging</a></li>
+                            <ul>
+                                <li><a href="./src/dp/log-aggregation.html">Log Aggregation</a></li>
+                                <li><a href="./src/dp/log-correlation-id.html">Correlation ID or Tracing</a></li>
+                                <li><a href="./src/dp/log-format.html">Log Format</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <b> Misc</b>
+                            <ul>
+                                <li><a href="./src/dp/monitoring.html">Monitoring</a></li>
+                                <li><a href="./src/dp/ext-config.html">Externalize Configuration</a></li>
+                                <li><a href="./src/dp/circuit-breaker.html">Circuit Breaker</a></li>
+                                <li><a href="./src/dp/bg-canary.html">Blue-Green and Canary Deployment</a></li>
+                                <li><a href="./src/dp/serverless.html">Serverless Microservices</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+
+                    To fulfill a single business requirement, we might need to talk to multiple services running on different machines. So, the log messages generated by the microservices are distributed across multiple hosts.
+
+
+
+                        Understanding Service Mesh, Istio and Sidecar Pattern
+
+                        Write-ahead Log
+Split-Brain Pattern
+Hinted Handoff
+Read Repair
+<br>
+Service Mesh (intercepts all network traffic and handles routing, circuit breaking, load balancing, etc.)
+                    
+                </section>
+            </div>
+            <div class="main-grid-item main-grid-item-4">
+                <section>
+                    Examples
+                    <ol>
+                        
+
+                    </ol>
+                </section>
+            </div>
+        </div>
+
+
+        <b>References:</b> 
+        <ul>
+            
+        </ul>
+
+        <b>TODO:</b> 
+        <ul>
+            
+            <li>Stateless service Pattern</li>
+            <li>Composition pattern</li>
+            <li>Broker Composition pattern</li>
+            <li>Aggregate Composition Pattern</li>
+            <li>Chained Composition Pattern</li>
+            <li>Proxy Composition Pattern</li>
+            <li>Batched Composition Pattern</li>
+            <li>Data Consistency 
+                <ul>
+                    <li>2-phase commit;</li>
+                    <li>Saga Pattern</li>
+                    <li>Eventual Consistency</li>
+                </ul>
+            </li>
+            <li>API Gateway</li>
+            <li>Kong API Gateway</li>
+
+            <li>Configuration
+
+                <ul>
+                    <li>Externalizing configuration</li>
+                    <li>Configuration Management Tools</li>
+                </ul>
+            </li>
+
+            <li>Registration and Discovery
+
+                <ul>
+                    <li>Service Registration</li>
+                    <li>Client Side Discovery</li>
+                    <li>Server Side Discovery</li>
+                </ul>
+            </li>
+
+            <li>Microdatabases
+                <ul>
+                    <li>Event Driven</li>
+                    <li>Event Sourcing</li>
+                    <li>CQRS</li>
+                    <li>Greenfield database approach</li>
+                    <li>Brownfield migration strategy</li>
+                </ul>
+            </li>
+
+            
+
+            <li>Backward compatibility
+                <ul></ul>
+            </li>
+            <li>Testing
+                <ul></ul>
+            </li>
+
+            <br>
+            <li>Document MicroServices Contracts
+                <ul>
+                    <li>Consumer Driven Contracts</li>
+                    <li>Resource Based Microservices</li>
+                    <li>Action Based Microservices</li>
+                    <li>Task Based Microservices</li>
+                    <li>Swagger</li>
+                </ul>
+            </li>
+
+            <li>Centralized Logging</li>
+
+            <li>Monitoring Microservices
+                <ul>
+                    
+                </ul>
+            </li>
+            the Microservice architecture style and service-orientation
+            strategies and patterns for realizing the seven design guidelines applied to microservices
+            standardized service contract. Strategies include:
+            design standards for REST APIs
+            API gateway
+            BFF
+            contract-first design
+            service loose coupling. Strategies include:
+            Wrapper pattern
+            point-to-point, publish-subscribe and other messaging patterns
+            event-driven architecture
+            service reusability. Strategies include:
+            modeling for reuse
+            Strangler Fig pattern
+            establishing a service registry
+            service autonomy. Strategies include:
+            Saga pattern
+            modeling services with DDD
+            
+            CQRS
+            event sourcing
+            service statelessness. Strategies include:
+            State Messaging pattern
+            asynchronous service without a broker
+            service deployability. Strategies include:
+            continuous delivery
+            
+            laC
+            DevOps
+            
+            
+            <li>
+                bounded contexts, asynchronous messaging, choreography-based sagas, event-sourcing, CQRS, telemetry, and more.
+            </li>
+            <li>https://thenewstack.io/how-redis-simplifies-microservices-design-patterns/</li>
+            <li>https://medium.com/javarevisited/10-best-java-microservices-courses-with-spring-boot-and-spring-cloud-6d04556bdfed</li>
+        </ul>
+    </body>
+</html>

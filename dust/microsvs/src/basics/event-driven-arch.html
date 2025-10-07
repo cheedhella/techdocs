@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Event Driven Architecture</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Event Driven Architecture?</strong></p>
+        <p class="answer">
+            <ul>
+                If you have a stream of data, you can use event store such as Kafka; 
+                Then, you can create event-driven consumer microservices to get the data from your event source and use it for different purposes;
+                
+
+                Event-Driven (EDA) is an architecture pattern that allows us to build highly scalable software
+                The key advantage of the Event-Driven systems is having loosely coupled components and services.
+            </ul>
+        </p>
+
+        <p class="question"><strong>Actors in Event Driven Architecture?</strong></p>
+        <p class="answer">
+            <ul>Typical Event Driven Architecture consists of:
+                <li>Events</li>
+                <li>Producers</li>
+                <li>Broker</li>
+                <li>Consumers</li>
+            </ul>
+        </p>
+
+        Apache Kafka is one of the highly demanded open-source message brokers that enables the application to respond to events.
+
+
+
+        <p class="question"><strong>What is Event?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It represents a significant change in state of a system;</li>
+                <li>Eg:
+                    <ul>
+                        <li>Did you just blink your eyes? Yes, that is also an event;</li>
+                        <li>User profile updated in database;</li>
+                        <li>CPU utilization of instances exceeding threshold;</li>
+                    </ul>
+                </li>
+                a lot of events occurring over a period of time, and an event can be anything from a tweet to a click of a button, an HTTP request, an ingested message, a change in the value of a variable, and so on.
+                
+                A record typically contains the information necessary to describe an event.
+
+                The application raising the order (say, the shopping cart service) has no idea who will process the order, when, how or even why. 
+                A producer ensures that everything that a prospective consumer needs to process the event is captured. 
+                That said, the order record does not strictly need to include every single attribute required for its fulfilment. 
+                For example, the dimensions of the product, its stocking location and the shipping address of the customer are not directly specified but can be resolved by following the IDs captured in the order record. 
+                The concept of foreign keys that you may be familiar with from relational databases also applies to events.
+
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is Event Driven Architecture?</strong></p>
+        <p class="answer">
+            <ul>
+
+                Event-driven architecture brings immense flexibility in development and operations by reducing interdependencies between services. It also inherits the benefits of loosely coupled systems by being scalable and resilient.
+
+There is one trade-off to consider: event-driven architecture relies on eventual consistency.
+
+To summarize, event-driven architecture is use-case specific. 
+
+                . Each service publishes an event whenever it update its data. Other service subscribe to events.
+                The event-driven architecture pattern is a popular distributed asynchronous architecture pattern used to produce highly scalable applications.
+
+                An event-driven architecture uses events to trigger and communicate between decoupled services and is common in modern applications built with microservices. 
+                An event is a change in state, or an update, like an item being placed in a shopping cart on an e-commerce website.
+                Kafka Event Driven Architecture is that, unlike messaging-oriented systems, events published in Kafka are not removed as soon as they are consumed.
+
+                Event-driven architecture can help solve the problems of the close coordination of microservices, error handling and retries, and coordination between development teams.
+
+                Deploying Apache Kafka on Kubernetes allows event-driven applications to be automated, scaled and deployed anywhere.
+
+
+                EDA takes a two-pronged approach to curb coupling.
+
+
+
+                In fact, producers of event records often have no knowledge of who the consumers might be, nor whether consumers exist at all.
+                Therefore, the producer will not cease working if the consumers are unavailable — provided that the broker can durably buffer the events without imposing back-pressure upon the producer.
+
+                A producer may publish an event at time T1, while a consumer may read it at T2, with T1 and T2 potentially being separated by milliseconds (if all is well) or hours (if some consumers are down or struggling).
+
+                EDA is not a silver bullet. It does not eliminate the notion of coupling altogether — otherwise, components in the system would no longer function collectively. Our attention now turns to the broker: for producers and consumers to be meaningfully decoupled, they must instead rely on (and therefore couple themselves to) a broker. This adds complexity to the architecture of a system and introduces another point of failure. This is why brokers must be highly performant and fault-tolerant, otherwise we’ve just traded one set of problems for another.
+
+
+            </ul>
+        </p>
+
+        If producers and consumers of events are unaware of each other, how do they communicate?
+
+
+
+
+        <p class="question"><strong>What is the opposite of event-driven architecture?</strong></p>
+        <p class="answer">
+            <ul>
+                <li> This also covers the case of having various services poll each other for data in timed intervals instead of being triggered by events.
+                </li>
+            </ul>
+        </p>
+
+        An event-driven architecture is a software design pattern in which microservices react to changes in state, called events. Events can either carry a state (such as the price of an item or a delivery address) or events can be identifiers (a notification that an order was received or shipped, for example).
+        Is Pub sub event-driven?
+        Pub/sub messaging can be used to enable event-driven architectures, or to decouple applications in order to increase performance, reliability and scalability.
+
+        https://medium.com/@gauravpm81/system-design-sql-vs-nosql-fdb36dab6f05
+
+        What is the difference between event-driven and message driven?
+As discussed above, in Message Driven systems, each component send items to a fixed recipient. In Event Driven systems, on the other hand, each component produces items of data with a fixed sender and shares them with any consumer.
+
+
+NOTE: This pattern has been deprecated and replaced by the Saga pattern.
+
+
+What is Event Steaming?
+        Continous flow of data; Incrementally processed;
+
+        For example, you can stream data from a Kafka topic using Kafka streams than run some calculations on it and then put your calculated data again into Kafka using another Kafka topic.
+        Another example is you can consume the data from Kafka and put on a relational database such as PostgreSQL to run some analytics calculations or just create your data warehouse.
+        Another example you can consume the data and send to a query engine such as elastic-search to make it easily searchable for your clients.
+        Because ElasticSearch is designed to enable querying faster, effective algorithms.
+
+    </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Canary VS Blue-Green Deployment</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Blue-Green Deployment?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is a deployment technique to release new code into the production environment;</li>
+                <li>It makes use of 2 identical production environments — one of these is active and the other environment is set to idle;</li>
+                <li>New updates are pushed to the active environment where it is monitored for bugs, while the idle environment serves as a backup where traffic can be routed in case an error occurs;</li>
+                <li>
+                    <b>Pros</b>
+                    <ul>
+                        <li>Rollback is straightforward, as we just need to simply flip traffic back to the old environment in case any issue arises;</li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Cons</b>
+                    <ul>
+                        <li>Quality assurance and user acceptance testing may not be enough to identify all of the anomalies or regressions;</li>
+                        <li>Cost is the major drawback to blue-green deployments; Replicating a production environment can be complex and expensive;</li>
+                    </ul>
+                </li>
+            </ul>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/bg-dep.png" height="200" width="450" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>What is Canary Deployment?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is a technique to reduce the impact of software update, by slowly rolling out the change to a small subset of users, before making it available for everyone;</li>
+                <li>
+                    <b>Pros</b>
+                    <ul>
+                        <li>It allows us to test our code in production with real users and use cases;</li>
+                        <li>It is cheaper than blue-green deployment because it does not require 2 production environments;</li>
+                    </ul>
+                </li>
+            </ul>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/canary-dep.png" height="200" width="450" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>Canary VS Blue-Green Deployment</strong></p>
+        <p class="answer">
+            <ul>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How to implement Canary deployment in k8s?</strong></p>
+        <p class="answer">
+            <ul>
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=tUSe7JJ-XNg</li>
+            </ul>
+        </p>
+    </body>
+</html>

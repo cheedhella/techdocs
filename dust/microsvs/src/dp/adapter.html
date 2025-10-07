@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Adapter</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Adapter Pattern?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>A minister of the highest rank sent to a foreign court to represent there his sovereign or country.</li>
+                <li>a person who represents, speaks for, or advertises a particular organization, group of people, activity, or brand (= type of product):</li>
+                <li>Ambassador, who is an envoy and a person a country chooses to represent their country and connect with the rest of the world</li>
+                <li>in the Kubernetes perspective, an Ambassador pattern implements a proxy to the external world</li>
+                <li>For eg, If you build an application that needs to connect with a database server, the server configuration, etc, changes with the environment;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Why Adapter Pattern is needed?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The adapter pattern helps you standardise something heterogeneous in nature;</li>
+                <li>For example, you’re running multiple applications within separate containers, but every application has a different way of outputting log files.</li>
+                <li>Now, you have a centralised logging system that accepts logs in a particular format only. What can you do in such a situation? Well, you can either change the source code of each application to output a standard log format or use an adapter to standardise the logs before sending it to your central server. That’s where the adapter pattern comes in.</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Demo?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://betterprogramming.pub/understanding-kubernetes-multi-container-pod-patterns-577f74690aee</li>
+            </ul>
+        </p>
+       
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li></li>
+            </ul>
+        </p>
+    </body>
+</html>

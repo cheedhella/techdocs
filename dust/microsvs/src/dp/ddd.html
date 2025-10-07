@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DDD</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Saga?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is made up of 2 containers: Primary and Sidecar containers;</li>
+                <li>Primary container contains the core logic of the applicaiton; Eg: provisioning.war</li>
+                <li>Sidecar container extends/augments the core logic in Primary container; Eg: Content-as-a-Service provisioning; </li>
+                <li>Sidecar container runs on the same Pod as the main applicaiton container; Both share resources such as disk, network etc;</li>
+                <li>Note: All containers in a pod are scheduled on the same node in a multi-node cluster;</li>
+                <li>Note: Containers in the same Pod can connect to each other using localhost, and then the port number exposed by the other container - So, no network latency;</li>
+                <li>Your Primary container works perfectly well without the sidecar, but with it, it can perform some extra functions;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Where it is useful?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is extremely useful when both Primary and Sidecar containers are implemented with different technologies OR different versions;</li>
+                <li>Log aggregator - Primary writes logs to shared volume, Sidecar container reads from it and pushes the logs to centralized log server;</li>
+                <li>In other words, Primary container focuses on business logic, where as Sidecar container focuses on cross cutting concerns such as Caching, Configuration and Secret management, Monitoring, Logging etc;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Sidecar Pattern Demo</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://betterprogramming.pub/understanding-kubernetes-multi-container-pod-patterns-577f74690aee</li>
+                <li>It is extremely useful when both Primary and Sidecar containers are implemented with different technologies OR different versions; // polyglot services</li>
+                <li>Log aggregator - Primary writes logs to shared volume, Sidecar container reads from it and pushes the logs to centralized log server;</li>
+                <li>In other words, Primary container focuses on business logic, where as Sidecar container focuses on cross cutting concerns such as Caching, Configuration and Secret management, Monitoring, Logging etc;</li>
+            </ul>
+        </p>
+
+
+       
+        For example, Istio Service Mesh can work as sidecar. The pod’s entire network control is taken over by the incoming istio-proxy as a sidecar and can manipulate incoming and outgoing requests/responses.
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://medium.com/nerd-for-tech/microservice-design-pattern-sidecar-sidekick-pattern-dbcea9bed783</li>
+                <li>https://medium.com/@schneideryaron/the-sidecar-pattern-for-application-developers-8bbc6560cef5</li>
+            </ul>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Service Mesh</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Service Mesh? What problems it solves in Microservices world?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>As you know, monolithic applications are complex to build and slow to release;</li>
+                <li>While microservices architecture helps in resolving above issues, it brings in new problems:
+                    <ul>
+                        <li>
+                            <b>Security</b> - How do we secure the traffic between all the services deployed in k8s cluster?
+                            <ul>
+                                <li>In general, you will have firewall rules set up for your k8s cluster;</li>
+                                <li>We can have proxy, which gets the request first, acts as an entry point to the cluster, so that resources can't be accessed directly;</li>
+                                <li>So, we have security around the cluster;</li>
+                                <br>
+                                <li>But, once the request reaches inside the cluster, communication is insecure;</li>
+                                <li>Microservices talk to each other using http or some other insecure protocol;</li>
+                                <br>
+                                <li>Every service can talk to every other service in the cluster directly, there are no restrictions on that;</li>
+                                <li>From security perspective, if an attacker gets inside the cluster, he can do anything;</li>
+                                <br>
+                                <li>For some applications, it is fine; But, most of the applications, higher level of security is important!</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li>
+                            <b>Observability</b>
+                            <ul>
+                                <li>Logs, metrics and traces are 3 pillars of observability - These are the external outputs of a system, which we may observe;</li>
+                                <li>As distributed systems grow more complex, demand to observe those systems grows equally;</li>
+                                <li>Traditional logging and monitoring systems often struggle with today's hybrid and multi-cloud, polyglot language-based, event-driven, container-based and serverless, infinitely scalable, ephemeral-compute platforms;</li>
+                                <li>Instead of adding this logic to each and every service that you write, modern tools are designed to handle this level of complexity in mind;</li>
+                                <br>
+                                <li>Tools like Istio attempt to solve the observability challenge by offering native integrations with several best-of-breed, open-source telemetry tools;</li>
+                                <li>Istio's integrations include <b>Jaeger</b> for distributed tracing, <b>Kiali</b> for distributed system visualization, and <b>Prometheus and Grafana</b> for metric collection, monitoring, and alerting;</li>
+                                <li>Combined with cloud platform-native monitoring and logging services, such as Stackdriver for Google Kubernetes Engine (GKE) on Google Cloud Platform (GCP), and we have a complete observability platform for modern, distributed applications;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li>Advanced traffic control, such as, circuit breaking, latency-aware load balancing, fault injection, retries, etc;</li>
+                        <br>
+                        <li>Kubernetes is not designed or equipped to handle all those problems, but <b>service meshes</b> are!</li>
+                        <li>In short, service mesh is a dedicated infrastructure layer that controls service-to-service communication;</li>
+                        <li>The mesh provides critical capabilities including service discovery, load balancing, encryption, observability, traceability, authentication and authorization, and support for the circuit breaker pattern;</li>
+                        <li>Service Mesh Implementations: <b>Istio</b>, <b>AWS App Mesh</b> etc;</li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Istio Architecture</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It contains a <b>data plane</b> and a <b>control plane</b>;</li>
+                <li>Fundamentally, Istio works by deploying envoy proxy as a sidecar to every service/container; envoy proxy is a open source implementation;</li>
+                <li>Data plane consists of network of Envoy proxies that control the communication between services(mesh traffic), incoming traffic (called ingress), outgoing traffic (called egress) and also collect metrics;</li>
+                <li>Control plane layer manages the configuration of envoy proxies;</li>
+                <li>istiod binary is the core of the control plane and provides service discovery, configuration and certificate management;</li>
+                <br>
+                <li>Istio is quite flexible in terms of integrating with external libraries and platforms;</li>
+                <li>For instance, we can integrate Istio with an external logging platform, telemetry, or policy system;</li>
+                <br>
+                <li>You don't have to write yaml files for creating envoy proxy for each container;</li>             
+            </ul>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/isito-arch.png" height="350" width="750" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>Isito Features</strong></p>
+        <p class="answer">
+            <ul>
+                <li><a href="#traffic-splitting">Traffic Splitting</a></li>
+                <li><a href="#configuration">Configuration</a></li>
+                <li>Service Discovery</li>
+                <li><a href="#cert-mgmt">Certificate Management</a></li>
+                <li><a href="#mont-trac">Monitoring and Tracing</a></li>
+                <li><a href="#ing-gateway">Ingress Gateway</a></li>
+            </ul>
+        </p>
+
+        <p class="question" id="traffic-splitting"><b>Traffic Splitting</b></p>
+        <p class="answer">
+            <ul>
+                <li>when you make changes to one service(for eg, payment service), you deploy the changes and test it in dev environment and then rolled out to production;</li>
+                <li>What if you have a bug, that none of the tests caught it;</li>
+                <li>In general, we don't want the buggy service in the producion;</li>
+                <li>You may want to send only 10% of the traffic to the new service for a period of time, to make sure it really works;</li>
+                <li>With service mesh, you can route 90% of traffic to older version and remaining 10% of traffic to new version;</li>
+                <li>It is also called <b>Canary Deployment</b>;</li>
+            </ul>
+        </p>
+
+        <p class="question" id="configuration"><b>How to configure all these features for all services?</b></p>
+        <p class="answer">
+            <ul>
+               <li>You dont have to adjust k8s(deployment/service) YAML files;</li>
+               <li>Isito configuration is different from application configuration;</li>
+               <li>Isito uses k8s CustomResourceDefinitions; No need to learn any other language;</li>
+               <li>CRD is basically a customer resource in k8s, that is used to configure 3rd party technologies like istio, prometheus etc;</li>
+               <br>
+               <li>We create CRDs;</li>
+               <li>Using CRD rules, we can configure different routing rules b/w our services, like which service can talk to which service? traffic split configuration? retry rules? other network configuration;</li>
+               <li><b>VirtualService</b> - It defines How to route traffic to given destination?</li>
+               <li><b>DestinationRule</b> - Using this, we can define policies on the traffic, like what kind of load balancing to use? etc</li>
+               <br>
+               <li>istiod converts these high level routing rules into envoy specific configurations and propagates the configuration into envoy proxy sidecars;</li>
+               <li>So, we don't configure proxies, we configure control plane; istiod pushes configuration to individual envoy proxies;</li>
+               <br>
+               <li>Proxies can communicate with each other, without connecting to istiod control plane, as they have all the configuration they need;</li>
+            </ul>
+
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/isito-virtual-service.png" height="450" width="350" alt="" srcset="" />
+            </div>
+
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/isito-destination-rule.png" height="300" width="350" alt="" srcset="" />
+            </div>
+
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/isito-gateway.png" height="350" width="750" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question" id="cert-mgmt"><b>Certificate Management</b></p>
+        <p class="answer">
+            <ul>
+                <li>It secures all the communiation b/w services using certificates;</li>
+            </ul>
+        </p>
+
+        <p class="question" id="mont-trac"><b>Monitoring and Tracing</b></p>
+        <p class="answer">
+            <ul>
+                <li>It gathers telemetry and tracing data from the envoy proxies, that can be later consumed by monitoring service such as Prometheus OR tracing server such zipkin;</li>
+            </ul>
+        </p>
+
+        <p class="question" id="ing-gateway"><b>Ingress Gateway</b></p>
+        <p class="answer">
+            <ul>
+                <li>It is entry point to k8s cluster; It runs as a pod in your cluster and acts as a load balancer by accepting incoming traffic in your cluster and gateway will then direct traffic to one of your microservices inside the cluster, using VirtualService compoennt;</li>
+                <li>You can configure Ingress gateway using gateway CRD;</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>Traffic Flow with Isito</b></p>
+        <p class="answer">
+            <ul>
+               <li>User intiates a request;</li>
+               <li>Request will first goes to Istio Gateway, as it is entry point to the k8s cluster;</li>
+               <li>Gateway will evaluate the VirtualService rules, to route the request to envoy proxy in one of the service;</li>
+               <li>Envoy proxy evaluates the request and forwards it to the container running in same pod, using localhost;</li>
+            </ul>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/isito-traffic-flow.png" height="300" width="750" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=16fgzklcF7Y</li>
+                <li>https://itnext.io/kubernetes-based-microservice-observability-with-istio-service-mesh-part-1-bed3dd0fac0b - Example Application, try when time permits;</li>
+                <li>https://medium.com/@GaryStafford/kubernetes-based-microservice-observability-with-istio-service-mesh-part-2-f25c4b474a65</li>
+                <li>https://istio.io/latest/about/service-mesh/</li>
+                <li>https://www.baeldung.com/ops/istio-service-mesh - Example Application, try when time permits;</li>
+            </ul>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>init container</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is init container?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>A Pod can have one or more containers; It can also have 0 or more init containers;</li>
+                <li>init container is used to perform one time/shortlived tasks, before actually bringing up the actual containers;</li>
+                <li>For eg, you could use init container to install some software, to fetch credentials from a remote location and make it available to the main container, setting up the file system permissions etc;</li>
+                <li>All init containers are executed sequentially, one after another; Once all of them complete, actual containers are started;</li>
+                <li>If, for any reason, one of the init container fails, actual container won't get started or fails;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>init container VS Job</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://andrewlock.net/deploying-asp-net-core-applications-to-kubernetes-part-8-running-database-migrations-using-jobs-and-init-containers/#:~:text=The%20Kubernetes%20job%20runs%20a,the%20application%20containers%20from%20starting.</li>
+                <li>https://dev.to/ahmeddrawy/database-schema-migration-to-kubernetes-initcontainers-vs-k8s-jobs-4a4f</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=J4S_MfsCPHo - Demo</li>
+                <li>https://www.vinsguru.com/cloud-design-pattern-kubernetes-init-container-pattern/ - init container fetching credentials from AWS Secret;</li>
+                <li>https://medium.com/bb-tutorials-and-thoughts/kubernetes-learn-init-container-pattern-7a757742de6b</li>
+            </ul>
+        </p>
+    </body>
+</html>

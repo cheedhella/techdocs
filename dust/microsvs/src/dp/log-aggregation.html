@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Log Aggregation</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><b>What is Log Aggregation?</b></p>
+        <p class="answer">
+            <ul>
+                The application consists of multiple services and service instances that are running on multiple machines. 
+                Requests often span multiple service instances.
+                Each service instance generates writes information about what it is doing to a log file in a standardized format. 
+                The log file contains errors, warnings, information and debug messages.
+                Use a centralized logging service that aggregates logs from each service instance. 
+                The users can search and analyze the logs. They can configure alerts that are triggered when certain messages appear in the logs.
+
+
+                <li></li>
+            </ul>
+        </p>
+
+        <p class="question"><b>ELK Stack</b></p>
+        <p class="answer">
+            <ul>
+                <li>ELK -> Elasticsearch + Logstash + Kibana;</li>
+                <li>Elasticsearch -> It is NoSQL database based on Lucene search engine, which helps us to store the logs;</li>
+                <li>Logstash -> It is a pipeline tool that accepts logs from various sources and exports data to various targets;</li>
+                <li>Kibana -> It is a visualization layer, which helps the user to monitor application logs;</li>
+                <li>Logs Flow -> Logstash takes the logs and process it to Elasticsearch; End user can browse/search the logs using Kibana;</li>
+                <br>
+                <li>How does Kibana talk to Elasticsearch? By default, Elasticsearch runs on https://localhost:9200</li>
+                <li>Kibana: http://localhost:5601</li>
+                <br>
+                <li>Add this to your application: src/main/resources/application.yml: logging: file: file-path/file.log</li>
+                <li>Start the application and check if logs are saved to above file;</li>
+                <br>
+                <li>Now, we need to tell logstash about the location of above log file;</li>
+                <li>Create and open logstash-library/bin/logstash.conf -> update the path of log file, in input -> file -> path section;</li>
+                <li>How does logstash knows about Elasticsearch? check output -> elasticsearch -> hosts section in bin/logstash.conf file;</li>
+                <br>
+                <li>How does Kibana knows about Elasticsearch?</li>
+                <li>http://localhost:9200/_cat/indices -> displays all our indices used by Elasticsearch;</li>
+                <li>http://localhost:9200/<index>/_search -> used to search log specific index;</li>
+                <li>That index is internally created by logstash; If you want to create your own logstash file, specify in bin/logstash.conf file;</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>What is Grafana?</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=5s9pR9UUtAU</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>What is Prometheus?</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=5s9pR9UUtAU</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>References</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=5s9pR9UUtAU</li>
+            </ul>
+        </p>
+
+        How to make log aggregator fail-safe?
+            There can be instances when the logging service (log aggregator) goes down, and it becomes a single point of failure for our analysis and debugging needs. We do not want to miss out on any logs that were generated during that outage. So, we need to develop an alternate mechanism that stores those logs until our aggregator is back online.
+
+    
+
+
+        Kibana (For the analysis of logs)
+Grafana (To look at the selected metrics)
+Prometheus (To look at all the metrics)
+
+
+Sauron is a service within Oracle which provides logging and monitoring solutions to applications and this page discusses the specific of RSYS integeration to Sauron;
+Sauron encapsulates different types of open source tools like elastic search, logstash, kibana, prometheus, grafana, elast alert etc; 
+Sauron is hosted on OCI and any queries related to service/ instances can be sent in #sauron-support slack channel;
+
+
+https://otube.oracle.com/media/Sauron+Overview+and+Provisioning+via+K8s+Service+Catalog/0_9cadzq0d/4647 
+
+This is a short video that shows an example of sending logs and metrics to a Sauron instance, and triggering an alert in PagerDuty. 
+
+
+
+Sauron provides a collection of secure web endpoints for the following standard monitoring and logging technologies:
+Elasticsearch
+Kibana
+Grafana - monitoring/metrics  - Visualization tool built over datasources like Prometheus, Elastic Search etc to see graphs or trends of metrics and send alerts.
+Prometheus - monitoring/metrics - Time series database for metrics
+Alertmanager - Alerting system which monitors the Prometheus for key metric values against configured rules. (Decided not to use in Responsys Projects, using Grafans alerts instead)
+ElastAlert - Alerting system which monitors the incoming data of elastic search against the configured rules;
+
+Filebeat - An agent which runs on client systems to push the application logs to an elastic seach endpoint . It takes the required information via a yaml config file.
+Journalbeat - Similar to filebeat, this is an agent which exclusively pushes system logs.
+*-exporter - The purpose of any exporter is to expose the metrics in a form which Prometheus can understand. For example, node-exporter exposes all the metrics of worker node in a Kubernetes Cluster. Jmx exporter exposes the jvm metrics of tomcat and applications and so on.
+Prometheus exporter - Pusher is a piece of software which pulls metrics from a local Prometheus and pushes it to Sauron's PushGateway.
+PushGateway - Prometheus works predominantly based on pull model. However to add a push model support, PushGateway was introduced where Prometheus Pusher can push metrics into a PushGateway and Sauron's Prometheus will scrape(pull) metrics from PushGateway instead of coming inside our data center to collect mertics.
+
+Sauron is a platform for Metric and Log capture, Alerting, and Visualization of operational data from production systems.
+Sauron provides a set of services that are integrated and (optionally) managed by Steven Greenberg's team in Portland, OR, Santa Clara, CA, and multiple locations in India. 
+Services include the Grafana/Prometheus metric stack, the Kibana/Elastic ("ELK") logging stack, PagerDuty and Slack integration for alerts, a configuration API, and more.
+Currently, each managed Sauron installation consists of a Kubernetes namespace in one OCI region. Each installation consists of approximately 25 Kubernetes pods and is managed by Kubernetes Operators designed by our team along other management components, some open source, some designed and implemented by us.
+
+
+
+
+
+When a Sauron instance is provisioned for a customer, underlying software or above components are deployed to a backend k8s infrastructure maintained by sauron team;
+
+k8s operator is a custom pod that runs in the cluster that manages life cycle operations of some particular application autonomously;
+sauron operator is a pod that manages lifecycles of various components of sauron;
+
+https://otube.oracle.com/media/Sauron+Overview+and+Provisioning+via+K8s+Service+Catalog/0_9cadzq0d/4647
+
+    </body>
+</html>

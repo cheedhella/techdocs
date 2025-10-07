@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>CAP Theorem</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Consistency?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Consistency means: For every read, client should get <b>most recent write or an error</b>, at any given time, no matter to which node they are connected to;</li>
+                <li>To achieve Consistency, whenever data is written to one node, it must be instantly replicated to all the other nodes in the system, before the write is deemed successful;</li>
+                <li>In ACID, consistency means any new transaction to the database wont corrupt the database; Data is in a consistent state when a transaction starts and when it ends;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is Availability?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Availability means any client making a request for data <b>gets a response, not an error</b>, even if one or more nodes are down, though it might not be the latest;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is Partition Tolerance?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Partition means communication breakdown b/w 2 nodes;</li>
+                <li>Partition Tolerance means <b>system/cluster should continue to work, despite node failures and network breakdown b/w any number of nodes in the system</b>;</li>
+                <li>Data records are sufficiently replicated across combinations of nodes and networks, to keep the system up through intermittent outages;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is CAP Theorem?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>In normal case, a distributed system provides all 3 functions;</li>
+                <li>CAP theorem says <b>any distributed system can support only 2 of 3 features</b>;</li>
+                <li>Network failures do happen in a distributed system, nothing that we can do;</li>
+                <li>So, Partition Tolerance is must; You need to choose b/w Consistency and Availability;</li>
+                <li>In case of network failures, your distributed system can support only one of Consistency and Availability;</li>
+                <br>
+                <li>If you choose consistency over availability, the system will return an error or a time out, if particular information cannot be guaranteed to be up to date, due to network partitioning;</li>
+                <li>If you choose availability over consistency, the system will always process the query and try to return the most recent available version of the information, even if it cannot guarantee it is up to date due to network partitioning;</li>
+                <br>
+                <li>High consistency comes at the cost of lower availability;</li>
+                <li>High availability comes at the cost of lower consistency;</li>
+                <br>
+                <li>In the absence of a partition, both availability and consistency can be satisfied;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Why is CAP Theorem Important?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>In case of distributed system, data is stored on a network of nodes(physical or virtual machines);</li>
+                <li>Because, all cloud applications are distributed in nature, it is essential to understand CAP theorem;</li>
+                <li>So that, you could choose a system that is better suited for your needs;</li>
+            </ul>
+        </p>   
+
+        <p class="question"><strong>Consistency Patterns</strong></p>
+        <p class="answer">
+        </p>
+
+       
+
+        <br>
+        <br>
+        <ul>
+            <ul>
+                <li>Weak consistency
+                    <ul>
+                        <li>After a write, reads may or may not see it. A best effort approach is taken;</li>
+                        <li>This approach is seen in systems such as memcached. Weak consistency works well in real time use cases such as VoIP, video chat, and realtime multiplayer games;</li>
+                        <li>For example, if you are on a phone call and lose reception for a few seconds, when you regain connection you do not hear what was spoken during connection loss;</li>
+                    </ul>
+                </li>
+                <li>Eventual consistency
+                    <ul>
+                        <li>After a write, reads will eventually see it (typically within milliseconds). Data is replicated asynchronously;</li>
+                        <li>This approach is seen in systems such as DNS and email. Eventual consistency works well in highly available systems;</li>
+                    </ul>
+                </li>
+                <li>Strong consistency
+                    <ul>
+                        <li>A read operation always gets the most recent update;</li>
+                        <li>After a write, reads will see it. Data is replicated synchronously;</li>
+                        <li>This approach is seen in file systems and RDBMSes. Strong consistency works well in systems that need transactions;</li>
+                    </ul>
+                </li>
+                <li>https://www.educative.io/courses/grokking-modern-system-design-software-engineers-managers/RLk5x3z88lO</li>
+                <li>https://www.educative.io/courses/distributed-systems-practitioners/3jYpyzggKjQ</li>
+                <li>https://www.educative.io/courses/distributed-systems-practitioners/xVZY5W3p5ZP</li>
+            </ul>
+        </ul>
+
+        <ul>Availability patterns
+            There are two main patterns to support high availability: fail-over and replication.
+
+            <ul>
+                <li>Active-passive
+                    <ul>
+                        <li>With active-passive fail-over, heartbeats are sent between the active and the passive server on standby;</li>
+                        <li>If the heartbeat is interrupted, the passive server takes over the active's IP address and resumes service;</li>
+                        <li>The length of downtime is determined by whether the passive server is already running in 'hot' standby or whether it needs to start up from 'cold' standby. Only the active server handles traffic;</li>
+                        <li>Active-passive failover can also be referred to as master-slave failover;</li>
+                    </ul>
+                </li>
+                <li>active-active
+                    <ul>
+                        <li>In active-active, both servers are managing traffic, spreading the load between them;</li>
+                        <li>If the servers are public-facing, the DNS would need to know about the public IPs of both servers;</li>
+                        <li>If the servers are internal-facing, application logic would need to know about both servers;</li>
+                        <li>Active-active failover can also be referred to as master-master failover;</li>
+                    </ul>
+                </li>
+                <li>Disadvantages: failover
+                    <ul>
+                        <li>There is a potential for loss of data if the active system fails before any newly written data can be replicated to the passive;</li>
+                    </ul>
+                </li>
+            </ul>
+        </ul>
+
+        Dynamo DB gives you option to be strongly consistent, so that ensures that the reads should always get the most recent value;
+        When you try to read from any node, if it detects that the connection is partitioned; So, the node will return an error;
+
+        
+
+
+        https://mwhittaker.github.io/consistency_in_distributed_systems/2_cap.html
+
+
+        <li>A distributed system is a network that stores data on more than one node (physical or virtual machines) 
+            at the same time. 
+            Because all cloud applications are distributed systems, it’s essential to understand the CAP theorem 
+            when designing a cloud app so that you can choose a data management system that delivers the 
+            characteristics 
+            your application needs most.                </li>
+        
+            The CAP theorem is a belief from theoretical computer science about distributed data stores that claims, 
+        in the event of a network failure on a distributed database, it is possible to provide either consistency 
+        or availability—but not both.
+
+       The assumption is that the system operates on a distributed data store so the system, by nature, 
+       operates with network partitions. 
+       Network failures will happen, so to offer any kind of reliable service, partition tolerance 
+       is necessary—the P of CAP.
+
+        That leaves a decision between the other two, C and A.
+        .
+        .
+        
+        CP - consistency and partition tolerance
+        Waiting for a response from the partitioned node might result in a timeout error. CP is a good choice if your business needs require atomic reads and writes.
+        
+        AP - availability and partition tolerance
+        Responses return the most recent version of the data available on a node, which might not be the latest. Writes might take some time to propagate when the partition is resolved.
+        
+        AP is a good choice if the business needs allow for eventual consistency or when the system needs to continue working despite external errors.
+
+
+    What is the CAP theorem?
+    Consistency, availability, and partition tolerance
+    CAP theorem NoSQL databases
+    CAP theorem and microservices
+    Wrapping up and next steps
+
+    The CAP theorem states that a distributed system can only provide two of three properties simultaneously: consistency, availability, and partition tolerance.
+
+    The theorem formalizes the tradeoff between consistency and availability when there’s a partition.
+    
+    
+    
+    A distributed system is a collection of computers that work together to form a single computer for end users; 
+    All of the distributed machines have one shared state and operate concurrently; 
+    With distributed systems, users must be able to communicate with any of the distributed machines without knowing it’s only one machine;
+    The distributed system network stores its data on more than just a single node, using multiple physical or virtual machines at the same time;
+
+
+
+    https://www.educative.io/courses/distributed-systems-practitioners/xVZY5W3p5ZP?aid=5082902844932096&utm_source=google&utm_medium=paid&utm_campaign=DSA_india&utm_content=search-dynamic&utm_term=&utm_campaign=Dynamic+Search+ads+-+India+-+NEW&utm_source=adwords&utm_medium=ppc&hsa_acc=5451446008&hsa_cam=11957940667&hsa_grp=113685778257&hsa_ad=582536295770&hsa_src=g&hsa_tgt=aud-1434952627660:dsa-904715088424&hsa_kw=&hsa_mt=&hsa_net=adwords&hsa_ver=3&gclid=CjwKCAjwi8iXBhBeEiwAKbUoffiRO1AQetApBxB8KRdZOxWcC4t9w4ymP2nvEwcsWXe7p8ql86vjsRoCsCEQAvD_BwE
+
+
+    NoSQL database stores the data in these multiple nodes. 
+    And each of these nodes runs an instance of the database server and they communicate with each other in some way.
+    When a user wants to write to the database, the data is appropriately written to a node in the distributed database. The user may not be aware of where the data is written. Similarly, when a user wants to retrieve the data, it connects to the nearest node in the system which retrieves the data for it, without the user knowing about this.
+    This way, a user simply interacts with the system as if it is interacting with a single database. Internally the nodes communicate with each other, retrieving data that the user is looking for, from the relevant node, or storing the data provided by the user.
+    Now, the benefits of a distributed system are quite obvious. With the increase in traffic from the users, we can easily scale our database by adding more nodes to the system. Since these nodes are commodity hardware, they are relatively cheaper than adding more resources to each of the nodes individually. That is, horizontal scaling is cheaper than vertical scaling.
+    This horizontal scaling makes replication of data cheaper and easier. This means that now the system can easily handle more user traffic by appropriately distributing the traffic amongst the replicated nodes that.
+
+
+    For example in a distributed system, if a partition occurs between two nodes, it is impossible to provide consistent data on both the nodes and availability of complete data. Therefore, in such a scenario we either choose to compromise on Consistency or on Availability. Hence, a NoSQL distributed database is either characterized as CP or AP. CA type databases are generally the monolithic databases that work on a single node and provide no distribution. Hence, they require no partition tolerance.
+
+
+    Understanding CP with MongoDB
+    <li>MongoDB is a NoSQL database that stores data in one or more Primary nodes in the form of JSON files;</li>
+    <li>Each Primary node has multiple replica sets that update themselves asynchronously using the operation log file of their respective primary node;</li>
+    <li>The replica set nodes in the system send a heartbeat (ping) to every other node to keep track if other replicas or primary nodes are alive or dead;</li>
+    <li>If no heartbeat is received within 10 seconds, then that node is marked as inaccessible;</li>
+    <li>If a Primary node becomes inaccessible, then one of the secondary nodes needs to become the primary node;</li>
+    <li>Till a new primary is elected from amongst the secondary nodes, the system remains unavailable to the user to make any new write query;</li>
+    <li>Therefore, the MongoDB system behaves as a Consistent system and compromises on Availability during a partition;</li>
+
+    MongoDB is a single-master system—each replica set (link resides outside IBM) can have only one primary node that receives all the write operations. All other nodes in the same replica set are secondary nodes that replicate the primary node's operation log and apply it to their own data set. By default, clients also read from the primary node, but they can also specify a read preference (link resides outside IBM) that allows them to read from secondary nodes.
+
+When the primary node becomes unavailable, the secondary node with the most recent operation log will be elected as the new primary node. Once all the other secondary nodes catch up with the new master, the cluster becomes available again. As clients can't make any write requests during this interval, the data remains consistent across the entire network.
+
+
+    Understanding AP with Cassandra or CouchDB
+    <ul>
+        <li>According to CAP theorem, Cassandra is an AP database — it supports availability and partition tolerance, but can't support consistency all the time;</li>
+        <li>Unlike MongoDB, Cassandra has a masterless architecture; As a result, it has multiple points of failure, rather than a single one;</li>
+        <li>Because Cassandra doesn't have a master node, all the nodes must be available continuously;</li>
+        <li>However, Cassandra provides eventual consistency by allowing clients to write to any nodes at any time and reconciling inconsistencies as quickly as possible;</li>
+        <li>Cassandra offers “repair” functionality to help nodes catch up with their peers;</li>
+        <li>if the ability to quickly iterate the data model and scale horizontally is essential to your application, but you can tolerate eventual (as opposed to strict) consistency, an AP database like Cassandra or Apache CouchDB can meet your requirements and simplify your deployment;</li>
+    </ul>
+
+    CA 
+    <li> On the other hand, if your application depends heavily on data consistency—as in an eCommerce application or a payment service—you might opt for a relational database like PostgreSQL;</li>
+    <li>MongoDB, , Elasticsearch, etcd, and other database solutions    </li>
+
+
+    <br>
+    <br>
+    <div style="margin-left: 40px;">
+        <img src="../../resources/imgs/cap-1.png" height="220" width="650" alt="" srcset="" />
+    </div>
+
+    <br>
+    <div style="margin-left: 40px;">
+        <img src="../../resources/imgs/cap-2.png" height="220" width="650" alt="" srcset="" />
+    </div>
+
+    <br>
+    <div style="margin-left: 40px;">
+        <img src="../../resources/imgs/ap-db.png" height="220" width="650" alt="" srcset="" />
+    </div>
+
+    <br>
+    <div style="margin-left: 40px;">
+        <img src="../../resources/imgs/cp-db.png" height="220" width="650" alt="" srcset="" />
+    </div>
+
+    <br>
+    <br>
+    References:
+    https://towardsdatascience.com/cap-theorem-and-distributed-database-management-systems-5c2be977950e
+    https://www.analyticsvidhya.com/blog/2020/08/a-beginners-guide-to-cap-theorem-for-data-engineering/
+    https://www.ibm.com/cloud/learn/cap-theorem
+    https://www.bmc.com/blogs/cap-theorem/
+    https://www.cs.princeton.edu/courses/archive/fall18/cos418/docs/L12-consistency.pdf
+    https://www.educative.io/blog/what-is-cap-theorem#whatiscaptheorem
+
+    <br>
+    <br>
+
+    <ul>
+        <li></li>
+    </ul>
+
+    </body>
+</html>

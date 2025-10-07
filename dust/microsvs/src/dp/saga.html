@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Saga</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Saga?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>We have seen database per service pattern, every service has it's own database;</li>
+                <li>However, some business transactions span multiple services, so you need a mechanism to implement transactions that span services;</li>
+                <li>For eg, let's imagine that you are building an e-commerce store where customers have a credit limit; The application must ensure that a new order will not exceed the customer’s credit limit. Since Orders and Customers are in different databases owned by different services the application cannot simply use a local ACID transaction;</li>
+                <br>
+                <li>How to implement transactions that span services?</li>
+                <li>2pc is not a solution;</li>
+                <br>
+                <li>Implement each business transaction that spans multiple services is a saga; A saga is a sequence of local transactions;</li>
+                <li>Each local transaction updates the database and publishes a message or event to trigger the next local transaction in the saga;</li>
+                <li>If a local transaction fails because it violates a business rule then the saga executes a series of compensating transactions that undo the changes that were made by the preceding local transactions;</li>
+                <br>
+                <li>After the rise of microservices, guaranteeing data consistency within transactions that span multiple services and distinct data sources became challeging; This is where the Saga pattern comes in handy;</li>
+                <li>We can understand sagas as a set of business workflows that affect data in multiple services; Each saga corresponds to a sequence of local transactions executed within a single service and this sequence is coordinated via messaging;</li>
+                <li></li>
+
+                Saga is a distributed transaction pattern mentioned in this paper SAGAS. The core idea is to split long transactions into multiple short local transactions, which are coordinated by the Saga transaction coordinator, so that if each local transaction completes successfully then it completes normally, and if anyone step fails then the compensating operations are invoked one at a time in reverse order.
+                
+                
+            </ul>
+        </p>
+
+        <p class="question"><strong>Example</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://github.com/IF1007/saga-orchestrator-microservice/blob/main/documentation/architecture.png</li>
+                <li>https://github.com/eventuate-tram/eventuate-tram-sagas</li>
+                <li>https://blog.couchbase.com/saga-pattern-implement-business-transactions-using-microservices-part/</li>
+                <li>https://blog.couchbase.com/saga-pattern-implement-business-transactions-using-microservices-part-2/</li>
+                <li>https://microservices.io/patterns/data/saga.html</li>
+                <li>Use the Eventuate.io platform to tackle distributed data management challenges in your microservices architecture;</li>
+                <li>Eventuate is Chris's latest startup. It makes it easy to use the Saga pattern to manage transactions and the CQRS pattern to implement queries;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Sidecar Pattern Demo</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://betterprogramming.pub/understanding-kubernetes-multi-container-pod-patterns-577f74690aee</li>
+                <li>It is extremely useful when both Primary and Sidecar containers are implemented with different technologies OR different versions; // polyglot services</li>
+                <li>Log aggregator - Primary writes logs to shared volume, Sidecar container reads from it and pushes the logs to centralized log server;</li>
+                <li>In other words, Primary container focuses on business logic, where as Sidecar container focuses on cross cutting concerns such as Caching, Configuration and Secret management, Monitoring, Logging etc;</li>
+            </ul>
+        </p>
+
+
+       
+        For example, Istio Service Mesh can work as sidecar. The pod’s entire network control is taken over by the incoming istio-proxy as a sidecar and can manipulate incoming and outgoing requests/responses.
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=WnZ7IcaN_JA</li>
+                <li>https://www.youtube.com/watch?v=WbNJTwKOCuM - SAGA Choreography Implementation | Part 1 - Requirements | Tech Primers</li>
+                <li>https://www.youtube.com/watch?v=bW62nGa5EvM - SAGA Choreography Implementation | Part 2 - order-service with gRPC, DynamoDB & SQS | Tech Primers</li>
+                <li>https://www.youtube.com/watch?v=1HzNWGeO02A - SAGA Choreography Implementation | Part 3 - payment-service with DynamoDB & SQS | Tech Primers</li>
+                <li>https://medium.com/@schneideryaron/the-sidecar-pattern-for-application-developers-8bbc6560cef5</li>
+                <li>https://www.youtube.com/watch?v=a8RM2xCM9RY - Zomato System Design</li>
+            </ul>
+        </p>
+ 
+
+
+Uber Eats
+- It is an online food ordering and delivery platform launched by Uber in 2014;
+- Users can read menus, reviews and ratings, order and pay for food from participating restaurants using an application on the iOS/Android/web browser;
+
+
+UI Service - User interacts with it; 
+Restaraunt Service
+Order Service
+Payment Service
+Delivery Service
+
+
+Types of SAGA
+1. Choreography or Event based
+    Services communicate using events; no need of synchronous transactions;
+    Cons:
+        - One service depends on another, which again depends on another etc, so, there is a chance of deadlock; 
+          If you less number of events/interactions, this pattern is useful;
+        - It is tedious to integration test, if there are too many events;
+
+2. Orchestration or Command based
+    There is a central Orchestrator service, which interacts with all other services;
+    Cons:
+        - Orchestrator needs to know what each service does; If there is any change to that, you need to change Orchestrator along with underlying service;
+
+
+    </body>
+</html>

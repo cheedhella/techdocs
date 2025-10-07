@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DB Per Service</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is CQRS?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>In a more traditional architecture, a single object model is used for both reading and updating data:;</li>
+                <li>Command Query Responsibility Segregation (CQRS) is a pattern in which the model that is used to read information is separated from the model that is used to update information</li>
+                <li></li>
+                <br>
+                <li>C - Command; Q - Query; R - Responsibility; S - Segregation;</li>
+                <li>Separating a system into query and command models makes can help to improve performance, scalability, and security..</li>
+                <li>Performance can be improved by optimizing the schema specifically for each model.</li>
+                <li> The schema for the query model can be optimized for queries, while the schema for the command model can be optimized for updates;</li>
+                <li>Data in the query model's data store can be denormalized in order to increase the performance of queries that the application needs to execute.</li>
+                <li>Workloads between read and write operations will differ and using CQRS allows you to scale each of them independently of the others.</li>
+                <br>
+                <li>The query model is responsible for reads and the command model is responsible for updates</li>
+                <li>Query objects only return data and do not alter state, while command objects alter state and do not return data.</li>
+                <li>When the system needs to read data, it goes through the query model, and when the system needs to update data, it goes through the command model.</li>
+                <li>As part of processing a command, the system may need to read data, but beyond what is necessary for completing a command, the reading of data should go through the query model;</li>
+                <br>
+                <li>Although not required, if CQRS is taken to the next level, the query and command models can be made to utilize separate databases;</li>
+                <li>This gives each of the two models its own schema, which can be optimized for its specific usage;</li>
+                <br>
+                <li> If separate databases are used, the two databases must be kept in sync; One way to do that is through the use of events.</li>
+                <br>
+                <li>Although CQRS can be used without events, they do complement each other so it is common for systems that use CQRS to leverage the use of events.</li>
+                <li>Events are one way to effectively communicate state changes so that the query model can stay up to date as the command model updates data;</li>
+
+
+                This segregation and responsibility pattern follows the modern approach of time optimization by saving the already used data. It doesn’t invoke the actual database every time a query is fired.
+
+The replica of the database will still be in view mode and cannot be accessed for any editing purpose. CQRS will have a separation of layers. For example, the command layer and query layer will be separated from each other. The command layer is used for inserting the data and the query layer for fetching the data from the data store.
+
+The advantage of using the CQRS pattern is that it logs the events in the database in parallel with the messaging queue whenever the customer/end-user updates the data. Unlike conventional approaches it opposes the idea of doing read and write operations with a single view. Traditional approaches often do the read and write operations with a single view and engender more complexity. Using the CQRS pattern breaks the traditional way of program executions and speeds up the workflow. 
+                
+            </ul>
+        </p>
+
+        <p class="question"><strong>Where it is useful?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is extremely useful when both Primary and Sidecar containers are implemented with different technologies OR different versions;</li>
+                <li>Log aggregator - Primary writes logs to shared volume, Sidecar container reads from it and pushes the logs to centralized log server;</li>
+                <li>In other words, Primary container focuses on business logic, where as Sidecar container focuses on cross cutting concerns such as Caching, Configuration and Secret management, Monitoring, Logging etc;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>CQRS Pattern Demo</strong></p>
+        <p class="answer">
+            <ul>
+                <li></li>
+            </ul>
+        </p>
+
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://github.com/confluentinc/kafka-streams-examples/tree/4.0.0-post/src/main/java/io/confluent/examples/streams/microservices</li>
+            </ul>
+        </p>
+    </body>
+</html>

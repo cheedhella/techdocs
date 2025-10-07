@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Log Format</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>Defining a standard log structure</strong></p>
+        <p class="answer">
+            <ul>
+                
+                
+Defining the log structure is the most crucial part of logging effectively. In the first place, we need to identify why are we enabling logging? A few points could be:
+
+How did each service respond while delivering on its front – whether it succeeded or caused errors? Whatever the case may be, our aim should be to get most of the context around that.
+What process/function from the service generated the log?
+At what time during the process was the log generated.
+How crucial is the process that generated the log?
+While answering these questions, we get to derive a format, which can include, but is not limited to the following things:
+
+Service name
+Correlation Id
+Log String (can include a short description, name of the generating method)
+Log Metadata (can include error stacks, successful execution response(s) of a subtask)
+Log Timestamp
+Log Level (DEBUG, WARN, INFO, ERROR)
+
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                   
+            </ul>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Event Sourcing</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Event Sourcing?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Most of the applications store current state of the data;</li>
+                <li>Application may log state changes somewhere, but source of truth is data store;</li>
+
+                <li>Event Sourcing is a different approach to storing data. </li>
+                <li>Event-sourcing involves persisting events that take place in a system such that the event store can serve as the record of truth.;</li>
+                <li>When the command model alters the state of the system, events can be raised so that the query model can be kept in sync.</li>
+                <li>In addition, a data store for the query model may contain denormalized data that has been optimized for particular queries. </li>
+                <li>Having an event store allows us to replay past events to recreate the system's current state, which can be useful for updating the denormalized data in the query model's data store.</li>
+                <br>
+                The event sourcing design pattern creates events regarding the changes in the application state. 
+                Also, these events are stored as a sequence of events to help the developers track which change was made when. 
+                So, with the help of this, you can always adjust the application state to cope up with the past changes. 
+                You can also query these events, for any data change and simultaneously publish these events from the event store. 
+                Once the events are published, you can see the changes of the application state on the presentation layer;
+
+                <li></li>
+            </ul>
+        </p>
+        What is the diffferrence b/w event sourcing and transaction log?
+            transaction log, that is natively available in database, shows state transitions, but not why that happened; 
+            In event sourcing, name of the event provides additional metadata that shows why;
+
+
+        <p class="question"><strong>Where it is useful?</strong></p>
+        <p class="answer">
+            <ul>
+                
+            </ul>
+        </p>
+
+        <p class="question"><strong>Event Sourcing Pattern Demo</strong></p>
+        <p class="answer">
+            <ul>
+               
+            </ul>
+        </p>
+
+        With event sourcing, data changes are getting saved in domain events. These events are held in the chronological order of occurrence. These events can be replayed to get to the current state of the data.
+A real-world example of a default event-sourced system is a ledger like a bank account. The current balance of the account is the current state. To get to the current balance, several transactions are deducted or added to the start amount. These transactions are the events. When these transactions are replayed, you will get to the current balance.
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                In an Event-driven architecture, the publisher publishes an event, and a consumer subscribes to it. These events help the services to communicate in a decoupled manner;
+                https://medium.com/trendyol-tech/event-driven-microservice-architecture-91f80ceaa21e
+                https://dzone.com/articles/building-event-driven-microservices-that-scales
+                https://www.developer.com/design/event-driven-microservices/
+                https://www.edureka.co/blog/microservices-design-patterns
+
+                https://www.youtube.com/watch?v=AUj4M-st3ic
+            </ul>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Circuit Breaker</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><b>What is Circuit Breaker?</b></p>
+        <p class="answer">
+            <ul>
+                <li>We break down a monolitic application into several small services, that focus on a particular domain;</li>
+                <li>You don't feel any benefit from circuit breaker pattern if everything goes fine;</li>
+                <li>Let's say, service A depends on service B and service B is down; when client makes a call to service A, A makes a internal call to B; But, B is down; So, A will wait for B until timeout and throws an irritating 500 response to client;</li>
+                <li>Making the client read this error message, after waiting for long time is the most irritating thing a developer can do;</li>
+                <br>
+                <li>How are going to solve the issue? Are we going to fix B?</li>
+                <li>We are not going to fix B; But, what A can do is return the error message without making it's client wait;</li>
+                <br>
+                <li>Why is this important in microservices?</li>
+                <li>The risk of a service failing in a microservices architecture is very high with the number of independent services; If you have many services there is a huge chance for a service to fail;</li>
+                <li>On the other hand, when a service is down, if we continuously send requests to that service, it will make the things worse; So this pattern will reduce the load on the needed service;</li>
+                <br>
+                <li><b>Closed state</b></li>
+                <li>It means the service is up and running;</li>
+                <li>If the number of error responses from a service crosses a threshold limit, circuit breaker will goes to open stage;</li>
+                <br>
+                <li><b>Open state</b></li>
+                <li>It means that a service is not working properly, as requests failed more than the threshold;</li>
+                <li>In this state, circuit breaker will not make the remote calls;</li>
+                <li>With the circuit breakers, we implement a fallback method which will handle the case if the needed service is down;</li>
+                <li>So, in open state, circuit breaker will trigger the fallback method;</li>
+                <li>After a considerable time, the circuit breaker will go to half-open state;</li>
+                <br>
+                <li><b>Half-open state</b></li>
+                <li>In this stage, circuit breaker makes a remote call to the service;</li>
+                <li>If the request fails, the circuit breaker will go to the open stage;</li>
+                <li>If the service gives the proper response, the circuit breaker will go to the closed stage;</li>
+                <br>
+                <li>So, we can use the Circuit Breaker Pattern to improve the fault-tolerance and resilience of the Microservice Architecture and also to prevent the cascading of failure to other microservices;</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>Hystrix</b></p>
+        <p class="answer">
+            <ul>
+                <li>Hystrix from Netflix is the most famous tool to implement this pattern;</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>References</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://medium.com/nerd-for-tech/design-patterns-for-microservices-circuit-breaker-pattern-ba402a45aac2</li>
+                <li>https://medium.com/@raja.biswas/build-a-fault-tolerant-resilient-system-with-circuit-breaker-using-resilience4j-c4054f25b457</li>
+                <li>https://tech.olx.com/demystifying-istio-circuit-breaking-27a69cac2ce4</li>
+                <li>https://medium.com/geekculture/design-patterns-for-microservices-circuit-breaker-pattern-276249ffab33</li>
+            </ul>
+        </p>
+    </body>
+</html>

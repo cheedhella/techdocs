@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Scaling</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Vertical Scaling?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Scale by adding more power(CPU/RAM/Storage etc) to existing node, as the traffic increases;</li>
+                <br>
+                <li>Problem #1: Scaling up/down takes time;</li>
+                <li>When a CPU utilization of a server reaches it's MAX, ALB can procure a new server with better capacity; Once procured, ALB can switch to the new server; </li>
+                <li>Your applciation can experience downtime, during the switching time;</li>
+                <br>
+                <li>Problem #2: Not cost effective;</li>
+                <li>Once you procure a server with high capacity, what if the traffic goes down?</li>
+                <li>Your CPU utilization is low, but still you have to pay for the bigger server;</li>
+                <li>You don't want to keep switching from smaller server to bigger and vice versa;</li>
+                <br>
+                <li>Problem #3: There is a limit on it;</li>
+                <li>There is a limit to the vertical scaling; You can't keep on adding CPU/memory to the server;</li>
+                <li>So, for a distributed system to be massively scalable, vertical scaling is not an option;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is Horizontal Scaling?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>When the traffic increases, insead of moving to a more powerful server, spin up another server;</li>
+                <li>There is no transition or cut off period; The moement traffic increases, load balancer spawns another instance;</li>
+                <li>It is faster to scale up/down, as needed;</li>
+                <li>Massively scalable;</li>
+                <li>It is cost effetive;</li>
+                <li>All real world distributed systems use Horizontal scaling;</li>
+                <li>Note: You need to refactor your legacy code; If you try to scale your legacy monolithic application with horizontal scaling, you end up paying more;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Horizontal vs Vertical Scaling</strong></p>
+        <p class="answer">
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/h-v-scaling.png" height="350" width="680" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>Examples</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Cassandra and MongoDB systems can scale horizontally, by adding more machines to meet growing needs;</li>
+                <li>MySQL supports vertical scaling, by switching from small to bigger machines; However, this process often involves downtime;</li>
+            </ul>
+        </p>  
+
+        <hr>
+        <p class="question"><strong>How can you make your application scalable for a big traffic day?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>
+                    <b>Average Answer</b>
+                    <ul>
+                        <li>Put your ec2 nodes/VMs in a auto scaling group and use a elastic load balancer; 3 years back, there is nothing wrong with this answer!</li>
+                        <li>But, if you are recuited for solutions architect today, there is a better answer!</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Better Answer</b>
+                    <ul>
+                        <li>Put your ec2 nodes in a auto scaling group and use a elastic load balancer;</li>
+                        <li>But, in a big traffic day, traffic burst is very high;</li>
+                        <li>ELB scales up naturally, with the high rate of traffic;</li>
+                        <li>I will also utilize a Scheduled Scaling in addition to auto scaling based on cpu/memory;</li>
+                        <li>Scheduled scaling already have multiple ec2 instances up and running to handle huge amount of traffic;</li>
+                        <li>In addition to that I will ensure that the AMI(Application Machine Image) is light-weight;</li>
+                        <li>More the number of libraries and packages you put on your AMI, the longer the time it takes to spin up new ec2 nodes in the event of auto scaling;</li>
+                        <br>
+                        <li>If my applicaiton is connecting to a database, I will utilize the database proxy, called RDS proxy;</li>
+                        <li>Sometimes applications will make rapid new connection to the database and when the program stop querying the database for that particular instance, the connection will stay open;</li>
+                        <li>So when another traffic invocation comes, instead of reusing that lingering or foreign connection, it will create another new connection;</li>
+                        <li>So this results in a lot of open database connections, taking up precious compute from your database;</li>
+                        <li>Using RDS proxy, we will eliminate that; RDS proxy will maintain the database connection pool;</li>
+                        <br>
+                        <li>On top that, run IEM(Infrastructure Event Management), to ensure that it can handle high traffic;</li>
+                        <li>IEM scales up the load balancer, ec2 and passes high traffic to ensure that it can handle it;</li>
+                        <br>
+                        <li>Also, check your AWS account settings;</li>
+                        <li>For eg, there is a limit on the number of ec2 instances that you can spwan;</li>
+                        <li>You can request AWS to increase certain limits and quotas;</li>
+                        <li>So one strategy that customers adopt is they will separate heavy eating APIs into multiple account and regions;</li>
+                        <br>
+                        <li>In addition to it, let's talk about splitting the application into microservices;</li>
+                        <li>With microservices, one heavy hitting API can scale up a lot more without impacting the other microservices;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Another Answer</b>
+                    <ul>
+                        <li>Let the k8s or serverless handle it; This is not true, because all of them have scaling limits;</li>
+                        <li>You have to tweak certain things in each technology to ensure that it can handle high traffic;</li>
+                        <br>
+                        <li>So, for serverless scaling, before the big traffic day, ensure the Provisioning Concurrency is enabled;</li>
+                        <li>Provisioning concurrency will pre warm certain number of lambdas, so that it can handle the burst traffic;</li>
+                        <li>Provisioning concurrency can be done in a auto scaling way or scheduled way;</li>
+                        <br>
+                        <li>Also, optimize lambda code using x-ray; optimize lambda configurations using cloudwatch insights;</li>
+                        <br>
+                        <li>For API gateway, enable API caching;</li>
+                        <li>Check the account limit for Amazon API Gateway concurrent connection limits, How many at lambda you can spin up and request AWS team to increase those limits;</li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Scaling in AWS</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Scaling differs from one AWS service(such as ec2, lambda, containers) to another;</li>
+                <br>
+                <li>We have already seen horizontal and vertical <b>scaling of ec2 instances</b>;</li>
+                <br>
+                <li><b>Lambdas</b> support only horizontal scaling;</li>
+                <li>For each new request, a new instance of lambda spins up; There is not Auto Scaling Group here!</li>
+                <br>
+                <li>Now, let's see <b>k8s containers scaling</b>;</li>
+                <li>At somepoint, using Horizontal Auto Pod scaler, another pod(not container) gets created, on the same EC2 node;</li>
+                <li>What happens if ec2 fills up? At some point, we need to scale the ec2 nodes;</li>
+                <li>We call it cluster auto scaler;</li>
+                <br>
+                <li>How does <b>fargate scale</b>?</li>
+                <li>With fargate, there is no ec2 node; All you see is a pod;</li>
+                <li>With increasing traffic, more pods are created; there is cluster auto scaler in this case;</li>
+                <li>Fargate manages everything else under the hood;</li>
+            </ul>
+        </p>	
+    </body>
+</html>

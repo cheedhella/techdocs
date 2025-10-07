@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Fanout</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Scatter/gather (a.k.a. Fan Out/Fan In) Pattern?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>This pattern helps you achieve parallelism in servicing requests, enabling you to service the client significantly faster than you would if you had to serve them sequentially;</li>
+                <li>In this system, the external client sends an initial request to the “root” or “parent” node. This root fans-out the request to multiple servers to perform parallel computations; Each shard returns partial data, and the root gathers the response from other shards and returns a single response;</li>
+                <li>This kind of pattern is commonly used in search engines. If you notice, building such systems requires a lot of boilerplate code: fanning out the requests, gathering the response, handling client requests, etc. These codes are quite generic and can be containerized and reused by the application containers;</li>
+                <br>
+                This approach is a bit costly in terms of computing power, but is useful in case response time is critical for our application. The idea in this approach is to have multiple replicas of our service. The caller will simultaneously call all these instances and accept the response from the one that responds fastest. As there is additional overhead in the use of this approach, caution is recommended.
+
+ 
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.clairvoyant.ai/blog/design-patterns-for-cloud-based-microservices</li>
+                <li>https://learning.oreilly.com/library/view/java-ee-8/9781788475143/1dc82f3a-d38f-42df-bd7a-a3f3335edb47.xhtml</li>
+            </ul>
+        </p>
+    </body>
+</html>

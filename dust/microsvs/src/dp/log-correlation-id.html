@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Correlation Id</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>Best Practices in Distributed Logging?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>A correlation id is a unique id that can be assigned to an incoming request, which can help us to identify this request uniquely in each service.</li>
+                <li>Generate correlation Id and pass the same correlation Id to the downstream services and return the correlation Id as part of the response;</li>
+                <li>If you are using Spring Cloud to develop microservices you can use Spring Sleuth module along with Zipkin;</li> 
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                   
+            </ul>
+        </p>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chain Of Responsibility</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Chain Of Responsibility?</strong></p>
+        <p class="answer">
+            <ul>
+                Chained or Chain of Responsibility Design Patterns produces a single output which is a combination of multiple chained outputs;
+                So, if you have three services lined up in a chain, then, the request from the client is first received by Service A;
+                Then, this service communicates with the next Service B and collects data;
+                Finally, the second service communicates with the third service to generate the consolidated output;
+                All these services use synchronous HTTP request or response for messaging;
+                Also, until the request passes through all the services and the respective responses are generated, the client doesn’t get any output;
+                So, it is always recommended to not to make a long chain, as the client will wait until the chain is completed;
+                One more important aspect which you need to understand, is that the request from Service A to Service B may look different from Service B to Service C; 
+                Similarly the response from Service C to Service B may look completely different from Service B to Service A;
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                https://www.edureka.co/blog/microservices-design-patterns
+            </ul>
+        </p>
+    </body>
+</html>

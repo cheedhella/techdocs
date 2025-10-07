@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Golang</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-container">
+            <div class="main-grid-item main-grid-item-1 grid-wide-column">
+                <img src="../resources/imgs/gears.gif" alt="" srcset="" />
+                <h2>Golang</h2>
+            </div>
+            <div class="main-grid-item main-grid-item-2">
+                <section>
+                    <ul>
+                        <li>Basic Concepts
+                            <ul>
+                                <li><a href="./basics/install.html">Install Golang</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="main-grid-item main-grid-item-3">
+                <section>
+                    <ul>
+                        <li>Concurrency
+                            <ul>
+                                <li><a href="./concurrency/goroutine.html">GoRoutines</a></li>
+                                <li><a href="./concurrency/waitgroups.html">WaitGroups - wait for GoRoutines to finish</a></li>
+                                <li><a href="./concurrency/mutex.html">Mutex - Manage access to shared resources</a></li>
+                                <li><a href="./concurrency/rwmutex.html">RWMutex - Manage access to shared resources</a></li>
+                                <li><a href="./concurrency/once.html">Once - run initialization only once</a></li>
+                                <li><a href="./concurrency/pool.html">Pool - manage reusable objects</a></li>
+                                <li><a href="./concurrency/os-pipe.html">os.Pipe</a></li>
+                                <li><a href="./concurrency/io-pipe.html">io.Pipe</a></li>
+                                <li><a href="./concurrency/channel.html">Channel</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="main-grid-item main-grid-item-4">
+                The sync package gives you these main tools:
+
+
+Cond → signal and wait on conditions.
+
+            </div>
+            <div class="main-grid-item main-grid-item-5">
+                <section>
+                    Examples
+                    <ol>
+                        
+
+                    </ol>
+                </section>
+            </div>
+        </div>
+
+
+        <b>References:</b> 
+
+1. Getting Started
+
+Introduction to Go
+
+Installing Go & Setting up GOPATH / Go modules
+
+go run, go build, go fmt, go test
+
+Project structure & go mod init
+
+2. Basics
+
+Hello World
+
+Variables & Constants
+
+Data Types (string, int, float, bool, rune, byte)
+
+Type inference (:=)
+
+Operators & Expressions
+
+Input/Output (fmt package)
+
+3. Control Structures
+
+if, else, switch
+
+Loops (for, range)
+
+Labels & break, continue
+
+4. Functions
+
+Defining & calling functions
+
+Parameters & return values
+
+Multiple return values
+
+Named return values
+
+Variadic functions
+
+Anonymous functions & closures
+
+defer keyword
+
+5. Collections
+
+Arrays
+
+Slices
+
+Maps
+
+Strings (as slices of bytes/runes)
+
+6. Structs & Methods
+
+Defining structs
+
+Struct literals
+
+Methods on structs
+
+Pointers vs. values
+
+Embedding (composition, not inheritance)
+
+7. Interfaces
+
+Defining & implementing interfaces
+
+Empty interface (interface{})
+
+Type assertions & type switches
+
+Duck typing
+
+8. Pointers
+
+Pointer basics
+
+Pointer to struct
+
+Passing by reference
+
+New vs. make
+
+9. Concurrency (Go’s Superpower 🚀)
+
+Goroutines
+
+Channels (unbuffered, buffered)
+
+select statement
+
+Channel directions (chan<-, <-chan)
+
+Worker pools
+
+Context package for cancellation & timeouts
+
+Mutexes & WaitGroups (sync package)
+
+10. Error Handling
+
+error type
+
+Custom errors
+
+Wrapping errors
+
+Panic & Recover
+
+11. Packages & Modules
+
+Creating and importing packages
+
+Visibility (capitalized = exported)
+
+Standard library essentials (strings, math, time, net/http, os)
+
+Dependency management (go mod tidy, go get)
+
+12. Testing
+
+Writing tests with testing package
+
+Table-driven tests
+
+Benchmarks
+
+Example functions
+
+Code coverage
+
+13. Advanced Topics
+
+Generics (Go 1.18+)
+
+Reflection (reflect package)
+
+Embedding interfaces
+
+Unsafe package (when to avoid it)
+
+Build tags
+
+Go memory model
+
+14. Web & Networking
+
+net/http basics
+
+Building a REST API
+
+JSON encoding/decoding
+
+gRPC in Go
+
+Web frameworks (Gin, Fiber, Echo)
+
+15. Tools & Ecosystem
+
+go fmt, golint, staticcheck
+
+Profiling & tracing (pprof)
+
+GoDoc & documentation generation
+
+Popular Go tools & frameworks
+
+16. Deployment & Best Practices
+
+Cross-compilation
+
+Building executables
+
+Environment variables
+
+Dockerizing Go apps
+
+Logging best practices
+
+Project layout patterns
+
+Effective Go (official style guide)
+
+    </body>
+</html>

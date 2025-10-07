@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Externalize Configuration</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>Why we need to externalize microservices configuration?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It's not easy, if you want to modify the configuration of a service that is replicated hundred times, when the configuration packaged with service itself;</li>
+                <li>It can result in some instances using the old configuration, and some using the new one, at some point;</li>
+                <li>Continuous delivery best practice say build once and deploy the same every time;</li>
+                <li>So, we need to externalize the configuration, if we have any of below expectations:
+                    <ul>
+                        <li>We need to have different configuration for different environnement;</li>
+                        <li>A service must run in multiple environments - dev, test, qa, staging, production - without modification and/or recompilation;</li>
+                        <li>We need to have different configuration for same environment over the time;</li>
+                        <li>We need to authorize user that can manage the configuration;</li>
+                        <li>We need to log configuration properties changes;</li>
+                        <li>We need pushing configuration properties changes at live;</li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How to externalize configuration?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>You can store the configuration in a GIT repository, Vault, database, file system etc;</li>
+                <li>At startup, microservices load the configuration from the external store;</li>
+                <li>During runtime, microservices provide an option to reload the configuration without having to restart the service;</li>
+                <br>
+                <li>What is more important it is, whichever store you use, it must be reliable and highly available; This is usually accomplished by replicating the configuration server itself;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>What is Spring Cloud Config Server?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.youtube.com/watch?v=JSdy9Q8Uk34</li>
+                <li>https://www.youtube.com/watch?v=gb1i4WyWNK4&t=137s</li>
+                <li>https://www.youtube.com/watch?v=AiGCx0raQfs</li>
+                <li>https://www.youtube.com/watch?v=RnsSivcCzPQ</li>
+                <li>https://www.youtube.com/watch?v=yNnLICy2zk4</li>
+                <li>https://www.youtube.com/watch?v=JSdy9Q8Uk34</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Why is it needed?</strong></p>
+        <p class="answer">
+            <ul>
+                
+            </ul>
+        </p>    
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://microservices.io/patterns/externalized-configuration.html</li>
+                <li>https://badia-kharroubi.gitbooks.io/microservices-architecture/content/patterns/configuration-patterns/externalized-configuration-store-pattern.html</li>
+                <li>https://medium.com/javarevisited/external-configuration-in-microservices-spring-cloud-config-9c925f64749f</li>
+            </ul>
+        </p>
+    </body>
+</html>

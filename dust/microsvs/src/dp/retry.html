@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Retry</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Retry?</strong></p>
+        <p class="answer">
+            <ul>
+                Sometimes when google.com does not work for us, we just do not give up. 
+                We simply refresh the page once assuming things will work next time and it does most of the times. 
+                Intermittent network issues are very common. 
+                In the Microservices world, we might be running multiple instances of same Service D for high availability and load balancing. 
+                If one of the instances could be having the issue and it does not respond properly to our request, If we retry the request, the load balancer 
+                could send the request to a healthy node and get the response properly. 
+                So with Retry option, we have more chance for getting the proper response.
+
+
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                https://www.vinsguru.com/retry-pattern/
+                https://blog.risingstack.com/designing-microservices-architecture-for-failure/
+            </ul>
+        </p>
+    </body>
+</html>
