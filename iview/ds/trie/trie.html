@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Trie</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
-    </head>
-    <body>
-      <p class="question"><strong>What is Trie?</strong></p>
-      <p class="answer">
+
+<head>
+    <title>Trie</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Trie?</strong></div>
+    <div class="answer">
         <ul>
-          <li>Trie is a tree based data structure that is used to store strings for fast retrieval;</li>
-          <li>Its name comes from the fact that Trie is reTrieval data structure;</li>
-          <li> It organizes information in a hierarchy;
-            <ul>
-              <li>Two strings with a common prefix have same ancestor in the tree;</li>
-              <li>If you have 1000's of strings, then you can use trie to store them; It is easy to search if the string exists in the collection or not;</li>
-              <li>For eg, trie is ideal data structure for storing dictionary;</li>
-              <li>Trie is used to prefix based searching and you can sort the collection;</li>
-            </ul>
-          </li>
-          <li>Except root, each node in a trie contains the following:
-            <ul>
-              <li>a character or a digit;</li>
-              <li>Pointer to children nodes;</li>
-              <li>Flag that is set to true, if the current node completes a word;</li>
-            </ul>
-          </li>
+            <li>Trie is a tree based data structure that is used to store strings for fast retrieval;</li>
+            <li>Its name comes from the fact that Trie is reTrieval data structure;</li>
+            <li> It organizes information in a hierarchy;
+                <ul>
+                    <li>Two strings with a common prefix have same ancestor in the tree;</li>
+                    <li>If you have 1000's of strings, then you can use trie to store them; It is easy to search if the
+                        string exists in the collection or not;</li>
+                    <li>For eg, trie is ideal data structure for storing dictionary;</li>
+                    <li>Trie is used to prefix based searching and you can sort the collection;</li>
+                </ul>
+            </li>
+            <li>Each node can have a max of 26 children(mind you, that number varies, if you want to store different set
+                of
+                alphabets);</li>
+            <li>Root node is always null and doesn't store anything;</li>
+            <li>Except root, each node in a trie contains the following:
+                <ul>
+                    <li>a character or a digit;</li>
+                    <li>Pointer to children nodes;</li>
+                    <li>Flag that is set to true, if the current node completes a word;</li>
+                </ul>
+            </li>
         </ul>
-      </p>
+    </div>
 
-      <div>
+    <div>
         <img src="./trie-model-visual.png" width="600" height="300" alt="" srcset="" />
-      </div>
+    </div>
 
-      <p class="question"><strong>Trie Node</strong></p>
-      <pre>
-        <code class="language-java">
-  class Node {
+    <div class="question"><strong>2. Applications of Trie?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Autocomplete</li>
+            <li>Spell checker</li>
+            <li>IP Routing</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Trie vs Hash table</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Trie is useful to story huge number of strings, such as Dictionary and retrieve faster;</li>
+            <li>In case of Trie: No hashing algorithm, no key collisions;</li>
+            <li>Trie has a better worst-case complexity;</li>
+            <li>Hash table doesn't support prefix search;</li>
+            <li>Hash table requires more space than trie;</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Hell World 2</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>class Node {
       // If your charset contains just lower OR upper case chars, you can replace the map with array of 26 chars;
       private HashMap<Character, Node> children;
       private boolean isWord;
@@ -71,25 +89,8 @@
           this.isWord = isWord;
       }
   }
-        </code>
-      </pre>
-
-      <p class="question"><strong>Trie VS Hash table</strong></p>
-      <p class="answer">
-        <ul>
-          <li>Trie is useful to story huge number of strings, such as Dictionary and retrieve faster;</li>
-          <li>In case of Trie: No hashing algorithm, no key collisions;</li>
-          <li>Trie has a better worst-case complexity;</li>
-          <li>Hash table doesn't support prefix search;</li>
-          <li>Hash table requires more space than trie;</li>
-        </ul>
-      </p>
-
-      <p class="question"><strong>Trie Implementation</strong></p>
-      <p class="answer">
-        <pre>
-          <code class="language-java">
-public class Trie {
+  
+  public class Trie {
   private Node root;
 
   public Trie() {
@@ -192,12 +193,8 @@ public class Trie {
       });
   }
 }
-          </code>
-        </pre>
-      </p>
 
-      <pre>
-        <code class="language-java">
+
 public class TrieApp {
   public static void main(String[] args) {
       Trie t1 = new Trie();
@@ -239,16 +236,17 @@ public class TrieApp {
           System.out.println("the is not present!");
   }
 }
-        </code>
-      </pre>
 
-      
+            <b>Output:</b>
+second
 
-  <br/>
+</code></pre>
+    </div>
 
 
 
-TODO: Spell Checker, Leveraging tries to implement an efficient spell-checker
+    <script src="../../../resources/js/codeblock.js"></script>
 
-    </body>
+</body>
+
 </html>
