@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Order-agnostic Binary Search</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given array of sorted numbers(could be ascending or descending) and a key K, find the index of K or return -1, if not found;</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+public class AgnosticBinarySearch {
+    public static void main(String[] args) {
+        System.out.println(AgnosticBinarySearch.search(new int[] { 4, 6, 10 }, 10));
+        System.out.println(AgnosticBinarySearch.search(new int[] { 1, 2, 3, 4, 5, 6, 7 }, 5));
+        System.out.println(AgnosticBinarySearch.search(new int[] { 10, 6, 4 }, 10));
+        System.out.println(AgnosticBinarySearch.search(new int[] { 10, 6, 4 }, 4));
+    }
+
+    // Time Complexity: O(logN); Space Complexity: O(1);
+    private static int search(int[] arr, int key) {
+        // Compare first and last elements, to find if the input ascending or descending ordered;
+        boolean isAscending = arr[0] < arr[arr.length - 1] ? true : false;
+        return search(arr, key, 0, arr.length - 1, isAscending);
+    }
+
+    private static int search(int[] data, int key, int start, int end, boolean isAscending) {
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            if (data[mid] == key) {
+                return mid;
+            }
+
+            if (isAscending) {
+                if (key < data[mid]) {
+                    end = mid - 1;
+                }
+                else {
+                    start = mid + 1;
+                }
+            }
+            else {
+                if (key > data[mid]) {
+                    end = mid - 1;
+                }
+                else {
+                    start = mid + 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
+
+// Output:
+2
+4
+0
+2
+
+        </code>
+      </pre>
+
+    </body>
+</html>

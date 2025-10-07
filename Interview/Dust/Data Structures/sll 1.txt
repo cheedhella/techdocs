@@ -1,0 +1,16 @@
+I want to reverse a linked list .I want to use minimum
+no. of pointers and use recursion.How it can be achieved.
+
+
+struct reverse(struct node *head) {
+struct node *p=head;
+if(p!=NULL) {
+reverse(p->next);
+}
+else
+printf("%d",p->data);
+}
+
+
+question was to reverse the linked list. Not print it in reverse.
+

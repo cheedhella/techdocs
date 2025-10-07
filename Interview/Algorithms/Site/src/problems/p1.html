@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find K'th Smallest Element in an Unsorted Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p class="question"><strong>Method 1</strong>: Using any sorting method;</p>
+            <p class="answer">
+                - Sort the array in ascending order, using any sorting algorithm; O(N*logN);<br/>
+	            - Print first K elements; O(K);<br/>
+                <br/>
+	            Time Complexity: O(N*logN + K);
+            </p>
+
+            <p class="question"><strong>Method 2</strong>: Using Bubble sort;</p>
+            <p class="answer">
+                - Modify Bubble Sort to run the outer loop atmost K times;<br/>
+	            - Print last K elements of the array obtained in above step;<br/>
+                <br/>
+	            Time Complexity: O(N*K);
+                <br/>
+                Like Bubble sort, selection/insertion sort can be used to get the K smaller elements;
+            </p>
+
+            <p class="question"><strong>Method 3</strong>: Using Heap;</p>
+            <p class="answer">
+                - Convert the array into a Min-Heap; O(N);<br/>
+	            - Use extract-min() K times to get the first K smaller elements; O(logN);<br/>
+                <br/>
+	            Time Complexity: O(K*logN)
+            </p>
+            <p class="question"><strong>Method 4</strong>: Using Quick Sort;</p>
+            <p class="answer">
+                - In QuickSort, we pick a pivot element and move it to its correct position and partition the array around it;<br/>
+	            - The idea is to stop at the point where the pivot itself is the Kth largest element;<br/>
+                <br/>
+	            Time Complexity: O(N*logN + K);<br/><br/>
+
+                Choose a pivot number.<br/>
+if K is lesser than the pivot_Index then repeat the step.<br/>
+if K == pivot_Index : Print the array (low to pivot to get K-smallest elements and (n-pivot_Index) to n fotr K-largest elements)<br/>
+if  K > pivot_Index : Repeat the steps for right part.<br/>
+            </p>
+            <p class="question"><strong>Method 5</strong>: Using Order Statistics; TODO</p>
+            <p class="answer">
+                - Use order statistic algorithm to find the kth largest element;<br/>
+                - Please see the topic selection in worst-case linear time O(n);<br/>
+                <br/>
+	            Time Complexity: TODO:
+            </p>
+            
+        </div>
+
+        <pre>
+            <code class="language-java">
+
+
+            </code>
+        </pre>
+    </body>
+</html>

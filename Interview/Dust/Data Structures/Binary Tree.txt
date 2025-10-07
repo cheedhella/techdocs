@@ -1,0 +1,104 @@
+other things: 
+	constructing an expression tree
+	infix to prefix, postfix - http://people.eecs.ku.edu/~jvalland/lectures/268-L9a-PrefixPostfixNotes-S09.pdf
+		http://www.dreamincode.net/forums/topic/37428-converting-and-evaluating-infix-postfix-and-prefix-expressions-in-c/
+		http://www.slideshare.net/nita23arora/infix-to-postfix-1909005
+		http://www.go4expert.com/forums/showthread.php?t=1693
+		http://www.scribd.com/doc/7244586/Postfix-to-Infix
+		http://personal.denison.edu/~havill/algorithmics/algs/postfix.pdf
+	Parenthesis are never needed in prefix or postfix expressions. because we don't have to worry about the priority of operations anymore. 
+	evaluation of an expression is always performed on prefix or postfix expressions and never infix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	Inorder traversal prints out all the keys in sorted order.
+	
+	
+	BST applications: dictionary, priority queue
+
+
+
+
+
+
+
+
+
+
+
+
+Threaded Binary Trees 
+	If we look carefully at the linked representation of any binary tree, we notice that there are more null links than actual pointers. As we saw before, there are n + 1 null links and 2n total links. A clever way to make use of these null links has been devised by A. J. Perlis and C. Thornton. Their idea is to replace the null links by pointers, called threads, to other nodes in the tree. 
+
+
+
+
+
+
+
+	
+
+2-3 tree
+AVL tree
+B-Tree
+
+
+
+root, leaf, parent, child, ancestor, descendant, sibling
+Ancestor - all nodes along the path from the to that node
+Descendants - all the nodes of a subtree
+depth of a tree
+height of a tree
+
+Depth of a node
+length of the unique path from the root to that node
+Height of a node
+length of the longest path from that node to a leaf
+all leaves are at height 0
+The height of a tree = the height of the root
+			    = the depth of the deepest leaf
+
+
+Ancestor and descendant
+If there is a path from n1 to n2
+n1 is an ancestor of n2, n2 is a descendant of n1
+Proper ancestor and proper descendant
+
+The height of an empty tree is -1, the height of an tree with one node (the root node) is 0, and the height of a tree of size greater than 1 is the longest path found in the left tree from the root.
+private int height(TreeNode t) {
+    if (t == null)
+      return -1;
+    else
+      return 1 + Math.max(height(t.left), height(t.right));
+  }
+
+
+
+Although in average a binary search tree has height  O ( log N )
+It not trivial to build a tree with  O ( log N ) height
+à Avl Trees provide a solution
+
+à What is an Avl tree ?
+	It is a binary search tree with the following property:
+	For any node in the tree, the height of it’s left and right
+	Subtrees can differ by at most 1
+
+insertion sort - http://www.personal.kent.edu/~rmuhamma/Algorithms/MyAlgorithms/Sorting/insertionSort.htm
+	http://www.concentric.net/~ttwang/sort/sort.htm
+

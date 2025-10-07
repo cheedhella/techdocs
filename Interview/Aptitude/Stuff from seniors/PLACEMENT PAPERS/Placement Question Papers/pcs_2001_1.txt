@@ -1,0 +1,28 @@
+1. Number of Weights needed for weighing 1 to 40 kgs?
+27 9 3 1 ans : 4
+
+2. Venn diagram problem venndiagram find the formulae.
+Ans. ABC'+AB'C+A'BC
+ 
+3. a+2b=6,ab=4 2/a + 1/b=?
+ans : 3/2
+
+4. age of 4 persons given in a relation find smallest age?
+ans : meera
+
+5. find floating point result
+(float)25/2, float(25/2), 25/float(2) ,25/2
+ans: 1 & 3
+
+6. find equivalent *(*(s+x)+y) ==> s[x][y]
+ans : content of s[x][y]
+
+7. find invalid statement : int a[3]
+1. scanf("%d",a[2]);
+2. scanf("%d",&a[2]);
+3. scanf("%d",a);
+4. all
+ 
+ans : 1
+
+

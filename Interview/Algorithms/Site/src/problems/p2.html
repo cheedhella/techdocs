@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>How to remove Duplicate elements from an Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <strong>If the input array is unsorted,</strong> <br/><br/>
+            <p class="question"><strong>Method 1</strong>: Native approach;</p>
+            <p class="answer">
+                // Requires running two loops; <br/>
+                For each element in the input, <br/>
+                    Check if it has already occurred or not; <br/>
+                    If already seen, then  <br/>
+                        Ignore it; <br/>
+                    Else <br/>
+                        add it to the array; <br/> <br/>
+
+                Time Complexity: O(N^2); Space Complexity: O(N), extra array needed to store unique elements;
+            </p>
+
+            <p class="question"><strong>Method 2</strong>: Using Sorting;</p>
+            <p class="answer">
+                Sort the array and use any of the approaches described below;
+            </p>
+
+            <p class="question"><strong>Method 3</strong>: Using a Set, internally uses hashing;</p>
+            <p class="answer">
+                Take an empty Set, iterate the given array and put each entry into the Set; <br/>
+		        This will store all unique entries into the Set; <br/>
+		        Now, iterate the set and put the entries back into the array starting from index 0; <br/><br/>
+
+		        Time Complexity: O(N); Space Complexity: O(N), we are taking extra set;
+            </p>
+            <p class="question"><strong>Method 4</strong>: TODO;</p>
+            <p class="answer">
+                Mehod 4 in https://www.geeksforgeeks.org/remove-duplicates-from-an-array-of-small-primes
+            </p>
+            <hr>
+            <strong>If the input array is already sorted,</strong><br/>
+            <p class="question"><strong>Method 1</strong>: </p>
+            <p class="answer">
+                Take a counter of unique elements, C, initialize it to 0;<br/>
+                Iteate the array, if the current element is not same as next element, store the current element at index C and increment it;<br/>
+                Eg: <br/>
+                    Input: [1, 1, 2, 3, 3, 4, 4, 5, 5, 5, 5, 6] <br/>
+                    Output: [1, 2, 3, 4, 5, 6] <br/>
+                <br/>
+                Time Complexity: O(N); Space Complexity: O(1);
+            </p>
+            
+        </div>
+
+        <pre>
+            <code class="language-java">
+
+
+            </code>
+        </pre>
+    </body>
+</html>

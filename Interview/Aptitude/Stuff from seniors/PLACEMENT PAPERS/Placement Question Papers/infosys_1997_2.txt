@@ -1,0 +1,63 @@
+            infosys paper 1997. 
+		 paper code q/c. 
+------------------------------------------------------------------------ 
+ 
+1)   be * be = acb 
+     a,b,c,e   are non zero numbers find b,e. 
+     ans)  b=1   e=9 
+2)   a,b,c,d,e  are having numerical values. there are some conditions 
+given 
+   a)  a=c  <===>  b!=e 
+   b) difference between a and c as same as difference between c and b  
+      as same as difference between a and d 
+   c)  c<a  and  c>d  
+  then find a,b,c,d,e 
+3)   there are six cards in which it has two king cards. all cards are  
+turned down and two cards are opened 
+  a) what is the possobility to get at least one king. 
+  b) what is the possibility to get two kings. 
+4) a person went to a shop and asked for change for 1.15paise. 
+but he said that he could not only give change for one rupee. 
+but also for 50p,25p,10p  and 5p. what were the coins he had  
+   ans) 1-->50   4--->10p      1--->25p 
+5)  there are 3 nurses and they work altogether only once in a week. 
+no nurse  is called to work for 3 consecutive days. 
+  nurse 1 is off on tueseday,thursday and sunday. 
+  nurse 2 is off on saturday. 
+  nurse 3 is off on thursday,sunday. 
+  no two nurses are off more than once a week. 
+    find the day on which all the 3 nurses were on work. 
+6)  there are 5 persons a,b,c,d,e and each is wearing a block or white  
+cap on his head. a person can see the caps of the remaining 4 but can't 
+see his own cap. a person wearing white says true and who wears block  
+says false. 
+  i) a says i see 3 whites and 1 block 
+ ii) b says i see 4 blocks 
+iii) e says i see 4 whites 
+iiii) c says i see 3 blocks and 1 white. 
+    now find the caps weared by a,b,c,d and e 
+7) there are two women, kavitha and shamili and two males shyam, aravind 
+who are musicians. out of these four one is a pianist, one flutist, 
+violinist and drummer. 
+    i) across aravind beats pianist 
+   ii) across shyam is not a flutist 
+  iii) kavitha's left is a pianist 
+ iiii) shamili's left is not a drummer 
+ v)    flutist and drummer are married. 
+8) 1/3 ed of the contents of a container evaporated on the 1 st day. 
+   3/4 th of the remaining contents of the container evaporated the  
+   second day. what part of the contents of the container are left at 
+   the end of the second day. 
+9) a man covered 28 steps in 30 seconds but he decided to move fast and  
+covered 34 steps in 18 seconds. how many steps are there on the  
+escalator when stationary. 
+10)  all fair skinned, rich, handsome, muscular, lean and employed are  
+tall men 
+ 1) all lean men are muscular. 
+ 2) no fairskinned person who is not rich is handsome. 
+ 3) some muscular men are handsome. 
+ 4) all handsome are fairskinned. 
+ 5) no person who is neither fair skinned nor muscular is enplyed. 
+ 6)  we unable to recall this condition  and  question also incomplete. 
+------------------------------------------------------------------------ 
+

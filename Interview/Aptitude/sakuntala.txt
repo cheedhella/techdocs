@@ -1,0 +1,617 @@
+2.  Assume there are x minutes left to 6 o’clock. From 3 o’clock, there is 180 minutes left to 6 o’clock. 
+    So time now is 180-x minutes past 3 o’clock. Now 50 minutes ago, number of minutes past 3 o’clock = 180-x - 50. 
+    From question it is given, this is equal to 4x. Equating we get x= 26minutes.
+
+    it -> belongs to no. of minutes to 6 
+
+3.  x boys, y girls
+    x-1=y 
+    x=2(y-1)
+    solving, x=4, y=3
+
+5.  a=40 b=25
+    avg speed = 2ab/(a+b)
+
+7.  cycle + 50 = 350Rs.
+
+8.  nos can be upside down and still can be read are 0 1 6 8 9 
+    therefore, 169 , 196
+    so, bus no= 169
+
+21. let the no. of 1 paise coin be 6y 
+	then the no. of 2 paise coin will be y
+	let the no. of 5 paise coin be x
+	now the total value =6y+2y+5x=75
+	8y+5x=75=>y=5,x=7
+	hence , 30 one paise coins , 5 two paise coins & 7 five paise coin .
+
+23. So ur man's wife saved 10 mins.. this 10 mins was saved cause she avoided going till the station and avoided covering 
+    that distance again while coming back.. so in all 5 mins saved in going from X to station and again from station to X.. 
+    see below)
+
+	----------->
+	HOME---------------------- (point X)---------- STATION
+	<----------
+
+    As mentioned wife picks up husband @ station @ 6:00 ( regular days)... She asved 5 mins; 
+    thus picked up husband @ 5:55.. Since husband arrived at 5:00, 
+    he walks for 55 mins (till 5:55) before his wife picks him up..
+
+25. Let the no. of sons be s, no. of daughters be d
+      let the value given to aunt is A
+	then given to each daughter = 2A
+	then given to each son = 6A
+	total value =6A*s+2A*d+A=192,0000 = 2^6 * 3 * 10000
+	=>A(6s+2d+1)=2^6 * 3 * 10000
+	Now a keen observation will show us that , on LHS (6s+2d+1) will always be odd for any values of s or d.
+	and the only odd multiple on RHS is 3 .
+	hence 6s+2d+1 =3
+	for this to be s=0,d=1
+	putting these values in our eqn, we get A=64,0000.So the aunt will get 64 ,000
+
+27. Assume that the speed of the escalator is only x steps per second then the number of steps that the man can travel 
+    in both cases should be same.
+       26 + 30 x = 34 +18 x
+       X = 2/3
+
+28. No, it can't be done. Each rectangle covers 1 white square and 1 black square.
+    the 2 squares which we remove from the chess board are of same color. so, the 
+    remaining board has 2 more boxes left of 1 color than the other.
+
+30. Let the circumfrence of the hind wheel be C1 nd that of for wheel be C2,
+    let there be x no. of revolutions by hind wheel,
+    hence , C1*x=C2 * (x+4)=96
+    Now, in the 2nd case, let theno. of revolutions be y
+    hence, (4/3)C1*y = (3/2)C2 * (y+2)=96
+    from the two eqns, C1=12 , C2=8
+
+36.
+
+37. Let the total distance be S & there point of meet be x from bangalore
+    let speed of mine be Vm and that of girl be Vw
+    then , taking 12 o clock as the refrence time ,
+  	(x/Vm) =245 , (S-x)/Vw = 125
+    
+    Also , (S/Vm) =(S/Vw) + 120 [since we are reaching at the same time even when she started 120 mins late]
+    from these two eqns,
+	S^2 - 2Sx+ (24/49 )x^2 = 0
+	=>S = (12/7)x or (2/7)x
+    so , S=(12/7)x , since S>x
+    So, time take n by me to reah tumkur =(12/7) * 245 =420=7 hrs
+    since our refrence is 12 oclock ,therefore,
+    we both reach at 7 pm.
+
+38.
+
+39.
+
+
+41. 1st ->  take 1 wheelfrom each machine and add them.
+            if sum==10*weight of individual => machines are correct.
+           
+    2nd ->  else  machines are fault. To find out fault machine
+            take 1 machine from M1, 2 from M2 .....
+
+44. profit = 25/100 * orginal cost
+    => 43(x+y) - (32x + 40y) = 25/100 (32x+40y)
+    solving x=7, y=3
+
+46. xy+ yz+zx = 74  => 4,5,6
+
+50.  2000* (3/2)^n  here n=6
+
+55.    T      S
+      -----------
+       L      L
+       R      R
+       L
+       ---------
+       R      L
+       L      R
+       R
+       ---------
+       sequence repeated... they never step out right foot together.
+
+123. Hi, The correct solution is
+
+     6x+2y=15-------------(1)
+     14/x-9/y=4-----------(2)
+     by solving these 2 equations we get the right answer.
+
+
+
+
+
+
+
+assuming that m is my house number and total number of houses are n such that sum of house numbers to my left is 
+equal to sum of numbers to the right, applying this condition and solving for it, we'll get 2*m^2 = n(n+1).
+
+various values of m and n are (6, 8 ) ; (35,49) ; (204,288 ) ; (1189,1681) ; (6930,9800)
+more values can also be found for it by simplifying the relation.........
+how i found these values: --- for a hint 
+we can say that one of n or n+1 is a perfect square and other is 2 times a perfect square....
+try simplifying it.......
+
+
+
+
+
+
+Normal days d, and normally chicken are r, assume each chicken eats q qty of feed / day. So
+total feed = rqd.
+
+rqd = (r-75)*(d+20)q and rqd = (r+100) (d-15)q
+
+So, we get
+
+rd = rd-75d+20r-1500 => 20r-75d = 1500--- (1)
+and
+rd = rd+100d-15r-1500 => 100d-15r =1500----(2)
+
+From 1 & 2
+20r-75d = 100d-15r
+Here is the mistake. It should be 35 r = 175 d
+Hence r = 5d. Backsubstitution will give u 25 d = 1500 and d = 60. Hence r = 300.
+
+
+
+
+
+
+
+There were 2 systems A n B.14 degrees in A is equivalent to 36 in system B.and 133 in A is equivalent to 87 in B.
+now what is the temperature where they both r equal?
+For the first problem, we can write
+(A -- 14)/(133 -- 14) = (B--36)/(87-36)
+(A -- 14)/119 = (B--36)/51
+we will get 7B -- 3A = 210 which is the equation in terms of A and B. If A = B, then we get 4B = 210 and B = 52.5
+
+
+
+
+
+
+
+
+
+
+
+In a railway station, there are two trains going. One in the
+harbour line and one in the main line, each having a frequency of 10
+minutes. The main line service starts at 5 o'clock and the harbour line starts
+at 5.02A.M. A man goes to the station every day to catch the first
+train that comes. What is the probability of the man catching the first
+train?
+for each 10 min interval, if man comes in first 2 min, he'll catch the 1st train, if he comes in next 8 min, 
+he'll catch the 2nd train.
+hence for harbor line - (2/10) 0.2 and for main line 0.8.
+
+
+
+
+
+-------------------------------------------------
+
+1 Hectare = 2.471 acres
+1 Acre = 100 cents
+1 Cent = 435.6 sq. ft.
+
+1 Mile = 1760 yards
+1 Yard = 3 feet
+1 Foot = 12 inches
+1 inch = 2.54 cm
+
+1 kilometer = 1000 meter
+1 meter = 100 cm
+1 centimeter = 10 millimeter
+
+1 Hectare = 10,000 square meters
+1 Acre = 4047 square meters
+
+
+tera  - 10 ^ 12
+giga  - 10 ^ 9
+mega  - 10 ^ 6
+kilo  - 10 ^ 3
+
+deci  - 10 ^ -1
+centi - 10 ^ -2 
+milli - 10 ^ -3
+micro - 10 ^ -6
+nano  - 10 ^ -9
+pico  - 10 ^ -12
+
+
+
+
+
+
+The greatest events in the life aren't the loudest, but the quietest hours
+
+
+
+
+X,Y are standing at one end of the diameter of a circle with diameter 140m. C is standing at the other end.
+All of them start at the same time. X moves along the diameter and Y and C moves to meet each other along the circular path.
+
+i) If they all meet at a point at the same time, find how much distance is travelled by C if the X and Y travel with the same speed.
+
+ii) If X and Y travel at speeds in the ratio 2:1, and if they all meet at the same time, find after how many seconds, will they meet?
+
+iii) similar question to above....
+
+
+A hill of 440 yards is there. Two competitors JACK and JILL go up the hill, first JACK reaches the topmost and 
+immediatly starts back and meet JILL 20 yards from the topmost point. Finally JACK reaches the starting point 
+0.5 minutes earler than JILL. Speed while coming down is 1.5 times the speed of going up. Find the time taken 
+by JACK for whole journey (880 yards)?
+
+Ans: 6.3 minutes. 
+
+Let us take that A and B be the persons and Sa and Sb be their respective speed when they go uphill. 
+Then their downhill speeds will be 1.5 times of the uphill speed. We can form the 2 equations as below
+420 / Sb = 440/Sa + 20 /1.5Sa and (440/Sb+440/1.5Sb) -- (440/Sa+440/1.5Sa) =30 seconds and 
+solving we get Sb = 1.794 yards/sec and tb = 6.8 min and hence ta = 6.3 min.
+
+
+A contribution of Rs. 500 was raisedfrom 500 people. The fee was as follows:
+Men: Rs.3.00 each
+Women: Rs. 2.00 each
+Childern: 0.48 each
+If number of women is more than number of men, how many childern are there? 
+
+We can develop 2 equations as follows
+x + y + z = 500 and 3x + 2y + 0.48 Z = 500 We have two equations and 3 variables Hence we will have more than 1 solution. 
+Actually 2 solutions are possible
+1. x = 32, y = 118 and z = 350
+2. x= 70, y = 55 and z = 375 But the problem states that y > x. Hence solution 1 is right.
+
+
+A coin is so unbalanced that it may come both heads in 2 tosses as it may come tails in a single toss. 
+What is the probabality of getting a head in a single toss.
+
+let prob of head in a toss be p & of tail be q then ..p+q=1
+In two tosses probability of two heads is 2C0 *p^2*q^0= p^2
+given p^2=q (both heads in 2 tosses as it may come tails in a single toss)
+so p^2=1-p solving we get prob of a head in a single toss= p=( 5^0.5 -1 )/2
+
+
+
+There is an escalator and 2 persons move down it. A takes 50 steps and B takes 75 steps while the escalator is moving down.
+Given that the time taken by A to take 1 step is equal to time taken by B to take 3 steps. 
+Find the number of steps in the escalator while it is stationary.
+
+Let A takes t time for completing 1 step during which B completes 3 steps. Since A takes 50 steps, 
+the time needed will be 50t and similarly for b time needed will be 25 t. Hence we can make the equations 
+as keeping x as total number of steps
+(x -- 50) / 50t = (x--75)/25t which upon simplification will give that
+x -- 50 == 2x -- 150 and x= 100 steps.
+
+
+A child questions his father, "What is your father's age", to which the father answers 
+"He was aged X in year X^2 (X square) ". If the context is 20th Century, What is his Date of Birth?
+ In the year X^2, his age is X. In the 20th century, we have years from 1901 -- 2000. But among them 
+only perfect squarer is 1936. Hence in 1936, the age will be 1936^0.5 = 44. 
+Hence he must have born in 1936 -- 44 == 1892.
+
+One of the arms of a balance is longer than the other. If 1kg is kept on the left pan,it is equal to 8 water melons.
+If the 1kg is kept on a a right pan, it is equal to 2 water melons on right. If the weight of all the watermelons are sam,
+what is the weight of the water melon?
+What i think is that the sum total of 10
+(8+2) watermelons is equal to 2kgs(1+1). So the weight of individual watermelons would be 2kgs/10 which is equal to 200 gms.
+Here we should consider that the square root of the product of the two given numbers is what equals the weight given. 
+(ie) sqrt of 8*2 = 4 which is the number of water melons whose weight equals 1 kg and 
+hence each watermelon will weigh 250 grams only.
+
+
+
+Players were playing a card game. Cards had different colours on both sides. Neither of cards had same colour on both sides. 
+Colours were 2 Red, 2 Blue, 2 Green, 2 Yellow. Cards were lying in front of each player. Now, each player knew the colour 
+on other side of his card. They are required to tell their colour.
+Statement given by each of them was :
+Annie : Blue or Green
+Bobby : Neither Blue nor Green
+Cindy : Blue or Yellow
+Danny : Blue or Yellow
+Colours of cards that are visible to all were Red, Blue, Green, Blue in order of their names. Exactly two of them are 
+telling truth and exactly two of them are lieing. Can you tell the colour on other face of card for each player ?
+
+There is a train from NY to Washington every 1/2 hr
+and 1 hr. there is a train from Washington to NY
+every 1 hr. (constant speed assumed) it takes 5 hrs
+from NY to Washington and 5 hrs. to come back.
+On your way from Washington to NY, how many trains
+will cross you?
+Just assume that u start from washigton at 10. Then the train started from NY at 5 will exactly reach Washington 
+provided there is no time delay in between. This is the first train . Similarly u will reach NY at 3 pm. So in the 
+mean time u will see trains coming from opposite . (ie) from the trainstarted at 5 to the train that will start at 2.30 . 
+Hence the number of trains u will meet will be (14.30 -- 5.00) /2 = 19. Hence 19 is the right choice.
+
+A lorry starts from Banglore to Mysore at 6.00 A.M, 7.00 A.M, 8.00
+am.....10 pm. Similarly one another starts from Mysore to Banglore at 6.00
+am,7.00 am, 8.00 am.....10.00pm. A lorry takes 9 hours to travel from Banglore
+to Mysore and vice versa.
+(i) A lorry which has started at 6.00 am will cross how many lorries. Ans: 10.
+(ii) A lorry which had started at 6.00pm will cross how many lorries. Ans: 14(14 is given but i got13).
+
+first problem
+=================
+(i have assumed that the concerned lorries are starting from bangalore)
+
+1)If a lorry has started at 6 a.m it will reach its destination at 3pm.
+thus it will meet the lorries which have started their journey from mysore from 6 am till 3 pm i.e 10 lorries.......but the lorries which had started their journey from mysore at 9 pm and 10 pm( the prev day) will also reach b'lore at 6 am and 7 am respectively....and which come across the lorry...thus according to me the no of lorries crossing it should be 12.....correct me plz...i might be wrong
+
+2)A lorry which has started it journey at 6 p.m from bangalore will come across the following lorries:-
+The concerned lorry starting from b'lore at 6 pm will reach mysore at 3am.
+
+a lorry starting at 9 am from mysore will reach b'lore at 6 pm
+
+thus the lorries starting from mysore at
+9 am,10 am,11 am,12 pm,1 pm,2 pm,3pm ,4pm,5 ,m,6 pm,7 pm,8 pm,9 pm,10 pm
+will all cross the concerned lorry.
+
+Thus the no of lorries =14
+
+second problem
+(i m considering that the train is starting off from bangalore towards madras)
+==================
+when the train will start its journey from b'lore it will come across the train which has started its journey from madras 5 hours ago.it will reach madras after 5 hours .but when it reaches the madras station it wud stop and its journey wud be over.So even if it meets a train which must starting off from madras ,we won't consider it as its journey is already over and in the question it has been asked to give the no of trains that is coming across during its journey.
+so according to me the answer is 10
+(5 hours ago+4 ago+3+2+1+at the time the train started+1 hour later+2 later+3 later +4 later)
+
+--------
+1)
+a)
+the bus goin at 6 am will cross the buses starting at 10 pm the previous night, nd then starting from 6 am to 2pm from the other side ... since the question asks about crossing and not meeting we wont consider the buses when this bus starts it journey and when it ends the journey. means the bus starting at 3 pm from other side should not be taken into consideration as well as the bus reachin at 6 am while that bus's start of journey ,also should not be taken into consideration....
+hence total buses it passes will be 1+9=10
+
+b)
+similarly,
+the buses from 10 am to 10 pm starting from the other side wiill cross the bus starting from the other end. We will again ignore the bus which is reachin at 6 pm towards the starting point as the question asks about the buses crossed.
+hence the ans would be 13 buses
+
+2)
+Again let us consider a train starting at 6 am.
+But here we have to keep in mind that it asks about meeeting and not crossing of trains .hence after this train reaches on the other side at 11 am it will meet the train staring at 11 am from the other side also.but while plying from its starting point we dont consider a meeting wid the train arriving at 6 am from the point of start, since the journey has not yet started.
+so , it will meet trains which start at,2am to 11 am...
+
+hence the total number of trains met by any one train will be 10..
+
+
+
+
+
+
+
+There are 9 coins. Out of which one is odd one i.e. weight is less or more. 
+How many iterations of weighing are required to find odd coin? the answer given is 3
+
+Lets divide the coins in group of 3 each ...
+Now since we dont know whether the defective coin is heavier or lighter.So, we take the first 2 groups of three coins and weigh them on a pan balance ..keep each group on either side.
+
+Now there may be two cases ...
+
+Case1: if the balance shows inequality on both sides ..its for
+sure that either of these groups has the defective coin.We also take into account that which pan of the balance goes up nd which goes down...(important ) .....(a)
+now we take any one group out of this and weigh it with the left third group.
+if the balance shows equality then the defective coin was in the other group which we weighed earlier.
+or if there is inequality it means the defective coin is in the group common to both the weighing cases we have taken ..
+So till now we have considered just 2 steps.
+Now after knowing which group of 3 coins has the defective one ...
+we will finally take any 2 coins out of the reamining 3 ..nd weigh them ...
+if the weight is equal ...then the 3rd coin left is defective . if the weight is unequal .then we see that which side of the pan has gone up and which has gone down.........(b)
+now considering the points (a) and (b)
+we can easily know the defective coin nd whether it is heavier or lighter ...
+This was the worst case scenario .and it took 3 steps to determine the defective coin as well as the fact that whether it was heavier or lighter .
+Case2: If the result of weighing first two groups shows equality by the balance ..then the defective coin is in third group..
+now since from the previous weighing we dont get an idea whether the coin is lighter or heavier ..
+we have to perform two more steps in weighing the remaining three coins which wud perfectly determine the defective coin and whether it is heavier or lighter than the rest coins ...
+in the left 3 coins we take any 2...
+Case2.1)
+if the weight is equal the defective coin is the third ...we can know here the defective coin in only two steps but we cud not determine whether it was heavy or light..
+so one more step by weighing the defective coin with one of the equal coins wud determine if the defective coin is heavier or lighter ..although the question doesnt aske us to determine the lightness or heaviness of the coin to be found...
+Case2.2)
+If by weighing any two coins in the left lot we get inequality. we again weigh one of these two coins with the third one keepin g in mind which side of the pan balance went up and which side went down in the previous weighing.
+then in these two steps plus the previous step we wud know that which is the defective coin and is it heavier or lighter..
+hence in total 3 iterative steps required ...
+
+
+There are 6561 balls out of them 1 is heavy.Find the min. no. of times the balls have to be weighed for finding out the haevy ball.
+the answer is 8...acc to ur method it shd b 9 isnt it
+See, the correct answer wud be 8 onlyand not 9 ...Since her its mentioned that the defective one is "heavier".
+
+
+
+
+
+Sam and Mala have a conversation.
+
+    * Sam says I am certainly not over 40
+    * Mala says I am 38 and you are atleast 5 years older than me
+    * Now Sam says you are atleast 39
+
+All the statements by the two are false. How old are they really?
+Answer
+
+Sam is 41 and Mala is 37.
+
+Let's invert the teaser and read it like this :
+
+    * Sam says I am certainly over 40
+    * Mala says I am not 38 and you are atmost 4 years older than me
+    * Now Sam says you are atmost 38
+
+From first statement it is clear that Sam is over 40. Also, from next 2 statements it is clear that Mala is less then 38. Hence the possibilities are :
+Sam = 41, 42, 43, 44, 45, ......
+Mala = 37, 36, 35, 34, 33, ......
+
+It also says that the difference between their age is maximum 4 years. Hence, there is only one possible pair i.e. 41 and 37, all other combination have differences more then 4.
+
+Hence the answer - Sam is 41 and Mala is 37.
+
+
+
+
+In a railway station, there are two trains going.
+One in the harbour line and one in the main line, each having a frequency of 10 minutes.
+The main line service starts at 5 o'clock and the harbour line starts at 5.02A.M.
+A man goes to the station every day to catch the first train that comes.
+What is the probability of the man catching the main line train?
+
+if he arrives between 5:00 and 5:02 he will take the harbor line train.
+if he arrives between 5:02 and 5:10 he will take the main line train.
+
+so probability = 8/10 = 0.8
+
+
+
+
+the combined ages of reena and seena are 44 and reena is twice as old as seena was then reena was half as old as seena 
+will be when seena is 3 times as old as reena was when reena was 3 times as old as seena.how old is reena?
+Let the present age of reena be r and seena be s
+Then r+s=44 ---(1)
+
+Now we will go srep by step as prob goes .....
+
+reena is twice as old as seena was
+
+lets consider x years back from now ......
+
+then , r=2(s-x) ---(2)
+
+when reena was half as old as seena will be
+
+lets consider y years ahead from now
+
+then , r-x = (s+y)/2 ........(3)
+
+when seena is 3 times as old as reena was
+
+lets consider z years back from now ......
+
+(s+y) = 3(r-z) ...........(4)
+
+when reena was 3 times as old as seena
+
+(r-z)=3(s-z) .................(5)
+
+Solving all these eqns we get ,
+s=16.5
+r=27.5
+
+
+
+i have 3 squre boards,the surface of the first containing 5 sqr feet more than the second and the second containing 
+five sqr feet more than the third.can u find the exact measurement for the sides of the board.
+Let the three square surfaces have areas a+10, a+5 and a respectively ...
+
+Now area of a sqaure surface is given by 6 (L^2)
+
+So, Lx^2 = (a+10)/6
+Ly^2 = (a+5)/6
+Lz^2 = (a)/6
+
+its clear that since all the areas are at a difference of 5 from each of the previous ......
+Hence , sqaure of sides of all surfaces cant be an integer .....(as the increment is not by multiple of 6 )
+So, we can have many values of areas and also corresponding sides .....
+So, we cant determine the exact measurement of thelength of a side ........
+
+
+
+
+
+The solution wud be in powers of 3 ..ie 3^0 , 3^! , 3^2 ,3^3 , 3^4 ..we dont require the 6th weight nor we can have less than 5 weights .
+
+
+we can obtain..
+1 itself
+3-1=2
+3 itself
+3+1=4
+9-3-1=5
+9-3=6
+9-3+1=7
+9-1=8
+9+1=10
+9+3-1=11
+9+3=12
+9+3+1=13
+27-9-3-1=14
+.
+.
+.
+.
+.
+.
+27+9+3+1=40
+81-27-9-3-1=41
+81-27-9-3 =42
+.
+.
+.
+.
+.
+.
+.
+81+27+9+3=120
+So this way we effectively used only 5 weightz viz, 1,3,9,27,81
+
+Now suppose if we had to weigh in such a weigh that we can only add weight and never reduce weight ,
+then ,
+the weights required wud be in the powers of 2
+like
+1,2,4,8,16,32 .....and so on.....
+this u will get similarly as i have shown above ..
+
+
+
+After gathering 770 chestnuts, three girls divided them up so that amounts were in the same proportion as their ages. 
+As often as mary took four chestnuts, nelli took three, and for every six that mary received, Susie took seven. 
+How many chestnuts did each girl get ?
+
+
+Soln:
+
+
+Let mary take m , nellie take n and susie take s chestnuts ...
+
+then , m : n =4:3 = 12:9
+
+and , s : m = 7:6 = 14:12
+
+therefor, s : m : n = 14 : 12 :9
+
+so susie got (14/35) *770 =308
+
+mary got =264
+
+and nellie =198
+
+
+Three neighbors are there. 1st one lends 2nd and 3rd that many no. of tractors that then already each had. After few months, 2nd lends to 1st and 3rd that many tractors then they had. After a few months 3rd lends to 1st and 2nd that many tractors then they had. Now each of them got 24. Find how many they had initially?
+the liner equations method will be long and time consuming.
+work it the other way.
+
+The guys end up with 24 each.
+Step 1 = A gives B and C
+Step 2 = B gives A and C
+Step 3 = C gives A and B
+
+after step 3
+24, 24, 24 (A, B, C)
+before step 3 (or) after step 2
+just take half of what A and B have and add it to C
+12, 12, 48 (A, B, C) (50% of A and B's tractors comes from C)
+before step 2 (or) after step 1
+6, 42, 24 (A, B, C) (same explanation)
+before step 1 (or) during start of problem
+39, 21, 12 (same explanation)
+
+
+
+
+
+
+
+

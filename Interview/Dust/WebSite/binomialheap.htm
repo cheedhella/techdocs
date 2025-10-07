@@ -1,0 +1,465 @@
+<html>
+<head><title>Binomial Heaps</title></head>
+<body background="./pics/Bck2.gif"><h2>1. Binomial Heaps</h2><p>
+</p>
+
+A Binomial heap is a collection of binomial trees, so this section
+starts by defining binomial trees and proving some key properties. We then
+define binomial heaps and show how they can be represented.</p>
+
+<h3>Binomial trees</h3><p>
+The <i>binomial tree B<sub>k</sub> </i>is an ordered tree defined
+recursively. As shown in Figure 1(a), the binomial tree B<sub>0</sub> consists of a single
+node. The binomial tree <i>B<sub>k</sub></i> consists of two binomial trees <i>B<sub>k-1</sub></i>
+that are <i>linked </i>together: the root of one is the leftmost <i>child</i>
+of the root of the other. Figure 1(b) shows the binomial trees B<sub>0</sub> through B<sub>4</sub>.</p><p>
+</p><p>
+Some properties of binomial trees are given by the following lemma.</p><p>
+</p><p>
+<i>Lemma 1 (Properties of binomial trees)</i></p><p>
+For the binomial tree <i>B<sub>k</sub></i>,
+</p><ol>
+<li>there are 2<sup>k</sup> nodes,
+</li><li>the height of the tree is <i>k</i>,
+</li><li>there are exactly 
+<img src="binomialheap_files/bhtext1.GIF">nodes at depth <i>i</i> for <i>i</i> = 0,1,... ,<i>k</i>, and
+</li><li>the root has degree <i>k</i>, which is greater than that of any other node;
+moreover if the children of the root are numbered from left to right by
+<i>k</i> - l, <i>k</i> - 2, ..., 0 child <i>i</i> is the root of a subtree B<sub>i</sub>.
+</li></ol>
+<p>
+<i>Corollary 2</i></p><p>
+The maximum degree of any node in an n-node binomial tree is lg
+<i>n</i>.</p><p>
+The term "binomial tree" comes from property 3 of Lemma 1, since the terms 
+<img src="binomialheap_files/bhtext2.GIF">
+are the binomial coefficients.</p><p>
+</p><p>
+</p><h3>Binomial heaps</h3><p>
+A<i> <b>binomial heap</b> H </i>is a set of binomial trees that
+satisfies the following <i><b>binomial-heap properties</b>.</i></p><p>
+</p><ol>
+<li> Each binomial tree in <i>H</i> is <i><b>heap-ordered</b></i>:
+the key of a node is greater than or equal to the key of its parent.
+</li><li> There is at most one binomial tree in <i>H</i> whose root has a given
+degree.
+</li></ol>
+The first property tells us that the root of a heap-ordered tree contains the
+smallest key in the tree.<p>
+</p><hr><p>
+<img src="binomialheap_files/bhtext3.GIF">
+</p><p>
+</p><h4><b>Figure 1</b> (a) The recursive definition of the binomial tree <i>B<sub>k</sub>.
+</i>Triangles represent rooted subtrees. (b) The binomial trees B<sub>0</sub> through B<sub>4</sub>.
+Node depths in B<sub>4</sub> are shown. (c) Another way of looking at the binomial tree
+<i>B<sub>k</sub>.</i>
+</h4>
+<p>
+</p><hr>
+<p>
+	The second property implies that an <i>n</i>-node binomial heap
+<i>H</i> consists of at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 1 binomial trees. To see why,
+observe that the binary representation of <i>n</i> has <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 1 bits,
+say (b<sub><img src="binomialheap_files/l_floor.gif" align="middle">lg <i>n</i><img src="binomialheap_files/r_floor.gif" align="middle"></sub>, b<sub><img src="binomialheap_files/l_floor.gif" align="middle">lg <i>n</i><img src="binomialheap_files/r_floor.gif" align="middle">-1</sub>, ..., b<sub>0</sub>)
+, so that <i>n</i> = <img src="binomialheap_files/bhtext4.GIF">.
+By property 1 of Lemma 1, therefore, binomial tree B<sub>i</sub> appears in <i>H</i> if
+and only if bit b<sub>i</sub> = 1. Thus, binomial heap <i>H</i> contains at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 1 binomial trees.</p><p>
+	Figure 2 shows a binomial heap <i>H</i> with 13 nodes. The binary
+representation of 13 is (1101), and <i>H</i> consists of heap-ordered binomial
+trees B3, B2, and B0, having 8, 4, and 1 nodes respectively, for a total of 13
+nodes.</p><p>
+	As Figure 2 also shows, the roots of the binomial trees within a binomial heap
+are organized in a linked list, which we refer to as the <b><i>root
+list.</i></b> The degrees of the roots strictly increase as we traverse
+the root list. By the second binomial-heap property, in an <i>n</i>-node
+binomial heap the degrees of the roots are a subset of {0, 1, ... <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif"> }. The
+<i>sibling </i>field has a different meaning for roots than for nonroots. If
+<i>x</i> is a root, then <i>sibling</i>[<i>x</i>] points to the next root in
+the root list. (As usual, <i>sibling</i>[<i>x</i>] = NIL if <i>x</i> is the
+last root in the root list.)</p><p>
+</p><p>
+</p><hr><p>
+<img src="binomialheap_files/bhtext5.GIF"></p><p>
+</p><p>
+
+</p><h4><b>Figure 2  </b>A binomial heap H with n = 13 nodes. The heap consists
+of binomial trees B<sub>0</sub>, B<sub>2</sub>, and B<sub>3</sub>, 
+which have 1, 4, and 8 nodes respectively,
+totaling <i>n </i>= 13 nodes. Since each binomial tree is heap-ordered, the key
+of any node is no less than the key of its parent. Also shown is the root list,
+which is a linked listof roots in order of increasing degree.<p>
+</p></h4>
+<p>
+</p><hr>
+<p>
+	A given binomial heap <i>H</i> is accessed by the field
+<i>head</i>[<i>H</i>]<i>, </i>which is simply a pointer to the first root in
+the root list of <i>H</i>. If binomial heap <i>H</i> has no elements, then
+<i>head</i>[<i>H</i>]<i> </i>= NIL<i>.</i></p><p>
+</p><p>
+
+</p><h2>2 Properties of binomial heaps</h2><p>
+Binomial heaps support the following operations:</p><p>
+MAKE-HEAP() creates and returns a new heap containing no elements.</p><p>
+INSERT(<i>H</i>, <i>x</i>) inserts node <i>x</i>, whose <i>key </i>field has
+already been filled in, into heap <i>H</i>.</p><p>
+MINIMUM(<i>H</i>) returns a pointer to the node in heap <i>H</i> whose
+<i>key</i> is minimum.</p><p>
+EXTRACT-MIN(<i>H</i>) deletes the node from heap <i>H</i> whose <i>key</i> is
+minimum, returning a pointer to the node.</p><p>
+UNION(<i>H</i>1, <i>H</i>2) creates and returns a new heap that contains all
+the nodes of heaps <i>H</i>1 and <i>H</i>2. Heaps <i>H</i>1 and <i>H</i>2 are
+"destroyed" by this operation.</p><p>
+</p><hr>
+<p>
+</p><pre>			Binary heap  	Binomial heap  
+<u>Procedure		(worst-case)	(worst-case)	</u>
+MAKE-HEAP		<img src="binomialheap_files/theta.gif">(1)		<img src="binomialheap_files/theta.gif">(1)	
+INSERT			<img src="binomialheap_files/theta.gif">(lg <i>n</i>) 		<i>O</i>(lg <i>n</i>)
+MINIMUM			<img src="binomialheap_files/theta.gif">(1)		<i>O</i>(lg <i>n</i>)	
+EXTRACT-MIN		<img src="binomialheap_files/theta.gif">(lg <i>n</i>)<i>		</i><img src="binomialheap_files/theta.gif">(lg <i>n</i>)		
+UNION 			<img src="binomialheap_files/theta.gif">(<i>n</i>)		<i>O</i>(lg <i>n</i>)
+</pre>
+<p>
+
+</p><h4><b>Figure 3  </b>Running times for operations on two implementations
+of mergeable heaps. The number of items in the heap(s) at the time of an
+operation is denoted by <i>n</i>.</h4>
+<p>
+</p><hr>
+<pre>
+<p>As the table in Figure 3 shows, 
+
+if we don't need the UNION operation, ordinary binary heaps, as used in heapsort, work well. 
+Operations other than UNION run in worst-case time <i>O</i>(lg <i>n</i>)--or better--on a binary heap. 
+
+If the UNION operation must be supported, however, binary heaps perform poorly. 
+By concatenating the two arrays that hold the binary heaps to be merged and then
+running HEAPIFY, the UNION operation takes <img src="binomialheap_files/theta.gif">(<i>n</i>) time in the worst case.</p><p>
+
+In this chapter, we shall examine "binomial heaps," whose worst-case time
+bounds are also shown in Figure 3.  In particular, the UNION operation takes
+only <i>O</i>(lg <i>n</i>) time to merge two binomial heaps with a total of
+<i>n</i> elements.</p><p>
+	This chapter ignores issues of allocating nodes prior to insertion and freeing
+nodes following deletion. We assume that the code that calls the heap
+procedures handles these details.</p><p>
+Binary heaps and binomial heaps are both inefficient in their support of the
+operation SEARCH<b>; </b>it can take a while to find a node with a given key.
+Section 3 shows how we can implement operations on binomial heaps in the time
+bounds given in Figure 3.</p><p> 
+</p><p>
+</pre>
+
+</p><h2>3 Operations on binomial heaps</h2><p>
+In this section, we show how to perform operations on binomial heaps in
+the time bounds shown in Figure 3. We shall only show the upper bounds.</p><p>
+</p><p>
+</p><h3>Creating a new binomial heap</h3><p>
+To make an empty binomial heap, the MAKE-BINOMIAL-HEAP procedure
+simply allocates and returns an object <i>H</i>, where <i>head</i>[<i>H</i>] =
+NIL<i>.  </i>The running time is <i>O</i>(1).</p><p>
+<pre><b>Make-Binomial-Heap</b>()
+<i>head</i>[<i>H</i>] = NIL
+<b>return</b> <i>H</i>
+</pre>
+</p>
+
+<p>
+</p><h3>Finding the minimum key</h3><p>
+The procedure BINOMIAL-HEAP-MINIMUM returns a pointer to the node
+with the minimum key in an n-node binomial heap <i>H</i>. This implementation
+assumes that there are no keys with value <img src="binomialheap_files/infinity.gif">.</p><p>
+</p><p>
+</p><pre>BINOMIAL-HEAP-MINIMUM(<i>H</i>)
+1 	<i>y</i> &lt;- NIL
+2	<i>x</i> &lt;- <i>head</i>[<i>H</i>]
+3	min &lt;- <img src="binomialheap_files/infinity.gif">
+4<b>	while</b> <i>x</i> != NIL
+5<b>		do if </b><i>key</i>[<i>x</i>] &lt; min
+6			<b>then </b>min &lt;- <i>key</i>[<i>x</i>]
+7				<i>y</i> &lt;-<i>x</i>
+8			<i>x</i> &lt;- <i>sibling</i>[<i>x</i>]
+9<b>	return</b> <i>y</i>
+</pre>
+<p>
+Since a binomial heap is heap-ordered, the minimum <i>key</i> must
+reside in a root node. The BINOMIAL-HEAP-MINIMUMprocedure checks all
+roots, which number at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 1, saving the current minimum in
+min and a pointer to the current minimum in <i>y</i>. When called on the
+binomial heap of Figure 2, BINOMIAL-HEAP-MINIMUM returns a pointer to
+the node with key 1. Because there are at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 1 roots to
+check, the running time of BINOMIAL-HEAP-MINIMUM is <i>O</i>(lg
+<i>n</i>).</p><p>
+</p><p>
+</p><h3>Uniting two binomial heaps</h3><p>
+The operation of uniting two binomial heaps is used as a subroutine by
+most of the remaining operations. The BINOMIAL-HEAP-UNION procedure repeatedly
+links binomial trees whose roots have the same degree. The following procedure
+links the <i>B</i><sub>k-1</sub> tree rooted at node <i>y</i> to the <i>B</i><sub>k-1</sub>
+tree rooted at node <i>z</i>; that is, it makes <i>z</i> the parent of
+<i>y</i>. Node <i>z</i> thus becomes the root of a <i>B</i><sub>k</sub>tree.</p><p>
+</p><p>
+</p><pre>BINOMIAL-LINK(<i>y</i>, <i>z</i>)
+1	<i>p</i>[<i>y</i>] &lt;- <i>z</i>
+2	<i>sibling</i>[<i>y</i>] &lt;-child[<i>z</i>]
+3	<i>child</i>[<i>z</i>] &lt;- y
+4	<i>degree</i>[<i>z</i>] &lt;- <i>degree</i>[<i>z</i>] + 1
+</pre>
+<p>
+The BINOMIAL-LINK procedure makes node <i>y</i> the new head of the
+linked list of node <i>z</i>'s children in <i>O</i>(1) time. It works because
+the left-child, right-sibling representation of each binomial tree matches the
+ordering property of the tree: in a <i>B</i><sub>k</sub> tree, the leftmost
+<i>child</i> of the root is the root of a <i>B</i><sub>k-1</sub> tree.</p><p>
+	The following procedure unites binomial heaps <i>H</i><sub>1</sub> and 
+<i>H</i><sub>2</sub>,
+returning the resulting heap. It destroys the representations of <i>H</i><sub>1</sub> and
+<i>H</i><sub>2</sub> in the process. Besides BINOMIAL-LINK, the procedure uses an
+auxiliary procedure BINOMIAL-HEAP-MERGEthat merges the root lists of
+<i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> into a single linked list that is sorted by degree into
+monotonically increasing order.</p><p>
+</p><p>
+<b>Note: This section is very wide--expand your window until you can see the comments
+on the right side about the Case being tested.</b></p><p>
+</p><pre>BINOMIAL-HEAP-UNION(<i>H</i>1, <i>H</i>2)
+1	<i>H</i> &lt;- MAKE-BINOMIAL-HEAP()
+2	<i>head</i>[<i>H</i>] &lt;- BINOMIAL-HEAP-MERGE(<i>H</i>1,<i>H</i>2)
+3	free the objects <i>H</i>1 and <i>H</i>2 but not the lists they point to
+4<b>	if </b><i>head</i>[<i>H</i>] = NIL
+5		<b>then return </b><i>H</i>
+6<b>	</b><i>prev-x</i> &lt;- NIL
+7	<i>x</i> &lt;- <i>head</i>[<i>H</i>]
+8	<i>next-x</i> &lt;- <i>sibling</i>[<i>x</i>]
+9<b>	while </b><i>next-x</i> != NIL
+10	<b>do if </b>(<i>degree</i>[<i>x</i>] != <i>degree</i>[<i>next-x</i>]) or
+			(<i>sibling</i>[<i>next-x</i>] != NIL
+			and <i>degree</i>[<i>sibling</i>[<i>next-x</i>]] =<i>degree</i>[<i>x</i>])
+11		<b>then </b><i>prev-x</i> &lt;- <i>x</i>  					&gt; Cases 1 and 2 
+12			<i>x</i> &lt;- <i>next-x</i> 					&gt; Cases 1 and 2 
+13		<b>else if </b><i>key</i>[<i>x</i>] &lt;= <i>key</i>[<i>next-x</i>]
+14			<b>then </b><i>sibling</i>[<i>x</i>] &lt;- <i>sibling</i>[next-x]		&gt; Case 3 
+15				BINOMIAL-LINK(<i>next-x</i>, <i>x</i>)<b>		</b>&gt; Case 3 
+16			<b>else if </b><i>prev-x</i> = NIL				&gt; Case 4 
+17				<b>then </b><i>head</i>[<i>H</i>] &lt;- <i>next-x</i> 			&gt; Case 4 
+18				<b>else </b><i>sibling</i>[prev-x] &lt;- <i>next-x</i> 		&gt; Case 4 
+19				BINOMIAL-LINK(<i>x</i><b>, </b>next-x)		&gt; Case 4 
+20				<i>x</i> &lt;- <i>next-x</i> 				&gt; Case 4 
+21		<i>next-x</i> &lt;- <i>sibling</i>[<i>x</i>]
+22	return <i>H</i>
+</pre>
+Figure 4 shows an example of BINOMIAL-HEAP-UNION in which all four cases given
+in the pseudocode occur.<p>
+</p><hr><p>
+<img src="binomialheap_files/bhtext6.GIF">
+<img src="binomialheap_files/bhtext7.GIF"></p><p>
+</p><h4><b>Figure 4  </b>The execution of BINOMIAL-HEAP-UNION.  (a) Binomial heaps
+<i>H</i><sub>1</sub> and <i>H</i><sub>2</sub>. (b) Binomial heap <i>H</i> is the output of
+BINOMIAL-HEAP-MERGE(<i>H</i><sub>1</sub>,<i>H</i><sub>2</sub>). Initially, <i>x</i> is the first root
+on the root list of H. Because both <i>x</i> and <i>next-x </i>have degree 0
+and <i>key</i>[<i>x</i>]<i> &lt; key</i>[<i>next-x</i>]<i>, </i>case 3 applies.
+(c) After the link occurs, <i>x</i> is the first of three roots with the same
+degree, so case 2 applies. (d) After all the pointers move down one position in
+the root list, case 4 applies, since <i>x</i> is the first of two roots of
+equal degree. (e) After the link occurs, case 3 applies. (f) After another
+link, case 1 applies, because <i>x</i> has degree 3 and <i>next-x has degree 4.
+</i>This iteration of the while loop is the last, because after the pointers
+move down one position in the root list, <i>next-x = </i>NIL.</h4><p>
+</p><hr>
+<p>
+	The BINOMIAL-HEAP-UNION procedure has two phases. The first phase,
+performed by the call of BINOMIAL-HEAP-MERGE, merges the root lists of
+binomial heaps <i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> into a single linked list <i>H</i> that
+is sorted by degree into monotonically increasing order. There might be as many
+as two roots (but no more) of each degree, however, so the second phase links
+roots of equal degree until at most one root remains of each degree. Because
+the linked list <i>H</i> is sorted by degree, we can perform all the link
+operations quickly.</p><p>
+	In detail, the procedure works as follows. Lines 1-3 start by merging the root
+lists of binomial heaps <i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> into a single root list
+<i>H</i>. The root lists of <i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> are sorted by strictly
+increasing degree, and BINOMIAL-HEAP-MERGE returns a root list <i>H</i>
+that is sorted by monotonically increasing degree. If the root lists of
+<i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> have <i>m</i> roots altogether, BINOMIAL-HEAP-MERGE<b>
+</b>runs in <i>O</i>(<i>m</i>) time by repeatedly examining the roots at
+the heads of the two root lists and appending the root with the lower degree to
+the output root list, removing it from its input root list in the process.</p><p>
+	The BINOMIAL-HEAP-UNION procedure next initializes some pointers into the root
+list of <i>H</i>. First, it simply returns in lines 4-5 if it happens to be
+uniting two empty binomial heaps. From line 6 on, therefore, we know that
+<i>H</i> has at least one root. Throughout the procedure, we maintain three
+pointers into the root list:</p><p>
+</p><ul>
+<li><i>x</i> points to the root currently being examined,<p>
+</p></li><li>.<i>prev-x </i>points to the root preceding <i>x</i> on the root list:
+<i>sibling</i>[<i>prev-x</i>]<i> = x, </i>and<p>
+</p></li><li><i> next-x </i>points to the root following <i>x</i> on the root list:
+<i>sibling</i>[<i>x</i>] = <i>next-x.</i><p>
+</p></li></ul>
+Initially, there are at most two roots on the root list <i>H</i> of a
+given degree: because <i>H</i><sub>1</sub> and <i>H</i><sub>2</sub> were binomial heaps, they each
+had only one root of a given degree. Moreover, BINOMIAL-HEAP-MERGE<b>
+</b>guarantees us that if two roots in <i>H</i> have the same degree, they are
+adjacent in the root list.<p>
+	In fact, during the execution of BINOMIAL-HEAP-UNION, there may be three roots
+of a given degree appearing on the root list <i>H</i> at some time. We shall
+see in a moment how this situation could occur. At each iteration of the<b>
+while </b>loop of lines 9-21, therefore, we decide whether to link <i>x</i> and
+<i>next-x </i>based on their degrees and possibly the degree of
+<i>sibling</i>[<i>next-x</i>]<i>. </i>An invariant of the loop is that each
+time we start the body of the loop, both <i>x </i>and <i>next-x </i>are
+non-NlL.</p><p>
+	Case 1, shown in Figure 5(a), occurs when <i>degree</i>[<i>x</i>]<i> </i>!=<i>
+degree</i>[<i>next-x</i>]<i>, </i>that is, when <i>x</i> is the root of a
+B<sub>k</sub>-tree and <i>next-x i</i>s the root of a B<sub>l</sub>-tree for some <i>l</i> &gt;
+<i>k</i>. Lines 11-12 handle this case. We don't link <i>x</i> and <i>next-x,
+</i>so we simply march the pointers one position further down the list.
+Updating <i>next-x </i>to point to the node following the new node <i>x</i> is
+handled in line 21, which is common to every case.</p><p>
+	Case 2, shown in Figure 5(b), occurs when <i>x</i> is the first of three roots
+of equal degree, that is, when <i>degree</i>[<i>x</i>]<i> =
+degree</i>[<i>next-x</i>]<i> =
+degree</i>[<i>sibling</i>[<i>next-x</i>]]<i>.</i> We handle this case in the
+same manner as case 1: we just march the pointers one position further down the
+list. Line 10 tests for both cases 1 and 2, and lines 11-12 handle both
+cases.</p><p>
+	Cases 3 and 4 occur when <i>x</i> is the first of two roots of equal degree,
+that is, when<i> degree</i>[<i>x</i>]<i> = degree</i>[<i>next-x</i>] !=
+<i>degree</i>[<i>sibling</i>[<i>next-x</i>]]<i>.</i> These cases may occur on
+the next iteration after any case, but one of them always occurs immediately
+following case 2. In cases 3 and 4, we link <i>x</i> and <i>next-x. </i>The two
+cases are distinguished by whether <i>x</i> or <i>next-x </i>has the smaller
+<i>key</i>, which determines the node that will be the root after the two are
+linked.</p><p>
+	In case 3, shown in Figure 5(c), <i>key</i>[<i>x</i>] &lt;=
+<i>key</i>[<i>next-x</i>], so <i>next-x </i>is linked to <i>x</i>. Line 14
+removes <i>next-x </i>from the root list, and line 15 makes <i>next-x </i>the
+leftmost child of <i>x</i>.</p><p>
+<b>	</b>In case 4, shown in Figure 5(d), <i>next-x </i>has the smaller key, so
+<i>x</i> is linked to <i>next-x. </i>Lines 16-18 remove <i>x</i> from the root
+list, which has two cases depending on whether <i>x</i> is the first root on
+the list (line 17) or is not (line 18). Line 19 then makes <i>x</i> the
+leftmost child of <i>next-x, </i>and line 20 updates <i>x</i> for the next
+iteration.</p><p>
+	Following either case 3 or case 4, the setup for the next iteration of the
+while loop is the same. We have just linked two B<sub>k</sub>-trees to form a B<sub>k+1</sub>- tree,
+which <i>x </i>now points to. There were already zero, one, or two other
+B<sub>k+1</sub>-trees on the root list from the output of BlNOMIAL-HEAP-MERGE, so<b>
+</b><i>x </i>is now the first of either one, two, or three B<sub>k+1</sub>-trees on the
+root list. If <i>x</i> is the only one, then we enter case 1 in the next
+iteration: <i>degree</i>[<i>x</i>]!=<i> degree</i>[<i>next-x</i>]<i>.
+</i>If <i>x</i> is the first of two, then we enter either case 3 or case 4 in
+the next iteration. It is when <i>x</i> is the first of three that we enter
+case 2 in the next iteration.</p><p>
+	The running time of BINOMIAL-HEAP-UNION is O(lg <i>n</i>), where <i>n</i> is
+the total number of nodes in binomial heaps <i>H</i><sub>1</sub> and
+<i>H</i><sub>2</sub>.<a href="#note1"><sup>Note 1</sup></a> </p><p>
+</p><p>
+</p><h3>Inserting a node</h3><p>
+The following procedure inserts node <i>x</i> into binomial heap
+<i>H</i>, assuming of course that node <i>x</i> has already been allocated and
+<i>key</i>[<i>x</i>]has already been filled in.</p><p>
+</p><p>
+</p><pre>BINOMlAL-HEAP-INSERT(<i>H</i>, <i>x</i>)
+1	<i>H</i>' &lt;- MAKE-BINOMIAL-HEAP()
+2	<i>p</i>[<i>x</i>] &lt;- NIL
+3	<i>child</i>[<i>x</i>] &lt;- NIL
+4	<i>sibling</i>[<i>x</i>] &lt;- NIL
+5	<i>degree</i>[<i>x</i>] &lt;- 0
+6	<i>head</i>[<i>H</i>'] &lt;- x
+7	<i>H</i> &lt;-BINOMlAL-HEAP-UNION(<i>H</i>, <i>H</i>')
+</pre>
+<p>
+The procedure simply makes a one-node binomial heap <i>H</i>' in <i>O</i>(1)
+time and unites it with the <i>n</i>-node binomial heap <i>H</i> in <i>O</i>(lg
+<i>n</i>) time. The call to BINOMIAL-HEAP-UNION takes care of freeing the
+temporary binomial heap <i>H</i>'.</p><p>
+
+</p><p>
+</p><hr><p>
+<img src="binomialheap_files/bhtext8.GIF"></p><p>
+</p><p>
+</p><h4><b>Figure 5  </b>The four cases that occur in BINOMIAL-HEAP-UNION. Labels
+<i>a</i>, <i>b</i>, <i>c, </i>and <i>d</i> serve only to identify the roots
+involved; they do not indicate the degrees or keys of these roots. In each
+case, x is the root of a B<sub>k</sub>-tree and <i>l</i> &gt; <i>k.</i> (a) Case 1:
+<i>degree</i>[<i>x</i>]!= <i>degree</i>[<i>next-x</i>]<i>. </i>The
+pointers move one position further down the root list. (b) Case 2:
+<i>degree</i>[<i>x</i>]<i> = degree</i>[<i>next-x</i>]<i> =
+degree</i>[<i>sibling</i>[<i>next-x</i>]]<i>. </i>Again, the pointers move one
+position further down the list, and the next iteration executes either case 3
+or case 4. (c) Case 3: <i>degree</i>[<i>x</i>]<i> =
+degree</i>[<i>next-x</i>]!=<i>
+degree</i>[<i>sibling</i>[<i>next-x</i>]]and <i>key</i>[<i>x</i>]<i>
+</i>&lt;=<i> key</i>[<i>next-x</i>]<i>. </i>We remove <i>next-x </i>from the
+root list and link it to x, creating a B<sub>k+1</sub>-tree. (d) Case 4:
+<i>degree</i>[<i>x</i>]<i> = degree</i>[<i>next-x</i>]!=<i>
+degree</i>[<i>sibling</i>[<i>next-x</i>]]and
+<i>key</i>[<i>next-x</i>]&lt;=<i> key</i>[<i>x</i>]<i>. </i>We remove
+<i>x</i> from the root list and link it to <i>next-x, </i>again creating a
+<i>B</i><sub>k+1</sub>-tree.</h4>
+<p>
+</p><hr>
+<p>
+</p><h3>Extracting the node with minimum key</h3><p>
+The following procedure extracts the node with the minimum <i>key</i>
+from binomial heap <i>H</i> and returns a pointer to the extracted node.</p><p>
+</p><p>
+</p><pre>BlNOMIAL-HEAP-EXTRACT-MIN(<i>H</i>)
+1	find the root <i>x</i> with the minimum key in the root list of <i>H</i>, and
+              remove <i>x</i> from the root list of <i>H</i>
+2	<i>H</i>' &lt;- MAKE-BINOMIAL-HEAP()
+3	reverse the order of the linked list of <i>x</i>'s children, and set
+              <i>head</i>[<i>H</i>'] to point to the head of the resulting list
+4	<i>H</i> &lt;- BINOMlAL-HEAP-UNION(<i>H</i>, <i>H</i>')
+5	return <i>x</i>
+</pre>
+This procedure works as shown in Figure 6. The input binomial heap
+<i>H</i> is shown in Figure 6(a). Figure 6(b) shows the situation after line 1
+of BINOMIAL-HEAPS-EXTRACT-MIN: the root <i>x</i> with the minimum <i>key</i>
+has been removed from the root list of <i>H</i>. If <i>x</i> is the root of a
+B<sub>k</sub>-tree, then by property 4 of Lemma 1, x's children, from left to right, are
+roots of <i>B</i><sub>k-1</sub>, <i>B</i><sub>k-2</sub>, ... , <i>B</i><sub>0</sub>-trees. Figure 6(c) shows
+that by reversing the list of <i>x</i>'s children in line 3, we have a binomial
+heap <i>H</i>' that contains every node in <i>x</i>'s tree except for <i>x</i>
+itself. Because <i>x</i>'s tree is removed from <i>H</i> in line 1, the
+binomial heap that results from uniting <i>H</i> and <i>H</i>' in line 4, shown
+in Figure 6(d), contains all the nodes originally in <i>H</i> except for
+<i>x</i>. Finally, line 5 returns <i>x</i>.<p>
+	Since each of lines 1-4 takes <i>O</i>(lg <i>n</i>) time if <i>H</i> has
+<i>n</i> nodes, BINOMIAL-HEAP-EXTRACT-MIN runs in <i>O</i>(lg <i>n</i>) time.</p><p>
+</p><p>
+
+</p><hr>
+<p>
+<img src="binomialheap_files/bhtext9.GIF">
+</p><h4><b>Figure 6</b> The action of BINOMIAL-HEAP-EXTRACT-MIN. (a) A binomial heap
+<i>H</i>. (b) The root <i>x</i> with minimum key is removed from the root list
+of <i>H</i>. (c) The linked list of <i>x</i>'s children is reversed, giving
+another binomial heap <i>H'</i>. (d) The result of uniting <i>H</i> and
+<i>H'</i>. </h4><p>
+
+</p><hr>
+<p>
+
+</p><h3><a name="note1">Note 1</a></h3>
+<h4>
+It's not critical, but we can see this as follows.  Let <i>H</i><sub>1</sub> contain <i>n<sub>1</sub></i>
+nodes and  <i>H</i><sub>2</sub> contain <i>n<sub>2</sub></i> nodes, so that <i>n</i>= <i>n<sub>1</sub></i>
++ <i>n<sub>2</sub></i>.  Then <i>H</i><sub>1</sub> contains at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><sub>1</sub><img src="binomialheap_files/r_floor.gif">+1 roots and <i>H</i><sub>
+2</sub> contains at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><sub>2</sub><img src="binomialheap_files/r_floor.gif">+1 roots, so <i>H</i> contains at most <img src="binomialheap_files/l_floor.gif">lg <i>n</i><sub>1</sub><img src="binomialheap_files/r_floor.gif"> +
+<img src="binomialheap_files/l_floor.gif">lg <i>n</i><sub>2</sub><img src="binomialheap_files/r_floor.gif">+2 &lt; <img src="binomialheap_files/l_floor.gif">lg <i>n</i><img src="binomialheap_files/r_floor.gif">  + 2 = <i>O</i>(lg <i>n</i>) roots immediately after the
+call of BINOMIAL-HEAP-MERGE.  The time to perform BINOMIAL-HEAP-MERGE is thus <i>O</i>(lg <i>n</i>).  Each iteration of the while loop takes <i>O</i>(1) time, and there are at most <img src="binomialheap_files/l_floor.gif">lg <i>n<sub>1</sub></i><img src="binomialheap_files/r_floor.gif">   + <img src="binomialheap_files/l_floor.gif">lg <i>n<sub>2</sub></i><img src="binomialheap_files/r_floor.gif">  + 2  iterations because each iteration either advances the
+pointers one position down the root list of <i>H</i> or removes a root from the root list.  The total time is thus <i>O</i>(lg <i>n</i>).
+</h4>
+
+<pre>
+References:
+http://en.wikipedia.org/wiki/Binomial_heap
+http://www-static.cc.gatech.edu/people/alumni/PhD/Colleen.Kehoe/binoheap/bhtext_noanim.html
+http://www.cse.yorku.ca/~aaw/Sotirios/BinomialHeapAlgorithm.html
+http://classes.engr.oregonstate.edu/eecs/winter2005/cs325/clrs2e/BinomialHeap.java
+</pre>
+
+
+</body></html>

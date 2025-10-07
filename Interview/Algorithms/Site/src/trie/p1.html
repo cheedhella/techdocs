@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Auto Completion OR Typeahead lookup</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Autocomplete system works by descending the tree as far as the text you'd feed it goes and 
+              then the system would carry on with the tree traversal to suggest you the possible completions;</li>
+            <li>Imagine you are designing a user signup form, which has a country field with lot of options;
+              We can create a trie with list of all the countries; When the users type part of their country, we can 
+              lookup the trie and show all available options to the user;</li>
+        </ul>
+
+      <pre>
+        <code class="language-java">
+import java.util.List;
+
+public class LookAheadApp {
+    public static void main(String[] args) {
+        Trie d1 = getTrie();
+        List<String> suggestions = d1.suggest("th");
+        suggestions.forEach(s -> System.out.println(s));
+    }
+
+    private static Trie getTrie() {
+        Trie d1 = new Trie();
+        d1.insert("the");
+        d1.insert("a");
+        d1.insert("there");
+        d1.insert("answer");
+        d1.insert("any");
+        d1.insert("by");
+        d1.insert("bye");
+        d1.insert("their");
+        return d1;
+    }
+}
+
+// Output:
+the
+there
+their
+        </code>
+      </pre>
+
+    </body>
+</html>

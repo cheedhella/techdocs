@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given K Sorted Linked Lists, how to merge all of them into another Sorted Linked List?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Given K Sorted Linked Lists, how to merge all of them into another Sorted Linked List?</strong></div>
+            
+            <div class="question"><strong>Method 1: </strong>Using Hashing;</div>
+            <div class="answer">
+                <ul>
+                    <li>Take the first list, which is already sorted;</li>
+                    <li>For each node in other lists,
+                        <ul>
+                            <li>Insert it into the first list;</li>
+                        </ul>
+                    </li>
+                </ul>
+    		    Complexity: It takes O(n * k^2) time;
+            </div>
+
+            <div class="question"><strong>Method 2: </strong>Using Min-Heap;</div>
+            <div class="answer">
+                <ul>
+                    <li>Create min-heap and insert first elements of all K lists;</li>
+                    <li>while min-heap is not empty
+                        <ul>
+                            <li>extract min from it(root is the minimum) and add it to result list;</li>
+                            <li>If there exists another element next to the element(in the same linked list) extracted in above step, insert it into min-heap;</li>
+                        </ul>
+                    </li>
+                    <li>return the head node of the resulting list;</li>
+                </ul>
+                Complexity: It takes O(N * log K) time and O(K) extra space for heap; N - total number of nodes; K - total number of lists;
+            </div>
+
+            <div class="question"><strong>Method 3: </strong> Divide and Conquer technique;</div>
+            <div class="answer">
+                <ul>
+                    <li>The idea is to pair up K lists and merge each pair in linear time using O(1) space;</li>
+                    <li>After the first cycle, K/2 lists are left each of size 2*N. After the second cycle, K/4 lists are left each of size 4*N and so on;</li>
+                    <li>Repeat the procedure until we have only one list left;</li>
+                </ul>
+                Complexity: It takes O(N * log K) time, but it requires no extra space;
+            </div>            
+    </body>
+</html>

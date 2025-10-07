@@ -1,0 +1,456 @@
+>Subject:	 CAMPUS  INTERVIEWS
+>
+>Hello friends,
+>      I'm attaching here with some questions that had been asked
+>during campus interviews to our batch and to seniour batch. Hope it
+>will be useful to you.
+>Wishing you  the best
+>[Madhusudhana.C.S]
+>.............................................................
+>TISL interview was conducted in a rather shady manner at the CSIC.
+>The written test was an aptitude test and i was told later that the
+>cutoff
+>for H/W was kept higher than that for S/W. Only CEDT guys were
+>interviewed
+>for H/w probably because we had campaigned for the jobs at the PPT.
+>
+>The Interview at CSIC was by a single guy who asked me about my
+>project
+>and then about PC architecture. Knowledge from douglas hall sufficed
+>to
+>answer all his questions.
+>
+>Then we were asked to meet some people at TISL office where we were
+>interviewed by three different people. one guy ( the BOSS Aditya
+>srinivasan ) just asked some general questions on our projects.
+>The other two ( Ajay Tambe & Yogesh Dayal )were more detailed and
+>asked
+>about IC used, PC fundas , elementary digital design and some analog
+>design ( designing astables etc..).
+>
+>TISL recruits H/W mtechs for their IPTS group.this group does h/w
+>design
+>for IBM AUSTIN, IBM Europe and IBM Japan. The group is at present
+>30-40
+>people strong and are a bit different from the general S/w guys. some
+>CEDT
+>seniors at that place SAJJID ( sajid@genius.tisl.soft.net) and a guy
+>called kiran( RAvi?). They have said that the work is OK and chances
+>of
+>going abroad are also good.
+>
+>************************************************************
+>                 TI
+>Make an OR gate using a two input mux.
+>Make a JK F/F from a four input mux and a D F/F.
+>How will u synchronize an asynchronous signal?
+>        -using a D F/F ? ...How will u take care of setup time  & hold
+>time
+>How will u delay a serial synchronous data by 64 bits?
+>Implement the following logic:
+>      Read operation should have one wait state
+>      & write operation should have two
+>Some more digital logic
+>
+>Types of feedback.
+>OP-AMP configeration in these types.
+>
+>Cmos inverter: ckt diag; allowable voltages at the input; threshold
+>voltage;
+>    graph of input Vs output voltage .....currents....
+>
+>And some project
+>                 infotech
+>
+>Setup time, hold time, meta-stable state
+>What is noise margin?
+>How will u implement single steping using the ready pin?
+>Draw the timing cycles (read & Write) of 8086.
+>And some project
+>i don't remember any more.
+>Ask others also to send some questions, u will get a lot more.
+>***********************************************************
+>Non-technical:
+>* Tell me something about ur self ( May be u can prepare something
+>for this before hand)
+>* What is it do u consider ur biggest plus point ? ( Substantiate
+>with an example incident rather than giving a blanket reply)
+>* biggest minus point ? ( Up to u to tell them ur real minus point or
+>a cooked up "minus point")
+>* After 5 years from now what would u want to be ? ( Project leader
+>may be a suitable answer , but make sure everyone doesn't say the
+>same thing)
+>* What is ur rank in the class? (Tell them the exact number if u are
+>within top 5 . Else may be u can simply telll them u are within top x
+>* Why does CEDT offer M.Tech while other depts offer M.E. ? i.e. what
+>differentiates an M.Tech Degree from M.E.? ( courtesy Cadence)
+>
+>Technical :
+>* Explain DMA
+>* U have a 386 mother board which doesn't work. What will be ur
+>sequence of operation for debugging the board.
+>* The famous D-flip flop question.
+>
+>Project - related questions:
+>
+>* In ur project will any catastrophic situation occur at power-on due
+>to ur digital circuitry taking random logical outputs?
+>* What are the specifications of ur product?
+>
+>General suggestions:
+>* Be there well ahead of ur allotted time . Chances are they may call
+>u in slightly ahead too.
+>* Make sure ur replies are convincing not only to u but also to the
+>others. Unconvincing replies usually invite more embarrassing
+>questions.
+>* Take ur grade sheets along (if u have got them)
+>* Don't invite the placement centre's wrath by by-passing
+>the centre and contacting companies outside the campus. It is also
+>unethical.
+>* Select ur dream jobs well ahead of the last date for submission of
+>forms to the placement centre. This is to avoid a hasty decision at
+>the last minute on such an important matter.
+>**************************************************************
+>I. technical :
+>-------------
+>1. what is ur project ?
+>2. which part r u handling ?
+>3. what r methods to control  I.M. speed?
+>4. why PWM ?
+>5. why V/F ?
+>6. what r critical issues involved?
+>7. build 3-bit adder using 2 2-bit adders.
+>8. xor gate using min. no. of NAND gates ( 4 reqd.)
+>9. one example on K-map
+>10. how'll u do POS in K-map?
+>11. what is diff. betn DSP and other architectures?
+>12. in a shift reg. 4 bit if clock to all is delayed by delays
+>T1,T2,T3 and T4 , what is relation betnthem for reliable operaion?
+>assume F/F delat Td all equal.
+>13. how'll u build XNOR using NOR gates?
+>
+>II. Non-technical:
+>-----------------
+>1. tell us @ ur academic
+>2. whta r ur + and - points? exemplify.
+>3. what is motivation behind doing M.tech?
+>4. why do want to join cg corel?
+>5. what r qualities a designer should possess?
+>6. what is more imp. for u : carrer or job atm?
+>7. how many sisters / brothers u have..?
+>8. why u didn't apply to infosys?
+>9. what is r&d in ur opinion?
+>10. do regret for your career which does not focus at a point ?
+>***************************************************************
+>Regarding interview questions:
+>Wipro:
+>     State Diagram implemention of digital logic ( eg. binary counter).
+>     Cache Coherence
+>     PC AT bus
+>     Other high speed buses (
+>     Meta stable state in FFs ( refer Art of Electronics)
+>     ( nothing about the project! )
+>
+>TI:
+>     Project :
+>         my contribution to the project
+>         codecs, internal block diagram of codec
+>         aliasing in frequency domain
+>     Design an SR FF using 2:4 Encoder
+>
+>TISL:
+>     (Satish has sent a detailed mail, so no repititions from me)
+>
+>Enjoy CEDT, explore the WEB, dont feel that if you netscape your
+>grades will go down.
+>
+>All the Best!
+>******************************************************************
+>dear juniors
+>       The list of questions
+>       1> About your project you should know every thing.
+>       2> Metastable state in flip flops
+>       3> pal structure 16l8,number of or term ,and term
+>       4> microprocessor read and write timing diagram
+>       5> how you will jmp to some location in memory where you don,t
+>         have jmp and call instruction.
+>       6> how nmi,interrupts are handled in processor you know
+>       7>interface of floppy disk controller,interrupt controls and
+>         how they work
+>       8>async.data to sync data
+>       9>state diagram use in designing counters
+>       10>constant current source
+>      this are some of the topics on which questions where ask to me
+>and my friends.
+>******************************************************************
+>     WIPRO
+>     Started with introduction and about the background [family and
+>     educational].
+>     Questions:
+>     1] For given logic ckt with some delay,setup and hold time how
+>     will you calculate the max. operating freq.?
+>     2] What happens if you violets the setup and hold time
+>     requirements?
+>     3] How to synchronize the async. signal?
+>     4]What is the main drawback of sync. ckt and how to avoid it?
+>     5]Draw a ckt diagram to interface 8259 with a processor.
+>     6]How interrupt mach. works for 8085 and 8086?
+>     7]What is DMA and how it is advantageous over the data transfer
+>     with processor involved?
+>     8]What are the protocols involved in DMA transfer?
+>
+>Some Question related to project.
+>     9]How to protect control ckt. for high freq. pickup?
+>    10]What are the PCB requirements for High freq. digital ckt.
+>
+>
+>    Thats all from WIPRO .
+>    Tomorrow the questions from TI.
+>    With Best Wishes
+>
+>*****************************************************************
+>Subject:        interview
+>Copies to:      EBENEZER
+>
+>Friends,
+>I appeared for one company on campus and got selected. The company is
+>Wipro Infotech Global R & D and it was my dream job....
+>The company has put CGPA cutoff as 6.5 as first filter and allowed 10
+>people to appear for interview. I was interviewed by 2 hardware
+>experts.
+>It started with general questions like my background and general
+>information about previous experience. Then they turned to my M Tech
+>project and asked to draw block diagram, few questions on TSI
+>switching like how is done and data rates on input and output lines.
+>Then few questions came on telephone lines like what is difference
+>between normal telephone line and leased one? What is the max. bit
+>transfer rate on these lines?
+>Then one of them asked about my interests and I told communication,
+>to be specific data communication and then he asked me to justify it.
+>Then we talked ( for all the topics given below, it was more
+>like a discussion and I simply told them how much I know in each
+>of the topics ) about 7 layers of protocol. Then different types of
+>networks and their protocols like ISDN, ATM, X.25, CSMA/CD, Token ring
+>bit rate on each of these networks, comaprison in terms of throughput
+>between token ring and csma network. We had little chat on LAN/WAN.
+>Finally he asked me on which cpus I had worked.....and how much I
+>knew about PC architecture and thats it............
+>Then I was selected for personal interview which went for 5 minutes
+>and there he asked me about my general interests, strengths and
+>weaknesses. Then why wipro?????????? I was prepared for this and
+>already knew some good points and achievements of the company.....
+>Finally I got selected....................
+>
+>General Remarks:
+>This interview was taken specifically for coomunication hardware and
+>hence all need not consider these questions as general questions...
+>Also remember following things....
+>You should be abel to justify your field of interests.....
+>You must know about the company before appearing for interview.
+>At least one of your interests should match to the company's area of
+>work.
+>Be frank to say no if you really don't know.....
+>Then it is not "START 0-0" but "ADAVANTAGE 'YOU'AND ONE MATCHPOINT"
+>Wish you All the Best..... enjoy your life at CEDT......
+>I will send you my new email ID later.
+>Mangesh
+>
+>*********************************************************
+>Hi,
+>Here are some questions asked in Wipro interview.
+>
+>First they asked general things about my project.
+>I had programmed FPGA in my project. So there were a few questions
+>about how did I actually went about designing FPGA like the package
+>used, device etc.
+>Then some questions on Bus architecture. But I didn't knew any of
+>them.
+>So they turned to 8086 interrupt as to what exactly happens after
+>interrupt occurs, etc.
+>Finally they asked on Digital like metamorphic states in F/F.
+>How to design a glitch free ckt and why exactly like that. Here some
+>hypothetical ckt.
+>That's all. I didn't appeared for any other interview after that.
+>Last but not the least. In personal interview, they mainly check your
+>probability of joining the company and they may reject you solely on
+>your personal interview performance even if your technical has been
+>good. So careful about that.
+>
+>ALL THE BEST FOR YOUR FUTURE AND CAREER PLANS.
+>A. S. DATE
+>Subject:       Interview questions
+>Dear Juniors
+>
+>     Here are my interview questions, i.e. the questions people had
+>asked me during the campus interviews at IISc. I feel that there will
+>not be any problem with the tests, most of them are aptitude tests.
+>
+>     Before CG-coreEL, I had attended some ten interviews,
+>after CG-coreEL none. So I may not able to recollect all the
+>questions, but I'll try my best.
+>
+>     Most of them asks only about general things like whether you know
+>this, that etc... For such questions I had just specified the topic
+>as such, you just go through it and get a peripheral idea of those.
+>
+>     Invariably all starts with personnel questions. So be prepare for
+>telling something about yourself.
+>
+>TISL :      test - aptitude
+>             questions - Different bus architectures, [outline only]
+>                         Type of memories, their differences.
+>                         project related questions.
+>WIPRO :     no test [ CGPA cutoff]
+>             questions - Different memories
+>                         On what conditions you will choose SRAM over
+>                         DRAM and viceversa.
+>                         Architecture of 196 [Project based]
+>                         Bus architecture.
+>                         Vhdl (did you know ?)
+>
+>HUGES :     test - aptitude + software
+>
+>             questions - Assembler/linker
+>                         Operating systems (Unix/MS-DOS)
+>                         If you have a binary file by name test on Unix
+>                         and if you type it on the command prompt what
+>                         will happen ?
+>                         Paging/Segmentation
+>
+>***** :     (I don't remember its name)
+>             test - aptitude
+>
+>             questions - Project
+>                         Operating systems
+>                         C++, Software engineering
+>                         ( general questions - How much you know...)
+>
+>
+>Exter :     test - aptitude
+>
+>             questions - Project based
+>                         Classes in C++
+>                         What is OOPs
+>                         What are objects in C++
+>                         Polymorphism, data hiding.
+>INFOSYS :   test - puzzles
+>             questions - two puzzles
+>A man needs 6 days to cross a desert. but one can take only 4 days
+>food with him. He can take any no of assistants with him. Give a
+>optimum solution.
+>
+>With a 11minute and 7minute hour glass how will you measure 15minute.
+>
+>
+>TATA-ELXI : no test (all those who went on that day)
+>
+>             questions - Why Digital
+>                         What is DSP
+>                         What is sampling theorm, Its significance.
+>                         Project
+>CG-CoreEL : test - fully technical - digital
+>             questions - A divide by 2 clock using dff
+>                         Design a 4 output buzzer circuit.
+>                         A visual puzzle
+>                         196 architecture
+>                         Max.freq of operation of digital circuits.
+>
+>************************************************************
+>Dear Juniors
+>
+>     Here are my interview questions, i.e. the questions people had
+>asked me during the campus interviews at IISc. I feel that there will
+>not be any problem with the tests, most of them are aptitude tests.
+>
+>     Before CG-coreEL, I had attended some ten interviews,
+>after CG-coreEL none. So I may not able to recollect all the
+>questions, but I'll try my best.
+>
+>     Most of them asks only about general things like whether you know
+>this, that etc... For such questions I had just specified the topic
+>as such, you just go through it and get a peripheral idea of those.
+>
+>************************************************************
+>
+>Dear Juniors
+>
+>     Here are my interview questions, i.e. the questions people had
+>asked me during the campus interviews at IISc. I feel that there will
+>not be any problem with the tests, most of them are aptitude tests.
+>
+>     Before CG-coreEL, I had attended some ten interviews,
+>after CG-coreEL none. So I may not able to recollect all the
+>questions, but I'll try my best.
+>
+>     Most of them asks only about general things like whether you know
+>this, that etc... For such questions I had just specified the topic
+>as such, you just go through it and get a peripheral idea of those.
+>
+>************************************************************
+>Dear Juniors
+>
+>     Here are my interview questions, i.e. the questions people had
+>asked me during the campus interviews at IISc. I feel that there will
+>not be any problem with the tests, most of them are aptitude tests.
+>
+>     Before CG-coreEL, I had attended some ten interviews,
+>after CG-coreEL none. So I may not able to recollect all the
+>questions, but I'll try my best.
+>
+>     Most of them asks only about general things like whether you know
+>this, that etc... For such questions I had just specified the topic
+>as such, you just go through it and get a peripheral idea of those.
+>
+>************************************************************
+>Hi,
+>Here are some questions asked in Wipro interview.
+>
+>First they asked general things about my project.
+>I had programmed FPGA in my project. So there were a few questions
+>about how did I actually went about designing FPGA like the package
+>used, device etc.
+>Then some questions on Bus architecture. But I didn't knew any of
+>them.
+>So they turned to 8086 interrupt as to what exactly happens after
+>interrupt occurs, etc.
+>Finally they asked on Digital like metamorphic states in F/F.
+>How to design a glitch free ckt and why exactly like that. Here some
+>hypothetical ckt.
+>That's all. I didn't appeared for any other interview after that.
+>Last but not the least. In personal interview, they mainly check your
+>probability of joining the company and they may reject you solely on
+>your personal interview performance even if your technical has been
+>good. So careful about that.
+>
+>ALL THE BEST FOR YOUR FUTURE AND CAREER PLANS.
+>
+>A. S. DATE
+>
+>--Message-Boundary-31052
+>Content-type: text/plain; charset=US-ASCII
+>Content-transfer-encoding: 7BIT
+>Content-description: Text from file '4.txt'
+>
+>From:          "M.REJEESH, IST M.TECH, 1995 BATCH" <ADITYA/MREJEESH>
+>To:            #users2
+>Date:          Sun, 26 Jan 1997 10:46:39 +0530
+>Subject:       Interview questions
+>X-mailer:     Pegasus Mail v3.1 (R1a)
+>X-PMFLAGS: 128
+>
+>Dear Juniors
+>
+>     Here are my interview questions, i.e. the questions people had
+>asked me during the campus interviews at IISc. I feel that there will
+>not be any problem with the tests, most of them are aptitude tests.
+>
+>     Before CG-coreEL, I had attended some ten interviews,
+>after CG-coreEL none. So I may not able to recollect all the
+>questions, but I'll try my best.
+>
+>     Most of them asks only about general things like whether you know
+>this, that etc... For such questions I had just specified the topic
+>as such, you just go through it and get a peripheral idea of those.
+>
+>************************************************************
+

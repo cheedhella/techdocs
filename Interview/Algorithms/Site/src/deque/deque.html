@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DeQueue</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p class="question"><strong>What is a DeQueue?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>It is acronym for double ended queue, it supports insertion and deletion at both ends;</li>
+                    <li>You can also use it as a stack or queue;</li>
+                </ul>
+            </p>
+        </div>
+
+        <pre>
+            <code class="language-java">
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class DequeApp {
+    public static void main(String[] args) {
+        Deque<String> deque = new LinkedList<String>();
+
+        // Add at the first
+        deque.addFirst("E1 (Head)");
+
+        // Add at the last
+        deque.addLast("E2 (Tail)");
+
+        // Add at the first
+        deque.push("E3 (Head)");
+
+        // Add at the last
+        deque.add("E4 (Tail)");
+
+        // Add at the first
+        deque.offerFirst("E5 (Head)");
+
+        // Add at the last
+        deque.offer("E6 (Tail)");
+
+        System.out.println(deque);
+
+        // We can remove the first element or the last element
+        deque.removeFirst();
+        deque.removeLast();
+        System.out.println("Deque after removing " + "first and last: " + deque);
+
+        // Deque provides iterators that are used iterate in both the directions - first to last, last to first;
+        for (Iterator<String> itr = deque.iterator(); itr.hasNext();) {
+            System.out.print(itr.next() + " ");
+        }
+
+        System.out.println();
+
+        for (Iterator<String> itr = deque.descendingIterator(); itr.hasNext();) {
+            System.out.print(itr.next() + " ");
+        }
+    }
+}
+
+Output:
+[E5 (Head), E3 (Head), E1 (Head), E2 (Tail), E4 (Tail), E6 (Tail)]
+Deque after removing first and last: [E3 (Head), E1 (Head), E2 (Tail), E4 (Tail)]
+E3 (Head) E1 (Head) E2 (Tail) E4 (Tail) 
+E4 (Tail) E2 (Tail) E1 (Head) E3 (Head) 
+
+            </code>
+        </pre>
+    </body>
+</html>

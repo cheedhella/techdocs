@@ -1,0 +1,5 @@
+Iterator pattern in one of the behavioral pattern and it’s used to provide a standard way to traverse through a group of Objects. 
+Iterator pattern is widely used in Java Collection Framework where Iterator interface provides methods for traversing through a collection.
+
+Iterator pattern is not only about traversing through a collection, but we can also provide different kind of iterators based on our requirements. Iterator pattern hides the actual implementation of traversal through the collection and client programs just use iterator methods. 
+Check out Iterator Pattern post for example program and implementation details.

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Maximum Depth of a Binary Tree</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Calculate the Maximum Depth of a Binary Tree?</strong></div>
+            <div class="answer">
+                It is the number of nodes along the longest path from the root node down to the farthest leaf node;
+            </div>
+
+        <pre>
+            <code class="language-java">
+    public static int maxDepth(Node root) {
+        if(root == null) {
+            return 0;
+        }
+        if(root.left == null && root.right == null){
+            return 1;
+        }
+        else{
+            int l = maxDepth(root.left);
+            int r = maxDepth(root.right);
+            return Math.max(l, r) + 1;             
+        }
+    }
+
+            </code>
+        </pre>
+
+        <div class="question"><strong>Complexity: </strong></div>
+        <div class="answer">
+            In order to compute depth, we end up visiting each node recursively, therefore the time complexity is T O(N);<br/>
+    	    Space complexity is O(n), the space cost incurred on the stack size because of recursion calls;
+        </div>
+    </body>
+</html>

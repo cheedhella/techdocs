@@ -1,0 +1,173 @@
+Put away your computers, calculators and office supplies.  Tell me, how many people need to be in a room for there to be greater than a 50% probability that at least two people share the same birthday?
+
+It is easier to see this as what is the chance that no one shares a common birthday?  We can call this probability A.  Therefore, our solution is the compliment, 1-A: at least two people or more have a common birthday.  What is probability A?  If there are two people, the chance that they don’t have the same birthday is (364/365); there is a 1/365 chance that they do have the same birthday.  This only leaves 363 days left for our third person, making the probability that three people don’t share a birthday as 1*(364/365)*(363/365).  If we continue with the math we see that we need 23 people in order to have a probability of 49.3% that no one shares a common birthday.  Since we are searching for 1-A, this means there is a 50.7% chance of a common birthday if there are 23 people in the room.
+
+It has 20 liters of mixture containing milk and water in the ratio 3:5, replace 4 liters of mixture with 4 liters of water. What is the final ratio of milk and water?
+
+In pure milk if 20% replaced by water and in this again 20% is replaced by water and again 20% is replaced by water then what is the proportion of milk in that mixture
+
+A licence code is composed of 3 letters and 3 numbers. The sum of the 3 numbers is 9. How many possible codes are there?
+
+
+
+3. some people went for vaction. unfortunately it rained for 13 days when they were there. but whenever it rained in the
+   morning, they had clean afternood and vice versa. In all they  enjoyed 11 morning and 12 afternoons. how many days did 
+   they stay there totally?
+
+4. A cow was standing on a bridge, 5feet away from the middle of the bridge. suddenly a lightning express 
+   with 90 miles/hr was coming towards the bridge from nearest end of the cow.seeeing this the cow ran towards the 
+   express and managed to escape when the train is one feet away from the bridge. if it would have ran to opposite 
+   direction(ie away from train) it would have been hit the train one ft away from the end of the bridge. 
+   Calculate the length of bridge?
+
+5. Mr. ANYMAN left ANYTOWN by car to attend a wedding at ANYCITY. He had been driving for exactly two hours when the car 
+   got punctured. It took his driver exactly ten minutes to change the wheel. In order to play safe they covered the 
+   remaining distance at a speed of 30mph. consequently, Mr. ANYMAN was at wedding half an hour behind schedule. 
+   Had the car got the puncture only 30 miles later , I would have been only FIFTEEN minutes late he told the driver . 
+   How Far is ANYCITY from ANYTOWN?
+
+6. Tom wants to catch a hare. He is standing 250 yards south from the hare. The hare starts moving due east.   
+   Tom, instead of moving in the northeast direction, moves in such a way that at every instant, he is going
+   towards the hare. If speed of tom is one and one-third times that of the hare, find the distance each
+   traveled before he caught the hare?
+
+Given Details:
+
+(1) Ashland is north of East Liverpool and west of Coshocton
+(2) Bowling Green is north of Ashland and west of Fredericktown
+(3) Dover is south and east of Ashland
+(4) East Liverpool is north of Fredricktown and east of Dover
+(5) Fredricktown is north of Dover and west of Ashland
+(6) Coshocton is south of Fredricktown and west of Dover
+
+1)Which of the towns mentioned is furthest to the northwest ?
+(a) Ashland
+(b) Bowling Green
+(c) Coshocton
+(d) East Liverpool
+(e) Fredericktown
+
+2). Which of the following must be both north and east of Fredricktown?
+(I) Ashland
+(II) Coshocton
+(III) East Liverpool
+(a) I only
+(b) II only
+(c) III only
+(d) I and II
+(e) I and III
+
+3. Which of the following towns must be situated both south and west of at
+least one other town?
+(a) Ashland only
+(b) Ashland and Fredricktown
+(c) Dover and Fredricktown
+(d) Dover,Coshocton and Fredricktown
+(e) Dover,Coshocton and East Liverpool
+
+4. Which of the following statements, if true, would make the information
+in the numbered statements more specific?
+(a) Coshocton is north of Dover
+(b) East Liverpool is north of Dover
+(c) Ashland is east of Bowling Green
+(d) Coshocton is east of Fredericktown
+(e) Bowling Green is north of Fredericktown
+
+
+2. which must be false if the information given is true ?
+a) no lean men are fair skinned.
+b) some fair skinned are lean.
+c) some rich men are both fair skinned and muscular.
+d) some tall men are neither fair skinned nor employed
+e) some rich men are lean
+
+3. which of the following can be deduced from the information given ?
+a) all rich men are handsome
+b) some rich men are handsome
+c) some rich men are employed
+d) some rich men are muscular
+e) all rich men are handsome, muscular, or employed
+
+4. which cannot be shown to be true or false on the basis of the information
+given ?
+I. No fair skinned or muscular man is employed
+II. Some muscular men are fair skinned but not handsome
+III. No fair skinned man both handsome and lean
+a) I only b) II only c) III only d) I and II e) II and III
+
+
+(The ans were given as : 1) C 2)D 3) E 4)B
+But i dont know how 2 get these answers. Plz explain how these hav come???)
+
+
+Q.3
+
+A recent murder case centered around the six men, clam, flip, gront, herm, mast,
+and walt.
+In one order or another these man were the victim, the murderer, the witness, the
+police, the judge, and the
+hangman.
+The facts of the case were simple. The victim had died instantly from
+the effect of gunshot
+wound inflicted a shot. After a lengthy trial the murderer was convicted,
+sentenced to death, and
+hanged.
+* Mast knew both the victim and the murderer.
+* In court the judge asked clam his account of the shooting.
+*Walt was the last of the six to see flip alive.
+*The police testified that he picked up gront near the place where the body was
+found.
+*Herm and walt never met.
+What role did each of the following play in this melodrama ?
+
+
+Q.4
+
+Ann,Brian,Cedric and Dave were Architect,Barber,Caretaker and Dentist not
+necessarily in that order.
+a)Atleast one but not all have the initials of occupation and name as same
+alphabet.
+b)The architect did not have 'r' in his name
+c)The dentist and barber had exactly one alphabet
+common in their names.
+Tell the occupation of Ann and Cedric
+
+Q.5
+John had a square farm.This year he had a larger square patch and hence he
+had 211 cabbages
+more than previous year.How many cabbages did he have the previous year?
+
+
+----------------------------------------------------------------------------
+
+
+3. Total no of mornings and evenings:12+11=23
+   It rained on 13 days so they went out just once: hence 23-13=10
+   so they went out ten times and they could go out twice on a day...so 10/2=5 days
+
+   therefore 13+5=18 days...
+
+4.
+
+5. Let L be the total distance, v be the velocity till the car breaks down and x be the dist from start where car 
+   breaks down for the first time
+
+   Now,
+
+       x/v=2--->>(A)
+
+	(L/v) + (30/60) = 2 + (10/60) + (L-x)/30----->>(B)
+
+	(L/v) + (15/60) = (x+30)/v + 10/60 + (L-x-30)/30 ------>>(C)
+
+  Figure out how i arrived at the eqns
+
+  Solving A,B,C     L=20 miles.
+
+6. 
+
+
+
+
+
+

@@ -1,0 +1,217 @@
+/* THIS FILE INCLUDES INFOSYS PAPERS FOR YEAR 2000 HELD AT IISc AND NAGPUR.
+*/
+
+
+INFOSYS TEST @ IISC - 2000
+
+1:there is a robery and four persons are suspected out of them one is
+actual
+thief,
+these are the senteces said by each one of them!
+A says D had done
+B says A had done
+C says i dddnt done
+D  B lied when he said that i am thief
+
+
+out of these only one man is true remaining are false
+ans C is thef,D is true!
+maks 3
+
+
+2  how many four digit numbers divisible by four  can be formed  using
+
+1,2,3,4;repetions are not allowed!
+ans 6;
+marks 4
+3  a vender solds two things at same cost 12 RS with one item at 25%profit
+and other at 20%loss,by this transaction he made profit or loss by how
+much
+ans loss,60paise
+
+
+marks 3
+
+
+4 two friends A,B are running up  hill and then to get down!
+length if road is 440 yards A on his return journy met B goin up at
+20 yards from top,A has finished the rase .5 minuit earlier than
+B,then how much time A had taken to complete the rase.
+
+ans 6.3 minuits
+marks 4
+
+5 barons question diagnostic test question 8-12,5 men and 5 women went for
+foot ball match.........
+
+marks 8
+
+6 write a five digit number ,
+which will be having two prime numbers,
+and some two more conditions,like 1st digit greater than 2nd etc
+its easy(remember one is not a prime number,most people don mistake
+taking 1
+as prime number)
+
+ans 71842
+
+5 marks
+
+7  two employs were there
+employ one says to employ two your work ezxperience twice as me
+emp2 exactly
+emp1 but two years before you said that your work experience is
+thrice as me
+emp2 yes its also true
+what are their work experience
+ans 4,8
+marks 3
+
+8   ther are four persons A,B,C,D and for languages english ,french
+,german
+italian,
+conditions
+1 only one language is spoken by more than two men
+2 A dont know english
+3 a man can speak either french or german but not both
+4 all man cannot spek in a group(no common language)
+5 A can mediate when B and C want to speak with each other
+6 each men  can speak two languages
+ans
+A      french italian
+B      english french
+C      german  italian
+D      german  italian
+
+
+marks 7
+
+9   there are 3 women ,they having three jewells,named diamond emerald
+,ruby
+
+3 women A,B,C
+3 thiefs D,E,F
+each thef had taken one jewel from each of the women
+following conditions
+one who had taken diamond is the bachelor and most dangerous
+D 's brother in law E who is less dangerous than the thief who had
+--------------------------------------------------------------------
+stolen emerald
+--------------
+(this is the key from this e had stolen ruby)
+D did nt stolen from B
+one more condition is there
+
+marks 7
+
+10 ther were five persons out of which two persons heir went white
+and three persons hair is black
+conditions
+if A 's hir is white then B'hair is white
+A,s hair is not blakck if C's hair is not black
+two more conditions
+but we can easily solve it from first codition
+ans is Aand B's hair is white
+marks 5
+
+essay
+in this age of super computer computer will repalce man!
+
+what is contribution of industry towards humn growth
+
+
+interview questions!
+
+1 two time glases 7,4 how you measure 9
+2  four persons have to cross the bridge  they are having one torch
+ligt
+four persons take 1,2,5,10 minuits respectively ,
+when two persons are going the will take the time of the slowest
+person
+whats the time taken to cross allof them
+
+ans 17minuits
+3   a non uniform rope burns for one hour how you will measure
+half an hour
+ans lit it from both sides!
+
+
+BEST OF LUCK!
+
+------------------------------------------------------------------------
+
+INFOSYS TEST @ NAGPUR - 2000
+questions
+1. there were three suspects for a robbery that happend in a bank, tommy,
+joy and bruceEach of them were saying that I haven't done anything and the
+other two has done it.police found that tommy was lying .who is the thief.
+3M (MARKS).
+
+2. three clocks where set to true time .First run with the exact time
+..second slows one minute/day. third gains one minute/day. after how many
+days they will show true time.  3M.
+
+3. A,B,C,D,E are some numbers.if AB * CD = EEE and CD - A =CC
+THEN what is AB * D =? IN SAME CODE .5M.
+
+4. Joe started from bombay towards pune and her friend julie in opposite
+direction.they meet at a point .distance travelled by joe was 1.8 miles
+more
+than that of julie.after spending some both started there way.joe reaches
+in
+2 hours while julie in 3.5 hours.
+Assuming both were travelling with constant speed.Wath is the distance
+between the two cities.   5M.
+
+5. In a six level building,a person lives .suppose the persons are
+A,B,C,D,E,F. --- and there were few clues like---
+A cann't live above third level,
+B cann't live above A and below C.-- i am recalling each.did u understood
+the question--
+u have to find person living at each level.  5M
+
+6. There were some containers of quantity 1,3,4,5,6,12,15,22,24,38
+liters.each was filled with some liquid except one.the liquids are milk,
+water and oil.quantity of each was like this
+water = 2* milk
+oil = 2* water
+find out which container was empty and cantainers filled with milk and
+oil.
+6M
+
+7. there were few diamonds.
+1st thief takes half of the diamonds +2
+2nd thief takes half of the diamonds +2
+3rd thief takes half of the diamonds +2
+4th thief takes half of the diamonds +2
+when 5 th thief arives there were no diamonds. find total no. of diamonds.
+(ans 60)  6M.
+
+8. there were five hunters A,B,C,D,E and five animals A,B,C,D,E. Hunter
+having the same name with the animal didn't kill it. Each hunter has
+missed
+some animal.
+A animal was hunt by the hunter whose name matches with animal hunt by
+hunter B.
+C animal was hunt by the hunter whose name matches with animal hunt by
+hunter D.
+E has hunt C and missed D .find out animals hunted by A,B,C.  6m.
+
+9. Five students A,B,C,D,E.
+when conversation started B,C were speaking english.When D join them they
+shifted to Spanish.A,E knows French .B,E knows Italian.Portoguese was
+known
+to there of them.Spanish was the most common language between them.
+one of them knows five languages.
+one of them knows four languages.
+one of them knows there languages.
+one of them knows two languages.
+one of them knows only one languages.
+
+A knows ?  4 options
+B knows ?  4 options
+C knows ?  4 options
+E knows ?  4 options       8M
+
+
+

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Min-Heap</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class MinHeap {
+
+    private ArrayList<Integer> data;
+
+    public MinHeap() {
+        this.data = new ArrayList<Integer>();
+    }
+
+    public MinHeap(ArrayList<Integer> data) {
+        this.data = data;
+        build_min_heap();
+    }
+
+    // Root is always minimum; Time Complexity: O(1);
+    public Integer findMin() {
+        return data.get(0);
+    }
+
+    // It takes an array of elements and converts it into a min-heap;
+    // Time Complexity: O(N);
+    private void build_min_heap() {
+        for (int i = (getLastElementIndex() - 1) / 2; i >= 0; i--) {
+            min_heapify_down(i);
+        }
+    }
+
+    // Add new element to the heap; Time Complexity: O(log N);
+    public void insert(int i) {
+        data.add(i); // Add new el at the end of the array!
+        min_heapify_up(data.size() - 1); // heapify-up the last el!
+    }
+
+    // It re-arranges last element and the elements in parent chain to satisfy heap
+    // property;
+    // Time Complexity: O(log N);
+    private void min_heapify_up(int elIndex) {
+        int parentIndex = (elIndex - 1) / 2;
+        if (data.get(parentIndex) > data.get(elIndex)) {
+            Collections.swap(data, elIndex, parentIndex);
+            min_heapify_up(parentIndex);
+        }
+    }
+
+    // It is used to delete root from the heap; Time Complexity: O(logN);
+    // Swap the root element with last element, delete last element,
+    // min-heapify-down(root);
+    public void delete_min() {
+        // root is always at index 0; swap the root element and last element!
+        Collections.swap(data, 0, getLastElementIndex());
+        int lastEl = data.remove(getLastElementIndex()); // remove the last el!
+        System.out.println(lastEl);
+        min_heapify_down(0); // heapify the root and it's subtrees!
+    }
+
+    // It re-arranges node i and it's subtrees to satisfy the heap property; Time
+    // Complexity: O(log N);
+    private void min_heapify_down(int elIndex) {
+        int l = 2 * elIndex + 1;
+        int r = 2 * elIndex + 2;
+
+        int smallest;
+        // Check if the current element is greater than it's left child
+        if (l < data.size() && data.get(l) < data.get(elIndex)) {
+            smallest = l;
+        }
+        else {
+            smallest = elIndex;
+        }
+
+        // Check if largest is smaller than right child
+        if (r < data.size() && data.get(r) < data.get(smallest)) {
+            smallest = r;
+        }
+
+        // If current is not the largest
+        if (elIndex != smallest) {
+            Collections.swap(data, elIndex, smallest);
+            min_heapify_down(smallest);
+        }
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    public int getLastElementIndex() {
+        return data.size() - 1;
+    }
+}
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MinHeapApp {
+    public static void main(String[] args) {
+        ArrayList<Integer> data = new ArrayList<Integer>();
+        data.add(1);
+        data.add(3);
+        data.add(9);
+        data.add(15);
+        data.add(12);
+        data.add(5);
+        System.out.println("Sorting: " + Arrays.toString(data.toArray()));
+
+        MinHeap heap = new MinHeap(data);
+        while (!heap.isEmpty()) {
+            heap.delete_min();
+        }
+    }
+}
+
+Output:
+Sorting: [1, 3, 9, 15, 12, 5]
+1
+3
+5
+9
+12
+15
+            </code>
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find whether an array is a subset of another array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <pre>
+            <code class="language-java">
+
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class SubsetApp {
+
+    // Need O(n1) to convert a1 into HashSet; 
+    // HashSet has O(1) lookup time; For n2 lookups, it requires O(n2) time;
+    // So, Time Complexity: O(n1 + n2);
+    private static boolean isSubset(int[] a1, int[] a2) {
+        HashSet<Integer> s1 = IntStream.of(a1).boxed()
+                .collect(Collectors.toCollection(HashSet::new));
+        for (int i = 0; i < a2.length; i++) {
+            if (!s1.contains(a2[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = { 9, 4, 7, 1, -2, 6, 5 };
+        int[] a2 = { 7, 1, -2 };
+        System.out.println("Is a2 is a subset of a1? " + isSubset(a1, a2));
+        int[] a3 = { 1, 2, 3, 11, 5 };
+        int[] a4 = { 1, 11 };
+        System.out.println("Is a4 is a subset of a3? " + isSubset(a3, a4));
+        int[] a5 = { 1, 3, 5, 7, 11 };
+        int[] a6 = { 3, 6, 9 };
+        System.out.println("Is a6 is a subset of a5? " + isSubset(a5, a6));
+    }
+}
+
+Output:
+Is a2 is a subset of a1? true
+Is a4 is a subset of a3? true
+Is a6 is a subset of a5? false
+
+
+            </code>
+        </pre>
+    </body>
+</html>

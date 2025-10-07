@@ -1,0 +1,32 @@
+Basically, we need to process data coming from another service, as fast as possible;
+	
+configuration-service
+	It is a git repo, which holds all environment specific configuration; 
+	Configuration could be 
+		- infinity endpoint URL; // common to all accounts - not IDCS username, password
+
+customer-metadata-processor
+	- It has background jobs to sync RIID and Push App key info in coherence distributed cache;
+	- It exposes API to fetch  RIID and Push App Key  based on infinity provided identifiers;
+	
+data-collector
+	- It estalishes 2 webscoket connections per each infinity enabled account, creates 2 processors for each account; // TODO: How can we create a container, using code?
+		maintains a map of <connection, processor>
+	- If any processor gets slow, for any reason, it applies backpressure, by calling hold();
+
+data-processor
+	- It take data, parse it, identify type of event, fetch other metadata and process it to dw/cust;
+
+funnel-service
+	- exposes API to funnel UI;
+
+infinity-data-simulator
+	- for dev/local testing only;
+
+
+-------------------------------------
+How scaling works, when there is toomuch of data?
+how do you know it?
+how to act?
+	
+

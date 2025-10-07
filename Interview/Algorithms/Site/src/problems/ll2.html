@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Check if a Single Linked List is Palindrome or not?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Check if a Single Linked List is Palindrome or not?</strong></div>
+
+            <div class="question"><strong>Method 1: </strong>Using a Stack;</div>
+            <div class="answer">
+                <ul>
+                    <li>Traverse the list from head to tail and push every visited node to Stack;</li>
+                    <li>Traverse the list again. For each visiting node, pop a node from the stack and compare them; <br/>
+                        If all nodes matched, then return true, else false;</li>
+                </ul>
+                Complexity: It takes O(N) time and requires O(N) space for stack;
+            </div>
+            
+            <div class="question"><strong>Method 2: </strong> without using a Stack;</div>
+            <div class="answer">
+                <ul>
+                    <li>Get the middle element of the list;</li>
+                    <li>Reverse the 2nd half of the list;</li>
+                    <li>Compare if both halves are same; If same, it is a palindrome;</li>
+                    <li>To restore the original list, reverse the 2nd half of the list again;</li>
+                </ul>
+                Complexity: It takes O(N) time and requires O(1) space;
+            </div>
+    </body>
+</html>

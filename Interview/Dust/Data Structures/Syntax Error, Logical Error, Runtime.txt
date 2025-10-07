@@ -1,0 +1,19 @@
+Syntax Error-Errors in coding which do not follw language 
+syntax format. It can occur by human mistak in typing & due 
+lack knowledge of language .
+
+EX - Ram are a boy.     error
+correct-  Ram  is a boy.
+
+Logical Error- Here is correct, program will execute 
+properly but not give answer correct.
+
+    EX- Table is a boy      syntax correct
+                            but meaning is not
+
+Runtime Error- overflow, underflow, out of memory capacity.
+
+
+
+google for solving recurrence equations???
+http://www.cs.virginia.edu/~luebke/cs332.fall00/lecture3/sld007.htm

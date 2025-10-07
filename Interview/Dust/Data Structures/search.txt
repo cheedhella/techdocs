@@ -1,0 +1,78 @@
+binary searching - an efficient method for searching sorted arrays. complexcity is O(log n).
+
+	binary_search(int A[], int key)
+	   {
+	   i=0; j=n-1; k=(i+j)/2;
+	   while(i<j)
+		if(A[k]==key) return success;
+		if(A[k]<key) i=k+1; // search continues in 2nd half
+		else j=k-1; // search continues in 1st half
+	  }
+
+Input: ordered list and element to be searched for (the search target)
+Output: location of search target or 0 if target is not found
+
+Algorithm binarySearch(list[], searchTarget)
+last <-- length(list[])
+first <-- 1
+// while there are still elements to be searched through
+while first = last do
+	middle <-- (first + last) / 2
+	// if current middle value is the search target
+	if list[middle] = searchTarget
+		return middle
+	// if current middle value is less than the search target
+	else if list[middle] < searchTarget
+		first <-- middle + 1
+	// if current middle value is larger than the search target
+	else
+		last <-- middle - 1
+	end if
+end while
+// return 0 if search target not found
+return 0
+
+
+int binarySearch(int value, int starting, int ending)
+
+  if ending < starting return -1
+  int mid = (starting + ending)  / 2	
+  if A[mid]
+  = value 
+    return mid
+  > value 
+    ending = mid - 1
+  < value
+    starting = mid + 1   
+	/if	 
+return  binarySearch(value, starting, ending) 
+  
+
+
+int binarySearch(int value, array A)
+	int starting = 0
+	int ending = A.size() 
+	int mid
+	int length
+  
+	while forever  
+
+		if starting > ending return -1   
+ 		length = ending - starting 
+		
+		if length = 0
+			if value = A[starting] 	return starting
+			return -1 
+		/if	 
+ 		mid = starting + int(length / 2)
+		if value 
+		< A[mid] :	ending = mid - 1
+		> A[mid] :	starting = mid + 1
+		else
+			return mid
+		/if
+	/while
+return -1
+  
+
+http://en.wikipedia.org/wiki/Fibonacci_search_technique

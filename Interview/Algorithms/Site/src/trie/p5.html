@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Trie Sorting</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+// List returned by getAllWords() is already sorted!
+// Time Complexity: O(N);
+public List<String> sort() {
+    return getAllWords();
+}
+            </code>
+          </pre>
+
+      <pre>
+        <code class="language-java">
+import java.util.List;
+
+public class Exercise3 {
+    public static void main(String[] args) {
+        Trie trie = getTrie();
+        List<String> sortedList = trie.sort();
+        sortedList.forEach(s -> System.out.println(s));
+    }
+
+    private static Trie getTrie() {
+        Trie d1 = new Trie();
+        d1.insert("the");
+        d1.insert("a");
+        d1.insert("there");
+        d1.insert("answer");
+        d1.insert("any");
+        d1.insert("by");
+        d1.insert("bye");
+        d1.insert("their");
+        return d1;
+    }
+}
+
+// Output:
+a
+answer
+any
+by
+bye
+the
+there
+their
+        </code>
+      </pre>
+    </body>
+</html>

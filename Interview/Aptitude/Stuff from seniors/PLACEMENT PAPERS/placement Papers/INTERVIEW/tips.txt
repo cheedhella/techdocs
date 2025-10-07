@@ -1,0 +1,241 @@
+  
+   Your guide to campus recruitments   
+
+
+
+
+
+  Interview Section
+--------------------------------------------------------------------------------
+ 
+After clearing the written test, companies usually interview the candidates to gauge his/her capabilities and personality. Basically there are two kinds of  interviews, the techincal one, where stress is laid on checking your fundamentals in your core subjects and the HR one , where your communication skills and personality is put to the test.
+
+Check out the following sections for more details
+
+Technical Section
+
+Human Resources (HR) Section
+
+General Tips for the Interview
+
+Group Discussion (GD)
+
+ 
+
+Technical Section
+
+As we are from computers and electronics branches, so for the moment we have information regarding core subjects of these fields only. As most of the companies coming to the campuses are from the IT industry hence you may expect them to probe your computer skills regardless of your stream. Knowledge of C is always an added advantage. 
+
+For Computer Students
+
+For a computer student knowledge of C is essential. Other important topics include  
+
+Data Structures 
+Operating Systems 
+Some students have also been grilled on Object Oriented Programming, C++ ,Microprocessor Architecture, Networking,  Database Management, Automata, Compiler Design and Computer Graphics depending upon subjects covered till the most recent semester.
+
+Some Commonly Asked Questions 
+
+Usage of pointers and their fundamentals in C? 
+What is the difference between structures and unions in C? 
+Basic concepts about data structures like trees, linked lists, circular lists, queues, arrays 
+Sorting Methodology ( you may be asked to make an algorithm/program to implement a sort method). 
+What is an finite algorithm? 
+Basic concepts of Operating Systems such as multitasking, multithreading, real time systems, CPU  scheduling algorithms, deadlocks, memory management etc. 
+Difference between one pass and multipass compilers, compilers and interpreters, parsing etc. 
+ 
+
+For Electronics and Communication Stream
+
+For electronic students the important subjects are 
+
+Digital Circuits and Logic Design 
+Microprocessor Architecture of 8085 
+Electronic Design and Circuits 
+Communication and Networking 
+Some Commonly Asked Questions 
+
+Difference between a latch and a flip flop 
+What is sampling theorem and why is it needed 
+Internal architecture of 8085 
+Comparison between OpAmps and transistors 
+Modulation techniques (AM ,FM , PAM etc.) 
+Transistor biasing methods ( fixed bias , emitter bias  etc. ) 
+ 
+
+ 
+
+HR Section
+
+In your HR interview ie human resources interview the main effort on the part of the interviewer will be to bring forth your true personality.They may ask you some routine questions , few of which have been mentioned below, but be expecting questions of varied type regarding sexuality ,music , authors etc. ; anything to get to know what you really are.
+
+ 
+
+Some Commonly Asked Questions 
+
+Describe yourself 
+Why are you better than the next person 
+Your strengths and weakness and what you are doing to rectify your weaknesses 
+Information regarding what kind of work your parents do 
+The magazines and newspapers you read , their cost and at times their editors ; and that days headlines 
+You prefer a team sport to an individual sport 
+Why you want to join this particular company and not some other one. 
+What are your career objectives ( long term and short term ) 
+Why you plan to switch over to software field ( for those who are from streams besides computers ) 
+At the end of the interview they ask whether you have any questions to ask  them. It is better to stick to one or two questions regarding the company and not dwelve into how you performed or the pay package or any personal questions to the interviewer.
+
+ 
+
+ 
+
+General Tips for the Interview
+
+The Essentials
+
+a) Fundamental principles pertaining to his academics ( most important )
+b) Essentials of past life and clear cut career objectives
+c) General awareness of world around him
+d) In depth knowledge of your extra curricular activities 
+
+Apart from these in general keep the following in mind 
+
+Always remember its a sort of formal occassion and never get too informal , like accepting interviewers offer for a smoke or drink 
+Smart and clean turnout. Neat clothes and polished shoes with tidy hair. 
+Be cool and don't get nervous.Try to be pleasant , alert and mantain eye contact. If u cant hold your own in technical questions try to remain composed ;your confidence may do the trick. 
+Try to maintain a good rapport with the interviewer and get him to ask questions regarding the subjects you are strong in. 
+Maintain eye contact from the begining and dont act in a manner so that the interviewer is distracted which for example can be caused by flashy dresses ,exaggerated arm movements or you shifting in your chair. 
+Give them the impression that you are going to stay with the company for atleast 3 to 5 years. Never mention anything concerning GRE or CAT . 
+Never try to bluff your way through an interview. The interviewers would be able catch on to it fast. 
+ 
+
+--------------------------------------------------------------------------------
+  
+References
+
+For Computer Students
+
+C
+
+Let Us C 
+(Y. Kanetkar) 
+Kernighan & Ritchie 
+Gottfried (Schaum Series) 
+Exploring C
+(Y. Kanetkar) 
+
+C++
+
+Waite Groups' Turbo C++ 
+
+Data Structures
+
+Data Structures
+(Tannenbaum) 
+Horowitz & Sahni 
+Sorenson & Tremelay 
+
+Operating Systems
+
+Galvin & Silberschatz 
+
+DBMS
+
+Silberschatz 
+Ullman 
+Date 
+
+Microprocessors
+
+Gaonkar 
+Barry B Brey 
+Douglas V Hall 
+Mathur 
+
+Automata & Compiler Design
+
+Aho & Ullman 
+Hopcroft & Ullman 
+
+Computer Organisation & Hardware
+
+Hayes 
+Hamascher 
+Peter Norton's computer  guides 
+ 
+
+
+
+
+For Electronics Students
+
+Communication
+Kennedy 
+Simon Haykins 
+
+Electronic Devices & Circuits
+
+Boylestead 
+Millman & Halkias 
+Mitchell et al. 
+
+Digital Circuits & Logic Designs
+
+Malvino & Leach 
+Floyd 
+Taub & Schilling 
+
+Computer Networks
+
+Tanenbaum 
+
+Antennas & Propogation
+
+K D Prasad 
+
+Control Systems
+
+Ogata 
+Kuo 
+ 
+
+
+
+
+Aptitude Section
+
+Aptitude Series by 
+R S Aggarwal 
+Barron's GRE and GMAT preparation books 
+Shakuntla Devi's Puzzle books 
+MBA entrance prep material 
+Norman Lewis for Word Power 
+George W Summers Brain Teasers
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+ 
+ 
+  
+
+For feedback send mail to webmasters@placementpapers.com
+
+See our Disclaimer 

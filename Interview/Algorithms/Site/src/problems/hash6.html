@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find If a Subarray with a Sum Equal to 0 Exists?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        Problem: Given an array with positive and negative integers, can you extract a contiguous sub-array from it which adds up to zero?
+
+        <pre>
+            <code class="language-java">
+import java.util.HashSet;
+import java.util.Set;
+
+public class FindZeroSum {
+
+    // Approach #1
+    // Iterate the array in a nested loop, summing each element with all the elements succeeding it;
+    // Time Complexity: O(n^2);
+    private static boolean findSubZero(int[] data) {
+        for (int i = 0; i < data.length; i++) {
+            int sum = data[i];
+            for (int j = i + 1; j < data.length; j++) {
+                sum += data[j];
+                if (sum == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Approach #2: We could use HashSet to get rid of nested loop!
+    // Keep summing each element with all the elements succeeding it and Check for 3 conditions:
+    // -- If 0 exists
+    // -- If sum becomes 0
+    // -- If the sum reverts back to a value which was already a key in the hash table
+    // Time Complexity: O(n);
+    private static boolean findSubZero2(int[] data) {
+        Set<Integer> sumSet = new HashSet<>();
+        int sum = 0;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] == 0) {
+                return true;
+            }
+            sum += data[i];
+            if (sum == 0)
+                return true;
+            if (sumSet.contains(sum)) {
+                return true;
+            }
+            sumSet.add(sum);
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = { 6, 4, -7, 3, 12, 9 };
+        System.out.println(findSubZero(arr));
+        System.out.println(findSubZero2(arr));
+    }
+}
+
+Output:
+true
+true
+
+            </code>
+        </pre>
+    </body>
+</html>

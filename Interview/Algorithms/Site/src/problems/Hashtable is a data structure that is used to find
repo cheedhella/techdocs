@@ -1,0 +1,55 @@
+
+
+
+
+
+		  	
+
+
+
+
+
+
+
+A hash table is a data structure that is used to search and retrieve elements in constant time. Hash tables apply a technique called hashing to uniquely identify each element. Elements or values are stored at some pre-calculated unique index called key. So every entry stored in the form of a key-value pair, and the collection of such items is called “Dictionary”. Each object can be searched using that key in 
+
+
+
+While inserting a new value, when a hash address is occupied we find some other position for it. What is this process called?
+Collision resolution
+
+We can avoid collisions by using the following method:
+chaining
+
+A Hash Table is a data structure that maps keys to values, not the other way around;
+
+The performance of Hashing Table depends upon following factors: hash function, size of the table, collision handling method;
+
+
+What is a Hash Function?
+	A function that calculates the location of a key in array
+
+Following is a type of Hash function:
+	Arthimetic modular
+	truncation
+	folding
+
+What is the average time complexity of searching operation in a hash table?
+	On average, it takes constant time to access a key in a hash table” O(1)
+
+What type of hash function does the following action?
+	“Divide key into smaller chunks and apply different strategy at each chunk”
+	key=456789  −> index=45+67+89
+
+What type of hash function does the following action? truncation
+	“Selecting part of key instead of whole key”
+	key=1234 −> index=23 key = 1234 \text{ } -> \text{ } index = 23
+	key=1234 −> index=23
+
+What type of hash function does the following action? Arthimetic modular
+
+“Take Mod of key with size of array”
+
+index=key MOD tableSizeindex = key \text{ } MOD \text{ } tableSize
+index=key MOD tableSize
+

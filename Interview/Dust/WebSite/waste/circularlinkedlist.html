@@ -1,0 +1,600 @@
+<html>
+<title>Linked List</title>
+
+<body background="./pics/Bck2.gif">
+
+<pre>
+<H3>SLL operations:</H3>
+<b>inserting a node</b>
+<b>delete a node</b>
+<b>Traversing a SLL</b>
+
+<H3>DLL operations:</H3>
+<b>inserting a node</b>
+<b>delete a node</b>
+<b>Traversing a DLL</b>
+
+#include < stdio.h>
+#include < conio.h>
+#include < stdlib.h>
+#include < string.h>
+
+struct list{
+    int data;
+    struct list *next;
+};
+
+typedef struct list node;
+
+void init(node*);
+void ins_aft(node*);       /*** FUNCTION FOR DELETING A NODE AFTER ***/
+node* ins_bef(node*);      /*** FUNCTION FOR INSERTING A NODE BEFORE ***/
+node* del(node*);          /*** FUNCTION FOR DELETING A NODE ***/
+void search(node*);        /*** FUNCTION FOR SEARCHING CRITERIA INPUT ***/
+void disp(node*);          /*** FUNCTION DISPLAYING THE NODES ***/
+void rollsrch(node*);      /*** FUNCTION SEARCHING THROUGH ROLL NUMBER ***/
+void namesrch(node*);      /*** FUNCTION SEARCHING THROUGH NAME ***/
+void marksrch(node*);      /*** FUNCTION SEARCHING THROUGH MARKS ***/
+
+/*****  Main function  *****/
+void main()
+   {
+   node *head;               /* HEAD OF THE LINK LIST */
+   char ch;                  /* Choice inputing varible */
+   int opt;                  /* Option inputing variable*/
+   static int flag=0;        /* Unchanged after iniialization */
+   clrscr();
+   head=NULL;   
+
+   do
+    {
+    printf("\nEnter your option\n");
+    printf("\n1. Initialize the node\n");
+    printf("\n2. Insert before a specified node\n");
+    printf("\n3. Insert after a specified node\n");
+    printf("\n4. Delete a particular node\n");
+    printf("\n5. Search the nodes\n");
+    printf("\n6. Display all the nodes\n");
+    scanf("%d",&opt);
+    if(flag==0 && opt!=1)
+    {
+        printf("\nNo. You must first initialize at least one node\n");
+        goto again;
+    }
+    if(flag==1 && opt==1)
+    {
+        printf("\nInitialisation can occur only once.\n");
+        printf("\nNow you can insert a node\n");
+        goto again;
+    }
+    if(opt==4 && head->next==head)
+    {
+        printf("\nYou cannot delete the one and only the single node\n");
+        goto again;
+    }
+    if(flag==0 && opt==1)
+        flag=1;
+    switch(opt)
+    {
+    case 1:
+        init(head);
+        break;
+    case 2:
+        head=ins_bef(head);
+        break;
+    case 3:
+        ins_aft(head);
+        break;
+    case 4:
+        head=del(head);
+        break;
+    case 5:
+        search(head);
+        break;
+    case 6:
+        disp(head);
+        break;
+    }
+    printf("\nDo you wish to continue[y/n]\n");
+    ch=(char)getche();
+    }while(ch=='Y' || ch=='y');
+    printf("\nDone by \"SHABBIR\"\n");
+    printf("\nPress any key to exit\n");
+    getch();
+}
+
+/*****  Initialisation function  *****/
+void init(node *start)
+{
+    printf("\nEnter Roll number\n");
+    scanf("%d",&start->data);
+    printf("\nEnter the name\n");
+    fflush(stdin);
+    gets(start->name);
+    printf("\nEnter the marks\n");
+    scanf("%f",&start->marks);
+    start->next=start;
+}
+
+/*****  Function for inserting before a particular node  *****/
+node* ins_bef(node *start)
+{
+    int rno;                    /* Roll number for inserting a node*/
+    node *newnode;              /* New inputed node*/
+    node *current;              /* Node for travelling the linked list*/
+    newnode=(node*)malloc(sizeof(node));
+    current=start;
+    printf("\nEnter the roll number before which you want to insert a node\n");
+    scanf("%d",&rno);
+    init(newnode);
+    if(current->data==rno)
+    {
+        newnode->next=start;
+        while(current->next!=start)
+            current=current->next;
+        current->next=newnode;
+        start=newnode;
+        return(start);
+    }
+    while(current->next!=start)
+    {
+        if(current->next->data==rno)
+        {
+            newnode->next=current->next;
+            current->next=newnode;
+            return(start);
+        }
+        current=current->next;
+    }
+    /*
+    If the function does not return from any return statement.
+    There is no match to insert before the input  roll number.
+    */
+    printf("\nMatch not found\n");
+    return(start);
+}
+
+/*****  Function for inserting after a particular node  *****/
+void ins_aft(node *start)
+{
+    int rno;                    /* Roll number for inserting a node*/
+    int flag=0;
+    node *newnode;              /* New inputed node*/
+    node *current;              /* Node for travelling the linked list*/
+    newnode=(node*)malloc(sizeof(node));
+    printf("\nEnter the roll number after which you want to insert a node\n");
+    scanf("%d",&rno);
+    init(newnode);
+    current=start;
+    while(current->next!=start)
+    {
+        /***  Insertion checking for all nodes except last  ***/
+        if(current->data==rno)
+        {
+            newnode->next=current->next;
+            current->next=newnode;
+            flag=1;
+        }
+        current=current->next;
+    }
+    if(flag==0 && current->next==start && current->data==rno)
+    {
+        /***  Insertion checking for last nodes  ***/
+        newnode->next=current->next;    /** start is copied in newnode->next**/
+        current->next=newnode;
+        flag=1;
+    }
+    if(flag==0 && current->next==start)
+        printf("\nNo match found\n");
+}
+
+/*****  deletion function  *****/
+node* del(node *start)
+{
+    int rno;                    /* Roll number for deleting a node*/
+    node *delnode;          /* Node to be deleted */
+    node *current;              /* Node for travelling the linked list*/
+    printf("\nEnter the roll number whose node you want to delete\n");
+    scanf("%d",&rno);
+    current=start;
+    if(current->data==rno)
+    {
+        /***  Checking condition for deletion of first node  ***/
+        delnode=current; /*  Unnecessary step  */
+        while(current->next!=start)
+            current=current->next;
+        current->next=start->next;
+        start=start->next;
+        free(delnode);
+        return(start);
+    }
+    else
+    {
+        while(current->next->next!=start)
+        {
+            /***  Checking condition for deletion of   ***/
+            /*** all nodes except first and last node  ***/
+            if(current->next->data==rno)
+            {
+                delnode=current->next;
+                current->next=current->next->next;
+                free(delnode);
+                return(start);
+            }
+            current=current->next;
+        }
+        if(current->next->next==start && current->next->data==rno)
+        {
+            /***  Checking condition for deletion of last node  ***/
+            delnode=current->next;
+            free(delnode);
+            current->next=start;
+            return(start);
+        }
+    }
+    printf("\nMatch not found\n");
+    return(start);
+}
+
+void search(node *start)
+{
+    int ch;                          /* Choice inputing variable */
+    printf("\nEnter the criteria for search\n");
+    printf("\n1. Roll number\n");
+    printf("\n2. Name\n");
+    printf("\n3. Marks\n");
+    scanf("%d",&ch);
+    switch(ch)
+    {
+    case 1:
+        rollsrch(start);
+        break;
+    case 2:
+        namesrch(start);
+        break;
+    case 3:
+        marksrch(start);
+        break;
+    default:
+        rollsrch(start);
+    }
+}
+
+/*****  Search function searching the appropriate roll number *****/
+void rollsrch(node *start)
+{
+    int rno;                    /* Roll number to be searched */
+    node *current;              /* Node for travelling the linked list*/
+    current=start;
+    printf("\nEnter the roll number to search\n");
+    scanf("%d",&rno);
+    while(current->next!=start)
+    {
+        if(current->data==rno)
+            printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+        current=current->next;
+    }
+    if(current->next==start && current->data==rno)
+        printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+}
+
+/*****  Search function searching the appropriate name *****/
+void namesrch(node *start)
+{
+    char arr[20];               /* Name to be searched */
+    node *current;              /* Node for travelling the linked list*/
+    current=start;
+    printf("\nEnter the name to search\n");
+    fflush(stdin);
+    gets(arr);
+    while(current->next!=start)
+    {
+        if(strcmp(current->name,arr)==NULL)
+            printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+        current=current->next;
+    }
+    if(current->next==start && strcmp(current->name,arr)==NULL)
+        printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+}
+
+/*****  Search function searching the appropriate marks *****/
+void marksrch(node *start)
+{
+    float marks;                /* Marks to be searched */
+    node *current;              /* Node for travelling the linked list*/
+    current=start;
+    printf("\nEnter the marks to search\n");
+    scanf("%f",&marks);
+    while(current->next!=start)
+    {
+        if(current->marks==marks)
+            printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+        current=current->next;
+    }
+    if(current->next==start && current->marks==marks)
+        printf("\n %d  %s  %f\n",current->data,current->name,current->marks);
+}
+
+/*****  Output displaying function  *****/
+void disp(node *start)
+{
+    node *current;              /* Node for travelling the linked list*/
+    current=start;
+    while(current->next!=start)
+    {
+        printf("\n %d  %s  %f",current->data,current->name,current->marks);
+        current=current->next;
+    }
+    printf("\n %d  %s  %f",current->data,current->name,current->marks);
+}
+
+---------------------------------------
+#include < stdio.h>
+#include < conio.h>
+#include < stdlib.h>
+
+typedef struct cllist{
+    int x;
+    struct cllist *next;
+    }nd;
+
+nd*insert(nd**,nd**,nd**);
+nd*delete(nd**,nd**,nd**);
+nd*insfro(nd**,nd**,nd**);
+nd*insaftnd(nd**,nd**,nd**);
+void display(nd*,nd*);
+
+void main()
+  {
+  int n;
+  nd *start,*current,*head;
+  head=(nd*)malloc(sizeof(nd));
+  start=head;
+  current=start;
+  do{
+  clrscr();
+  textbackground(RED);
+  textcolor(BLACK+BLINK);
+  printf("CIRCULAR LINKEDLIST");
+
+  printf("MAIN MENU");
+  printf("1. INSERT 2.INSERTION AT FRONT 3.INSERION AFTER A NODE 4.DELETION 5.END");
+  printf("");
+  printf("enter your choice: ");
+  scanf("%d",&n);
+  switch(n)
+     {
+     case 1:
+	insert(&head,&start,&current);
+	break;
+     case 2:
+	insfro(&head,&start,&current);
+	break;
+     case 3:
+	 insaftnd(&head,&start,&current);
+	 break;
+     case 4:
+        if(start==head){
+	    printf("the list empty!");
+	    break;
+	    }
+	delete(&head,&start,&current);
+	break;
+     case 5:
+	 clrscr();
+	 exit(0);
+     default:
+	  printf("invalid choice!");
+	  getch();
+	  break;
+     }
+  }while(n!=5);
+  getch();
+  }
+
+nd *insert(nd**head,nd**start,nd**current)
+   {
+   int m;
+   nd*temp,*val;
+   clrscr();
+
+   printf("INSERTIONn");
+   do{
+    temp=(nd*)malloc(sizeof(nd));
+    if(!temp ){
+	  printf("memory allocation not possible!");
+	  getch();
+	  exit(0);
+	  }
+	  val=temp;
+	  temp=temp->next;
+	  printf("enter the element:");
+	  scanf("%d",&m);
+	  val->x=m;
+	  val->next=*head;
+	  if(*start==*head){
+	   (*head)->next=val;
+	   *start=val;
+	   *current=*start;
+	   }
+	  else{
+	   (*current)->next=val;
+	   *current=val;
+	   }
+	   printf("any more inserton(y/n):");
+	   fflush(stdin);
+	   }while(toupper(getch())!='N');
+	   display(*head,*start);
+	   getch();
+	   return(*head,*start,*current);
+	   }
+
+void display(nd*head,nd*start)
+	  {
+	   if(head==start){
+	    printf("the list is empty!");
+	    getch();
+	    return;
+	    }
+	    else{
+	     printf("the list is now:");
+	     do{
+	     printf("%5d",start->x);
+	     start=start->next;
+	     }while(start!=head);
+	   }
+	   return;
+	   }
+
+nd*delete(nd**head,nd**start,nd**current)
+	{
+	 int ele;
+	 nd *temp,*save,*val,*pred;
+
+	 clrscr();
+
+	printf("DELETION");
+	 save=*start;
+	   do{
+	  display(*head,*start );
+
+	  	  val=save;
+	  printf("enter the element to be deleted:");
+	  scanf("%d",&ele);
+	  while(save->x!=ele && save->next!=val){
+	   pred=save;
+	   save=save->next;
+
+	   }
+	   if(save->next==val){
+	    printf("the elment is not in the list!");
+	    getch();
+	    break;
+	    }
+	   temp=save;
+	   printf("the element to be deleted is:%d",temp->x);
+	   printf("r u sure(y/n):");
+	   fflush(stdin);
+	   if(toupper(getch())!='N'){
+	    if(save==(*head)->next){
+	     *start=(*start)->next;
+	     free(temp);
+	     save=*start;
+	     }
+	     else if(save->next==*head){
+	     pred->next=*head;
+	     *current=pred;
+	     free(temp);
+	     save=pred;
+	     }
+	     else{
+	      pred->next=temp->next;
+	      free(temp);
+	      save=pred;
+	      }
+	     }
+	    else
+	    break;
+	    printf("anymore deletion(y/n):");
+	    fflush(stdin);
+	    }while(toupper(getch())!='N');
+	    display(*head,*start);
+	    getch();
+	    return(*head,*start,*current);
+	    }
+
+nd* insfro(nd**head,nd**start,nd**current)
+	    {
+	     int m;
+	     nd *temp,*val;
+	      clrscr();
+	      printf("INSERTION IN FRONT");
+	      do{
+	       temp=(nd*)malloc(sizeof(nd));
+	       if(!temp){
+		printf("memory allocation not possible!");
+		getch();
+		exit(0);
+		}
+		val=temp;
+		temp=temp->next;
+		printf("enter the element:");
+	       scanf("%d",&m);
+	       val->x=m;
+	       if(*start==*head){
+	       val->next=*head;
+		(*head)->next=val;
+		*start=val;
+		*current=*start;
+		}
+		else{
+		 (*head)->next=val;
+		 val->next=*start;
+		 *start=val;
+		 }
+		printf("any more insertion to be performed(y/n):");
+		fflush(stdin);
+		}while(toupper(getch())!='N');
+		display(*head,*start);
+		getch();
+		return(*head,*start,*current);
+		}
+
+nd* insaftnd(nd**head,nd**start,nd**current)
+	   {
+	    int trg,n=1,m;
+	    nd *temp,*val,*save,*pred;
+	    save=*start;
+	    clrscr();
+	    printf("INSERTION AFTER A NODE");
+	    do{
+	    display(*head,*start);
+	     temp=(nd*)malloc(sizeof(nd));
+	     if(!temp){
+	      printf("memory allocation not possible!");
+	      getch();
+	      exit(0);
+	      }
+	      val=temp;
+	      temp=temp->next;
+	      printf("enter the element:");
+	      scanf("%d",&m);
+	      val->x=m;
+	      if(*start==*head){
+	       val->next=*head;
+	       (*head)->next=val;
+	       *start=val;
+	       *current=*start;
+	       }
+	       else{
+		printf("enter the position of insertion:");
+		scanf("%d",&trg);
+		while(trg!=n){
+		 pred=save;
+		 save=save->next;
+		 n++;
+		 if(save==*head)
+		 n=0;
+		 }
+		 pred->next=val;
+		 val->next=save;
+		 save=save->next;
+		 }
+		 printf("any more insertion(y/n):");
+		 fflush(stdin);
+		}while(toupper(getch())!='N');
+		display(*head,*start);
+		getch();
+		return(*head,*start,*current);
+		}
+
+
+
+
+
+
+</pre>
+
+
+</body>
+</html>

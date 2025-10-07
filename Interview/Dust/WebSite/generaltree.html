@@ -1,0 +1,28 @@
+<html>
+<title>General Trees</title>
+
+<body background="./pics/Bck2.gif">
+
+<pre>
+<b>Representation of General trees:</b>
+
+Each node contains some data, pointer to it's 1st child and pointer to it's 1st sibling.
+
+  struct tree_node
+  {
+  element_type element;
+  tree_ptr first_child;
+  tree_ptr next_sibling;
+  };
+
+<b>Representation of General trees:</b>
+preorder traversal:   work at a node is performed before (pre) its children are processed. Eg: ls -R list recursively
+postorder traversal:  work at a node is performed after (post) its children are evaluated. Eg: ls -s size of dir
+nothing like inorder for general trees.
+
+   For Eg, Markallenweiss section 4.1.2
+
+
+
+</body>
+</html>

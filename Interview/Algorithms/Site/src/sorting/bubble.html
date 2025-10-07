@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bubble Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+package com.cmr.ds.sorting;
+
+import java.util.Arrays;
+
+/*
+
+Bubble OR Sinking OR Exchange Sort
+    It compares each element  in the array  with it's next element  and 
+    swaps if they are not in order; Once you complete an iteration, the 
+    largest element in the  given array, bubbles up  towards the end of 
+    the array; So, it is called Bubble Sort;
+
+    It is also called Sinking sort, because if you change the comparison
+    a little bit, the smallest element sinks to the beginning of the array;
+    
+    Best-case Complexity:
+        If the Array is already sorted, only n-1 comparisons are needed. So, complexity is O(n);
+        
+    Average-case Complexity: O(n^2);
+        
+    Worst-case Complexity:
+        If the Array is sorted in reverse, complexity is O(n^2);
+        
+    Applications:
+        It's never used because of it's average and worst case complexity is O(n^2);
+
+    Important Links:
+        https://www.interviewbit.com/tutorial/bubble-sort
+
+*/
+
+public class BubbleSort {
+    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+
+    public static void main(String args[]) {
+        BubbleSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+        System.out.println("----------------------------");
+        BubbleSort.sort(Arrays.copyOf(reverse_sorted_input, sorted_input.length));
+        System.out.println("----------------------------");
+        BubbleSort.sort_improved(Arrays.copyOf(sorted_input, sorted_input.length));
+        System.out.println("----------------------------");
+        BubbleSort.sort_improved(Arrays.copyOf(reverse_sorted_input, sorted_input.length));
+    }
+
+    public static void sort(int[] data) {
+        System.out.println("Input: " + Arrays.toString(data));
+        int i;
+        for (i = 1; i < data.length; i++) { // n-1 iterations needed!
+            for (int j = 0; j < data.length - i; j++) {
+                // Compare & Swap
+                if (data[j] > data[j + 1]) {
+                    int temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
+                }
+            }
+        }
+        System.out.println("No of iterations taken: " + (i - 1));
+        System.out.println("Output: " + Arrays.toString(data));
+    }
+
+    // Used to stop iteration, if array is already sorted!
+    public static void sort_improved(int[] data) {
+        System.out.println("Input: " + Arrays.toString(data));
+        int i;
+        for (i = 1; i < data.length; i++) {
+            boolean anySwaps = false;
+            for (int j = 0; j < data.length - i; j++) {
+                // Compare & Swap
+                if (data[j] > data[j + 1]) {
+                    anySwaps = true;
+                    int temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
+                }
+            }
+            if (!anySwaps) { // If there are no swaps, it means array is sorted!
+                break;
+            }
+        }
+        System.out.println("No of iterations taken: " + (i - 1));
+        System.out.println("Output: " + Arrays.toString(data));
+    }
+}
+                
+
+            </code>
+        </pre>
+    </body>
+</html>

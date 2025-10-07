@@ -1,0 +1,120 @@
+This is the paper of PCS, which came today at CDAC, New Delhi
+*********************************
+P    C     S     17-12-2000
+*********************************
+--Time 50min
+--1/3 Negative marking
+--Total question 20
+
+(Questions are not in order)  
+
+Q.  There are 254 women. A sales man asks each about which product they
+use out of three
+(A, B, C,) 22 use all three, 39 use B and C....... Each uses atleast one
+product.
+Find the number of women that use product C
+(ans 52)
+
+Q. A man leaves office daily at 7pm  A driver with car comes from his home to pick him from office and bring back home  
+     One day he gets free at 5:30 and instead of waiting for driver he starts walking towards home.
+     In the way he meets the car and returns home on car  He reaches home 20 minutes earlier than usual.
+     In how much time does the man reach home usually??
+
+Ans. 1hr 20min
+
+
+Q  The following truth table is given  What is Y equal to??
+
+A B C Y 
+0 0 0 1 
+0 0 1 1 
+0 1 0 0 
+0 1 1 0 
+1 0 0 0 
+1 0 1 0 
+1 1 0 1 
+1 1 1 1 
+
+Ans. (A')(B')(AB) , where ' stands for complement.
+
+
+Q    A question on venn diagram of intersection of three circles. Some
+area is shaded. Find 	the shaded area?
+ans d) a(b+c)
+
+Q     Question about 22 people dancing. 7 men dance with one girl
+etc...... You have to find the 	number of girls in it.
+ans 8
+
+Q. A works thrice as much as B. If A takes 60 days less than B to do a work then find the number of days it would take to       complete the work if both work together?
+
+Ans. 22½days
+
+
+Q.  How many 1's are there in the binary form of  8*1024 + 3*64 + 3
+
+Ans. 4
+
+Q.     One quetion on 5*5 matrix. How much time does computer take to
+calculate (something....)
+ans:- d)more than a year
+
+Q. In a digital circuit which was to implement (A B) + (A)XOR(B), the designer implements (A B) (A)XOR(B)  
+    What is the probability of error in it ?
+
+Q     One question on 64 playing cards. You put the top card at the bottom
+and then discard
+next. Repeat the process till you are left with one card. What is the number
+of this card
+ans:- 1
+
+Q. A boy has Rs 2. He wins or loses Re 1 at a time  If he wins he gets Re 1 and if he loses the game he loses Re 1.
+     He can loose only 5 times. He is out of the game if he earns Rs 5.
+     Find the number of ways in which this is possible?
+
+Ans. 16
+
+
+Q. If there are 1024*1280 pixels on a screen and each pixel can have around 16 million colors
+     Find the memory required for this?
+
+Ans. 4MB
+
+
+Q. On a particular day A and B decide that they would either speak the truth or will lie. 
+     C asks A whether he is speaking truth or lying?
+     He answers and B listens to what he said. C then asks B what A has said  B says "A says that he is a liar" 
+     What is B speaking ?
+
+(a) Truth
+(b) Lie
+(c) Truth when A lies
+(d) Cannot be determined
+
+Ans. (b)
+
+
+Q. What is the angle between the two hands of a clock when time is 8:30
+
+Ans. 75(approx)
+
+
+Q. A student is ranked 13th from right and 8th from left. How many students are there in totality ?
+
+
+Q. A man walks east and turns right and then from there to his left and then 45degrees to
+  his right.In which direction did he go
+
+Ans. North west
+
+
+Q. A student gets 70% in one subject, 80% in the other. To get an overall of 75% how much should get in third subject.
+
+
+Q. A man shows his friend a woman sitting in a park and says that she the daughter of my  grandmother's only son.
+    What is the relation between the two
+
+Ans. Daughter
+ 
+
+

@@ -1,0 +1,15 @@
+B Tree - generalization of BST in that a node can have more than 2 children.
+	
+
+
+
+
+
+
+The height h of a B-tree of order m, with a total of n keys, satisfies the inequality:
+h <=  1 + log ém / 2ù  ((n + 1) / 2) 
+
+Are keys in B-tree nodes duplicated when the node is split?
+	No. it is the case in B+ tree.
+
+

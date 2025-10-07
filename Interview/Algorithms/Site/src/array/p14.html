@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Minimum Difference Element</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an array of numbers sorted in ascending order and a key K, find the element in the array that has minimum difference with K;</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+public class MinimumDifference {
+    public static void main(String[] args) {
+        System.out.println(MinimumDifference.searchMinDiffElement(new int[] { 4, 6, 10 }, 4));
+        System.out.println(MinimumDifference.searchMinDiffElement(new int[] { 4, 6, 10 }, 6));
+        System.out.println(MinimumDifference.searchMinDiffElement(new int[] { 4, 6, 10 }, 7));
+        System.out.println(MinimumDifference.searchMinDiffElement(new int[] { 4, 6, 10 }, 9));
+        System.out.println(MinimumDifference.searchMinDiffElement(new int[] { 4, 6, 10 }, 11));
+    }
+
+    private static int searchMinDiffElement(int[] arr, int key) {
+        int nearestElIndex = search(arr, key);
+        if (nearestElIndex == 0) {
+            return arr[nearestElIndex];
+        }
+        if (nearestElIndex == arr.length) {
+            return arr[nearestElIndex];
+        }
+        if (arr[nearestElIndex] == key) {
+            if (key - arr[nearestElIndex - 1] < arr[nearestElIndex + 1] - key) {
+                return arr[nearestElIndex - 1];
+            }
+            return arr[nearestElIndex + 1];
+        }
+        if (key - arr[nearestElIndex - 1] < arr[nearestElIndex] - key) {
+            return arr[nearestElIndex - 1];
+        }
+        return arr[nearestElIndex];
+    }
+
+    // Modify the binary search to return index of key OR element around to it!
+    private static int search(int[] arr, int key) {
+        return search(arr, key, 0, arr.length - 1);
+    }
+
+    private static int search(int[] data, int key, int start, int end) {
+        while (start < end) {
+            int mid = (start + end) / 2;
+            if (data[mid] == key) {
+                return mid;
+            }
+
+            if (key < data[mid]) {
+                end = mid - 1;
+            }
+            else {
+                start = mid + 1;
+            }
+        }
+        return start;
+    }
+}
+
+Output:
+4
+4
+6
+10
+10
+
+        </code>
+      </pre>
+
+    </body>
+</html>

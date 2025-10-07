@@ -1,0 +1,59 @@
+Bucket Sort
+
+// A is the array to be sorted, n is the no. of items in A
+// b is the base of items in A
+// NEXT-SORT is any sorting algorithm
+// Assumption: elements of array are distributed uniformly among 
+// all the buckets.
+Bucket-sort(A, n)
+   {
+   take an array of b empty linked lists, name it B.
+   for i=0 to n-1
+	j = MSD(A[i]); // Most Significant Digit of A[i]
+	insert A[i] into the jth linked list of B.
+   
+   // sort each linked list separately using any sorting alg
+   for i=0 to b-1
+	NEXT-SORT(B[i]); 
+   
+   printing the contents of all the lists B[0], B[1],..., B[b-1] 
+   in order produces the sorted array.
+   }
+
+Note: Using Bucket-sort itself as the NEXT-SORT produces a relative of the radix sort(MSD Radix Sort).
+
+
+Example:
+
+input: 523, 153, 088, 554, 235, 515
+
+iteration 1: distribute the elements based on MSD
+0 -> 088
+1 -> 153
+2 -> 235
+3 -> 
+4 -> 
+5 -> 523, 554, 515
+6 ->
+7 ->
+8 -> 
+9 ->
+
+Sort each linked list separately.
+
+0 -> 088
+1 -> 153
+2 -> 235
+3 -> 
+4 -> 
+5 -> 515, 523, 554 
+6 ->
+7 ->
+8 -> 
+9 ->
+
+print the contents of each linked list in the order in which they are, it prints the items in sorted order.
+
+088, 153, 235, 515, 523, 554.
+
+Refer samantha for the proof that its time complexcity is O(n) and takes less space than Radix Sort.

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find minimum in Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      <pre>
+        <code class="language-java">
+import java.util.OptionalInt;
+import java.util.stream.IntStream;
+
+public class P3 {
+    public static void main(String[] args) {
+        int[] a1 = { 9, 2, 3, 6 };
+        OptionalInt optionalInt = IntStream.of(a1).min();
+        if (optionalInt.isPresent())
+            System.out.println("Min: " + optionalInt.getAsInt());
+    }
+}
+
+// Output:
+Min: 2
+        </code>
+      </pre>
+
+    </body>
+</html>

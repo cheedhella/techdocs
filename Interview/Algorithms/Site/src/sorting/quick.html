@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Quick Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+                package com.cmr.ds.sorting;
+
+                import java.util.Arrays;
+                
+                /*
+                
+                Like Merge sort, Quick sort also uses divide-and-conquer strategy;
+                It is most widely used sorting algorithm, especially for large data sets;
+                In fact, Arrays.sort() uses a variant of Quick sort for sorting array of primitives;
+                
+                How it works?
+                    - Choose the pivot element; There are many ways in which you can choose pivot:
+                        - first element
+                        - last element
+                        - median element
+                        - random element
+                    - Partition
+                        We reorder all the elements around the pivot – the ones with smaller value are placed before it and all the elements greater than the pivot after it;
+                        After this step, the pivot is in its final position; Then, we recursively sort all elements less the pivot and all elements greater than the pivot;
+                
+                Complexity
+                    - Best and Average complexity is O(n*log n);
+                    - Worst case complexity is O(n^2);
+                        If the array is already sorted or reverse sorted, it always splits n-1 elements into first sub-array and 1 element into second sub-array;
+                        Thus, the complexity is O(n) + O(n-1) + … + O(1), which is equal to O(n^2);
+                    - Space complexity is O(1), as it doesn't require any additional space;
+                        
+                Quick Sort VS Merge Sort
+                    - Quick sort is better than the Merge sort because Quick sort is in-place sorting, it does not require additional memory space;
+                    - Quick sort is not stable, where as Merge sort is stable;
+                
+                Important Links
+                    https://www.programiz.com/dsa/quick-sort - How it works, Visualization
+                    https://www.baeldung.com/java-quicksort
+                    https://www.geeksforgeeks.org/quick-sort
+                    https://algorithms.tutorialhorizon.com/quick-sort-implementation
+                    
+                */
+                public class QuickSort {
+                    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+                    private static final int[] random_input = new int[] { 6, 5, 8, 0, 1, 3, 7, 2, 4 };
+                
+                    public static void main(String args[]) {
+                        System.out.println("Before: " + Arrays.toString(sorted_input));
+                        QuickSort.sort(sorted_input, 0, sorted_input.length - 1);
+                        System.out.println("After: " + Arrays.toString(sorted_input));
+                        System.out.println("----------------------------");
+                        System.out.println("Before: " + Arrays.toString(reverse_sorted_input));
+                        QuickSort.sort(reverse_sorted_input, 0, reverse_sorted_input.length - 1);
+                        System.out.println("After: " + Arrays.toString(reverse_sorted_input));
+                        System.out.println("----------------------------");
+                        System.out.println("Before: " + Arrays.toString(random_input));
+                        QuickSort.sort(random_input, 0, random_input.length - 1);
+                        System.out.println("After: " + Arrays.toString(random_input));
+                    }
+                
+                    private static void sort(int[] data, int begin, int end) {
+                        int partitionIndex = partition(data, begin, end);
+                
+                        int n1 = partitionIndex - begin; // Number of elements in subarray-1
+                        if (n1 > 1) { // Array of length 1 is already sorted!
+                            sort(data, begin, partitionIndex - 1);
+                        }
+                
+                        int n2 = end - partitionIndex; // Number of elements in subarray-2
+                        if (n2 > 1) {
+                            sort(data, partitionIndex + 1, end);
+                        }
+                    }
+                
+                    private static int partition(int[] data, int begin, int end) {
+                        int pivot = data[end]; // Choose last element as Pivot!
+                        int n = (begin - 1); // Indicates no of elements found that are less than Pivot!
+                
+                        // To sort in ascending order, swap the element greater than pivot with the
+                        // element smaller than the pivot!
+                        // In other words, this moves all elements smaller than the Pivot to the
+                        // beginning of the array!
+                        for (int i = begin; i < end; i++) {
+                            if (data[i] <= pivot) { // Note: To sort in descending order, if (data[i] >= pivot) {
+                                n++; // We found one more element that is less than the pivot!
+                                swap(data, n, i); // Swap the smaller element and element at index n;
+                            }
+                        }
+                
+                        // If n is 3, there are 3 elements less than Pivot, so n+1 is index of Pivot;
+                        // So, swap the Pivot element and element at index n+1;
+                        swap(data, n + 1, end);
+                        return n + 1;
+                    }
+                
+                    private static void swap(int[] data, int srcIndex, int destIndex) {
+                        int temp = data[srcIndex];
+                        data[srcIndex] = data[destIndex];
+                        data[destIndex] = temp;
+                    }
+                }
+            </code>
+        </pre>
+    </body>
+</html>

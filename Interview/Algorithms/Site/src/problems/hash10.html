@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given arrays of integers, find 2 numbers that add up to n?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        Problem: Given an array and a number n, find two numbers from the array that sums up to n?
+
+        <pre>
+            <code class="language-java">
+package com.oracle.eventflow.infinity.actors;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class FindSumApp {
+
+    // Time Complexity: O(N); Space Complexity: O(N);
+    // Note: If array is sorted, we could do it in O(N) time without extra space; Check array/p20.html;
+    private static String findSum(int[] a, int n) {
+        Set<Integer> data = new HashSet<Integer>();
+        for (int i = 0; i < a.length; i++) {
+            data.add(a[i]);
+        }
+
+        String output = "";
+        for (int x : data) {
+            int y = n - x;
+            if (data.contains(y)) {
+                output += "(" + x + ", " + y + ")";
+            }
+        }
+        return output;
+    }
+
+    public static void main(String[] args) {
+        int[] a = { 3, 5, 6, 9, 7, 2 };
+        int n = 10;
+        System.out.println(findSum(a, n));
+    }
+}
+
+Output:
+(3, 7)(5, 5)(7, 3)
+
+
+            </code>
+        </pre>
+    </body>
+</html>

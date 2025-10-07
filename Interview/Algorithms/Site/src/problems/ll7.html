@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cycle/Loop in the given Single Linked List</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Find if there is a cycle/loop in the given Single Linked List?</strong></div>
+
+            <div class="question"><strong>Method 1: </strong>Using Hashing;</div>
+            <div class="answer">
+                <pre>
+            <code class="language-java">
+Take an empty hash table;
+current = head;
+while(current != null) {
+    Get the address of the current node;
+    If hash table is having that node address,
+        then there is a cycle, return true;
+    else 
+        current = current.next;
+}
+return false; // Indicates end of list is reached!
+
+</code>
+</pre>
+Complexity: It takes O(N) time and it requires O(N) space for hash table;
+            </div>
+            
+            <div class="question"><strong>Method 2: </strong> Floyd’s Cycle-Finding Algorithm;</div>
+            <div class="answer">
+                <ul>
+                    <li>Traverse linked list using two pointers</li>
+                    <li>Move one pointer(slow_p) by one and another pointer(fast_p) by two;</li>
+                    <li>If these pointers meet at a node, then there is a loop; Else there is no loop;</li>
+                </ul>
+                Complexity: It takes O(N) time and it requires O(1) space;
+            </div>
+
+            <br/>Reference: https://www.geeksforgeeks.org/detect-loop-in-a-linked-list/
+
+    </body>
+</html>

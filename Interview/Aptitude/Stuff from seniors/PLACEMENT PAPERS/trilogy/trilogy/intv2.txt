@@ -1,0 +1,19 @@
+1) letus assume we have 'N' courses in a college
+    they are some prerequisites for some cources
+     
+    ex:- A->B ( i.e to do course 'A' he has to do course 'B' in before sems)
+ 
+    They will give so many dependencies like above
+    Questions:
+      1) given a course give all its dependencies
+      2) given two courses check whether they dependent on one another
+      3) Optimization:-  what are the cources he has to choose to complete the course quickly
+
+2) n-array tree
+   how to create it?
+   how to find  least common ancesstor when given two node pointers?
+3) number of combinations possible to take 'n' steps
+   each action involves 1 or 2 steps
+    - answer is fibbonoci sequence (check it)
+
+4) one puzzle, actually it is a dynamic programming question

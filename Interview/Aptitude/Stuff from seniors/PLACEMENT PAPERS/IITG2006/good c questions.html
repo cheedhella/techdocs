@@ -1,0 +1,636 @@
+<html>
+<title> C Puzzle :  Level 3 </title> 
+<body>
+<!-- following code added by server. PLEASE REMOVE -->
+<!-- preceding code added by server. PLEASE REMOVE -->
+<body bgcolor="FFFFFC" link="FF0000" text="111919" vlink="0000FF" alink="FF0000">
+<h3><p align=center> 
+	C Puzzles : Questions and Answers - Level 3 
+</p></h3>
+<hr>
+
+<!--------------- Questions -------------------->
+
+<h1> <p align=center>
+<img align=top src = ".gif"> Questions 
+</p></h1>
+
+<h4> <a name="L3.Q1">
+L3.Q1 : 
+</h4>
+<pre>
+ Write a function revstr() - which reverses the given string
+ in the same string buffer using  pointers.  (ie) Should not
+ use extra buffers for copying the reverse string.
+
+</pre>
+<p>
+<a href = "#L3.A1">Solution for L3.Q1</a>
+<hr>
+
+<h4> <a name="L3.Q2">
+L3.Q2 : 
+</h4> 
+<pre>
+Write a program  to print the series 2 power x, where x >= 0
+( 1, 2, 4, 8, 16, ....  ) without  using C math  library and
+arithmatic  operators  ( ie.  *, /, +, - and  math.h are not
+allowed)
+
+</pre>
+<p>
+<a href = "#L3.A2">Solution for L3.Q2</a>
+<hr>
+
+<h4> <a name="L3.Q3">
+L3.Q3 : 
+</h4>
+<pre>
+Write a  program  to swap two  integers  without  using  3rd
+integer (ie.  Without using any temporary variable)
+
+</pre>
+<p>
+<a href = "#L3.A3">Solution for L3.Q3</a>
+<hr>
+
+<h4> <a name="L3.Q4">
+L3.Q4 :  
+</h4>
+<pre>
+Write a general swap macro in C :
+
+  - A macro which can swap any type of data (ie.  int, char,
+	float, struct, etc..)
+
+</pre>
+<p>
+<a href = "#L3.A4">Solution for L3.Q4</a>
+<hr>
+
+
+<h4> <a name="L3.Q5">
+L3.Q5 : 
+</h4>
+<pre>
+Write a program to delete  the entry from the doubly  linked
+list  without  saving any of the  entries of the list to the
+temporary variable.
+
+</pre>
+<p>
+<a href = "#L3.A5">Solution for L3.Q5</a>
+<hr>
+
+
+<h4> <a name="L3.Q6">
+L3.Q6 : What will be the output of this program ? 
+</h4>
+<pre>
+#include <stdio.h>
+
+main()
+{
+	int	*a, *savea, i;
+
+	savea = a = (int *) malloc(4 * sizeof(int));
+
+	for (i=0; i<4; i++) *a++ = 10 * i;
+
+
+	for (i=0; i<4; i++) {
+		printf("%d\n", *savea);
+		savea += sizeof(int);
+	}
+}
+</pre>
+<p>
+<a href = "#L3.A6">Solution for L3.Q6</a>
+<hr>
+
+<h4> <a name="LX.Q7">
+LX.Q7 : Trace the program and print the output 
+</h4>
+<pre>
+#include <stdio.h>
+
+typedef	int abc(int a, char *b);
+
+
+int func2(int a, char *b)
+{
+	a *= 2;
+	strcat(b, "func2 ");
+	return a;
+}
+
+int func1(int a, char *b)
+{
+	abc	*fn = func2;
+
+	a *= a;
+	strcat(b, "func1 ");
+	return (fn(a, b));
+}
+
+main()
+{
+	abc	*f1, *f2;
+	int 	res; 
+	static  char	str[50] = "hello! ";
+
+	f1 = func1;
+	res = f1(10, str);
+	f1 = func2;
+	res = f1(res, str);
+
+	printf("res : %d  str :  %s\n", res, str);
+}
+</pre>
+<p>
+<a href = "#LX.A7">Solution for LX.Q7</a>
+<hr>
+
+
+<h4> <a name="LX.Q8">
+LX.Q8 : 
+</h4>
+<pre>
+Write a program to reverse a Linked list within the same list 
+</pre>
+<p>
+<a href = "#LX.A8">Solution for LX.Q8</a>
+<hr>
+
+
+<h4> <a name="LX.Q9">
+LX.Q9 : What will be the output of this program 
+</h4>
+<pre>
+#include <stdio.h>
+
+main()
+{
+  int a=3, b = 5;
+
+  printf(&a["Ya!Hello! how is this? %s\n"], &b["junk/super"]);
+  printf(&a["WHAT%c%c%c  %c%c  %c !\n"], 1["this"],
+	 2["beauty"],0["tool"],0["is"],3["sensitive"],4["CCCCCC"]);
+}
+</pre>
+<p>
+<a href = "#LX.A9">Solution for LX.Q9</a>
+<hr>
+
+<h4> <a name="LX.Q10">
+LX.Q10 : 
+</h4>
+<pre>
+</pre>
+<p>
+<a href = "#LX.A10">Solution for LX.Q10</a>
+<hr>
+
+<!---------------- Solutions ---------------------------->
+
+<h1> <p align=center>
+<img align=top src = ""> Answers 
+</p></h1>
+
+<h4>
+<a name="L3.A1">
+L3.A1 <br> Solution for <a href = "#L3.Q1">L3.Q1</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+char *rev_str(char *str)
+{
+	char *s = str, *e = s + strlen(s) -1;
+	char *t = "junk"; /* to be safe - conforming with ANSI C std */
+
+	while (s < e) { *t = *e; *e-- = *s; *s++ = *t; } 
+	return(str);
+}
+
+/* Another way of doing this */
+
+char *str_rev(char *str)
+{
+
+	int len = strlen(str),i=0,j=len/2;
+	
+	len--;
+	while(i < j) {
+		*(str+i)^=*(str+len)^=*(str+i)^=*(str+len);
+		i++; len--;
+	}
+	return(str);
+}
+
+main (int argc, char **argv)
+{
+	printf("1st method : %s\n", rev_str(argv[1]));
+	printf("2nd method : %s\n", str_rev(argv[1]));
+}
+</pre>
+<hr>
+
+<h4>
+<a name="L3.A2">
+L3.A2 <br> Solution for <a href = "#L3.Q2">L3.Q2</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+void main()
+{
+	int i;
+
+	for(i=0; i< 10; i++)
+		printf("%d\t", 2 << i);
+}
+</pre>
+<hr>
+
+<h4>
+<a name="L3.A3">
+L3.A3 <br> Solution for <a href = "#L3.Q3">L3.Q3</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+main()
+{
+	int a, b;
+
+	printf("Enter two numbers A, B : ");
+	scanf("%d %d", &a, &b);
+
+	a^=b^=a^=b;	/* swap A and B */
+
+	printf("\nA = %d, B= %d\n", a, b);
+}
+</pre>
+<hr>
+
+<h4>
+<a name="L3.A4">
+L3.A4 <br> Solution for <a href = "#L3.Q4">L3.Q4</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+/* Generic Swap macro*/
+#define swap(a, b, type) { type t = a; a = b; b = t; }
+
+/* Verification routines */
+main()
+{
+	int a=10, b =20;
+	float e=10.0, f = 20.0;
+	char *x = "string1", *y = "string2";
+	typedef struct { int a; char s[20]; } st;
+	st	s1 = {50, "struct1"}, s2 = {100, "struct2"};
+
+	swap(a, b, int);
+	printf("%d %d\n", a, b);
+
+	swap(e, f, float );
+	printf("%f %f\n", e, f);
+
+	swap(x, y, char *);
+	printf("%s %s\n", x, y);
+
+	swap(s1, s2, st);
+	printf("S1: %d %s \tS2: %d %s\n", s1.a, s1.s, s2.a, s2.s); 
+
+	ptr_swap();
+}
+
+ptr_swap()
+{
+	int *a, *b;
+	float *c, *d;
+
+	a = (int *) malloc(sizeof(int));
+	b = (int *) malloc(sizeof(int));
+	*a = 10; *b = 20;
+
+	swap(a, b, int *);
+	printf("%d %d\n", *a, *b);
+
+	c = (float *) malloc(sizeof(float));
+	d = (float *) malloc(sizeof(float));
+	*c = 10.01; *d  = 20.02;
+
+	swap(c, d, float *);
+	printf("%f %f\n", *c, *d);
+}
+</pre>
+<hr>
+
+<h4>
+<a name="L3.A5">
+L3.A5 <br> Solution for <a href = "#L3.Q5">L3.Q5</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+/* Solution */
+
+typedef struct Link{
+	int  	    val;
+	struct Link *next;
+	struct Link *prev;
+} Link;
+
+void DL_delete(Link **, int);
+
+void DL_delete(Link **head, int val)
+{
+	Link	**tail;
+
+	while ((*head)) {
+		if ((*head)->next == NULL) tail = head;
+		if ((*head)->val == val) {
+			*head = (*head)->next;
+		}
+		else head = &(*head)->next;
+	}
+	while((*tail)) {
+		if ((*tail)->val == val) {
+			*tail = (*tail)->prev;
+		}
+		else tail= &(*tail)->prev;
+	}
+}
+
+/* Supporting (Verification) routine */
+
+Link *DL_build();
+void DL_print(Link *);
+
+main()
+{
+	int	val;
+	Link	*head;
+
+	head = DL_build();
+	DL_print(head);
+
+	printf("Enter the value to be deleted from the list : ");
+	scanf("%d", &val);
+
+	DL_delete(&head, val);
+	DL_print(head);
+}
+
+Link *DL_build()
+{
+	int 	val;
+	Link	*head, *prev, *next;
+
+ 	head = prev = next =  NULL;
+
+	while(1) {
+		Link *new;
+
+		printf("Enter the value for the list element (0 for end) : ");
+		scanf("%d", &val);
+
+		if (val == 0) break;
+
+		new = (Link *) malloc(sizeof(Link));
+		new->val = val;
+		new->prev = prev;
+		new->next = next;
+
+		if (prev) prev->next = new;
+		else head = new;
+
+		prev = new;
+	}
+
+	return (head);
+}
+
+void DL_print(Link *head)
+{
+	Link *shead = head, *rhead;
+	printf("\n****** Link List values ********\n\n");
+	while(head) {
+		printf("%d\t", head->val);
+		if (head->next == NULL) rhead = head;
+		head = head->next;
+	}
+
+	printf("\n Reverse list \n");
+	while(rhead)
+	{
+		printf("%d\t", rhead->val);
+		rhead = rhead->prev;
+	}
+	printf("\n\n");
+}
+</pre>
+<hr>
+
+<h4>
+<a name="L3.A6">
+L3.A6 <br> Solution for <a href = "#L3.Q6">L3.Q6</a>
+</h4>
+<pre>
+The first value will be 0, the rest of the three values will
+not be  predictable.  Actually  it prints the  values of the
+following location in each step
+
+	* savea
+	* (savea + sizeof(int) * sizeof(int))
+	 etc...
+
+ie. savea += sizeof(int) => savea = savea + 
+				sizeof(savea_type) * sizeof(int)
+			  ( by pointer arithmatic)
+			 => save = savea +  sizeof(int) * sizeof(int)
+
+Note: You can verify the above by varing the type of 'savea'
+	  variable to char, double, struct, etc.
+
+Instead of statement 'savea += sizeof(int)' use savea++ then
+the values 0, 10, 20 and 30 will be printed.  This behaviour
+is because of pointer arithmatic.
+
+</pre>
+<hr>
+
+<h4>
+<a name="LX.A7">
+LX.A7 <br> Solution for <a href = "#LX.Q7">LX.Q7</a>
+</h4>
+<pre>
+Two  function  pointers f1 and f2 are  declared  of the type
+abc.  whereas abc is a pointer to a function returns int.
+
+func1()  which  is  assigned  to  f1  is  called  first.  It
+modifies  the  values of the  parameter  'a' and 'b' to 100,
+"hello!  func1  ".  In  func1(),  func2()  is  called  which
+further  modifies  the value of 'a' and 'b' to 200,  "hello!
+func1  func2 " and  returns the value of 'a' which is 200 to
+the main.  Main calls f1() again after assigning  func2() to
+f1.  So,  func2() is called  and it  returns  the  following
+value which will be the output of this program.
+
+	res : 400	str : hello! func1 func2 func2
+
+The output string shows the trace of the functions  called :
+func1() and func2() then again func2().
+
+</pre>
+<hr>
+
+<h4>
+<a name="LX.A8">
+LX.A8 <br> Solution for <a href = "#LX.Q8">LX.Q8</a>
+</h4>
+<pre>
+#include <stdio.h>
+
+typedef struct  Link {
+	int  val;
+	struct Link *next;
+} Link;
+
+/* Reverse List function */
+Link *SL_reverse(Link *head)
+{
+	Link 	 *revlist =  (Link *)0;
+
+	while(head) {
+		Link *tmp;
+
+		tmp = head;
+		head = head->next;
+		tmp->next = revlist;
+		revlist = tmp;
+	}
+
+	return revlist;
+}
+
+/* Supporting (Verification) routines */
+
+Link *SL_build();
+
+main()
+{
+	Link	*head;
+
+	head = SL_build();
+	head = SL_reverse(head);
+
+	printf("\nReversed List\n\n");
+	while(head) { 
+		printf("%d\t", head->val);
+		head = head->next;
+	}
+}
+
+
+Link *SL_build()
+{
+	Link *head, *prev;
+
+	head = prev = (Link *)0;
+
+	while(1) {
+		Link	*new;
+		int 	val;
+
+		printf("Enter List element [ 0 for end ] : ");
+		scanf("%d", &val);
+		if (val == 0) break;
+
+		new = (Link *) malloc(sizeof(Link));
+		new->val = val;
+		if (prev) prev->next = new;
+		else head = new;
+		prev = new; 
+	}
+
+	prev->next = (Link *)0;
+	return head;
+}
+</pre>
+<hr>
+
+<h4>
+<a name="LX.A9">
+LX.A9 <br> Solution for <a href = "#LX.Q9">LX.Q9</a>
+</h4>
+<pre>
+In C we can index an array in two ways. 
+For example look in to the following  lines
+	int a[3] = {10, 20, 30, 40};
+	In this example  index=3 of array 'a' can be represented
+	in 2 ways.
+	1) a[3] and   
+	2) 3[a]
+i.e) a[3] = 3[a] = 40
+
+Extend  the same  logic to this  problem.  You will  get the
+output as follows
+
+	Hello! how is this?  super
+	That is C
+</pre>
+<hr>
+
+<h4>
+<a name="LX.A10">
+LX.A10 <br> Solution for <a href = "#LX.Q10">LX.Q10</a>
+</h4>
+<pre>
+</pre>
+<hr>
+
+<!----------- Foot ----------------->
+
+<br><br><br>
+<h4>
+Goto C Puzzle  
+<li> <a href = "cpuz_l2.html">level 2</a> 
+<li> <a href = "cpuz_l1.html">level 1</a> 
+<p>
+
+<img src=""> 
+<i>
+For  any  further   clarifications/   informations   and  to
+contribute  some more puzzles for this page please feel free
+to contact
+<a href = "mailto:achutha@singapore.sun.com">Achutha Raman</a>
+</i> 
+<br> <br>
+last modified on 10 sep 1996
+</h4>
+
+
+<!------------ Foot ---------------------->
+
+<center>
+<table border=10 cellspacing=5 cellpading=5> 
+<td> <a href = "achu.html">About me</a>  
+<td> <a href = "pub.html">Publications</a> 
+<td> <a href = "cpuz_l1.html">C puzzles</a> 
+<td> <a href = "index_txt.html">Home</a>  
+<td><a href = "form.html">Form</a> 
+<td> <a href = "songs.html">Music library</a> 
+<td> <a href = "pic.html">Picture library</a> 
+</table>
+</center>
+</h4>
+
+</body>
+</html>
+<!-- text below generated by server. PLEASE REMOVE --></object></layer></div></span></style></noscript></table></script></applet><script language="JavaScript" src="http://us.i1.yimg.com/us.yimg.com/i/mc/mc.js"></script><script language="JavaScript" src="http://geocities.com/js_source/geov2.js"></script><script language="javascript">geovisit();</script><noscript><img src="http://visit.webhosting.yahoo.com/visit.gif?us1129004585" alt="setstats" border="0" width="1" height="1"></noscript>
+<IMG SRC="http://geo.yahoo.com/serv?s=76001067&t=1129004585&f=us-w80" ALT=1 WIDTH=1 HEIGHT=1>

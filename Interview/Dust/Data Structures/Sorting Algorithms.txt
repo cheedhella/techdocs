@@ -1,0 +1,90 @@
+Heap sort is always O(nlog n), why not just use it? Empirical studies show that quick sort is considerably faster than heapsort. Thus, if an occasional O(n^2) is tolerable then use quicksort.
+
+
+
+Though in terms of average and best case complexity, both merge sort
+and quick sort are the same, it is generally observed that the most
+popular method of sorting is quicksort. Also if we consider the worst
+case, quick sort is even worse compared to merge sort. Of course with
+the right selection of pivot we can always avoid the worst case from
+happening.
+
+
+The partition routine examines every item in the array at most once, so it is clearly O(n).
+Usually, the partition routine will divide the problem into two roughly equal sized partitions. 
+We know that we can divide n items in half log2n times.
+This makes quicksort a O(nlogn) algorithm - equivalent to heapsort.
+
+However, no matter what you do, there will be some cases where Quicksort runs in O(n2) time
+
+
+
+
+
+
+
+
+
+
+
+
+JARVIS-203
+504
+470
+
+
+
+
+
+
+
+
+
+
+For Merge sort worst case is O(n*log(n)), for Quick sort: O(n2). For other cases (avg, best) both have O(n*log(n)). However Quick sort is space constant
+
+
+While quicksort is often a better choice than merge sort, there are definitely times when merge sort is thereotically a better choice.
+quick sort is little complex to understand, while merge sort is very easier to understand.
+merge sort involves a large no. of swappings which makes it slower..
+
+Most implementations of Mergesort, require additional scratch space, which could bash the performance. The pros of Mergesort are: it is a stable sort, and there is no worst-case scenario. 
+
+
+
+Iterative solution:
+
+Algorith 4.4 Merge
+
+Input: Arrays A with k elements and B with m elements, each in nondecreasing order of their keys.
+
+Output: C, an array containing n=k+m elements from A and B in nondecreasing order.  C is passed in and the algorithm fills it.
+
+Void merge( Element[] A, int k, Element[] B, int m, Element[] C)
+            int n =k+m;
+            int indexA=0;indexB=0;indexC=0;
+
+        while(indexA < k && indexB <m) //smaller one into C
+          {
+                    If(A[indexA].key <= B[indexB].key)
+                    {
+                        C[indexC]=A[indexA];
+                        indexA++;
+                        indexC++;
+                      }
+                     Else
+                     {
+                        C[indexC] = B[indexB];
+                        indexB++;
+                        indexC++;
+                      }
+           }
+
+       //either indexA or indexB reach limit 0-k-1, 0-m-1
+        If (indexA=k) Copy B[indexB, …, m-1] to C[indexC,…, n-1].
+        else
+            copy A[indexA,…,k-1] to C[indexC,…, n-1]
+
+
+
+

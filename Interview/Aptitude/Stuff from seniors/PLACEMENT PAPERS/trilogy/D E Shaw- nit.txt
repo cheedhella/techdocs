@@ -1,0 +1,36 @@
+hi
+ This is the DeShaw paper and it was conducted at nit trichy. My friend is unable to
+remember all questions, so this only specifies the pattern of the question paper.
+
+
+Deshaw paper.
+
+1.Apti 20 questions 25 min
+2.Tech 20 questions 25 min
+3.One algorithm 15 min
+
+Apti has standard questions...even two questions were of verbal reasoning tye.I cudnt
+crack all apti in 20 min.I felt it as good paper among all i faced before that.
+
+A question on trains was there,two trains of same lenght cross a bridge of
+length 100m in 10 sec,what is the lenght of train??(not exactly...but similar)
+
+I dont remember all yaar
+Tech was cool.Can crack in 25 min.I remembe only few questions
+
+1.A question in C++,where a pointer to member of a class not defined ,but
+accessed...ans.error
+2.A question on virtual functions
+3.How to print % using printf
+4.A question on macro and string...a different type question(difficult to remember)
+5.Another question on strings...(sorry for not writing the exact questions)
+6.two questions in java,one had a catch block after finally.Error.
+
+
+Algorithm
+
+Given sequence a1,a2,a3,a4...,an. is a preordr sequence of a n node binary
+tree.Each of the symbol a1,a2,... represents a binary sequence 00,01,10,11. If
+node has a left child and right child 11,left cild but no roght child then
+10...and so on.Write algorithm to construct the tree in O(n) time.
+

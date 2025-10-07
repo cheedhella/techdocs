@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Right rotate the array by one index?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class P5 {
+    private static void rightRotate(int[] data) {
+        int lastEl = data[data.length - 1];
+        for (int i = data.length - 1; i > 0; i--) {
+            data[i] = data[i - 1];
+        }
+        data[0] = lastEl;
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 9, 2, 3, 6 };
+        rightRotate(data);
+        System.out.println("After right rotating: " + Arrays.toString(data));
+    }
+}
+
+// Output:
+After right rotating: [6, 9, 2, 3]
+        </code>
+      </pre>
+
+    </body>
+</html>

@@ -1,0 +1,13 @@
+1) find the symmetry of the given tree
+2) program on sets datastructure ( union & find)
+3) program on optimization 
+   Set s={ some numbers}   k elements total
+   set R={ (low,up), (low,up)....}  n elements
+
+   u have to preprosess S ( the way u preprocess will lead optimization)
+
+   The query is
+   number of elementes between low & up in set 'S' for all entries of R
+
+             u have to give 0(n) solution using o(k) space
+       Answers:  use techniche of counter sort

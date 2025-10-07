@@ -1,0 +1,77 @@
+the questions are    (time 60 min)
+1) there are brothers and sisters in a family. one of the brother has
+equal breothers and sisters, and one of the sister has twice as many
+brothers as she had sisters. find the number of brother and sisters.
+ans 4 and 3 (3marks)
+
+2) a girl is given one full soda bottle, for every 5 empty bottles, she
+had 77 empty bottles, how many max soda bottles she can drink.
+ans 19 (3m)
+
+3) what is the angle between minutes hand and hours hand if the time is
+3:15
+ans 15/2 degrees (3m)
+
+4) a van can travel atr a max speed of 100 kmph, the decrease in velocity
+is proporsional to the number of passegers. if 3 persons are there in the
+van the velocity is 88 kmph, the maximum capacioty of the van is 7 if 6
+people board, what is the speed of the van
+ans 72kmph (4m)
+
+5) A and B are two cities separated by 99 kms apart, there are 98 poles in
+between, showing the distances of the two cities on the either side, find
+the number of poles, in which, only 2 digits are used (example 11,88 here
+only 1 and 8 are used)
+ans 18 (5m)
+
+6)the 26 alphabates from A to Z are numbered in the serial order A -1
+(B-2 etc.) B is 2 to the power of its preceding term, exampke C-3^2 = 9
+and so on up to Z, find the value of (X-A)*(X-B)*........(X-Z)
+ans 0 (6m)
+
+7) 15, 16, 18 ,19, 20, 31 were thw weights of six items of which five
+butter and one was chweese. a man purchased two butter items and the
+second bought items twice the weight of the first person. what is the weight of
+cheese.
+ans 20 (6m)
+8)there are four girls.they got prizes which they have won after a concert
+ " i got one prize more than u" said bernise. onr girl said to
+"i got two prizes more than ". one girl said  that "i got three prizes
+more than the u". one girl said that "i got four prizes mo10re than u".
+one gorl said that" i got five prizes more than u" one girl said that" i
+got six prizes more than u" if the total prizes won by them are 27 find
+the no. of prizes won by bernise.
+ ans 5 (6m)
+9) there are four brothers A, B,C,D and each has two dogs. they name
+thaeir dogsafter their other brothers.the dogs were of breed c, d,t.ther
+are threee c three t's and two d's
+ each brother will notnhave the dogs of the same breed
+ no two dogs of same breed will have the same name
+ B will not have t breed dogs
+ A wiil not name his dog after D
+ C will not name his dog after A
+ What are the names and owners of dogs of d breed??
+
+ans B,C   are the owners A and C are the dogs names.(6m)
+
+10) there was a party held in which four DJ's contested.L, S,P,J. They
+were numbere 1, 2, 3, 4. L won the first place.P defeated S.The person who
+was numbered 2 had red deck. J did not have yellow deck. the person who
+came last had a blue deck.there is only one person who is numbered the
+same as his position.the person who was third had green deck. find the
+positions of all the persons and their numbering and their decks.   (8m)
+
+ans L RED
+    P YELLOW
+    S GREEN 
+    J BLUE.
+
+
+and there is an essay (15min)
+*******Topics********
+1) power and politics,
+2)relevance of education with work life.
+
+
+
+

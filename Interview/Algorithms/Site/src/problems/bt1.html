@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Height of a Binary Tree</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Calculate the Height of a Binary Tree?</strong></div>
+            <div class="answer">
+                Height is the number of edges along the longest path from the root node down to the farthest leaf node;
+            </div>
+
+        <pre>
+            <code class="language-java">
+    public static int height(Node root) {
+        if(root == null) {
+            return -1;
+        }
+        if(root.left == null && root.right == null){
+            return 0;
+        }
+        else{
+            int l = height(root.left);
+            int r = height(root.right);
+            return Math.max(l, r);          
+        }
+    }
+
+            </code>
+        </pre>
+
+        <div class="question"><strong>Complexity: </strong></div>
+        <div class="answer">
+            In order to compute depth, we end up visiting each node recursively, therefore the time complexity is T O(N);<br/>
+    	    Space complexity is O(n), the space cost incurred on the stack size because of recursion calls;
+        </div>
+    </body>
+</html>

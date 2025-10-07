@@ -1,0 +1,9 @@
+array vs linked list
+	size of an array is fixed, while a linked list can hold indefinite no. of items.
+	elements of the array are stored in consecutive memory locations(so, random accessing of elements is possible).
+
+
+
+
+http://www.c4learn.com/2010/02/drawbacks-disadvantages-of-linked-list.html
+

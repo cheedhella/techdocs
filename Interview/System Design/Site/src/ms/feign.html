@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Feign</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><b>What is Feign?</b></p>
+        <p class="answer">
+            <ul>
+                <li>When a service wants to call another service, you could use Spring RestTemplate; But, you need to write lot of code!</li>
+                <li>With Fiegn, we don't have write any code, other than an interface definition;</li>
+                <li>Spring Cloud OpenFeign, spring-cloud-starter-openfeign - a declarative REST client for Spring Boot apps;</li>
+                <li>Annotate the main class with: @EnableFeignClients; It scans for the components/feign clients that are annotated with @FeignClient;</li>
+                <li>Feign also supports lot of customizable configuration, such as timeout etc;</li>
+                <li>Feign also allows you customize things, wherever needed;</li>
+            </ul>
+        </p>
+
+        Feign talks to the naming server(eureka), to get list of instances of a service and load balances the request;
+        If you use Eureka and Feign, load balancing comes as free!
+        This is called client-side load balancing, b/c it happens on the caller side;
+        Feign has a dependency on spring-cloud-loadbalancer; Earlier version of spring use Ribbon as load balancer;
+
+        <p class="question"><b>TODO</b></p>
+        <p class="answer">
+            <ul>
+                <li>RestTemplate VS Feign VS GraphQL</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>References</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://www.baeldung.com/spring-cloud-openfeign</li>
+            </ul>
+        </p>
+
+        Hystrix - Hystrix is a library that controls the interaction between microservices to provide latency and fault tolerance. 
+        Additionally, it makes sense to modify the UI to let the user know that something might not have worked as expected or would take more time.
+        
+    </body>
+</html>

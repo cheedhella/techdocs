@@ -1,0 +1,158 @@
+
+There were ten questions in the software section
+give the output of the following programs
+there were no options given, you have to fill in the given blanks
+
+_____________________________________________________________________
+
+given A=65
+double is 4 byte,int is 2 byte
+
+Q1) this question was based on swaping two varibles
+      
+      swap(int a,int b)
+     {
+       a=a+b;
+       b=a-b;
+       a=a-b;
+      }
+      
+      main()
+     {
+        int a=3;
+	int b=4;
+  	printf("%d %d\n",a,b);
+	..............        
+ 
+        printf("%d %d",a,b);
+      } 
+                      
+ans-4 3
+    4 3      
+Q2)  this question was based on switch statement,break+continue
+      main()
+     {
+       int a=1,b=4;
+       for (i=0;i<2;i++)
+	{
+		switch (a) {
+		case 1: if (b!=4) 
+			break;			// watch out for these 
+			else continue;		// two lines
+			b=....
+			a=.....
+		case 2: ....
+			........
+			..........
+		}
+	} 
+	printf("Output is %d %d",a,b);
+	}
+
+ans- Output is 1 4 
+Q3) third question was based on macros
+    #define dcm(a)    a*a
+    main()
+   {
+     int first=3,second=2,var1;
+     var1=dcm(first+1);
+     printf("output is %d %d\n",var1++,var1++);
+     var1=dcm(first++);
+     printf("output is %d %d",var1++,var1++);
+   }
+ans- output is 8 7
+     output is 10 9
+Q4)  what is the output
+  main()
+   {
+    int d;
+    d=(a&b) ~(~0 ... &c);  //there was an expression like this
+    printf("%d",d);
+    }
+ans- 5
+
+Q5) 
+     fun(char *p1,char *p2) 
+                           //this function was displaying the position
+    {			   //the position of DCM in the string	
+      .............
+	.............
+	...........
+	.............
+	...............
+     }
+    main()
+	{
+          printf("%d",fun("datasystem","DCM");
+          printf("%d",fun("DCMDELHI","DCM");
+        }
+
+ans- -1 ... (for the second answer count the position of DCM in the 			string)
+
+Q(6) 
+     funct(int var)
+    {
+      static int s;
+      if(var=3) return var;
+      else { s=s+7;
+       		var=var+1;
+	        funct(var);
+             }
+       s=s-var;
+       return s;
+      }
+    main()
+    {
+     int munx,munz;
+     numx=funct(1);
+     numz=funct(0);
+     printf("numx=%d numz=%d",numx,numz);
+    }
+ans- numx=9 numz=24
+
+
+
+Q9) this question was based on printing char variable using %d flag which prints the ascii value
+   
+   #include<stdio.h> 
+   char a;  
+  func(.......)
+    {
+     .........
+	........
+	.........
+	printf("%c",a);
+	}
+    main()
+    {
+     char a='B';
+     printf("%d",a);
+     ...........;
+     printf(................);
+     .................;
+     printf(...............);
+     }
+ans- 66BAA66     
+
+Q10) 
+ int mask,nbits;
+     funct(int a)           //this function was same as that given     	
+     {   			 //in page 433 in schaum series        				//  c programming book
+				// this function prints the binary				//equivalent of the number passed
+   for(count=1;count<=nbits;count++)	// in blocks of four bits	
+   {  b=(a & mask)  ? 1:0;
+     printf("%x",b);
+     if(count %4 ==0)
+       printf(" ");
+       mask>>1;
+    }
+
+   main()
+ {
+  nbits=8*sizeof(int);
+  mask=0x1 << (nbits -1);
+  funct(32767);
+  funct(-32768);
+ }
+
+ans- 0111 1111 1111 1111 1000 0000 0000 0000

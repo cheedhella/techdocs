@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Insertion Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+package com.cmr.ds.sorting;
+
+import java.util.Arrays;
+
+/*
+
+Insertion Sort
+    It works by dividing the original array into 2 sub-arrays: Sorted sub-array and 
+    unsorted sub-array; An array with one element is always sorted; So, Initially, the 
+    sorted sub-array contains only first element; It then takes 1st element from unsorted
+    sub-array and inserts it into the right position in sorted sub-array; It repeats the 
+    process until unsorted sub-array is empty;
+
+    Time Complexity:
+        Best-case Complexity:
+            If the Array is already sorted, complexity is O(n);			
+        Average-case Complexity: O(n^2);
+        Worst-case Complexity:
+            If the Array is sorted in reverse, complexity is O(n^2);
+
+    Space Complexity:
+        It doesn't require any extra space, So complexity is O(1)l
+    
+    This is useful for sorting very small arrays(7 to 50 elements);
+        
+Insertion VS Selection Sort
+    - If the array is already sorted, insertion sort does it well(similar to bubble sort, unlike selection sort)!
+    - Otherwise, It has same complexity as that of Selection sort;
+    
+*/
+public class InsertionSort {
+    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+
+    public static void main(String args[]) {
+        InsertionSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+        System.out.println("----------------------------");
+        InsertionSort.sort(Arrays.copyOf(reverse_sorted_input, reverse_sorted_input.length));
+    }
+
+    public static void sort(int[] data) {
+        System.out.println("Input: " + Arrays.toString(data));
+        int i; // Index of unsorted sub-array!
+        for (i = 1; i < data.length; i++) {
+            // take 1st element in the unsorted sub-array;
+            int currentEl = data[i];
+            // Insert it into sorted sub-array;
+            int j;
+            for (j = i - 1; j >= 0 && data[j] > currentEl; j--) {
+                data[j + 1] = data[j];
+            }
+
+            // Found a position for current element!
+            data[j + 1] = currentEl;
+        }
+        System.out.println("Output: " + Arrays.toString(data));
+    }
+}
+            </code>
+        </pre>
+    </body>
+</html>

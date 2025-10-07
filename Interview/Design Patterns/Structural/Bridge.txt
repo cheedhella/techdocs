@@ -1,0 +1,24 @@
+What is Bridge Pattern?
+
+It can be thought of as 2 layers of abstraction.
+It decouples an abstraction from it's implementation so that 2 classes can vary independantly. 
+In short, it converts 'is-a relationship' to 'has-a relationship'.
+It helps us to avoid ending up with multiple concrete classes that will be exposed to the client.
+
+Implementing the Bridge design pattern in the Spring Framework                                                        The following Spring modules are based on the Bridge design pattern:ViewRendererServlet: It is a bridge servlet, mainly for Portlet MVC supportThe Bridge design pattern: The Bridge design pattern is used in the Spring logging processLet's see a sample implementation of the Bridge design pattern.
+
+Bridge vs Strategy
+
+
+Bridge vs State
+	State enables a protest’s conduct to change alongside its state, while Bridge’s purpose is to decouple a deliberation from its implementation with the goal that the two can shift freely.
+
+
+https://www.tutorialspoint.com/design_pattern/bridge_pattern.htm
+https://refactoring.guru/design-patterns/bridge/java/example
+https://dzone.com/articles/bridge-design-pattern-in-java
+https://examples.javacodegeeks.com/core-java/java-bridge-design-pattern-example/
+https://www.geeksforgeeks.org/bridge-design-pattern/
+https://stackoverflow.com/questions/319728/when-do-you-use-the-bridge-pattern-how-is-it-different-from-adapter-pattern
+https://simpleprogrammer.com/design-patterns-simplified-the-bridge-pattern/
+https://learning.oreilly.com/library/view/spring-5-design/9781788299459/6d3655eb-aa38-47d7-a436-b84ba43d621a.xhtml

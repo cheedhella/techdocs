@@ -1,0 +1,274 @@
+TCS Talent Test
+Time : 2 Hrs
+
+Part I	English Synonyms etc.	34 Bits
+Part II 	Arthimatic		32 Bits
+Part III	Critical Reasoning	12 Bits
+			Total   	78 Bits  2 Hours Duration.
+
+Part I and Part III are Multiple Choice Questions and
+Patr II is filling up the Blanks model.
+If  your choice is B among A, B, C, D then put a cross
+mark on B.
+i.e.
+	
+ 
+IMPORTANT  :  Once you stricked off the answer you CAN
+NOT CHANGE IT again. So be careful in the first time.
+Not applicable for fill up the blanks.
+
+--------------------------------------------------------
+
+PART I   English Synonyms & Passages	34 Bits
+-----------------------------------------------
+
+Nearly 20 Bits on Synonyms:
+1.	Clutch
+2.	Divergent
+3.	Veracity
+4.	Indigenous
+5.	Hamper
+Please go through  Barrons GRE book  -> High Frequency
+Words List (especially all words starting with      A
+and C. But look all the words nearly 300. Even 1 mark
+makes the difference. Don't neglect. Hardly it takes 2
+hrs to remember them along with synonyms)
+
+Next two passages are given consisting of some
+underlines in between. Below passage, its given some
+(7-8) sentences. We have to choose the correct
+sentence and put it in the appropriate blank in the
+main passage.
+Passage 1 is on Mind Power ( 8 blanks)
+Passage 2 is on Investing Shares in the Companies ( 6
+Balnks)
+
+Part II	Arthimatic - 20 Bits
+----------------------------
+
+1.	5,6,7,8,10,11,14, ?
+2.	 
+A	1	0	0	1	0	0	0	1
+B	0	1	1	0	1	0	1	0
+C	1	0	0	1	0	1	1	0
+	(AuB)nC = ?   [ (A union B) intersection C = ?]
+3.	Find the Odd word .
+Java, Lisp, Smalltalk, Eiffel  
+(One more wuestion of same type - Oddman out)
+
+4.
+Year  	95     96       97   	98	99    
+Members 100	1	70	10	50     
+
+i ) Which year has maximum members growth?
+           Two more questions on this. Please go
+through Barrons GRE data interpretation problems
+
+5.   In Madras, temperature at noon varies according
+to   -t^2/2 + 8t + 3  (READ as : -t square /2 + ...),
+where t is elapsed time. Find how much  temp. More or
+less in 4pm to 9pm. (May be we can solve it by
+Definite Integration. Check any way)
+
+6.	A man, a woman, and a child can do a piece of work
+in 6 days. Man only can do it in 24 days. Woman can do
+it in 16 days and in howmany days child can do the
+same work? ( Numbers are not correct. Problem model is
+important)
+
+7.	What is the highest prime number that can be stored
+in a 8-bit microprocessor?
+
+8.	In which of the system 384 is equal to 1234?
+(Numbers are not correct. Important is only problem
+model)
+
+9.	If D_MUQZM is coded as CENTRAL then RBDJK  can be
+coded as ---------
+
+10.	The size of a program is N. And the memory
+occupied by the program is given by M = square root of
+ 100N. If the size of the program is increased by 1%
+then how much memory now occupied ?
+
+11. French, English, German
+														1.    How many more or less
+speak English than French?
+2.	What % people speak all the three languages?
+3.	What % people speak German but not English?
+
+12.	The size of the bucket is N kb. The bucket fills
+at the rate of  0.1 kb per millisecond. A programmer
+sends a program to receiver. There it waits for 10
+milliseconds. And responce will be back to programmer
+in 20 milliseconds. 
+Based on above information one question is there.
+13.	A power unit is there by the bank of the river 750
+mts. A cable is made from power unit to power a plant
+opposite to that of the river at 1500mts. The cost of
+the cable below water is Rs. 15/- per meter ansd cost
+of cable on the bank is Rs. 12/- per meter. 
+Based on above information one question is there.
+14.	Match the following.
+ 
+i.   brother - sister		a. Part of
+ii.  alsecian - dog		b. Sibling
+iii. sentence - paragraph	c. Type of
+iv.	d.
+
+15.	If the vertex (5,7) is placed in the memory. First
+vertex (1,1) 's address is 1245 and then address of
+(5,7) is ----------
+
+16.	A Planar solid cube contains how many vertices,
+howmany corner points and how many faces?
+
+17.	Which of the equation satisfies the graph?					
+		4 equations given.							  																							
+18.	Square of the <<term>> is directly proportional to
+the cube of the <<another term>> . If the <<term>> is
+'a' and <<another term>> is 'b' then which one is
+correct?
+4 options given like a square / b cube =const... 
+
+
+Part III Critical reasoning
+---------------------------
+
+4 passages and each 3 questions.
+
+Passage 1 :  Barrons GRE Analytical Ability ->Practice
+Excercise  questions 7-11. ( passage is :  The office
+staff of the XYZ corporation.....) In 1996 edition
+page number 377.
+Any way Iam giving the passage for those who do not
+have Barrons book.
+
+The office staff  of the XYZ corporation presently
+consists of three book keepers (A, B and C) and five
+secretaries (D,E,F,G, and H). Management is planning
+to open a new office in another city using 3
+secretaries and 2 book keepers of the present staff.
+To do so they plan to seperate  certain individuals
+who do not function well together. The following
+guidelines were established to set up the new office.
+
+1.	Book keepers A and C are constantly finding fault
+with one another and should not be sent as a team to
+the new office.
+
+2.	C and E function well alone but not as a team. They
+should be seperated.
+
+3.	D and G have not been on speaking terms for many
+months. They should not go together.
+
+4.	Since D and F have been competing for promotion,
+they should not be a team.
+
+Questions : 
+1.	If A is to be moved as one of the book keeper which
+of the following CANNOT be a possible working unit?
+a. ABDEH    b. ABDGH   c. ABEFH     d. ABEGH   e.
+ABFGH
+ANS) b
+2.	If C and F are moved to the new office , how many
+combinations are possible?
+a. 1	   b.2 	c.3 	d. 4 	e. 5 
+ANS) a
+3.	If C is sent to new office, which member of  the
+staff CANNOT go with C?
+a. B	   b. D	c. F	d. G	e. H
+ANS) b
+4.	Under the guidelines developed, which of the
+following MUST go to the new office?
+ a. B   b. D	c. E	d. G	e. H
+ANS) a
+5.	If D is going to the new office which of the
+following is/are true?
+I.	C  cannot go
+II.	A cannot go
+III.	H must also go
+a.	I only
+b.	II only
+c.	I and II only
+d.	I and III only
+e.	I, II, III
+ANS)d
+NOTE : Qustion paper contains project leads and
+programmers not book keepers and secretaries.
+
+Passage 2 :  Barrons GRE Analytical Ability ->Practice
+Excercise  questions 14-17. ( passage is :  After
+months of talent searching for an .....) In 1996
+edition page number 377.
+Any way Iam giving the passage for those who do not
+have Barrons book.
+	After months of talent searching for an
+administrative assistant to the president of the
+college the field of applicants has been narrowed down
+to five (A,B,C,D and E). It was announced that
+finalist would be chosen after a series of all-day
+group personal interviews were held. The examining
+committee agreed upon the following procedure.
+1.	The interviews will be held once a week.
+2.	Three candidates will appear at any all-day
+interview session.
+3.	Each candidate will appear atleast once.
+4.	If it is necessary to call applicants for
+additional interviews, no more than one such applicant
+should be asked to appear the next week.
+5.	Because of the details in the written applications,
+it was agreed that whenever candidate B appears, A
+should also be present.
+6.	Because of the travel difficulties, it was agreed
+that C will appear for only one interview.
+Questions:
+1.	At the first interview, the following candidates
+appear: A, B and D. Which of the following 
+combinations can be called for the interview to be
+held the next week?
+a. BCD	b. CDE	     c. ABE	d. ABC	      e. ADE
+ANS) b
+2.	Which of the following is a possible combinations
+for  interviews in two consecutive interviews?
+a.	ABC ; BDE
+b.	ABD; ABE
+c.	ADE; ABC
+d.	BDE; ACD
+e.	CDE; ABC
+ANS) c
+3.	If A, B and D appear at the interviw and D is
+called for additional interview the following week,
+which the two candidates  may be asked to appear with
+D?
+I.	A 
+II.	B
+III.	C
+IV.	E
+a.	I and II
+b.	I and III only
+c.	II and III only
+d.	II and IV only
+e.	III and IV only
+ANS)e
+4.	Which of the following correctly state(s) the
+procedure followed by the search committee?
+I.	After the second interview, all appicants have
+appeared atleast once.
+II.	The committee sees each applicant a second time.
+III.	If a third session is held it is possible fir akk
+applicants to appear atleast twice.
+a.	I only 
+b.	II only
+c.	I and II only
+d.	III only
+e.	I and III only
+ANS)a
+
+Passage 3 is  some thing like this. There are swimmers
+J,K,L,M,N,O,P and different conditions given.
+Passage 4 is like . A former planted trees in 4X4
+rows. No of plant verieties are 6. Like red, green
+etc. Questions based on these arragements.
+

@@ -1,0 +1,39 @@
+C/C++ Questions
+
+1) What is the output of printf("%d") 
+2)  What will happen if I say delete this 
+3)  Difference between "C structure" and "C++ structure". 
+4)  Diffrence between a "assignment operator" and a "copy constructor" 
+5)  What is the difference between "overloading" and "overridding"? 
+6)  Explain the need for "Virtual Destructor". 
+7)  Can we have "Virtual Constructors"? 
+8)  What are the different types of polymorphism? 
+9)  What are Virtual Functions? How to implement virtual functions in "C" 
+10)  What are the different types of Storage classes? 
+11)  What is Namespace? 
+12)  What are the types of STL containers?. 
+13)  Difference between "vector" and "array"? 
+14)  How to write a program such that it will delete itself after exectution? 
+15)  Can we generate a C++ source code from the binary file? 
+16)  What are inline functions? 
+17)  Talk sometiming about profiling? 
+18)  How many lines of code you have written for a single program? 
+19)  What is "strstream" ? 
+20)  How to write Multithreaded applications using C++? 
+21)  Explain "passing by value", "passing by pointer" and "passing by reference" 
+22)  Write any small program that will compile in "C" but not in "C++" 
+23)  Have you heard of "mutable" keyword? 
+24)  What is a "RTTI"? 
+25)  Is there something that I can do in C and not in C++? 
+26)  Why preincrement operator is faster than postincrement? 
+27)  What is the difference between "calloc" and "malloc"? 
+28)  What will happen if I allocate memory using "new" and free it using "free" or allocate sing "calloc" and free it using "delete"? 
+29)  What is Memory Alignment? 
+30)   Explain working of printf. 
+31)  Difference between "printf" and "sprintf". 
+32)  What is "map" in STL? 
+33)  When shall I use Multiple Inheritance? 
+34)  What are the techniques you use for debugging? 
+35)  How to reduce a final size of executable? 
+36)  Give 2 examples of a code optimization. 
+

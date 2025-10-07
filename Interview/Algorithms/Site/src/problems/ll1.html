@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Length of Cycle/Loop in the given Single Linked List</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Find the Length of the cycle/loop in the given Single Linked List?</strong></div>
+
+            <div class="question"><strong>Method 1: </strong> Using Floyd’s Cycle-Finding Algorithm;</div>
+            <div class="answer">
+                <ul>
+                    <li>Find the common point, using floyd's cycle finding algorithm;</li>
+                    <li>Take a temp pointer, initialize it to temp; Take a counter, initialize it to 0;</li>
+                    <li>Keep traversing the linked list one by one using temp pointer and increase the count, until common point is reached again'</li>
+                    <li>Now, count contains the number of nodes in the loop;</li>
+            </div>
+    </body>
+</html>

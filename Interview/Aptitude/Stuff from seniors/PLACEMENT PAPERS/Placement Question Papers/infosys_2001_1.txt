@@ -1,0 +1,54 @@
+this is infosys paper as on 9 july 2001
+
+Srini: Thanks Sunil Nikam
+
+----------------------------------------
+
+1. A, B, C made trips to PIZZA centre 
+ B made 2.4 times more trips then ! , C made 6 more
+then A Total Min trips are
+ans 28
+
+2. 5 thioves stole dimands in following way 
+   1st stole half +2 
+   2nd remaining half +2
+   .
+   .
+   for 5th there was no diamond 
+   how many diamond were there initially
+ans 60
+
+3. a circular track has 100yards.
+ The race of Rabbit and TOuttoise. they started at
+same point. and move in circular path. in opposite
+direction.
+    first tortoice run for 1/8 th path, then only
+rabitt starts,
+ rabitt moved slowwy till toutice meet him, Rabitt had
+covered 1/6 th distance speed( over earlier speed) to
+win
+ans   don' know
+
+4. 1,2,3,4,5,6,7,8,9 station. route betwwen any 2
+station is there only ifthe 2 digit nob. is divisible
+by 3.
+e.g. route exist between 1 to 2 b'cause 12 is 
+divisible by 3
+   how many station have routes to 8 either direct or
+indirect 
+ans   5
+
+5.write ascending order of weights 
+  five friends A, B, C, D
+  some comparision is there 
+
+ans   BADC
+
+6. Travelling for 9 days.
+total dist to be covered is 1080 miles. Dist covered
+per day must be 20 miles then that of previous day.
+  what dist is covered 
+       4 th day     ans  100
+       7 th day     ans  200
+
+

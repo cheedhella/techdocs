@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find Lowest Common Ancestor of 2 given nodes in a binary tree?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            Lowest Common Ancestor -> Lowest common ancestor of 2 nodes n1 and n2 is defined as the lowest node in T that has both n1 and n2 as descendants;
+
+	Method 1: Store root to n1 and root to n2 paths;
+		1. Find a path from the root to n1 and store it in a vector or array;
+		2. Find a path from the root to n2 and store it in another vector or array;
+		3. Traverse both paths till the values in arrays are the same. Return the common element just before the mismatch
+
+	Time Complexity: O(N); It requires 3 tree traversals plus extra space for path arrays;
+
+	Method 2: ;
+	The idea is to traverse the tree starting from the root. If any of the given keys (n1 and n2) matches with the root, then the root is LCA (assuming that both keys are present). If the root doesn’t match with any of the keys, we recur for the left and right subtree. The node which has one key present in its left subtree and the other key present in the right subtree is the LCA. If both keys lie in the left subtree, then the left subtree has LCA also, otherwise, LCA lies in the right subtree.  
+
+		Node findLCA(Node node, int n1, int n2)
+    {
+        // Base case
+        if (node == null)
+            return null;
+ 
+        // If either n1 or n2 matches with root's key, report
+        // the presence by returning root (Note that if a key is
+        // ancestor of other, then the ancestor key becomes LCA
+        if (node.data == n1 || node.data == n2)
+            return node;
+ 
+        // Look for keys in left and right subtrees
+        Node left_lca = findLCA(node.left, n1, n2);
+        Node right_lca = findLCA(node.right, n1, n2);
+ 
+        // If both of the above calls return Non-NULL, then one key
+        // is present in once subtree and other is present in other,
+        // So this node is the LCA
+        if (left_lca!=null && right_lca!=null)
+            return node;
+ 
+        // Otherwise check if left subtree or right subtree is LCA
+        return (left_lca != null) ? left_lca : right_lca;
+    }
+
+
+     If one key is present and the other is absent, then it returns the present key as LCA (Ideally should have returned NULL). 
+     
+
+
+	The idea is to traverse the tree starting from the root. If any of the given keys (n1 and n2) matches with the root, then the root is LCA (assuming that both keys are present). If the root doesn’t match with any of the keys, we recur for the left and right subtree. The node which has one key present in its left subtree and the other key present in the right subtree is the LCA. If both keys lie in the left subtree, then the left subtree has LCA also, otherwise, LCA lies in the right subtree.  
+
+	https://www.geeksforgeeks.org/lowest-common-ancestor-binary-tree-set-1/
+	https://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/
+	236
+
+
+
+
+	we can find LCA in O(h) time where h is the height of the tree.
+    
+            <p class="question"><strong>Method 1</strong>: Using any sorting method;</p>
+            <p class="answer">
+                - Sort the array in ascending order, using any sorting algorithm; O(N*logN);<br/>
+	            - Print first K elements; O(K);<br/>
+                <br/>
+	            Time Complexity: O(N*logN + K);
+            </p>
+
+            <p class="question"><strong>Method 2</strong>: Using Bubble sort;</p>
+            <p class="answer">
+                - Modify Bubble Sort to run the outer loop atmost K times;<br/>
+	            - Print last K elements of the array obtained in above step;<br/>
+                <br/>
+	            Time Complexity: O(N*K);
+                <br/>
+                Like Bubble sort, selection/insertion sort can be used to get the K smaller elements;
+            </p>
+
+            <p class="question"><strong>Method 3</strong>: Using Heap;</p>
+            <p class="answer">
+                - Convert the array into a Min-Heap; O(N);<br/>
+	            - Use extract-min() K times to get the first K smaller elements; O(logN);<br/>
+                <br/>
+	            Time Complexity: O(K*logN)
+            </p>
+            <p class="question"><strong>Method 4</strong>: Using Quick Sort;</p>
+            <p class="answer">
+                - In QuickSort, we pick a pivot element and move it to its correct position and partition the array around it;<br/>
+	            - The idea is to stop at the point where the pivot itself is the Kth largest element;<br/>
+                <br/>
+	            Time Complexity: O(N*logN + K);<br/><br/>
+
+                Choose a pivot number.<br/>
+if K is lesser than the pivot_Index then repeat the step.<br/>
+if K == pivot_Index : Print the array (low to pivot to get K-smallest elements and (n-pivot_Index) to n fotr K-largest elements)<br/>
+if  K > pivot_Index : Repeat the steps for right part.<br/>
+            </p>
+            <p class="question"><strong>Method 5</strong>: Using Order Statistics; TODO</p>
+            <p class="answer">
+                - Use order statistic algorithm to find the kth largest element;<br/>
+                - Please see the topic selection in worst-case linear time O(n);<br/>
+                <br/>
+	            Time Complexity: TODO:
+            </p>
+            
+        </div>
+
+        <pre>
+            <code class="language-java">
+
+
+            </code>
+        </pre>
+    </body>
+</html>

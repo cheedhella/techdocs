@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Merge 2 sorted Arrays</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Merge 2 sorted Arrays?</li>
+        </ul>
+
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class P2 {
+    private static int[] mergeSortedArrays(int[] a1, int[] a2) {
+        int[] output = new int[a1.length + a2.length];
+        int i = 0, j = 0, k = 0;
+        while (i < a1.length && j < a2.length) {
+            if (a1[i] < a2[j]) {
+                output[k] = a1[i];
+                i++;
+            }
+            else {
+                output[k] = a2[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < a1.length) {
+            output[k] = a1[i];
+            i++;
+        }
+
+        while (j < a2.length) {
+            output[k] = a2[j];
+            j++;
+        }
+
+        return output;
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = { 1, 12, 14, 17, 23 };
+        int[] a2 = { 11, 19, 27 };
+        int[] outputArr = mergeSortedArrays(a1, a2);
+        System.out.println("After merging: " + Arrays.toString(outputArr));
+    }
+}
+
+// Output:
+After merging: [1, 11, 12, 14, 17, 19, 23, 27]
+        </code>
+      </pre>
+
+    </body>
+</html>

@@ -1,0 +1,31 @@
+Given an singly linked list and poisition "n", we have to remove the nth item from end
+Answer: In either of implementation, the complexity will be O(n).
+Steps of the first questions are as:
+1) Take a temporary pointer.
+2) When you cross the (n)th element, store the address of the nth position in the temporary pointer or reference such that traversal pointer must be having (n+1)th address.3) Now after above step, always update the value of the temp by the new address or next address in the singly linked list.
+4) After reaching at the end, temp pointer will be in the (n+1)th position from the end.
+5) Now just replace the value from the (n-1)(from the end) address to get the new linked list.
+
+
+
+
+
+
+
+
+
+
+2) Remove the duplicates in an array.
+
+
+
+
+Duplicate removal can be reduced to sort. There are O(n) sorting algorithms that work for integers. See Cormen, et al. Introduction to Algorithms, chapter 8, or Google for "radix sort", "counting sort", "bucket sort".
+
+
+
+
+
+
+
+

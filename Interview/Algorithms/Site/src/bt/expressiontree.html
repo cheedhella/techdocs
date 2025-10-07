@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Expression Tree</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>What is a Expression Tree?</strong></div>
+            <div class="answer">
+                It is a binary tree which represents an expression;<br/>
+	In expression tree, each internal node contains operator and each leaf node contains operand;<br/>
+	An operator can be unary or binary;<br/><br/>
+
+	<b>Eg:</b> Expression tree for <b>3 + ((5+9)*2)</b> would be:<br/><br/>
+    <pre>
+			+	
+		 3	    * 
+			 +     2 
+		   5   9	
+    </pre>
+            </div>
+
+            <div class="question"><strong>Evaluation of Postfix Expression:</strong></div>
+            <div class="answer">
+                - Take an empty Stack, s;<br/>
+		- For each character in the postfix expression,<br/>
+		&emsp;	- If current character is operand, push it to stack;<br/>
+		&emsp;	- If current character is binary operator, pop two values from stack, apply the operation and push the result to stack;<br/>
+		- In the end, only element in the stack will be the expression value;<br/>
+            </div>
+
+            TODO: Evaluating infix, prefix expressions; converting one form of expression to another;
+    </body>
+</html>

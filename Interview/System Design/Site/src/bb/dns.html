@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DNS</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is DNS?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is a naming service that maps human-friendly domain names(like https://www.educative.io) to machine-friendly IP address(104.18.2.119);</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Why DNS is needed?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>It is easier for humans to remember domain names, rather than IP addresses;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>New Terms</strong></p>
+        <p class="answer">
+            <ul>
+                <li>
+                    <b>DNS</b> 
+                    <ul>
+                        <li>It is important to understand DNS is not a single naming server; It is a hierarchy of huge number of naming servers;</li>
+                        <li>The hierarchical structure allows DNS to be highly scalable with it's increasing query load;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Name Server</b> 
+                    <ul>
+                        <li>Each server contains a collection of Resource Records;</li>
+                        <li>There are mainly 4 types of servers:
+                            <ul>
+                                <li><b>DNS Resolver</b> - DNS Server of your ISP, mostly;</li>
+                                <li><b>Root Server</b></li>
+                                <li><b>Top-Level Domain Server</b> - A .com TLD nameserver contains information about every website that ends with .com;</li>
+                                <li><b>Authoritative Name Server</b></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Resource Record</b> 
+                    <ul>
+                        <li>Each record contains type, name and value;</li>
+                        <li>type could be: A, NS, CNAME, MX etc;</li>
+                        <li>name and value change depending upon the type of the RR;</li>
+                        <br>
+                        <li>A -> maps hostname to IP address; name -> hostname; value -> IP address;</li>
+                        <li>CNAME -> maps alias to hostname; name -> canonical name; value -> hostname;</li>
+                        <li>MX -> Specifies the mail server for accepting messages; Mail Exchange Record;</li>
+                        <li>NS -> Specifies the nameserver to contact for your domain; Name Server Record;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Zone</b>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    <b>Caching</b>
+                    <ul>
+                        <li>DNS uses caching at different layers to reduce request latency for the user;</li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How do you get IP address for a new domain and what happens when you register?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Procuring IP address entirely a different thing!</li>
+                <li>You could register your IP address and domain with any DNS registar(like GoDaddy that offers both DNS registration and hosting);</li>
+                <li>They have authoritative name servers, which stores the mapping;</li>
+                <br>
+                <li>How does TLD server knows that GoDaddy's authoritative name server contains mapping for www.example.com?</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How does your browser finds IP address of www.google.com, when you type it in the address bar and press enter?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>
+                    <b>Browser Cache</b> 
+                    <ul>
+                        <li>Browser first looks at it's cache;</li>
+                        <li>Browser caches the IP address of the domains that we have visited recently, with a TTL(Time to live);</li>
+                    </ul>
+                </li>
+                <br>
+                <li>If the record is not found in Browser cache, next, it checks the ISP's DNS server;
+                    <ul>
+                        <li>
+                            <b>How does browser know ISP's DNS server?</b>
+                            <ul>
+                                <li>Either you network interface card is statically configured OR it obtains the information dynamically, using another protocol called DHCP;</li>
+                                <li>Dynamic Host Configuration Protocol (DHCP) is a protocol for automatically assigning IP addresses and other configurations to devices when they connect to a network;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <br>
+                <li>
+                    If ISP's DNS server can't find the record in it's cache, it check with the root DNS server?
+                    <ul>
+                        <li>
+                            <b>What is root naming server?</b>
+                            <ul>
+                                <li>There are 13 DNS root servers, each of which is named with the letters A to M; They all have a IPv4 address and most have an IPv6 address;</li>
+                                <li>Managing the root servers is ICANN's responsibility (Internet Corporation for Assigned Names and Numbers);</li>
+                                <li>All root servers contains an identical copy of the root zone file - there is complicated process for any updates to it;</li>
+                                <li>The file itself only contains a size of roughly 2 MB; However, it contains all the names and IP addresses of all the top-level domain name servers;</li>
+                            </ul>
+                            <br>
+                            <b>How does ISP know about root server?</b>
+                            <ul>
+                                <li>Root servers mostly have a pre-defined IP, but that could change rarely;</li>
+                                <li>In the rare case, if the IP of a root server changes, there are other root servers which could serve the request, until ISP updates root hints file from ns.internic.net;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <br>
+                <li>TODO: How does root server knows about TLD servers? How does TLD server gets data from Authorative Server?</li>        
+            </ul>
+
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/url-parts.png" height="200" width="600" alt="" srcset="" />
+            </div>
+            <br>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/dns-resolution.png" height="400" width="800" alt="" srcset="" />
+            </div>
+            <br>
+            <div style="margin-left: 40px;">
+                <img src="../../resources/imgs/dns-root-servers.png" height="400" width="800" alt="" srcset="" />
+            </div>
+        </p>
+
+        <p class="question"><strong>Questions</strong></p>
+        <p class="answer">
+            <ul>
+                <li>How does naming servers find each other?</li>
+                <li>Since DNS servers are distributed, the requests are distributed from a single-point-of-entry to multiple servers in the background;</li>
+                <li>How does the distributed nature of the DNS infrastructure help its robustness?</li>
+                <li>How is caching performed at different levels of the Internet to reduce the querying burden over the DNS infrastructure?</li>
+                <li>How is the DNS hierarchy formed using various types of DNS name servers?</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>References</strong></p>
+        <p class="answer">
+            <ul>
+                <li>https://medium.com/@alysachan830/what-happens-from-typing-in-a-url-to-displaying-a-website-part-1-dns-cache-and-dns-lookup-86441848ea59</li>
+                <li>https://blogs.oracle.com/cloud-infrastructure/post/how-to-manage-your-godaddy-domain-with-oci-dns - DNS on OCI</li>
+                <li>https://www.educative.io/courses/grokking-modern-system-design-software-engineers-managers/Y5ZqGDpDLrO</li>
+            </ul>
+        </p>
+    </body>
+</html>

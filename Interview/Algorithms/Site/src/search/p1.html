@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search a Sorted Array that is Rotated</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Search for a given number in a sorted array that has been rotated by some arbitrary number?</li>
+        </ul>
+
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class BinarySearch {
+
+    // Time complexity: O(log N); Space Complexity: O(1);
+    private static int iterativeBinarySearchRotated(int[] nums, int target) {
+        int start = 0;
+        int end = nums.length - 1;
+
+        if (start > end)
+            return -1;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            // Target value is present at the middle of the array
+            if (nums[mid] == target)
+                return mid;
+
+            // start to mid is sorted
+            if (nums[start] <= nums[mid]) {
+                if (nums[start] <= target && target < nums[mid]) {
+                    end = mid - 1;
+                }
+                else {
+                    start = mid + 1;
+                }
+            }
+
+            // mid to end is sorted
+            else {
+                if (nums[mid] < target && target <= nums[end]) {
+                    start = mid + 1;
+                }
+                else {
+                    end = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int binarySearch(int[] nums, int start, int end, int target) {
+        if (start > end)
+            return -1;
+
+        // Finding mid using floor division
+        int mid = start + (end - start) / 2;
+
+        if (nums[mid] == target)
+            return mid;
+
+        // start to mid is sorted
+        if (nums[start] <= nums[mid])
+            if (nums[start] <= target && target < nums[mid])
+                return binarySearch(nums, start, mid - 1, target);
+            else
+                return binarySearch(nums, mid + 1, end, target);
+        // mid to end is sorted
+        else if (nums[mid] < target && target <= nums[end])
+            return binarySearch(nums, mid + 1, end, target);
+        else
+            return binarySearch(nums, start, mid - 1, target);
+    }
+
+    // Time Complexity: O(log*n); Space Complexity: O(logN);
+    private static int binarySearchRotated(int[] nums, int target) {
+        return binarySearch(nums, 0, nums.length - 1, target);
+    }
+
+    public static void main(String[] args) {
+        int[] targetList = { 3, 6, 3, 6 };
+        int[][] numsList = { { 6, 7, 1, 2, 3, 4, 5 }, { 6, 7, 1, 2, 3, 4, 5 }, { 4, 5, 6, 1, 2, 3 },
+                { 4, 5, 6, 1, 2, 3 } };
+
+        for (int i = 0; i < targetList.length; i++) {
+            System.out.println((i + 1) + ". Rotated array: " + Arrays.toString(numsList[i]));
+            System.out.println("   target " + targetList[i] + " found at index "
+                    + iterativeBinarySearchRotated(numsList[i], targetList[i]));
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------\n");
+        }
+
+        for (int i = 0; i < targetList.length; i++) {
+            System.out.println((i + 1) + ". Rotated array: " + Arrays.toString(numsList[i]));
+            System.out.println("   target " + targetList[i] + " found at index "
+                    + binarySearchRotated(numsList[i], targetList[i]));
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------\n");
+        }
+    }
+}
+            
+
+// Output:
+1. Rotated array: [6, 7, 1, 2, 3, 4, 5]
+   target 3 found at index 4
+----------------------------------------------------------------------------------------------------
+
+2. Rotated array: [6, 7, 1, 2, 3, 4, 5]
+   target 6 found at index 0
+----------------------------------------------------------------------------------------------------
+
+3. Rotated array: [4, 5, 6, 1, 2, 3]
+   target 3 found at index 5
+----------------------------------------------------------------------------------------------------
+
+4. Rotated array: [4, 5, 6, 1, 2, 3]
+   target 6 found at index 2
+----------------------------------------------------------------------------------------------------
+
+1. Rotated array: [6, 7, 1, 2, 3, 4, 5]
+   target 3 found at index 4
+----------------------------------------------------------------------------------------------------
+
+2. Rotated array: [6, 7, 1, 2, 3, 4, 5]
+   target 6 found at index 0
+----------------------------------------------------------------------------------------------------
+
+3. Rotated array: [4, 5, 6, 1, 2, 3]
+   target 3 found at index 5
+----------------------------------------------------------------------------------------------------
+
+4. Rotated array: [4, 5, 6, 1, 2, 3]
+   target 6 found at index 2
+----------------------------------------------------------------------------------------------------
+
+
+
+        </code>
+      </pre>
+
+    </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Stock Buy Sell to Maximize Profit?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an array of daily stock prices, integers for simplicity, return the buying and selling prices for making the maximum profit;</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+class Tuple {
+    public int low;
+    public int high;
+
+    public Tuple(int low, int high) {
+        this.low = low;
+        this.high = high;
+    }
+}
+
+public class StockPrices {
+    public static Tuple findBuySellStockPrices(int[] dayWisePrices) {
+        Tuple result = new Tuple(-1, -1);
+
+        int low = dayWisePrices[0];
+        int high = -1;// dayWisePrices[0];
+        int currMaxGap = 0;
+        for (int i = 1; i < dayWisePrices.length; i++) {
+            if (dayWisePrices[i] < low) { // found a new low, could be a spike start!
+                low = dayWisePrices[i];
+                high = -1;
+            }
+            else if (dayWisePrices[i] > high) { // this could be a spike end!
+                high = dayWisePrices[i];
+                if (high - low > currMaxGap) {
+                    currMaxGap = high - low;
+                    result.low = low;
+                    result.high = high;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 100, 10, 5, 50, 2, 60 };
+        System.out.println("Input: " + Arrays.toString(data));
+        Tuple output = findBuySellStockPrices(data);
+        System.out.println("Output: " + output.low + ", " + output.high);
+    }
+}
+
+// Output:
+Input: [100, 10, 5, 50, 2, 60]
+Output: 2, 60
+        </code>
+      </pre>
+
+    </body>
+</html>

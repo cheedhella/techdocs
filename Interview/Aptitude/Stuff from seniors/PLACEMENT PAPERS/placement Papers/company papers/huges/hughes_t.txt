@@ -1,0 +1,170 @@
+This is a list of questions that came in the Hughes test in 1996
+Some questions were repeated in 1997 - preceeded by a *
+Questions which came only in 1997 are preceeded by **
+
+1. quality factor defines the quality of :
+  (a) inductor		(b) capacitor		(c) both 	(d) none
+
+2. Resistance increases with temp. in :
+(a) conductor     (b) semi-conductor      (c) insulator    (d)not dependent
+
+*3. Spanning tree algorithm is used in :
+(a) routes   (b) bridge    (c) repeater     (d) gateway
+
+*4. Encryption is done in ________  layer :
+(a)       (b)      (c)      (d)
+
+*5. Principle of locality is used in ________:
+(a)       (b)      (c) polling   (d) cache
+
+*6.JK built with SR ;J=  ,  K=   :
+(a)      (b)   (c)   (d)
+
+7. AM spectrum 
+(a)    (b)   (c)   (d)
+
+8. Noise immunity of AM is ______ than that of FM :
+(a)less     (b) more    (c) equal    (d) none
+
+9. Push-pull amp. has the following adv.  :
+(a) low harmonic   (b) high power gain   (c) both    (d) none
+
+*10. To transmit a signal with freq. f , BW reqd. is  :
+(a) 1/2 f     (b) 2f      (c) f     (d) none
+
+*11. If o/p of serial shift reg. is connected to its i/p it becomes :
+(a) flip-flop   (b) seq. memory    (c) counter     (d) ALU
+
+12. Of the follo. which can't go to a predetermined memory location :
+(a)INTR    (b) RST 5.5   (c) RST 7.5    (d) TRAP
+
+13.Single parity bit in asynch. transfer is used for  :
+(a)error detector   (b) error correction    (c)error detection & correction  
+    (d) none
+
+14. Banking algo. can be used for :
+(a) deadlock avoidance   (b) dead lock removal  (c)   (d)
+
+15. in O.S. which is correct :
+(a) water     (b) dispatch       (c) block     (d)none
+
+*16. Boolean exp. simplification (x+y)(x+y-) (x- +z)
+(a) xz  
+
+17. Which of the following is not Demorgan's law:
+(a) (aUb)' = a'Ub' etc.
+
+A question on solving an expression was given  on solving one expression
+
+*18. int *ptrint,intarr[4];
+    intarr[0]=1;
+    intarr[1]=2;
+    intarr[3]=3;
+    intarr[4]=4;
+    ptrint=intarr;
+     *(intarr + 3) = *(++ptrint) + *(ptrint++)
+
+  (a) 1,2,3,4   (b) 1,2,3,5  (c) 1,2,4,5  (d) 
+
+19. funca()
+{
+static int y=10;
+printf("%d",y);
+y++;
+}
+
+what is value of y after 2nd call to function?
+(a) 11     (b) 12     (c) infinite   (d) compilation error
+
+A question on static variable value was asked this time
+
+20. i/p current=?   max. current=?    CMRR=?    gain of op-amp=? 
+
+21. pictorial  question on vitual page and phy. page  offset given => give memory location ?
+
+*22. The no. of trees that can be constructed with 3 nodes a,b,c is :
+(a) 2    (b) 3    (c) 12    (d) infinite
+
+*23. A comp. n/w has 5 nodes fully interconnected the no. of full duplex channels reqd. for interconnection is _______: 
+(a) 120    (b) 10   (c) 5     (d) 1
+
+24. Diff. between RET and IRET in 8086 is _____:
+
+25. Disad. of CPU reg. is :
+(a) eval. of exp.     (b) function call   (c) arrange implementation  (d)none
+
+26. union 
+ {
+  type 1 ival;
+  type 2 cval;
+ }
+size of union is ________?
+
+27. MACRO subt x,y
+       --------
+       --------
+
+x,y  are:
+(a) variables    (b) actual parameters    (c) identifier   (d) formal parameters
+
+
+27. Visibility of static variables is _________.
+
+*28.	s1,s2,...,sn are records in ascending order. Given si, to
+	find s i+1, we need
+	(a) O(1)	(b) O(n)	(c) O(n log n)	(d) O(n^2)
+
+29. Figure
+	This is ____ gate.
+	(a) not 	b) nor	c) and	d) nand.
+*31. load x
+    xor y
+    store x
+    xor y
+    store y
+    xor y
+    store x
+    a) flipping x & y contents
+    b) stores the absolute values of x & y in x,y
+    c) swapping
+    d) no change
+32. supply voltage =10V, gain =100, i/p voltage=1V, o/p voltage=?
+33. o/p of TTL gate is
+    a) totempole amplifier
+    b) common emmitter.
+    c) d).
+34. A floating pt. number having 16-bits for mantissa and 8-bit
+    for exponent is represented in 2's complement form. The max.
+    and min. numbers possible are .... and ....
+
+*35. The selection of files by the movement of the head of a disk in 
+    its path is referred to as
+    a) FCFS	b) shortest seek job first	c) d) none
+
+*36. Address space consists of 1 byte. There are 8k x 4 bits in one chip.
+    The RAM consists of 4 x 6 array. How many address lines
+    are required. ans = 17
+
+37. Find the no. of bits & words required to implement a 1 x 4
+    DMUX using RAM.
+
+38. int a[5..10,-5..10];
+    The array is arranged in row  major form. If the array starts at
+    100 and each element occupies 4 bytes, the address of a[6,0] is.
+39. Pick the wrong one.
+    a) In I/O mapped I/O, i/o address and memory addresses are
+       different.
+    b) In memory mapped I/O they are not different.
+    c) There are no special opcodes for I/O devices.
+    d) none of above.
+40. Regenerative amplifier is not used for analog signals because
+    a) they amplify noise also
+    b)  c)  d)
+41. Zero bit stuffing in LDAP is used for 
+    a) avoidance of occurence of flag data in the message field.
+    b)   c)   d)
+*42. Pick the wrong one.
+    a) bridges - data link , gateway - network layer.
+    b) bidge - network layer , protocol conversion - higher layer.
+    c) gateway - network layer , protocol conversion - higher layer.
+    d) none.

@@ -1,0 +1,50 @@
+Count sort
+
+	Input: array of n integers in the range 1 to k (or) k1 to k2.
+
+	Algorithm: two-pass sorting algorithm
+	   pass 1 -> count the occurrences of each key in the given array.
+	   pass 2 -> put each key in it's final place.
+
+	// A[n] - array of n integers in the range 1 to k (or) k1 to k2
+
+	count-sort(A[n], k)
+	   {
+	   for(i=0; i<k; i++)
+		C[i] = 0;
+
+	   for(i=0; i<n; i++)
+		C[A[i]]++;	// C[i] contains no. of elements equal to i
+
+
+	   for(i=1; i<k; i++)
+		C[i] = C[i-1] + C[i];    // C[i] contains no. of elements less than or equal to i 
+
+
+	   // unstable
+	   for(i=0; i<n; i++)
+	      B[C[A[i]-1] = A[i];
+	      C[A[i]]--;
+
+
+	   // stable
+	   for(i=n-1; i>=0; i--)
+	      B[C[A[i]-1] = A[i];
+	      C[A[i]]--;
+
+	   printf("Sorted Array Contents: ");
+	   for(i=0; i<n; i++) printf("%d ", B[i]);
+	   }
+
+	Analysis:
+	
+	Two of the for loops takes O(k) time and remaining two takes O(n) time. 
+	So, overall time complexicity of the counting sort is O(k) + O(n) + O(k) + O(n) = O(k + n).
+
+	For the algorithm to be efficient, k must be smaller than n.
+	Eg: suppose you want to sort 10000 people by birthday; n=10000, k=366, so time = O(n). 
+
+	Disadvantage: not a in-place sorting algorithm.
+
+All (count sort, bucket sort, radix sort) takes O(n) time. 
+But, Count sort performs better than bucket sort, which in turn performs better than radix sort.

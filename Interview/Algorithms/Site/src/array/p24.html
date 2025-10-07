@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sort the words of given String</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given a String, sort all words in it by it's length and if word length is same, sort by alphabetical order;</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class OrderingEg {
+    public static void main(String args[]) {
+        String input = "Mobile and Laptop are not exempt";
+        List<String> wordsList = Stream.of(input.split(" ")).map(String::trim)
+                .collect(Collectors.toList());
+
+        System.out.println("Before sorting: " + wordsList);
+        Comparator<String> comparator = (s1, s2) -> Integer.compare(s1.length(), s2.length());
+        Collections.sort(wordsList, comparator);
+        System.out.println("After sorting by length: " + wordsList);
+
+        List<String> wordsList2 = Stream.of(input.split(" ")).map(String::trim)
+                .collect(Collectors.toList());
+
+        System.out.println("Before sorting: " + wordsList2);
+        Collections.sort(wordsList2, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if (o1.length() != o2.length()) {
+                    return o1.length() - o2.length();
+                }
+                else {
+                    return o1.compareToIgnoreCase(o2);
+                }
+            }
+        });
+
+        System.out.println("After sorting by length and alphabetically: " + wordsList2);
+    }
+}
+
+Output:
+Before sorting: [Mobile, and, Laptop, are, not, exempt]
+After sorting by length: [and, are, not, Mobile, Laptop, exempt]
+
+Before sorting: [Mobile, and, Laptop, are, not, exempt]
+After sorting by length and alphabetically: [and, are, not, exempt, Laptop, Mobile]
+
+        </code>
+      </pre>
+
+    </body>
+</html>

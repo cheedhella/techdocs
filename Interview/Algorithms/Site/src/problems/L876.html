@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Middle node of a Single Linked List</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>Middle node of a Single Linked List</strong></div>
+            <div class="answer">
+                Find the middle node of a Single Linked List? If there are 2 middle nodes, return the 2nd middle node;<br/><br/>
+                Input 1: 1 2 3 4 5		&nbsp;&nbsp;&nbsp; Output: 3<br/>
+	            Input 2: 1 2 3 4 5 6	&nbsp; Output: 4<br/>
+            </div>
+
+            <div class="question"><strong>Method 1: </strong></div>
+            <div class="answer">
+                Traverse the whole list and count the number of nodes in it;<br/>
+	            Now, traverse the list again till count/2 and return the node at count/2;
+            </div>
+            
+            <div class="question"><strong>Method 2: </strong> Using 2 pointers;</div>
+            <div class="answer">
+                <ul>
+                    <li>Traverse the list using two pointers;</li>
+                    <li>Move one pointer by one and the other pointers by two;</li>
+                    <li>When the fast pointer reaches the end, slow pointer will reach the middle of the linked list;</li>
+                </ul>
+            </div>
+            
+           <div class="question"><strong>Method 3: </strong>almost same as above;</div>
+           <div class="answer">
+                <ul>
+                    <li>Initialize mid element as head and initialize a counter as 0;</li>
+                    <li>Traverse the list from head, while traversing increment the counter and change mid to mid->next whenever the counter is odd;</li>
+                    <li>So the mid will move only half of the total length of the list;</li>
+                </ul>
+            </div>
+
+            <br/>Reference: https://www.geeksforgeeks.org/write-a-c-function-to-print-the-middle-of-the-linked-list/
+
+    </body>
+</html>

@@ -1,0 +1,16 @@
+1) Given an array find two  elements a[i] & a[j] such that
+
+     a[i]+a[j] = X
+
+2) Check whether a tree is BST or not
+    a) use traversal
+    b) top-down approach
+    c) bottom-up approach
+3) Linked list have loop or not
+    a) use 2-pointer concept
+    b) using reverse linked list concept
+4) given two strings check one is a permutation of another
+    a) sort & check
+    b) using extraspacke of size 26
+    c) using ex-or if elements of string are unique
+

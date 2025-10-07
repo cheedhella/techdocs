@@ -1,0 +1,177 @@
+Wipro  Sample Test #3
+ Home
+ 
+
+Back To Wipro Page
+
+
+
+Q.If  x= sin-1(t), y = log(1-t2), find d2y/dx2 when  t=1/2 and when t =-8/3.
+
+Q. Element having same atomic number and different mass number are ................
+
+Q. The sum of the series 1+1(1+1/n)+3(1+1/n)^2+..... is equal to .............
+
+Q. X,Yand Z are senior engineers. A,B,C,D are junior engineers. Company wants to select 4 enginers. Two will be senior and two will be juniors. Y is not front to A, Z is not front to C, B is not front to A, B is selected then who will be 4 members ?
+
+Q. A speaks 70% of truth , B is speaking 80% truth .prob. that both are contradicting each other is ?
+
+Q. Integration of (2x-3)/((x^2 +x+1)^2 dx is ?
+
+Q. Ram is starting from north walking 2 km and turn right walk 4 km and turn right walking 4 km again, turn walked 4 km .    Radha walking opposite to Ram . 
+     a.) what will be the distance of Ram direction Radha ?
+     b.) D.B.T starting and finishing positions. ?
+
+Q. If dy= (sec x+ y tan x)dx , then  y =.....?......
+
+Q. If the equation  x^2 -3x +a=0 has the roots (0,1) then value of a is ?
+
+Q. A and B's temperature are 10°c and 20°c having same surface , then their  ratio of emmisions is ?
+
+Q.If  2 persons have to select a number from 1 to 25 then  the probability for not selecting the same number is .... ?....
+
+Q. There are 10 questions divided into two groups each containing 5 questions. A and B select max of 4 numbers from       their respective groups . Number  of ways to select 6 quiestions is .......?....
+
+Q. A system P1,T1 is transferred to P2,T2 .The condition for the two forces to remain constant during the two process       is.... ?.....
+
+Q. An atomic particle exists and has a  particlular decay rate . It is in a train . When the train moves, a person observes for       whether   the decay rate
+     a.) increases
+     b.) decreases
+     c.) depend on the directions of movement of train 
+
+Q. What is the emperical formula for the compoud with composition C=40% , H=6.7%, O=53.6% 
+
+Ans. CH2O 
+
+Q. Which of the following exchanges positive ions
+a).cl-
+b) nh2- 
+
+
+Ans nh2-
+
+Q. What is an ideal solution ?
+
+Q. If x approaches infinity , then (òe^x dx )/( òe^2xdx) is ?
+
+Q. Cemeatite is represented by ?
+
+Q. Dead zone in control system means ?
+
+Q.Warping can be avoided by ?
+
+Q. After execution of CMP, a instruction in Intel 8085 microprocessor...
+   a) ZF is set and CY is reset.
+   b) ZF is set CY is unchanged
+   c) ZF is reset, CY is set
+   d) ZF is reset , CY is unchanged .
+
+Ans .ZF is set and CY is  reset
+
+Q Two bodies changed from P1V1 to P2V2 states in two ways , the heat supplied is delta Q and work done is delta W .       What is the constant in these two processes ?. 
+   a)delta Q
+   b) delta W
+   c) Delta Q+delta W
+   d) DeltaQ-deltaW
+
+
+Q When a free electron is placed in a plane of EM then it moves in 
+   a.) in the direction of Electriv field.
+   b.) in direction of magnetic field 
+   c.) of propogative waves.
+   d.) of the plane containing magnetic field an propogation direction.
+
+Q The element which have same atomic mass and atomic number are called ....
+
+Ans   isomers.
+
+Q Name the phenomean in wich 1 photon is jumped from 1 isomer to another to create two different elts.
+   a) functional  isomers.
+   b) stereo isomers
+   c) tauto isomers 
+   d) penta isomers ?
+
+Q  In triod valve in order to increase the saturation current what has to be done? 
+    a) increase plate voltage
+    b) reduce dist. between grid and plate
+    c) increase cathode potential
+    d) reduce grid potential. ?
+
+Q In how many ways can seven different toys be distriubuted among 3 children ?
+
+Q. A,B and C are three speakers . They have to speak along with 5 other speakers in a function. A has to speak  
+     before B, B has to speak before C in how many ways can this happen ?
+
+Q. Periods of sin( 2pi +3)6pi is ....?.....
+
+Q. There are two section in a paper, each contains five questions . A student has to answer 6 questions. Max no. of 
+     questions that can be answered from one section is 4. In how many ways can this be done ?
+
+
+Q. Two circles of different radii intersect each other .What is the no. of max intersections ?
+
+Q. If the function f(x)= 1-cos(1-cosx) / x^4  is continuos at f(0) . then what is x?
+
+Q. The best tool for editing a graphic image is ?
+
+Q. Network scheme defines 
+    a.)one to one
+    b.) many to many 
+    c.) one to ,many ?
+
+
+Q Two conditions are given  a) if one touch bees it strings and  b) he touched the bees.What happens next ?
+   1) it sting
+   2)it may be sting
+   3)it definitily stings.
+
+Q.A starts from  a point and walked towards north for 2 meters and turns to his right side and walks for 
+    4 mtrs. The turns right and walks for 4 mtrs then 
+    1.) in which direction a is going after first turn ?
+    2.) how much distance away from the beginning point is A  at the end.?
+
+
+Q  A person wants to measures the length of a rod.First he measures with standing ideally then he maeasures by  
+     moving  parrel to the rod. 
+    a)the length will decresde in second case.
+    b)length will be same.
+    c) length will increse in the second case.
+
+Q. A line passes through (1,0) .What is line's equation ?
+
+Q. A does work in 3 days and B can do in 2 days in how many days can both do it ?
+
+Q. One U-230 nucleus is placed in a train moving by velocity emmitimg alpha rays .When the train is at rest the 
+    distance between nucleus and alpha particle is x . One passenger is observing the particle . When the train is moving
+    what is the distance between particle and nucleus ? 
+    a.) x.
+    b.) x+vt 
+    c.)x-vt ?
+
+Q. What is the resulting soln. when benzene and toluene are mixed ?
+
+Q What sorting algos have their best and worst case times equal ?
+
+Q. What page replacement algo . has minimumn number of page faults ?
+
+Q. What is the use of abstract base class  in C++ ?
+
+The following are few sample questions that maybe asked in the hardware paper.We haven't been able to give the values in certain problems ; only the type of questions have been mentioned.
+
+Q. Concentration and restivity is given and conductivity is asked for  ?
+
+Q. R , resistance and C,capacitance  is given ,find the frequency  and Q factor of the crystal ?
+
+Q. Critical fequency and angle theta is given ;.the  max useable frequency is to becalculated
+
+Q.Questions on parabolic reflector  anttena's and  half wave dipole antenna's design 
+
+Q. Ramp signal is generated from integrator .Whether it is a  low or high pass filter .?
+
+Q. Calculate FM bandwidth given max modulation fequency FM , max freq deviation , df and 8 pairs alllowable          
+     side  band component ?
+
+
+
+
+Back to top

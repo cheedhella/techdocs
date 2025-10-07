@@ -1,0 +1,138 @@
+<html>
+<title>2-3 Trees</title>
+
+<body background="./pics/Bck2.gif">
+
+<pre>
+
+
+A 2-3 Tree is a null tree (zero nodes) or a single node tree or a multiple node tree with the following properties:
+
+	 i. Each interior node has 2 or 3 children.
+	ii. Each path from the root to a leaf has the same length.
+
+Format of a node:
+
+<b>Non-leaf Node</b>
+
+<table border="1" cellpadding="3">
+<tbody><tr>
+<td align="left"><i>p</i><sub>1</sub></td>
+<td align="left"><i>k</i><sub>1</sub></td>
+<td align="left"><i>p</i><sub>2</sub></td>
+<td align="left"><i>k</i><sub>2</sub></td>
+<td align="left"><i>p</i><sub>3</sub></td>
+</tr></tbody></table>
+
+<table cellpadding="0" width="100%">
+<tbody>
+
+<tr valign="CENTER">
+<td align="right" nowrap="nowrap"><i>p</i><sub>1</sub></td>
+<td align="center" nowrap="nowrap" width="10">:</td>
+<td align="left" nowrap="nowrap">Pointer to the first child</td>
+<td align="right" width="10"></td>
+</tr>
+
+<tr valign="CENTER">
+<td align="right" nowrap="nowrap"><i>p</i><sub>2</sub></td>
+<td align="center" nowrap="nowrap" width="10">:</td>
+<td align="left" nowrap="nowrap">Pointer to the second child</td>
+<td align="right" width="10"></td>
+</tr>
+
+<tr valign="CENTER">
+<td align="right" nowrap="nowrap"><i>p</i><sub>3</sub></td>
+<td align="center" nowrap="nowrap" width="10">:</td>
+<td align="left" nowrap="nowrap">Pointer to the third child</td>
+<td align="right" width="10"></td>
+</tr>
+
+<tr valign="CENTER">
+<td align="right" nowrap="nowrap"><i>k</i><sub>1</sub></td>
+<td align="center" nowrap="nowrap" width="10">:</td>
+<td align="left" nowrap="nowrap">Smallest key that is a descendent of the second child</td>
+<td align="right" width="10"></td>
+</tr>
+
+<tr valign="CENTER">
+<td align="right" nowrap="nowrap"><i>k</i><sub>2</sub></td>
+<td align="center" nowrap="nowrap" width="10">:</td>
+<td align="left" nowrap="nowrap">Smallest key that is a descendent of the third child</td>
+<td align="right" width="10">&nbsp;</td>
+</tr>
+
+</tbody></table></center>
+
+<b>Leaf Node</b>
+<table border="1" cellpadding="3">
+<tbody><tr>
+<td align="left">key</td>
+<td align="left">other fields</td>
+</tr></td></tbody></table>
+
+
+<b>Insert (x)</b>
+
+1. Locate the node <i>v</i>, which should be the parent of <i>x</i>.
+2. If <i>v</i> has <b>two</b> children,
+<ul>
+<li>make <i>x</i> another child of <i>v</i> and place it in the proper order</li>.
+<li>adjust <i>k</i><sub>1</sub> and <i>k</i><sub>2</sub> at node <i>v</i> to reflect the new situation</li></ul>.
+3. If <i>v</i> has <b>three</b> children,
+<ul>
+<li>split <i>v</i> into two nodes <i>v</i> and <i>v'</i>. Make the two smallest among four
+children stay with <i>v</i> and assign the other two as children of <i>v'</i>.
+
+</li><li>Recursively insert <i>v'</i> among the children of <i>w</i> where
+
+				w = parent of  v
+
+</li><li>The recursive insertion can proceed all the way up to the root, making it necessary to split the root.  
+In this case, create a new root, thus increasing the number of levels by 1.
+
+</li></ul>
+
+<b>Delete (<i>x</i>)</b>
+
+1. Locate the leaf <i>L</i> containing <i>x</i> and let <i>v</i> be the parent of <i>L</i>.
+2. Delete <i>L</i>.  This may leave <i>v</i> with only one child. If <i>v</i> is the root, delete <i>v</i> and 
+   let its lone child become the new root. This reduces the number of levels by 1. If <i>v</i> is not the root, let
+
+	p = parent of <i>v</i>
+
+	If <i>p</i> has a child with 3 children, transfer an appropriate one to <i>v</i>, if this child is adjacent (sibling) to <i>v</i>.
+	If children of <i>p</i> adjacent to <i>v</i> have only two children, transfer the lone child of <i>v</i> to an adjacent sibling of <i>v</i> and delete <i>v</i>.
+ 		If <i>p</i> now has only one child, repeat recursively with <i>p</i> in place of <i>v</i>. The recursion can
+                ripple all the way up to the root, leading to a decrease in the number of levels.
+
+
+
+<b>Search</b>
+
+1. The values recorded at the internal nodes can be used to guide the search path.
+
+2. To search for a record with key value <i>x</i>, we first start at the root. Let <i>k</i><sub>1</sub> and <i>k</i><sub>2</sub> be the two values stored here.
+
+<ul><li>If <i>x</i> &lt; <i>k</i><sub>1</sub>, move to the first child.</li></ul>
+<ul><li>If <i>x </i><img src="./pics/img20.gif" alt="$ \geq$" align="middle" border="0" height="42" width="25"><i> k</i><sub>1</sub> and the node has only two children, move to the second child.</li></ul>
+<ul><li>If <i>x </i><img src="./pics/img20.gif" alt="$ \geq$" align="middle" border="0" height="42" width="25"><i> k</i><sub>1</sub> and the node has three children, move to the second child if <i>x</i> < <i>k</i><sub>2</sub> and to the third child if <i>x</i><img src="./pics/img20.gif" alt="$ \geq$" align="middle" border="0" height="42" width="25"><i>k</i><sub>2</sub>.</li></ul>
+Eventually, we reach a leaf. <i>x</i> is in the tree iff <i>x</i> is at this leaf.
+
+
+<b>Path Lengths</b>
+<ul> <li> A 2-3 Tree with <i>k</i> levels has between 2<sup>k - 1</sup> and 3<sup>k- 1</sup> leaves</li>
+
+<li> Thus a 2-3 tree with <i>n</i> elements (leaves) requires</li> <p><br>at least 1 + log<sub>3</sub><i>n</i> levels
+</p><p>at most 1 + log<sub>2</sub><i>n</i> levels</p></ul>
+
+
+
+<p>
+
+Egt. of 2-3 insertion, deletion - http://lcm.csa.iisc.ernet.in/dsa/node119.html
+
+
+
+</body>
+</html>

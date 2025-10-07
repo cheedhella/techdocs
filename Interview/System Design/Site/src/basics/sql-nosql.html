@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SQL vs NoSQL vs Aurora vs DynamoDB</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>SQL vs NoSQL</strong></p>
+        <p class="answer">
+            <ul>
+                <li>In SQL, tables have predefined schema;</li>
+                <li>NoSQL is schemaless; </li>
+                <br>
+                <li>SQL is used for storing structured data;</li>
+                <li>NoSQL is used for both structured and unstructured data;</li>
+                <br>
+                <li>SQL is fit for joins and complex queries;</li>
+                <li>NoSQL is not fit for complex multi table queries;</li>
+                <br>
+                <li>SQL follows ACID properties: Atomicity, Consistency, Isolation, Durability;</li>
+                <li>NoSQL follows CAP properties; Consistency, Availability, Partition Tolerance;</li>
+                <br>
+                <li>SQL databases scale vertically;</li>
+                <li>NoSQL databases scale horizontally;</li>
+                <br>
+                <li>Eg of SQL databases: Oracle, MySQL, PostgresQL, Amazon Aurora, Amazon RDS etc;</li>
+                <li>Eg of NoSQL databases: MongoDB, Cassandra, AWS DynamoDB etc;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>NoSQL database types</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Key-Value Stores:
+                    <ul>
+                        <li>It stores data as an array of key-value pairs; key is the name of the attribute, which is linked to the value;</li>
+                        <li>Eg: Redis, DynamoDB;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>Document Stores:
+                    <ul>
+                        <li>It stores data in the form of a JSON document; Each document can have an entirely different structure;</li>
+                        <li>Eg: CouchDB, MongoDB;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>Wide-column databases:
+                    <ul>
+                        <li>It stores data in the form of a JSON document; Each document can have an entirely different structure;</li>
+                        <li>Eg: Cassandra, HBase;</li>
+                        <li>Columnar databases are best suited for analyzing large datasets;</li>
+                    </ul>
+                </li>
+                <br>
+                <li>Graph databases:
+                    <ul>
+                        <li>It stores data in the form of a JSON document; Each document can have an entirely different structure;</li>
+                        <li>Eg: Neo4J, InfiniteGraph;</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <ul>
+                <li>It In SQL, tables have predefined schema;</li>
+                <li>NoSQL is schemaless; </li>
+                <br>
+                <li>SQL is used for storing structured data;</li>
+                <li>NoSQL is used for both structured and unstructured data;</li>
+                <br>
+                <li>SQL is fit for joins and complex queries;</li>
+                <li>NoSQL is not fit for complex multi table queries;</li>
+                <br>
+                <li>SQL follows ACID properties: Atomicity, Consistency, Isolation, Durability;</li>
+                <li>NoSQL follows CAP properties; Consistency, Availability, Partition Tolerance;</li>
+                <br>
+                <li>SQL databases scale vertically;</li>
+                <li>NoSQL databases scale horizontally;</li>
+                <br>
+                <li>Eg of SQL databases: Oracle, MySQL, PostgresQL, Amazon Aurora, Amazon RDS etc;</li>
+                <li>Eg of NoSQL databases: MongoDB, Cassandra, AWS DynamoDB etc;</li>
+            </ul>
+        </p>
+
+        https://medium.com/@gauravpm81/system-design-sql-vs-nosql-fdb36dab6f05
+    </body>
+</html>

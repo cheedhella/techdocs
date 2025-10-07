@@ -1,0 +1,440 @@
+<html>
+<title>Linked List</title>
+
+<body background="./pics/Bck2.gif">
+
+<pre>
+
+<b>Single Linked List Implementation</b>
+
+#include < stdio.h>
+#include < conio.h>
+#include < process.h>
+
+struct node
+  {
+  int data;
+  struct node *next; 
+  };
+struct node *head;
+
+int flag=0;
+void main()
+  {
+  int ch,ele;
+  clrscr();
+  head=NULL;
+
+  while(1)
+     {
+     printf("\n\t1.  to insert \n\t2.  to delete  \n\t3.  to display  \n\t4. to quit\n\tEnter ur chioce:");
+     scanf("%d",&ch);
+     switch(ch)
+	{
+	case 1:  printf("\n\tenter an element");
+             	 scanf("%d",&ele);
+		 insert(ele);
+		 break;
+
+	case 2:  ele=delete();
+		 if(!flag)
+			printf("\n\tRemoved element is  %d",ele);
+		 else
+			printf("\n\tNo elements to delete");
+			getch();
+			break;
+
+	case 3: 	display();
+			getch();
+			break;
+
+	case 4:  exit(0);
+		 default: printf("\n\tInvalid chioce");
+	}//switch()
+
+     }
+
+   }
+
+
+insert(int ele)
+   {
+   int ch;
+   printf("\n\t Insert Menu");
+   printf("\n\t1. to insert at begining\n\t2.  to insert at end\n\t3.  to insert after element");
+   printf("\n\tEnter u r chioce");
+   scanf("%d",&ch);
+   switch(ch)
+      {
+      case 1: insertbeg(ele);
+		break;
+      case 2: insertend(ele);
+		break;
+      case 3: insertafter(ele);
+		break;
+      dafault: printf("\n\tInvalid insert chioce");
+      }//switch()
+   }
+
+insertbeg(int ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node));
+   temp->data=ele;
+   if(head==NULL)
+     {
+     head=temp;
+     temp->next=NULL;
+     }
+   else
+     {
+     temp->next=head;
+     head=temp;
+     }
+   }
+
+insertend(ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node)),*cur;
+   temp->data=ele;
+   if(head==NULL)
+     {
+     head=temp;
+     temp->next=NULL;
+     }
+   else
+     {
+     cur=head;
+     while(cur->next!=NULL)
+	 cur=cur->next;
+     cur->next=temp;
+     }
+   }
+
+insertafter(int ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node)),*cur;
+   temp->data=ele;
+
+   printf("\n\tEnter element after which to insert: ");
+   scanf("%d",&ele);
+
+   cur=head;
+   while(cur->data!=ele && cur!=NULL)
+	  cur=cur->next;
+
+   if(cur!=NULL)
+	{
+	temp->next=cur->next;
+	cur->next=temp;
+	}
+    else
+	printf("\n\tNo match is found");
+
+   }
+
+delete()
+  {
+  int ch;
+  if(head==NULL)
+	{
+	printf("\n\tNo elements to delete ");
+	flag=1;
+	return(0);
+	}
+
+  printf("\n\tdelete menu");
+  printf("\n\t1.  to delete at begining\n\t2.  to delete at last \n\t3.  to delete chosed element");
+  printf("\n\tEnter u r chioce");
+  scanf("%d",&ch);
+  switch(ch)
+	{
+	case 1: deletebeg();break;
+	case 2: deletelast();break;
+	case 3: deletechose();break;
+	defulat: printf("\n\tInvalid delete chioce");
+ 	}
+  }
+
+deletebeg()
+   {
+   struct node *temp=head;
+   head=head->next;
+   temp->next=NULL;
+   return(temp->data);
+   }
+
+deletelast()
+   {
+   struct node *cur=head,*prev;
+   while(cur->next!=NULL)
+        {
+	prev=cur;
+	cur=cur->next;
+	}
+   prev->next=NULL;
+   cur->next=NULL;
+   return(cur->data);
+   }
+
+deletechose()
+   {
+   struct node *cur=head,*prev;
+   int ele;
+   printf("\n\tEnter element  : ");
+   scanf("%d",&ele);
+   while(cur!=NULL)
+	{
+ 	if(cur->data==ele)
+		break;
+	prev=cur;
+	cur=cur->next;
+	}
+   if(cur!=NULL)
+	{
+	prev->next=cur->next;
+	cur->next=NULL;
+	return(cur->data);
+	}
+   else
+        {
+	flag=!flag;
+	printf("\n\tno element is found");
+	}
+   }
+
+display()
+   {
+   struct node *cur=head;
+   if(head==NULL)
+	{
+	printf("\n\tNo elements to display");
+	return(0);
+	}
+   printf("\n\t");
+   while(cur!=NULL)
+	{
+	printf("%d  ",cur->data);
+	cur=cur->next;
+	}
+   }
+
+
+
+
+<p>A linked list is another structure we can use to hold collections
+of values and whose size can grow and shrink dynamically. A linked
+list uses pointers heavily. Instead of having an array of values, we
+chain together the values with pointers. To put a value into a linked
+list, we create a "node". Inside the node is the value and a pointer
+to the next node in the list:</p>
+
+<blockquote><pre>typedef struct node {
+  int value;
+  struct node *next;
+} Node;</pre></blockquote>
+
+<p>Two points about this declaration. First, notice that we said
+"typedef struct node" instead of just "typedef struct". That was so
+that we could declare the next pointer inside the struct. We couldn't
+declare next to be "Node *" because Node is not yet defined when we
+reach the declaration of next. In C everything must be defined
+earlier in the file than where it was used and this little trick
+works nicely for structs.</p>
+
+<p>The second point is to notice that we declared our value to be an
+int. We could have made it a void * and created a linked list that
+held similar values to our vector from yesterday. However, normally
+when we use linked lists, it is because we want to maintain an
+ordering based on the values. Often, the values in the linked list
+are sorted. Therefore, we need a function to compare the values in
+two nodes. If the types of the values are void *, we wouldn't know
+what we were comparing so we wouldn't know what function to call to
+compare the values. Therefore, we need to reimplement linked lists
+for each type of value we want to place in them. (C++ offers
+templates and function overloading to get around this problem.)</p>
+
+<p>A list is just a chain of these nodes linked together. To
+manipulate a list, we just need to remember the first node in the
+chain:</p>
+
+<blockquote><pre>typedef struct {
+  Node *head;
+} LinkedList;</pre></blockquote>
+
+<p>To create a linked list, we just need to allocate memory for the
+list struct and initialize its fields:</p>
+
+<blockquote><pre>LinkedList *newLinkedList () {
+  LinkedList *new = malloc (sizeof (LinkedList));
+  new-&gt;head = NULL;
+  return new;
+}</pre></blockquote>
+
+<p>To insert a new node in the list, we first must find the right
+location for the node so that the values are in sorted order. After
+we have done that we must update 2 pointers: the next pointer of the
+new node as well as the pointer pointing at the new node.</p>
+
+<blockquote><pre>void insert (LinkedList *l, int value) {
+  /* The node that should precede the new node in the list. */
+  Node *previous = NULL;
+   
+  /* The node we are currently comparing to our new value */
+  Node *current = l-&gt;head;
+   
+  /* The new node */
+  Node *new = newNode (value);
+   
+  /* Find the nodes that should precede and follow the new node. */
+  while (current != NULL &amp;&amp; current-&gt;value &lt; value) {
+    previous = current;
+    current = current-&gt;next;
+  }
+   
+  /* Special case the situation where we are adding the first
+     node to the list */
+  if (previous == NULL) {
+    l-&gt;head = new;
+  } else {
+    previous-&gt;next = new;
+  }
+   
+  /* Set the node that follows the new node. */
+  new-&gt;next = current;
+}</pre></blockquote>
+
+<p>To remove a node from the list, we only need to update one
+pointer, the pointer that points at the node we are removing. We
+should also remember to free the memory associated with the node that
+we remove.</p>
+
+<blockquote><pre>void removeValue (LinkedList *l, int value) {
+  /* The node that precedes the node we are removing */
+  Node *previous = NULL;
+   
+  /* The node we are examining */
+  Node *current = l-&gt;head;
+   
+  /* Keep looking until there are no more nodes or we have found
+     or gone past the value we are looking for. */
+  while (current != NULL &amp;&amp; current -&gt;value &lt; value) {
+    previous = current;
+    current = current-&gt;next;
+  }
+   
+  /* If we reached the end of the list or we found a value 
+     higher than what we wanted, then the value is not in the 
+     list */
+  if (current == NULL || current-&gt;value &gt; value) {
+    printf ("%d not found.\n", value);
+    return;
+  }   
+  if (previous == NULL) {
+    /* Removing the head of the list. */
+    l-&gt;head = current-&gt;next;
+  } else {
+    /* Remove the current element by having its predecessor
+       skip it. */
+    previous -&gt;next = current-&gt;next;
+  }
+   
+    /* Free the memory associated with the node we just removed. */
+    free (current);
+  }
+}</pre></blockquote>
+
+<p>To free a list, we must first free all the nodes in the list and
+then the list itself.</p>
+
+<blockquote><pre>void freeLinkedList (LinkedList *l) {
+  Node *current;
+   
+  for (current = l-&gt;head; current != NULL; current = current-&gt;next) {
+    free (current);
+  }
+   
+  free (l);
+}
+   
+Node *newNode (int value) {
+  Node *new = malloc (sizeof (Node));
+  new-&gt;value = value;
+  new-&gt;next = NULL;
+  return new;
+}
+   </pre></blockquote>
+
+
+<h3>Good Points</h3>
+
+<p>Adding elements early in a linked list is cheaper than in a Vector
+since we do not need to move anything to make room for the new
+element.</p>
+
+<p>If we search for a value, on average we need to search half the
+list to find the value or to determine that it is not in a list so
+this is better than an unsorted vector.</p>
+
+<h3>Bad Points</h3>
+
+<p>There is no direct access to elements given an index as there is
+with vectors. To find an element by position, we need to start at the
+beginning of the list and count nodes as we walk the list.</p>
+
+<p>Adding nodes towards the end of a linked list is expensive because
+we need to walk the list to get to the spot where the addition will
+occur.</p>
+
+<p>Linked lists often require more memory than Vectors. Each value in
+a linked list requires additional memory to hold a pointer. In a
+Vector, there may be wasted space due to unused capacity. The closer
+our vector is to full, the less wasted space there is.</p>
+
+
+<b>Doubly Linked List</b> (DLL) is a type of Linked List in which each data item points to the next and also to the previous data item.  This ?linking? is accomplished by keeping two address variables (pointers) together with each data item.  These pointers are used to store the address of the previous and the address of the next data items in the list.  
+<br><br>The structure that is used to store one element of a linked list is called a <b>node</b> like in Linked Lists. 
+<br><br>A node has three parts: <b>data</b>, <b>previous address</b> and <b>next address</b>. 
+<br><br>The data part contains the necessary information about the items of the list, the previous address part contains the address of the previous node, the next address part contains the address of the next node.</font></dir>
+
+</dd><img src="./pics/LN_LinkLists_fig02.jpg">
+
+<H3>DLL operations:</H3>
+<b>inserting a node</b>
+<b>delete a node</b>
+<b>Traversing a DLL</b>
+
+
+1. how to reverse the links in a SLL?
+2. how to convert a SLL into DLL?
+
+
+<b>Linked Stack</b>
+
+Algorithm push(ITEM)  // STACK_HEAD is the stack header and TOP is the pointer to first node.
+
+  new = GETNODE(NODE);
+  new.DATA=ITEM
+  new.LINK=TOP
+  TOP=new
+  STACK_HEAD.LINK=TOP
+end
+
+Algorithm pop()
+
+  if TOP=NULL print "stack is empty" and exit;
+  else
+    ptr=TOP.LINK;
+    ITEM=TOP.DATA:
+    STACK_HEAD.LINK=ptr
+    TOP=ptr
+    
+end
+
+
+
+
+</pre>
+
+
+</body>
+</html>

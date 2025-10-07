@@ -1,0 +1,38 @@
+Proxy Design Pattern
+	Proxy means 'in place of' or 'on behalf of';
+	Proxy is an object that acts as a substitute for the real object;
+	Proxy has same interface as that of real object and it holds a reference to real object; 
+	Client knows about only Proxy, not the real object; Proxy receives the client request, 
+	does some work(acess control, caching etc) and delegates the request to real object;
+
+	Proxy is invaluable when you have to add some additional behaviors to a class which code you can’t change;
+	
+	There different ways of using Proxy:
+	Remote Proxy
+		It forwards the request to a webservice, which often runs on a different machine;
+	Virtual Proxy 
+		It delays the creation and initialization of expensive objects until needed;
+		If you use Hibernate to fetch entities from DB, hibernate actually returns a proxy object;
+		It helps in lazy loading scenarios where associated entities are fetched only when they are 
+		requested explicitly, thus improving performance;
+	Protection Proxy 
+		By implementing additional checks for access rights, it provides controlled access to real object;
+		In corporate networks, internet access is guarded behind a network proxy;
+		All network requests goes through a proxy, which first check the requests for allowed websites;
+		If request looks suspicious, proxy block the request – else request pass through;
+	Smart Proxy
+		It is used to do additional housekeeping work when an object is accessed by a client;
+	
+	Example 1: In real life, cheque or debit card is a proxy for the money in our bank account;
+
+Implementing a Proxy
+	Object composition is preferable to inheritance because, with composition, enclosing objects can only 
+	manipulate their enclosed object through the enclosed object's interface, which results in loose coupling 
+	between objects. In contrast, with inheritance, classes are tightly coupled to their base class because the 
+	internals of a base class are visible to its extensions. Because of that visibility, inheritance is often 
+	referred to as white-box reuse. 
+
+	On the other hand, with composition, the internals of the enclosing object are not visible to the enclosed 
+	object (and vice-versa); therefore, composition is often referred to as black-box reuse. 
+	All things being equal, black-box reuse (composition) is preferable to white-box reuse (inheritance) because 
+	loose coupling results in more malleable and flexible systems;

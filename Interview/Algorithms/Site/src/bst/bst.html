@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Binary Search Tree</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p class="question"><strong>What is Binary Search Tree?</strong></p>
+            <p class="answer">
+                Complete Binary Tree is a Binary Tree in which every level, except possibly the last, is completely filled and all nodes are as far left as possible;
+	            <br/><br/>
+                <b>Advantage of Complete Binary Tree over Binary Tree:</b> It's height is always O(log N), it's never O(N);
+            </p>
+
+            <p class="question"><strong>What is a Heap?</strong></p>
+            <p class="answer">
+                There are 2 types of heaps: Min-Heap, Max-Heap;<br/><br/>
+                <b>Min-Heap:</b><br/>
+                    It is a Complete Binary Tree, in which each node is less than or equal to it's children;<br/>
+                    It is useful in sorting the list in ascending order;<br/><br/>
+                <b>Max-Heap:</b><br/>
+                    It is a Complete Binary Tree, in which each node is greater than or equal to it's children;<br/>
+                    It is useful in sorting the list in descending order;<br/>
+            </p>
+
+            <p class="question"><strong>Heap Represenation</strong></p>
+            <p class="answer">
+                You can use an array to represent a heap;<br/><br/>
+
+	            In the array, the first index contains the root element. The next two indices of the array contain the root's children;<br/>
+	            The next four indices contain the four children of the root's two child nodes, and so on;<br/>
+	            Therefore, given a node at index i, its children are at indices 2i + 1 and 2i + 2, and its parent is at index floor((i-1)/2);<br/><br/>
+
+	            Current node index -> i; index of left child -> 2i + 1; index of right child -> 2i + 2; index of parent -> floor((i-1) / 2);<br/>
+            </p>
+
+            <p class="question"><strong>Min-Heap Operations</strong></p>
+            <p class="answer">
+            <strong>find-min(A)</strong> - It reutrns the root element; Time Complexity: O(1);<br/><br/>
+            
+            <strong>insert(A, el)</strong> - Add new element to the heap; Time Complexity: O(log N);<br/>
+                <div class="tab4">
+        // Add the new element at the end of the tree or array and heapify-up it;<br/>
+                    A[A.length + 1] = el;<br/>
+                    min-heapify-up(A, A.length + 1);<br/>
+                </div>
+            <br/><br/>
+            <strong>min-heapify-up(A, i)</strong> - It re-arranges node i and the nodes in parent chain to satisfy heap property; Time Complexity: O(log N);<br/>
+                // If the parent of new key is less than it, then nothing to do; Otherwise, we need to traverse up to fix the violated heap property;<br/>
+                parent = (i-1)/2;<br/>
+                if(A[parent] > A[child]) {<br/>
+                    swap(parent, child);<br/>
+                    min-heapif-up(A, parent);<br/>
+                }
+            <br/><br/>
+            <strong>delete-min(A)</strong> - It is used to delete root from the heap; Time Complexity: O(logN);<br/>
+                // Swap the root element with last element, delete last element, min-heapify-down(root);<br/>
+                swap(0, A[size-1]); 	// swap the root element and last element<br/>
+                A.pop_back(); 		    // delete the last element<br/>
+                min-heapify-down(heap, 0);
+            <br/><br/>
+            <strong>min-heapify-down(A, i)</strong> - It re-arranges node i and it's subtrees to satisfy the heap property; Time Complexity: O(log N);<br/>
+                l = left-child(i);<br/>
+                r = right-child(i);<br/>
+                <br/>
+                // Check if left child is smaller than it's parent<br/>
+                if l <= A.length and A[l] < A[i]<br/>
+                    smallest = l;<br/>
+                else <br/>
+                    smallest = i; <br/>
+                    <br/>
+                // Check if right child is smaller than smallest <br/>
+                if r <= A.length and A[r] < A[smallest] <br/>
+                    smallest = r; <br/>
+                <br/>
+                // If current is not the smallest <br/>
+                if smallest != i { <br/>
+                    swap(i, smallest); <br/>
+                    min-heapify(A, smallest); <br/>
+                } <br/>
+            </p>
+
+            <p class="question"><strong>How to convert an array into a Heap?</strong></p>
+            <p class="answer">
+                General approach:<br/>
+		Heapifying a single node takes O(log N) time; To heapify the entire array, it takes N heapify operations. So, total time complexity is O(N*logN);<br/>
+
+	Optimized approach:<br/>
+		The above approach can be optimized by observing the fact that the leaf nodes need not to be heapified, as they already follow the heap property;<br/>
+		So the idea is to find the position of the last non-leaf node and perform the heapify operation of each non-leaf node in reverse level order;<br/>
+		Last non-leaf node = parent of last-node;<br/>
+						   = parent of node at (n-1)th index;<br/>
+						   = Node at index ((n-1) - 1)/2;<br/>
+						   = (n/2) - 1;<br/>
+                           <br/>
+	build-min-heap(A) - It takes an array of elements and converts it into a heap; Time Complexity: O(N);<br/>
+		for i = A.length/2 to 1<br/>
+			min-heapify-up(A, i);<br/>
+            <br/>
+	TODO: Complexity of min-heapify-up() is O(log N) and it is executed N/2 times, but why the complexity of build-min-heapify() is linear, O(N)?<br/>
+		http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf <br/>
+        <br/>
+	Note: Converting an array to heap takes O(N) time, but N insertions to construct heap takes O(N logN) time; <br/>
+
+            </p>
+            <p class="question"><strong>Applications</strong></p>
+            <p class="answer">
+                <section>
+                    <ol>
+                        <li><a href="">Heaps are often used in the implementation of Priority Queues</a></li>
+                        <li><a href="">Heap Sort</a></li>
+                        <li><a href="">Efficiently find k th smallest (or largest) element in an array;</a></li>
+                    </ol>
+                </section>
+            </p>
+        </div>
+
+        <pre>
+            <code class="language-java">
+
+                package com.cmr.iview;
+
+                import java.util.ArrayList;
+                import java.util.Collections;
+                
+                public class MaxHeap {
+                
+                    private ArrayList<Integer> data;
+                
+                    public MaxHeap() {
+                        this.data = new ArrayList<Integer>();
+                    }
+                
+                    public MaxHeap(ArrayList<Integer> data) {
+                        this.data = data;
+                        build_max_heap();
+                    }
+                
+                    // It takes an array of elements and converts it into a heap;
+                    // Time Complexity: O(N);
+                    private void build_max_heap() {
+                        for (int i = (getLastElementIndex() - 1) / 2; i >= 0; i--) {
+                            max_heapify_down(i);
+                        }
+                    }
+                
+                    // Add new element to the heap;
+                    // Time Complexity: O(log N);
+                    public void insert(int i) {
+                        data.add(i); // Add new el at the end of the array!
+                        max_heapify_up(data.size() - 1); // heapify-up the last el!
+                    }
+                
+                    // It re-arranges last element and the elements in parent chain to satisfy heap
+                    // property;
+                    // Time Complexity: O(log N);
+                    private void max_heapify_up(int elIndex) {
+                        int parentIndex = (elIndex - 1) / 2;
+                        if (data.get(parentIndex) < data.get(elIndex)) {
+                            Collections.swap(data, elIndex, parentIndex);
+                            max_heapify_up(parentIndex);
+                        }
+                    }
+                
+                    // It is used to delete root from the heap; Time Complexity: O(logN);
+                    // Swap the root element with last element, delete last element,
+                    // min-heapify-down(root);
+                    public void delete_max() {
+                        // root is always at index 0; swap the root element and last element!
+                        Collections.swap(data, 0, getLastElementIndex());
+                        int lastEl = data.remove(getLastElementIndex()); // remove the last el!
+                        System.out.println(lastEl);
+                        max_heapify_down(0); // heapify the root and it's subtrees!
+                    }
+                
+                    // It re-arranges node i and it's subtrees to satisfy the heap property; Time
+                    // Complexity: O(log N);
+                    private void max_heapify_down(int elIndex) {
+                        int l = 2 * elIndex + 1;
+                        int r = 2 * elIndex + 2;
+                
+                        int largest;
+                        // Check if parent is less than it's left child
+                        if (l < data.size() && data.get(elIndex) < data.get(l)) {
+                            largest = l;
+                        } else {
+                            largest = elIndex;
+                        }
+                
+                        // Check if largest is smaller than right child
+                        if (r < data.size() && data.get(largest) < data.get(r)) {
+                            largest = r;
+                        }
+                
+                        // If current is not the largest
+                        if (elIndex != largest) {
+                            Collections.swap(data, elIndex, largest);
+                            max_heapify_down(largest);
+                        }
+                    }
+                
+                    public boolean isEmpty() {
+                        return data.isEmpty();
+                    }
+                
+                    public int getLastElementIndex() {
+                        return data.size() - 1;
+                    }
+                }
+                
+
+Output:
+15
+12
+9
+5
+3
+1
+
+            </code>
+        </pre>
+    </body>
+</html>

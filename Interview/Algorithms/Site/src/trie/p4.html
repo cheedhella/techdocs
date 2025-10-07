@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Print All the Words</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      
+
+      <pre>
+        <code class="language-java">
+public List<String> getAllWords() {
+    ArrayList<String> allWords = new ArrayList<String>();
+    getAllWords(root, allWords, "");
+    return allWords;
+}
+
+private void getAllWords(Node current, List<String> allWords, String currentWord) {
+    if (current.isWord()) {
+        allWords.add(currentWord);
+    }
+    for (Entry<Character, Node> entry : current.getChildren().entrySet()) {
+        String newWord = currentWord + Character.toString(entry.getKey());
+        getAllWords(entry.getValue(), allWords, newWord);
+    }
+}
+        </code>
+      </pre>
+
+      <pre>
+        <code class="language-java">
+import java.util.List;
+
+public class PrintTrieApp {
+    public static void main(String[] args) {
+        Trie trie = getTrie();
+        List<String> allWords = trie.getAllWords();
+        allWords.forEach(word -> System.out.println(word));
+    }
+
+    private static Trie getTrie() {
+        Trie d1 = new Trie();
+        d1.insert("the");
+        d1.insert("a");
+        d1.insert("there");
+        d1.insert("answer");
+        d1.insert("any");
+        d1.insert("by");
+        d1.insert("bye");
+        d1.insert("their");
+        return d1;
+    }
+}
+
+// Output:
+
+        </code>
+      </pre>
+
+    </body>
+</html>

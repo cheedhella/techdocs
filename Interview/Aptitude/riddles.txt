@@ -1,0 +1,35 @@
+1. A man wanted to get into a members only club but because he couldn't become a member, the man hid and watched as the guard at the door of the club house said a number to each member as they approached, the member would respond with a number of their own, if the member responded with the correct number they were let in, if they responed incorrectly they were thrown out. One member come up to the guard, the guard said twelve and the member responded with six and was let in. Another member came to the door, the guard said six and the member responded with three and was let in. Believing he had heard enough, the reject went up to the guard, the guard said ten, and the reject said five, but was not let in, what should the reject have said? 
+
+
+2. There are a 100 coins on the table, of which 90 are placed with the heads side up and 10 with the tails side up. A blind man is asked to separate the piles (not necessarily with equal number in each pile) such that the number of tails in each pile is equal.
+
+No balancing of the coins on their edge is allowed, blind man cant feel the coins to find out which side is which.
+
+3. here are 2 doors in a room, one door contains gold,diamonds and other riches, another contains a hungry lion who has not been fed for 10 days. There are two knaves in the room, one who always tells lies and the other always tells the truth. You can ask them ONLY ONE question to identify the correct door. What is that question ? 
+
+
+Boat and stone
+Suppose you sit in a rubber boat in a swimming pool. In the boat lies a stone. You throw this stone from the boat into the pool. Will the water level in the pool raise or drop?
+
+Solution
+For a floating body it holds that the weight of the volume of displaced water is equal to the weight of the floating body.
+A body which is sunk displaces as many water as its volume.
+Since the density of stone is larger than the density of water (which means that 1 litre of stone weights more than one litre of water) the water level will drop if the stone is thrown into the pool.
+
+
+The pharmacy has an old scale which has only two measuring weights 30 grams and 5 grams. How can you divide 300 grams of powder medicine into 3 groups, one 150 grams, one 100 and the other 50 grams. You can only weigh 3 times.
+
+1)divide as two parts 150 gm and 150 gm
+
+2) take 150 gm powder and partition it as a 2 equal parts (75 gm and 75 gm)
+
+3) at one side (say A side) put 30 gm measuring weight other side (say B side)put 5 gm measuring weight. and balance the weighing machine by taking powder from one partition of 75 gm . At balance condition the B side 25 gms of powder medicine will be there. Mix this powder with the other 75 gm. so total 100 gm.
+Remaining powder is 50 gm
+
+
+-----------------------------------------------------------------------------
+1. Counting the letters of ten. ans: 3
+
+2. make 2 piles, 1 pile with 90 coins and another with only 10 coins. flip the entire pile with 10 coins and you will surely have the same number of coins in each pile with the tail facing up
+
+3. Ask any guy this question - "If i were to ask him(pointing to the other knave) to tell me which room the lion is in, where would he point me to" . 

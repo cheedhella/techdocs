@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given an array of pairs(sorted by first el), merge overlapping pairs?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an array of pairs(sorted by first el), merge overlapping pairs?</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+class Pair {
+    public int first;
+    public int second;
+
+    public Pair(int x, int y) {
+        this.first = x;
+        this.second = y;
+    }
+}
+
+public class MergeIntervals {
+    private static List<Pair> mergeIntervals(Pair[] input) {
+        if (input.length <= 1) {
+            return Arrays.asList(input);
+        }
+        List<Pair> output = new ArrayList<Pair>();
+        Pair prevPair = input[0];
+        int j = 0;
+        output.add(j, prevPair);
+        j++;
+        for (int i = 1; i < input.length; i++) {
+            Pair current = input[i];
+            if (current.first <= prevPair.second) { // overlapping
+                prevPair.second = current.second;
+            }
+            else {
+                output.add(j, current);
+                j++;
+            }
+        }
+        return output;
+    }
+
+    private static void printPairList(Pair[] pairs) {
+        String resultStr = "";
+        for (int i = 0; i < pairs.length; i++) {
+            Pair p = pairs[i];
+            resultStr += "(" + p.first + "," + p.second + ")";
+            if (i != pairs.length - 1)
+                resultStr += ",";
+        }
+        System.out.println("Intervals to merge:\t[" + resultStr + "]");
+    }
+
+    public static void main(String[] args) {
+        Pair[] v1 = { new Pair(1, 5), new Pair(3, 7), new Pair(4, 6) };
+        Pair[] v2 = { new Pair(1, 5), new Pair(4, 6), new Pair(6, 8), new Pair(11, 15) };
+        Pair[] v3 = { new Pair(3, 7), new Pair(6, 8), new Pair(10, 12), new Pair(11, 15) };
+        Pair[] v4 = { new Pair(1, 5) };
+        Pair[][] vList = { v1, v2, v3, v4 };
+
+        for (int i = 0; i < vList.length; i++) {
+            printPairList(vList[i]);
+            List<Pair> result = mergeIntervals(vList[i]);
+            String result_str = "";
+            for (int j = 0; j < result.size(); j++) {
+                result_str += "[" + result.get(j).first + ", " + result.get(j).second + "] ";
+            }
+            System.out.println(" Merged intervals:\t" + result_str);
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------\n");
+        }
+    }
+}
+
+// Output:
+Intervals to merge:	[(1,5),(3,7),(4,6)]
+ Merged intervals:	[1, 6] 
+----------------------------------------------------------------------------------------------------
+Intervals to merge:	[(1,5),(4,6),(6,8),(11,15)]
+ Merged intervals:	[1, 8] [11, 15] 
+----------------------------------------------------------------------------------------------------
+Intervals to merge:	[(3,7),(6,8),(10,12),(11,15)]
+ Merged intervals:	[3, 8] [10, 12] [11, 15] 
+----------------------------------------------------------------------------------------------------
+Intervals to merge:	[(1,5)]
+ Merged intervals:	[1, 5] 
+----------------------------------------------------------------------------------------------------
+        </code>
+      </pre>
+
+    </body>
+</html>

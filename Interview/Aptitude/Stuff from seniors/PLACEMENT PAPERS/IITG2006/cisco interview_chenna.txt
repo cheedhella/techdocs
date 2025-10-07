@@ -1,0 +1,131 @@
+Ist round
+
+1. Is windows/linux is preemptive or not(kernel).
+
+2. Is the sheduler is a process or not.
+
+3.What is the meaning of enabling kerenel level threading
+
+4. What do you mean by allowing kernel preemption
+
+5.What is the meaning of 8/16/32 bit operationg system
+
+6. How interrupts will be handled in operating system
+
+7.Why swapspace is required in operating system
+
+8.how come a swapspace accessing is faster than normal secondary memory access though swapspace is a part of secondary memory.
+
+9.What is the concept of micro kernel architecture
+
+10.Is windows/linux is micro kernel architecture
+
+11.Difference btw multi programming and multi processing
+
+12.What is symmetric and asymmetric multi processing
+
+12.Tell about IRQ's
+
+12.How the devices are managed if more devices are available than IRQ lines
+
+12.How the devices associated with a single IRQ line are managed.
+
+13.How the operating system finds out which device has generated the interrupt in a single IRQ
+
+14.Which ISR is serviced if we get an interrupt from an IRQ connected to more than one device.
+
+13.write an inplace strrev routine
+
+14.Why pointer manipulations are faster
+
+15.	
+	
+	int sum(int a,int b)
+	{
+		int s;
+		s = a + b;
+		return s;
+	}
+	convert this function to a macro......
+
+16.Finding unduplicated element in a list of n elements where n-1 elements are duplicated.
+
+17.Finding the no. of 1's in a binary representation of a number.
+
+18.Two linked lists are given, if the two lists are merging at one point and becoming a single list from that   point find out point of merging in linear time.
+
+19.What is the difference btw char *s="iitg"
+			      char s[]="iitg"
+	like compiler error or runtime error if we try to change the value of that s array
+
+20.Basics in networks
+  like OSI layers and TCP layers
+21.difference between Hub and switch and which layer each one belongs to
+
+22.Is it possible to broadcast using a switch.
+
+23.which is more suitable for broadcasting either a hub or a switch
+
+24.What is class D addressing
+
+25.How a DLL device(switch) knows about multicast addresses.
+
+26.What is the difference between a router and gateway
+
+27.What is the function of Multiport router
+
+28.About Adhoc routing protocols  
+
+
+2 nd round
+
+1.Explain u r project work
+
+2.Explain the routines that executes whenever the system boots up like ROM BIOS routines
+
+3.What is the meaning of Partitioning and formating a disc
+
+4.Is a system can have more than one primary partition
+
+5.If linux and windows coexist which one lies on primary partition of the disk.
+
+6.Which process executes first when os bootsup
+
+7.What is master boot record
+
+8.what is a super block
+
+9.Which layer of networks u r most comfortable with (I told except physical layer I am comfortable with all other layers, then he started asking questions only on physical layer, though, I have answered well)
+
+10.Tell about the significance of physical layer in networks
+
+11.why fiber optics data rate is very high
+
+12.What are advantages of fiber optics over normal copper or co-axial cables
+
+13.Why cross talk and attenuation is insignificant in fiber cables
+
+14. what is total internal reflection in fiber cables
+
+15.what is single mode and multi modes in iptical fibers
+
+16.Did u ever installed two windows versions on the same logical drive
+
+17. Some questions on project
+
+
+3 rd round(HR just for the formality)
+
+1.Tell about u r self
+
+2.Tell about any extra curricular activities and any significant work u have done in the past 2 years
+
+3.Will u leave CISCO if some other company pays u high package
+
+4.How can we believe in u r loyality towards the company
+
+5.Any questions
+
+	How far CICSO is an R&D company
+	CISCO culture and employee values
+

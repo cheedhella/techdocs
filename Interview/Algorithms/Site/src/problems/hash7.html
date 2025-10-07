@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>First Non-Repeating Integer in an Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        Problem: Find the first unique integer which appears only once in the whole array?
+
+        <pre>
+            <code class="language-java">
+import java.util.HashMap;
+import java.util.Map;
+
+public class NonUniqueApp {
+
+    // Time Complexity: O(n);
+    private static Integer findFirstUnique(int[] data) {
+        Map<Integer, Integer> dataSet = new HashMap<Integer, Integer>(); // <number, count>
+        for (int i = 0; i < data.length; i++) {
+            if (dataSet.containsKey(data[i])) {
+                int count = dataSet.get(data[i]);
+                dataSet.put(data[i], count + 1);
+
+            }
+            else {
+                dataSet.put(data[i], 1);
+            }
+        }
+
+        return dataSet.entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey)
+                .findAny().orElse(null);
+    }
+
+    public static void main(String[] args) {
+        int[] arr = { 2, 54, 7, 2, 6, 54 };
+        System.out.println(findFirstUnique(arr));
+    }
+}
+
+Output:
+6
+
+            </code>
+        </pre>
+    </body>
+</html>

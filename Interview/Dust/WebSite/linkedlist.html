@@ -1,0 +1,275 @@
+<html>
+<title>Linked List</title>
+
+<body background="./pics/Bck2.gif">
+
+<pre>
+
+<b>Circullar Single Linked List</b>
+
+#include <stdio.h>
+#include <conio.h>
+
+struct node
+  {
+  int data;
+  struct node *next;
+  }*head=NULL;
+
+void main()
+  {
+  int ch,ele;
+  clrscr();
+  while(1)
+     {
+     printf("\n\t1.  to insert \n\t2.  to delete  \n\t3.  to display  \n\t4. to quit\n\tEnter u rchioce");
+     scanf("%d",&ch);
+     switch(ch)
+	{
+	case 1:  printf("\n\tenter an element");
+		 scanf("%d",&ele);
+		 insert(ele);
+		 break;
+
+	case 2:  ele=delete();
+		 break;
+
+	case 3:  display();
+		 getch();
+		 break;
+
+	case 4:  exit(0);
+		 break;
+	default: printf("\n\tInvalid chioce");
+	}
+     }
+   }
+
+insert(int ele)
+   {
+   int ch;
+   printf("\n\t Insert Menu");
+   printf("\n\t1. to insert at begining\n\t2.  to insert at end\n\t3.  to insert after element");
+   printf("\n\tEnter u r chioce");
+   scanf("%d",&ch);
+   switch(ch)
+      {
+      case 1: insertbeg(ele);
+		break;
+      case 2: insertend(ele);
+		break;
+      case 3: insertafter(ele);
+		break;
+      dafault: printf("\n\tInvalid insert chioce");
+      }
+   }
+insertbeg(int ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node)),*cur=head;
+   temp->data=ele;
+   if(head==NULL)
+     {
+     head=temp;
+     head->next=head;
+     }
+   else
+     {
+     while(cur->next!=head)
+	cur=cur->next;
+     cur->next=temp;
+     temp->next=head;
+     head=temp;
+     }
+   }
+
+insertend(ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node)),*cur;
+   temp->data=ele;
+   if(head==NULL)
+     {
+     head=temp;
+     temp->next=head;
+     }
+   else
+     {
+     cur=head;
+     while(cur->next!=head)
+	 cur=cur->next;
+     cur->next=temp;
+     temp->next=head;
+     }
+   }
+
+insertafter(int ele)
+   {
+   struct node *temp=(struct node *)malloc(sizeof(struct node)),*cur;
+   temp->data=ele;
+
+   printf("\n\tEnter element after which to insert: ");
+   scanf("%d",&ele);
+
+   cur=head;
+   while(cur->data!=ele && cur!=NULL)
+	  cur=cur->next;
+
+   if(cur!=NULL)
+	{
+	temp->next=cur->next;
+	cur->next=temp;
+	}
+    else
+	printf("\n\tNo match is found");
+
+   }
+
+
+
+delete()
+  {
+  int ch;
+  if(head==NULL)
+	{
+	printf("\n\tNo elements to delete ");
+	return(0);
+	}
+
+  printf("\n\tdelete menu");
+  printf("\n\t1.  to delete at begining\n\t2.  to delete at last \n\t3.  to delete chosed element");
+  printf("\n\tEnter u r chioce");
+  scanf("%d",&ch);
+  switch(ch)
+	{
+	case 1: deletebeg();break;
+	case 2: deletelast();break;
+	case 3: deletechose();break;
+	defulat: printf("\n\tInvalid delete chioce");
+ 	}
+  }
+
+deletebeg()
+   {
+   struct node *temp=head,*cur=head;
+   if(head->next=head)
+     {
+     head=NULL;
+     return 0;
+     }
+   while(cur->next!=head)
+	cur=cur->next;
+   cur->next=head->next;
+   head=head->next;
+   temp->next=NULL;
+   return(temp->data);
+   }
+
+deletelast()
+   {
+   struct node *cur=head,*prev;
+   if(head->next==head)  // only 1 node
+	{
+	head=NULL;
+	return;
+	}
+   while(cur->next!=head)
+	{
+	prev=cur;
+	cur=cur->next;
+	}
+   prev->next=head;
+   cur->next=NULL;
+   return(cur->data);
+   }
+
+deletechose()
+   {
+   struct node *cur=head,*prev;
+   int ele;
+   printf("\n\tEnter element  : ");
+   scanf("%d",&ele);
+   if(head!=NULL && head->data==ele)
+     {
+     if(head->next==head)
+       {head=NULL;return;}
+     while(cur->next!=head)
+       cur=cur->next;
+     cur->next=head->next;
+     head=head->next;
+     return;
+     }
+
+   while(cur->next!=head && cur->data!=ele)
+	{
+	prev=cur;
+	cur=cur->next;
+	}
+
+   if(cur!=NULL)
+	{
+	prev->next=cur->next;
+	cur->next=NULL;
+	return(cur->data);
+	}
+   else
+     {
+     printf("\n\tno element is found");
+     }
+   }
+
+
+display()
+   {
+   struct node *cur=head;
+   if(head==NULL)
+	{
+	printf("\n\tNo elements to display");
+	return(0);
+	}
+   printf("\n\t");
+   while(cur->next!=head)
+	{
+	printf("%d  ",cur->data);
+	cur=cur->next;
+	}
+   printf("%d  ",cur->data);
+   }
+
+
+
+--------------------------------------------------------------------
+
+
+1. how to reverse the links in a SLL?
+2. how to convert a SLL into DLL?
+
+
+<b>Linked Stack</b>
+
+Algorithm push(ITEM)  // STACK_HEAD is the stack header and TOP is the pointer to first node.
+
+  new = GETNODE(NODE);
+  new.DATA=ITEM
+  new.LINK=TOP
+  TOP=new
+  STACK_HEAD.LINK=TOP
+end
+
+Algorithm pop()
+
+  if TOP=NULL print "stack is empty" and exit;
+  else
+    ptr=TOP.LINK;
+    ITEM=TOP.DATA:
+    STACK_HEAD.LINK=ptr
+    TOP=ptr
+    
+end
+
+
+
+
+</pre>
+
+
+</body>
+</html>

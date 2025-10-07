@@ -1,0 +1,35 @@
+https://www.youtube.com/watch?v=W6qURtqrldc
+
+epoch + system cpu serial number; // what if you invoke this service in the same microsecond? what if your computers time gets changed to old date?
+computer_id + counter++; // what happens if your computer gets reboots?
+// So, we need to store the counter across reboots;
+If we use disk storage, every time you generate a new number, store it in the disk; // disk write/read takes time;
+
+// We could store the counter for every 1000 times;
+// when you read it from disk, start from the value in the disk + 1000;
+
+
+You might ask do I need to implement this? answer is No! there is UUID or GUID; // Universal unique or Global unique identifier;
+
+---------
+Sometimes, this is not enough!
+Sometimes, given 2 unique ids, we need to find which is generated first?
+So, we need to generate monitonically increasing IDs - an ID that is bigger than all IDs generated in the past;
+
+
+You could have a server which generates unique id same approach as above;
+Clients which need unique number, should reach the server for UUID;
+But, that requires n/w round trip;
+
+what if that server goes down?
+
+
+https://www.youtube.com/watch?v=W6qURtqrldc
+https://towardsdatascience.com/ace-the-system-design-interview-distributed-id-generator-c65c6b568027
+https://blog.devgenius.io/7-famous-approaches-to-generate-distributed-id-with-comparison-table-af89afe4601f
+
+
+fault tolerant vs high availability
+
+
+You seem to float around a lot. Are you one of those people who doesn't like to be boxed ?? 

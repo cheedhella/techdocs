@@ -1,0 +1,41 @@
+DATE: Thu, 19 Jul 2001 12:44:08
+From: Akshay Mishra 
+To: <vvasan@mailcity.com>
+Cc: 
+
+hi,
+	here's what veritas asked at IIT, Bombay this year...
+
+--------------
+Srini: Thanks  Bobby Maisnam
+
+--------------
+
+mainly C and puzzles.
+
+C:
+
+(1)comparison question of array and linked list. why is array poorer.
+ans: inserting new elements at front is potentially expensive
+
+(2) how to insert a new element in a linked list.
+(3) some programs and asking for result.
+(4) where does malloc allocate memory
+ans : heap.
+
+Puzzles:
+(1) car tied to a tree with infinite elastic rope. drives at 100kmph. ant on tree travelling along the rope at 1.5kmph. will the ant catch up with the car.
+
+(2) lion lies on monday,tuesday and wednesday. unicorn on thursday,friday and saturday. on other days both say the truth.
+
+one day lion said: yesterday was one of my lying days.
+unicorn said: yesterday was not one of my lying days.
+
+what day is it:
+
+ans: thursday.
+
+(3) square of 8x8 can be filled with 2x1 rectangles. now if we remove two corner squares(opposite) than can the remaining object be covered completely with 2x1 squares.? explain.
+ans: no. explain urself :)
+
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hashing</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <pre>
+What is Hashtable?
+  - Hashtable is a data structure that is used to find/retrieve elements in constant time; 
+  - It uses a technique called hashing to determine the location of each entry(key-value pair);
+
+What is Hashing?
+  - Hashing is a well-known searching technique;
+  - It uses less number of comparisions while performing search;
+  - Time Complexity: constant time, O(1);
+
+Hash Function
+  - It is used to compute the hash value of a key;
+  - Hash value is further used to identify a location where to store the key in the hash table;
+  - Hash function may return the same hash value for two or more keys;
+
+Collision
+  - When the hash value of a key maps to an already occupied bucket of the hash table, it is called as a Collision;
+
+Collision Resolution
+  - Open hashing
+    -- Chaining
+  - Closed hashing
+    -- Linear Probing
+    -- Quadratic Probing
+    -- Double Hashing
+
+Chaining
+  - It creates a linked list to the slot for which collision occurs;
+  - Keys are inserted in the linked list;
+  - Worst case search complexity is O(N), if all keys in the bucket map to same bucket of the hash table;
+
+Closed hashing
+  - It never stores any key-value pair outside of the hash table; So, size of hash table is always greater than or equal to number of keys;
+
+  Linear probing
+    - In case of collision, it linearly probes/searches the hash table for next empty slot;
+    - Problem with linear probing is clustering; 
+    - In worst case, it takes O(hash table size) time;
+
+  Quadratic Probing
+    - In case of collision, it checks for i^2 location, in i th iteration;
+    - We keep probing until an empty bucket is found;
+
+  Double Hashing
+    - We use another hash function hash2(x) and look for i * hash2(x) bucket in ith iteration;
+    - It requires more computation time as two hash functions need to be computed;
+
+    - Double hashing is done using: (hash1(key) + i * hash2(key)) % TABLE_SIZE, 
+      hash1(), hash2() are hash functions and TABLE_SIZE is the size of the hash table; We repeat by increasing i, when collision occurs;
+
+      First hash function is: hash1(key) = key % TABLE_SIZE
+      A second hash function is good, if: 
+          - It must never evaluate to zero;
+          - Must make sure that all cells can be probed;
+      A popular second hash function is: hash2(key) = PRIME – (key % PRIME) where PRIME is any prime smaller than the TABLE_SIZE;
+            <code class="language-java">
+
+            </code>
+        </pre>
+    </body>
+</html>

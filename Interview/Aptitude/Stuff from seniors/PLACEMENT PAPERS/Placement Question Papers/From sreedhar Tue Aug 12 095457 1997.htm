@@ -1,0 +1,540 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0045)http://vvasan.hypermart.net/paper/cq/cq_1.htm -->
+<HTML><HEAD><TITLE>From sreedhar Tue Aug 12 09:54:57 1997</TITLE>
+<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2614.3500" name=GENERATOR></HEAD>
+<BODY><FONT face="Courier New" size=2>
+<P>_________________________________________________________________</P>
+<P>1. Declarations and Initializations</P>
+<P>1.1 How do you decide which integer type to use? </P>
+<P>1.4 What should the 64-bit type on new, 64-bit machines be? </P>
+<P>1.7 What's the best way to declare and define global variables? </P>
+<P>1.11 What does extern mean in a function declaration? </P>
+<P>1.12 What's the auto keyword good for? </P>
+<P>1.14 I can't seem to define a linked list node which contains a</P>
+<P>pointer to itself. </P>
+<P>1.21 How do I declare an array of N pointers to functions returning</P>
+<P>pointers to functions returning pointers to characters? </P>
+<P>1.22 How can I declare a function that returns a pointer to a function</P>
+<P>of its own type? </P>
+<P>1.25 My compiler is complaining about an invalid redeclaration of a</P>
+<P>function, but I only define it once and call it once. </P>
+<P>1.30 What can I safely assume about the initial values of variables</P>
+<P>which are not explicitly initialized? </P>
+<P>1.31 Why can't I initialize a local array with a string? </P>
+<P>1.32 What is the difference between char a[] = "string"; and char *p =</P>
+<P>"string"; ? </P>
+<P>1.34 How do I initialize a pointer to a function? </P>
+<P>_________________________________________________________________</P>
+<P>2. Structures, Unions, and Enumerations</P>
+<P>2.1 What's the difference between struct x1 { ... }; and typedef</P>
+<P>struct { ... } x2; ? </P>
+<P>2.2 Why doesn't "struct x { ... }; x thestruct;" work? </P>
+<P>2.3 Can a structure contain a pointer to itself? </P>
+<P>2.4 What's the best way of implementing opaque (abstract) data types</P>
+<P>in C? </P>
+<P>2.6 I came across some code that declared a structure with the last</P>
+<P>member an array of one element, and then did some tricky allocation to</P>
+<P>make it act like the array had several elements. Is this legal or</P>
+<P>portable? </P>
+<P>2.7 I heard that structures could be assigned to variables and passed</P>
+<P>to and from functions, but K&amp;R1 says not. </P>
+<P>2.8 Why can't you compare structures? </P>
+<P>2.9 How are structure passing and returning implemented? </P>
+<P>2.10 Can I pass constant values to functions which accept structure</P>
+<P>arguments? </P>
+<P>2.11 How can I read/write structures from/to data files? </P>
+<P>2.12 How can I turn off structure padding? </P>
+<P>2.13 Why does sizeof report a larger size than I expect for a</P>
+<P>structure type? </P>
+<P>2.14 How can I determine the byte offset of a field within a</P>
+<P>structure? </P>
+<P>2.15 How can I access structure fields by name at run time? </P>
+<P>2.18 I have a program which works correctly, but dumps core after it</P>
+<P>finishes. Why? </P>
+<P>2.20 Can I initialize unions? </P>
+<P>2.22 What is the difference between an enumeration and a set of</P>
+<P>preprocessor #defines? </P>
+<P>2.24 Is there an easy way to print enumeration values symbolically? </P>
+<P>_________________________________________________________________</P>
+<P>3. Expressions</P>
+<P>3.1 Why doesn't the code "a[i] = i++;" work? </P>
+<P>3.2 Under my compiler, the code "int i = 7; printf("%d\n", i++ *</P>
+<P>i++);" prints 49. Regardless of the order of evaluation, shouldn't it</P>
+<P>print 56? </P>
+<P>3.3 How could the code [CENSORED] ever give 7? </P>
+<P>3.4 Don't precedence and parentheses dictate order of evaluation? </P>
+<P>3.5 But what about the &amp;&amp; and || operators? </P>
+<P>3.8 What's a ``sequence point''? </P>
+<P>3.9 So given "a[i] = i++;" we don't know which cell of a[] gets</P>
+<P>written to, but i does get incremented by one. </P>
+<P>3.12 If I'm not using the value of the expression, should I use i++ or</P>
+<P>++i to increment a variable? </P>
+<P>3.14 Why doesn't the code "int a = 1000, b = 1000; long int c = a *</P>
+<P>b;" work? </P>
+<P>3.16 Can I use ?: on the left-hand side of an assignment expression? </P>
+<P>_________________________________________________________________</P>
+<P>4. Pointers</P>
+<P>4.2 What's wrong with "char *p; *p = malloc(10);"? </P>
+<P>4.3 Does *p++ increment p, or what it points to? </P>
+<P>4.5 I want to use a char * pointer to step over some ints. Why doesn't</P>
+<P>"((int *)p)++;" work? </P>
+<P>4.8 I have a function which accepts, and is supposed to initialize, a</P>
+<P>pointer, but the pointer in the caller remains unchanged. </P>
+<P>4.9 Can I use a void ** pointer to pass a generic pointer to a</P>
+<P>function by reference? </P>
+<P>4.10 I have a function which accepts a pointer to an int. How can I</P>
+<P>pass a constant like 5 to it? </P>
+<P>4.11 Does C even have ``pass by reference''? </P>
+<P>4.12 I've seen different methods used for calling functions via</P>
+<P>pointers. </P>
+<P>_________________________________________________________________</P>
+<P>5. Null Pointers</P>
+<P>5.1 What is this infamous null pointer, anyway? </P>
+<P>5.2 How do I get a null pointer in my programs? </P>
+<P>5.3 Is the abbreviated pointer comparison ``if(p)'' to test for</P>
+<P>non-null pointers valid? </P>
+<P>5.4 What is NULL and how is it #defined? </P>
+<P>5.5 How should NULL be defined on a machine which uses a nonzero bit</P>
+<P>pattern as the internal representation of a null pointer? </P>
+<P>5.6 If NULL were defined as ``((char *)0),'' wouldn't that make</P>
+<P>function calls which pass an uncast NULL work? </P>
+<P>5.9 If NULL and 0 are equivalent as null pointer constants, which</P>
+<P>should I use? </P>
+<P>5.10 But wouldn't it be better to use NULL, in case the value of NULL</P>
+<P>changes? </P>
+<P>5.12 I use the preprocessor macro "#define Nullptr(type) (type *)0" to</P>
+<P>help me build null pointers of the correct type. </P>
+<P>5.13 This is strange. NULL is guaranteed to be 0, but the null pointer</P>
+<P>is not? </P>
+<P>5.14 Why is there so much confusion surrounding null pointers? </P>
+<P>5.15 I'm confused. I just can't understand all this null pointer</P>
+<P>stuff. </P>
+<P>5.16 Given all the confusion surrounding null pointers, wouldn't it be</P>
+<P>easier simply to require them to be represented internally by zeroes? </P>
+<P>5.17 Seriously, have any actual machines really used nonzero null</P>
+<P>pointers? </P>
+<P>5.20 What does a run-time ``null pointer assignment'' error mean? </P>
+<P>_________________________________________________________________</P>
+<P>6. Arrays and Pointers</P>
+<P>6.1 I had the definition char a[6] in one source file, and in another</P>
+<P>I declared extern char *a. Why didn't it work? </P>
+<P>6.2 But I heard that char a[] was identical to char *a. </P>
+<P>6.3 So what is meant by the ``equivalence of pointers and arrays'' in</P>
+<P>C? </P>
+<P>6.4 Why are array and pointer declarations interchangeable as function</P>
+<P>formal parameters? </P>
+<P>6.7 How can an array be an lvalue, if you can't assign to it? </P>
+<P>6.8 What is the real difference between arrays and pointers? </P>
+<P>6.9 Someone explained to me that arrays were really just constant</P>
+<P>pointers. </P>
+<P>6.11 I came across some ``joke'' code containing the ``expression''</P>
+<P>5["abcdef"] . How can this be legal C? </P>
+<P>6.12 What's the difference between array and &amp;array? </P>
+<P>6.13 How do I declare a pointer to an array? </P>
+<P>6.14 How can I set an array's size at compile time? </P>
+<P>6.15 How can I declare local arrays of a size matching a passed-in</P>
+<P>array? </P>
+<P>6.16 How can I dynamically allocate a multidimensional array? </P>
+<P>6.17 Can I simulate a non-0-based array with a pointer? </P>
+<P>6.18 My compiler complained when I passed a two-dimensional array to a</P>
+<P>function expecting a pointer to a pointer. </P>
+<P>6.19 How do I write functions which accept two-dimensional arrays when</P>
+<P>the ``width'' is not known at compile time? </P>
+<P>6.20 How can I use statically- and dynamically-allocated</P>
+<P>multidimensional arrays interchangeably when passing them to</P>
+<P>functions? </P>
+<P>6.21 Why doesn't sizeof properly report the size of an array which is</P>
+<P>a parameter to a function? </P>
+<P>_________________________________________________________________</P>
+<P>7. Memory Allocation</P>
+<P>7.1 Why doesn't the code ``char *answer; gets(answer);'' work? </P>
+<P>7.2 I can't get strcat to work. I tried ``char *s3 = strcat(s1, s2);''</P>
+<P>but I got strange results. </P>
+<P>7.3 But the man page for strcat says that it takes two char *'s as</P>
+<P>arguments. How am I supposed to know to allocate things? </P>
+<P>7.5 I have a function that is supposed to return a string, but when it</P>
+<P>returns to its caller, the returned string is garbage. </P>
+<P>7.6 Why am I getting ``warning: assignment of pointer from integer</P>
+<P>lacks a cast'' for calls to malloc? </P>
+<P>:wq</P>
+<P>7.7 Why does some code carefully cast the values returned by malloc to</P>
+<P>the pointer type being allocated? </P>
+<P>7.8 Why does so much code leave out the multiplication by sizeof(char)</P>
+<P>when allocating strings? </P>
+<P>7.14 I've heard that some operating systems don't actually allocate</P>
+<P>malloc'ed memory until the program tries to use it. Is this legal? </P>
+<P>7.16 I'm allocating a large array for some numeric work, but malloc is</P>
+<P>acting strangely. </P>
+<P>7.17 I've got 8 meg of memory in my PC. Why can I only seem to malloc</P>
+<P>640K or so? </P>
+<P>7.19 My program is crashing, apparently somewhere down inside malloc. </P>
+<P>7.20 You can't use dynamically-allocated memory after you free it, can</P>
+<P>you? </P>
+<P>7.21 Why isn't a pointer null after calling free? </P>
+<P>7.22 When I call malloc to allocate memory for a local pointer, do I</P>
+<P>have to explicitly free it? </P>
+<P>7.23 When I free a dynamically-allocated structure containing</P>
+<P>pointers, do I have to free each subsidiary pointer first? </P>
+<P>7.24 Must I free allocated memory before the program exits? </P>
+<P>7.25 Why doesn't my program's memory usage go down when I free memory?</P>
+<P>7.26 How does free know how many bytes to free? </P>
+<P>7.27 So can I query the malloc package to find out how big an</P>
+<P>allocated block is? </P>
+<P>7.30 Is it legal to pass a null pointer as the first argument to</P>
+<P>realloc? </P>
+<P>7.31 What's the difference between calloc and malloc? </P>
+<P>7.32 What is alloca and why is its use discouraged? </P>
+<P>_________________________________________________________________</P>
+<P>8. Characters and Strings</P>
+<P>8.1 Why doesn't "strcat(string, '!');" work? </P>
+<P>8.2 Why won't the test if(string == "value") correctly compare string</P>
+<P>against the value? </P>
+<P>- 8.3 Why can't I assign strings to character arrays? </P>
+<P>8.6 How can I get the numeric (character set) value corresponding to a</P>
+<P>character? </P>
+<P>8.9 Why is sizeof('a') not 1? </P>
+<P>_________________________________________________________________</P>
+<P>9. Boolean Expressions and Variables</P>
+<P>9.1 What is the right type to use for Boolean values in C? </P>
+<P>9.2 What if a built-in logical or relational operator ``returns''</P>
+<P>something other than 1? </P>
+<P>9.3 Is if(p), where p is a pointer, valid? </P>
+<P>_________________________________________________________________</P>
+<P>10. C Preprocessor</P>
+<P>10.2 I've got some cute preprocessor macros that let me write C code</P>
+<P>that looks more like Pascal. What do y'all think? </P>
+<P>10.3 How can I write a generic macro to swap two values? </P>
+<P>10.4 What's the best way to write a multi-statement macro? </P>
+<P>10.6 What are .h files and what should I put in them? </P>
+<P>10.7 Is it acceptable for one header file to #include another? </P>
+<P>10.8 Where are header (``#include'') files searched for? </P>
+<P>10.9 I'm getting strange syntax errors on the very first declaration</P>
+<P>in a file, but it looks fine. </P>
+<P>10.11 Where can I get a copy of a missing header file? </P>
+<P>10.12 How can I construct preprocessor #if expressions which compare</P>
+<P>strings? </P>
+<P>10.13 Does the sizeof operator work in preprocessor #if directives? </P>
+<P>10.14 Can I use an #ifdef in a #define line, to define something two</P>
+<P>different ways? </P>
+<P>10.15 Is there anything like an #ifdef for typedefs? </P>
+<P>10.16 How can I use a preprocessor #if expression to detect</P>
+<P>endianness? </P>
+<P>10.18 How can I preprocess some code to remove selected conditional</P>
+<P>compilations, without preprocessing everything? </P>
+<P>10.19 How can I list all of the pre#defined identifiers? </P>
+<P>10.20 I have some old code that tries to construct identifiers with a</P>
+<P>macro like "#define Paste(a, b) a/**/b", but it doesn't work any more.</P>
+<P>10.22</P>
+<P>What does the message ``warning: macro replacement within a string</P>
+<P>literal'' mean?</P>
+<P>10.23 How can I use a macro argument inside a string literal in the</P>
+<P>macro expansion? </P>
+<P>10.25 I've got this tricky preprocessing I want to do and I can't</P>
+<P>figure out a way to do it. </P>
+<P>10.26 How can I write a macro which takes a variable number of</P>
+<P>arguments? </P>
+<P>_________________________________________________________________</P>
+<P>11. ANSI/ISO Standard C</P>
+<P>11.1 What is the ``ANSI C Standard?'' </P>
+<P>11.2 How can I get a copy of the Standard? </P>
+<P>11.3 My ANSI compiler is complaining about prototype mismatches for</P>
+<P>parameters declared float. </P>
+<P>11.4 Can you mix old-style and new-style function syntax? </P>
+<P>11.5 Why does the declaration "extern f(struct x *p);" give me a</P>
+<P>warning message? </P>
+<P>11.8 Why can't I use const values in initializers and array</P>
+<P>dimensions? </P>
+<P>11.9 What's the difference between const char *p and char * const p? </P>
+<P>11.10 Why can't I pass a char ** to a function which expects a const</P>
+<P>char **? </P>
+<P>11.12 Can I declare main as void, to shut off these annoying ``main</P>
+<P>returns no value'' messages? </P>
+<P>11.13 But what about main's third argument, envp? </P>
+<P>11.14 I believe that declaring void main() can't fail, since I'm</P>
+<P>calling exit instead of returning. </P>
+<P>11.15 The book I've been using always uses void main(). </P>
+<P>11.16 Is exit(status) truly equivalent to returning the same status</P>
+<P>from main? </P>
+<P>11.17 How do I get the ANSI ``stringizing'' preprocessing operator `#'</P>
+<P>to stringize the macro's value instead of its name? </P>
+<P>11.18 What does the message ``warning: macro replacement within a</P>
+<P>string literal'' mean? </P>
+<P>11.19 I'm getting strange syntax errors inside lines I've #ifdeffed</P>
+<P>out. </P>
+<P>11.20 What are #pragmas ? </P>
+<P>-- pre 11.21 What does ``#pragma once'' mean? </P>
+<P>11.22 Is char a[3] = "abc"; legal? </P>
+<P>11.24 Why can't I perform arithmetic on a void * pointer? </P>
+<P>11.25 What's the difference between memcpy and memmove? </P>
+<P>11.26 What should malloc(0) do? </P>
+<P>11.27 Why does the ANSI Standard not guarantee more than six</P>
+<P>case-insensitive characters of external identifier significance? </P>
+<P>11.29 My compiler is rejecting the simplest possible test programs,</P>
+<P>with all kinds of syntax errors. </P>
+<P>11.30 Why are some ANSI/ISO Standard library routines showing up as</P>
+<P>undefined, even though I've got an ANSI compiler? </P>
+<P>11.31 Does anyone have a tool for converting old-style C programs to</P>
+<P>ANSI C, or for automatically generating prototypes? </P>
+<P>11.32 Why won't frobozz-cc, which claims to be ANSI compliant, accept</P>
+<P>this code? </P>
+<P>11.33 What's the difference between implementation-defined,</P>
+<P>unspecified, and undefined behavior? </P>
+<P>11.34 I'm appalled that the ANSI Standard leaves so many issues</P>
+<P>undefined. </P>
+<P>11.35 I just tried some allegedly-undefined code on an ANSI-conforming</P>
+<P>compiler, and got the results I expected. </P>
+<P>_________________________________________________________________</P>
+<P>12. Stdio</P>
+<P>12.1 What's wrong with the code "char c; while((c = getchar()) != EOF)</P>
+<P>..."? </P>
+<P>12.2 Why won't the code `` while(!feof(infp)) { fgets(buf, MAXLINE,</P>
+<P>infp); fputs(buf, outfp); } '' work? </P>
+<P>12.4 My program's prompts and intermediate output don't always show up</P>
+<P>on the screen. </P>
+<P>12.5 How can I read one character at a time, without waiting for the</P>
+<P>RETURN key? </P>
+<P>12.6 How can I print a '%' character with printf? </P>
+<P>12.9 How can printf use %f for type double, if scanf requires %lf? </P>
+<P>12.10 How can I implement a variable field width with printf? </P>
+<P>12.11 How can I print numbers with commas separating the thousands? </P>
+<P>12.12 Why doesn't the call scanf("%d", i) work? </P>
+<P>-- 12.13 Why doesn't the code "double d; scanf("%f", &amp;d);" work? </P>
+<P>12.15 How can I specify a variable width in a scanf format string? </P>
+<P>12.17 When I read numbers from the keyboard with scanf "%d\n", it</P>
+<P>seems to hang until I type one extra line of input. </P>
+<P>12.18 I'm reading a number with scanf %d and then a string with</P>
+<P>gets(), but the compiler seems to be skipping the call to gets()! </P>
+<P>12.19 I'm re-prompting the user if scanf fails, but sometimes it seems</P>
+<P>to go into an infinite loop. </P>
+<P>12.20 Why does everyone say not to use scanf? What should I use</P>
+<P>instead? </P>
+<P>12.21 How can I tell how much destination buffer space I'll need for</P>
+<P>an arbitrary sprintf call? How can I avoid overflowing the destination</P>
+<P>buffer with sprintf? </P>
+<P>12.23 Why does everyone say not to use gets()? </P>
+<P>12.24 Why does errno contain ENOTTY after a call to printf? </P>
+<P>12.25 What's the difference between fgetpos/fsetpos and ftell/fseek? </P>
+<P>12.26 Will fflush(stdin) flush unread characters from the standard</P>
+<P>input stream? </P>
+<P>12.30 I'm trying to update a file in place, by using fopen mode "r+",</P>
+<P>but it's not working. </P>
+<P>12.33 How can I redirect stdin or stdout from within a program? </P>
+<P>12.34 Once I've used freopen, how can I get the original stream back? </P>
+<P>12.38 How can I read a binary data file properly? </P>
+<P>_________________________________________________________________</P>
+<P>13. Library Functions</P>
+<P>13.1 How can I convert numbers to strings? </P>
+<P>13.2 Why does strncpy not always write a '\0'? </P>
+<P>13.5 Why do some versions of toupper act strangely if given an</P>
+<P>upper-case letter? </P>
+<P>13.6 How can I split up a string into whitespace-separated fields? </P>
+<P>13.7 I need some code to do regular expression and wildcard matching. </P>
+<P>13.8 I'm trying to sort an array of strings with qsort, using strcmp</P>
+<P>as the comparison function, but it's not working. </P>
+<P>13.9 Now I'm trying to sort an array of structures, but the compiler</P>
+<P>is complaining that the function is of the wrong type for qsort. </P>
+<P>13.10 How can I sort a linked list? </P>
+<P>13.11 How can I sort more data than will fit in memory? </P>
+<P>13.12 How can I get the time of day in a C program? </P>
+<P>13.13 How can I convert a struct tm or a string into a time_t? </P>
+<P>13.14 How can I perform calendar manipulations? </P>
+<P>13.15 I need a random number generator. </P>
+<P>13.16 How can I get random integers in a certain range? </P>
+<P>13.17 Each time I run my program, I get the same sequence of numbers</P>
+<P>back from rand(). </P>
+<P>13.18 I need a random true/false value, so I'm just taking rand() % 2,</P>
+<P>but it's alternating 0, 1, 0, 1, 0... </P>
+<P>13.20 How can I generate random numbers with a normal or Gaussian</P>
+<P>distribution? </P>
+<P>13.24 I'm trying to port this old program. Why do I get ``undefined</P>
+<P>external'' errors for some library functions? </P>
+<P>13.25 I get errors due to library functions being undefined even</P>
+<P>though I #include the right header files. </P>
+<P>13.26 I'm still getting errors due to library functions being</P>
+<P>undefined, even though I'm requesting the right libraries. </P>
+<P>13.28 What does it mean when the linker says that _end is undefined? </P>
+<P>_________________________________________________________________</P>
+<P>14. Floating Point</P>
+<P>14.1 When I set a float variable to 3.1, why is printf printing it as</P>
+<P>3.0999999? </P>
+<P>14.2 Why is sqrt(144.) giving me crazy numbers? </P>
+<P>14.3 I keep getting ``undefined: sin'' compilation errors. </P>
+<P>14.4 My floating-point calculations are acting strangely and giving me</P>
+<P>different answers on different machines. </P>
+<P>14.5 What's a good way to check for ``close enough'' floating-point</P>
+<P>equality? </P>
+<P>14.6 How do I round numbers? </P>
+<P>14.7 Where is C's exponentiation operator? </P>
+<P>14.8 The pre-#defined constant M_PI seems to be missing from 
+&lt;math.h&gt;.</P>
+<P>14.9 How do I test for IEEE NaN and other special values? </P>
+<P>14.11 What's a good way to implement complex numbers in C? </P>
+<P>14.12 I'm looking for some mathematical library code. </P>
+<P>14.13 I'm having trouble with a Turbo C program which crashes and says</P>
+<P>something like ``floating point formats not linked.'' </P>
+<P>_________________________________________________________________</P>
+<P>15. Variable-Length Argument Lists</P>
+<P>15.1 I heard that you have to #include &lt;stdio.h&gt; before calling</P>
+<P>printf. Why? </P>
+<P>15.2 How can %f be used for both float and double arguments in printf?</P>
+<P>15.3 Why don't function prototypes guard against mismatches in</P>
+<P>printf's arguments? </P>
+<P>15.4 How can I write a function that takes a variable number of</P>
+<P>arguments? </P>
+<P>15.5 How can I write a function that takes a format string and a</P>
+<P>variable number of arguments, like printf, and passes them to printf</P>
+<P>to do most of the work? </P>
+<P>15.6 How can I write a function analogous to scanf, that calls scanf</P>
+<P>to do most of the work? </P>
+<P>15.7 I have a pre-ANSI compiler, without &lt;stdarg.h&gt;. What can I do? 
+</P>
+<P>15.8 How can I discover how many arguments a function was actually</P>
+<P>called with? </P>
+<P>15.9 My compiler isn't letting me declare a function that accepts only</P>
+<P>variable arguments. </P>
+<P>15.10 Why isn't "va_arg(argp, float)" working? </P>
+<P>15.11 I can't get va_arg to pull in an argument of type</P>
+<P>pointer-to-function. </P>
+<P>15.12 How can I write a function which takes a variable number of</P>
+<P>arguments and passes them to some other function ? </P>
+<P>15.13 How can I call a function with an argument list built up at run</P>
+<P>time? </P>
+<P>_________________________________________________________________</P>
+<P>16. Strange Problems</P>
+<P>16.3 This program crashes before it even runs! </P>
+<P>16.4 I have a program that seems to run correctly, but then crashes as</P>
+<P>it's exiting. </P>
+<P>16.5 This program runs perfectly on one machine, but I get weird</P>
+<P>results on another. </P>
+<P>16.6 Why does the code "char *p = "hello, world!"; p[0] = 'H';" crash?</P>
+<P>16.8 What does ``Segmentation violation'' mean? </P>
+<P>_________________________________________________________________</P>
+<P>17. Style</P>
+<P>17.1 What's the best style for code layout in C? </P>
+<P>17.3 Is the code "if(!strcmp(s1, s2))" good style? </P>
+<P>17.4 Why do some people write if(0 == x) instead of if(x == 0)? </P>
+<P>17.5 I came across some code that puts a (void) cast before each call</P>
+<P>to printf. Why? </P>
+<P>17.8 What is Hungarian Notation''? Is it worthwhile? </P>
+<P>17.9 Where can I get the ``Indian Hill Style Guide'' and other coding</P>
+<P>standards? </P>
+<P>17.10 Some people say that goto's are evil and that I should never use</P>
+<P>them. Isn't that a bit extreme? </P>
+<P>_________________________________________________________________</P>
+<P>18. Tools and Resources</P>
+<P>18.1 I'm looking for C development tools (cross-reference generators,</P>
+<P>code beautifiers, etc.). </P>
+<P>18.2 How can I track down these pesky malloc problems? </P>
+<P>18.3 What's a free or cheap C compiler I can use? </P>
+<P>18.4 I just typed in this program, and it's acting strangely. Can you</P>
+<P>see anything wrong with it? </P>
+<P>18.5 How can I shut off the ``warning: possible pointer alignment</P>
+<P>problem'' message which lint gives me for each call to malloc? </P>
+<P>18.7 Where can I get an ANSI-compatible lint? </P>
+<P>18.8 Don't ANSI function prototypes render lint obsolete? </P>
+<P>18.9 Are there any C tutorials or other resources on the net? </P>
+<P>18.10 What's a good book for learning C? </P>
+<P>18.13 Where can I find the sources of the standard C libraries? </P>
+<P>18.14 I need code to parse and evaluate expressions. </P>
+<P>18.15 Where can I get a BNF or YACC grammar for C? </P>
+<P>18.15a Does anyone have a C compiler test suite I can use? </P>
+<P>18.16 Where and how can I get copies of all these freely distributable</P>
+<P>programs? </P>
+<P>_________________________________________________________________</P>
+<P>19. System Dependencies</P>
+<P>19.1 How can I read a single character from the keyboard without</P>
+<P>waiting for the RETURN key? </P>
+<P>19.2 How can I find out how many characters are available for reading,</P>
+<P>or do a non-blocking read? </P>
+<P>19.3 How can I display a percentage-done indication that updates</P>
+<P>itself in place, or show one of those ``twirling baton'' progress</P>
+<P>indicators? </P>
+<P>19.4 How can I clear the screen, or print things in inverse video, or</P>
+<P>move the cursor? </P>
+<P>19.5 How do I read the arrow keys? What about function keys? </P>
+<P>19.6 How do I read the mouse? </P>
+<P>19.7 How can I do serial (``comm'') port I/O? </P>
+<P>19.8 How can I direct output to the printer? </P>
+<P>19.9 How do I send escape sequences to control a terminal or other</P>
+<P>device? </P>
+<P>19.10 How can I do graphics? </P>
+<P>19.11 How can I check whether a file exists? </P>
+<P>19.12 How can I find out the size of a file, prior to reading it in? </P>
+<P>19.13 How can a file be shortened in-place without completely clearing</P>
+<P>or rewriting it? </P>
+<P>19.14 How can I insert or delete a line in the middle of a file? </P>
+<P>19.15 How can I recover the file name given an open file descriptor? </P>
+<P>19.16 How can I delete a file? </P>
+<P>19.17 What's wrong with the call "fopen("c:\newdir\file.dat", "r")"? </P>
+<P>19.18 How can I increase the allowable number of simultaneously open</P>
+<P>files? </P>
+<P>19.20 How can I read a directory in a C program? </P>
+<P>19.22 How can I find out how much memory is available? </P>
+<P>19.23 How can I allocate arrays or structures bigger than 64K? </P>
+<P>19.24 What does the error message ``DGROUP exceeds 64K'' mean? </P>
+<P>19.25 How can I access memory located at a certain address? </P>
+<P>19.27 How can I invoke another program from within a C program? </P>
+<P>19.30 How can I invoke another program and trap its output? </P>
+<P>19.31 How can my program discover the complete pathname to the</P>
+<P>executable from which it was invoked? </P>
+<P>19.32 How can I automatically locate a program's configuration files</P>
+<P>in the same directory as the executable? </P>
+<P>19.33 How can a process change an environment variable in its caller? </P>
+<P>19.36 How can I read in an object file and jump to routines in it? </P>
+<P>19.37 How can I implement a delay, or time a user's response, with</P>
+<P>sub-second resolution? </P>
+<P>19.38 How can I trap or ignore keyboard interrupts like control-C? </P>
+<P>19.39 How can I handle floating-point exceptions gracefully? </P>
+<P>19.40 How do I... Use sockets? Do networking? Write client/server</P>
+<P>applications? </P>
+<P>19.40b How do I use BIOS calls? How can I write ISR's? How can I</P>
+<P>create TSR's? </P>
+<P>19.41 But I can't use all these nonstandard, system-dependent</P>
+<P>functions, because my program has to be ANSI compatible! </P>
+<P>_________________________________________________________________</P>
+<P>20. Miscellaneous</P>
+<P>20.1 How can I return multiple values from a function? </P>
+<P>20.3 How do I access command-line arguments? </P>
+<P>20.5 How can I write data files which can be read on other machines</P>
+<P>with different data formats? </P>
+<P>20.6 How can I call a function, given its name as a string? </P>
+<P>20.8 How can I implement sets or arrays of bits? </P>
+<P>20.9 How can I determine whether a machine's byte order is big-endian</P>
+<P>or little-endian? </P>
+<P>20.10 How can I convert integers to binary or hexadecimal? </P>
+<P>20.11 Can I use base-2 constants (something like 0b101010)?</P>
+<P>Is there a printf format for binary? </P>
+<P>20.12 What is the most efficient way to count the number of bits which</P>
+<P>are set in a value? </P>
+<P>20.13 How can I make my code more efficient? </P>
+<P>20.14 Are pointers really faster than arrays? How much do function</P>
+<P>calls slow things down? </P>
+<P>20.17 Is there a way to switch on strings? </P>
+<P>20.18 Is there a way to have non-constant case labels (i.e. ranges or</P>
+<P>arbitrary expressions)? </P>
+<P>20.19 Are the outer parentheses in return statements really optional? </P>
+<P>20.20 Why don't C comments nest? Are they legal inside quoted strings?</P>
+<P>20.24 Why doesn't C have nested functions? </P>
+<P>-</P>
+<P>20.25 How can I call FORTRAN (C++, BASIC, Pascal, Ada, LISP) functions</P>
+<P>from C? </P>
+<P>20.26 Does anyone know of a program for converting Pascal or FORTRAN</P>
+<P>to C? </P>
+<P>20.27 Can I use a C++ compiler to compile C code? </P>
+<P>20.28 I need to compare two strings for close, but not necessarily</P>
+<P>exact, equality. </P>
+<P>20.29 What is hashing? </P>
+<P>20.31 How can I find the day of the week given the date? </P>
+<P>20.32 Will 2000 be a leap year? </P>
+<P>20.34 How do you write a program which produces its own source code as</P>
+<P>its output? </P>
+<P>20.35 What is ``Duff's Device''? </P>
+<P>20.36 When will the next Obfuscated C Code Contest be held? How can I</P>
+<P>get a copy of previous winning entries? </P>
+<P>20.37 What was the entry keyword mentioned in K&amp;R1? </P>
+<P>20.38 Where does the name ``C'' come from, anyway? </P>
+<P>20.39 How do you pronounce ``char''? </P>
+<P>20.40 Where can I get extra copies of this list? </P>
+<P>&nbsp;</P>
+<P>&nbsp;</P></FONT></BODY></HTML>

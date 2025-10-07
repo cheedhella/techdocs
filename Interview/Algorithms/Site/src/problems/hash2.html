@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given 2 arrays, check if they are disjoint or not?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        Problem: 2 sets are disjoint, if they have nothing in common(intersection is empty);
+
+        <pre>
+            <code class="language-java">
+
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class DisjointsetApp {
+
+    // Need O(n1) to convert a1 into HashSet; 
+    // HashSet has O(1) lookup time; For n2 lookups, it requires O(n2) time;
+    // So, Time Complexity: O(n1 + n2);
+    private static boolean isDisjoint(int[] a1, int[] a2) {
+        HashSet<Integer> s1 = IntStream.of(a1).boxed()
+                .collect(Collectors.toCollection(HashSet::new));
+        for (int i = 0; i < a2.length; i++) {
+            if (s1.contains(a2[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = { 9, 4, 7, 1, -2, 6, 5 };
+        int[] a2 = { 7, 1, -2 };
+        System.out.println("Is a1 and a2 are disjoint sets? " + isDisjoint(a1, a2));
+        int[] a3 = { 1, 2, 3, 11, 5 };
+        int[] a4 = { 10, 12 };
+        System.out.println("Is a1 and a2 are disjoint sets? " + isDisjoint(a3, a4));
+    }
+}
+
+Output:
+Is a1 and a2 are disjoint sets? false
+Is a1 and a2 are disjoint sets? true
+
+
+            </code>
+        </pre>
+    </body>
+</html>

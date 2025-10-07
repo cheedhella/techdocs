@@ -1,0 +1,147 @@
+B Tree - generalization of BST in that a node can have more than 2 children.
+	used for indexing large blocks of data in case of databases.
+
+A B-Tree of order m is a tree with the following properties:
+
+	1. For each node(except root and leaf), ceil(m/2) <= degree(node) <= m
+	   Root node can have either 0 or atleast 2 children.
+
+	2. Number of keys in each non-leaf node is one less than the number of it's children.
+	   node - min/max. no. of keys?????
+	   min. no. of keys for root node is 1, min. no. of childs is 2.
+
+	3. Format of each node is:
+		P0  K1  P1  K2 ....... Km-1, Pm-1
+		
+	   struct btnode {
+		int count;             // count of active keys in the node
+		int K[m];              // each node can hold a max. of m-1 keys, don't use K[0] 
+		struct btnode *P[m];   // each node can have a max. of m children
+	   };
+
+	4. Inside a node, Ki < Ki+1, for all i such that 1 <=	i <= m-1
+
+	5. All the key values in the subtree Pi are less than Ki+1, 0 <= i <= m-1
+	
+	6. All the key values in the subtree Pi are greater than Ki, 0 <= i <= m-1
+
+
+// Returns a pointer to the node containing the specified key(KEY) or null.
+// A stack named PATH contains the path to the node containing the specified key.
+
+Initialize a linked stack with name PATH.
+search(btnode *root) {
+   if(root==null) return null; // not found
+   count = root->count; // no. of keys in the current node
+   for(i=1 to count) {
+	if(KEY == K[i]) return root;
+	if(KEY < K[i]) { 
+		PATH.push(root); 
+		temp=search(P[i-1]); 
+		return temp; 
+		}
+	}
+   PATH.push(root);
+   temp=search(P[i]);
+   return temp;
+   }
+
+
+insert(btnode *root, int KEY) {
+	temp = search(root, KEY);
+	if(temp!=null) print "Key already exists... duplicates not allowed... exiting..."; exit;
+	temp = PATH.pop(); // returns a pointer to the leaf node in which new KEY is to be inserted.
+	
+	boolean isInserted=false;
+	while(!isInserted)
+		{
+		count = temp->count;
+		if(count < max. no. of keys allowed in a node) then put the key in a proper place inside temp node. isInserted=true.
+		else 
+			the node full, so choose a median and split it into 2 nodes evenly by creating a new node.
+			temp = PATH.pop();
+			KEY=median; // insert the median value into temp node
+		}
+	}
+
+
+delete(btnode *root, int KEY) 
+	{
+	temp = search(root, KEY);
+	if(temp==null) print "Key not found..."; exit;
+
+	if(temp.P[0]!=null) // key to be deleted is found in a non-leaf node, so exchange it with it's inorder successor.
+		{
+		// inorder successor is the first key of the leftmost node in the right subtree just after key
+		Z = temp;
+		for(i=1;temp.K[i]!=key;i++);
+		PATH.push(temp);
+		temp=temp.P[i]; // move to right subtree
+
+		while(temp->P[0]!=null) // move to leftmost node
+			PATH.push(temp);
+			temp=temp->P[0];
+
+		// excange the key in non-leaf with inorder successor in the leaf node
+		swap(Z.K[i], temp.K[0]);
+		}
+
+	delete the key in temp by left shifting the keys right to it. temp->count--
+
+	while(temp->count < min. no. of keys required && temp!=root) 
+		{
+		PARENT -> parent node of temp, PATH.pop()
+		i -> temp is parent's i th child
+		X -> left sibling of temp
+		Y -> right sibling of temp
+
+		// case 1: if it's right sibling exists and has greater than min. no. of required keys
+		if(Y!=null && Y->count > min. required) 
+			{
+			transfer PARENT.K[i+1] to temp.
+			transfer Y.K[1] to PARENT.K[i+1]
+			break;
+			}
+		// case 2: if it's left sibling exists and has greater than min. no. of required keys
+		else if(X!=null && X->count > min. required) 
+			{
+			transfer PARENT.K[i] to temp.
+			transfer X.K[X->count-1] to PARENT.K[i]
+			break;
+			}
+		// case 3: if it's right sibling exists and has less than or equal to min. no. of required keys
+		else if(Y!=null) 
+			{
+			// create a new node by merging temp, PARENT.K[i+1], Y
+			// delete PARENT.K[i+1], PARENT.P[i+1} by left shifting the keys and pointers right to it. PARENT->count--
+			temp=PARENT;
+			}
+		// case 4: if it's left sibling exists and has less than or equal to min. no. of required keys
+		else if(X!=null) 
+			{
+			// create a new node by merging X, PARENT.K[i], temp
+			// delete PARENT.K[i], PARENT.P[i} by left shifting the keys and pointers right to it. PARENT->count--
+			temp=PARENT;
+			}
+		}
+	} // end of delete
+
+
+
+traverseTree(struct BTNODE *root)
+	{
+	if(root==null) return;
+	traverseTree(root->P[0]);
+	for(i=1 to root->count)
+		print root->K[i]
+		traverseTree(root->P[i]);
+	}
+
+
+The height h of a B-tree of order m, with a total of n keys, satisfies the inequality:
+h <=  1 + log ém / 2ù  ((n + 1) / 2) 
+
+Are keys in B-tree nodes duplicated when the node is split?
+	No. it is the case in B+ tree.
+
+

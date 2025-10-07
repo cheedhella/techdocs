@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Find Second Maximum Value in an Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      <pre>
+        <code class="language-java">
+// Time Complexity: O(N);
+public class P4 {
+    private static int find2ndMax(int[] data) {
+        int max1, max2;
+        if (data[0] > data[1]) {
+            max1 = data[0];
+            max2 = data[1];
+        }
+        else {
+            max1 = data[1];
+            max2 = data[0];
+        }
+        for (int i = 2; i < data.length; i++) {
+            if (data[i] > max1) {
+                max2 = max1;
+                max1 = data[i];
+            }
+            else if (data[i] > max2) {
+                max2 = data[i];
+            }
+        }
+        return max2;
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = { 9, 2, 3, 6 };
+        System.out.println("2nd Max: " + find2ndMax(a1));
+    }
+}
+
+// Output:
+2nd Max: 6
+        </code>
+      </pre>
+
+    </body>
+</html>

@@ -1,0 +1,286 @@
+HUGHES at IISC 2000
+
+
+q1) special charracter of c++ regarding oop;
+a) funs overloading, b?) polymerisation vc) virtual funs d) data 
+encapsulation
+   {
+int i=4000;
+int j=9000;
+main()
+{
+printf(,i,j);
+f(&i,&j);
+printf((i,j);
+f1(&i,&j);
+printf(i,j);
+
+
+
+f( int *a, int *b)
+{
+int *temp;
+temp=a;
+a=b;
+b=temp;
+}
+f1(int *a,int *b)
+{
+*b=*a;
+*a=500;
+}
+3) using delaration ---- namespace funda;
+4) few questions on inheritence including  protcted --- pointer to base 
+derived class.
+
+
+5)   port address is unique at
+    a)globaly, b)...
+6)    ((5+4)*8)*(16+9)*5)  convert to prefix
+7) there r 2 dices. probabilty to get 7
+a) 5/36   b) 7/36   c) 1/36  d) 9/36
+
+8)     4R balls,  5G , 6Y,5O balls. no. of balls are kept linearly . no 
+of 
+permutayion that similar color balls will be together.
+20!  ,    6!5!,   4!5!,   none
+
+9)    a man has color blindness then what will be permutations. ans  
+may be 
+24,2,10, none
+
+
+10_   if  the man has closes his eye and arranges then what is the 
+probability
+    20,12,24, none
+
+
+11 3 boys: 3 girls a,b,c: x,y,z a,c unmarried   , a& b  have a dog. a 
+thinks 
+the dog will be with his wife. B's wife thinks that her dog is with  
+his 
+husband. they r seated in a line c can sit near  x but not near y,z. 
+now 
+they have to sit like the distace between dogs is near.
+no. of seats between dogs
+( one dog is at first other is at 5th)
+
+12) tell the sequence azcxyb
+13) X.42 is in which layer
+14) TCMP or somewhat like this protocol
+15) -------!---------!--------
+                !             !
+                !              R
+               Z(diode)!
+______!______!____
+
+ans) clipper , damper, rectifier, trigger ckt
+
+
+16
+flush as in toilet can be considered electricallyas
+a) capaciter b) inductor c) trigger ckt
+
+
+17)    haruard code is
+a) orthogonal b) 1
+
+18) which is better
+1)semaphore,2) monitor c).....
+
+
+19 single bit parity checketr can detect
+1) 1 bit error  2) 2 bit error etc
+
+20motion estimation is used in
+1) satellite 2) communication 3) video
+
+
+
+
+1.  What does compiler do? (b is correct)
+	a. memory management b. symbol table c. --      d.-
+2.  Kerberos used for- Authentication and security.
+3.  RSA Algorithm
+4.  One digital ckt.(simple)
+5.  One K-map (simple)
+6.  Min no. of operations in worst case input for - Heap Sort
+7.  3 device serially connected, each having a probability of  0.9 of 
+not
+     failing. Combined prob. Of the entire ckt to work-0.729 (according 
+to 
+me)
+8.  CONNECT BY command in DBMS
+9.  Projection in DBMS
+10. Program Counter incremented in - Fetch  Phase
+11. You have to delete a given node in a singly connected link list. 
+What is
+     the order of no. of nodes to be traversed - O(n) (acc. To me)
+12. Hit ratio for first level cache is  0.9 and access time 100ns, for
+     second level cache is  0.9 and access time 400ns, memory access 
+time  
+is
+     1000ns. Find time to access an address- 140ns
+13. Ping  is in - ICMP
+14. Def. of Coupling
+15. Function pts used in - Software analysis
+16. Can DFDs  be used in OO Model
+17. Protected members in Public class can be accessed by - Don't 
+remember
+     the choices.
+18. Message to A from B, So B will use- A's private key or A's public 
+key or
+     B's private key or B's public key.
+19. No.  of lines req. to completely connect n nodes - O(n*n)
+20. Something on NFS
+21. Something on Threaded trees
+22. N=2 exp(p) routers, what is the max. hops req. to send a message 
+between
+     the farthest two
+23. Diff between 3rd and @nd normal form
+24. Which is not client server- email access, web access, NFS, 
+telephone
+25. Data structure used to sort direct access or disk files.
+26. Least avg waiting time - Shortest job first algo
+27. Something on JAVA interface
+28. For arithmetic expression evaluation using stack- postfix
+29. For diskless systems - RARP
+30. Something on  dirty bits
+31. Something on downloading of Java
+32. Bubble sort
+33. How to define constant pointer in C
+34. Char*(*(*A[X])())() is what
+35. Every shared resource has a colocated resource manager for - 
+concurrency
+     control,location transparency,replication transparency
+36. Can a computer have more than one Domain address and more than one 
+IP
+     address
+37. Which searches best in binary tree- ht. Balancing, wt. Balancing, 
+both,
+     none
+38. Heap management is done by library routine - user procedure in user
+     mode, user proc. In kernel mode, kernel,
+39. Something on regression testing
+40. IPV6 address bits -128 bits
+41. Something on raw IP
+40 questions in all, +3 for correct ans ; -1 for wrong one;
+
+1)Question on probability: whats prob that a no b/w 100 & 999(both 
+inclusive) will not have 7?
+
+2)A question on RARP protocol
+
+3)An algo was given and it was asked as to what does it do??
+Ans: evaluate GCD of two numbers
+
+4)a question on cache memory: Disadv of Direct mapped cache memory
+
+5) One question on digial circuits. There were two input variables and 
+u've 
+to assign them some values to get the output to be X' + Y;
+
+6)If X'*Y = X+Y and z=X*Y then what is z*X
+my answer was not matching any of the alternatives
+
+7)If A and B r two sets then (A-B) U (B-A) U (A intersection B) is:
+A U B
+
+8)One question on newton Raphson method find solution to X(square) - 
+1=0 
+with initial itertion x=-1
+
+9)A procedure was written and it was asked what will be the result if 
+procedure calling is call by value, call by reference, call by name etc
+
+10)One question on Page replacement algorithm asking which algo is most 
+efficient
+Ans: The one where the page that will not be used for max time in 
+future is 
+replaced
+
+11)An IP packet can get struck into a circular loop while travelling, 
+which 
+field in IP header can prevent this::
+(i)Source address (ii) destination address (iii) TTL(Time to live)
+correct answer(iii)
+
+12)In order to get numbers in sorted order out of a binary tree
+Ans: we should do inorder traversal
+
+13) There was a set of data given. U had to tell that How many nodes 
+will be 
+there on left and right subtrees, if they were inserted in given order
+
+14) what tree has all the child nodes less than itself
+Ans:Heap
+
+15)Which type of data structures can have hetrogeneous elements
+(i) array (ii) records (iii) file
+Ans (iii)
+
+16)Given bandwidth = 3000 and no of bits transferred per level =8 what 
+is 
+Nyquist's max bit rate?
+Ans: use formula bitrate = 2*Bandwidth*log(to base 2)of no of bits per 
+level, therefore Ans=18000bps
+
+17)One question on pulse code modulation. If i remember correctly it 
+was : 
+why is it used or when is it used??
+
+18)One question on Graphs, as i haven't done graphs i don't exactly 
+remember 
+the question. I guess it was degree of graph given no of nodes and 
+edges.
+
+19)Given a recursive function
+function X(int A)
+{
+	If (A<3)
+		X=1;
+	else
+		X=X(A-1) + X(A-3) + 1
+}
+
+U had to tell how many calls does X(X(5)) will make??
+Don't remember the answer exactly, but u can work it out!!
+
+20)How many 4 input multiplexers u need to make a 16 input 
+multiplexer??
+Ans: 8
+
+21)What is the worst case for Booth's multiplication algo?
+
+22)SOme question regarding size of ROM:If i remember correctly, it was: 
+For 
+multiplication of two 8-bit numbers, what should be the size of ROM?
+
+This is all i could recollect!!
+
+Interview:
+Difference between C and C++.
+Interrupts, what r they and whats their significance.
+C++: inheritance, polymorphism, friend classes etc.
+Write an algo to insert a node into singly linked list at a given 
+location.
+B+ tree.
+Difference between Win 95 and Win NT.
+Regarding the project i m doing in my training.
+difference b/w token bus, token ring and ethernet
+Multithreading and multitasking.
+A few questions on tree balancing , AVL trees and  Red Black trees
+A question on pointers to pointer,
+what do u mean by char ** a[35]
+Also asked what is hash table and where it is used??
+
+
+
+
+General:
+In OS , semaphores (Ch 6) is most important, and then process 
+management, 
+memory management is what u should be thorough with (Ch 4, 8 & 9) Ch 5 
+is 
+easy and least important!!
+

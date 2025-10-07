@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Rearrange Sorted Array in Max/Min Form?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an array, can you re-arrange the elements such that the first position will have the largest number, the second will have the smallest, the third will have the second-largest, and so on?</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class P7 {
+    private static int[] rearrange(int[] data) {
+        int[] output = new int[data.length];
+        int i = 0;
+        while (i < data.length / 2) {
+            output[2 * i] = data[data.length - 1 - i];
+            output[2 * i + 1] = data[i];
+            i++;
+        }
+
+        if (data.length % 2 != 0) {
+            output[2 * i] = data[i];
+        }
+        return output;
+
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 1, 2, 3, 4, 5 };
+        int[] output = rearrange(data);
+        System.out.println("After re-arranging: " + Arrays.toString(output));
+
+        int[] data2 = { 1, 2, 3, 4, 5, 6 };
+        int[] output2 = rearrange(data2);
+        System.out.println("After re-arranging: " + Arrays.toString(output2));
+    }
+}
+
+// Output:
+After re-arranging: [5, 1, 4, 2, 3]
+After re-arranging: [6, 1, 5, 2, 4, 3]
+        </code>
+      </pre>
+
+    </body>
+</html>

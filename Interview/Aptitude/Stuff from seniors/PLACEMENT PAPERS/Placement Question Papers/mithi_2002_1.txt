@@ -1,0 +1,174 @@
+I gave the written test for Mithi Software in March 2002.
+At this point of time Mithi is a small one-apartment company located in Pune (Aundh).
+They are mainly into converting web-pages/ web-sites into Indain languages.
+Have a look at their web-site http://www.mithi.com/ and you'll get the general idea. 
+
+At places I have added notes, these are titled "Note from me". 
+
+The written test was for 1.5 hrs and consists of 9 sections, of which the first 3 are compulsary.
+Depending on your skills you can attempt as many of the remaning sections. 
+
+Srini: Thanks Ameet
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Section One (Designing):
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Please do not wirte code for the following problem.
+	You have a lot of text, that flows into many pages. Even the page numbers are not marked. There are some key words and phrases that have to be indexed, much like the index that you find at the back of books. How will you go about doing the same.
+
+
+Section Two (C Programming):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Write a C function that will trim all the trailing spaces of a string passed to it. Write all the test cases you can think of that will test the above function.
+
+
+Section Three (Presonal Questions):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Q1> Name one obstacle that had faced in the past that you could not resolve for some time. IN the end how did you solve the problem?
+Q2> What salary are you drawing from your current employer?
+Q3> What salary do you expect from us?
+Q4> Reason for seeking emplomeny elsewhere?
+Q5> Where do you see yourself 2/5/10 years from now?
+
+"Note from me": This section contained about 10-12 presonal questions. OF which only 4 were compulsary. These are the first 4 in the above list!
+
+Section Four (C++):
+~~~~~~~~~~~~~~~~~~~
+
+Q1> Write a CString class that will implement the following functions:
+    The CString class should be able to handle strings upto 1GB in size.
+
+"Note from me": There were well over 15 member functions you had to code. You can imagine all the functions you might expect a CString class to have, you were asked to code all those! Here are some I can remember of:
+** Getbuffer()
+** GetLength()
+** Overload the = operator.
+** OVerload the  == operator.
+** Overload the  + operator.
+** ChatAt()
+** TrimRigh()
+** <To find the index of a sub-string in the string>
+
+Q2> What will be the output of the following program:
+
+class A
+{
+   public:
+      A () { cout << "In constructor\n";}
+      A (A &a) { cout << "In copy constructor\n";}
+      ~A () { cout << "In destructor\n";}
+};
+
+A Func(A a)
+{
+   return a;
+}
+
+void main()
+{
+   A ObjA, ObjB;
+   A *Aptr= new A;
+   ObjA=Func(ObjA);
+   Aptr=&ObjB;
+   delete Aptr;
+}
+
+"Note from me": Hey I don't remember if there was a "public:" in the class. If it is not there, the program will obviously not compile. Well assuming the public was there, here is the output:
+In constructor
+In constructor
+In constructor
+In copy constructor
+In copy constructor
+In destructor
+In destructor
+In destructor
+In destructor
+In destructor
+In either case, this is a nasty program. It has a memory leak and it calls the destructor of "ObjB twice"! BTW, you are expected to write all this!
+
+Q3> Why do you need Virtual Destructors?
+Q4> What is the difference between the stack and the heap?
+Q5> What is the maximum size the stack can grow to?
+
+Section Five (Core Java & Servlets):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Q1> You are programming under the Windows environment. What is the purpose/use of the java.exe     file?
+Q2> When will you use an abstract class & when will you use an interface.
+Q3> What will be the output of the following program:
+
+class test
+{
+        void foo()
+        {
+                System.out.println("Mithi Software");
+        }
+}
+
+public class test1
+{
+        public static void main(String args[])
+        {
+                test t=null;
+                t.foo();
+        }
+}
+
+	Will it give a compile-time error or a run-time error? Why?
+
+"Note from me": I'll save you the trouble of compiling & running the program. It will give you a run-time error, the following exception will be thrown: "NullPointerException". This is because you are attempting to call a function using a null reference.
+
+Q4> Will the following snippet compile?
+
+class test
+{
+        synchronized void foo() {}
+}
+
+class test1 extends test
+{
+        void foo() {}
+}
+
+	What are the rules governing the inheritance of synchronized methods?
+
+"Note from me": In this section there were 4 questions on Core Java, all of which I have listed above. There were another 2 on servelts, but I do not remember about them :-(
+
+
+Section Six (Windows SDK Programming):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+"Note from me": This section had 4 questions. I don't remember two of the qyestions. But, two of them were on drawing using the various paint methods. Of the two questions, one of them had a 10-15 lined program and you are asked to optimize the code. 
+
+Section Seven (Networking):
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Q1> How does DNS work?
+
+"Note from me": In this section there were about 9-10 questions. I remeber two. One of which I have written above. The second was something like this "Comapre IP, TCP and UDP" or this "Write short notes on IP, TCP and UDP". 
+
+Section Eight (Linux):
+~~~~~~~~~~~~~~~~~~~~~~
+
+Q1> If you want to acheve certain tasks as soon you log-into the system and soon as you log-out, how can you achieve the same?
+Q2> What do the following shell metecahracters stand for "$1, $2, $*, $$"?
+Q3> What do the following commands do?
+    a) ps [or was it ls???] 
+    b) tee
+    c) ???
+    d) ???
+    e) ???
+
+
+"Note from me": Not being the Linux guy I don't remember much of this section either, there were about 8-10 quesions in all.  
+
+Section Nine (QA):
+~~~~~~~~~~~~~~~~~~
+
+Q1> Have you worked on automated testing before?
+Q2> <One question about something to do on web-based testing> 
+
+"Note from me": There were a total of 4 question in this section!
+

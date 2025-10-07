@@ -1,0 +1,294 @@
+<html>
+<title>Binary Trees</title>
+
+<body background="./pics/Bck2.gif">
+<pre>
+<b>Binary Tree </b>- a tree in which every node has atmost two children, left child and right child.
+
+<b>Array Representation of Binary Tree</b>
+	Root is always stored at array index '0'.
+	Left Child’s Index   =  2 * Parent’s Index + 1
+	Right Child’s Index  =  2 * Parent’s Index + 2
+	Parent’s Index = (Child’s Index - 1) / 2
+
+<b>List representation of binary tree</b>
+	struct node {
+		struct node *lchild;
+		int data;
+		struct node *rchild;
+	}*root;
+
+
+<b>Binary Tree Traversals:</b>
+
+<b>Recursive version</b>
+	// preorder: root, left subtree, right subtree
+	void preorder(struct node *root) {
+		if(root == NULL) return; 
+		printf("%d", root->data); // visit root node
+		if(root->lchild != NULL) preorder(root->lchild); // preorder of left subtree
+		if(root->rchild != NULL) preorder(root->rchild); // preorder of right subtree
+	}
+
+	// inorder: left subtree, root, right subtree
+	void inorder(struct node *root) {
+		if(root == NULL) return;
+		if(root->lchild != NULL) inorder(root->lchild); // inorder of left subtree
+		printf("%d", root->data); // visit root node
+		if(root->rchild != NULL) inorder(root->rchild); // inorder of right subtree
+	}
+
+	// postorder: left subtree, right subtree, root
+	void postorder(struct node *root) {
+		if(root == NULL) return;
+		if(root->lchild != NULL) postorder(root->lchild); // postorder of left subtree
+		if(root->rchild != NULL) postorder(root->rchild); // postorder of right subtree
+		printf("%d", root->data); // visit root node
+	}
+
+
+
+
+Application of Binary Trees: Expression tree, Huffman coding
+
+
+
+Expression tree: a binary tree in which all leaf nodes are operands and internal nodes are operators.
+	Algorithm to evaluate postfix expression(using stack):
+		i/p: postfix expression in the form of a char array.
+		take an empty stack.
+		for each char in the expression {
+			if the char is an operand, push it onto the stack.
+			if the char is an operator, op1 = pop; op2 = pop; perform op2 operator op1; push the result onto stack.
+		}
+		finally, stack contains the result.
+
+	Algorithm to evaluate prefix expression(using stack):
+		i/p: prefix expression in the form of a char array.
+		take an empty stack.
+		reverse the given prefix expression
+		for each char in the reversed prefix expression {
+			if the char is an operand, push it onto the stack.
+			if the char is an operator, op1 = pop; op2 = pop; perform op1 operator op2; push the result onto stack.
+		}
+		finally, stack contains the result.
+
+	Algorithm to evaluate prefix expression(using queue):
+		WHILE the queue has more than one element DO
+		    (1)  Inspect the front element.
+		    (2a) If it is an operator followed by all its arguments,
+		         append the value to the rear of the queue AND THEN
+		         remove operator and arguments from the front of the queue
+		    (2b) If it is an operator not followed by all its arguments,
+		         remove it from the front, copy it to the rear.
+		    (2c)  (it is an operand)
+		         remove it from the front, copy it to the rear. 
+
+	Algorithm to evaluate postfix expression(using queue):
+	In the same way, it is just as simple to evaluate a postfix expression as a queue - merely by reading the queue from right to left.
+		0:                        1  2  3  *  +
+		1:                    +  1  2  3  *             (2b)
+		2:                6  +  1                         (2a)
+		3:            1  6  +                             (2c)
+		4:          7                                        (2a)
+		Of course postfix and prefix are not just reverses of each other
+
+
+
+	Algorithm to evaluate an expression tree:
+		i/p: an expression in the form of tree
+		Algorithm evaluatetree(Node x) // i/p: expression tree
+			{
+		   	if( x is an operator )
+			   {
+	      		op1 = evaluatetree(x.left);
+			      op2 = evaluatetree(x.right);
+	      		result = op1 <operator> op2;
+			    }
+			    else
+			       return result; /* x is a number */
+			}
+
+
+<b>Non Recursive traversals using stack</b>
+
+Preorder traversal
+
+     makenull(S)
+     push(root,S)
+     while not_empty(S) do
+        p<-pop(S)
+        visit(p)
+        if (right[p] &#8800; null) push(right[p])
+        if (left[p]  &#8800; null) push(left[p])
+
+inorder(T)
+	ptr = T
+	repeat
+		while(ptr <> nil)
+			push(ptr)
+			ptr = ptr^.left
+		endwhile
+		if (not stack_empty()) then
+			x = pop()
+			print(x^.value)
+			ptr = ptr^.right
+		endif
+	until (stack_empty() and (ptr = nil))
+
+
+<b>Non Recursive traversals without stack using parent pointers</b>
+
+All of the above recursive algorithms require stack space proportional to the depth of the tree. 
+If we store on each node a reference to its parent, then we can implement all of these traversals in-place using 
+a simple iterative algorithm. The parent references occupy much more space, however. This is useful if the parent 
+references are needed anyway, stack space in particular is limited or function call overhead (which can be quite 
+significant on some architectures) should be avoided. For example, here is an iterative algorithm for in-order traversal:
+
+inorder(node)
+  if node == null then
+    return
+  // Start from the minimum node
+  while node.left &#8800; null do
+    node = node.left
+  do
+    visit(node)
+    // Next in order will be our right child's leftmost child (if null, our right child)
+    if node.right &#8800; null then
+      node = node.right
+      while node.left &#8800; null do
+        node = node.left
+    else
+      // Next in order will be our closest ancestor that hasn't been visited yet
+      while true do
+        if node.parent == null then
+          node = nil
+          break
+        node = node.parent
+        // If node is its parents left child, then its parent hasn't been visited yet
+        if node.parent.left == node then
+          break
+  while node &#8800; null
+
+<b>post order traversal using stack</b>
+
+for each node there are 2 states.
+1)wait state
+2)process state
+
+initialise stack to the (root,wait)
+while(stack is not empty)
+{
+pop an element from stack;
+if (state=process)
+then print the node;
+else(i.e state is wait)
+{
+push the (element,process);
+if(node.right!=NULL)push(node->right,wait);
+if(node.left!=NULL)push(node->left,wait);
+}
+}
+-------------
+If pre-order algorithm be executed with the difference that instead of
+left we explore right.
+The final order obtained when reversed will give post order. 
+post_order(root)
+{
+    string_reverse( func(root));
+
+}
+
+func(root)
+{
+   do {
+          while(root != NULL)
+          {
+                print(root->data);
+                push(root);
+                root=root->right;
+          }
+          while( root->left=NULL || stack ! empty)
+                  root=pop()
+          if(root->left !=NULL)
+          {
+                root=root->left
+          }
+
+   }while( stack ! empty);
+
+} 
+
+Inorder traversal
+<ol><li>define a stack</li>
+<li>traverse the left sub-tree and push each visited node on the stack until the leftmost node has been visited.</li>
+<li>If the right sub-tree in not null, pop the stack and output it, then visit the right sub-tree and push it on the stack. If null, pop the stack and output it.</li>
+<li>Do 2 and 3 until the stack is empty.</li>
+</ol></li>
+
+Postorder traversal
+<ol><li>define a stack</li>
+<li>traverse the left sub-tree and push each visited node on the stack until the leftmost node has been visited.</li>
+<li>If the right sub-tree in not null, visit the right sub-tree and push it on the stack. If null, pop the stack and output it.</li>
+<li>Do 2 and 3 until the stack is empty.</li>
+</ol></li>
+
+
+<b>Complete Binary Tree:</b> is a tree in which each node has at most two children.Typically the child nodes are called left and right.
+<b>Binary Search Tree:</b> is a tree in which
+    * Each node has a value.
+    * The left subtree of a node contains only values less than the node's value.
+    * The right subtree of a node contains only values greater than or equal to the node's value.
+<code>
+
+<b>BST Operations:</b>
+Algorithm Insert(element e, tree t)
+This returns the original tree with e added
+	1. If t is empty
+		1.1 return new tree with e as root node
+	2. If root node of t contains e
+		2.1 return t unchanged
+	3. If e &gt; root node element
+		3.1 get tnew = Insert(e, right subtree of t)
+		3.2 set the right subtree of t to tnew
+		3.3 return t
+	4. Else
+		4.1 get tnew = Insert(e, left subtree of t)
+		4.2 set the left subtree of t to tnew
+		4.3 return t
+</code>
+<code>
+Algorithm Delete(element e, tree t)
+This returns the original tree with e removed
+	1. If t is empty return t
+	2. If e &gt; root node element
+		2.1 Set tnew = Delete(e, right subtree of t)
+		2.2 Set the right subtree of t to tnew
+	3. If e &lt; root node element
+		3.1 Set tnew = Delete(e, left subtree of t)
+		3.2 Set the left subtree of t to tnew
+	4. (e equals root node element)
+	   If left subtree of t is empty
+		4.1 Return right subtree of t
+	5. If right subtree of t is empty
+		5.1 Return left subtree of t
+	6. (both subtrees are non-empty)
+	   Get smallest element, s, in right subtree
+	7. Change root node element from e to s
+	8. Set tnew = Delete(s, right subtree of t)
+	9. Set the right subtree of t to tnew
+	10. Return t
+</code>
+<code>
+Algorithm FindNode(element e, tree t)
+Returns the node containing e in t, or null
+	1. If t is empty then return null
+	2. If root node of t contains e
+		2.1 Return root node
+	3. If e &gt; root node element
+		3.1 Return FindNode(right subtree of t)
+	4. Return FindNode(left subtree of t)
+</code>
+
+</body>
+</html>

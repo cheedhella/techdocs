@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Heap Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p class="question"><strong>Heap Sort</strong></p>
+            <p class="answer">
+                Heap sort is based on the heap data structure;<br/>
+	            Idea behind heap sort is the root of min-heap always contains the smallest element, so, keep removing the root node until heap is empty;
+            </p>
+
+            <p class="question"><strong>Alogirthm</strong></p>
+            <p class="answer">
+                - Build Min-Heap from input data;   // O(N) <br/>
+                - Until heap is empty			    // O(N logN) <br/>
+                    -- Keep removing the root node; // O(logN)
+            </p>
+
+            <p class="question"><strong>Analysis</strong></p>
+            <p class="answer">
+                It has time complexity of O(N logN) in best, worst, avg cases; <br/>
+                It doesn't require any extra space, so, space complexity is O(1); <br/>
+                It is not stable, but can be made stable;
+            </p>
+
+            <p class="question"><strong>Heap sort vs Quick sort</strong></p>
+            <p class="answer">
+                - Compared to Quick sort, heap sort has a better worst case complexity, O(n log*n); <br/>
+                - But, Heap sort is slower than a well-implemented Quick sort; <br/>
+            </p>
+
+            <p class="question"><strong>Heap sort vs Merge sort</strong></p>
+            <p class="answer">
+                - Heap sort is unstable, where as Merge sort is stable;
+            </p>
+
+            Although Heap Sort has O(N logN) time complexity even for the worst case, it doesn't have more applications (compared to other sorting algorithms like Quick Sort, Merge Sort);
+        </div>
+        
+        <pre>
+            <code class="language-java">
+package com.cmr.ds.sorting;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.cmr.iview.MaxHeap;
+
+public class HeapSort {
+	private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+
+	public static void main(String args[]) {
+		HeapSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+		System.out.println("----------------------------");
+		HeapSort.sort(Arrays.copyOf(reverse_sorted_input, reverse_sorted_input.length));
+	}
+
+	public static void sort(int[] data) {
+		System.out.println("Input: " + Arrays.toString(data));
+		ArrayList<Integer> input = IntStream.of(data).boxed().collect(Collectors.toCollection(ArrayList::new));
+		System.out.println("Output: ");
+		MaxHeap heap = new MaxHeap(input);
+		while (!heap.isEmpty()) {
+			System.out.println(heap.delete_max());
+		}
+	}
+}
+
+Output:
+Input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Output: 
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+----------------------------
+Input: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+Output: 
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+
+                
+            </code>
+        </pre>
+    </body>
+</html>

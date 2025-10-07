@@ -1,0 +1,326 @@
+<html>
+<head><title>Balanced Search Trees</title></head>
+
+<body background="./pics/Bck2.gif"> 
+<b> Introduction to Balanced Search Trees</b>
+
+<p>
+From our study of Binary trees, we know that the average and maximum search times will be minimised, if the BST is maintained as a <i>complete</i> tree at all times. <br>
+In the best-case, the search time is O(log N).
+</p>
+<p>
+If the tree gets out of balance - its search performance deteriorates.<br>
+In the worst-case, the search time degrades to O(N).
+</p>
+
+<p> <img src="./avltree_files/BSTworstbest.gif"> </p>
+
+<p>
+
+<b>Idea!</b>: </p><p> Keep the BST as completely balanced as possible by
+rebalancing it each time a new key is inserted.
+</p><p>
+Example BST rebalancing algorithms:
+</p><p>
+</p><ul>
+<li> Inorder traversal followed by tree reconstruction from the sorted
+array.
+<p>
+</p></li><li> The DSW (C. Day, Q. Stout and B. Warren) algorithm.
+</li></ul>
+<p>
+<b>Problem with Idea:</b> </p><p>The cost of rebalancing with both of these
+algorithms can take O(N) operations (global tree rebalancing).
+
+</p><p>
+So, we have:
+</p><p>
+</p><ul>
+<li> O(log N) search for a balanced tree, but
+<p>
+</p></li><li> O(N) for key insertion and rebalancing the tree.
+</li></ul>
+<p><img src="./avltree_files/smilesad.gif" height="50" width="50"></p>
+<p>
+<b>Question</b>: </p><p> Is there some way of achieving O(log N) search times
+while also achieving O(log N) insertion times?
+
+</p><p>
+<b>Answer</b>: </p><p> Yes!
+<img src="./avltree_files/smilehappy.gif" align="middle" height="50" width="50">
+</p><p>
+The idea is to try and define a class of BSTs that are <i>almost</i> balanced and use a <i>local</i> tree balancing technique.<br>
+In this case, it can be shown that we can have both O(log N) search and insertion times.
+</p><p>
+
+A classical method to do this is to use a AVL (Adelson-Velskii and Landis) tree.
+
+
+<p>
+
+<H2>AVL Trees</H2></p>
+<p>An AVL tree is a binary search tree in which the height of the left and right subtrees of <b>every</b> node differ by <b>at most one</b> - referred to as "height-balanced".
+
+<p>Example AVL trees:
+
+<pre>
+     3            6                 5
+    / \          / \              /    \
+   2   5        4   7            2       9
+               /                / \    /   \
+              3                1   4  7     12
+                                  /    \    / \
+                                 3      8  11  14
+                                           /
+                                          10
+</pre>
+
+Example non-AVL trees:
+<pre>
+     5             6                5
+    /            /   \            /   \
+   3            3     10         2     9
+  /            / \    /         / \   / \
+ 2            1   4  7         1   4 7   12
+                      \           /      / \
+                       8         3      11  14
+                                        /
+                                       10
+
+</pre>
+
+<p>In order to indicate the differences between the heights of the left and right subtrees of a given node, <b>balance factor</b> is defined for each node.
+<pre>     BF = (height of right subtree - height of left subtree)</pre>
+<p>So, BF = -1, 0 or +1 for an AVL tree.
+<p>Balance factors for the above AVL trees (node key values not shown):
+
+<pre>     0            -1               +1
+    / \          /  \             /  \
+   0   0       -1    0          -1   -1 
+               /                /   /  \
+              0                0   +1   0
+                                    \   
+                                     0
+</pre>
+
+<p>
+Balance factors for the above non-AVL tree (node key values not shown):
+
+<pre>
+               +1
+              /  \
+            -1   -2 
+            /   /  
+           0   +1   
+                \   
+                 0
+</pre>
+
+<p>When the AVL property is lost we can rebalance the tree 
+via one of four rotations:
+<ol>
+<li> <b>Single Right Rotation (SRR):</b>
+<p>
+  A is the node that the rotation is performed on.  This rotation is 
+  performed when A is unbalanced to the left (the left subtree is 2 higher
+ than the right subtree) and B is left-heavy (the left subtree of B is 1
+ higher
+  than the right subtree of B).  T1, T2 and T3 represent subtrees (a node
+ was added to T1 which made B leftheavy and unbalanced A).
+<pre>
+        A        SRR at A        B
+       / \      ---------->     / \
+      B  T3                    T1  A
+     / \                          / \
+    T1 T2                        T2 T3
+</pre>
+
+<p> <img src="./avltree_files/rightrot.JPG"> </p>
+
+<p>
+<li> <b>Single Left Rotation (SLR):</b>
+<p>
+  A is the node that the rotation is performed on.  This rotation is 
+  performed when A is unbalanced to the right (the right subtree is 2
+higher
+  than the left subtree) and B is right-heavy (the right subtree of B is 1
+higher
+  than the left subtree of B).  T1, T2 and T3 represent subtrees (a node 
+  was added to T3 which made B right-heavy and unbalanced A).
+ 
+
+<pre>
+        A        SLR at A        B
+       / \      ---------->     / \
+      T1  B                    A  T3
+         / \                  / \
+        T2  T3               T1 T2
+</pre>
+
+<img src="./avltree_files/leftrot.JPG"> </p>
+
+<p>
+<li> <p> <b>Double Left Rotation (DLR):</b>
+<p>
+  C is the node that the rotation is performed on.  This rotation is 
+  performed when C is unbalanced to the left (the left subtree is 2 higher
+ than the right subtree), A is right-heavy (the right subtree of A is 1
+higher
+  than the left subtree of A) and B is left-heavy.  T1, T2, T3, and T4 
+  represent subtrees (a node was added to T2 which made B left-heavy, made
+  A right-heavy  and unbalanced C).  This consists of a single left
+rotation at
+  node A, followed by a single right at node C.
+ 
+
+<pre>
+        C        SLR at A         C        SRR at C       B
+       / \      ---------->     /   \     --------->    /   \
+      A  T4                    B     T4                A     C
+     / \                      / \                     / \   / \
+    T1  B                    A   T3                  T1 T2 T3 T4
+       / \                  / \
+      T2 T3                T1 T2
+</pre>
+<p>
+That is,
+<pre>
+        DLR equiv SLR + SRR
+</pre>
+<img src="./avltree_files/rightleftrot.JPG"> </p>
+
+<p>
+<li> <b>Double Right Rotation (DRR):</b>
+<p>
+  A is the node that the rotation is performed on.  This rotation is 
+  performed when A is unbalanced to the right (the right subtree is 2
+higher
+  than the left subtree), C is leftheavy (the left subtree of C is 1
+higher
+  than the right subtree of C) and B is right-heavy.  T1, T2, T3, and T4 
+  represent subtrees (a node was added to T3 which made B right-heavy, made
+ C left-heavy  and unbalanced A).  This consists of a single right at
+  node C, followed by a single left at node A.
+ 
+<pre>
+        A        SRR at C         A         SLR at A         B
+       / \      ---------->     /   \      ---------->     /   \
+      T1  C                    T1    B                    A     C
+         / \                        / \                  / \   / \
+        B  T4                      T2  C                T1 T2 T3 T4
+       / \                            / \
+      T2 T3                          T3 T4
+</pre>
+That is,
+<pre>
+        DRR equiv SRR + SLR
+</pre>
+</ol>
+<img src="./avltree_files/leftrightrot.JPG"> </p>
+
+<p>
+<hr>
+<p>
+
+<font size=4><b>Insertion in a AVL-tree</b></font>
+<p> <img src="./avltree_files/btreeinsert.JPG"> </p>
+<p>In each case the tree is rebalanced locally (since there is no need to modify
+the balance factors higher in the tree).
+<p>
+Since rebalancing is local, insertion requires one single or one double 
+rotation, ie O(constant) for rebalancing.<br>
+Of course, there is still the cost of search for insertion (see below). 
+<p>
+Experiments have shown that 53% of insertions do not bring the tree out of balance.
+</pre>
+
+<p><hr>
+
+<p><font size=4><b>Deletion in a AVL-tree</b></font>
+
+
+Deletion of keys follows in a similar fashion requiring either a left rotation, a right rotation or a combination of both in order to reinstate the AVL property.Various examples of deletion and subsequent rotations follow for illustration.
+
+<p><img src="./avltree_files/avldel1.png"></p>
+<p><img src="./avltree_files/avldel2.png"></p>
+
+----------------------------------------------------------------------------------------------------
+
+<p>In addition to the two cases pictured below, there are the two dual (i.e., symmetric) cases where the deletion has occurred in the left subtree below k<sub>1</sub>.</p>
+<p><img src="./avltree_files/avldelete1.gif"></p>
+<p><img src="./avltree_files/avldelete2.gif"></p>
+
+<p>
+It can be shown that deletion requires O(log N) rotations in the
+worst-case. <br>
+However, experiments show that 78% of deletions do not require
+rebalancing.
+
+
+
+<hr>
+<p>
+<font size=4><b>Performance for Searching in an AVL tree</b></font><p>
+
+<p>
+We can show that the maximum number of comparisons in an <i>optimum shaped
+tree</i> is:
+<pre>
+	C > 2 ceiling[log(N + 1)] + 1
+</pre>
+
+<p>
+The number of comparisons for a worst-case AVL tree is obtained by evaluating an
+AVL tree with the greatest possible height and minimum number of nodes.
+<p>
+This type of AVL tree is called a <i>Fibonacci AVL trees</i>.
+<p>
+The maximum number of comparisons in the deepest possible
+Fibonacci AVL tree is
+<pre>
+	C' = 2h + 1 < 2.88*log(N + 2) - 1.66
+</pre>
+That is, AVL searches can require no more than
+about 44% more comparisons than required in the most costly search of an
+optimum shaped AVL tree!
+<p>
+Also, much better than the O(N) worst-case result for a normal (non-AVL) binary
+search tree!
+
+
+<p>Non-recursive algorithm for AVL tree insertion -- http://cgi.cse.unsw.edu.au/~neilb/me/01100825323
+<p>Non-recursive algorithm for AVL tree deletion  -- http://cgi.cse.unsw.edu.au/~neilb/me/01101186893
+
+<p><b>Other Types of Balanced Search Trees</b></p>
+
+<p>We have seen that AVL trees gives good performance (search, insertion and
+deletion) - with the (slight) compromise of not achieving <i>perfect
+balance</i>.</p>
+
+<p>However, there are two problems with AVL trees:</p>
+<p>
+</p><ol>
+<li> Insertion and deletion require two passes in the tree.
+<p>
+</p></li><li> Perfect balancing is generally not achievable.
+</li></ol>
+<p>To address the first problem, the <i>red-black</i> tree is used.</p>
+<p>To address the second problem, multi-way trees are used.</p>
+
+----------------------------------------------------------------------------------------------------------------
+
+<pre>
+References:
+
+deletion -- http://mgmt.iisc.ernet.in/~raghavan/mis/chap6/chap6.html
+
+deletion -- http://math.ucsd.edu/~sbuss/CourseWeb/Math176_2000F/Topics/AvlDelete.html
+
+http://cairns.cs.jcu.edu.au/teaching/Subjects/cp2001/1998/LectureNotes/BalancedTrees/index.html
+
+http://cairns.cs.jcu.edu.au/teaching/Subjects/cp2001/1998/LectureNotes/
+
+</pre>
+
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Selection Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+package com.cmr.ds.sorting;
+
+import java.util.Arrays;
+
+/*
+
+Selection Sort
+    It works by dividing the original array into 2 sub-arrays: Sorted sub-array and 
+    unsorted sub-array; Initially, the sorted sub-array is empty; It then repeatedly
+    finds the minimum element in the unsorted sub-array and appends/moves it to sorted
+    sub-array, until unsorted sub-array is empty;
+    
+    In all cases, it requires n(n-1) comparisons; So, it has a time complexity of O(n^2);
+    
+Selection VS Bubble Sort
+    - If the array is already sorted, bubble sort does it well!
+    - Otherwise, select sort is faster, as it takes less number of swaps compared to bubble sort!
+
+*/
+public class SelectionSort {
+    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+
+    public static void main(String args[]) {
+        SelectionSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+        System.out.println("----------------------------");
+        SelectionSort.sort(Arrays.copyOf(reverse_sorted_input, sorted_input.length));
+    }
+
+    public static void sort(int[] data) {
+        System.out.println("Input: " + Arrays.toString(data));
+        int i; // Index of unsorted sub-array!
+        for (i = 0; i < data.length - 1; i++) {
+            // Find the index of minimum element in unsorted sub-array!
+            int minElIndex = i;
+            for (int j = i + 1; j < data.length; j++) {
+                if (data[j] < data[minElIndex]) {
+                    minElIndex = j;
+                }
+            }
+            // Swap first element and minimum element in the unsorted sub-array!
+            int temp = data[i];
+            data[i] = data[minElIndex];
+            data[minElIndex] = temp;
+        }
+        System.out.println("No of iterations taken: " + i);
+        System.out.println("Output: " + Arrays.toString(data));
+    }
+}
+            </code>
+        </pre>
+    </body>
+</html>

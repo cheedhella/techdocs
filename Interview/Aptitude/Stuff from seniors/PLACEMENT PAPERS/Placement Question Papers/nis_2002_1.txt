@@ -1,0 +1,208 @@
+I gave the written test for Neptune Information Technologies (located in Pune)  in March 2002.
+The written test has 20 questions in C/C++/VC++/SQL that has to be completed in one hour.
+Web-site: http://www.neptune-int.com/index2e.html
+
+Srini: Thanks Ameet..
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Section One - C
+~~~~~~~~~~~~~~~
+
+Q1> How many bytes are occoupied by arr?
+    char arr[] = "ABCD\r\n";
+
+Q2> Write the declaration of a funciton pointer that takes a char as a parameter and returns an       int.
+
+Q3> What will be the output of the program below?
+
+void main()
+{
+   int a[9], i;
+   int *ptr;
+
+   for(i=0;i<9;i++)
+      a[i]=i;
+
+   ptr=a;
+   ptr+=8;
+
+   printf("%d", *ptr);
+}
+
+Q4> What will be the output of the program below?
+ 
+void main()
+{
+   int b,i,j,a[4][2];
+
+   b=0;
+   for(i=0;i<4;i++)
+      for(j=0;j<2;j++)
+         a[i][j]=b++;
+
+   printf("%u", *(*(a+2)-1) );
+}
+
+Q5> What does the mystry funciton do?
+
+int mystry(int a, int b)
+{
+   if (b==1)
+      return a;
+   else
+      return a + mystry(a,b-1);
+}
+
+void main()
+{
+   int x,y;
+   cin >> x >> y;
+   printf("%d", mystry(x,y) );
+}
+
+Q6> If the following function is called Func(A,B,C). The stack looks like this:
+
+|------|
+|  A   |   Lower memory Address
+|------|
+|  B   | 
+|------|
+|  C   |   Higher memory Address 
+|------|
+	What is the calling convention being used?
+
+Section tWO - C++
+~~~~~~~~~~~~~~~~~
+
+Q7> What will be the output of the following program:
+
+class base1
+{
+   public:
+       base1() { cout << "Contructor of 1\n"; }
+};
+
+class base2 : public base1
+{
+   public:
+       base2() { cout << "Contructor of 2\n"; }
+};
+
+class base3
+{
+   public:
+       base3() { cout << "Contructor of 3\n"; }
+};
+
+class derived : public base3, public base2
+{
+   public:
+       derived() { cout << "Derived\n"; }
+};
+
+void main()
+{
+   derived d;
+}
+
+Q8> Will the derived class's destructor be called in the program below:
+
+class t
+{
+};
+
+class d : public t
+{
+   public:
+       ~d() { cout << "Destructor\n"; }
+};
+
+void main()
+{
+   t *y;
+   y=new d;
+   delete y;
+}
+
+Q9> Which of the following funcitons will need a copy constructor?
+
+f(A *a);
+f(A &a);
+f(A a);
+
+Q10> What will be the output of the program below:
+
+class base
+{
+   public:
+
+   void fx()
+   { cout << "In fx base\n"; }
+
+   virtual void dx()
+   { cout << "In dx base\n"; }
+};
+
+class derived : public base
+{
+   public:
+
+   void fx()
+   { cout << "In fx derived\n"; }
+
+   void dx()
+   { cout << "In dx derived\n"; }
+};
+
+void main()
+{
+   base *p=new derived;
+   p->fx();
+   p->dx();
+}
+
+Section Three - VC++
+~~~~~~~~~~~~~~~~~~~~
+
+Q11> The __________ class must be the base class if a class wants to serialize itself.
+
+Q12> If a class wants to handle messages other than command, it ___________ should be the base         class.
+
+Q13> The __________ class can convert user coordinates to system coordinates.
+
+Q14> The ___________ message is sent to a view class, so that it can repaint itself.
+
+Q15> There can be ___________ applicaiton object(s), ____________ document classes and __________      view classes.
+
+Q16> A variable is suddenly and un-expectedly changing it's value. Which is the best option you        can use in the integrated debugger to track the problem. 
+     <5 options were given>
+
+Q17> Under what circumstances should the MFC code be changed?
+     ** You need to change the painting method in youtr program.
+     ** You want to enchace the usage of common controls.
+     ** The MFC code should never be changed.
+     ** ??
+     ** ??
+
+Section Four -SQL
+~~~~~~~~~~~~~~~~~
+
+Given the following tables:
+
+** Employee 
+   Columns of this table=Emp-ID, Name, Post, DeptID 
+
+** Department
+   Name, DeptID
+
+Q18> Fire an SQL query that will list all the employees in the Management Department strictly          using inner join.
+
+Q19> Fire an SQL query that will list the names of emplyees grouped by their post 
+
+Q20> Here two tables were listed with some data. Each table has 2 columns. An SQL query is fired      that performs an inner join. You have to tell the output of the sql query.
+
+
+	
+
+

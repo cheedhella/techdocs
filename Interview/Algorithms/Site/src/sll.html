@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Single Linked List</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/highlight.min.css" />
+        <script src="../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>What is a Single Linked List?</strong></div>
+            <div class="answer">
+                <ul>
+                    <li>Linked List is a linear data structure, in which elemenets are not stored at contiguous memory locations;</li>
+                    <li>Elements of the list are linked using pointers; Each node contains 2 items - data and reference to the next node;</li>
+                    <li>A special pointer, named head, always points to the first node in the list; Head can be null, when the linked list is empty;</li>
+                </ul>
+            </div>
+           
+            <div class="question"><strong>Array VS Linked List</strong></div>
+            <div class="answer">
+                <ul>
+                    <li>Size
+                        <ul>
+                            <li>In case of Arrays, size is fixed(you must know the maximum number of elements to be stored in advance);</li>
+                            <li>In case of Linked List, they can grow/shrink dynamically, as insert/delete elements;</li>
+                            <li>In case of Arrays, elements are stored contiguously;</li>
+                            <li>In case of Linked List, elements are not stored contiguously;</li>
+                        </ul>
+                    </li>
+                    <li>Memory Allocation
+                        <ul>
+                            <li>In case of Array, memory is allocated at compile time;</li>
+                            <li>In case of Linked List, memory is allocated at run time;</li>
+                        </ul>
+                    </li>
+                    <li>Memory Efficiency
+                        <ul>
+                            <li>For a given number of elements, Linked List takes more memory, as each node need to maintain a reference to next node;</li>
+                        </ul>
+                    </li>
+                    <li>Operations
+                        <ul>
+                            <li>Insertion/Deletion is faster in Linked Lists; Random Access(by index) is not possible in Arrays, so, we can't use it for binary search;</li>
+                            <li>Accessing/Modifying an element is faster in Arrays;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <pre>
+            <code class="language-java">
+// Node.java
+package com.cmr.ds.sll;
+
+public class Node {
+	public int data;
+	public Node next;
+
+	public Node(int data) {
+		this.data = data;
+	}
+}
+            </code>
+            <code class="language-java">
+// SingleLinkedList.java
+package com.cmr.ds.sll;
+
+public class SingleLinkedList {
+	private Node head;
+	private int size;
+
+	// It takes O(1) time;
+	public void insertAtStart(int data) {
+		Node newNode = new Node(data);
+		if (head == null) { // list is empty!
+			head = newNode;
+			size++;
+			return;
+		}
+		newNode.next = head;
+		head = newNode;
+
+		size++;
+	}
+
+	// It takes O(N) time;
+	public void insertAtEnd(int data) {
+		Node newNode = new Node(data);
+		Node temp = head;
+		if (temp == null) { // list is empty!
+			head = newNode;
+			size++;
+			return;
+		}
+		while (temp.next != null) {
+			temp = temp.next;
+		}
+		temp.next = newNode;
+
+		size++;
+	}
+
+	// It takes O(N) time, in worst case;
+	public void insertAtIndex(int data, int index) {
+		int size = getSize();
+		if (index < 0 || index > size) {
+			System.out.println("Invalid Index, Try again!");
+			return;
+		}
+		if (index == 0) {
+			insertAtStart(data);
+			return;
+		}
+		if (index == size) {
+			insertAtEnd(data);
+			return;
+		}
+
+		Node newNode = new Node(data);
+		Node temp = head;
+		int count = 0;
+		while (count != index - 1) {
+			temp = temp.next;
+		}
+		newNode.next = temp.next;
+		temp.next = newNode;
+
+		this.size++;
+	}
+
+	// It takes O(1) time;
+	public void deleteAtStart() {
+		if (head == null) {
+			System.out.println("List is already empty!");
+			return;
+		}
+		head = head.next;
+
+		this.size--;
+	}
+
+	// It takes O(N) time;
+	public void deleteAtEnd() {
+		if (head == null) {
+			System.out.println("List is already empty!");
+			return;
+		}
+
+		if (getSize() == 1) {
+			head = null;
+			size--;
+			return;
+		}
+
+		// Go to last but one node!
+		Node temp = head;
+		while (temp.next.next != null) {
+			temp = temp.next;
+		}
+		temp.next = null;
+		this.size--;
+	}
+
+	// It takes O(N) time, in worst case;
+	public void deleteAtIndex(int index) {
+		int size = getSize();
+		if (index < 0 || index > size) {
+			System.out.println("Invalid Index, Try again!");
+			return;
+		}
+		if (index == 0) {
+			deleteAtStart();
+			return;
+		}
+		if (index == size) {
+			deleteAtEnd();
+			return;
+		}
+
+		Node temp = head;
+		int count = 0;
+		while (count != index - 1) {
+			temp = temp.next;
+		}
+		temp.next = temp.next.next;
+
+		size--;
+	}
+
+	// It takes O(1) time;
+	public int getSize() {
+		return size;
+	}
+
+	// It takes O(N) time, in worst case;
+	public int elementAt(int index) {
+		int size = getSize();
+		if (index < 0 || index > size) {
+			System.out.println("Invalid Index, Try again!");
+			return -1;
+		}
+
+		int count = 0;
+		Node temp = head;
+		while (count != index) {
+			temp = temp.next;
+			count++;
+		}
+		return temp.data;
+	}
+
+	// It takes O(N) time;
+	public void display() {
+		if (head == null) {
+			System.out.println("List is empty!");
+			return;
+		}
+		Node temp = head;
+		while (temp != null) {
+			System.out.print(" " + temp.data);
+			temp = temp.next;
+		}
+		System.out.println();
+	}
+}
+
+            </code>
+            <code class="language-java">
+// SingleLinkedListApp.java
+package com.cmr.ds.sll;
+
+public class SingleLinkedListApp {
+	public static void main(String args[]) {
+		SingleLinkedList l1 = new SingleLinkedList();
+		System.out.print("insertAtStart(5): ");
+		l1.insertAtStart(5);
+		l1.display();
+
+		System.out.print("insertAtStart(15): ");
+		l1.insertAtStart(15);
+		l1.display();
+		
+		System.out.print("insertAtEnd(20): ");
+		l1.insertAtEnd(20);
+		l1.display();
+		
+		System.out.print("insertAtEnd(21): ");
+		l1.insertAtEnd(21);
+		l1.display();
+		
+		System.out.print("deleteAtStart(): ");
+		l1.deleteAtStart();
+		l1.display();
+		
+		System.out.print("deleteAtEnd(): ");
+		l1.deleteAtEnd();
+		l1.display();
+
+		System.out.print("insertAtIndex(10, 1): ");
+		l1.insertAtIndex(10, 1);
+		l1.display();
+
+		System.out.print("insertAtEnd(16): ");
+		l1.insertAtEnd(16);
+		l1.display();
+
+		System.out.println("Size of the list is: " + l1.getSize());
+		System.out.println("Element at 2nd position : " + l1.elementAt(2));
+		// System.out.println(" Searching element 20, location : " + l1.search(15));
+	}
+}
+
+Output:
+insertAtStart(5):  5
+insertAtStart(15):  15 5
+insertAtEnd(20):  15 5 20
+insertAtEnd(21):  15 5 20 21
+deleteAtStart():  5 20 21
+deleteAtEnd():  5 20
+insertAtIndex(10, 1):  5 10 20
+insertAtEnd(16):  5 10 20 16
+Size of the list is: 4
+Element at 2nd position : 20
+
+            </code>
+        </pre>
+    </body>
+</html>

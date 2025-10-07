@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Merge Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+                package com.cmr.ds.sorting;
+
+                import java.util.Arrays;
+                
+                /*
+                Merge Sort
+                    It is a divide and conquer algorithm, where in we first divide the 
+                    problem into subproblems; When the solutions for the subproblems are 
+                    ready, we combine them together to get the final solution to the problem;
+                
+                    The algorithm can be described as the following 2 step process:
+                        Divide: In this step, we divide the input array into 2 halves, the pivot being the midpoint of the array.
+                             This step is carried out recursively for all the half arrays until there are no more half arrays to divide.
+                        Conquer: In this step, we sort and merge the divided arrays from bottom to top and get the sorted array.
+                
+                    Complexity:
+                        Time complexity of Merge Sort is O(n*log n) in all the 3 cases (worst, average and best) as merge sort always 
+                        divides the array in two halves and takes linear time to merge two halves;
+                        It requires equal amount of additional space as the unsorted array; So space complexity is O(n);
+                        In Quick Sort, we divide the list into halves every time, but we repeat the iteration N times(where N is the size of list);
+                        Hence time complexity will be N*log( N );
+                        The running time consists of N loops (iterative or recursive) that are logarithmic, thus the algorithm is a combination of linear and logarithmic;
+                
+                    Important Links:
+                        https://www.baeldung.com/java-merge-sort
+                        https://www.studytonight.com/data-structures/merge-sort
+                        https://www.geeksforgeeks.org/merge-sort/
+                        
+                */
+                public class MergeSort {
+                    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+                
+                    public static void main(String args[]) {
+                        System.out.println("Before: " + Arrays.toString(sorted_input));
+                        MergeSort.sort(sorted_input, 0, sorted_input.length - 1);
+                        System.out.println("After: " + Arrays.toString(sorted_input));
+                        System.out.println("----------------------------");
+                        System.out.println("Before: " + Arrays.toString(reverse_sorted_input));
+                        MergeSort.sort(reverse_sorted_input, 0, reverse_sorted_input.length - 1);
+                        System.out.println("After: " + Arrays.toString(reverse_sorted_input));
+                    }
+                
+                    private static void sort(int[] data, int begin, int end) {
+                        int mid = (begin + end) / 2;
+                
+                        int n1 = mid - begin + 1; // Number of elements in subarray-1
+                        if (n1 > 1) { // Array of length 1 is already sorted!
+                            sort(data, begin, mid);
+                        }
+                
+                        int n2 = end - mid; // Number of elements in subarray-2
+                        if (n2 > 1) {
+                            sort(data, mid + 1, end);
+                        }
+                
+                        merge(data, begin, mid, end);
+                    }
+                
+                    // https://www.baeldung.com/java-merge-sorted-arrays
+                    private static void merge(int[] data, int begin, int mid, int end) {
+                
+                        int n1 = mid - begin + 1; // length of subarray-1
+                        int n2 = end - mid; // length of subarray-2
+                        int[] merged = new int[n1 + n2]; // We need a temporary array to merge 2 sorted arrays!
+                
+                        int i, j, k;
+                        for (i = begin, j = mid + 1, k = 0; i <= mid && j <= end; k++) {
+                            if (data[i] < data[j]) {
+                                merged[k] = data[i];
+                                i++;
+                            } else {
+                                merged[k] = data[j];
+                                j++;
+                            }
+                        }
+                
+                        while (i <= mid) {
+                            merged[k++] = data[i++];
+                        }
+                
+                        while (j <= end) {
+                            merged[k++] = data[j++];
+                        }
+                
+                        System.arraycopy(merged, 0, data, begin, n1 + n2);
+                    }
+                }
+                
+            </code>
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,270 @@
+
+ WILCO '99 in IITG on 25-6-99.
+
+       ALL the best
+
+ Section I contains 20 questions and 20 minutes.
+
+         Most of the GRE type questions.
+
+ Section II contains 20 questions of CS anb 30 minutes.
+
+ Section III contains programming logic and write an algorithm and 15
+
+ minutes.
+
+ -----------------------------------------------------------------------
+
+ section I
+
+ --------------------------------------------------------
+
+ ( madhu questions r not in sequence so u have to
+
+   remember both question and answers hope u will )
+
+ 1. A triangle P with altitude A and B is given.
+
+   Triangle Q with altitude twice the triangle P and with
+
+ same base as 'P'. What is the ratios of areas of P and Q
+
+  ans 1:2
+
+ 2.A rectangle with sides A and B given. A triangle is
+
+ made by connecting mid pts of sides. what is the
+
+ ratio of area of rectangle to  triangle?
+
+  ans 1:8
+
+ 3.radius  of circle = r and square side is a and find the diagonal of the
+ square, both the areas of the circle and sqaure of equal.
+
+         ans : root(2pi)*r
+
+ 4. A person riding total 185 miles with an average speed of 50 miles per hour.
+ He crossed first 85 miles in two hours.  what is the speed in the second 100
+ miles of his journey?
+
+ ans : e
+
+ 5. 3:1 of wins and losses after wining 6 times ratio becomes 5:1.  What is the
+ number of matches they have won before wining 6 times
+
+ ans : 9
+
+ 6. Ratio of jewles to red is
+
+     Ans : 60
+
+ 7.
+
+ questions 8 to 12 from GRE barrons Model test 2 page No.496
+
+ like this
+
+ Ashland is north of east Liverpool and west of Coshcoton.
+
+ question(s)
+
+ 8.
+
+         ans : b
+
+ 9 ans :e
+
+ 10 ans :d
+
+ 11 ans : a
+
+ 12 ans :c
+
+ SECTION II
+
+ 1. Which is not a valid C variable
+
+         Ans : u-2
+
+ 2. What is the output of the following:
+
+         printf("Hello");
+
+         fork()
+
+         printf("hi");
+
+         Ans : Hello,hi,hi
+
+ 3. a= (  ,  ,012)
+
+         what is the a's  out put ?
+
+         Ans : 10
+
+ 4. something like this
+
+       fun( char *p)
+
+
+
+      In the calling procedure fun(ii+++"Campus Interview");
+
+         Ans : Interview
+
+ 5. i =5;
+
+   printf("%d",*p)
+
+    *p=10
+
+     printf("%d%d",i,*p);
+
+           c = calloc();
+
+     printf("%d",*c);
+
+        Ans : garbage, 5,10,0
+
+ 6. i = 1
+
+         i = 1+2*i++;
+
+         Ans : i = 4;
+
+ 7. a>b ? b=100:b=200
+
+         Compilation error because of brackets missed in (b=100):(b=200)
+
+ 8. A long program in pointers
+
+         Ans : abcd abcd stuv
+
+ 9.function (int n)
+
+         {
+
+         if n > 3 return
+
+         R=5;
+
+         R =6;
+
+         return
+
+         }
+
+         what is output?
+
+         Ans : compilation error
+
+ 10.#define PRINT() printf("something is printing");else
+
+         Ans : Compilation error
+
+ 11.function *int (register j)
+
+         Ans : registers cannot be cused for pointers  (b)
+
+ 12.int *(*[10])) (char*)
+
+         meaning is
+
+         Ans : b
+
+ 13. File *fp1,*fp2;
+
+     fp1 = fopen("one","w");
+
+     fp2 = fopen("one","w");
+
+     fputc('A',fp1);
+
+     fputc('B',fp2);
+
+     fclose(fp1);
+
+     fclose(fp2);
+
+
+
+     What is the output?
+
+      Ans : Overwites A by B and file one contains only character B
+
+ 14. What is the meaning of "dagling reference/pointers"
+
+ 15. main()
+
+ {
+
+         int i =4;
+
+         fn(i/4);
+
+         printf("%d",i);
+
+         }
+
+ fn(i)
+
+ {
+
+         return (i/2);
+
+ }
+
+         ans : 4
+
+ Section 3 ( 15 min )
+
+ -------------------------------------------------------------------
+
+ Given an array of indexes A[].  Each index will point to array itself.  So write
+ an algorithm to find out the number of loops in the array.
+
+ (use three variables)
+
+ sol.
+
+ 1.variable count =0 // for counting loops
+
+ 2.variable temp  // for parsing
+
+ 3.consider an additional array of the length equal to given array for status .
+
+ 4.madhu  consider each location of the A[0] and parse throu the array
+
+  by making the status aray bit 1 for the visited locations.
+
+  if there is a loop then  count ++ if not return
+
+ hint:   ( use temp variable to parsing over the list )
+
+
+
+ 5.make status array all 0's ,
+
+   againg repeat the procedure 4. for every location A[1] to A[n]
+
+
+
+ 6. count will give the no of loops
+
+ -------------------------------------------------------------------
+
+    madhu this we could remember if u do this sure u will get select
+
+ in the written test. U can face personal interview. very easily
+
+  all the best my friend
+
+  this time I hope u will
+
+    bye urs nirmal and co
+
+ ----------------------------------------------------------------
+
+
+

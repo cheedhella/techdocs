@@ -1,0 +1,231 @@
+Relative speeds
+
+Two bodies are moving in opposite directions at speed V1 & V2 respectively. The relative speed is defined as Vr = V1 + V2
+Two bodies are moving in same directions at speed V1 & V2 respectively. The relative speed is defined as Vr = |V1 - V2|
+
+Train problems
+
+
+
+Boats & Streams
+
+Let U= Velocity of the boat in still water  V=Velocity of the starem.
+While moving in upstream, distance covered S= (U-V)/T
+   Incase of down stream, distance covered S= (U+V)/T  // in the direction stream is flowing
+
+Circular motion
+
+The relative velocity of 2 bodies moving around a circle in the same direction is taken as (V1 - V2) and 
+                                            while moving in opposite direction is taken as (V1 + V2)
+
+First Meeting Three or more bodies start moving simultaneously from the same point on the circumference of the circle. 
+They will 1st meet again in the LCM of the times that the fastest runner will takes in totally overlapping 
+each of the slower runners
+
+First meeting time = Circumference / Relative velocity
+
+First Meeting at starting point The first meeting at the starting point will occur after a time that is obtained 
+by the LCM of the times that each of the bodies takes the complete one full round.
+
+Clock problems
+
+For clock problems consider the clock as a circular track of 60km.
+
+Min. hand moves at the speed of 60km/hr (think min. hand as a point on the track) and hour hand moves at 5km/hr and 
+second hand at the speed of 3600 km/hr.
+
+Relative speed between hr hand and mins hand = 55
+
+
+
+
+
+1. 8 men and 10 women can do a work in 25 days, the same work can be done by 10 children and 5 women. 
+   In how many days can 2 children and 3 men do the same work?
+
+2. If 1 man or 2 women or 3 boys can do a work in 44 days then 1 man, 1 women and 1 boy together can finish the 
+   same work in ______ days.
+
+3. Monika can do a piece of work in 30 days. She worked at it for 10 days. The remaining work was finished by Rahul 
+   in 24 days. Had they worked together, how many days would it have taken to finish the work?
+
+4. A train 120 metres long passes an electric pole in 12 seconds and another train of same length traveling in 
+   opposite direction in 8 seconds. The speed of the second train is -----?
+
+5. Three friends A, B and C run around a circular track of length 120 metres at speeds of 5 m/s, 7 m/sec and 15 m/sec, 
+   starting simultaneously from the same point and in the same direction. How often will the three of them meet?
+
+6. Two cars leave simultaneously from points A & B (100km apart)& they meet at a point 40 km from A. What is Va/Vb?
+
+7. A train meets with an accidient and moves at 3/4th its original speed. Due to this , it is 20 mins late. 
+   Find the original time for the journey beyond the point of accident?
+
+8. A train traveling at 72 kmph crosses a platform in 30 seconds and a man standing on the platform in 18 seconds. 
+   What is the length of the platform in meters?
+
+9. A train traveling at 72 kmph crosses a platform in 30 seconds and a man standing on the platform in 18 seconds. 
+   What is the length of the platform in meters?
+
+10. A train traveling at 100 kmph overtakes a motorbike traveling at 64 kmph in 40 seconds. 
+    What is the length of the train in meters?
+
+11. Jim travels the first 3 hours of his journey at 60 mph speed and the remaining 5 hours at 24 mph speed. 
+    What is the average speed of Jim's travel in mph?
+
+12. A man can row 50 km upstream and 72 km downstream in 9 hours. He can also row 70 km upstream and 
+    90 km downstream in 12 hours. Find the rate of current or speed of flow?
+
+13. Ram covers a part of the journey at 20 kmph and the balance at 70 kmph taking total of 8 hours to cover 
+    the distance of 400 km. How many hours has been driving at 20 kmph?
+
+14. Yana and Gupta leave points x and y towards y and x respectively simultaneously and travel in the same route. 
+    After meeting each other on the way, Yana takes 4 hours to reach her destination, while Gupta takes 9 hours 
+    to reach his destination. If the speed of Yana is 48 km/hr, what is the speed of Gupta? 
+
+15. Three friends A, B and C run around a circular track of length 120 metres at speeds of 5 m/s, 7 m/sec and 15 m/sec, 
+    starting simultaneously from the same point and in the same direction. How often will the three of them meet?
+
+16. By walking at 3/4th of his usual speed, a man reaches office 20 minutes later than usual. What is his usual time?
+
+17. Two friends A and B run around a circular track of length 510 metres, starting from the same point, simultaneously 
+    and in the same direction. A who runs faster laps B in the middle of the 5th round. If A and B were to run a 3 km race
+    long race, how much start, in terms of distance, should A give B so that they finish the race in a dead heat?
+
+18. The speed of a motor boat itself is 20 km/h and the rate of flow of the river is 4 km/h. Moving with the stream 
+    the boat went 120 km. What distance will the boat cover during the same time going against the stream?
+
+19. A man and a woman 81 miles apart from each other, start travelling towrds each other at the same time. If the man 
+    covers 5 miles per hour to the women's 4 miles per hour, how far will the woman have travelled when they meet? 
+
+20. Two boys begin together to write out a booklet containing 535 lines. The first boy starts with the first line, 
+    writing at the rate of 100 lines an hour; and the second starts with the last line then writes line 534 and so on,
+    backward proceeding at the rate of 50 lines an hour. At what line will they meet?
+
+21. If the wheel of a bicycle makes 560 revolutions in travelling 1.1 km, what is its radius?
+
+22. When an object is dropped, the number of feet N that it falls is given by the formula N = ½gt2 
+    where t is the time in seconds from the time it was dropped and g is 32.2. If it takes 5 seconds for the object 
+    to reach the ground, how many feet does it fall during the last 2 seconds?
+
+23. A man driving his bike at 24 kmph reaches his office 5 minutes late. Had he driven 25% faster on an average 
+    he would have reached 4 minutes earlier than the scheduled time. How far is his office?
+
+24. 
+
+
+
+
+
+
+
+2. ans is 24
+   1 man 1 day work=1/44 
+   1women 1day work =1/88
+   1 boy 1day work =1/132,
+   so work done by 1 man 1 woman and 1 boy together per day is 1/44 +1/88 +1/132
+   on solving this we get 1/24. so reverse it we will get 24 which is the required answers.
+
+3. 16.3
+
+4. 72km/hr
+
+5. First find out when A and B will meet for the first time. A and B will meet for the first time in 
+      (Circumference of track / relative speed) seconds = (120/2) = 60 seconds.
+   This also means that A and B will continue meeting each other every 60 seconds.
+   
+   Next find out when B and C will meet for the first time.
+   B and C will meet for the first time in (120/8) = 15 seconds.
+   This also means that they will meet every 15 seconds after they meet for the first time.
+
+   i.e. A and B meet every 60 seconds and multiples of 60 seconds and B and C meet every 15 seconds and 
+   multiples of 15 seconds. The common multiples to both these time, will be when A and B and B and C will meet – i.e 
+   when A, B and C will meet. The common multiple of 60 and 15 will be 60, 120, 180 etc.
+
+6. T is constant so V1/V2=S1/S2=40/60=4/6
+
+7. Think about 2 diff. Situations , 1st with accident and another w/o accident , then S is constant
+
+	So V1/V2=T1/T2 =>V1/[3/4)*V2]=(T1+20)/T1
+
+	=>4/3=(T1+20)/T1 =>T1=60
+
+9. When the train crosses a man standing on a platform, the distance covered by the train is equal to the 
+   length of the train. However, when the same train crosses a platform, the distance covered by the train is 
+   equal to the length of the train plus the length of the platform.
+
+   The extra time that the train takes when crossing the platform is on account of the extra distance that it has 
+   to cover = length of the platform.
+
+   Therefore, length of the platform = speed of train * extra time taken to cross the platform
+   Length of platform = 72 kmph * 12 seconds
+   Converting 72 kmph into m/sec, we get 72 kmph = = 20 m/sec
+   Therefore, length of the platform = 20 * 12 = 240 meters.
+
+10. When a train overtakes another object such as a motorbike, whose length is negligible compared to the 
+    length of the train, then the distance traveled by the train while overtaking the motorbike is the same 
+    as the length of the train.
+
+    The length of the train = distance traveled by the train while overtaking the motorbike
+                            = relative speed between the train and the motorbike * time taken
+    
+    answer is 400 meters.
+
+11. 37.5 mph
+
+12. Let x and y be the upstream and downstream speed respectively.
+    Hence 50/x + 72/y = 9 and 70/x + 90/y = 12
+           Solving, we get x = 10 km/hr and y = 18 km/hr
+    We know that Speed of the stream = 1/2 * (downstream speed - upstream speed) = 1/2 (18 – 10) = 4 km/hr.
+
+13. Let x be the number of hours he travels at 20 kmph.
+    Distance covered in this x hours = 20x km
+    He would have therefore, traveled the balance (8 – x) hours at 70 kmph.
+    Distance covered in this 8 – x hours = (8-x) * 70 = (560 – 70x) km
+    The total distance traveled = 20x + 560 – 70x = 400
+            =>160 = 50 x
+            =>x = (160/50) hours = 3.2 hours = 3 hours and 12 minutes
+
+14. Yana and Gupta travel for the same amount of time till the time they meet between x and y.
+    So, the distance covered by them will be the same as the ratio of their speeds. 
+    Let the time that they have taken to meet each other be x hours from the time they have started.
+
+    Therefore, the cover the entire distance, Yana would take x + 4 hours and Gupta will take x + 9 hours.
+    Ratio of time taken Yana : Gupta :: x + 4 :: x + 9
+     => Ratio of speeds of Yana : Gupta :: x + 9 :: x + 4 or 1 : (x + 4 / x + 9)
+
+         => Therefore, 48 : 48x/9 :: 1 : (x + 4 / x + 9)
+	
+       x/9 = (x + 4 / x + 9)
+    => x2 + 9x = 9x + 36
+    => x2 = 36 or x = 6 hours.
+    Hence, speed of Gupta = 48x/9 = 32 kmph 
+
+15. they will meet every 60 seconds
+
+16. 60 minutes
+
+17. A and B run around a circular track. A laps B in the middle of the 5thlap. i.e. when A has run four and 
+    a half laps he has covered a distance which is 1 lap greater than that covered by B's.
+    Therefore, when A runs 9/2 laps, B runs 7/2 laps. Which is the same as saying when A runs 9 laps, B runs 7 laps.
+    i.e in a race that is 9 laps long, A can give B a start of 2 laps.
+    So, if the race is of 3000 metres long, then A can give B a start of 2/9 x 1000 = 666.67 metres.
+
+18. 80 km
+
+19. 36 miles
+
+20. both of them shall meet on 357th line
+
+21. The distance covered by the wheel in 560 revolutions = 1100 m . Hence, the distance covered per revolution =
+    metres. The distance covered in one revolution = circumference of the wheel.
+
+Circumference = 
+=> r = 31.25 cm.
+
+22. In 5 seconds it travels
+½ * 32.2 * 52 = 16.1 * 25 = 402.5
+In first 3 seconds it travels
+½ * 32.2 * 32 = 16.1 * 9 = 144.9
+Hence in the last 2 seconds it traveled 402.5 - 144.9 = 257.6
+
+23. 18 km

@@ -1,0 +1,16 @@
+Consider the following statements:
+Albert: Dave did it.
+Dave: Tony did it.
+Gug: I did not do it.
+Tony: Dave lied when he said that i did it.
+(a)If only one out of all above statements is true, who did it?
+(b)If only one out of all above statements is false, who did it?
+
+
+Problem from George Summers - (After Dinner Drink) on page 14.
+Fodder, Pepsi, and Cola often eat dinner out.
+(i) Each orders either tea or coffee after dinner.
+(ii) If Fodder orders Coffee, then Pepsi orders the drink that Cola orders.
+(iii) If Pepsi orders coffee, then Fodder orders the drink that Cola doesn't order.
+(iv) If Cola orders tea, then Fodder orders the drink that Pepsi orders.
+Who do you know always orders the same drink after dinner?

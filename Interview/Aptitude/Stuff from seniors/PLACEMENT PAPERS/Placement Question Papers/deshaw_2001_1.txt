@@ -1,0 +1,111 @@
+From: Bobby Maisnam
+To: vvasan@mailcity.com
+
+Hi,
+
+please find below DESHAW paper for test held on 22 June 2001 at Jawaharlal Nehru Technological University College of Engineering (JNTUCE), Kakinada (Andhra Pradesh).
+
+--------------
+Srini: Thanks  Bobby Maisnam
+
+--------------
+
+There were 3 sections:
+[1] aptitude (20 questions - 20 mins)
+[2] programming (20 questions - 30 mins)
+[3] problem solving (algorithm) (1 question - 15 mins)
+
+
+SECTION A: APTITUDE 
+--------------------------------
+
+most questions are very easy but only problem is the time limit. 
+so do as many questions as you can.
+
+1. what is the area covered in in 14 minutes by the minute hand of a clock of length 15 cm ?
+
+2. what is the diameter of a wheel if it covers 440 m in 1000 revolutions?
+
+3. there are 1 Re, 50 p, 25 p coins in the ratio 3:3:4 respectively. if the total amount is Rs.550, how many 1 Re coins are there?
+ans: 300
+
+4. if A can do 1/3rd of work in 4 days and B can do 1/6th of work in 3 days, then in how many days can both A and B complete the work.
+ans: 7 1/7 days
+
+5. if a number is divided by 935 remainder is 69. if same no. is divided by 38, what will be the remainder?
+ans: 29
+
+6. if a tank is filled by 10 pumps, it takes 12 hours. if the same tank is filled by 15 pumps, then it will take 6 hours. how much time will it take to fill the tank if 25 pumps are used?
+
+7. one problem on age difference (eg: father's age now is x times son's age 10 years hence. 5 years before father was y times son's age. what will be their ages 10 years hence? )
+
+8. what is the probability of having b'days of 2 persons on the same day in a gathering of 50 persons?
+ans: maybe 3 % (not sure)
+
+9. how many words can be formed by the letters of the word DELCIOUS starting with D and ending with E?
+ans: 6! = 720
+
+10. if a man works for 3 hours he gets Rs.15 + 1 meal. if he works for 12 hours he gets Rs.90 + 2 meals. what is the cost of a meal?
+ans: Rs.15/-
+
+11. if a tank can be filled by pipe A in 24 mins and by pipe B in 32 mins. if A and B both are open, when should B be stopped to fill the tank in 18 mins.
+
+
+SECTION B: PROGRAMMING (C, C++, JAVA)
+-----------------------------------------------------------
+
+there were 20 questions on C, C++ and Java. most were very long and quite complicated. above that we do not know C++ and Java. however, i remember only one C program:
+
+1. what is the output?
+
+main()
+{
+   int i=3;
+   while (i--)
+   {
+      int i=100
+      i--;
+      printf("%d..",i);
+    }
+}
+
+answer:
+a) infinite loop
+b) error
+c) 99..99..99..99
+d) 3..22..1..
+
+
+SECTION C: PROBLEM SOLVING (ALGORITHM)
+-----------------------------------------------------------------
+
+assume the following:
+1. there are 2 rabbits - 1 male and 1 female just born.
+2. the female rabbit attains maturity after 1 month of its birth. 3. the gestation (pregnancy) period of a rabbit is 1 month. 4. one female rabbit always gives birth to 1 male and 1 female rabbit after attaining maturity 5. rabbits never die.
+
+question: if there is only 1 pair at the beginning, how many rabbit pairs will be there after 12 months?
+
+answer: 233 
+
+procedure:
+
+use fibonacci series.
+
+month 1 - 1
+month 2 - 2
+month 3 - 3
+month 4 - 5
+month 5 - 8
+month 6 - 13
+month 7 - 21
+month 8 - 34
+month 9 - 55
+month 10 - 89
+month 11 - 144
+month 12 - 233
+
+
+INTERVIEW:
+
+interview is almost fully technical. they are asking questions in Operating Systems and C (for B.Tech) and C++ (for MCA). one interview is taking minimum 45 mins. 150 candidates appeared for the test. they took 7 for interview and finally selected only 1 student. tough competition, i guess :) 
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Remove even integers from an Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Remove even integers from an Array?</li>
+        </ul>
+
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
+public class P1 {
+    public static void main(String[] args) {
+        int[] a1 = { 1, 2, 4, 5, 10, 6, 3 };
+        int[] evenInts = IntStream.of(a1).filter(n -> n % 2 == 0).toArray();
+        System.out.println("Even numbers: " + Arrays.toString(evenInts));
+    }
+}
+
+// Output:
+Even numbers: [2, 4, 10, 6]
+        </code>
+      </pre>
+
+    </body>
+</html>

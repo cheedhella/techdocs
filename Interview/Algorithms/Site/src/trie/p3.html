@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Count</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      
+
+      <pre>
+        <code class="language-java">
+public int getWordCount() {
+    return getWordCount(root);
+}
+
+private int getWordCount(Node current) {
+    int count = 0;
+    if (current.isWord())
+        count++;
+    for (Entry<Character, Node> entry : current.getChildren().entrySet()) {
+        count += this.getWordCount(entry.getValue());
+    }
+    return count;
+}
+        </code>
+      </pre>
+
+      <pre>
+        <code class="language-java">
+public class TrieCountApp {
+    public static void main(String[] args) {
+        Trie trie = getTrie();
+        System.out.println(trie.getWordCount());
+    }
+
+    private static Trie getTrie() {
+        Trie d1 = new Trie();
+        d1.insert("the");
+        d1.insert("a");
+        d1.insert("there");
+        d1.insert("answer");
+        d1.insert("any");
+        d1.insert("by");
+        d1.insert("bye");
+        d1.insert("their");
+        return d1;
+    }
+}
+
+// Output:
+8
+        </code>
+      </pre>
+
+    </body>
+</html>

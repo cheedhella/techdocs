@@ -1,0 +1,70 @@
+B+ Tree - Main difference between B tree and B+ tree is in B+ tree 
+Leaf nodes contains a copy of keys in the non-leaf nodes. There is a purpose for this.
+All leaf nodes are joined as double linked list.
+
+// Returns a pointer to the node containing the specified key(KEY) or null.
+// A stack named PATH contains the path to the node containing the specified key.
+
+Initialize a linked stack with name PATH.
+search(btnode *root) 
+   {
+   if(root == null) return null; // tree is empty and key not found
+
+   while(root->P[0] != null) // while current node is not a leaf
+	{
+	count = root->count;
+	temp = root->P[root->count];
+	for(i=1 to count) // find smallest key which is greater than KEY
+     	   if(root->K[i]>KEY) // for <, >=. change it to root->K[i]>=KEY for <=, >
+		temp=root->P[i-1]; break;
+	PATH.push(root);
+	root=temp;
+	}
+   for(i=1 to root->count)
+	if(root->K[i]==KEY) 
+	   return root;
+   PATH.push(root);
+   return null; // not found
+   }
+
+	
+insert(btnode *root, int KEY) {
+	temp = search(root, KEY);
+	if(temp!=null) print "Key already exists... duplicates not allowed... exiting..."; exit;
+	temp = PATH.pop(); // returns a pointer to the leaf node in which new KEY is to be inserted.
+	
+	while(temp!=root)
+		{
+		count = temp->count;
+		Put the key in a proper place inside temp node.
+		if(count < max. no. of keys allowed in a node) return;
+		else { // node is full
+			if(temp->P[0]==null) // splitting a leaf node
+				choose a median, copy the median into parent, split it into 2 nodes.
+				join the 2 nodes to form a DLL.
+			else
+				choose a median, move the median into parent, split it into 2 nodes.
+			temp = PATH.pop();
+			KEY=median; // insert the median value into temp node
+		}
+	}
+	split the root, create a new node with one key and two pointers.
+}
+
+Find out the leaf node in which the key to be deleted is present. Delete it in the same way as you do in B tree. There might be a second copy of the same key in the non-leaf node. So, search all the internal nodes in the stack PATH for the KEY. If a second copy exists, replace it with it's inorder successor.
+
+traverseTree(struct BTNODE *root)
+	{
+	if(root==null) return;
+	while(root->P[0]!=null) root=root->P[0];
+	while(root!=null)
+		for(i=1 to root->count)
+			print root->K[i];
+		root=root->P[root->count];
+	}
+
+
+Are keys in B-tree nodes duplicated when the node is split?
+	No. it is the case in B+ tree.
+
+

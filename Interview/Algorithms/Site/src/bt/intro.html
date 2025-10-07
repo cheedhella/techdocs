@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Binary Tree</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>What is a Binary Tree?</strong></div>
+            <div class="answer">
+                A tree in which every node has atmost 2 children, left child and right child;<br/>
+            </div>
+
+            <div class="question"><strong>Properties of a Binary Tree</strong></div>
+            <div class="answer">
+                <ul>
+                    <li>Height of a tree is the number of levels in it;</li>
+                    <li>Each level l can have a maximum of 2^l nodes;</li>
+                    <li>
+                        <span>
+                            Maximum number nodes is 2^(h+1)-1, where h is the height of the tree;<br/>
+                            n = Sum of max nodes at each level;<br/>
+                            &nbsp;  = 2^0 + 2^1 + ... + 2^(h-2) + 2^(h-1);<br/>
+                            &nbsp;  = (2^h)-1;<br/>
+                        </span>
+                    </li>
+                    <li>Maximum number of leaf nodes is the number of nodes in last level, 2^(h-1);</li>
+                    <li>Minimum number of levels in a binary tree with n nodes is log(n+1) base 2;</li>
+                    <li>Minimum height of a binary tree with n nodes is log(n+1) base 2;</li>
+                </ul>
+            </div>
+
+            <div class="question"><strong>Binary Tree Represenations</strong></div>
+            <div class="answer">
+                <div><strong>Array Representation</strong></div><br/>
+                <div class="tab2">
+                    Root is always stored at index 0;<br/>
+                    Left Child's Index = 2 * Parent’s Index + 1;<br/>
+                    Right Child's Index = 2 * Parent’s Index + 2;<br/>
+                    Parent’s Index = (Child’s Index - 1) / 2;<br/>
+                </div>
+                <br/><br/>
+                <div><strong>Representation using a Java Class</strong></div><br/>
+                <div class="tab2">
+                    public class Node {<br/>
+                    &emsp;    public int value;<br/>
+                    &emsp;    public Node left, right, parent;<br/>
+                    &emsp;    ...<br/>
+                    }
+                </div>
+            </div>
+
+            <div class="question"><strong>Binary Tree Operations</strong></div>
+            <div class="answer">
+                insert(), delete(), find() - Different from BST;<br/>
+            </div>
+    </body>
+</html>

@@ -1,0 +1,264 @@
+Tips:
+
+A painted cube is cut down into n x n x n small cubes. 
+
+	No faces painted = (n-2) x (n-2) x (n-2)
+
+	one face painted = 6 x (n-2) x (n-2)
+
+      Two sides painted = 12 x (n-2)
+ 
+      three sides painted = 8
+
+
+1. There is a cube with all faces painted red. If we cut in into 27 equal pieces. 
+   How many cubes will be there with
+	a) 3 sides painted red
+	b) 2 sides painted red
+	c) 1 sides painted red
+	d) 0 sides painted red
+
+2. If a cube of dimensions on 3*4*5 coloured with three different colors namely Red,Green,Black are painted on 
+   opposite corners of the cube.this cube is cut down into 78 smaller cubes.Of these 78 , 73 are smaller in 
+   dimension & remaining 5 are bigger than remaining but of equal dimension.From these given information find
+
+	i) How many cubes are there painted with red colr?
+	ii) How many cubes are there of painted on three sides?
+	iii) How many cubes are there of painted on two sides?
+	iv) How many cubes are there of painted on only one side?
+	v) How many cubes are of unpainted? I cant remeber the dimension right ,but the quos r like these?
+	vi) No. of cuts required?
+
+3. 125 small but identical cubes have been put together to form a large cube. How many such small cubes would be 
+   required to cover this large cube compeltely?
+
+4. what is the maximum number of identical pieces of cube that can be cut into by 3 cuts?
+
+5. 125 small but identical cubes are cut to form a large cube. This large cube is now painted on all six faces.
+   How many of the smaller cubes have no faces painted at all / have exactly one face painted?
+
+6. What is the least number of cuts required to cut a cube into 24 indentical pieces?
+
+7. It was found that a cube can be cut into ceratin number of identical cuboids each measuring 1 cm * 2cm *5 cm.
+   What is the side of the cube. How many such cuboids can be formed from such a cube?
+
+8. A cube of side 6 cm, has cut into 64 smaller but identical cubes. If it was estimated that it would take a 4 ltrs 
+   of paint to paint all the faces of the original cube, then how much paint is the original cube, then 
+   how much paint is required to paint all the faces of all the smaller cubes?
+
+------------------------------------------------------------------------------------------------------
+
+1. 8 12 6 1 = total 27
+
+2. 
+
+3. Size of given larger cube = 125^1/3 = 5
+   Then size of cube required to completely engulf the cube of size_5 = 7
+
+   No of small cubes = 7^3 = 343
+   more needed = 343-125 = 218.
+   right(150)....6 faces x (5x5) each face......cubes at the corners are not required...so 218 is wrong
+   after covering, it should form a cube again. implies 218
+
+4. I think its clear that the 3 cuts are to be put in the three different axis. so, answer is 8.
+
+5. Using Formula,
+   No faces painted = (n-2) x (n-2) x (n-2)
+     So since cubes is of 5 x 5 x 5. Number of cubes with no face painted = 3 x 3 x 3 = 27
+          // If you extapolate these to 3d the central 3sized cube will be completely immersed.
+   One face painted = 6 x (n-2) x (n-2)
+      So its = 6 x 3 x 3 = 54
+
+6. First find factors of 24
+	24 = 2 x 2 x 2 x 3
+   Now write the number (24) in terms of 3 factors of least possible value.
+      So its 24 = 2 x 3 x 4.
+
+   Cuts required = (a-1) x (b-1) x (c-1) = 1 x 2 x 3 = 6
+
+7. Side of the cube is the LCM of 1,2,5 ... i.e. 10 cm
+
+   For number of cuboids,
+        = (Volume of Cube) / (Volume of each cuboid)
+        = (10 x 10 x 10) / (1 x 2 x 5) = 100 cuboids.
+
+8. Surface area of the BIG cube = 6 x ( 6 x 6 ) = 216 sq. cm
+   So 4 ltrs req. for 216 sq. cms. ... so 1 ltr can paint 216/4 = 54 sq cms.
+   64 = 4 x 4 x 4. So side of smaller cube = 6/4 = 1.5 cms.
+   Total surface area of smaller cubes = 64 x [ 6 x (1.5 x 1.5) ] = 864 sq cms.
+   ltrs of paint required = 864/79 = 16 ltr
+
+9. 
+
+10.  i didnt get this logic.
+
+suppose i need to cut the cube by 10 cuts ....
+i can split it 2 ,3,5 therefore 3*4*6= 72 identical cubes ..but answer is 44
+for 3 cuts and 4 cuts it comes correct as 8 and 12.
+
+
+try for 13 too ...i didnt follow as u rightly said
+The logic is to divide the number into 3 equals parts if possible and put that many cuts on each axis. Also remember, 1 cut = 2 parts, 2 cuts = 3 parts and so on.
+
+Now for 10 cuts, we try to split 10 into 3 equals parts around 10/3 = 3.33 .
+So it will be 3,3,4 ... hope u got this,
+
+So we have to put 3 cuts on 2 axis and 4 on the remaining axis to get maximum number of "cuboids" .
+
+We can't have smaller cube with different number of cuts on different axis.
+
+To total number of smaller cuboids obtained = (3+1) x (3+1) x (4+1) = 4 x 4 x 5 = 80.
+
+So answer for 10 cuts shud be 80 according to me.
+
+If total number of smaller "cubes" are required. we can only use 9 cuts, 3 on each axis to have (3+1)^3 = 64 smaller cubes. Please check the answer again.
+
+So for 13, we will have parts close to 13/3 = 4.33 ... i.e. 4,4,5
+
+Smaller cuboids obtained = 5 x 5 x 6 = 150.
+
+
+
+
+
+
+
+
+
+The number needs to be in terms of 3 factors, coz the factors represents the 3 axis. So 5 will be wrong.
+
+freak, yeah by 3 cuts on 3 axis, we can have 8 smaller pieces, but with 4 cuts we cannot have 16 smaller pieces.
+
+Actually there is a reverse kind of a problem too, like how many smaller pieces can be made using 4 cuts.
+
+Here you divide the number into three parts of close values.
+
+4 can only be divided as 1,1,2.
+
+So the parts in each axis is 2 , 2 , 3. Total smaller pieces = 2 x 2 x 3 = 12.
+
+I know that maybe its still not clear, still am quite sure about this and please post your doubts if any
+
+HTH
+
+Gaurav.
+Ok. I got it. I was wrong. The answer is 6
+
+There need to be 4 pieces in X, 3 pieces in Y and 2 in Z. Hence the number of cuts required would be 3+2+1 = 6
+
+I got confused by your formula (a-1)*(b-1)*(c-1). I guess it should be (a-1)+(b-1)+(c-1)
+so if you need 'n' pieces, factorize 'n' into 3 factors such that the sum of the 3 factors is minimum (the 3 factors represent the no. of identical pieces in each axis) and then apply the formula.
+
+eg. if you need 40 pieces, 40 = 2*4*5 (which gives 1+3+4=8cuts) and also 40 = 8*5*1 (7+4+0=11cuts). 8 will be the answer.
+
+
+
+
+
+
+
+
+Here are the formulae:
+
+Taking 5 x 5 x 5 cube as the sample cube.
+
+For no faces painted:
+
+Its the smaller cube inside the big one. given by (n-2) x (n-2) x (n-2)
+
+For the sample cube, its 3 x 3 x 3 = 27
+
+For 1 face painted:
+
+There are (n-2) x (n-2) faces on each surface of the a cube which has just 1 face painted. So for 6 faces, its 6 x (n-2) x (n-2)
+
+For the sample cube, its 6 x 3 x 3 = 54
+
+For 2 faces painted:
+
+All the edge pieces (not corners) should be counted here. Since there are 12 egdes. So its 12 x (n-2)
+
+For the sample cube, its 12 x 3 = 36
+
+For 3 faces painted:
+
+Just the corner cubes. So its 8 for any cube.
+
+So for the sample cube too its 8.
+
+
+
+
+
+
+
+1) 125 small but identical cubes have been put together to form a large cube.how many such small cubes would be required to cover this large cube compeltely?
+Ans :218
+
+2)what is the maximum number of identical pieces of cube that can be cut into by 3 cuts?
+Ans 8
+if 4 cuts are there answer is 12
+
+
+3)125 small but identical cubes are cut to form a large cube.This large cube is now painted on all six faces.
+How many of the smaller cubes have no faces painted at all / have exactly one face painted?
+ans 27 and 54
+
+
+4) What is the least number of cuts required to cut a cube into 24 indentical pieces?
+ans 6
+
+
+5) It was found that a cube can be cut into ceratin number of identical cuboids each measuring 1 cm * 2cm *5 cm.what is the side of the smallest such sube.How many such cuboids can be formed from such a cube?
+ans 10 cm 100 cuboid
+
+
+6) A cube of side 6 cm, has cut into 64 smaller but identical cubes.If it was estimared that it would take a 4 ltrs of paint to paint all the faces of the original cube, then how much paint is the original cube, then how much paint is required to paint all the faces of all the smaller cubes?
+ans 16 ltrs
+
+
+
+
+
+
+
+
+
+
+
+
+1. Each of the twelve edges of a cube is colored either red or black. Every face of the cube has at least one black edge. What is the smallest possible number of black edges?
+
+
+2. Four cubes of volume 1, 8, 27, and 125 are glued together at their faces. What is the smallest possible surface area of the resulting solid figure?
+
+3. One thousand unit cubes are assembled to form a cube of size 10 × 10 × 10. How many of these thousand cubes are visible from a position away from the cube along the line of one of its space diagonals?
+
+4. Some unit cubes are assembled to form a larger cube of size n × n × n. Then all six faces of the large cube are painted. Find the number of painted cubes as a function of the side length. This function is a polynomial. Explain what the coefficients of the polynomial mean.
+
+
+5. As in the previous problem, an n × n × n cube is made from n^3 unit cubes. Some of the faces of the large cube are painted. It is determined that exactly m of the unit cubes receive some paint.
+
+(a) For n = 2, what are the possible values of m?
+(b) For n = 3, what are the possible values of m?
+(c) Find m in terms of n when all six faces are painted (this is problem 4).
+(d) Find m in terms of n when five faces are painted.
+(e) Find the two values of m in terms of n when four faces are painted.
+(f ) Find the two values of m in terms of n when three faces are painted.
+(g) Find the two values of m in terms of n when two faces are painted.
+(h) For m = 218, what are the possible values of n? Find them.
+
+
+6. A 5 × 5 × 5 cube is made by gluing unit cubes together. Some of these small cubes are then removed by ”drilling five holes right through the large cube from left to right, then five more from front to back, and finally five more from top to bottom. How many of the small cubes remain? What is the surface area of the figure that remains? Only the front face is shown below.
+
+
+
+
+
+
+
+
+
+
+
+

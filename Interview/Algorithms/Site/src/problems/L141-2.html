@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Remove the cycle/loop in a Single Linked List</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>How to Detect and Remove the cycle/loop in a Single Linked List?</strong></div>
+
+            <div class="question"><strong>Method 1: </strong></div>
+            <div class="answer">
+                <ul>
+                    <li>
+                        Identify the common point(a node where slow and fast pointers meet), using Floyd's cycle finding algorithm, name it as cptr;<br/>
+                        Note that, common point can be any of the loop nodes; It need not be a loop starting node;<br/>
+                        Let's identify the loop starting node as follows:
+                    </li>
+                    <li>Start from the head and check for each node, if it is reachable from cptr;</li>
+                    <li>Whenever we find a node that is reachable, it is the starting node of the loop;</li>
+                    <li>From there, we can easily get the pointer to the node that is previous to loop starting node and make next of it as NULL;</li>
+                </ul>
+            </div>
+
+            <div class="question"><strong>Method 2: </strong>Better solution;</div>
+            <div class="answer">
+                <ul>
+                    <li>Identify the common point, name it as cptr;</li>
+                    <li>Count the number of nodes in the loop, let the count be k;</li>
+                    <li>Take one pointer to the head and another to the k th node from the head;</li>
+                    <li>Move both pointers at the same pace, they will meet at loop starting node;</li>
+                    <li>From there, we can easily get the pointer to the node that is previous to loop starting node and make next of it as NULL;</li>
+                </ul>
+            </div>
+
+           <div class="question"><strong>Method 3: </strong>Even better solution, no need to identify the loop size;</div>
+           <div class="answer">
+                <ul>
+                    <li>Identify the common point, name it as cptr;</li>
+                    <li>Take one pointer to the head and another to cptpr;</li>
+                    <li>Move both pointers at the same pace, they will meet at loop starting node;</li>
+                </ul>
+            </div>
+
+            <br/>Reference: https://www.geeksforgeeks.org/detect-and-remove-loop-in-a-linked-list/?ref=rp
+
+    </body>
+</html>

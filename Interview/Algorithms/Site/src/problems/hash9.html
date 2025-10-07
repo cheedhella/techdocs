@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given 2 arrays of integers, find union and intersection?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <pre>
+            <code class="language-java">
+import java.util.HashSet;
+import java.util.Set;
+
+public class UnionIntersectionApp {
+
+    private static Set<Integer> findUnion(int[] a1, int[] a2) {
+        Set<Integer> data = new HashSet<Integer>();
+        for (int i = 0; i < a1.length; i++) {
+            data.add(a1[i]);
+        }
+        for (int i = 0; i < a2.length; i++) {
+            data.add(a2[i]);
+        }
+        return data;
+    }
+
+    private static Set<Integer> findIntersection(int[] a1, int[] a2) {
+        Set<Integer> h1 = new HashSet<Integer>();
+        for (int i = 0; i < a1.length; i++) {
+            h1.add(a1[i]);
+        }
+
+        Set<Integer> intersection = new HashSet<Integer>();
+        for (int i = 0; i < a2.length; i++) {
+            if (h1.contains(a2[i])) {
+                intersection.add(a2[i]);
+            }
+        }
+        return intersection;
+    }
+
+    public static void main(String[] args) {
+        int[] a1 = { 3, 5, 6, 9, 7, 2 };
+        int[] a2 = { 6, 4, -7, 3, 12, 9 };
+        System.out.println(findUnion(a1, a2));
+        System.out.println(findIntersection(a1, a2));
+    }
+}
+
+Output:
+[2, 3, 4, 5, 6, -7, 7, 9, 12]
+[3, 6, 9]
+
+            </code>
+        </pre>
+    </body>
+</html>

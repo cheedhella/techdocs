@@ -1,0 +1,13 @@
+They will give all the programming questions..
+questions they gave to us are...
+1) Array contains number from 1 to n in random order each number appears once
+and randomly two numbers are changed to zero.. write program to find the two
+numbers..(algo efficiency is imp)
+2)find the loop in linked list
+3)and find the max distance between the nodes in tree assuming edges of tree
+are nondirectional.
+These are the some of the questions...
+questions are easy but algo effic is imp. so do well..
+Can you please send us Microsoft and Yahoo papers to us as soon as possible..
+how is the microsoft written test and interviews.. how many people they
+selected..

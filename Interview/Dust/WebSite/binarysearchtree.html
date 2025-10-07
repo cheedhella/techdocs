@@ -1,0 +1,151 @@
+<html>
+<title>Binary Search Trees</title>
+
+<body background="./pics/Bck2.gif">
+<pre>
+<b>Binary Search Tree: </b>a binary tree in which for every node X, all the keys in it's left subtree are 
+	less than or equal to the key value in X and all the keys in it's right subtree are greater than the key value in X.
+
+
+	same set of keys may have different BSTs.
+
+	find(struct node *root, int x) {
+		if(root == NULL) return NULL; // match not found
+		if(x < root->data) return find(root->lchild, x); // search left subtree
+		if(x > root->data) return find(root->rchild, x); // search right subtree
+		return root; // match found
+	}
+	
+	// return left-most descendant of root
+	findMin(struct node *root) {
+		if(root == NULL) return NULL; // empty tree
+		while(root->lchild != NULL) root = root->lchild;
+		return root -> data;
+	}
+
+	// return right-most descendant of root
+	findMax(struct node *root) {
+		if(root == NULL) return NULL; // empty tree
+		while(root->rchild != NULL) root = root->rchild;
+		return root -> data;
+	}
+
+
+	insert(int val) {
+		struct node *newnode = (struct node *)malloc(sizeof(struct node));
+		newnode -> data = val;
+
+		if(root == NULL) { root = newnode; return; } // insertion into empty tree
+
+		struct node *temp = root;
+		while(temp != NULL) {
+			if(val < temp->data && temp->lchild != NULL) temp = temp->lchild;
+			else if(val < temp->data && temp->lchild == NULL) { temp->lchild = newnode; return;} // insert
+			else if(val > temp->data && temp->rchild != NULL) temp = temp->rchild;
+			else if(val > temp->data && temp->rchild == NULL) { temp->rchild = newnode; return;} // insert
+			else temp = NULL; // val = temp->data, node already exists
+		}
+
+	}
+	The new node is always inserted as a leaf
+
+
+	delete(int val) {
+		find the node to be deleted.
+		if it is a leaf node, delete it directly.
+		else if it has one child, make a link b/w it's parent and it's only child and then delete.
+		else if it has two childs, find the min element in it's right subtree and exchange it's key with the key in the node to be deleted and then delete that minimum node.
+			// Has either no child or only right child because if it has a left child, that left child would be smaller and would have been chosen. So invoke case 1 or 2.
+			// you can choose either its in-order successor node or its in-order predecessor node
+	}
+
+
+	// successor of a node is the smallest node that is strictly greater than it(node which appears next to it in the sorted list).
+	Alg: If p has a right subtree, then it is the smallest element of the right subtree.
+	Else we need to keep on moving up the tree following the parent pointer until we reach
+	a node x such that x is left child of parent(x). In this case parent(x) is the successor.
+
+	if x->right exists, then return findMin( x->right );
+	else Find the first ancestor of x whose left subtree contains x;
+
+	successor(t, p) {
+		If(p->right != NULL) return findMin(p->right);
+		while(x != NULL)
+		{ 
+			if(x == parent(x)->right) // if x is it's parent's right child
+				x = parent(x);
+			else return parent(x);
+		}
+		return NULL;
+	}
+
+
+	// predecessor of a node is the biggest node that is strictly lesser than it(node which appears before it in the sorted list).
+
+	predecessor(t, p) {
+		If(p->left != NULL) return findMax(p->left);
+		while(x != NULL)
+		{ 
+			if(x == parent(x)->left) // if x is it's parent's left child
+				x = parent(x);
+			else return parent(x);
+		}
+		return NULL;
+	}
+
+	For all the operations: O(height of the tree)
+
+
+
+
+<b>BST Operations:</b>
+Algorithm Insert(element e, tree t)
+This returns the original tree with e added
+	1. If t is empty
+		1.1 return new tree with e as root node
+	2. If root node of t contains e
+		2.1 return t unchanged
+	3. If e &gt; root node element
+		3.1 get tnew = Insert(e, right subtree of t)
+		3.2 set the right subtree of t to tnew
+		3.3 return t
+	4. Else
+		4.1 get tnew = Insert(e, left subtree of t)
+		4.2 set the left subtree of t to tnew
+		4.3 return t
+</code>
+<code>
+Algorithm Delete(element e, tree t)
+This returns the original tree with e removed
+	1. If t is empty return t
+	2. If e &gt; root node element
+		2.1 Set tnew = Delete(e, right subtree of t)
+		2.2 Set the right subtree of t to tnew
+	3. If e &lt; root node element
+		3.1 Set tnew = Delete(e, left subtree of t)
+		3.2 Set the left subtree of t to tnew
+	4. (e equals root node element)
+	   If left subtree of t is empty
+		4.1 Return right subtree of t
+	5. If right subtree of t is empty
+		5.1 Return left subtree of t
+	6. (both subtrees are non-empty)
+	   Get smallest element, s, in right subtree
+	7. Change root node element from e to s
+	8. Set tnew = Delete(s, right subtree of t)
+	9. Set the right subtree of t to tnew
+	10. Return t
+</code>
+<code>
+Algorithm FindNode(element e, tree t)
+Returns the node containing e in t, or null
+	1. If t is empty then return null
+	2. If root node of t contains e
+		2.1 Return root node
+	3. If e &gt; root node element
+		3.1 Return FindNode(right subtree of t)
+	4. Return FindNode(left subtree of t)
+</code>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Shell Sort</title>
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <pre>
+            <code class="language-java">
+                package com.cmr.ds.sorting;
+
+                import java.util.Arrays;
+                
+                /*
+                
+                Shell Sort
+                    It breaks the original array into smaller subsets and then each of those is sorted using Insertion sort;
+                    But, how it makes the subsets is not straightforward; It doesn’t choose neighboring elements to form a subset as we might expect;
+                    Rather, shell sort uses the so-called interval or gap for subset creation;
+                    For example, if there are 9 elements and we choose gap 3, then it creates 3 subsets: 1st subset with 0, 3, 6; 2nd subset with 1, 4, 7; 3rd subset with 2, 5, 8;
+                    Repeat the process with reduced gap size, until gap size is 1;
+                    When gap size is 1, it is exactly same as insertion sort;
+                
+                    Best-case Complexity:
+                        
+                    Average-case Complexity: 
+                        
+                    Worst-case Complexity:
+                
+                    Important Links
+                        https://www.baeldung.com/java-shell-sort
+                        https://www.inf.hs-flensburg.de/lang/algorithmen/sortieren/shell/shellen.htm
+                        
+                Insertion VS Shell Sort
+                    - In insertion sort, we move elements only one position ahead; When an element has to be moved far ahead, many movements are involved;
+                      The idea of shellSort is to allow exchange of far items;
+                    
+                */
+                public class ShellSort {
+                    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+                    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+                
+                    public static void main(String args[]) {
+                        ShellSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+                        System.out.println("----------------------------");
+                        ShellSort.sort(Arrays.copyOf(reverse_sorted_input, reverse_sorted_input.length));
+                    }
+                
+                    public static void sort(int data[]) {
+                        System.out.println("Input: " + Arrays.toString(data));
+                
+                        int n = data.length;
+                        for (int gap = n / 2; gap > 0; gap /= 2) {
+                            for (int i = gap; i < n; i++) {
+                                int key = data[i];
+                                int j = i;
+                                while (j >= gap && data[j - gap] > key) {
+                                    data[j] = data[j - gap];
+                                    j -= gap;
+                                }
+                                data[j] = key;
+                            }
+                        }
+                
+                        System.out.println("Output: " + Arrays.toString(data));
+                    }
+                }
+            </code>
+        </pre>
+    </body>
+</html>

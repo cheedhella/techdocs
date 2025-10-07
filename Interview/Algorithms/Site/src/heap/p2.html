@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Priority Queue Implementation</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>   
+        <pre>
+            <code class="language-java">
+public class PriorityQueueUsingHeap {
+                
+    public static void main(String[] args) {
+        MaxHeap heap = new MaxHeap();
+        heap.insert(9);
+        heap.insert(3);
+        heap.insert(15);
+        heap.insert(1);
+        heap.insert(12);
+        heap.insert(5);
+                
+        while (!heap.isEmpty()) {
+            heap.delete_max();
+        }
+    }
+}
+
+Output:
+15
+12
+9
+5
+3
+1
+
+            </code>
+        </pre>
+    </body>
+</html>

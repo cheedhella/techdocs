@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Heap</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <p class="question"><strong>What is Complete Binary Tree?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>Complete Binary Tree is a Binary Tree in which every level, except possibly the last, is completely filled and all nodes are as far left as possible;</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>Advantage of Complete Binary Tree over Binary Tree?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li> It's height is always O(log N), it's never O(N);</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>What is a Heap?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>There are 2 types of heaps: <strong><a href="./min-heap.html">Min-Heap</a></strong>, <strong><a href="./max-heap.html">Max-Heap</a></strong>;</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>What is Min-Heap?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>It is a Complete Binary Tree, in which each node is less than or equal to it's children;</li>
+                    <li>It is useful in sorting the list in ascending order;</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>What is Max-Heap?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>It is a Complete Binary Tree, in which each node is greater than or equal to it's children;</li>
+                    <li>It is useful in sorting the list in descending order;</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>Heap Represenation</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>You can use array to represent a heap;</li>
+                    <li>In the array, the first index contains the root element; The next two indices of the array contain the root's children;</li>
+                    <li>The next four indices contain the four children of the root's two child nodes, and so on;</li>
+                    <li>Current node index -> i; index of left child -> 2i + 1; index of right child -> 2i + 2; index of parent -> floor((i-1) / 2);</li>
+                </ul>
+            </p>
+
+            <p class="question"><strong>How to convert an array into a Heap?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>General Approach
+                        <ul>
+                            <li>Heapifying a single node takes O(log N) time; To heapify the entire array, it takes N heapify operations. So, total time complexity is O(N*logN);</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Optimized approach
+                        <ul>
+                            <li>The above approach can be optimized by observing the fact that the leaf nodes need not to be heapified, as they already follow the heap property;</li>
+                            <li>So the idea is to find the position of the last non-leaf node and perform the heapify operation of each non-leaf node in reverse level order;</li>
+                            <li>
+                                Last non-leaf node = parent of last-node;<br/>
+						   = parent of node at (n-1)th index;<br/>
+						   = Node at index ((n-1) - 1)/2;<br/>
+						   = (n/2) - 1;<br/>
+                           <br/>
+	build-min-heap(A) - It takes an array of elements and converts it into a heap; Time Complexity: O(N);<br/>
+		for i = A.length/2 to 1<br/>
+			min-heapify-up(A, i);<br/>
+            <br/>
+	TODO: Complexity of min-heapify-up() is O(log N) and it is executed N/2 times, but why the complexity of build-min-heapify() is linear, O(N)?<br/>
+		http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf <br/>
+        <br/>
+	Note: Converting an array to heap takes O(N) time, but N insertions to construct heap takes O(N logN) time; <br/>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </body>
+</html>

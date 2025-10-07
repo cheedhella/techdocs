@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Maximum Subarray Problem</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+        <script src="../../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        What is Maximum Subarray Problem OR Kadane's Algorithm?
+        <ul>
+            <li>https://medium.com/@rsinghal757/kadanes-algorithm-dynamic-programming-how-and-why-does-it-work-3fd8849ed73d</li>
+        </ul>
+        https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/ <br/>
+        https://www.educative.io/module/lesson/data-structures-in-java/q2QGAO94Zxy
+
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class P7 {
+    private static int findMaxSum(int[] data) {
+        if (data.length < 1) {
+            return 0;
+        }
+
+        int curr_max = data[0];
+        int max_so_far = data[0];
+        int lengtharray = data.length;
+        for (int i = 1; i < lengtharray; i++) {
+            if (curr_max < 0) {
+                curr_max = data[i];
+            }
+            else {
+                curr_max += data[i];
+            }
+
+            if (max_so_far < curr_max) {
+                max_so_far = curr_max;
+            }
+        }
+        return max_so_far;
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 1, 7, -1, -4, 10, -1 };
+        int maxSum = findMaxSum(data);
+        System.out.println("Input: " + Arrays.toString(data) + " Max Sum: " + maxSum);
+
+        int[] data2 = { 1, 7, -3, -5, 10, -1 };
+        int maxSum2 = findMaxSum(data2);
+        System.out.println("Input: " + Arrays.toString(data2) + " Max Sum: " + maxSum2);
+    }
+}
+
+// Output:
+Input: [1, 7, -1, -4, 10, -1] Max Sum: 13
+Input: [1, 7, -3, -5, 10, -1] Max Sum: 10
+
+        </code>
+      </pre>
+
+    </body>
+</html>

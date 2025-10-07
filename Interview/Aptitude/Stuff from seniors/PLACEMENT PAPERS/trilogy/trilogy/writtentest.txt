@@ -1,0 +1,12 @@
+Section A: 35 minutes
+
+1) return "max no. of partitions" possible by 'N' infinetly extended lines.
+    input: coordinates for all lines
+2) rotation of array in o(n) time
+3) Constructing an ascending double circular linked list from a BST
+
+
+Section B: 40 minutes
+
+1) finding postorder successor using an exiting threaded binary tree 
+2) Combination generator

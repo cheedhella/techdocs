@@ -1,0 +1,130 @@
+DATE: Thu, 06 Sep 2001 05:01:59 
+From: jaya krishnan
+To: vvasan@mailcity.com 
+
+Hi ,
+ 
+Here iam sending a part of megasoft question paper that i attended yesterday(5-9-2K1)..
+ 
+megasoft,mylapore,chennai (2001)
+ 
+--------------
+
+Srini: Thanks Jaya krishnan
+
+--------------
+
+you would have a writen test, GD, and Interview
+
+GD topics:
+ 1.AGRA summit.
+ 2.IT slow down in INDIA.
+ 3.creative thinking.
+ 
+Writen test:
+  1.DATA INTERPRETATION   (10)
+  2.MATHEMATICAL ABILITY (10)
+  3.TEST OF REASONING     (15)
+  4.ENGLISH  (10)
+  5.COMPUTER SCIENCE (15)
+  duration : 1hr
+ 
+  test was very easy ,you would have ample time to do it within 30 min.
+  cut off was 45.i dont remember the questions in order.iam giving the
+  answers to 3.test of reasoning for which i dont remember the questions
+  but questions and answers are in order.
+ 
+   TEST OF REASONING 
+                      
+   21.E  26.B  31.D
+   22.D  27.-  32.E
+   23.-  28.D  33.A
+   24.E  29.D  34.B
+   25.B  30.C  35.E
+ 
+  here i give the remaining questions and answers which are not in order
+ 
+  1.if 1/x=a/b then value of x is
+ 
+ ans:quotient of b and a.
+ 
+  2.in a class there are S single seat chairs, D double seat chairs
+    how many people can be seated?
+ 
+ ans:S+2D.
+ 
+  3.value of C(A^2-B^2)/(-a-b) is
+ 
+ ans:-CA+CB.
+ 
+  4.if 3x+10=9x-20 value of (x+5)^2 is
+ 
+ ans:100.
+ 
+  5.in a class there are R rows and D tables in each row one person can 
+    sit in a table.on a particular day when all were present three tables
+    were empty,total number of persons in the class were?
+ 
+ ans:RD-3.
+ 
+  6.if s=sxy ,value of x^2Y^2 is
+ 
+ ans:1.
+ 
+  7.if n/5+n/7=12/35, value of n is
+ 
+ ans:1.
+ 
+  8.how many days are there in W weeks and W days?
+ 
+ ans:8W.
+ 
+  9.if x+y represents "x is brother of y",
+    x*y represents------------
+    x/y represents------------
+ (x is sister/father of y)-->i dont remember exactly?
+    then represent M is the uncle of P. 
+ 
+COMPUTER SCIENCE
+****************
+ 
+  1.4GL used the language?
+ a.SQL   b.c c.c++ d.SQL server
+ 
+  2.typedef intptr *int;       
+    intptr a,b;
+    here a&b are?
+ 
+ a.a is a pointer to integer ,b is an integer.
+ b.a&b are pointer to integer. 
+ c.----.
+ d.none of the above.
+ 
+ ans:b.
+ 
+  3.in UNIX ______ is used to copy a open file descriptor.
+ 
+ a.dup.
+ b.dupe.
+ 
+  4.in UNIX major part was written in?
+ 
+ ans:C language
+ 
+  5.https stands for?
+ 
+ a.hyper text transfer protocol secured.
+ b.hyper text transport protocol secured.
+ c.hyper text transfer protocol with security.
+ d.hyper texr transport protocol with security.
+ 
+ ans:c
+ 
+  6.________ is hiding by combining data and functions together.
+ 
+ a.abstraction.
+ b.encapsulation.
+ 
+ ans.b
+ 
+

@@ -1,0 +1,206 @@
+    TISL  ----------->   PAPER MODEL
+               Two parts.
+        Part A:  aptitude   (100 Que) 100 marks
+                 1 to 40 leter series 
+                 41 to 65  problems
+                 66 to 100  figures 
+        Part B:  comp knowledge test
+                  50 QUE 50 marks
+						
+		TISL(TATA-IBM)PAPER
+		-------------------
+Q9). what will be the result of executing following program
+     main
+     {
+     char *x="new";
+     char *y="dictonary";
+     char *t;
+     void swap (char * , char *);
+     swap (x,y);
+     printf("(%s, %s)",x,y);
+      
+     char *t;
+     t=x;
+     x=y;
+     y=t;
+     printf("-(%s, %s)",x,y);
+     }
+     void swap (char *x,char *y)
+     {
+     char *t;
+     y=x;
+     x=y;
+     y=t;
+     }
+
+     a).(New,Dictionary)-(New,Dictionary)
+     b).(Dictionary,New)-(New,Dictionary)
+     c).(New,Dictionary)-(Dictionary,New)
+     d).(Dictionary,New)-(Dictionary,New)
+     e).None of the above 
+     (Ans will be b or e) check
+      
+Q10).If a directory contains public files (can be valied and used
+     by any one ) which should not be altered ,the most liberal
+     permissions that can be given to the directory is 
+     a)755
+     b)777
+     c)757
+     d)775
+     e)None of the above
+     (Ans a)
+11) what would the following program results in
+    main()
+    {
+    char p[]="string";
+    char t;
+    int i,j;
+    for(i=0,j=strlen(p);i<j;i++)
+    {
+    t=p[i];
+    p[i]=p[j-i];
+    p[j-i]=t;
+    }
+    printf("%s",p);
+    }
+    a)will print:string
+    b)will not print anything since p will be pointing to a null string
+    c)will print:gnirtS
+    d)will result in a complication error
+    e)will print invallid characters(junk)
+    (Ans will be b ) check
+12) After the following command is executed 
+   $ ln   old   new
+   a listing is performed with the following output
+   $ ls -li
+    
+   total 3
+   15768  -rw-rw-rw-  2 you 29 Sep 27 12:07 old
+   15768     " "      "  "  "   "   "   "   new
+   15274    "  "      1  "  40  "   "  09:34 veryold
+
+   which of the following is true
+   a)old and new have same i-node number,2
+   b) "   "   "   "     "    "      "   , 15768
+   c)old and new have nothing yo do with each other
+   d)very old and new are linked
+   e)very old and old are linked
+   (Ans is b)
+13) What will be the result of executing the following statement
+	int i=10;
+	printf("%d %d %d",i,++i,i++);
+   a).10 11 12
+   b).12 11 10
+   c).10 11 11 
+   d).result is OS dependent
+   e).result is compiler dependent
+   (Ans is e)
+14) What does extern means in a function declaration
+   a)the funct has global scope
+   b)the funct need not be defined\
+   c)nothing really
+   d)the funct has local scope only to the file it is defined in
+   e)none of the above
+   (Ans will be c)
+15) What will be result of the following program
+      main()
+      {
+      void f(int,int);
+      int i=10;
+      f(i,i++);
+      }
+      void f(int i,int j)
+      {
+      if(i>50)
+      return;
+      i+=j;
+      f(i,j);
+      printf("%d,",i);
+      }
+      a).85,53,32,21
+      b)10,11,21,32,53
+      c)21,32,53,85
+      d)32,21,11,10
+      e)none of the above
+      (Ans is e)
+16). MS windows 3.1 is a
+    a)operating system
+    b)Application
+    c)Programing language
+    d)database
+    e)shell
+    (Ans will be b)
+17).MS Windows 3.1 supports which type of multi-tasking?
+    a)cycle
+    b)executive
+    c)preemptive
+    d)Non-preemptive
+    e)Manual
+    (Ans      )
+18)The command ......ln /bin/mail  /usr/you/bin/m
+   a)will not be executed because you are linking files
+     across different file systems
+   b)results ln /bin/main being the same file as /usr/you/bin/m
+   c)results in 2 links to the file mail
+   d)   "     "      "        "     m
+   e)none
+   (Ans will be b)
+19)In a standerd directory lay out ,/etc is the directory where
+   a) basic programs such as who and ed reside
+   b) - -  - -  -   -  -
+   c)various administrative files such as password file reside
+   d) - - - - - - - 
+   e) -  - - - - -
+   (Ans is c)
+20) The command echo *
+   a) echoes all files in the current directory
+   b) - - - - -
+   c)
+   d)
+   e)
+   (Ans is a)
+21)What will be the result of the following segment of the program
+	main()
+	{
+	char *s="hello world";
+	int i=7;
+	printf("%.*%s",s);
+	}
+	a)syntax error
+	b)hello w
+	c)
+	d)
+	e)
+	(Ans is b)
+22) What will be the result of the following program
+     main()
+     {
+     int a,b;
+     printf("enter two numbers :");
+     scanf("%d%d",a,b);
+     printf("%d+%d=%d",a,b,a+b);
+     }
+     a)- - - - -
+     b) - --  
+     c) will generate run time error /core dump
+     d)
+     e)
+     (Ans is c)
+23) What is the size of 'q'in the following program?
+   union{  
+	    int x;
+	    char y;
+	    struct {
+	    char x;
+	    char y;
+	    int xy;}p;
+	    }q;
+  a)11
+  b)6
+  c)4
+  d)5
+  e)none
+  (Ans is b  why because no of bytes for int =4 given in instructions)
+24) Which message is displayed when a window is destroyed
+   a)WM_CLOSE
+   b)WM_D                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

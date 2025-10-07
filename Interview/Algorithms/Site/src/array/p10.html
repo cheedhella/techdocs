@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Move All Zeros to the Beginning of the Array?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an integer array, move all 0s if any to the left while maintaining the order of other elements in the array;</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class MoveZeros {
+
+    private static void moveZerosToLeft(int[] nums) {
+        int count = 0;
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] == 0) {
+                count++;
+            }
+            else {
+                nums[i + count] = nums[i];
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            nums[i] = 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 0, 1, 10, 20, 0, 59, 63, 0, 88 };
+        System.out.println("Input: " + Arrays.toString(data));
+        moveZerosToLeft(data);
+        System.out.println("Output: " + Arrays.toString(data));
+    }
+}
+
+// Output:
+Input: [0, 1, 10, 20, 0, 59, 63, 0, 88]
+Output: [0, 0, 0, 1, 10, 20, 59, 63, 88]
+        </code>
+      </pre>
+
+    </body>
+</html>

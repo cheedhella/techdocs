@@ -1,0 +1,2057 @@
+INFOSYS WRITTEN TEST 2000 (C.E.T)Dated 25th JUNE 2000
+(Time limit:60 min.)
+1. A bicycle goes 1 mile in 3 min.with the wind and
+returns back in 4
+min.against the wind. How much time will he take to
+cover 1 mile when
+there
+is
+no wind? (Ans. 24/7 min.)
+ 
+2. A man passed 1/6 of his life in childhood, 1/12 in
+youth and 1/7
+more as a
+ 
+bachelor. Five years after his marriage a son was born
+who died four
+years
+before his father at his final age. What is the total
+age of the man?
+(Ans.
+84
+yrs.)
+ 
+3. Alpha, Beta, Theta, Gamma & Epsilon are stated as
+follows:
+ 
+#. If and only if alpha is equal to gamma then beta is
+not equal to
+epsilon.
+#. Alpha-Beta=Beta-Gamma ;Alpha>Theta.
+#. Alpha>Beta and Gamma>Theta. Write the above
+quantities in
+descending order? (Ans.
+Alpha>Beta=Epsilon>Gamma>Theta) 
+
+4. A thief broke into a jwellwry shop and thought of
+taking all the
+diamonds
+with him . But while he was leaving, he came to his
+better senses and
+thought
+of
+taking half with him. But he couldn^Rt resist and took
+two more and
+left. A
+second thief came and took half of the remaining and
+two more.
+Similarly
+third
+and fourth thief came and did the same. The fifth
+thief came but there
+was no
+diamond left for him. What was the initial number of
+diamonds? (Ans.
+60)
+ 
+5. SEND+MORE=MONEY What is the value of
+^SM^T,^TO^T,^TN^T,^TE^T ? (Hint:
+9567+1085=10652 M=1,O=0,N=6,E=5)
+ 
+6. Three men A,B,C went in three directions and had
+stolen a mule, a
+horse and
+a
+camel. They were caught by CBI and arrested. During
+their interrogation
+they
+gave the following statements:
+A: B has stolen the horse. B: A & C are both
+lying and I have stolen nothing. C: A is lying and B     
+
+has stolen a mule. One who has stolen a camel is
+telling lie and one
+who has stolen a horse is telling truth. Among A,B,C
+who has stolen
+what?
+(Ans. A-Camel B-Mule C-Horse)
+ 
+7. A scientist ^SSAM^T arrived late in his lab and found
+that in his
+watch, the
+minute hand and the hour hand were coming together
+every 65 min. Was
+his
+watch
+gaining or losing time and by how much per hour?
+(Hint: Shakuntala
+Devi^Rs
+Puzzles to Puzzle You Problem 63)
+ 
+8. *Amarpur is north of Landganj and west of Chutpur.
+*Basti is north of Amarpur and west of Fulganj.
+*Dania is south and east of Amarpur.
+*Landganj is north of Fulganj and aest of Dania.
+*Fulganj is north of Dania and west of Amarpur.
+*Chutpur is south of Fulganj and stofania.
+. Which town is farthest to the north-lganj
+#. Which town is both north and east of Fulganj?
+I. .Amarpur
+II. Chutpur
+III. Landganj
+I only
+II only
+III only
+I & II                    
+I & III
+ 
+#. Which of the following town(s) must be situated
+both south and west
+of
+atleast one other town?
+1 . Amarpur only
+2. Amarpur &Fulganj
+3. Dania&Fulganj
+4. Dania, Chutpur & Fulganj 5. Chutpur & Landganj
+ 
+#. Which of the following statements, if true, would
+make the
+information in
+the
+numbered statements more specific?
+1. Chuutpur is north of Dania
+2. Landganj is north of Dania
+3. Amarpur is east of Basti
+4. Chutpur is east of Fulganj
+5. Basti is north of Fulganj
+1.A LOG WEIGHT 30KG. IF ITS WIDTH IS REDUCED BY HALF &
+ITS
+THICKNESS IS
+INCREASED BY TWICE, THEN WHAT IS THE WEIGHT.
+2.A PERSON DECIDED TO GIVE UP SMOKING . AFTER SMOKING
+ALL THE 27 CIGARATES ,IN
+THE POCKET .HE SMOKES 2/3rd OF THE CIGARATE .THEN HOW
+MANY DAYS HE WILL SMOKE
+CIGARATE.
+3.ABALL FALS FROM 180 ft HEIGHT.IN EACH BOUNCE BALL
+RISES
+TO ITS 1/10th
+HEIGHT.THEN HOW MANY DISTANCE THE BALL WILL COVER TO
+COME TO REST .
+4.FROM NEWYORK TO WASHINGTON TRAIN LEAVES IN EACH
+HOUR .SUPPOSE U R SITTING IN
+A TRAIN FROM NEWYORK TO WASHINGTON .THEN HOW MANY
+TRAINS WILL PASS U.
+5.AB*CD=EEE
+E*CD-AB=CC
+FIND AB*D.
+6.THERE ARE 4 PERSON IN ABANK & THEY ARE GIVING 4
+DIFFERENT STUDENTS REGARDING
+A THIEF & FROM WHICH ONLY ONE STATEMENT IS CORRECT
+I.GUARD-BLUE EYE, TALL,VELT & HAT.
+II.CASHIER-BLACK EYE,SHORT,VELT &HAT.
+III.SECERATARY-GREY EYE,MEDIUM,HAT,RAINYCOAT.
+IV.DIRECTOR-GREEN EYE,TLL,NO HAT,VEIT.
+7.THERE ARE 5 PERSONS IN 5 POSITIONS, BUYER
+,CASHIER,CLERK,FLOOR
+WALLER,MANAGER,MISS ANNA,MISS BROWN, MR. C, MR. D, MR
+E.
+CONDITION-
+I.BUYER &MANAGER ARE ROOM MATES.
+II.ANNA & D ONLY BUSSINESS PARTNER.
+III.MR. C WAS DISSAPOINTED BECAUSE HER HUSBAND TOLD
+THAT THE MANAGER REFUSED
+TO RAILE   
+IV.WHEN CASHIER & CLERK WILL MARRY THEN D WILL BE
+HAPPY
+V.BUYER IS BACHOLOR.
+THEN FIND OUT THE POSITION OF EACH OTHER.
+8.H=J+B,H+B=J+T
+H+J<B+T
+FIND OUT THE ASCENDING SERIES.
+9.
+10.
+ESSAY.
+1.WILL INDIA BE THE GLOBAL POWER HOUSE IF YES WHY IF
+NO
+WHY.
+ 
+ 
+   Infosys _cet 2000
+  1, a bicyle goe 1 mi,e in 3 min with wind &returns
+back in 4 mins against the wind how many minutes he
+will take to cover 1 mile when there is no
+wind.ans:-24/7mins.
+ 
+2. a man passed 1/6th of his life in child hood,1/12th
+in uth,&1/7th more as abatcheler.5 years after his
+marriage a son was born.,who died 4 yaers before his
+father at half his final age.what is the total age of
+man/ans:-84
+ 
+3. there were 5 different quantities a,b,g,t,e.
+1. if&onlyif a=g then b!=e.
+2.  a-b=b-g only if a>t
+3. a>b,&g>t.
+arrange the quantities in descending
+order.ans:-a>b=e>g>t
+                     
+4. a thief  chinu broke into a jewellery shop&thought
+of taking all the diamonds with him.but while he was
+leaving came to his better senses & thought of taking
+half with him.but he could not resist&took 2 more with
+hi.m.& left.a 2nd thief came & took half of  the
+remainig& took 2 more.a third thief came & did the
+same.,so also did the 4th one.when 5th thief came
+there was no more diamond for him to steal.what was
+the actual number of diamond initially.ans:-60
+ 
+5. what is the value of  m, o, n, e?
+              SEND
+            + MORE
+           = MONEY              ans:-M=1,O=0,N=6E=5
+ 
+6. 3 MEN a,b,c went in 3 directions & has stolen a
+mule,a horse, a camel.they were caught
+C.B.I.&ARRESTED.they gave the following statements
+a: b had stolen a horse.
+b.:a&c are both lying&that I had stolen nothing.
+c.:a is lying&b had stolen a mule.
+One who has stolen a camel is lying.one who has stolen
+a horse is telling truth.among a ,b,c who had stolen
+what?ans:-a :camel,b:mule,c:horse.
+ 
+7. REFER  SHAKUNTALA DEVI^RS  ^SPUZZLES TO  PUZZLE U^T
+NO:63.(WATCH PROBLE)
+ 
+8. REFER   BARON^RS GRE  GUIDE MODEL TEST 2, SECTION 6
+, QUESTIONS(8 TO 12)
+DIRECTION  PROBLEM.
+ 
+9. there are 4 women & conditions about their  last
+names.& things they are selling.from this u have to
+find their last name& what they are selling?  
+ 
+10.  DANCE PROBLEM.(WHO IS WHO^RS PARTNER & WHAT THEY
+ARE DANCING)
+ 
+ 
+ 
+                ^EBEST OF LUCK
+ 
+           
+
+ 
+1.employe 1.-you told me ,"two years ago, you have
+worked 3 times as
+much
+as me.
+employe2.-yes, isaid that now i have worked twice as
+much as you.
+how many years both of them have worked.------4&8
+2. there are 20 flag . aperson starts from firstflag
+and goes up to
+12th flag
+in 24
+sec . what is the total time he took to reach 20th
+flag.---------24*19/11
+3. mr X says that the 2 dial of the watch concide
+every 65 min. is the
+ 
+or gaining the time, and by how much in a
+hour.-----60/143min.
+4.a person leaves the city at const speed. on his way
+he saw a
+mile-stone,a2
+digit no.
+after going for 1 hour , he sees another , milestone
+having the same
+number
+in reverse order
+still further 1 hour he again sees the mile stone
+showing the two
+number but
+a
+zero in between.
+what is the velocity of x .---------------ans 45km per
+hour
+                     
+
+5.MOON
+ SOON
+NOON
+-------
+JUNE FIND JUNE? ----------ANS - 9326
+6. a,b,C,D HAS 4 CARDS IN FRONT OF THEM. and the
+colour of the cards on
+2
+faces are diffrent.
+2 red 2green, 2 blue.
+a says- yellow or blue
+b          says- niether yellow nor blue
+c says blue or yellow
+d says- blue or green
+if the open face colour is the order red,
+green,red,blue. find the
+hidden
+colour, if 2 of them says
+lie.-----------red green red green
+yellow blue yellow blue
+ 
+7.A's wife died .he is living with his niece.B is a
+widow an dliving
+with her
+daughter
+and C is living with hr wife.C's wife suggested that
+they should live
+together.each member of the
+group should contribute 25/- and the rest should be
+distributed equally
+.if
+the monthly expense was rs
+92/- and each got whole sum of money(no
+fraction).after cutting their         
+expenses
+what is amount each
+will get? -----rs 2/-
+ 
+ 
+8-a man leaves home for his office in time according
+to his watch but
+in the
+office he finds that
+he is not on time and checks his watch.he finds that
+his watch shows
+one hour
+when actually
+65 min has been passed say whether his watch loses or
+gain time.
+ 
+ 
+ 
+ 
+INFOSYS 2000. REC DGP
+50 MARKS 1 HOUR
+ 
+(1)A and B are 2 employees.Presently A has been
+working for twice as
+long as
+B.2 years ago,A was with the company for thrice as
+long as B.Det. the
+period
+of working
+of Aand B. (3)
+ 
+(2)There are 20 flagpoles on a running track.A runner
+starts from 1st
+pole                 
+and takes 24 secs to reach the 12th one.Hou long does
+he take to reach
+the
+20th one? (4)
+ 
+(3) N O O N
+M O O N
++ S O O N
+-----------
+J U N E
+____________
+Each alphabet corresponds to a digit.find numerical
+equivalent of JUNE?
+ans 9326 (3)
+ 
+(4)In going from A to B a driver passes a milestone
+with a no on it .
+1 hour later he passes another with the same digits
+but in reverse
+order
+another hour later he passes a 3rd with same
+digits(forward or backward
+order)
+but with a in between.find driver's speed? 45km/hr (6)
+ 
+(5)Mr x on reaching his office late ,says "my watch
+needs repair .the
+min
+and hour hands come together after 65 mins ."is the
+clock going fast or
+slow?
+if so,how much an hour? ( ans loses time by 5/11 mins)
+(4)                                                       
+6)A,B,C are 3 friends .at the death of A's wife ,his
+neice lives with
+him.
+C also a widower, lives with his daughter .B is
+married.they all plan
+to live
+together,
+upon the condition that each member will pay Rs 25 at
+the beginning of
+every
+month, at the of which the rem.,if any,will be
+returned equally to all.
+if the monthly expenses were Rs 92 and each member
+received back an
+even no.
+of
+Rs , find that amount. (ans Rs2 ,4members) (4)
+ 
+7)Jack,Brown,Smith were 3 neighbours out of which one
+was a policeman
+while the others being a teacher and a fireman. we
+were 5 statements
+out of
+which
+2 were correct.we had to pick them out and det. the
+profession of all
+the 3.
+ 
+(8)jerry and his friend a broker gave a party of total
+5 friends .5
+cards
+are distributed randomly among them .(ace,king
+,queen,jack,ten)
+some clues are given.you have to find out the
+proffesion of       
+individuals.
+ans is something like this
+__________________________________________________
+| ... | amanda | ... | ... | jerry |
+---------------------------------------------------
+| doctor | mechanic|attorney| broker | banker |
+---------------------------------------------------
+| 10 | jack | queen| king | ace | (8)
+---------------------------------------------------
+ 
+(9)4 men x,y,z,v sitting on a table & in front them
+,there is 1 card
+each
+which have diff color on the two faces .colors are
+like this 2 are red
+2 are green ,2 are blue .they saw the hidden part and
+give the
+statement
+x: blue or green
+y: neither blue nor green
+z: blue or yellow
+v: blue or yellow
+exactly two are lying .the color visible to them are
+red ,blue
+,red,green
+respectively .give the color of hidden side.
+ans yellow yellow green blue
+x y z v
+ 
+                            
+
+COMBIND INFO LATEST PAPER
+ 
+ 
+    The following are parts of the four info papers
+from all over the
+country: fundae at the end......
+ 
+ 
+*************** the first paper ***********
+ 
+A men passed 1/6th of his life in
+childhood,1/12th in youth & 1/7th
+as a bachelor;5 yrs after his marriage a son was
+born who died 4 yrs
+before his father at half his final age.what is
+age of man.
+ 
+a,b,c,d and e 5 different quantities are given:
+-> if and only if a=c then b is not = e;
+-> a-b=b-c;
+-> a>b;
+-> a>b and c>d; write in descending order.
+ 
+ 
+SEND + MORE = MONEY,WHAT IS VALUE OF M,O,N,E?
+ 
+3 men a,b,c went in 3 direction and had stolen a
+mule,a horse and
+a
+camel.they were caught by cbi.during there
+interrogation they said:
+a: b had stolen a horse.
+b: a and c are both lying and i had stolen
+nothing.
+c: a is lying and b had stolen mule.
+                                      
+one who had stolen camel is lying and who has
+stolen horse is telling
+truth.among a,b,c who had stolen what.
+ 
+ 
+amarpur is north of landgang and west of
+chutpur.basti is north of
+amarpur and west of fulganj.dama is south and
+east of
+amarpur.landganj is
+north of fulganj and east of dania.fulganj is
+north of dania and west
+of amarpur.chutpur is south of fulganj and west
+of dania.a.which of
+the
+towns mentioned is farthest to the north west.
+b.which one must be bothnorth and east of
+fulganj.
+ 
+c. which one must be situated both south and
+west of at least one
+another town.
+d.which of the statements if true would make
+information in the
+numbered statements more specific.
+(there are two lost statements here - cpc)
+->amarp is east of basti
+->chutp is east of fulg
+->basti is north of ful.
+ 
+ther are 4 women and in quest. the condition
+about what they are
+selling and there last name are given.from this
+u have to find what   
+they
+are selling and their lastname.
+ 
+*************** the second paper ***************
+ 
+ 
+two boys riding on the bicycle in opposite
+directions at 10 km/hr
+start at
+same instant . a fly on one bicycle flies to
+another and after
+reaching there
+returns to the original cyclist. it does this
+upto the time the two
+cyclist
+meet. how much distance has the fly travelled.
+speed of the fly is
+15 km/hr
+and total dist between cyclists is 20 km.
+ 
+B jones sells 1/4th of the total paper +1, A
+smith sells 1/4th of
+the
+remaining +1, C jones sells 1/4th of the
+remaining +1, B smith sells
+1/4th of
+the remaining +1. upto this jones has sold 100
+more papers than
+smith. C smith
+sells the remaining papers . how much more have
+the smith sold than
+the jones
+?               
+a clock takes 6 seconds to strike 5 , 9 sec to
+strike 6 . how much
+would it
+take throughout a day ?
+ 
+an old lady have age between 50 & 70 her each
+son has same no of
+brothers
+as his own sons. what is the age of the lady ?.
+age of the lady is
+equal to
+the total members in the family excluding the
+lady .
+ 
+george, michael & harry each give one false and
+2 true statements.
+find
+their respective ages.
+1). i'm 22 years old
+2). harry is a year older than me
+3). michael is 2 years younger than me.
+ 
+ 
+********** the third paper ************
+ 
+when a man is going on a cycle with wind it
+takes him 3 minutes to
+cover
+one mile. when he is going against wind it takes
+him 4 minutes for 1
+mile.
+Then how much time will it take to cover the same
+distance without
+wind .              
+i am having a watch. the hour hand and minute
+hand are coming
+together
+every 65 minutes. whether my watch is gaining or
+loosing time, and
+how much
+per hour.
+( puzzles to puzzel u - shakuntala devi q no 3D63
+)
+ 
+one night a thief entered in a house to steal
+something. he saw a
+pile of
+diamonds. first he decided to take all the
+diamonds. because he is
+very kind
+in heart he took half of the diamond from the
+pile. then at the time
+of
+leaving he took two more diamond. after sometime
+a second thief came
+and did
+the same. then third and fourth did the same.
+after that the fifth
+thief came
+and saw there was no diamond. so how many
+diamonds were there at the
+begining.
+ 
+barrorns gre 12th ed page496 q 8-12
+ 
+a person had spent 1/6 th of his total life as a
+child, 1/12th as
+young and         
+1/7th as bachelor. after 5 years of his present
+age he becomes the
+father of a
+son. his son dies 4 years before the man becomes
+half of his age.
+then what is
+the total age of the person .
+ 
+there r some numbers such as alpha, beta, gamma,
+epsilon & zeta.
+few
+conditions r given u have to find the smallest
+one.
+ 
+******** the fourth paper ***********
+ 
+employe 1.-you told me ,"two years ago, you
+have worked 3 times as much
+as me.
+employe2.-yes, isaid that now i have worked
+twice as much as you.
+how many years both of them have worked.-----
+ 
+mr X says that the 2 dial of the watch concide
+every 65 min. is
+the or gaining the time, and by how much in a
+hour.----
+ 
+ 
+a person leaves the city at const speed. on his
+way he saw a mile-
+stone,a2
+digit no.
+after going for 1 hour , he sees another ,
+milestone having the same
+                              
+number
+in reverse order
+still further 1 hour he again sees the mile stone
+showing the two
+number but a
+zero in between.
+what is the velocity of x .--------------
+ 
+MOON
+SOON
+NOON
+-------
+JUNE FIND JUNE?
+ 
+a,b,C,D HAS 4 CARDS IN FRONT OF THEM. and the
+colour of the cards on 2
+faces are diffrent.
+2 red 2green, 2 blue.
+a says- yellow or blue
+b says- niether yellow nor blue
+c says blue or yellow
+d says- blue or green
+if the open face colour is the order red,
+green,red,blue. find the
+hidden
+colour, if 2 of them says
+lie.-----------red green red green
+yellow blue yellow blue
+ 
+A's wife died .he is living with his niece.B is a
+widow an dliving
+with her
+daughter
+and C is living with hr wife.C's wife suggested
+that they should live 
+together.each member of the
+group should contribute 25/- and the rest should
+be distributed
+equally .if
+the monthly expense was rs
+92/- and each got whole sum of money(no
+fraction).after cutting their
+expenses
+what is amount each
+will get?
+ 
+ 
+a man leaves home for his office in time
+according to his watch but
+in the
+office he finds that
+he is not on time and checks his watch.he finds
+that his watch shows
+one hour
+when actually
+65 min has been passed say whether his watch
+loses or gain time and
+by what
+amount per hour?
+ 
+three people A,B,C live in a place , their
+occupations are
+policeman ,
+fireman , teacher.
+ 
+out of the five conditions , only two are true
+(a) A is the neighbour of techer.
+(b) B is the neighbour of techer.
+(c) policeman and fireman are neighbour of C.
+(d) all of them are neighbour of each other.
+(e) B is the neighbour of fireman.
+FIND THEIR OCCUPATION OF A,B,C.
+ 
+ 
+                        INFOSYS - PAPER - 2000
+                        ----------------------
+                          (TEST - BANGLORE)
+ 
+ 
+ 
+     INSTRUCTIONS:
+ 
+     1. THERE WILL BE TEN QUESTION IN ALL.
+     2. THE TOTAL MARK FOR THE TEST IS 50.
+     3. TIME ALLOTED : 60
+     4. THERE MAY BE AN ESSAY TEST ALSO FOR 15 MINUTES
+,IN 200 WORDS.
+     5. TRY TO SOLVE ATLEAST 50% OF THE QUESTIONS
+CORRECTLY.
+     6. NEVER TRY TO SOLVE ALL THE QUESTIONS
+ 
+ 
+     PROBLEM :1
+       FOUR PERSONS WERE CAUGHT BY THE POLICE FOR
+INTERROGATION.DURING
+THE
+       INTERROGATION EACH WAS ASKED BY THE POLICE:
+ 
+       ALY : POP DID IT.
+       GUY : TOM DID IT.
+       TOM : I DIDN'T DO IT.  
+       POP : ........
+ 
+       I DON'T REMEMBER THE EXACT CLUE FOR THE LAST
+ONE.
+ 
+       AMONG THEM ONE OF THEM IS GUILTY. WHO DID IT ?
+ 
+       ANS:  GUY
+ 
+     PROBLEM :2
+       A PERSON BROUGHT TWO COMMODITES FROM THE MARKET
+& HE SELLS THEM
+EACH
+       FOR RS. 12/- EACH.HE MAKES 25% PROFIT IN
+SELLING ONE COMMODITY
+AND 20%
+       LOSS IN SELLING THE OTHER COMMODITY. DID HE
+GAIN OR LOSE ? WHAT
+PERCENTAGE?
+ 
+       ANS: GAIN
+            PERCENTAGE : 2.5% 
+ 
+     PROBLEM :3
+       THERE WAS A CONVERSATION BETWEEN TWO EMPLOYEES
+OF THE SAME FIRM.
+ 
+       EMPLOY-1 : YOUR EXPREIENCE IS TWICE OF MINE.
+       EMPLOY-2 : YEAH !
+       EMPLOY-1 : BUT SOME YEARS AGO , YOUR EXPREIENCE
+WAS THRICE THAT
+OF
+MINE.
+       EMPLOY-2 : YEAH IT WAS TWO YEARS AGO.
+ 
+       FIND OUT HOW YEAR DID EACH OF THEM STAY IN THE
+FIRM ?
+ 
+       ANS: EMPLOY-1 (4 YEARS)
+            EMPLOY-2 (8 YEARS)
+ 
+     PROBLEM :4
+ 
+       HOW MANY POSSIBLE WAYS CAN YOU ARRANGE DIGITS
+1,2,3,4 , SUCH
+THAT YOU
+CAN
+       MAKE A 4 - DIGIT NUMBER , WHICH ARE DIVISIBLE
+BY '4' ?
+ 
+       ANS: 6 WAYS
+ 
+     PROBLEM  :5
+ 
+      XXXXXXXX
+ 
+     PROBLEM  :6            
+     JACK & JILL CLIMBED UP A HILL WHICH WAS 440
+YARDS LONG TO REACH
+THE
+TOP.
+      WHILE RETURING BACK JACK MET JILL AT A DISTANCE
+OF  20 YARDS FROM
+THE
+TOP
+      OF THE HILL.JILL TOOK HALF  A MINUTE MORE THAN
+JCK TO REACH THE
+STARTING
+ 
+      POINT.BOTH OF THEM WERE ONE  & HALF TIMES FASTER
+WHILE MOVING
+DOWNHILL
+      THAN GOING UPHILL ?
+         HOW MUCH TIME DID JACK TAKE TO COVER 880
+YARDS ?
+ 
+        ANS : 456.4 SECONDS
+ 
+      PROBLEM : 7
+ 
+        ABU , KAFIR, MR. X (...DONN'T REMEMBER THE
+NAME) ARE THREE
+THEIVES.
+        THERE WERE THREE QUEENS NAMED FATIMA , AMIN
+,SAIF & THESE QUEEN
+HAS
+        THREE JEWELS RUBY , EMERALD & DIAMOND ?
+ 
+        CLUES:
+             1. THE MAN WHO STOLE DIAMOND WAS THE MOST
+DANGEROUS OF ALL         
+ & A BACHELOR.
+             2. ABU'S BROTHER -IN - LAW KAFIR IS LESS
+DANGEROUS , THAN
+THE
+               PERSON WHO STOLE EMERALD.
+             3. ABU'S DIDN'T STOLE FROM FATIM.
+             4. XXXXX...
+ 
+             WHO STOLE WHAT ?WHO WORE IT ?
+ 
+          ANS:
+               ABU :    EMERALD  -  SAIF
+               KAFIR :  RUBY     - AMIN
+               MR. X : DIAMOND   - FATIMA
+ 
+       PROBLEM : 8
+ 
+          FIND THE 5 - DIGIT NUMBER BASED ON THE CLUE
+GIVEN ?
+ 
+          1. THERE ARE 2 - PRIME NUMBERS IN THE
+NUMBER.
+          2. DIGIT -3 IS THE HIGHEST ONE.
+          3. DIGIT -2 IS THE LOWEST ONE.
+          4. NO DUPLICATION OF THE DIGITS .
+          5. DIGIT -4 LIES BETWEEN DIGIT -1 & DIGIT
+-2.
+          6. DIGIT -5 IS THE HALF OF THE DIGIT - 4.
+ 
+ 
+         ANS : 81942
+ 
+       PROBLEM :9                             
+      PROBLEM :9
+ 
+          THERE WERE FOUR DIFFERENT PEOPLE WHO KNEW
+TWO LANGUAGES EACH.
+          THE FOUR PEOPLE NAMED AS PETER,
+JACK,JOHN,WILLAM.THE
+LANGUAGES
+          KNOWN ARE ENGLISH,GERMAN,FRENCH,ITALY.
+ 
+          CLUES:
+ 
+          1. THE MAN WHO  SPEAK GERMAN DON'T SPEAK
+FRENCH.
+          2. JOHN DOESN'T KNOW ENGLISH.
+          3. JACK KNOW GERMAN & WILLAM DOESN'T KNOW
+GERMAN.
+          4. JOHN , JACK & PETER CAN SPEAK TO EACH
+OTHER IN A COMMON
+LANGUAGE.
+          5. JOHN , PETR , WILLAM CANN'T DISCUSS
+WITHIN EACH OTHER.
+          6. NOT MORE THAN ONE LANGUAGE IS SPOKEN BY
+MORE THAN TWO
+PERSONS.
+ 
+          ANS:
+          PETER: FRENCH & ENGLISH
+          JACK : GERMAN & ENGLISH
+          JOHN : GERMAN & ITALY
+          WILLAM: FRENCH & ITALY
+ 
+ 
+       PROBLEM : 10
+                                     
+     PROBLEM : 10
+ 
+       IT  IS ONE OF THE EASIEST QUESTION CARRYING THE
+HIGHEST MARK .
+       DON'T MISS TO ATTEMPT THAT QUESTION.
+ 
+       IT IS MULTI- CHOICE TYPE BUT MAY BORE U WHEN  U
+SEE THE LENGTH
+       OF THE QUESTION?
+*************************************************************************
+ 
+ 
+ 
+       THE TOPIC FOR THE FIFTEEN MINUTES ESSAYS
+ARE:(200 - WORDS)
+ 
+       1. CAN SUPERCOMPUTER BE FASTER THAN HUMANS &
+WHAT WOULD BE THERE
+          EFFECT ?
+ 
+       2. WHAT ARE THE POSITIVE EFFECT OF INDUSTRIES
+ON THE SOCIETY ?
+ 
+      IN THE INTERVIEW PREPARE ALL THE PUZZELS FROM
+YHE PAST PAPERS.
+      BE COOL ONCE U GET THROUGH THE WRITTEN FOR THE
+INTERVIEW.
+ 
+      ALL THE BEST !!!!                   
+                   INFOSYS-2000 (IISC)
+ 
+1>One person sold two things in same price(12/-) , one
+in 20% profit
+,another in 20% loss.what is the overall profit or
+loss?
+Ans.(60p)
+2>there is one five digit integer which has two prime
+number in it.
+Third digit is the largest ,second digit is the
+lowest,first digit is
+the
+difference of third and second digit.The sum of
+fouirth and fifth
+digit is
+less than first digit.There is no repeatation.What is
+the number?
+Ans. 81942
+ 
+3>Converasation between two employee about their
+service time.Two
+simple
+equation related to service time .(4yr & 8yr.)
+ 
+4>Barron's question related to sitting arrangement
+among 10 people
+ditto.
+(....M,N,L,O,P are males ..S,T,U,V,W are females ,..O
+and V are
+couples.
+Each woman sits just right to her husbands.)
+ 
+5>3 housewives (names are given) have three precious         
+jewels,(diamonds,ruby,emerald) 3 thieves(names are
+given) have stolen
+them.There are other
+conditions , find who has taken which jewels from
+whom?
+ 
+6> There are four foreigners came to Goa having
+different mothertongue
+(French German Italian English)(names are given)
+He who speaks germany doesn't know french and
+viceversa
+Everyone knows two languages and so on
+ 
+7>The length of the slope of a hill is 440 m.Jack &
+Jill were going to
+top of the hill .Jack has greater speed than
+Jill.After coming back
+from
+peak,Jack meets Jill at 20m from peak.After coming
+back from the peak
+the time difference between them at base of the hill
+is 1/2 mins(for
+entire trip).Downhill velocity is 1.5 times uphill
+velocity.
+Find time for some distance(given) to travel for
+Jack/Jill.
+ 
+8>conversation between four thieves and police is
+given.Who is the
+thief?
+Ans.GUY                                                        
+H.B.T.I.
+INFOSYS-2000``````````````````````````````````````````````````````````````````````
+READ THE INSTRUCTIONS FROM OTHER PAPERS.
+THERE WERE TEN QUESTIONS AS USUAL. TIME = 60 min
+ORDER OF QUESTIONS IS NOT SAME.
+ 
+Q1. there are two persons A & B. And the nos. are
+given 1 to 1000.
+First A select a no. then B select a no. What is the
+probability that
+B's
+no. is greater than A's.
+ 
+Q2.     [(x)**1/3 - (x)**1/9] = 60
+   solve for x.
+ 
+ 
+Q3  SIMPLE QUESTION BASED ON MOMENT>
+                       d1                    d2
+ 
+!-------------------|--------------------!
+             !
+!
+             W1
+!
+     d4      !         d3
+!
+!-----------------------------!
+(C)
+!                             !
+!                             !
+W2                            (B)
+!                         
+(A)
+ 
+ 
+value of d1,d2, d3,d4,W1,W2 was given.(I don't
+remember) If the system
+is
+balanced find A,B,C.
+ 
+ 
+Q4. there are three boys T,J,B and three girls V,G,D.
+ they decided to form tiplets. If the sum of ages of
+all couples are
+same
+find who is engaged with whom?
+conditions:
+1. D is sister of T.
+2. age of T> age of J
+3. V is the oldest among all three girls.
+4. ages of   J+G = B+D
+ 
+Q5. It was a long question on true and false
+statements.(READ GEORGE
+SUMMERS)
+ 
+Q6.  there are 51 teams for a game. The rule is that
+if a team looses
+TWO
+games it is out of the compitions. what is the no. of
+                             
+max. games that
+can
+be played.
+ 
+Q7. The master says to the grandmaster,  "the sum of
+my age and the
+ages
+of my three distant cousins is 50. If all the ages are
+the prime nos.
+find
+the ages of my cousins."
+ 
+Q8. There are two boats going across the river, in a
+direction
+perpendicular to the shore. they starts at the same
+time(but speeds are
+diffirent) from opposit
+shores in the same straight line. They meet at a
+distance of 700 yards
+from the nearest shore. After reaching at the shores
+they spend 10 min
+each  there and again they meet at a distance of 400
+yards from the
+other
+shore.
+find the width of the river.
+ 
+ 
+Q9. ONE of the questions from other papers.
+ 
+ 
+ 
+ 
+Q10.     X    Y     Z
+       + X    Z     Y            
+       Z    Y     X
+ 
+Find the values of X, Y , Z.
+ 
+ 
+ANSWERS:
+Q1.   449.5/1000
+Q2. X= 2**18
+Q3. 100,60,85
+Q4. T-G, B-V, J-D
+Q5.
+Q6. 101
+Q7.  13,11,7 or 17, 7,3 or  3, 5,11
+(answer should be uniqe. there was some other
+condition but it was not
+clear.)
+Q8. 1760
+Q9. 5,11,10,7
+Q10. X=4,Y=5,Z=9
+1.  Mr.chow ,mr.dow,mr.frow are 3 persons.one is
+acarpenter,a
+plasterer,painter not in order.dows salary is     >
+frows
+salary.painter
+salary is >plasterers salary. Chow&dow go out in
+weekend.
+Plasterer&carpenter
+are friends. Find each of them.
+2.  A person from village goes to town .he peddles 8km
+uphill&24 km
+downhill
+and takes 2hrs 50 min.
+While returning he took 4hrs. 30 min. find velocity in
+uphill and                           
+velocity
+downhill.
+3.  A,b,c started collecting chestnuts. Whenthey
+collected 770nuts they
+divided  the nuts as follows
+If a gets 4 nuts b gets 3nuts.if a gets 6 nuts then c
+gets 7nuts.find
+their
+individual shares.
+4.  A person can go to his office thru  mainline or
+harbour line
+train.the
+frequency of trains is 10 min.
+If  harbourline train starts at 5am and mainline train
+at 5.02 am and a
+persons comes to the station at a random time.find
+probability that a
+person
+catches the harbourline train.
+5.  Each of the person A,B,C,D knows two languages
+from any of the four
+languages,english,italian,french
+German.No person can speak french and german
+simultaneously.No 3 person
+can
+speak a common language. A  communicates with C
+through an interpreter
+who
+does not know english.Find the
+.Find the languages spoken by
+each person.
+6.   Men and women are seated alternatively,men at odd
+positions
+starting from
+the left. V and O are a pair.
+W will not come at the right end of the theatre.M and
+his spouse sat in
+the
+centre.T cannot sit adjacent to W.There were ten
+positions.
+A: which is the correct order?
+B: who is U's husband?
+C: whose position cannot be found?
+D: someone in a pair says that his wife should sit
+next to T.
+7.   At the end of summer a clock was setback by one
+hour in the
+evening
+before the night.A wanted to fix an appointment with
+B.
+Their conversation goes as follows:
+A:  I would meet you eleven hours after the clock
+strikes ten times in
+the
+town hall clock.
+B:   Does the clock strike for every second?
+A:   Yes.
+B:   Then the appointment is fixed.
+At what time on the next day morning  did they meet?
+8.   Mary described about a sea serpent to her friend.
+>From her
+description ,
+A: If the serpent was not green or its length is not
+35 metres,then its
+length
+is 55 m.
+B:  If it is not black or if its length is not 35m
+,then it is brown.
+C:  If it is not 45m or if it is not black,then it is
+55m long.
+Ans: length of the serpent is 55m and its colour is
+brown.
+9.   Four persons give witnesses about a burglary.
+Clerk: thief had blue eyes,tall,wearing a hat and a
+vest.
+Accountant: dark eyes,short,wearing a hat and a vest.
+Watchman:  brown eyes, medium sized,wearing a raincoat
+and a hat.
+Director: green eyes,tall,wears a vest but not a hat.
+Find the exact details about the criminal.
+Note: It was a problem on school grades involving four
+students.You
+have to
+identify the corresponding grade for each student
+according to the
+statements
+given in the problem.
+ 
+Qn in interview
+Some guys are arranged in rows n columns . if A is the
+tallest among
+the
+shortest in each in each row and B is the shortest
+among the tallest in
+each
+row , who taller  A or B
+ 
+I got 40/50 in this paper , topper in my college . in
+                                        
+fact I had done
+better
+than some guys who had already had half of the qns .i
+didn't do the
+interview
+very well . I cracked the puzzle they gave me inside ,
+that's all.
+Try Answering  the qns from the last  . u will not
+have time to work
+all the
+problems . the last qns carry more marks than the
+initial ones. Theres
+another
+writing assessment. I don't think they really use it.
+U neednt prepare
+for
+it.
+Hi Andu!
+ 
+Here's what u asked.....
+ 
+In Netscape Communicator,Click the "Communicator"
+option in the Menu bar.Then u will c the pop-up window
+,In that ,there is option "Tools" click that ,then
+click on "History" option.
+ 
+Now u r able 2 c all the mails in the history.
+I think now u will be able 2 understand when u will
+open the mails.
+ 
+And the Companies in which I gave the Interviews
+are:Datamatics(MNC),Hughes(MNC),NIIT,ERP Advantage.
+ 
+Bye....If any more problem...I will always available
+for u mere yaar.                 
+SECTION I - 8 questions.
+Series.
+ 
+1.   Interchange of letters in a word and the adjacent
+letters are also
+to
+be changed.  given letters series like [also few
+condotions]
+  AAABBB=
+  ABABAB=
+LET QUESTION IS ABBAAB
+        If we apply 25 on this it means we have to
+interchange the
+letters
+at positions 2 and 5, and we have to change the
+adjacent letters 2 and
+5
+from A to B and B to A.
+That is   q's A B B A A B
+  after Step 1 i.e interchange 2 and 5.
+ 
+  now change adjacent elements of 2 and 5...finally
+answer becomes
+Ans:    B A A B B A
+ 
+//Hint:  As per question papers 5 questions above like
+ but numbers
+change.
+ 
+REMAINING 3 QUESTIONS:
+ 6. To  get AAABBD  from BBBAAA  what ot apply:-
+  a) 25   b) 34   c)25 & 34  d) none
+                               
+SECTION II
+1.  Given the function f(n  a  b c ) = ac if n=1
+        f(n a b c) = f( n-1  a b  c) + f( 1 a  b  c) +
+f( n-1  b a c )
+                        if n >  1
+        f( 2) = ?
+Ans:  f( 2 a c b ) = ab + ac + bc.
+ 
+2. similar question in functions.
+3. [ based on function in 1.]   f( 4 a b c )  the
+number of terms
+is...?
+Ans:  f( 4 a b c ) =  f( 3 a c b ) + f( 1 a b c ) + f(
+3 b a c )  etc.
+           = 5ab + 5ac + 5bc.
+4. f( 5 a b c ) = ?
+ 
+SECTION III
+Permutations and Combinations.
+8 questions.
+ 
+1. r = number of flags;
+   n = number of poles;
+   Any number of flags can be accommodated on any
+single pole.
+ 
+  i)  r=5,n=5 The no. of ways the flags can be
+arranged ?
+ ii) to iv) are based on this.
+ 
+6.  r= 5 n = 3 . If first pole has 2 flags ,third pole
+has 1 flag
+   how many ways the remaining can be arranged?
+7.& 8. same as above.                   
+SECTION IV
+Question consising of figures consist of 4 small
+squares and every
+square
+having an arrow pointing in one Direction.
+ 
+GRE test of reasoning.
+hint: What is the next sequence if we tilt the figure
+by 90 degrees
+like
+that( clockwise  and mirror images ? ).
+ 
+SECTION V
+In this section first part of compound word is given.
+Select meaning of
+the second part from the choice given:
+        1. Swan
+        2. Swans
+        3. Fool
+        4. Fools
+        5. Stare
+        6. Lady
+  For all above 4 choices are given.....
+Eg. Swan
+  a) category  b) music   c) ---   d) none
+Ans: Swansong is compound word. But song is not given
+as option. so
+     b) music is answer.
+ 
+TS 99 PAPER .
+*This paper contains 40 questions and time is 60mts.*/
+ 
+CTS -REC'99(TRICHY)       SECTION-1:
+ 
+Find the sequence:
+(       d is always NONE        )
+ 
+1. BC  CE  EG  GK ?
+        a)KN    b)KU    c)KM    d)
+2. AA  AB  BC  CE?
+        a)EG    b)EH    c)EI    d)
+3. AB  EF  JK  QR ?
+        a)YZ    b)ZA    c)AB    d)
+4.ACD  EGL  IKT  MOB?
+        a)QST   b)QSZ   c)QSY   d)
+5.AC CG GO OE?
+        a)EJ    b)EI    c)EL    d)
+6.AE BH CM DU?
+        a)EH     b)EZ    c) EB  d)
+7. AD DP PL LV
+        a)VS     b)VK   c)VI    d)
+8. SE QU EN TI?
+        a)CN    b)BM    c)AI or AZ    d)
+ 
+SECTION-II:
+ 
+FIND THE VALUES FOR FOLLOWING PROBLEM:
+        F(X)= 2X-1 + f(X-1) if X NOT EQUAL TO ZERO
+                            if f(X=0)=0
+9. f(5) VALUE
+        a)15  b)24  c)22  d)NONE
+10.f(f(2))
+ 
+11.f(16)- f(15)
+ 
+12.f(16)+f(15)-480
+                                         
+13.f(f(x))=81 THEN VALUE OF X=
+ 
+14.f(X)=4f(X-1) THEN VALUE OF X=
+ 
+15.f(X)= f(X-1)+f(X-2) FOR X>1 THEN X=
+ 
+16.f(X)-f(X-1)=f(X-8) FOR X>5 THEN X=
+SECTION -III:
+ 
+###In the follwing questins we r giving 'aword' which
+may not have any
+meaning.Find differnet possible words or palandrams
+for the word as per
+que.
+I. for the following find no of distinct words that
+can be formed.
+17. TYGHHTT
+A).420 B)1540 C)840 D)NONE
+18. TYGHHTY
+19. TYGHHTT
+20. TYGHHTT
+21. TYGHASD
+22. TYGHHTY
+II Find NO OF POSSIBLE PALANDRAMS for following
+23. TYGHHTY
+24. TYHHHTYH.
+/*dEAR FRIENDS DON,T CONFUSE WITH THE WORDS
+REPEATED.Iam sure.Words are
+same.They might have changed the
+questionsfor20,21,22.Concentrate on
+that
+respect*/
+25 to 32 are figures.Uhave to analyse them.He will
+give five figs.One                     is not
+correct
+SECTION IV:
+        It having complete of figs.(26 -32)
+SECTION -V:
+ 
+For following first find out the anagram and then note
+the
+corresponding
+meaning.
+33.TABLET(anagram means first u arrange the letters in
+correct order
+like
+         (TABLET===BATTLE .  so ans is   FIGHT i.e. B)
+34.RUGGED
+35.GORE.
+36.STASSI.
+For all above choices are.
+A) resentment B)Fight c)Help d) Monster
+37. ENFOLD
+38. LAMB
+39. RECEDE.
+40. PLEASE.
+For above 4  choices are same
+A)cuddle B)sleeping c)proclamination d)ointment.
+ 
+                          CTS 98
+                                  IIT MADRAS
+##########################################################################
+                analogies
+                ---------
+1. slur : speech
+ans: smulge : writing       (choice is B)
+7. cpahlet : shoulder
+ans: ring : finger       (choice is C)
+                             
+8. vernanlar : place
+ans: finger print : identical    (choice is B)
+ 
+                        opposite
+                        --------
+9.corphlent
+ans:  emaciated    (choice is D)
+10. officious
+ans: pragmate   (choice is D)
+0F@L22  M^Y3"A^P"")^S^\^XHI^B;INFOSYS-2000-CET,BHUBHANESWAR
+& REC JAIPUR
+25-06-2K &
+19-07 2000
+ 
+ 
+ THERE ARE 10 PUZZLES IN ONE HOUR ALONG WITH AN
+ESSAYOF 15 MINS
+THE TOPIC OF ESSAY IN REC J WAS
+        INTERNET REVOLUTION
+OR      ROLE OF MEDIA IN SHAPING THE YOUTH .
+ 
+TOPIC IN DURGAPUR
+        WOULD INDIA BECOME GLOBAL POWERHOUSE OF 21st
+CENTURY.
+        ROLE OF GOVT IN SHAPING THE NATION.
+ 
+1.A bicycle goes 1 mile in 3 min. with the wind
+&returns back in 4 min
+ 
+against the wind.how muchmins. will it take to cover 1
+mile when no
+wind is blowing.(ans.3.4285)
+ 
+2.A men passed 1/6th of his life in childhood,1/12th
+in youth & 1/7th     
+as a bachelor;5 yrs after his marriage a son was born
+who died 4 yrs
+before his father at half his final age.what is age of
+man.(ans 84).
+ 
+3.a,b,c,d and e 5 different quantities are given:
+-> if and only if a=c then b is not = e;
+-> a-b=b-c;
+->a>b;
+->a>b and c>d; write in descending order.(ans
+a>b=e>c>d.)  (rec j)
+ 
+4.Athief broke into jwellery shop and thought of
+taking all the
+diamonds.but while leaving ,came to his better senses
+and thought of
+taking
+half with him.but he could not resist and took 2 more
+extra and left.a
+ 
+2nd thief came and took half of the remaining and 2
+more.a 3rd thief
+came
+and took the remaining and 2 more.then 4th thief came
+did the same.5th
+ 
+thief came and there was no more diamond to steal.what
+was the actual
+no. of diamond initially.(ans 60)
+ 
+5. SEND + MORE = MONEY,WHAT IS VALUE OF
+M,O,N,E?ans(m=1,o=0,n=6,e=5) (
+REC J)
+       ans of SEND WAS ASKED IN REC J . ANS 9567
+6. 3 men a,b,c went in 3 direction and had stolen a
+                                                  
+mule,a horse and a
+ 
+camel.they were caught by cbi.during there
+interrogation they said:
+a: b had stolen a horse.
+b: a and c are both lying and i had stolen nothing.
+c: a is lying and b had stolen mule.
+one who had stolen camel is lying and who has stolen
+horse is telling
+truth.among a,b,c who had stolen
+what.(ans:a:camel,b:mule,c:horse)
+ 
+7.shakuntala devi's puzzle to puzzle u number 63.
+(REC J)
+ 
+8.amarpur is north of landgang and west of
+chutpur.basti is north of
+amarpur and west of fulganj.dama is south and east of
+amarpur.landganj
+is
+north of fulganj and east of dania.fulganj is north of
+dania and west
+of amarpur.chutpur is south of fulganj and west of
+dania.a.which of
+the
+towns mentioned is farthest to the north west.(ans
+basti)
+b.which one must be bothnorth and east of
+fulganj.(ans: amarpur and
+landganj)
+c. which one must be situated both south and west of
+at least one
+another town.(ans:dania,chutpur and fulganj)
+d.which of the statements if true would make
+information in the                                 
+numbered statements more specific.
+->chutpur is north of dania.
+->landg is north of dan
+->amarp is east of basti
+->chutp is east of fulg
+->basti is north of ful.(ans:1st statement)
+(  QUESTION FROM BARON'S MODEL TEST 2 SECTION 6)
+ 
+ 
+9.ther are 4 women and in quest. the condition about
+what they are
+selling and there last name are given.from this u have
+to find what
+they
+are selling and their lastname.
+ 
+10. two men 120 km apart coming to each oter at 40kmph
+& 20 kmph.
+     a bee flies from one to other @ 68 kmph find
+distance covered by
+bee.
+     till they meet.    (chek the Question from
+narula's book)
+      ans  136 km.  (REC JAIPUR INTERVIEW)
+ 
+11.  two persons a& b has faulti watches. a's watch is
+ 2 min faster
+and b's
+watch is 1 min slower than the original time. after
+some time they meet
+and found that a is 1 hour advanced than b. after how
+long they meet.
+        ans 20 hrs.  (REC JAIPUR)       
+12.  TROT + TROT = ROOM; FIND TROM ?
+        TROT=2502 & ROOM=5004
+ 
+13.   AB * CD =EEE;
+      CD - B  =CC;
+      FIND A,B,C,D,E ?
+        ANS:l-    A=3,B=7,C=1,D=8,E=6;
+ 
+14.   RAVI NAROOLA PAGE 12.
+ 
+15.   SOX, HER SISTER & FATHER . WHEN SOX WILL BE AS
+OLD AS HIS FATHER
+        HER SISTER 'LL BE TWICE AS OLD AS NOW.SUM OF
+THEIR AGES IS 100.
+        ONE MORE CONDITION WAS GIVEN I FORGOT THAT
+        ANS IS   SOX=20,  SISTER=30, FATHER=50;  (REC
+J)
+ 
+16.   5 BAGS 20 BALLS EACH WITH DIFFRENT COLORS . FIND
+THE  MINIMUM
+NO.
+        OF BALLS WE HAVE TO TAKE OUT SOTHAT WE SURELY
+GET 2 BALLS OF
+SAME
+COLOR.
+        ANS 6  (REC J)
+ 
+17.   2 TWINS A & B. A SPEAKS TRUTH ON MONDAY,WED,
+FRI.B SPEAKS TRUTH
+ON
+TUES,THRUS,SAT.
+        BOTH SPEAKS TRUTH ON SUNDAY. 4 QUESTIONS WITH
+CERTAIN CONDITION                                            
+WERW
+ASKED .
+        ANS AT REC JAIPUR  ARE D,B,E,C.(ALL QUESTION
+WERE MULTIPLE
+CHICE)
+ 
+18.     11 PEOPLE WENT TO CINEMA THEY SAT IN A ROW.
+FIRST PERSON CAN
+TAKE ANY
+OF YHE
+11 SEATS.
+        2nd 'LL SIT ON ANY OF ADJESENT SEAT AND OTHER
+FOLLOW THE SAME
+WAY.FIND
+THE NO.
+OF WAYS IN WHICH THEY CAN SIT.
+        { REC J}
+19.     NOON+MOON+SOON=JUNE; FIND JUNE;  (REC DURGA)
+ 
+20.     A PERSON IS LEAVING TO BANGLORE BY CAR AFTER A
+WHILE HE SEES A
+MILE
+STONE WITH 2 DIGITS
+        AFTER 1 HOUR HE SEES ANOTHER MILE STONE WITH
+SAME 2 DIGITS
+REVERSED.AFTER
+ANOTHR HOUR HE SEES
+        A MILE STONE WITH SAME DIGITS SEPERATED BY
+0.FIND SPEED OF CAR.
+                ANS   45 KMPH.    {XY=16 YX=61
+X0Y=106}
+ 
+21.     IN A FIELD THERE ARE 20 FLAGS. A RUNNER STARTS
+FROM 1 st FALAG
+&REACHES                                               
+12th IN 24 SEC.
+        IF HE IS RUNNING AT UNIFORM SPEEED .WHAN 'LL
+HE REACH THE 20th
+FLAG.
+                ANS   24*19/11;
+2.      THERE ARE 3 FRIENDS A,B,C; A'S WIFE DIES AND
+HE LIVES WITH HIS
+NIECE
+BLIVES
+WITHHIS DAUGHTER
+        WHEN C MET THEM HE ASKED THEM TO LIVE
+TOGETHER. EACH
+CONTRIBUTED RS
+25.  AFTER
+A MONTH
+        EXPENDITURE WAS RS 92. AND THE REST MONEY WAS
+EQUALY
+DISTRIBUTED AMONG
+TH
+MEMBERS.
+        IT CAME OUT TO BE A EVEN NO.FIND AMOUNT
+DISTRIBUTED TO EACH.
+                {HINT c dint live with them}
+                ANS : 2;
+ 
+ 
+ 
+STATE COLLEGE Bombay
+*************** info 2000 ***************
+ 
+1. there r 4 cyclists in a race. a cyclist after some
+time notices that
+1/5th
+of the total cyclist r in front of him while 5/6th r
+behind him. how                               
+many
+cyclists r there ?
+ans. 32
+ 
+2. two boys riding on the bicycle in opposite
+directions at 10 km/hr
+start at
+same instant . a fly on one bicycle flies to another
+and after reaching
+there
+returns to the original cyclist. it does this upto the
+time the two
+cyclist
+meet. how much distance has the fly travelled. speed
+of the fly is 15
+km/hr
+and total dist between cyclists is 20 km.
+ans 15 km
+ 
+3. B jones sells 1/4th of the total paper +1, A smith
+sells 1/4th of
+the
+remaining +1, C jones sells 1/4th of the remaining +1,
+B smith sells
+1/4th of
+the remaining +1. upto this jones has sold 100 more
+papers than smith.
+C smith
+sells the remaining papers . how much more have the
+smith sold than the
+jones
+?
+ans 220
+ 
+4.a clock takes 6 seconds to strike 5 , 9 sec to
+                                             
+strike 6 . how much
+would it
+take throughout a day ?
+ans 198
+ 
+5. an old lady have age between 50 & 70 her each son
+has same no of
+brothers
+as his own sons. what is the age of the lady ?. age of
+the lady is
+equal to
+the total members in the family excluding the lady .
+ans 64.
+ 
+6. george, michael & harry each give one false and 2
+true statements.
+find
+their respective ages.
+   1). i'm 22 years old
+   2). harry is a year older than me
+   3). michael is 2 years younger than me.
+ans 22,23,25 ( g, m, h)
+ 
+7. 5 persons r there each names his shop by other ones
+daughter................
+ans father is mrinal
+ 
+8. ans 5 pair
+ 
+9. alen is the oldest
+harry
+alister                                 
+infosys-2000(it-bhu)
+ 
+ 
+ 
+1>>a person hass 27 cigerattes makes 1 cigerate out of
+3 butts. how
+many cig
+did
+he smoke.(previous year's).
+ 
+2>>there are 100 balls in basket.20 red,20 blue,20
+green,20 yellow
+> and 20 pink.the least no of balls to be taken out to
+get two balls of
+> same colour...
+3> A men passed 1/6th of his life in childhood,1/12th
+in youth & 1/7th
+as a bachelor;5 yrs after his marriage a son was born
+who died 4 yrs
+before his father at half his final age.what is age of
+ 
+man. (language different )
+4>
+A thief broke into jwellery shop and thought of
+taking all the
+diamonds.but while leaving ,came to his better senses
+and thought of taking
+half with him.but he could not resist and took 2 more
+extra and left.a
+2nd thief came and took half of the remaining and 2
+more.a 3rd thief came
+and took the remaining and 2 more.then 4th thief came
+did the same.5th
+thief came and there was no more diamond to steal.what
+                                                     
+was the actual
+no. of diamond initially.
+5>
+ABCDEFG each take leave on one of the days (sunday to
+saturday)
+no two take leave on same day.
+conditions
+B takes leave 3 days before G
+D takes leave 2 days after E
+A takes leave immediately after C
+Ftakes leave exactly halfway between B&C on a
+thursaday
+find the days on which A,B ,C,D take leave?
+ 
+ 
+ 
+6>denis's wife dead stays with his niece, smith
+widower with his
+daughter
+john
+with his wife proposed to live together...
+they decided to pool in rs 25 each and the monthly
+expenses turn out to
+be
+92.
+if they splt the remainder equally it comes out to be
+even no. with no
+fraction.how much each got?
+ 
+7>
+SEND
++MORE
+=====
+MONEY find SEND                        
+8> there are three persons BARBER, CLARK & DRAKE
+their wives DOROTHY,LOUISE,BETH
+& their sons ALLEN,HENRY,VICTOR.
+drake is neither louise's husband nor henry's father
+beth is neither clark's wife nor allen's mother
+if allen is son of drake or clark then louise is
+victor's mother
+if louise is clark's wife then dorothy is not allen's
+mother
+find relations?
+ 
+9>
+ATTRACTIVE(a) DELECTABLE(d) & FASCINATING(f) are 3
+beauty queens in
+theisland
+of Imperfection.
+there are 3 tribes PUKKA who speak truth always, WOTTA
+who never speak
+truth
+&
+SUMMA who speak truth or false alternatively (T&F or
+F&T)
+ 
+a: d is summa
+d is more beautiful than f
+ 
+d: f is wotta
+a is pukka
+ 
+f: pukka is least beautiful
+a is not the most beautiful
+find the tribes and the order of beauty?
+ 
+10 >barrons 25-28 analytical exercise section               
+ANSWERS
+========
+1. 40
+2. 6
+3. 84
+4. 60
+5. SUNDAY TUESDAY SAT WED
+6. 2
+7. 9567
+8. BARBER LOUISE ALLEN
+CLARK BETH HENRY
+9. S W P : D A F
+10. A B E C
+ 
+ 
+ESSAYS
+1. ROLE OF GOVERNMENT IN SHAPING FUTURE OF A NATION
+2. WILL INDIA BECOME A GLOBAL POWERHOUSE IN THE 21-ST
+CENTURY.
+ 
+INFOSYS TRICHI 2000
+==================
+1. there are 100 balls in basket.20 red,20 blue,20
+green,20 yellow
+and 20 pink.the least no of balls to be taken out to
+get two balls of
+same colour...
+ans: 6
+3 marks
+ 
+2.a rectangular sheet is there.it is cut 2 inches from
+all the sides
+to form a cube of 600 cubic meters what is the
+original dimension of           
+the sheet.
+4 marks
+ 
+3.two men A and B starts from points p and q.towards
+each other.they
+meet at the point where A has covered 18 meters more
+then B .then
+A took 13 and half hrs and B took 24 hrs to reach the
+the other end
+what is the total distance between p and q.
+ans:126
+this was the 1 st crack question.
+ 
+4.major vikram roy choudhary(param vir chakra 1948)
+died at the age,
+one 39 th of the year he was born.when did he born.
+ans :1911
+this was the main crack question
+ 
+5.4 cards are there.no cards have same colour on both
+sides.they are
+placed on table with only front face to see.order red
+green red
+blue.A B C D are four players.they lift the cards to
+see the other
+face......
+this problem is in the previous paper.check this one.
+ 
+6.ALPHA BETA GYAMA EPSILON THETA problem...some
+conditions...u have to
+arrange them....this one is also in previous
+paper.like A B C D E.
+ANS: ABECD
+ 
+7.WALKIE TALKIE PROBLEM...from GEORGE SUMMERS
+THIS ONE ALSO YOU WILL GET IN PREVIOUS PAPER.
+marks 8
+ 
+8.ONE clock problem. due to summer the clocks were 1
+hr slow.
+it takes 1 sec between two intervals of clock tick.it
+took 10 sec
+for a clock to click and A SAYS TO B that we will meet
+after 11 hrs
+from now.at what time they will meet.
+ans: 10pm
+ 
+9.A B C D four thiefs are there.they made some
+statements.out of that
+only two were correct.
+THIS ONE ALSO a previous year problem.
+ 
+10. ONE ANALYTICAL PROBLEM WAS THERE..I CAN'T
+REMEMBER....
+ 
+ESSAYS:
+1.INTERNET REVOLUTION
+2.ROLE OF MEDIA IN YOUTH DEVELOPEMENT.
+ 
+ 
+> INFOSYS 19TH JULY REC TRICHY( the lang is not exact)
+hi mandeep,
+ye le paper.aish kar.
+bye
+ 
+ 
+> 1) THERE ARE THREE goats tied in the corners of an
+eql triangle
+>with an area of 120 m2.each goat grazes the full area
+which only it                                          
+>can cover, half of the area which can be covered by
+two goats and a
+>third of the area which can be covered by all the
+gaots.what is the
+>total area that they eat.
+>
+>2) there are three tribes-agori,dravid,mast
+>an agori woman cannot marry dravid male, and a dravid
+female cannot
+>marry mast male.
+>
+>then there is a 4 ques series on this condition.
+(easy 8 marks)
+>
+>3) A says-i ve got either red or blue card
+> b says -i have no green card
+> c sas i ve either red or green card
+> d says i ve either blue or green
+> these above conditions are of their resp hidden
+cards
+> their resp open cards are ---(dont remember)
+>
+>
+> there are two each of red blue green
+> some people may tell false.
+> who got which color as hidden.(solvable. not very
+easy but can be
+>done.answer=yellow,yellow,blue , green)
+>
+>4) this problem is about two diff temp scales. x in 1
+=y of other
+>and x1 of 1 =y1 of other. find at what time they
+coincide.
+>(pathetic. take y=mx +c .put the values and get
+ans=52.5 )                                               
+5)1,2,3,4 . find sum of all the numbers which can be
+formed by
+>these. repitition allowed. eg 1,...11,121,1234,4444
+>(dont remember the ans.solve it. kaafi bada
+hai.8marks)
+>
+>6)there are 100 bulbs and their corr switches.
+>all the bulbs are initially on.
+>then the status of bulbs divisible by 2 is changed(
+ie on-->off &
+>off-->on)
+>same is done for all the nos till 100. find how many
+bulbs are on in
+>the end.(ans. all perfect squares. not sure. solve
+and check)
+>
+>7) a 2 mark problem.easy. three boys--- may speak
+false or truth.
+>just remember this the answer because no one
+remembers the ststements
+>exactly.(ans =grey color of the horse)
+>
+> 8) there are some couples and their chldren.
+> some facts about them
+> families<girls
+> adults>boys
+> children >adults
+> boys> girls
+> there are no childless couples.
+> each girl has atmost one sis and atleast 1 bro
+                         
+

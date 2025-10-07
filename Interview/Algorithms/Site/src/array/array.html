@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>1D Array</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+      <pre>
+        <code class="language-java">
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class OneDApp {
+    public static void main(String[] args) {
+        // Declaration
+        int[] a1 = new int[4];
+
+        // Initialization
+        a1[0] = 10;
+        a1[1] = 20;
+        a1[2] = 30;
+        a1[3] = 40;
+
+        // Accessing elements in an array
+        for (int i = 0; i < a1.length; i++) {
+            System.out.println(a1[i]);
+        }
+
+        // Update value of element at index 3
+        a1[3] = 900;
+
+        // Accessing elements in the updated array
+        System.out.println("Updated Array: " + IntStream.of(a1).mapToObj(Integer::toString)
+                .collect(Collectors.joining(", ")));
+
+        // Declare & Initialize
+        int[] myArray2 = { 13, 14, 15 };
+        int[] myArray3 = IntStream.range(1, 11).toArray();
+        int[] myArray4 = IntStream.rangeClosed(1, 10).toArray();
+        int[] myArray5 = IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).toArray();
+    }
+}
+
+// Output:
+10
+20
+30
+40
+Updated Array: 10, 20, 30, 900
+        </code>
+      </pre>
+
+      <pre>
+        <code class="language-java">
+public class TwoDApp {
+    public static void main(String[] args) {
+        // Declaration
+        int[][] a1 = new int[5][];
+
+        // Initialization
+        for (int i = 0; i < a1.length; i++) {
+            a1[i] = new int[10];
+            for (int j = 0; j < a1[i].length; j++) {
+                a1[i][j] = i;
+            }
+        }
+
+        // Access
+        for (int i = 0; i < a1.length; i++) {
+            for (int j = 0; j < a1[i].length; j++) {
+                System.out.print(a1[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // Declaration & Intialization
+        int marks[][] = { { 50, 60, 55, 67, 70 }, { 62, 65, 70, 70, 81 }, { 72, 66, 77, 80, 69 } };
+        for (int i = 0; i < marks.length; i++) {
+            for (int j = 0; j < marks[i].length; j++) {
+                System.out.print(marks[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+Output:
+0 0 0 0 0 0 0 0 0 0 
+1 1 1 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 2 2 
+3 3 3 3 3 3 3 3 3 3 
+4 4 4 4 4 4 4 4 4 4 
+50 60 55 67 70 
+62 65 70 70 81 
+72 66 77 80 69
+        </code>
+    </pre>        
+    </body>
+</html>

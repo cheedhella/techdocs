@@ -1,0 +1,50 @@
+IBM C questions 1999
+
+The IBM technical question paper consisted of three sections,
+the first was a compulsory C-Section consisting of 20 questions,
+the other two were on Windows internals and UNIX (15 questions each),
+the candidates were to solve any one of the last two sections. 
+
+
+The C-Section had the following text before it:
+
+Assume the following programs are written in ANSI C, where,  
+        Size of  Char = 1 byte.     
+        Size of  Int = 4 bytes.
+        Size of  Double = 8 bytes.
+        Size of  Long Double = 10 Bytes.
+Do not make any assumptions about the underlying platform
+
+1.   What is the output of the following program:
+
+# define MACRO(X) (X)*(X)
+
+void main()  
+{
+    printf("%d",4/MACRO(2));
+}
+
+----------------------------------------------------------
+
+IBM Objective questions 1999
+
+The IBM technical question paper consisted of three sections,
+the first was a compulsory C-Section consisting of 20 questions,
+the other two were on Windows internals and UNIX (15 questions each),
+the candidates were to solve any one of the last two sections. 
+
+The following questions are from the UNIX section
+
+1. What will be the output of the following
+$ sort employee > list 2> error. 
+
+2. What is a Zombie process?
+
+3. Which of the following is used to convert a binary executable to a process:   
+(a) execl()
+(b) execv()
+(c) execpv()
+(d) execve()
+All of the above.
+
+

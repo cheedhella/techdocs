@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Given an array of integers, find 2 pairs such their sum is equal?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        Problem: Given an array of integers, find 2 pairs such their sum is equal? a + b = c + d
+
+        <pre>
+            <code class="language-java">
+import java.util.HashMap;
+import java.util.Map;
+
+public class FindPairApp {
+
+    // Take a HashMap to store <Sum, Pair>;
+    // Sum each number in the array with every other number and check hashmap to see if there already exists a pair with that sum;
+    // Time Complexity: O(n^2);
+    private static String findPair(int[] data) {
+        Map<Integer, int[]> sumMap = new HashMap<>();
+        for (int i = 0; i < data.length; i++) {
+            for (int j = i + 1; j < data.length; j++) {
+                int sum = data[i] + data[j];
+                if (sumMap.containsKey(sum)) {
+                    int[] anotherPair = sumMap.get(sum);
+                    return "(" + data[i] + "," + data[j] + ")" + "," + "(" + anotherPair[0] + ","
+                            + anotherPair[1] + ")";
+                }
+                else {
+                    sumMap.put(sum, new int[] { data[i], data[j] });
+                }
+            }
+        }
+        return "Couldn't find a pair!";
+    }
+
+    public static void main(String[] args) {
+        int[] arr = { 3, 4, 7, 1, 12, 9 };
+        System.out.println(findPair(arr));
+    }
+}
+
+Output:
+(7,9),(4,12)
+
+            </code>
+        </pre>
+    </body>
+</html>

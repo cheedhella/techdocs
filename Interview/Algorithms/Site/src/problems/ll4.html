@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>How to merge 2 sorted linked lists?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="question"><strong>How to merge 2 sorted linked lists?</strong> It is used during Merge Sort;</div>
+            <div class="answer">
+                <ul>
+                    <li>Traverse the list from start to end;</li>
+                    <li>If the head node of second list lies in between two nodes of the first list, insert it there and make the next node of second list the head;</li>
+                    <li>Continue this until there is no node left in both lists, i.e. both the lists are traversed;</li>
+                    <li>If the first list has reached end while traversing, point the next node to the head of second list;</li>
+                </ul>
+
+                <pre>
+                    <code class="language-java">
+h1 -> head of l1; h2 -> head of l2; h -> head of new list;
+if(h1.value < h2.value) // Insert l2 into l1
+    h = h1; prev1 = h1; next1 = h1.next; cur2 = h2;
+else 		// Insert l1 into l2
+    h = h2; prev1 = h2; next1 = h2.next; cur2 = h1;
+
+while curr2 != null && next1 != null
+    if(t.value > prev1.value and t.value < next1.value) {
+        // insert t into l1, after prev1;
+        t.next = next1;
+        prev1.next = t;
+        cur2 = cur2.next; // take next node!
+    } else {
+        prev1 = next1;
+        next1 = next1.next;
+    }
+    if(curr2 == null) {
+        return; // Merging is complete!
+    }
+    if(curr2 != null && next1 == null) {
+    while(curr2 != null) {
+        next1.next = curr2;
+        cur2 = cur2.next;
+        next1 = cur2;
+	}
+}        
+                    </code>
+                </pre>
+                Complexity: It takes O(N) time and O(1) space for lists, O(N) space for arrays;
+            </div>
+    </body>
+</html>

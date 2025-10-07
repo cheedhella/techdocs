@@ -1,0 +1,1336 @@
+
+Material for programs on DataStructues Using C
+
+//=========List of programs available in this notepad
+
+1.	Stack using Arrays
+2.	Queue Using Arrays
+3.	Circullar Queue using Arrays
+4.	Single Linked List Implementation
+5.	Stack Implementation Using Linked List
+6.  	Double Linked List Implementation
+7.	Stack Implementation Using Double Linked List
+8.	Queue Implementation Using Double Linked List
+
+9.	Circullar List Implementation Using Single Linked List
+
+
+
+10.	Implementation of Binary Search Tree with Following Features
+1.	inserting an element into Binary search tree
+2.	deleting an element from Binary search tree
+3.	printing elements in Pre Order 
+4.	printing elements in In Order 
+5.	printing elements in Post Order
+
+11.	Implemetation of Graph traversals 
+1.	BFS  (Breadth First Ssearch)
+2.	DFS (Depth First Search)
+
+
+12.
+1.	Implementation of Sequential Searching texhnique
+2.	Implenetation of Binary searching Technique
+
+
+13. Implementaion of Bubble Sort
+14. Implementation of Inserting Sort
+
+15. Implemention of Selection Sort
+16. Implementation of Quick Sort
+
+17. Implementation of Heap Sort
+
+
+//=============================================================================
+1.	Stack using Arrays
+
+#include<stdio.h>
+#include<conio.h>
+viod push();
+void pop();
+int menu();
+struct stack
+{
+	int top;
+   	int element[100];
+};
+struct stack s;
+void main()
+{
+	int chioce;
+	s.top=-1;
+	clrscr();
+	while(1)
+	{
+	        chioce=menu();
+		switch(chioce)
+		{
+			case 1: push();
+    				break;
+			case 2: pop();
+				break;
+			case 3: exit();
+			default: printf("\n\tInvalid chioce");
+		}//switch()
+	}//while()
+	getch();
+}//main()
+menu()
+{	
+	int ch;
+	printf("\n\t\t\tSTACK MENU");
+	printf("\n\n\t1.  to push\n\t2.to poop\n\t3.to quit");
+	printf("\n\tEnter u r chioce");
+	scanf("%d",&ch);
+	return(ch);
+}
+
+
+
+
+
+push()
+{
+	int ele;
+	if(s.top==99)
+	{
+		printf("\n\tStack is Overflow");
+	}//if()
+	else
+           {
+                       printf("\n\tEnter element");
+	           scanf("%d",&ele); 
+	           s.element[++s.top]=ele;
+            }//else
+}
+pop()
+{
+	if(s.top==-1)
+	{
+		printf("\n\tStack is Under flow");
+	}//if()
+	else
+	printf("The poped element is %d",s.element[s.top--]);
+}	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//=====================================================================================
+
+
+
+
+
+2.	Queue Using Arrays
+
+#include<stdio.h>
+#include<process.h>
+#include<conio.h>
+#define MAX 50
+int menu(void);
+struct queue
+{
+    int items[MAX];
+    int front;
+    int rear;
+};
+void  main()
+{
+    struct queue q={{0},0,-1};
+    int ch;
+    clrscr();
+    while(1)
+   {
+	ch=menu();
+            if(ch==3)
+		exit(0);
+	else
+	    switch(ch)
+	    {
+		case 1:    if(q.rear==MAX-1)
+			    	printf("\n\tQ is full");
+			    else
+			    {
+				printf("\n\tEnetr elemet");
+                                                scanf("%d",&q.items[++q.rear]);
+			    }//else
+			    break;
+		case 2:     if(q.front>q.rear)
+				printf("\n\tQ is empty");
+			     else
+				printf("the element  is  : %d ",q.items[q.front++]);
+		default:    printf("\n\tInvalid choice");
+                }//switch()
+	}//wile(0
+}//main()
+int menu()
+{
+		int ch;
+		printf("\n\tQ menu");
+		printf("\n\t1..add\n\t2..delete\n\t3..exit");
+		printf("\n\tEnter u r chioce");
+		scanf("%d",&ch);
+		return(ch);
+}
+//===========================================================================
+
+3.	Circullar Queue using Arrays
+#include<stdio.h>
+#include<conio.h>
+#include<process.h>
+#define MAX 50
+struct CQueue
+{
+	int items[MAX];
+	int front;
+	int rear;
+};
+void main()
+{
+	int ele;
+	struct CQueue cq={{0},-1,-1};
+	int chioce;
+	clrscr();
+	while(1)
+	{
+		chioce=menu();
+		switch(chioce)
+		{
+			case 1: if((cq.rear==MAX-1&&cq.front==0)||(cq.rear==cq.front-1))
+					printf("\n\tCQ is full");
+				else
+				{
+					printf("\n\tEnter Element");
+					scanf("%d",&ele);
+					insert(&cq,ele);
+				}//else
+				break;
+			case 2: if((cq.rear==0&&cq.front==MAX-1)||(cq.front==cq.rear+1))
+						printf("\n\tCQ is empty");
+					else
+					{
+						ele=delete(&cq);
+						printf("\n\tRemoved element is  %d",ele);
+					}
+					break;
+			case 3: if((cq.rear==0&&cq.front==MAX-1)||(cq.front==cq.rear+1))
+						printf("\n\tCQ if empty");
+					else
+						display(&cq);
+					break;
+			case 4: exit(0);
+					break;
+			default:
+						printf("\n\tInvalid Chioce");
+		}
+	}
+}
+
+
+
+insert(struct CQueue *cq,int ele)
+{
+	if(cq->rear==-1)
+		cq->front++;
+	if(cq->rear==MAX-1)
+		cq->rear=0;
+	else
+		cq->rear++;
+	cq->items[cq->rear]=ele;
+}
+int delete(struct CQueue *cq)
+{
+	int ele;
+	ele=cq->items[cq->front];
+	if(cq->front==MAX-1)
+		cq->front=0;
+	else
+		cq->front++;
+	return(ele);
+}
+display(struct CQueue *cq)
+{
+	int i;
+	if(cq->front<=cq->rear)
+	{
+		for(i=cq->front;i<=cq->rear;i++)
+			printf("\t%d",cq->items[i]);
+	}
+	else
+	{
+		for(i=cq->front;i<MAX-1;i++)
+			printf("\t%d",cq->items[i]);
+		for(i=0;i<=cq->rear;i++)
+			printf("\t%d",cq->items[i]);
+	}
+}
+int menu()
+{
+	int chioce;
+	printf("\n\tCQ menu");
+	printf("\n\t1.insert\n\t2. delete\n\t3.display\n\t4. to quit");
+	printf("\n\tEnter U r chioce");
+	scanf("%d",&chioce);
+	return(chioce);
+}
+
+
+
+
+
+//=====================================================================================
+
+
+10.	Implementation of Binary Search Tree with Following Features
+
+1.	inserting an element into Binary search tree
+2.	deleting an element from Binary search tree
+3.	printing elements in Pre Order 
+4.	printing elements in In Order 
+5.	printing elements in Post Order
+
+/*Insertion ,Deletion and Traversal in Binary Search Tree*/
+# include <stdio.h>
+# include <malloc.h>
+
+struct node
+{
+	int info;
+	struct node *lchild;
+	struct node *rchild;
+}*root;
+
+main()
+{
+	int choice,num;
+	root=NULL;
+	while(1)
+	{
+		printf("\n");
+		printf("1.Insert\n");
+		printf("2.Delete\n");
+		printf("3.Inorder Traversal\n");
+		printf("4.Preorder Traversal\n");
+		printf("5.Postorder Traversal\n");
+		printf("6.Display\n");
+		printf("7.Quit\n");
+		printf("Enter your choice : ");
+		scanf("%d",&choice);
+
+		switch(choice)
+		{
+		 case 1:
+			printf("Enter the number to be inserted : ");
+			scanf("%d",&num);
+			insert(num);
+			break;
+		 case 2:
+			printf("Enter the number to be deleted : ");
+			scanf("%d",&num);
+			del(num);
+			break;
+		 case 3:
+			inorder(root);
+			break;
+
+		 case 4:
+			preorder(root);
+			break;
+		 case 5:
+			postorder(root);
+			break;
+		 case 6:
+			display(root,1);
+			break;
+		 case 7:
+			exit();
+		 default:
+			printf("Wrong choice\n");
+		}/*End of switch */
+	}/*End of while */
+}/*End of main()*/
+
+
+
+
+
+
+
+find(int item,struct node **par,struct node **loc)
+{
+	struct node *ptr,*ptrsave;
+
+	if(root==NULL)  /*tree empty*/
+	{
+		*loc=NULL;
+		*par=NULL;
+		return;
+	}
+	if(item==root->info) /*item is at root*/
+	{
+		*loc=root;
+		*par=NULL;
+		return;
+	}
+	/*Initialize ptr and ptrsave*/
+	if(item<root->info)
+		ptr=root->lchild;
+	else
+		ptr=root->rchild;
+	ptrsave=root;
+
+	while(ptr!=NULL)
+	{
+		if(item==ptr->info)
+		{       *loc=ptr;
+			*par=ptrsave;
+			return;
+		}
+		ptrsave=ptr;
+
+
+
+
+		if(item<ptr->info)
+			ptr=ptr->lchild;
+		else
+			ptr=ptr->rchild;
+	 }/*End of while */
+	 *loc=NULL;   /*item not found*/
+	 *par=ptrsave;
+}/*End of find()*/
+
+
+
+
+
+
+
+
+
+nsert(int item)
+{       struct node *tmp,*parent,*location;
+	find(item,&parent,&location);
+	if(location!=NULL)
+	{
+		printf("Item already present");
+		return;
+	}
+
+	tmp=(struct node *)malloc(sizeof(struct node));
+	tmp->info=item;
+	tmp->lchild=NULL;
+	tmp->rchild=NULL;
+
+	if(parent==NULL)
+		root=tmp;
+	else
+		if(item<parent->info)
+			parent->lchild=tmp;
+		else
+			parent->rchild=tmp;
+}/*End of insert()*/
+
+del(int item)
+{
+	struct node *parent,*location;
+	if(root==NULL)
+	{
+		printf("Tree empty");
+		return;
+	}
+
+	find(item,&parent,&location);
+	if(location==NULL)
+	{
+		printf("Item not present in tree");
+		return;
+	}
+
+
+
+
+	if(location->lchild==NULL && location->rchild==NULL)
+		case_a(parent,location);
+	if(location->lchild!=NULL && location->rchild==NULL)
+		case_b(parent,location);
+	if(location->lchild==NULL && location->rchild!=NULL)
+		case_b(parent,location);
+	if(location->lchild!=NULL && location->rchild!=NULL)
+		case_c(parent,location);
+	free(location);
+}/*End of del()*/
+
+case_a(struct node *par,struct node *loc )
+{
+	if(par==NULL) /*item to be deleted is root node*/
+		root=NULL;
+	else
+		if(loc==par->lchild)
+			par->lchild=NULL;
+		else
+			par->rchild=NULL;
+}/*End of case_a()*/
+
+case_b(struct node *par,struct node *loc)
+{
+	struct node *child;
+
+	/*Initialize child*/
+	if(loc->lchild!=NULL) /*item to be deleted has lchild */
+		child=loc->lchild;
+	else                /*item to be deleted has rchild */
+		child=loc->rchild;
+
+	if(par==NULL )   /*Item to be deleted is root node*/
+		root=child;
+	else
+		if( loc==par->lchild)   /*item is lchild of its parent*/
+			par->lchild=child;
+		else                  /*item is rchild of its parent*/
+			par->rchild=child;
+}/*End of case_b()*/
+
+
+case_c(struct node *par,struct node *loc)
+{
+	struct node *ptr,*ptrsave,*suc,*parsuc;
+
+	/*Find inorder successor and its parent*/
+	ptrsave=loc;
+	ptr=loc->rchild;
+	while(ptr->lchild!=NULL)
+	{
+		ptrsave=ptr;
+		ptr=ptr->lchild;
+	}
+	suc=ptr;
+	parsuc=ptrsave;
+
+	if(suc->lchild==NULL && suc->rchild==NULL)
+		case_a(parsuc,suc);
+	else
+		case_b(parsuc,suc);
+
+	if(par==NULL) /*if item to be deleted is root node */
+		root=suc;
+	else
+		if(loc==par->lchild)
+			par->lchild=suc;
+		else
+			par->rchild=suc;
+
+	suc->lchild=loc->lchild;
+	suc->rchild=loc->rchild;
+}/*End of case_c()*/
+
+preorder(struct node *ptr)
+{
+	if(root==NULL)
+	{
+		printf("Tree is empty");
+		return;
+	}
+	if(ptr!=NULL)
+	{
+		printf("%d  ",ptr->info);
+		preorder(ptr->lchild);
+		preorder(ptr->rchild);
+	}
+}/*End of preorder()*/
+
+
+inorder(struct node *ptr)
+{
+	if(root==NULL)
+	{
+		printf("Tree is empty");
+		return;
+	}
+	if(ptr!=NULL)
+	{
+		inorder(ptr->lchild);
+		printf("%d  ",ptr->info);
+		inorder(ptr->rchild);
+	}
+}/*End of inorder()*/
+
+postorder(struct node *ptr)
+{
+	if(root==NULL)
+	{
+		printf("Tree is empty");
+		return;
+	}
+	
+
+      if(ptr!=NULL)
+	{
+		postorder(ptr->lchild);
+		postorder(ptr->rchild);
+		printf("%d  ",ptr->info);
+	}
+}/*End of postorder()*/
+
+display(struct node *ptr,int level)
+{
+	int i;
+	if ( ptr!=NULL )
+	{
+		display(ptr->rchild, level+1);
+		printf("\n");
+		for (i = 0; i < level; i++)
+			printf("    ");
+		printf("%d", ptr->info);
+		display(ptr->lchild, level+1);
+	}/*End of if*/
+}/*End of display()*/
+
+
+
+//=================================================================================
+
+
+
+
+11.	Implemetation of Graph traversals 
+1.	BFS  (Breadth First Ssearch)
+2.	DFS (Depth Firct Search)
+
+
+/* Program for traversing a graph through BFS and DFS */
+#include<stdio.h>
+#define MAX 20
+
+typedef enum boolean{false,true} bool;
+int adj[MAX][MAX];
+bool visited[MAX];
+int n;    /* Denotes number of nodes in the graph */
+main()
+{
+	int i,v,choice;
+
+	create_graph();
+	while(1)
+	{
+		printf("\n");
+		printf("1. Adjacency matrix\n");
+		printf("2. Depth First Search using stack\n");
+		printf("3. Depth First Search through recursion\n");
+		printf("4. Breadth First Search\n");
+		printf("5. Adjacent vertices\n");
+		printf("6. Components\n");
+		printf("7. Exit\n");
+		printf("Enter your choice : ");
+		scanf("%d",&choice);
+
+		switch(choice)
+		{
+		 case 1:
+			printf("Adjacency Matrix\n");
+			display();
+			break;
+		 case 2:
+			printf("Enter starting node for Depth First Search : ");
+			scanf("%d",&v);
+			for(i=1;i<=n;i++)
+				visited[i]=false;
+			dfs(v);
+			break;
+		 case 3:
+			printf("Enter starting node for Depth First Search : ");
+			scanf("%d",&v);
+			for(i=1;i<=n;i++)
+				visited[i]=false;
+			dfs_rec(v);
+			break;
+		 case 4:
+			printf("Enter starting node for Breadth First Search : ");
+			scanf("%d", &v);
+			for(i=1;i<=n;i++)
+				visited[i]=false;
+			bfs(v);
+			break;
+		 case 5:
+			printf("Enter node to find adjacent vertices : ");
+			scanf("%d", &v);
+			printf("Adjacent Vertices are : ");
+			adj_nodes(v);
+			break;
+		 case 6:
+			components();
+			break;
+		 case 7:
+			exit(1);
+		 default:
+			printf("Wrong choice\n");
+			break;
+		 }/*End of switch*/
+	}/*End of while*/
+}/*End of main()*/
+
+create_graph()
+{
+	int i,max_edges,origin,destin;
+
+	printf("Enter number of nodes : ");
+	scanf("%d",&n);
+	max_edges=n*(n-1);
+
+	for(i=1;i<=max_edges;i++)
+	{
+		printf("Enter edge %d( 0 0 to quit ) : ",i);
+		scanf("%d %d",&origin,&destin);
+
+		if((origin==0) && (destin==0))
+			break;
+
+		if( origin > n || destin > n || origin<=0 || destin<=0)
+		{
+			printf("Invalid edge!\n");
+			i--;
+		}
+		else
+		{
+			adj[origin][destin]=1;
+		}
+	}/*End of for*/
+}/*End of create_graph()*/
+
+display()
+{
+	int i,j;
+	for(i=1;i<=n;i++)
+	{
+		for(j=1;j<=n;j++)
+			printf("%4d",adj[i][j]);
+		printf("\n");
+	}
+}/*End of display()*/
+
+dfs_rec(int v)
+{
+	int i;
+	visited[v]=true;
+	printf("%d ",v);
+	for(i=1;i<=n;i++)
+		if(adj[v][i]==1 && visited[i]==false)
+			dfs_rec(i);
+}/*End of dfs_rec()*/
+
+
+
+
+dfs(int v)
+{
+	int i,stack[MAX],top=-1,pop_v,j,t;
+	int  ch;
+
+	top++;
+	stack[top]=v;
+	while (top>=0)
+	{
+		pop_v=stack[top];
+		top--;                      /*pop from stack*/
+		if( visited[pop_v]==false)
+		{
+			printf("%d ",pop_v);
+			visited[pop_v]=true;
+		}
+		else
+			continue;
+
+		for(i=n;i>=1;i--)
+		{
+			if( adj[pop_v][i]==1 && visited[i]==false)
+			{
+				top++;    /* push all unvisited neighbours of pop_v */
+				stack[top]=i;
+			}/*End of if*/
+		}/*End of for*/
+	}/*End of while*/
+}/*End of dfs()*/
+
+bfs(int v)
+{
+	int i,front,rear;
+	int que[20];
+	front=rear= -1;
+
+	printf("%d ",v);
+	visited[v]=true;
+	rear++;
+	front++;
+	que[rear]=v;
+
+	while(front<=rear)
+	{
+		v=que[front];	 /* delete from queue */
+		front++;
+		
+
+
+
+
+
+for(i=1;i<=n;i++)
+		{
+			/* Check for adjacent unvisited nodes */
+			if( adj[v][i]==1 && visited[i]==false)
+			{
+				printf("%d ",i);
+				visited[i]=true;
+				rear++;
+				que[rear]=i;
+			 }
+		}
+	}/*End of while*/
+}/*End of bfs()*/
+
+adj_nodes(int v)
+{
+	int i;
+	for(i=1;i<=n;i++)
+	if(adj[v][i]==1)
+		printf("%d ",i);
+	printf("\n");
+}/*End of adj_nodes()*/
+
+components()
+{
+	int i;
+	for(i=1;i<=n;i++)
+		visited[i]=false;
+	for(i=1;i<=n;i++)
+	{
+		if(visited[i]==false)
+			dfs_rec(i);
+	}
+	printf("\n");
+}/*End of components()*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+//==================================================================================
+
+
+12.	Implementation of Sequential Searching texhnique
+
+
+/*Write a program for sequential searching*/
+# include<stdio.h>
+
+main()
+{
+	int arr[20],n,i,item;
+	printf("How many elements you want to enter in the array : ");
+	scanf("%d",&n);
+
+	for(i=0; i < n;i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d", &arr[i]);
+	}
+	printf("Enter the element to be searched : ");
+	scanf("%d",&item);
+	for(i=0;i < n;i++)
+	{
+		if(item == arr[i])
+		{
+			printf("%d found at position %d\n",item,i+1);
+			break;
+		}
+	}/*End of for*/
+	if(i == n)
+		printf("Item %d not found in array\n",item);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//====================================================================================
+
+
+
+
+
+12. Implenetation of Binary searching Technique
+
+/*Program for binary search*/
+#include <stdio.h>
+
+main()
+{
+	int arr[20],start,end,middle,n,i,item;
+
+	printf("How many elements you want to enter in the array : ");
+	scanf("%d",&n);
+	for(i=0; i < n; i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d",&arr[i]);
+	}
+	printf("Enter the element to be searched : ");
+	scanf("%d",&item);
+	start=0;
+	end=n-1;
+	middle=(start+end)/2;
+	while(item != arr[middle] && start <= end)
+	{
+		if(item > arr[middle])
+			start=middle+1;
+		else
+			end=middle-1;
+		middle=(start+end)/2;
+	}
+	if(item==arr[middle])
+		printf("%d found at position %d\n",item,middle+1);
+	if(start>end)
+		printf("%d not found in array\n",item);
+}/*End of main()*/
+
+
+
+
+
+
+
+
+
+
+//==========================================================================
+
+
+
+
+
+13. Implementaion of Bubble Sort
+
+/* Program of sorting using bubble sort */
+#include <stdio.h>
+#define MAX 20
+main()
+{
+	int arr[MAX],i,j,k,temp,n,xchanges;
+	printf("Enter the number of elements : ");
+	scanf("%d",&n);
+	for (i = 0; i < n; i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d",&arr[i]);
+	}
+	printf("Unsorted list is :\n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	 printf("\n");
+
+	/* Bubble sort*/
+	for (i = 0; i < n-1 ; i++)
+	{
+		xchanges=0;
+		for (j = 0; j <n-1-i; j++)
+		{
+			if (arr[j] > arr[j+1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j+1];
+				arr[j+1] = temp;
+				xchanges++;
+			}/*End of if*/
+		}/*End of inner for loop*/
+		if(xchanges==0) /*If list is sorted*/
+			break;
+		printf("After Pass %d elements are :  ",i+1);
+		for (k = 0; k < n; k++)
+			printf("%d ", arr[k]);
+		printf("\n");
+	}/*End of outer for loop*/
+
+	printf("Sorted list is :\n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+}/*End of main()*/
+
+
+//==============================================================================
+
+
+14. Implementation of Inserting Sort
+
+/* Program of sorting using insertion sort */
+#include <stdio.h>
+#define MAX 20
+
+main()
+{
+	int arr[MAX],i,j,k,n;
+	printf("Enter the number of elements : ");
+	scanf("%d",&n);
+	for (i = 0; i < n; i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d", &arr[i]);
+	}
+	printf("Unsorted list is :\n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+	/*Insertion sort*/
+	for(j=1;j<n;j++)
+	{
+		k=arr[j]; /*k is to be inserted at proper place*/
+		for(i=j-1;i>=0 && k<arr[i];i--)
+			arr[i+1]=arr[i];
+		arr[i+1]=k;
+		printf("Pass %d, Element inserted in proper place: %d\n",j,k);
+		for (i = 0; i < n; i++)
+			printf("%d ", arr[i]);
+		printf("\n");
+	}
+	printf("Sorted list is :\n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+}/*End of main()*/
+
+
+
+
+
+
+
+
+
+
+//=================================================================================
+
+
+
+15. Implemention of Selection Sort
+
+/*Program of sorting using selection sort*/
+#include <stdio.h>
+#define MAX 20
+
+main()
+{
+	int arr[MAX], i,j,k,n,temp,smallest;
+	printf("Enter the number of elements : ");
+	scanf("%d",&n);
+	for (i = 0; i < n; i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d", &arr[i]);
+	}
+	printf("Unsorted list is : \n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+	/*Selection sort*/
+	for(i = 0; i< n - 1 ; i++)
+	{
+		/*Find the smallest element*/
+		smallest = i;
+		for(k = i + 1; k < n ; k++)
+		{
+			if(arr[smallest] > arr[k])
+				smallest = k ;
+		}
+		if( i != smallest )
+		{
+			temp = arr [i];
+			arr[i] = arr[smallest];
+			arr[smallest] = temp ;
+		}
+		printf("After Pass %d elements are :  ",i+1);
+		for (j = 0; j < n; j++)
+			printf("%d ", arr[j]);
+		printf("\n");
+	}/*End of for*/
+	printf("Sorted list is : \n");
+	for (i = 0; i < n; i++)
+		printf("%d ", arr[i]);
+	printf("\n");
+}/*End of main()*/
+
+
+//=====================================================================================
+
+
+
+16. Implementation of Quick Sort
+
+
+/*Program of sorting using quick sort through recursion*/
+#include<stdio.h>
+#define MAX 30
+
+enum bool { FALSE,TRUE };
+main()
+{
+	int array[MAX],n,i;
+	printf("Enter the number of elements : ");
+	scanf("%d",&n);
+
+	for(i=0;i<n;i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d",&array[i]);
+	}
+
+	printf("Unsorted list is :\n");
+	display(array,0,n-1);
+	printf("\n");
+
+	quick(array,0,n-1);
+
+	printf("Sorted list is :\n");
+	display(array,0,n-1);
+	printf("\n");
+
+}/*End of main() */
+
+quick(int arr[],int low,int up)
+{
+	int piv,temp,left,right;
+	enum bool pivot_placed=FALSE;
+	left=low;
+	right=up;
+	piv=low; /*Take the first element of sublist as piv */
+
+	if(low>=up)
+		return;
+	printf("Sublist : ");
+	display(arr,low,up);
+
+	/*Loop till pivot is placed at proper place in the sublist*/
+
+
+
+
+
+
+	while(pivot_placed==FALSE)
+	{
+		/*Compare from right to left  */
+		while( arr[piv]<=arr[right] && piv!=right )
+			right=right-1;
+		if( piv==right )
+		      pivot_placed=TRUE;
+		if( arr[piv] > arr[right] )
+		{
+			temp=arr[piv];
+			arr[piv]=arr[right];
+			arr[right]=temp;
+			piv=right;
+		}
+		/*Compare from left to right */
+		while( arr[piv]>=arr[left] && left!=piv )
+			left=left+1;
+		if(piv==left)
+			pivot_placed=TRUE;
+		if( arr[piv] < arr[left] )
+		{
+			temp=arr[piv];
+			arr[piv]=arr[left];
+			arr[left]=temp;
+			piv=left;
+		}
+	}/*End of while */
+
+	printf("-> Pivot Placed is %d -> ",arr[piv]);
+	display(arr,low,up);
+	printf("\n");
+
+	quick(arr,low,piv-1);
+	quick(arr,piv+1,up);
+}/*End of quick()*/
+display(int arr[],int low,int up)
+{
+	int i;
+	for(i=low;i<=up;i++)
+		printf("%d ",arr[i]);
+}
+
+
+
+
+
+
+
+
+//===========================================================================
+
+
+17. Implementation of Heap Sort
+
+
+/* Program of sorting through heapsort*/
+# include <stdio.h>
+
+int arr[20],n;
+
+main()
+{
+	int i;
+	printf("Enter number of elements : ");
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+	{
+		printf("Enter element %d : ",i+1);
+		scanf("%d",&arr[i]);
+	}
+	printf("Entered list is :\n");
+	display();
+
+	create_heap();
+
+	printf("Heap is :\n");
+	display();
+
+	heap_sort();
+	printf("Sorted list is :\n");
+	display();
+}/*End of main()*/
+
+display()
+{       int i;
+	for(i=0;i<n;i++)
+		printf("%d  ",arr[i]);
+	printf("\n");
+}/*End of display()*/
+
+create_heap()
+{
+	int i;
+	for(i=0;i<n;i++)
+		insert(arr[i],i);
+}/*End of create_heap()*/
+
+
+
+
+
+
+
+
+insert(int num,int loc)
+{
+	int par;
+	while(loc>0)
+	{
+		par=(loc-1)/2;
+		if(num<=arr[par])
+		{
+			arr[loc]=num;
+			return;
+		}
+		arr[loc]=arr[par];
+		loc=par;
+	}/*End of while*/
+	arr[0]=num;
+}/*End of insert()*/
+
+
+heap_sort()
+{
+	int last;
+	for(last=n-1; last>0; last--)
+	   del_root(last);
+}/*End of del_root*/
+
+del_root(int last)
+{
+	int left,right,i,temp;
+	i=0; /*Since every time we have to replace root with last*/
+	/*Exchange last element with the root */
+	temp=arr[i];
+	arr[i]=arr[last];
+	arr[last]=temp;
+
+	left=2*i+1; /*left child of root*/
+	right=2*i+2;/*right child of root*/
+
+while( right < last)
+	{
+		if( arr[i]>=arr[left] && arr[i]>=arr[right] )
+			return;
+		if( arr[right]<=arr[left] )
+		{
+			temp=arr[i];
+			arr[i]=arr[left];
+			arr[left]=temp;
+			i=left;
+		}
+	
+
+
+
+		else
+		{
+			temp=arr[i];
+			arr[i]=arr[right];
+			arr[right]=temp;
+			i=right;
+		}
+		left=2*i+1;
+		right=2*i+2;
+	}/*End of while*/
+	if( left==last-1 && arr[i]<arr[left] )/*right==last*/
+	{
+		temp=arr[i];
+		arr[i]=arr[left];
+		arr[left]=temp;
+	}
+}/*End of del_root*/
+
+
+
+
+
+
+
+
+
+
+
+
+        

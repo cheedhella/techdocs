@@ -1,0 +1,46 @@
+1. It has 20 liters of mixture containing milk and water in the ratio 3:5, replace 4 liters of mixture 
+   with 4 liters of water. What is the final ratio of milk and water?
+
+2. In pure milk if 20% replaced by water and in this again 20% is replaced by water and again 20% is replaced by water 
+   then what is the proportion of milk in that mixture?
+
+3. If a man reduces the selling price of a fan from 400 to 380 his loss increases by 20%. What is the cost price of fan?
+
+4. If all the 6 are replaced by 9, then the algebraic sum of all the numbers from 1 to 100(both inclusive) varies by ?
+
+5. The total no. of numbers that are divisible by 2 or 3 between 100 and 200(both inclusive) are ---?
+
+
+
+
+
+
+
+
+
+
+
+1. 3:7
+
+2. Suppose initially we have 100 ltrs of milk
+  
+   after removing 20% of pure milk we are left wid
+       80ltr pure milk
+       20ltr water
+   after again removing 20% or mixture we are left with
+      80-(20% of 80) = 64 ltr
+      36 ltr of water
+   next xchange
+     64 - (20% of 64) = 51.2ltr
+     rest all is water i.e. 48.8 ltr
+
+4. 330
+
+5. 67
+
+
+
+
+
+
+

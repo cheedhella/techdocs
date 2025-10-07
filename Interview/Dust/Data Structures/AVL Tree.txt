@@ -1,0 +1,74 @@
+. If the node is not a leaf node (that is, is has at least one child), then the node must be swapped with either it's in-order successor or predecessor (based on availability). 
+
+
+# AVL tree, red-black tree, and splay tree, kinds of binary search tree data structures that use rotations to maintain balance.
+If you delete an item from an AVL tree and then insert it back into the tree, will you always get back the original AVL tree? 
+The major advantage of AVL trees is that their height cannot exceed O(log2 n), where n is the number of nodes in the tree.  Prove this.  (Hint: develop a recurrence for the minimum number of nodes in an AVL tree of height h.  
+AVL trees are often compared with red-black trees <http://en.wikipedia.org/wiki/Red-black_trees> because they support the same set of operations and because red-black trees also take <http://en.wikipedia.org/wiki/Big_O_notation>(log n) time for the basic operations. 
+AVL trees perform better than red-black trees for lookup-intensive applications.
+The worst case for AVL trees: Insert: O(log n). Delete: O(log n).
+
+
+deletion:
+find the node to be deleted.
+if(node to be deleted has 2 children) {
+	interchange it with it's inorder successor or predecessor(depending on it's availability) and now delete it.
+	// after interchanging node to be deleted has either only 1 child or 0 childs.
+	}
+ 
+// heights of chilren of a deleted node doesn't change, in any case(deleting nodes either with one child or zero childs)
+// In case deletion, we need to check the balance of each node from the parent of the deleted node to the root even though there exist only one unbalanced at a given time b/c fixing the unbalanced node by rotating may cause any of it's ancestor node to become unbalanced.
+
+if(node to be deleted has 1 child) {
+	make a link b/w it's parent and it's only child and then delete it.
+}
+
+if(node to be deleted has no childs) {
+	delete it directly. 
+}
+
+for each node from the parent of deleted node to root {
+	if the node is unbalanced {
+		
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+if there is some unbalanced node, 
+
+any unbalancing happens, it would happen to some node
+
+
+// so, if deleting a node violates the property of AVL tree, it any node is unbalanced due to deletion, it 
+
+Thus, if a delete causes a violation
+of the AVL Tree height property, this would HAVE to occur
+on some node on the path from the parent of the deleted node
+to the root node.
+
+there may be
+multiple nodes in the delete that need to be rebalanced.
+Technically speaking, at any point in the restructuring
+algorithm ONLY one node will ever be unbalanced. But, what
+may happen is when that node is fixed, it may propogate an
+error to an ancestor node. But, this is NOT a problem because
+our restructuring algorithm goes all the way to the root node.
+
+
+
+
+, the .
+
+
+in-order successor node or its in-order predecessor 

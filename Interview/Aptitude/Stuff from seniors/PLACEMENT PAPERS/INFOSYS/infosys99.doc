@@ -1,0 +1,99 @@
+1.A person says I have a horse ,whose color may be brown ,grey or black.A,B,
+C are given each 
+A) the color is mot black
+B) the color is either grey or brown
+C) the color is brown.
+One of these is at least true and one is wrong .Identify
+Ans.A & B r correct ,C is false grey is the color
+
+2>In a society there are young married couples living in apartments.The 
+couples have children
+
+a) No. of children > no. of adults > no. of boys >no. of girls
+>no of families
+b) No of children in each family is unique.
+c) No of children in one family is greater then no. of 
+children in all others.
+d) in a family every girl has minimum of one brother and a maximum of 
+one sister
+Identify the no of families and the no of children they have
+
+ans.three 2 adults		2 adults		2adults
+         Bro.			Bro.G,G			Bro,Bro,Bro,G,G
+
+3)A+B+C+D=D+E+F+G=G+H+I=17
+
+A=4,and all of them lie betwen 1..9 and have unique values
+find D G
+
+Ans. sum all three eqs,so D+G=6
+	therefore either (4,2) or (5,1) therefore check for 5 and 1
+
+4)in a river a sons & father are rowing upstream.After rowing upstream 
+for a mile the son sees that father's hat has fallen in the river.After 
+rowing for five more minutes ,he tells the father.Then they turn and 
+row & reach the hat at the original starting point in five minutes
+what is the speed of the river?
+
+Ans.6miles /hr
+
+5)A recent murder case centred around 6 men. C,F,G,H,M,W. in that one is
+murderer, a policeman, a witness, a judge and a hangman. the victim had
+died instantly from the effect of a gunshotwound inflicted at close
+range.the witness didn't see the crime committed.but swore to hearing an
+altercation followed by a shot. after a lengthy trial the murderer was
+convicted and sentenced to be hanged to death.
+* M knew both victim and the murderer
+* In court judge asked F to give his acct of shooting
+* W was the last of 6 to see F alive
+* the policeman testified that he picked up G near the place where the
+body was found.
+* M & W never met .
+What is the role each of the four play in the case.
+a) F b) H c) M d) G
+ans F murderer  H victim M policeman G witness
+
+6 ) A,B,C went out empty handed.However when they returned each of them
+had brought along a animal. they were apprehended by the CBI.animals that
+were stolen are horse,mule and camel.the guy who stole the horse always
+speaks the truth, the one who stole the camel always lies.
+1) A says B has stolen the horse.
+2) C says A is lying and b has stolen the mule
+3) B says i haven't stolen anything and A and C are both lying.
+
+Ans: B-Mule,C-horse,A-camel
+
+7) Argentina's football team has 22 players. they have to select a team of
+11. the captain and the goalkeeper are fixed.14 play for European club and
+6 for Argentinian club.
+6 European and 3 argentenian are to be selected.How many ways ?
+
+Ans: 60060
+
+8) the bill for a meal was 2400.they decided to split evenly but two of
+them didn't have money.So the rest had to pay Rs 100 per head extra.How
+many were they ?
+
+Ans: 8
+
+9) There are four grades A,B,C,D
+Jack : all get different grades. if i get A then Lucy gets C
+Jean : if i don't get A, Jack gets C. Jack gets higher grade than Paul.
+Lucy : If i get C, Paul doesn't get B
+Paul : if Lucy gets A, I get B. If Jean doesn get B, I won't either.
+
+All passed. What grades did they all get ?
+
+Ans: B,A,D,C
+
+
+
+
+
+
+
+
+
+
+
+

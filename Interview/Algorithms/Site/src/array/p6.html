@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Re-arrange Positive & Negative Values?</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>Given an array, can you re-arrange its elements in such a way that the negative elements appear at one side and positive elements appear at the other?</li>
+        </ul>
+      <pre>
+        <code class="language-java">
+import java.util.Arrays;
+
+public class P6 {
+    private static void rearrange(int[] data) {
+        int lIndex = 0, rIndex = data.length - 1;
+        while (lIndex < rIndex) {
+            while (data[lIndex] < 0)
+                lIndex++;
+            while (data[rIndex] > 0)
+                rIndex--;
+
+            int temp = data[lIndex];
+            data[lIndex] = data[rIndex];
+            data[rIndex] = temp;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] data = { 10, -1, 20, 4, 5, -9, -6 };
+        rearrange(data);
+        System.out.println("After re-arranging: " + Arrays.toString(data));
+    }
+}
+
+// Output:
+After re-arranging: [-6, -1, 4, -9, 5, 20, 10]
+        </code>
+      </pre>
+
+    </body>
+</html>

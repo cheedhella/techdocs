@@ -1,0 +1,22 @@
+Infosys 2000 -  I.I.T.,Madras
+
+
+1. If 1/4 of the time from midnight plus 1/2 of the time from now to midnight is the present time,then what is the present time ?
+
+2. In a 10 digit number, if the 1st digit number is the number of ones,2nd digit number is the number of twos, and ... so on. 10th digit is the number of zeroes,then find the number
+
+3. A train blows a siren one hour after starting from the station. After that it travels at 3/5th of its speed it reaches the next station 2 hours behind schedule. If it had a problem 50 miles farther from the previous case,it would have reached 40 minutes sooner. Find the distance between the two stations .
+
+4. An army 50 miles long marches at a constant rate. A courier standing at the rear moves forward and delivers the message to the first person and then turns back and reaches the rear of the army as the army completes 50 miles. Find the distance travelled by the courier.
+
+5. A person grows cabbage, he uses a larger square this year than previous year and produces cabbages than previous year.what is the no. of cabbages produced this year
+
+6. Olympic race :
+4 contestants  : Alan,charlie, Darren ,Brain.
+There are two races and average is taken to decide the winner.one person comes at the same position in both the race. Charlie always come before darren. Brian comes first once. Alan comes third atleast once. Find the positions. Alan never comes last. Charlie & darren comes 2nd atleast once.
+
+
+8. Problem finding who is husband,wife & son from 4 set of families.
+9. Rank the persons from set of conditions.
+
+

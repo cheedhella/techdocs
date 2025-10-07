@@ -1,0 +1,155 @@
+﻿<html><head><title>Graph Algorithms</title>
+
+<body background="./Bck2.gif">
+<h2>Graph Algorithms</h2>
+
+<pre>
+
+<b>Computer Representation of Graphs:</b>
+
+Adjascency matrix Representation
+
+A graph with n nodes is represented by nxn matrix, where entry(i,j)=1 if there is an edge from node i to node j.
+                                                                   =0, else
+
+
+Adjascency list Representation
+
+
+
+
+
+For a graph with n vertices and  m edges, the adjacency matrix representation requires O(n2) storage 
+while the adjacency lists representation requires O(m) storage.
+ 
+
+<h3>Breadth First Search</h3>
+ 
+
+Search a graph (directed or not) in breadth first; this is done by 
+using a queue where the vertices found are stored.
+
+Here is a brief description of the BFS algorithm:
+<pre>    bfs (Graph G)
+    {
+	all vertices of G are first painted white
+	
+	the graph root is painted gray and put in a queue
+
+	while the queue is not empty
+	{
+	    a vertex u is removed from the queue
+
+	    for all white successors v of u
+	    {
+	        v is painted gray
+		v is added to the queue
+	    }
+
+	    u is painted black
+	}
+    }
+</pre>
+
+
+<h3>Depth First Search</h3>
+
+The general idea is the same, but we now use a stack instead of a queue. 
+With recursion of course, so the stack management is all done by Java.
+
+Here is a brief description of the DFS algorithm:
+
+<pre>    dfs-visit (Graph G, Vertex u)
+    {
+	the vertex u is painted gray
+	
+	for all white successors v of u
+	{
+	    dfs-visit(G, v)
+	}
+
+	u is painted black
+    }
+
+
+    dfs (Graph G)
+    {
+	all vertices of G are first painted white
+
+	dfs-visit(G, root of G)
+    }
+
+BFS and DFS: http://www.ics.uci.edu/~eppstein/161/960215.html
+
+
+<h2>Topological Ordering</h2>
+What is a <b>Topological Ordering</b> of a Graph?
+A <b>topological ordering</b> of a <b>directed acyclic graph G </b> is a linear ordering of all its nodes as follows. 
+If G contains an edge e=(u,v), node u appears before v in the ordering. If G is contains cycles, no topological 
+ordering is possible.
+
+<p><b>Algorithm:</b> (topological ordering)</p>
+<pre>    list L = empty
+    while (G is not empty)
+    find a vertex v with no incoming edges
+    delete v from G
+    add v to L
+</pre>
+
+
+Running Time: is linear in the size of the graph (O(|V|+|E|)).
+
+<b>Algorithm:</b> (topological ordering, detailed
+implementation)</p>
+
+<pre>    list K = empty
+    list L = empty
+    for each vertex v in G
+    let I[v] = number of incoming edges to v
+    if (I[v] = 0) add v to K
+    while (G is not empty)
+    remove a vertex v from K
+    for each outgoing edge (v,w)
+    decrement I[w]
+    if (I[w] = 0) add w to K
+    add v to L
+
+
+<H2>Spanning trees</H2>
+http://www.ics.uci.edu/~eppstein/161/960206.html
+
+
+
+http://www.ics.uci.edu/~eppstein/161/960208.html
+
+
+
+
+<H2>Dijkstra's algorithm</H2> Also called single-source shortest path problem.
+
+input: +ve weighted directed graph G and a source vertex s in G.
+output: Length of the shortest paths from s to all other vertices in G.
+
+http://en.wikipedia.org/wiki/Dijkstra's_algorithm
+
+<H2>Bellman-Ford algorithm</H2> weights can be +ve or -ve.
+
+
+
+http://www.inf.uos.de/knust/ga_links
+
+http://www.cs.sunysb.edu/~skiena/392/lectures/week10/
+
+http://www.vuse.vanderbilt.edu/~spin/open.html
+
+KMP string matching - http://www.ics.uci.edu/~eppstein/161/960227.html
+		http://www.ics.uci.edu/~eppstein/161/960229.html
+		http://www.ics.uci.edu/~eppstein/161/960222.html
+
+
+http://www.algorithmic-solutions.info/leda_manual/graph_algorithms.html
+http://www.algorithmic-solutions.info/leda_guide/GraphAlgorithms.html
+	
+
+
+</body></html>

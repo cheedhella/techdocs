@@ -1,0 +1,86 @@
+This is the first two sections of cts.::
+hi ramasubbareddy,
+		there are 5 sections. the cts people are having around 3 sets of papers which they will be changing all time from college to college. this is the toughest of all. I will be sending the remaining papers also. This paper will be marked as ctsiitk. O.K good luck.
+
+Section-1
+^^^^^^^^^
+
+A(S,T)=	S		  IF T=(a) and a is not a member of S;
+      = ST		  IF T=()  and a is a member of S;
+      = Subtract S from T IF T=(a) and a is not a member of S;
+      = ()		  other wise.
+
+
+B(S,T)=S		  IF T=() and a is not a member of S;
+      =T		  IF T=(a) and a is a member of S;
+      =Subtract S from T  IF T=(a) and a is not a member of S;
+      =()	          other wise.
+
+S={a,b,(a,b),(b,b)},T={a,b,(a,a),(b,a)},U={b,(a,a),(b,a),(b,b)}.
+      ( The above conditions are not fully correct.But the question is same)
+
+Q.1.
+A(S,T)=
+(a).       (b).		(c).		(d)
+Q.2.
+A(T,S)=
+(a).       (b).		(c).		(d)
+Q.3.
+A(S,S)=
+(a).       (b).		(c).		(d)
+Q.4.
+A(S,U)=
+(a).       (b).		(c).		(d)
+Q.5.
+B(T,U)=
+(a).       (b).		(c).		(d)
+Q.6.
+B(U,S)=
+(a).       (b).		(c).		(d)
+Q.7,Q.8 are also like this.
+
+
+Section-2
+
+note: here what u have to do is to identify the function and thats it u can solve the remaining questions easily.
+
+^^^^^^^^^
+This section is related to functions
+Q.9
+
+f(x)=f(1/x);
+f(6)+f(15)=
+(a)21 7/30 (b)12 4/30 (c)21 21/31 (d)20 5/31
+[Here the actual function is f(x)= x + 1/x]
+
+Q.10
+f(x)=f(-1/x);
+f(6)+f(15)=
+(a)	(b)	(c)	(d)
+[Here the actual function is f(x)= x - 1/x]
+
+Q.11
+f(x)=f(1/x);
+f(6)+f(15)
+(a)	(b)	(c)	(d)
+[Here the actual function is f(x)= x*x + 1/(x*x)]
+
+Q.12
+f(x)=f(-1/x);
+f(9)+f(15)=
+(a)	(b)	(c)	(d)
+[Here the function is f(x)=f(-1/x)]
+
+Q.13
+Here the function may be x*x
+Q.14
+Here the function may be x*x*x
+Q.15
+Here the function may be x*x*x
+Q.16
+Here the function may be -x*x*x
+
+-------------------------------------------------------------
+This is the end of the first two sections of cts99 paper
+-------------------------------------------------------------
+

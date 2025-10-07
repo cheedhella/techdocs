@@ -1,0 +1,1287 @@
+	title : test1
+				 CV
+				 -------
+	
+	This is the last hurdle in our life that V have eo jump..
+	Ok >>BTW my friend srinivas is such guy who could manage to
+	get the papers..Try to have contact with him in these aspects..
+		Give the reply with out fail...
+	Bye.....................................
+				Luv............
+				Venkatesh Nanduri...
+
+> CV paper:
+> *****************************************************************
+> 
+> 
+>  	1-18  General  (i) Data sufficiency
+> 		       (ii) Analytical
+> 		       (iii) Mathematics
+> 	19-45 C&UNIX
+> 
+> 1. |x-a|=a-x 	Ans: (c) x<=a
+> 
+> 2. There is six letter word VGANDA . How many ways you can arrange the
+>    letters in the word in such a way that both the A's are together.
+>     Ans : 120    (5x4!)
+> 
+> 3.  If two cards are taken one after another without replacing from
+>      a pack of 52 cards what is the probability  for the two cards be
+> 	queen.     Ans : (4/52)*(3/51)       (1/17)*(1/13)
+> 
+> 4. 51 x 53 x ... x 59 ; symbols ! - factorial
+> 			        ^ - power of 2
+>   (a) 99!/49! (b)  (c)   (d) (99! x 25!)/(2^24 x 49! x 51!)
+> 
+> 5. The ratio fo Boys to Girls is 6:4. 60% of the boys and 40% of girls
+>     take lunch in the canteen. What % of class takes lunch in canteen.
+> 	Ans : 52%    (60/100)*60 + (40/100)*40
+> 
+> 
+> Data Sufficiency : a) only statement A is sufficent , B is not
+> 		   b) only statemnet B
+> 		   c) both are necessary
+> 		   d) both are not sufficient.
+> 
+> 6. X is an integer. Is X dvisible by 5?
+>    A) 2X is divisible by 5.
+>    B) 10X is divisible by 5.
+> 
+>    Ans : A)
+> 
+> 7. (A) Anna is the tallest girl
+>    (B) Anna is taller than all boys.
+>   (Q) . Is Anna the tallest in the class
+> 
+>   Ans : c
+> 
+> 8. maths question
+> 9, 10 Analytical
+> 
+> Zulus always speak truth and  Hutus always speak lies. There are
+> three persons A,B&C. A met B and says " I am a Zulu or I am Hutu".
+> We don't know what exactly he said. then B meets C and says to c
+> that " A is a Zulu ". Then C replied " No, A is a Hutu ".
+> 
+> 9. How many Zulus are there ? Ans 2( check)
+> 10) Who must be a Zulu ? Ans B (check)
+> 
+> 11,12.13,14.
+> -----------
+> 
+> 	A father F has 5 sons, p,q,r,s,t. Not necessarly in this order.
+> Two are of same age. The eldest and youngest cannot be twins. T is elder
+> to r and younger to q and s has three older brothers
+> 
+> q) who are the twins?   s,t
+> q) who is the oldest and youngest?   q, (s&t)
+> q)
+> q)
+> 
+> 
+> 15,16,17,18
+> ----------
+> 
+>  There are 7 people who take a test among which  M is the worst, R is
+> disqualified, P and S obtain same marks, T scores less than S and Q scores
+> less than P, N scores higher than every one.
+> Ans : N P S T Q R M (may be, just check)  or N S P T Q R M
+> 
+> C & UNIX
+> --------
+> 
+> 19. What does chmod 654 stand for.
+> 
+>    Ans : _rw_r_xr__
+> 20. Which of following is used for back-up files?
+>     (a) compress (b) Tar (c) make (d) all the above  Ans : b
+> 21 what does find command do ? Ans : search a file
+> 22. what does " calloc" do?
+>     Ans :  A memory allocation and initialising to zero.
+> 23 what does exit() do?
+>    Ans : come out of executing programme.
+> 24. what is the value of 'i'?
+>    i=strlen("Blue")+strlen("People")/strlen("Red")-strlen("green")
+>    Ans : 1
+> 25. i=2
+>     printf("%old %old %old %old ",i, i++,i--,i++);
+>     Ans : check the answer.
+> 26. Using pointer, changing A to B and B to A is Swapping the function
+>     using two address and one temperory variable. a,b are address, t is
+>     temporary variable. How function look like?
+>      Ans : swap(int *, int *, int )
+> 27.  In  'o' how are the arguments passed?
+>      ans : by value.
+> 28. Find the prototype of sine function.
+>     Ans : extern double sin(double)
+> 29. Scope of a global variable which is declared as static?
+>     ans : File
+> 30. ASCII  problem
+>      i=..
+>  ans : 6
+> 31 .
+> 32. what is the o/p
+>     printf(" Hello \o is the world ");
+>    Ans : Hello is the world.
+> 33. Clarifying the concept addresses used over array ; ie changing
+>     the address of a base element produces what error?
+> 34. child process  -- fork
+>     child shell    -- sh
+> 35. Answer are lex 7 yacc & man read these things in UNIX
+> 36. What is
+>     int *p(char (*s)[])
+>     Ans : p is a function which is returning a pointer to integer
+>     which takes arguments as pointer to array of characters.
+> ************************************************************
+			INFOSYS
+			--------
+			
+1) There are two balls touching each other circumferencically.
+The radius of the big ball is 4 times the diameter of the small
+ball.The outer small ball rotates in anticlockwise direction
+circumferencically over the bigger one at the rate of 16 rev/sec.
+The bigger wheel also rotates anticlockwise at Nrev/sec. what is
+'N' for the horizontal line from the centre of small wheel always
+is horizontal.
+
+2)     1 2 3 4
+     + 3 4 5 5
+     ----------
+       4 6 8 9
+     - 2 3 4 5
+     ----------
+       2 3 4 4
+     + 1 2 5 4
+     ------------
+       3 6 9 8
+
+ Q)  Strike off any digit from each number in seven rows (need not
+ be at same place) and combine the same operations with 3 digit numbers
+ to get the same addition. After this strike off another digit from all
+ and add all the No.s to get the same 2 digit No. perform the same
+ process again with 1 digit No.s. Give the ' no.s in 7 rows at
+ each stage.
+
+3) there is a safe with a 5 digit No. The 4th digit is 4 greater than
+second digit, while 3rd digit is 3 less than 2nd digit. The 1st digit
+is thrice the last digit. There are 3 pairs whose sum is 11. Find
+the number.  Ans) 65292.
+
+4) there are 2 guards Bal and Pal walking on the side of a wall of a
+wearhouse(12m X 11m) in opposite directions. They meet at a point and
+Bal says to Pal " See you again in the other side". After a few moments
+of walking Bal decides to go back for a smoke but he changes his 
+direction again to his previous one after 10 minutes of walking in
+the other(opposite) direction remembering that Pal will be waiting
+for to meet.If Bal and Pal walk 8 and 11 feet respectively, how
+much distance they would have travelled before meeting again.
+
+5)          xxx)xxxxx(xxx
+		3xx
+		-------
+		 xxx
+		 x3x
+		 ------
+		  xxx
+		  3xx
+		  ------
+
+   Q) Find the 5 digit No.
+    Hint: 5 is used atleast once in the calculation.
+6) Afly is there 1 feet below the ceiling right across a wall length
+is 30m at equal distance from both the ends. There is a spider 1 feet
+above floor right across the long wall eqidistant from both the ends.
+If the width of the room is 12m and 12m, what distance is to be 
+travelled by the spider to catch the fly? if it takes the shortest
+path.
+
+7) Ramesh sit around a round table with some other men. He has one 
+rupee more than his right person and this person in turn has 1 rupee
+more than the person to his right and so on, Ramesh decided to give
+1 rupee to his right & he in turn 2 rupees to his right and 3 rupees
+to his right & so on. This process went on till a person has 
+'no money' to give to his right. At this time he has 4 times the
+money to his right person. How many men are there along with Ramesh
+and what is the money with poorest fellow.
+
+
+8)Question related to probabilities of removing the red ball from a
+basket,given that two balls are removed from the basket and the other
+ball is red. The basket contains blue,red,yellow balls.
+
+9)Venkat has 1boy&2daughters.The product of these children age is 72.
+The sum of their ages give the door numberof Venkat.Boy is elder of
+three.Can you tell the ages of all the three.
+
+                           ANALYTICAL
+			   ----------
+1)L:says all of my other 4 friends have money
+M:says that P said that exact one has money
+N:says that L said that precisely two have money
+O:says that M said that 3 of others have money.
+P:Land N said that they have money.
+   all are liers.Who has money&who doesn't have?
+
+2)A hotel has two,the east wing and the west wing.some east wing rooms
+but not all have an ocean view(OV).All WW have a harbour view(HV).The
+charge for all rooms is identical, except as follows
+* Extra charge for all HV rooms on or above the 3rd floor
+* Extra charge for all OV rooms except those without balcony
+* Extra charge for some HV rooms on the first two floor&some EW rooms
+without OV but having kitchen facilities. (GRE modrl Test 3-question
+						 1J-22)
+3)Post man has a data of name surname door no.pet name of 4 families.
+But only one is correct for each family.There are a set of statements
+&questions.
+4)4 couples have a party.Depending on the set of statements,find who
+insulted whom and who is the host of the party.
+5)5 women given some of their heights(tall,medium,short)Hair( long,
+plainted),stards(Black or Brown), sari,2 medium,2-short.Tall->no
+sari.Plainted->medium.Answer the combinations.
+
+
+1) A person has to go both Northwards&Southwards in search of a job.
+He decides to go by the first train he encounters.There are trains for
+every 15 min both southwards and northwards.First train towards south 
+is at 6:00 A.M. and that towards North is at 6:10 .If the person arrives
+at any random time,what is the probability that he gets into a train
+towards North.
+2) A person has his own coach&whenever he goes to railway station he
+takes his coach.One day he was supposed to reach the railway station
+at 5 O'clock.But he finished his work early and reached at 3 O'clock.
+Then he rung up his residence and asked to send the coach immediately.
+He came to know that the coach has left just now to tje railway station.
+He thought that the coach has left just now to the railway station.He
+thought that he should not waste his time and started moving towards
+his residence at the speed of 3mi/hr.On the way,he gets the coach and
+reaches home at 6 o'clock.How far is his residence from railway
+station.
+
+3)Radha,Geeta&Revathi went for a picnic.After a few days they forgot the
+date,day and month on which they went to picnic.Radha said that it was 
+onThursday,May 8 and Geeta said that it was Thursday May 10.Revathi
+said Friday Jun 8.Now one of them told all things wrongly,others one
+thing wrong and the last two things wrongly.If April 1st is tuesday
+what is the right day,date and month?
+
+
+
+
+
+
+
+
+Hello Naren,
+     Iam first sending Hughes paper. This paper consists of two sections.
+     A: Paper common to cse & ece
+     B: Attempt either cse or ece (Better to attempt Electronics paper)
+*****************************************************************************
+                                SECTION A
+                                ---------
+    1. Which of the following is not correct
+       a. (x+y)' = x' . y'     b. (x'+y')'=x.y
+       c. (x'.y')'=x+y         d.(x'+y')'=x'.y'       [d] 
+       
+    2. Question on logic ckt. U have to find the output
+         ans. AB'+CD'+EF'
+
+    3. Output of MUX
+                ____________
+       c ------|            |
+       c'------|            |_______ Y      ans. A xor B xor c
+       c'------|            |
+       c ------| ___________|
+                   |    |
+                   A    B  (select lines)
+
+    4. If X and Y are two sets. |X| and |Y| are corresponding coordinates
+       and exact no. of functions from X to Y is 97 then
+       a. |X|=97 |Y|=1   b. |X|=1  |Y|=97
+       c. |X|=97 |Y|=97  d. .....                    [b] (not sure) 
+       
+   5. If two dies are thrown simultaneously what is the prob. of one of the 
+      dice getting face 6 ?
+      a. 11/36  b. 1/3  c. 12/35  d. 1/36          [a]
+
+   6. The relation '<' on reals is                                       [d]
+      a. a partial order because of symmetry and reflexive
+      b.       .......              antisymmetric and reflexive
+      c. not a partial order because of asymmetric and non reflexive
+      d.          .........             not antisymmetric and non reflexive.
+
+   7. In C language the parameters are passed by
+      a. value  b. name  c. reference  d. none          [a] ( I think [c] is
+                                                             also correct ) 
+   8. Advantages of SRAM over DRAM
+      ans. faster
+
+  9. Diasy chaining related question  (  refer Z80 )
+     a. uniform interrupt priority                    [b] (not sure)
+     b. nonuniform   .....
+     c. interfacing slower peripherals
+     d. .......
+
+ 10. RAM chips arranged in 4x6 array and of 8kx4bit capacity each. How many
+     address lines reqd. to access each byte
+     a. 12  b. 16  c. 15  d. 17                        [d]
+
+ 11. Question related to AVL trees regarding how many no. of nodes to be
+     changed to become balanced after addition of a leaf node to a particular
+     node
+      ans. 3
+
+ 12. When following sequence is inserted in the binary search tree no. of 
+     nodes in left and right subtrees
+       52 86 64 20 3 25 14 9 85     ans. 5 & 3    (numbers given here are diff.)
+
+ 13. Method used for Disk searching ..                        [c] (not sure)
+    a. linked list   b. AVL   c. B-tree   d. binary tree
+
+ 14. Which of the following is correct statement.
+    a. 1's complement can have two zero representations.    [a]
+    b. 2's   ....         represent an extra neg. number.
+    c. 2's & 1's have no difference in representing 16-bit no.
+    d. none
+
+ 15. AX=B where A is mxn, B is mx1, X is nx1 which of the following is 
+    incorrect
+    a. if m<n , X has infinite solutions
+    b. if m=n rank of A<n then X has trivial solutions
+    c.  .....
+    d.  ......
+  
+ 16. The option avialable in C++ i.e., not in C        [b]
+    a. dynamic scoping
+    b. declaration in the middle of the code block
+    c. separate compiled and linked units
+    d. ....
+
+ 17.  int a[4]={1,2,3,4};                           [a]
+      int *ptr;
+      ptr=a;
+      *(a+3)=*(++ptr)+(*ptr++);
+      A part of code is shown. The elements in 'a` after the execution of 
+      this code
+      a. 1 2 3 4     b. 1 2 3 6
+      c. 1 2 3 5     d. compilation error
+
+ 18. Critical section  program segment is               [c] (not sure)
+     a. enclosed by semaphore with P & V operations
+     b. deadlock avoidance
+     c. where shared resources are accessed
+     d. ....
+
+ 19. When head is moving back and forth, the disk scheduling algorith is
+     a. scan     b.   sstf      c. fcfs      d.  ....      [a](not sure)
+
+ 20. How many times the loop will execute          [d]
+        LOOP   LXI B,1526H
+               DCR B
+               JNZ LOOP
+     a.1526H times b. 31  c. 21  d. 38             
+
+ 21. The addressing mode in which the address of the operand is expressed
+     explicitely within the instruction
+     a. index  b. absolute   c. indirect   d. immediate     [b](not sure)
+
+ 22. (A-B) U (B-A) U (A ^ B) = ?      (^ is intersection)
+     a. A U B   b. A ^ B  c. ....  d. .....           [a]
+
+ 23. The network that does not use virtual circuit
+    a. IP   b. X.25  c. ....  d. .....      [a](not sure)
+
+ 24. source routing bridge
+    a. source will route the frame
+    b. frame will routed with info in header
+    c. .....
+    d. ....
+ 25. Cache access time is 100msec. main memory access time 800msec. if 
+    the hit ratio is 95% ,  what is mean access time  .... 
+     ans.  140 msec.
+
+  26.The module that should be always reside in main memory is
+    a. loader    b. link module  c. assembler  d. ....     [a](not sure)   
+
+  27. The order of algorithm to merge the sorted lists of lengths m and n is
+   a. O(m)   b. O(n)   c. O(m+n)  d. O(mn)            [c]
+        (Study what O() represents 3 quesn. are there on it)
+
+  28. A chocolate block is of 4x4 size. How many cuts are needed to make it  
+     1x1 size
+  a. O(n log(n) )  b. O( log(n)) c. ....  d.  ..... 
+ 
+   
+  I will send the Technical paper soon. First Iam sending this part. 
+
+
+
+
+
+
+
+
+
+       
+    DEAR  JAYA & BUCHIBABU 
+               Maheedhar from iitk. just now i got Huges Technical paper
+    conducted at iitk.there something i want to tell keep this paper 
+   only among you. because i got this from a person who told not to distribute
+   it .  he has a friend there and he may come to  find it out . 
+      you can distribute previous papers if you want.
+                BEST WISHES 
+                                                 with love
+                                                      G. Maheedhar
+Now Iam sending some questions on Technical section of 
+        Hughes paper. 20 questions are given in this section.
+
+************************************************************************
+                        SECTION C
+
+1. Some circuit is given and asked what is the function of the
+circuit.
+                 ans:    voltage doubler.
+
+2.For OP-AMP  Imax=........,  Imin=......, CMRR=........, are given
+asked to find the voltage or power gain.
+(Try to mugup the formula if the formula exists, In that one option
+is cannot be calculated from the given data )
+
+3. What is the advantage of PUSH PULL amplifier
+a. hormonic distortion reduction.       [c](not sure)
+b. high power gain.
+c. both a & b
+d. none
+
+4. The channel bitrate is 2400bps if a character needs 7 bits, 1 bit for header
+2 bits for parity, how many chars can be transmitted in one second.
+  ans:  240
+
+5. If the maximum frequency of a signal is 'f' then the Nyquest rate is
+  ans: 2f
+
+6. In a cellulor communication system if the density of clients increases
+then
+a. cell size should be decreased & no. of connections are increased
+b. cell size  ...      increased      .......             decreased
+c. ...
+d. ....
+
+7.Higher minimum Hamming gives
+a. gives good code quality              [a]
+b. gives poor code quality
+c. ...
+d. it gives distance weighted hamming code
+             
+
+8.A set of instructions are given and asked what the program does?
+ans:  Swapping.
+
+9. Multiplication by Boothes algorithm gives worst result for which of the folowing
+a. 1000....00001
+b.  1111....11111
+c. ....
+d. ....
+
+10. which pin of microprocessor 8085 is used for generating 16 bit address ...
+ans:  ALE
+
+11. In Assembler first pass which of the following function is not done 
+a. Interpretation of instructions
+b. Generation of symbolic table
+c. generates code
+d. ...
+
+( one more question is given on this assembler in SECTION A )
+
+12. MACRO:  MULTI(X,Y) X*Y
+         ....
+         ....
+     X& Y are
+a. formal parameters b. actual parameters  c. definitions  d. variables
+
+13. Automatic gain control gives
+(Options are on fading)  ( i.e,, you read which type of fading it gives)
+
+14. The process of UNIX which is correct
+a. wake up: ready -> running
+b. block:   ready -> running
+c. ...  :  ready-> running
+d. ...  :  ready -> running
+
+
+ 
+      
+
+ 
+				HUGHES
+****************************************************************************
+Source : iit k ( this paper is got from rookee and same is given in iitk) 
+Dated  :25/08/97
+
+section A 30m (Compulsary)
+section B or C  20 m(changed )m
+Attempt either B or C     sec B contains CST
+			      C          E&C
+Better to attempt Electronics paper
+(Those who are having electronics background)
+----------------------------------------------------------------------------
+			   SECTION A
+
+1. Which of the folowing is not correct
+   a. (x+y)'=x'.y'   b. (x'+y')'=x.y
+   c. (x'.y')'=x+y   d. (x'+y')'=x'.y'     [d]
+
+2. Question on logic ckt. U have to find the output
+     ans.   AB'+CD'+EF'
+
+3. Output of MUX 
+       _________
+ c-----|       |
+ c'----|       |-------Y
+ c'----|       |             ans. A xor B xor C
+ c-----|       |
+       ---------
+	|   |
+	A   B  (select lines)
+
+4.If X and Y are two sets. |X| and |Y| are corresponding
+  coordinates and exact no.of functions from X to Y is 97
+  then
+  a. |X|=97  |Y|=1   b. |X|=1   |Y|=97
+  c. |X|=97 |Y|=97   d.  .....
+
+5. If two dies are thrown simultaneously what is the prob.
+   of one of the dice getting face 6 ?
+   a. 11/36   b. 1/3  c. 12/35  d. 1/36     [a]
+
+6. The relation ,<,on reals is 
+   a. a partial order because of symmetric and reflexive
+   b.     ...                   antisymmetric and ....
+   c. not ......     ..         asymmetric and non reflexive
+   d. ...          ....         not anti-symm and non reflexive
+
+7. In C language the parameters are passsed by
+   a. values b. name   c.referrence  d....
+
+8. Advantage of SRAM over DRAM   
+   ans. faster
+
+9. Diasy chaining related question (refer Z80)
+   a. uniform interrupt priority
+   b.non ....       ....
+   c.interfacing slower peripherals
+   d.....
+
+10. RAM chips arranged in 4X6 array and of 8kX4bit capacity
+    each. How many address lines reqd. to access each byte
+     a. 12 b. 16 c.15 d. 17
+
+11.Question related to AVL trees regarding how many no.of
+   nodes to be changed to become balanced after addition of
+    a leaf node to a particular node.
+       ans . 3
+
+12.When following sequence is insertedin the binary search tree
+   no.of nodes in left and right subtrees
+   52 86 64 20 3 25 14 9 85
+
+13.Method used for Disk searching..
+  a.linked list  b.AVL  c.B-tree d. binary tree
+
+14. Which of the following is correct statement.
+   a. 1's complement can have two zero re[resentations
+   b.2's  ...       ...  represent an extra neg. number
+   c.2's & 1's have no difference in representing 16-bit no.
+   d.......
+
+15. AX=B where A is mXn ,b&X are column matrices of order m
+  a. if m<n, X  has infinite solutions
+  b.if m=n, rank of A <n then X has trivial solutions
+  c....  d....
+
+16. The option avialable in C++, not C:
+  a.dynamic scoping
+  b.declaration in the middle of code block
+  c.seperate compiled and linked units
+  d. ....
+
+17.   int a[4]={1,2,3,4};
+      int *ptr;
+      ptr=a;
+      *(a+3)=*(++ptr)+(*ptr++);
+       A part of code is shown. The elements in A after
+       the execution of this code.
+    a.1 2 3 4     b. 1 2 3 6
+    c. compilation error   d.1 2  2 4    [a]
+
+18. Critical section program segment is
+   a. enclosed by semaphores with P & V operations
+   b. deadlock avoidance
+   c. where shared resources are accessed
+   d. ...
+
+
+19. when head is moving back and forth, the disk scheduling 
+algorithm is _____
+a) scan      b) sstf     c) fcfs    d).....
+
+20. how many times the loop will execute
+
+	LOOP  LXI  B,1526H
+	      DCX  B
+	      JNZ  LOOP 
+a)1526H times   b) 31    c)21    d)38
+
+21. the addressing mode in which the address of the operand is
+expressed explicitly within the instruction 
+a)index addressing     b)absolute    c)indirect    d) immediate
+
+22. (A - B) U (B - A) U (A ^ C) = ?
+where A,B are two sets A' , B' are compliments of A and B
+a) A U B   b) A ^ B   c)....    d).....
+
+23. the network that does not use virtual circuit 
+a) IP   b) X.25      c)....  d).....
+
+24. source routing bridge 
+a)source will route the frame 
+b)frame will routed with info in header
+c)....      d).....
+
+26. cache access time 100 msec. main memory access time  800 msec
+if the hit ratio is 95% , what is mean access time ...
+
+27. the module that should be always reside in main memory is
+a) loader   b)link module  c)... d)....
+
+   .... and some questions related to
+
+1. addressing mode  2.assembler passes    3.linking and loading
+4. file directory search   5. turning machine 
+6. finite state machine   7. daisy wheel
+
+28. The order of algorithm to merge the two sorted lists of 
+   lengths m and n is 
+    a. O(m)  b. O(n) c. O(m+n)  d. O(log(m)+log(n))
+29.A chocolate block is of 4 X 4 size.How many cuts are needed
+   to make 1 X 1 size blocks. No simultaneous vert. & horz. cuts.
+
+30. Which among the following is not correct
+    a.  O(n) > O(log n)   ..  likewise
+-----------------------------------------------------------------------------
+
+
+ THIS IS THE PAPER GIVEN IN ROKEE NOT IN IIT K . PAPER IN IITK IS 
+ DIFFERENT. BUT THE ABOVE PAPER IS SAME IN BOTH .
+> 
+Hughes,Delhi:
+> -------
+SECTION B : UNIVERSITY OF ROOKEE (not iitk);
+> > > (A)Aptitude :25 Qns, 20 Minutes
+> > > 
+> > >   1. 2 x 4 analytical GRE type qns
+> > >   2. 2-3 Reasoning qns (GRE type)
+> > >   3. Probability of getting a sum of 7 when two dices are thrown together
+> > >   4. Rest quantitative questions
+> > > 
+> > >  (B) Technical: 50 Qns, 45 Minutes
+> > >   
+> > >   1. 3 qns on operating systems. I qn on dijkestra algorithm
+> > > 
+> > >   2. Using which pin it's possible to address 16 bit addresses even though there
+> > >      are only 8 address bits in 8085? Ans: ALE
+> > >   3. Voltage gain for an amplifier is 100 while it is operating at 10 volts.
+> > >      What is the O/P voltage wen i/p is 1 volt
+> > >   4. Quality factor indicates a0 Quality of inductor b) quality of capacitor
+> > >      c) both
+> > >   5. Qns related to bridges, routers and generators, which OSI layer they 
+> > >   corresspond to. (Refer to stevens 4th chapter)
+> > >   6.OPAmp's I/P ciurrent, O/p current and CMRR is given, what is the voltage 
+> > >   gain
+> > >   7. 2-3 qns on scope of static variables in C. Qn to view o/p odf a C static 
+> > >      var
+> > >   8. Qn to print a value of a pointer
+> > >   9.resistance increases with temperature in a) Metal b) semiconductor
+> > >   10. A qn to find the physical address from a given virtual address, virtual
+> > >       to physical address table was provided
+> > >   11. 16 bit mantissa and 8 bit exponent can present what maximum value?
+> > >   12. 4 bit window size in sliding window protocol, how many acknowledements can be held?
+> > >   13. Security functionality is provided by which layer of OSI
+> > >   14. Frequency spectrums for AM, FM and PM (figure given, u'veto tell which
+> > >       Kind of modulation it belongs to)
+> > >   15. Among AM and FM which is better and why?
+> > >   16.LASt stage of TTL NAND gate is called: Ans: Totem Pole Amplifier
+> > >   17. SR to JK flip flop conversion. Ans: S=JQ', R=KQ
+> > >   18. LSB of  a shift register is connected to its MSB, what is formed: Ans:
+> > >       RING Counter
+> > >   19. 2-3 Qns based on Demorgan's laws (identiies: (A+b)' = A'b', etc)
+> > >   20. 2 qns on Logic gates (O/p of logic gates)
+> > >   21. Diff in IRET and RET statements of 8086
+> > >   22. How many address bytes are required to address an array of memory chips
+> > >       (4 * 6), each chip having 4 memory bits and 8k registers.
+> > >    23. Diff. in memory mapped and I/P O/P mapped Input/Output (Refer a book on Microprocessor)
+> > >    24. Qn on pipeline architecture
+> > >    25 QN on LAPB protocol
+> > > 
+> > >
+> > 
+> 
+> 
+> 
+> 
+> 
+
+
+
+
+
+A
+
+				WIPRO INFOTECH
+
+
+------------------------------------------------------------------------------
+Date: July 1997
+source: Roorkee University
+------------------------------------------------------------------------------
+This paper have two sections
+each paper contains 10 questions each.
+-----------------------------------------------------------------------------
+1) abcD+abcd+aBCd+aBCD
+   then the simplified function is
+   ( Capital letters are copliments of corresponding letters
+     A=compliment of a)
+
+  [a] a   [b] ab  [c] abc  [d] a(bc)* [e] mone
+  (bc)*=compliment of bc
+
+  Ans:  e
+
+-------------------------------------
+2) A 12 address lines maps to the memory of
+  
+ [a] 1k bytes  [b] 0.5k bytes [c] 2k bytes  [d] none
+
+ Ans: b
+
+----------------------------------------
+3) In a processor these are 120 instructions . Bits needed to impliment
+   this instructions
+   [a] 6  [b] 7  [c] 10  [d] none
+
+  Ans: b
+
+-----------------------------------------
+4) In 8085 microprocessor READY signal does.which of the following
+   is incorrect statements
+   [a]It is input to the microprocessor
+   [b] It sequences the instructions
+
+  Ans : b
+----------------------------------------
+
+5) Return address will be returned by function to
+  [a] Pushes to the stack by call
+  Ans : a
+------------------------------------------
+6)
+   n=7623
+   {
+	temp=n/10;
+	result=temp*10+ result;
+       n=n/10
+   }
+  
+Ans : 3267
+----------------------------------------------
+7) If A>B then
+      F=F(G);
+   else B>C then
+      F=G(G);
+   in this , for 75% times A>B and 25% times B>C then,is 10000 instructions
+   are there ,then the ratio of F to G
+   [a] 7500:2500  [b]  7500:625  [c] 7500:625 if a=b=c else
+				     7500:2500
+--------------------------------------------------
+8) In a compiler there is 36 bit for a word and to store a character 8bits are needed. IN this to store
+ a character two words are appended .Then for storing a K characters string,
+ How many words are needed.
+ [a] 2k/9  [b] (2k+8)/9  [c]  (k+8)/9 [d] 2*(k+8)/9 [e] none
+  
+ Ans: a
+---------------------------------------------------------
+9) C program code
+   
+   int zap(int n)
+   {
+    if(n<=1)then zap=1;
+    else  zap=zap(n-3)+zap(n-1);
+   }
+   then the call zap(6) gives the values of zap
+   [a] 8  [b]  9  [c] 6  [d]  12  [e] 15
+  
+  Ans: b
+---------------------------------------------------------------
+
+ 
+PART-B
+-------
+1) Virtual memory size depends on
+   [a] address lines    [b] data bus
+   [c] disc space       [d] a & c    [e] none
+
+ Ans :  a
+-----------------------------------------------
+2) Critical section is 
+   [a]
+   [b] statements which are accessing shared resourses
+   Ans : b
+-------------------------------------------------
+
+3) load a
+   mul  a
+   store t1
+   load  b
+   mul   b
+   store t2
+   mul t2
+   add t1
+
+  then the content in accumulator is
+
+Ans : a**2+b**4
+---------------------------------------------------
+4) question (3) in old paper
+5) q(4) in old paper
+6) question (7) in old paper
+7) q(9) in old paper
+------------------------------
+    
+    
+
+> 
+> CV paper:
+> *****************************************************************
+> 
+> 
+>  	1-18  General  (i) Data sufficiency
+> 		       (ii) Analytical
+> 		       (iii) Mathematics
+> 	19-45 C&UNIX
+> 
+> 1. |x-a|=a-x 	Ans: (c) x<=a
+> 
+> 2. There is six letter word VGANDA . How many ways you can arrange the
+>    letters in the word in such a way that both the A's are together.
+>     Ans : 120    (5x4!)
+> 
+> 3.  If two cards are taken one after another without replacing from
+>      a pack of 52 cards what is the probability  for the two cards be
+> 	queen.     Ans : (4/52)*(3/51)       (1/17)*(1/13)
+> 
+> 4. 51 x 53 x ... x 59 ; symbols ! - factorial
+> 			        ^ - power of 2
+>   (a) 99!/49! (b)  (c)   (d) (99! x 25!)/(2^24 x 49! x 51!)
+> 
+> 5. The ratio fo Boys to Girls is 6:4. 60% of the boys and 40% of girls
+>     take lunch in the canteen. What % of class takes lunch in canteen.
+> 	Ans : 52%    (60/100)*60 + (40/100)*40
+> 
+> 
+> Data Sufficiency : a) only statement A is sufficent , B is not
+> 		   b) only statemnet B
+> 		   c) both are necessary
+> 		   d) both are not sufficient.
+> 
+> 6. X is an integer. Is X dvisible by 5?
+>    A) 2X is divisible by 5.
+>    B) 10X is divisible by 5.
+> 
+>    Ans : A)
+> 
+> 7. (A) Anna is the tallest girl
+>    (B) Anna is taller than all boys.
+>   (Q) . Is Anna the tallest in the class
+> 
+>   Ans : c
+> 
+> 8. maths question
+> 9, 10 Analytical
+> 
+> Zulus always speak truth and  Hutus always speak lies. There are
+> three persons A,B&C. A met B and says " I am a Zulu or I am Hutu".
+> We don't know what exactly he said. then B meets C and says to c
+> that " A is a Zulu ". Then C replied " No, A is a Hutu ".
+> 
+> 9. How many Zulus are there ? Ans 2( check)
+> 10) Who must be a Zulu ? Ans B (check)
+> 
+> 11,12.13,14.
+> -----------
+> 
+> 	A father F has 5 sons, p,q,r,s,t. Not necessarly in this order.
+> Two are of same age. The eldest and youngest cannot be twins. T is elder
+> to r and younger to q and s has three older brothers
+> 
+> q) who are the twins?   s,t
+> q) who is the oldest and youngest?   q, (s&t)
+> q)
+> q)
+> 
+> 
+> 15,16,17,18
+> ----------
+> 
+>  There are 7 people who take a test among which  M is the worst, R is
+> disqualified, P and S obtain same marks, T scores less than S and Q scores
+> less than P, N scores higher than every one.
+> Ans : N P S T Q R M (may be, just check)  or N S P T Q R M
+> 
+> C & UNIX
+> --------
+> 
+> 19. What does chmod 654 stand for.
+> 
+>    Ans : _rw_r_xr__
+> 20. Which of following is used for back-up files?
+>     (a) compress (b) Tar (c) make (d) all the above  Ans : b
+> 21 what does find command do ? Ans : search a file
+> 22. what does " calloc" do?
+>     Ans :  A memory allocation and initialising to zero.
+> 23 what does exit() do?
+>    Ans : come out of executing programme.
+> 24. what is the value of 'i'?
+>    i=strlen("Blue")+strlen("People")/strlen("Red")-strlen("green")
+>    Ans : 1
+> 25. i=2
+>     printf("%old %old %old %old ",i, i++,i--,i++);
+>     Ans : check the answer.
+> 26. Using pointer, changing A to B and B to A is Swapping the function
+>     using two address and one temperory variable. a,b are address, t is
+>     temporary variable. How function look like?
+>      Ans : swap(int *, int *, int )
+> 27.  In  'o' how are the arguments passed?
+>      ans : by value.
+> 28. Find the prototype of sine function.
+>     Ans : extern double sin(double)
+> 29. Scope of a global variable which is declared as static?
+>     ans : File
+> 30. ASCII  problem
+>      i=..
+>  ans : 6
+> 31 .
+> 32. what is the o/p
+>     printf(" Hello \o is the world ");
+>    Ans : Hello is the world.
+> 33. Clarifying the concept addresses used over array ; ie changing
+>     the address of a base element produces what error?
+> 34. child process  -- fork
+>     child shell    -- sh
+> 35. Answer are lex 7 yacc & man read these things in UNIX
+> 36. What is
+>     int *p(char (*s)[])
+>     Ans : p is a function which is returning a pointer to integer
+>     which takes arguments as pointer to array of characters.
+> ************************************************************
+> 
+> DE-Shaw Software,Hyderabad.
+> ---------------------------
+> 			SECTION-A
+> 
+>  you should write the programs for the following problems in C.
+> 
+>  1. swapping two variables x,y without using a temporary variable.
+>  2. a program has been given asking to find the output
+> 	ans. it is algorithm for finding G.C.D
+>  3. write a program for reversing the given string.
+>  4. the integers from 1 to n are stored in an array in a random
+>     fashion. but one integer is missing. write a program to find the
+>     missing integer.
+> 	ans. idea. the sum of n natural numbers is = n(n+1)/2.
+> 	     if we subtract the above sum from the sum of all the
+> 	     numbers in the array , the result is nothing but the
+> 	     missing number.
+>  5. some bit type of questions has been given on pointers asking to
+>     to find whether it is correct from syntax point of view. and if
+>     it is correct explain what it will do.(around 15 bits).
+> 
+> 			SECTION-B
+> 
+>    ANSWER AS MANY AS POSSIBLE.
+> 
+>  6.& 7. two programs on pre-processor directions has been given asking
+>         to find the output.
+>  8. simple question given on pointer
+>     a) kernighan & richie page no. 122
+>     b) schaum series  page no. 323
+>     try to understand the pointer problems given here he asked to explain
+>     in the interview if answer it in exam.
+>  9. write a c program to find whether a stack is progressing in forward
+>    or reverse direction.
+>  10. write a c program that reverses the linked list.
+> 
+>   GUIDELINES:
+>      the interview is very tough he is asking to do the problems in
+>    front of him. he is also giving some new problems to solve before him.
+>    you should have a very good funda of C language.
+>   From iit-kgp only two 2 students have been selected.
+> 
+> 
+> 
+> -------------------------------------------------------------------------
+> 
+> 
+> 
+> Wipro paper(System software)
+> July-1997
+> ------------
+> 
+> PART --A
+> ------------------------------------------------------
+> 1) abcD+abcd+aBCd+aBCD
+>    then the simplified function is
+>    ( Capital letters are copliments of corresponding letters
+>      A=compliment of a)
+> 
+>   [a] a   [b] ab  [c] abc  [d] a(bc)* [e] mone
+>   (bc)*=compliment of bc
+> 
+>   Ans:  e
+> 
+> -------------------------------------
+> 2) A 12 address lines maps to the memory of
+> 
+>  [a] 1k bytes  [b] 0.5k bytes [c] 2k bytes  [d] none
+> 
+>  Ans: b
+> 
+> ----------------------------------------
+> 3) In a processor these are 120 instructions . Bits needed to impliment
+>    this instructions
+>    [a] 6  [b] 7  [c] 10  [d] none
+> 
+>   Ans: b
+> 
+> -----------------------------------------
+> 4) In 8085 microprocessor READY signal does.which of the following
+>    is incorrect statements
+>    [a]It is input to the microprocessor
+>    [b] It sequences the instructions
+> 
+>   Ans : b
+> ----------------------------------------
+> 
+> 5) Return address will be returned by function to
+>   [a] Pushes to the stack by call
+>   Ans : a
+> ------------------------------------------
+> 6)
+>    n=7623
+>    {
+>         temp=n/10;
+>         result=temp*10+ result;
+>        n=n/10
+>    }
+> 
+> Ans : 3267
+> ----------------------------------------------
+> 7) If A>B then
+>       F=F(G);
+>    else B>C then
+>       F=G(G);
+>    in this , for 75% times A>B and 25% times B>C then,is 10000 instructions
+>    are there ,then the ratio of F to G
+>    [a] 7500:2500  [b]  7500:625  [c] 7500:625 if a=b=c else
+>                                      7500:2500
+> --------------------------------------------------
+> 8) In a compiler there is 36 bit for a word and to store a character 8bits are
+> needed. IN this to store
+>  a character two words are appended .Then for storing a K characters string,
+>  How many words are needed.
+>  [a] 2k/9  [b] (2k+8)/9  [c]  (k+8)/9 [d] 2*(k+8)/9 [e] none
+> 
+>  Ans: a
+> ---------------------------------------------------------
+> 9) C program code
+> 
+>    int zap(int n)
+>    {
+>     if(n<=1)then zap=1;
+>     else  zap=zap(n-3)+zap(n-1);
+>    }
+>    then the call zap(6) gives the values of zap
+>    [a] 8  [b]  9  [c] 6  [d]  12  [e] 15
+> 
+>   Ans: b
+> ---------------------------------------------------------------
+> 
+> 
+> PART-B
+> -------
+> 1) Virtual memory size depends on
+>    [a] address lines    [b] data bus
+>    [c] disc space       [d] a & c    [e] none
+> 
+>  Ans :  a
+> -----------------------------------------------
+> 2) Critical section is
+>    [a]
+>    [b] statements which are accessing shared resourses
+>    Ans : b
+> -------------------------------------------------
+> 
+> 3) load a
+>    mul  a
+>    store t1
+>    load  b
+>    mul   b
+>    store t2
+>    mul t2
+>    add t1
+> 
+>   then the content in accumulator is
+> 
+> Ans : a**2+b**4
+> ---------------------------------------------------
+> 4) question (3) in old paper
+> 5) q(4) in old paper
+> 6) question (7) in old paper
+> 7) q(9) in old paper
+> ------------------------------
+> 
+> Hughes,Delhi:
+> -------
+> 
+> > > (A)Aptitude :25 Qns, 20 Minutes
+> > > 
+> > >   1. 2 x 4 analytical GRE type qns
+> > >   2. 2-3 Reasoning qns (GRE type)
+> > >   3. Probability of getting a sum of 7 when two dices are thrown together
+> > >   4. Rest quantitative questions
+> > > 
+> > >  (B) Technical: 50 Qns, 45 Minutes
+> > >   
+> > >   1. 3 qns on operating systems. I qn on dijkestra algorithm
+> > > 
+> > >   2. Using which pin it's possible to address 16 bit addresses even though there
+> > >      are only 8 address bits in 8085? Ans: ALE
+> > >   3. Voltage gain for an amplifier is 100 while it is operating at 10 volts.
+> > >      What is the O/P voltage wen i/p is 1 volt
+> > >   4. Quality factor indicates a0 Quality of inductor b) quality of capacitor
+> > >      c) both
+> > >   5. Qns related to bridges, routers and generators, which OSI layer they 
+> > >   corresspond to. (Refer to stevens 4th chapter)
+> > >   6.OPAmp's I/P ciurrent, O/p current and CMRR is given, what is the voltage 
+> > >   gain
+> > >   7. 2-3 qns on scope of static variables in C. Qn to view o/p odf a C static 
+> > >      var
+> > >   8. Qn to print a value of a pointer
+> > >   9.resistance increases with temperature in a) Metal b) semiconductor
+> > >   10. A qn to find the physical address from a given virtual address, virtual
+> > >       to physical address table was provided
+> > >   11. 16 bit mantissa and 8 bit exponent can present what maximum value?
+> > >   12. 4 bit window size in sliding window protocol, how many acknowledements can be held?
+> > >   13. Security functionality is provided by which layer of OSI
+> > >   14. Frequency spectrums for AM, FM and PM (figure given, u'veto tell which
+> > >       Kind of modulation it belongs to)
+> > >   15. Among AM and FM which is better and why?
+> > >   16.LASt stage of TTL NAND gate is called: Ans: Totem Pole Amplifier
+> > >   17. SR to JK flip flop conversion. Ans: S=JQ', R=KQ
+> > >   18. LSB of  a shift register is connected to its MSB, what is formed: Ans:
+> > >       RING Counter
+> > >   19. 2-3 Qns based on Demorgan's laws (identiies: (A+b)' = A'b', etc)
+> > >   20. 2 qns on Logic gates (O/p of logic gates)
+> > >   21. Diff in IRET and RET statements of 8086
+> > >   22. How many address bytes are required to address an array of memory chips
+> > >       (4 * 6), each chip having 4 memory bits and 8k registers.
+> > >    23. Diff. in memory mapped and I/P O/P mapped Input/Output (Refer a book on Microprocessor)
+> > >    24. Qn on pipeline architecture
+> > >    25 QN on LAPB protocol
+> > > 
+> > >
+> > 
+> 
+> 
+> 
+> 
+> 
+
+
+
+
+
+>From umakant@maths.iitkgp.ernet.in Sun Sep 14 19:15:13 1997
+Received: from yamuna by vidya.iitk.ernet.in; (5.65/1.1.8.2/07Jan97-0402PM)
+	id AA32358; Sun, 14 Sep 1997 19:15:13 +0500
+Received: by yamuna.iitk.ernet.in (8.7.5/8.7.3) with UUCP id TAA27744 for gmahee@yamuna.iitk.ernet.in; Sun, 14 Sep 1997 19:15:14 +0530 (IST(+5:30))
+> 
+> Paper consists of two sections : 1. analytical (20 marks)
+>                                  2. C skills (20 marks)total time 45 min
+> 
+> Analytical:
+> -------------
+> 
+> 1. Given a cube, with different colors on its faces, and then is cut
+> into 64 pieces, and the questions relate to the colors of different 
+> colored small cubes.
+> 
+> 2. A few ladies and gents sit around table in some given order and 4
+> questions are about their seating arrangement with some restrictions.
+> 
+> 3. Draw a venn diagram for 3 items : white, flowers, cloth
+> 
+>  Ans : draw 3 circles each intersecting the other , with white kept in the
+> middle.
+> 
+> 4. A problem related to seating arrangement of 4 people ( 2 ladies and
+> 2 gents) with some restrictions
+> 
+> 5. problem related to milk with water added to it for three times
+> 
+> Ans: 20.5 litres
+> 
+> 6. Problem related to diagrams . Five diagrams were given and asked to
+> find the sixth one.
+> 
+> C-Skills:
+> --------
+> 
+> 1. Max number of nodes in a binary tree with height 3 is 20 : Ans: False
+> 
+> 2. 10,20,30,40,50,60 : give the order when put in a queue and in a stack
+> 
+> Ans : Queue : 10,20,30,40,50,60
+>       stack : 60,50,40,30,20,10
+> 
+> 3. Debugging is the process of finding
+> 
+> Ans : logical and runtime errors
+> 
+> 4. trace the error:
+> 
+>    void main(){
+>             int &a;
+>              /* some other stuff here */
+>                }
+> Ans: syntax error
+> 
+> 5. a problem with a function named 'myValue' will be given and asked to
+> find the value of main() for an argument of 150,
+> 
+> Ans : 150
+> 
+> 6. Some problems related to 'for' loops.
+> 
+> 7. problem on conditional inclusion.
+> 
+> 8. problem related to depth first and breadth first search (DSA subject)
+> 
+> 9. study the syntax of malloc function
+> 
+> 10. locate the error
+> 
+>     int arr (20);
+>    Ans: syntax error.
+> 
+>    
+> :the above are only the guide lines, may not be the exact paper.

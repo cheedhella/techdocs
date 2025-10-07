@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cyclic Sort</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <b>Cyclic Sorting</b>
+        <ul>
+            <li>Given an array of integers/objects, from 1 to n, sort them in O(N) time without using any extra space?</li>
+            <li>While iterating over the numbers, if the current number is not at the correct index, swap it with the number at its correct index;</li>
+            <li>This way, we will go through all numbers and place them at their correct indices, hence, sorting the whole array;</li>
+        </ul>
+
+        <pre>
+            <code class="language-java">
+public class CyclicSort {
+    private static void sort(int[] nums) {
+        for (int i = 0; i < nums.length;) {
+            int j = nums[i] - 1;
+            if (nums[i] != nums[j])
+                swap(nums, i, j);
+            else
+                i++;
+        }
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[] { 3, 1, 5, 4, 2 };
+        CyclicSort.sort(arr);
+        for (int num : arr)
+            System.out.print(num + " ");
+        System.out.println();
+    }
+}
+
+Output:
+1 2 3 4 5
+            </code>
+        </pre>
+    </body>
+</html>
