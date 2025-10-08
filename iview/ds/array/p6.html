@@ -1,53 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Re-arrange Positive & Negative Values?</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
-    </head>
-    <body>
-        <ul>
-            <li>Given an array, can you re-arrange its elements in such a way that the negative elements appear at one side and positive elements appear at the other?</li>
-        </ul>
-      <pre>
-        <code class="language-java">
-import java.util.Arrays;
 
-public class P6 {
-    private static void rearrange(int[] data) {
-        int lIndex = 0, rIndex = data.length - 1;
-        while (lIndex < rIndex) {
-            while (data[lIndex] < 0)
-                lIndex++;
-            while (data[rIndex] > 0)
-                rIndex--;
+<head>
+    <title>Given an array of integers, Given an array of integers, re-arrange its elements in such a way that the
+        negative elements appear at one side and positive elements appear at the other?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
 
-            int temp = data[lIndex];
-            data[lIndex] = data[rIndex];
-            data[rIndex] = temp;
-        }
-    }
-
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Given an array of integers, re-arrange its elements in such a way that the
+            negative elements appear at one side and positive elements appear at the other?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+// Simpler approach, but uses O(N) extra space;
+public class P6_1 {
     public static void main(String[] args) {
-        int[] data = { 10, -1, 20, 4, 5, -9, -6 };
-        rearrange(data);
-        System.out.println("After re-arranging: " + Arrays.toString(data));
+        int[] arr = {10, -1, 20, 4, 5, -9, -6};
+
+        int[] result = new int[arr.length];
+        int index = 0;
+
+        // First store all negatives
+        for (int num : arr) {
+            if (num < 0) result[index++] = num;
+        }
+
+        // Then store all positives
+        for (int num : arr) {
+            if (num >= 0) result[index++] = num;
+        }
+
+        System.out.println("Array after rearranging:");
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
     }
 }
 
-// Output:
-After re-arranging: [-6, -1, 4, -9, 5, 20, 10]
+<b>Output: </b>-1 -9 -6 10 20 4 5
         </code>
       </pre>
+    </div>
 
-    </body>
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">Given an array of integers, re-arrange its elements in such a way that the
+            negative elements appear at one side and positive elements appear at the other?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+// 2-pointer approach: it avoids extra space;
+// Use two pointers: left starts from the beginning, right from the end;
+// Move pointers inward, swapping when a positive number is on the left and a negative on the right;
+// Result: All negatives grouped on one side, all positives on the other;
+
+public class P6_2 {
+    public static void main(String[] args) {
+        int[] arr = {10, -1, 20, 4, 5, -9, -6};
+
+        rearrange(arr);
+
+        System.out.println("Array after rearranging:");
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
+    }
+
+    public static void rearrange(int[] arr) {
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left <= right) {
+            // If left is negative, it's already on correct side
+            if (arr[left] < 0 && arr[right] < 0) {
+                left++;
+            }
+            // If right is positive, it's already on correct side
+            else if (arr[left] > 0 && arr[right] > 0) {
+                right--;
+            }
+            // If left is positive and right is negative, swap them
+            else if (arr[left] > 0 && arr[right] < 0) {
+                int temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+                left++;
+                right--;
+            }
+            // If left is negative and right is positive, both are in place
+            else {
+                left++;
+                right--;
+            }
+        }
+    }
+}
+
+<b>Output: </b>
+Array after rearranging: -1 -9 -6 10 20 4 5
+        </code>
+      </pre>
+    </div>
+
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
 </html>

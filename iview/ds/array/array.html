@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>1D Array</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
-    </head>
-    <body>
-      <pre>
-        <code class="language-java">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Array?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Array is a collection of elements, usually of fixed size and all are of same data type, stored in contiguous (side-by-side) memory locations, thus supporting accessing by index;</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">1D Array</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -51,18 +53,22 @@ public class OneDApp {
     }
 }
 
-// Output:
+<b>Output:</b>
 10
 20
 30
 40
 Updated Array: 10, 20, 30, 900
-        </code>
-      </pre>
 
-      <pre>
-        <code class="language-java">
-public class TwoDApp {
+</code></pre>
+    </div>
+
+    <br />
+    <br />
+    <div class="code-block">
+        <div class="code-block-title">2D Array</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>public class TwoDApp {
     public static void main(String[] args) {
         // Declaration
         int[][] a1 = new int[5][];
@@ -94,7 +100,7 @@ public class TwoDApp {
     }
 }
 
-Output:
+<b>Output:</b>
 0 0 0 0 0 0 0 0 0 0 
 1 1 1 1 1 1 1 1 1 1 
 2 2 2 2 2 2 2 2 2 2 
@@ -103,7 +109,13 @@ Output:
 50 60 55 67 70 
 62 65 70 70 81 
 72 66 77 80 69
-        </code>
-    </pre>        
-    </body>
+
+</code></pre>
+    </div>
+
+
+    <script src="../../../resources/js/codeblock.js"></script>
+
+</body>
+
 </html>
