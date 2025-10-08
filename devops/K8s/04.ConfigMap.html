@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is ConfigMap?
+  Almost every application can be fine-tuned through configuration.
+  Never store application configuration(like database URL, username, password etc) in the image/pod/deployment/server, separate it!
+  In case of non-sensitive configuration, use ConfigMap; 
+	In case of sensitive configuration(passwords, API keys), use Secret;
+
+	It stores data in key-value pairs, like a Map;
+	Data in ConfigMap is passed to Pods via environment variables, command line arguments or mount configmap as file in a volume;
+
+	It is tied to the namespace in which it is created;
+
+Why to use ConfigMap?
+	- Runtime configuration
+	  By separating the configuration from image, it allows us to change the configuration, without rebuilding the image OR redeploying;
+  - Share configuration between pods 
+    You can share configuration between multiple pods or containers;
+  - Environment specific configuration 
+	  You can use different ConfigMaps for different environments(development, staging, production etc);
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl create -f &lt;configmap.yml&gt; 													                  # Create configmap from ConfigMap resource;
+kubectl create cm &lt;name&gt; --from-literal k1=v1 --from-literal k2=v2 					  # CLI: Create configmap from literals;
+kubectl create cm &lt;name&gt; --from-file=config1.txt --from-file=config2.txt			# CLI: Create configmap from property files;
+kubectl get cm 																		                            # List all configmaps;
+kubectl describe cm &lt;name&gt; 															                      # Describe the configmap;
+kubectl delete cm &lt;name&gt;                                                      # Delete the configmap;
+kubectl describe cm &lt;name&gt; 				                                            # Describe(name, namespace, labels and annotations, data) the specified ConfigMap;
+kubectl edit cm &lt;name&gt;                                                        # It opens the manifest file using your favorite text editor, do the changes and save it! 
+                                                                              # Any changes made to configmap will reflect in the pod immediately;
+                                                                              # You might need to restart the pod or use a checksum annotation on your Deployment to force a rollout;       
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Use envFrom to load all keys as environment variables.
+Use env with configMapKeyRef for selective keys.
+Use volumes to mount config as files.
+
+
+  Note: ConfigMaps have size limitations, so ensure that they do not exceed these constraints to avoid deployment issues.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: config-map-1-printer-pod
+spec:
+  containers:
+    - name: config-map-1-printer-c1
+      image: registry.k8s.io/busybox
+      command: [ &quot;/bin/sh&quot;, &quot;-c&quot;, &quot;env&quot; ]
+	  envFrom:
+		- configMapRef:
+		  name: config-map-1
+
+
+      env:
+        # Define the environment variable
+        - name: SPECIAL_LEVEL_KEY
+          valueFrom:
+            configMapKeyRef:
+              # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+              name: special-config
+              # Specify the key associated with the value
+              key: special.how
+  restartPolicy: Never
+
+
+
+
+
+
+
+
+	ConfigMap is used to store configuration(key-value pairs);
+	Configuration is injected into the container, when it is started;
+	
+
+	Once Pod is up, any changes to configuration will require a redeployment of the Pod;
+	https://medium.com/@harsh.manvar111/update-configmap-without-restarting-pod-56801dce3388
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - Creating a ConfigMap
+------------------------------------------------------------
+# Pass the configuration(key-value pairs) from command line;
+------------------------------------------------------------
+&gt; kubectl create configmap cm1 --from-literal=k1=v1
+configmap/cm1 created
+
+&gt; kubectl create configmap cm2 --from-literal k2=v2 --from-literal k3=v3
+configmap/cm2 created
+------------------------------------------------------------
+# Pass the configuration using one or more files;
+------------------------------------------------------------
+&gt; cat config1.txt
+k4=v4
+k5=v5
+
+&gt; cat config2.txt
+k6=v6
+k7=v7
+
+&gt; kubectl create configmap cm3 --from-env-file=config1.txt
+configmap/cm3 created
+
+&gt; kubectl create configmap cm4 --from-file=config1.txt --from-file=config2.txt
+configmap/cm4 created
+------------------------------------------------------------
+# Use manifest file to create a ConfigMap;
+------------------------------------------------------------
+&gt; cat cm5.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm5
+data:
+  k8: v8
+  k9: v9
+
+&gt; kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/config/cm5.yaml 
+configmap/cm5 created
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - Consuming a ConfigMap
+------------------------------------------------------------
+Way #1: Mount the ConfigMap as a Volume; When you use ConfigMap in Pod as volume, each key becomes a file in the mounted directory;
+------------------------------------------------------------
+&gt; kubectl create -f ~/Data-new/Technical/Backend/Kubernetes/code/config/cm-demo-pod-1.yaml 
+pod/cm-demo-pod-1 created
+
+&gt; kubectl exec -it cm-demo-pod-1 -- /bin/bash
+root@cm-demo-pod-1:/# cd /etc/config/
+root@cm-demo-pod-1:/etc/config# ls
+k1  k2
+root@cm-demo-pod-1:/etc/config# cat k1
+v1
+root@cm-demo-pod-1:/etc/config# cat k2
+v2
+
+&gt; kubectl exec -it cm-demo-pod-1 -- ls /etc/config
+k1 k2
+&gt; kubectl exec -it cm-demo-pod-1 -- cat /etc/config/k1
+v1
+------------------------------------------------------------
+Way #2: It injects ConfigMap environment variables to your pod; This is used and convenient if the ConfigMap reflects the desired syntax;
+------------------------------------------------------------
+&gt; kubectl create -f ~/Data-new/Technical/Backend/Kubernetes/code/config/cm-demo-pod-2.yaml 
+pod/cm-demo-pod-2 created
+
+&gt; kubectl exec -it cm-demo-pod-2 -- /bin/bash
+root@cm-demo-pod-2:/# echo $k1
+v1
+
+&gt; kubectl exec cm-demo-pod-2 -- printenv 			# Print all environment variables;
+------------------------------------------------------------
+&gt; kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/config/cm-demo-pod-3.yaml 
+pod/cm-demo-pod-3 created
+
+&gt; kubectl logs cm-demo-pod-3
+Welcome to  Kubernetes!: v1 - v2 
+------------------------------------------------------------
+&gt; kubectl apply -f ~/Data-new/Technical/Backend/Kubernetes/code/config/cm-demo-pod-4.yaml 
+pod/cm-demo-pod-4 created
+
+&gt; kubectl get pods
+NAME            READY   STATUS      RESTARTS   AGE
+cm-demo-pod-4   0/1     Completed   0          5s
+
+&gt; kubectl logs cm-demo-pod-4
+K1=v1
+USERNAME=peterpan
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+&gt; kubectl get cm 								# List all configmags in current namespace;
+NAME               DATA   AGE
+cm1                1      3h38m
+cm2                2      3h38m
+cm3                2      3h37m
+cm4                2      3h36m
+cm5                2      3h33m
+kube-root-ca.crt   1      34d
+
+
+&gt; kubectl describe configmap cm1 				# Describe the specified ConfigMap;
+
+&gt; kubectl edit configmap cm1 					# It opens the manifest file using your favorite text editor, do the changes and save it!
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TODO:
+https://stackoverflow.com/questions/48150179/how-to-mount-entire-directory-in-kubernetes-using-configmap
+
+
+
+
+-----------
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-files
+data:
+  app.properties: |
+    mode=production
+    port=8080
+  log.config: |
+    level=info
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+spec:
+  containers:
+  - name: app-container
+    image: busybox
+    command: [&quot;sleep&quot;, &quot;3600&quot;]
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+  volumes:
+  - name: config-volume
+    configMap:
+      name: config-files
+
+
+Inside the container, the following files exist:
+/etc/config/app.properties
+/etc/config/log.config
+
+You can cat them or use them in your app.
+-----------</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

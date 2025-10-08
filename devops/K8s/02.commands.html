@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>### General 
+kubectl version 				                                                                    # It prints the both client and server version;
+kubectl version --client		                                                                # It prints only client version;
+kubectl version --short			                                                                # It prints only server version;
+kubectl api-resources 			                                                                # It prints all resource types that are available in your cluster; It prints type, shortname, api version, namespaced or not;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl config view                                                                         # View kubeconfig file;
+kubectl config get-contexts	                                                                # List all contexts
+kubectl config current-context                                                              # Show the current active context;
+kubectl config use-context &lt;name&gt;	                                                          # Switch to another context
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Namespace 
+kubectl get namespaces                                                                      # List all namespaces 
+kubectl create namespace &lt;mynamespace&gt; 	                                                    # Create a namespace
+kubectl delete namespace &lt;mynamespace&gt; 	                                                    # Delete a namespace; Delting a namespace would delete all the resources in it;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ConfigMap
+kubectl get cm 																		                                          # List all configmaps;
+kubectl describe cm &lt;name&gt; 				                                                          # Describe(name, namespace, labels and annotations, data) the specified ConfigMap;
+kubectl edit cm &lt;name&gt;                                                                      # It opens the manifest file using your favorite text editor, do the changes and save it!
+kubectl delete cm &lt;name&gt;                                                                    # Delete the configmap;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Secret 
+kubectl get secrets                                                                         # List all secrets;
+kubectl get secret &lt;name&gt; -o jsonpath=&#x27;{.data}&#x27;									                            # It shows encoded key-value pairs stored in the data section;
+kubectl edit secret &lt;name&gt; 														                                      # Edit secret;
+kubectl delete secret &lt;name&gt; 													                                      # Delete secret;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# ServiceAccount
+kubectl create sa &lt;name&gt;                                                                    # Create service account;
+kubectl get sa                                                                              # List all service accounts(in current namespace);
+
+kubectl describe sa &lt;name&gt;                                                                  # List token
+kubectl exec -it &lt;pod&gt; -- cat /var/run/secrets/kubernetes.io/serviceaccount/token           # List token
+
+# Role, RoleBinding, ClusterRole, ClusterRoleBinding 
+kubectl get roles --all-namespace                                                           # 
+kubectl get rolebindings -n &lt;name&gt;                                                          # 
+kubectl get clusterroles
+kubectl get clusterrolebindings
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Job 
+kubectl get jobs                                            # List all jobs in current namespace
+kubectl describe job &lt;job-name&gt;                             # Check job status - success/failure, howmany times failed etc;
+kubectl get pods -l job-name=&lt;job-name&gt;                     # List all pods created by given job;
+kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt;                 # Once the Job completes successfully, the pod will terminate, and you can see the output logs
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+There are around 77 resource types
+These are the standard, built-in objects:
+
+1. Workloads (Apps you run)
+Pod
+
+ReplicaSet
+
+Deployment
+
+StatefulSet
+
+DaemonSet
+
+Job
+
+CronJob
+
+✅ Total: 7
+
+2. Networking
+Service
+
+Ingress
+
+NetworkPolicy
+
+✅ Total: 3
+
+3. Configuration &amp; Storage
+ConfigMap
+
+Secret
+
+PersistentVolume (PV)
+
+PersistentVolumeClaim (PVC)
+
+VolumeAttachment
+
+StorageClass
+
+CSIStorageCapacity
+
+CSIDriver
+
+✅ Total: 8
+
+
+
+
+4. Cluster Management
+Namespace
+
+Node
+
+Event
+
+LimitRange
+
+ResourceQuota
+
+PodDisruptionBudget
+
+PriorityClass
+
+✅ Total: 7
+
+
+
+5. RBAC (Access Control)
+ServiceAccount
+Role
+RoleBinding
+ClusterRole
+ClusterRoleBinding
+✅ Total: 5
+
+
+
+6. Custom Resource Definitions (CRDs)
+CustomResourceDefinition
+✅ Total: 1 (but enables many user-defined types)
+
+
+7. API Extensions &amp; Controllers
+MutatingWebhookConfiguration
+ValidatingWebhookConfiguration
+APIService
+ControllerRevision
+✅ Total: 4
+
+
+
+kubectl 
+
+Cluster: cluster-info, get nodes;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl create -f &lt;manifest.yaml&gt;               # Create Resources 
+kubectl delete -f &lt;manifest.yaml&gt;               # Delete Resources 
+------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get pods                                                                        # List all Pods
+kubectl describe pod &lt;pod_name&gt;                                                         # Describe specified pod; Displays events, which are useful when Pod creation failed;
+kubectl get pod &lt;pod_name&gt; -o jsonpath=&quot;{.spec[&#x27;containers&#x27;,&#x27;initContainers&#x27;][*].name}&quot; # List both containers and init containers in a Pod;
+kubectl exec &lt;pod_name&gt; --container &lt;container_name&gt; -- &lt;command&gt; &lt;args&gt;                # Run given command in the specified container;
+kubectl exec -it &lt;pod_name&gt; --container &lt;container_name&gt; -- bash                        # Open interactive shell session with specified container;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get rs 							                # List all Replicasets
+kubectl scale rs/&lt;name&gt; --replicas=4 	                # Scale Up/Down
+------------------------------------------------------------------------------------------------------------------------------------------------------
+# Deployment
+kubectl get deployments                                                                     # List all Deployments
+kubectl set image deployment/my-deployment my-container=your-registry/my-image:2.0.0        # Upgrade specified containers to specified image;
+kubectl edit deployment/my-deployment                                                       # Edit deployment;
+kubectl rollout status deployment/my-deployment                                             # Print status of rollout;
+kubectl rollout pause deployment/my-deployment                                              # Pause a rollout that is in-progress;
+kubectl rollout resume deployment/my-deployment                                             # Resume a rollout that is paused;
+kubectl rollout history deployment/my-deployment                                            # History of rollouts;
+kubectl rollout history deployment/my-deployment --revision=2                               # Check the details of particular revision;
+kubectl rollout undo deployment/my-deployment                                               # Rollback to previous revision;
+kubectl rollout undo deployment/my-deployment --to-revision=2                               # Rollback to specified revision;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+# Labels 
+kubectl label &lt;resource_type&gt;/&lt;resource_name&gt; &lt;label_name&gt;-                     # Remove label 
+kubectl get &lt;resource_type&gt;/&lt;resource_name&gt; -o json | jq .metadata.labels       # Get all labels of Pod 
+kubectl label &lt;resource_type&gt;/&lt;resource_name&gt; &lt;label_name&gt;=&lt;value&gt;              # Add label 
+
+# Query for resources, based on labels;
+kubectl get &lt;resource_type&gt; -l &#x27;environment=dev&#x27;                                            # Get all resources with label
+kubectl delete deployment,services,statefulsets -l &#x27;environment in (local,dev,staging)&#x27;     # Delete resources with any of specified labels; // OR
+kubectl get pods -l ‘environment=dev,release=daily’                                         # Get all pods with all specified labels; // AND 
+------------------------------------------------------------------------------------------------------------------------------------------------------
+The main difference between labels and annotations is that annotations are not used to filter, group, or operate over the Kubernetes resource. Instead, you can use them to access additional information about it.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+# Cluster 
+kubectl get all                                 # List all objects in the cluster;
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+kubectl get pods 
+kubectl delete deployment,services,statefulsets -l &#x27;environment in (local,dev,staging)&#x27;     # delete resources with specified labels 
+
+
+Schedule pods based on node labels
+kubectl get nodes -l ‘critical=true’
+
+
+Annotations 
+
+Selectors 
+
+
+
+Environment variables 
+Config files,
+ConfigMaps 
+Custom Resource Definitions (CRDs)
+Deployments are ideal for stateless applications, 
+StatefulSets for stateful applications requiring persistent storage, and 
+DaemonSets for running background tasks on every node.
+https://medium.com/@muppedaanvesh/a-hands-on-guide-to-kubernetes-deployments-statefulsets-and-daemonsets-%EF%B8%8F-20167634775d
+
+
+kubectl get all
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl cluster-info   										# 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get nodes 											# List of all nodes in the cluster;
+kubectl get nodes --show-labels 							# 
+kubectl describe nodes worker1.example.com
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl create deployment 									# It creates Deployment, ReplicaSet, Pod;
+kubectl expose deployment 									# It creates Service;
+kubectl get deployments
+kubectl scale deployment &lt;deployment-name&gt; --replicas=3  						# It ensures that specfied number pod replicas are running always!	
+kubectl set image deployment &lt;deployment-name&gt; &lt;deployment-name&gt;=&lt;new-image&gt; 	# By default, It uses rolling upgrade strategy for upgrade!
+													# It creates a new replica set with 1 pod; Once pod is up, it deletes 1 pod in old replicaset;
+													# It repeats the process, until all pods are recreated with new image;
+													# Once all pods are upgraded, it deletes the old replica set;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get replicasets -o wide 				# List of replica sets
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get pods -o wide 						# List all Pods	
+kubectl describe pod &lt;podName&gt; 					# 
+kubectl delete pod &lt;podName&gt; 					# Delete a pod
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get services 							# List all Services running
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl events --sorty-by=.metadata.creationTimestamp	# This command tells you what all happened in the background, for each kubectl command you run;
+kubectl get events – List recent events for all resources in the system.
+
+kubectl get events --field-selector type=Warning – List Warnings only.
+
+kubectl get events --sort-by=.metadata.creationTimestamp – List events sorted by timestamp.
+
+kubectl get events --field-selector involvedObject.kind!=Pod – List events but exclude Pod events.
+
+kubectl get events --field-selector involvedObject.kind=Node, involvedObject.name=&lt;node_name&gt; – Pull events for a single node with a specific name.
+
+kubectl get events --field-selector type!=Normal – Filter out normal events from a list of events.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get componentstatuses 					# Prints the status of different components of Master Node
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get deployment &lt;deployment-name&gt; -o yaml &gt;&gt; &lt;deployment-file-name&gt;.yaml		# It prints entire deployment configuration in yaml format
+kubectl get service &lt;service-name&gt; -o yaml &gt;&gt; &lt;service-file-name&gt;.yaml				# It prints entire service configuration in yaml format
+
+# You can make changes to yaml file manually and run below command to apply it;
+kubectl diff -f &lt;deployment-file-name&gt;.yaml
+kubectl apply -f &lt;deployment-file-name&gt;.yaml 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl explain pods 									# help about pods
+kubectl explain rs
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl label nodes &lt;your-node-name&gt; disktype=ssd 		# Assign label to specified node;
+
+
+Some clusters may allow you to ssh to a node in the cluster. 
+
+ kubectl get nodes -l node-role.kubernetes.io/master=true
+
+  kubectl get netpol --all-namespaces
+
+kubectl logs &lt;pod-id&gt; 		# See logs of a pod, to see if application started fine
+kubectl logs -f &lt;pod-id&gt; 	# Tail logs of a pod, to see if application started fine
+
+kubectl rollout history deployment &lt;deployment-name&gt; 					# History of all deployments
+kubectl rollout undo deployment &lt;deployment-name&gt; --to-revision=1 		# Revert a deployment to older version
+# There is a little lag when you switch from one version to another; Any requests to the container, in that time will run into Internal Server Error;
+# You can use Liveness and Readiness probes to avoid it;
+
+# K8s uses probes to check the health of a microservice; 
+#	If Readiness probe is not successful, no traffic is sent to it;
+# 	If Liveness probe is not successful, pod is restarted;
+
+# Spring boot actuator(&gt;=2.3) provides inbuilt liveness and readiness probes; /health/readiness, /health/liveness
+
+
+kubectl get events --sort-by=.metadata.creationTimestamp
+ue7s glisjosszt
+
+-e csnvFrom:
+	- configMapRef:
+		name: &lt;config-map-name&gt;
+
+readinessProbe:
+	httpGet:
+		port: 8000
+		path: /actuator/health/readiness
+
+livenessProbe:
+	httpGet:
+		port: 8000
+		path: /actuator/health/liveness
+
+watch -n 0.1 curl &lt;URL&gt; 		# For every 0.1 seconds, it fires a request
+
+
+
+
+kubectl top pods 		    # To see how much load each pod is handling
+kubectl top nodes       # To see how much load each node is handling
+kbectl get hpa   		    # List all horizontal pod autoscalers
+-------------------------------------------------------------------------------------------------------------------------------------------------
+What is Kubernetes Client?
+	https://stackoverflow.com/questions/60991658/kubectl-what-does-client-vs-server
+
+What is Kubernetes Server?
+
+What is Kubernetes Cluster?
+
+What is Kubernetes Node?
+	In Production, It could be either a physical machine in a datacenter OR a virtual machine hosted on cloud provider like Google Cloud Platform.
+
+
+What is kubectl?
+
+Run a pod, and then connect to a shell in it using kubectl exec. Connect to other nodes, pods, and services from that shell.
+Some clusters may allow you to ssh to a node in the cluster. From there you may be able to access cluster services.
+
+# Use Fn+Shift+Up/Down to scroll through multi line output;
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------
+# Cluster
+
+kubectl cluster-info
+Kubernetes master is running at https://192.168.99.101:8443
+KubeDNS is running at https://192.168.99.101:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl api-resources
+	It prints all the resource types supported(along with short name, API group, Namespaced or not, Kind)
+
+	-o name 				- print only short name
+	-o wide					- 
+	--namespaced=true 		- print only namespaced resources
+	--namespaced=false 		- print only non-namespaced resources
+	--api-group=extensions	- print all resources in the &quot;extensions&quot; API group
+	--verbs=list,get 		- print all resources that support &quot;list&quot; and &quot;get&quot; verbs
+
+kubectl api-resources | awk &#x27;{print $5}&#x27;  		# List of kinds.
+
+
+
+
+&gt; kubectl api-versions
+admissionregistration.k8s.io/v1
+apiextensions.k8s.io/v1
+apiregistration.k8s.io/v1
+apps/v1
+authentication.k8s.io/v1
+authorization.k8s.io/v1
+autoscaling/v1
+autoscaling/v2
+autoscaling/v2beta1
+autoscaling/v2beta2
+batch/v1
+batch/v1beta1
+certificates.k8s.io/v1
+coordination.k8s.io/v1
+discovery.k8s.io/v1
+discovery.k8s.io/v1beta1
+events.k8s.io/v1
+events.k8s.io/v1beta1
+flowcontrol.apiserver.k8s.io/v1beta1
+flowcontrol.apiserver.k8s.io/v1beta2
+networking.k8s.io/v1
+node.k8s.io/v1
+node.k8s.io/v1beta1
+policy/v1
+policy/v1beta1
+rbac.authorization.k8s.io/v1
+scheduling.k8s.io/v1
+storage.k8s.io/v1
+storage.k8s.io/v1beta1
+v1
+
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl create vs apply vs replace
+	kubectl apply fails if you do not have an active cluster.
+	kubectl apply -f [DIRECTORY]/ to create all objects (except existing ones) defined in manifest files stored a directory.
+
+-----------------------------------------------------------------------------------------------------------------------------------
+# Container Related
+kubectl logs - print the logs from a container in a pod
+kubectl exec - execute a command on a container in a pod
+https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+https://kubernetes.io/docs/tasks/access-kubernetes-api/http-proxy-access-api/
+https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
+-----------------------------------------------------------------------------------------------------------------------------------
+# Node Related
+
+
+kubectl describe nodes 			# it will expose each pod per node in the cluster with the following info
+    							# Namespace | Name | CPU Requests | CPU Limits | Memory Requests | Memory Limits
+
+kubectl get nodes
+kubectl get nodes --show-labels	
+To see the labels automatically generated for each pod, run kubectl get pods --show-labels
+-----------------------------------------------------------------------------------------------------------------------------------
+# Pod Related
+kubectl create -f &lt;pod-config.yaml&gt;								# Create Pod
+
+kubectl get pods -o wide										# Get the status of all Pods(shows node name). -o specifies Output format.
+kubectl get pod &lt;pod-name&gt; -o wide								# Get the status of specified Pod(status of continers? are there any restarts? etc).
+kubectl get pods -l k1=v1,k2=v2									# Get all Pods with specified labels.
+kubectl get pods --field-selector spec.nodeName=minikube 		# Get all Pods in the specified Node.
+
+kubectl describe pod &lt;pod-name&gt;								# Get more information(continers, resources, events) about specified Pod.
+kubectl get pod &lt;pod-name&gt; -o yaml 							# Get all the information the system has about this pod(more than describe) in YAML format.
+kubectl get pod &lt;pod-name&gt; -o json 							# Get all the information the system has about this pod(more than describe) in JSON format.
+kubectl get pod &lt;pod-name&gt; -o jsonpath={.spec.containers[*].name} 	# Used to query the JSON object representing the Pod.
+-----------------------------------------------------------------------------------------------------------------------------------
+# ReplicaSet
+
+kubectl get rs 					# list all ReplicaSets
+kubectl describe rs &lt;rs-name&gt; 	# 
+kubectl delete rs &lt;rs-name&gt;		# 
+								# it is impossible to scale down the ReplicaSet by deleting the Pod, because while a Pod is removed, the ReplicaSet is out of stable status: if the desired number of Pods is not met, and the controller manager will ask ReplicaSet to create another one. 
+
+// change replica count from 2 to 5, default system editor will pop out. Change `replicas` number
+kubectl edit rs &lt;rs-name&gt;
+replicaset.extensions/nginx edited
+-----------------------------------------------------------------------------------------------------------------------------------
+# Deployment Related
+
+kubectl create -f my-deployment.yaml --record 		# Create Deployment, --record flag ensures that creation of deployment is recorded in history.
+kubectl get deployments 												# Get all deployments
+kubectl scale deployment &lt;deployment-name&gt; --replicas 3 				# scaling
+kubectl rollout history deployment/&lt;deployment-name&gt; 					# Get rollout history of specified deployment
+kubectl rollout history deployment/&lt;deployment-name&gt;  --revision 42		# Get the details of 42nd deployment
+kubectl set image deployment/&lt;deployment-name&gt; &lt;container-name&gt;=&lt;image1&gt;:&lt;tag&gt; &lt;container-name-2&gt;=&lt;image2&gt;:&lt;tag&gt;
+						# Update deployment&#x27;s container-name and container-name-2 cotnainers to specified images
+						# In case of any problem(wrong image name, internet connect for pulling image), it holds the deployment.
+kubectl apply -f &lt;version updated in yaml file.yaml&gt;  --record 			# Another way to rollout new version of image
+
+kubectl rollout status deployment/my-deployment							# Get the status of the deployment or rollout
+kubectl rollout pause deployment &lt;deployment-name&gt;						# Pause Rolling Update
+kubectl rollout resume deployment &lt;deployment-name&gt; 					# Resume Rolling Update 
+kubectl rollout undo deployment/&lt;deployment-name&gt; 						# Rollback to previously deployed version
+kubectl rollout undo deployment/&lt;deployment-name&gt; --to-revision 21 		# Rollback to specific version
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl get pods,rs,deployments
+kubectl create -f FILENAME [flags]
+	Create one or more resources from a file or stdin.
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl exec POD [-c CONTAINER] [-i] [-t] [flags] [-- COMMAND [args...]]
+	Execute a command against a container in a pod.
+	kubectl exec - execute a command on a container in a pod
+
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl get events --all-namespaces
+kubectl get events --namespace=my-namespace
+kubectl get events --sort-by=.metadata.creationTimestamp  		# Sorted by timestamp; By default, events are not sorted;
+
+
+kubectl logs POD [-c CONTAINER] [--follow] [flags]	Print the logs for a container in a pod.
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl run NAME --image=image [--env=&quot;key=value&quot;] [--port=port] [--replicas=replicas] [--dry-run=bool] [--overrides=inline-json] [flags]	
+	Run a specified image on the cluster.
+	It is used to create a new deployment.
+	kubectl run kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8080
+	docker run --name docker-nginx -p 8080:80 nginx # Running in detached mode
+	docker run --name docker-nginx -p 8080:80 -d nginx # Accessing the container
+
+You can create a Deployment using the kubectl run, kubectl apply, or kubectl create commands.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+kubectl scale (-f FILENAME \| TYPE NAME \| TYPE/NAME) --replicas=COUNT [--resource-version=version] [--current-replicas=count] [flags]	
+	Update the size of the specified replication controller.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+What is Context?
+kubectl describe - show detailed information about a resource
+
+
+https://carlos.mendible.com/2018/03/18/my-kubectl-cheat-sheet/
+https://www.oreilly.com/learning/kubernetes-kubectl-commands
+
+kubectl run my-nginx --image=nginx --port=80
+	run command creates a new deployment. We need to provide the deployment name and app image location (include the full repository url for images hosted outside Docker hub).
+	It does following:
+		- Searched for a suitable node where an instance of the application could be run (we have only one available node).
+		- Scheduled the ngnix application to run on that Node.
+		- Configured the cluster to reschedule the instance on a new Node when needed.
+	Once the application instances are created, a Kubernetes deployment controller continuously monitors those instances. If the Node hosting an instance goes down or is deleted, the deployment controller replaces it.
+	https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/
+	https://stackoverflow.com/questions/42564058/how-to-use-local-docker-images-with-minikube?rq=1
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+kubectl cluster-info
+kubectl cluster-info dump --all-namespaces	# Dump all namespaces to stdout
+kubectl cluster-info dump --namespaces default,kube-system --output-directory=/path/to/cluster-state # Dump a set of namespaces to /path/to/cluster-state
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get pods # default namespace
+kubectl get pods --all-namespaces
+	It shows all pods in the cluster and across all of the available namespaces.
+	Kubernetes splits up resources (think on a per-customer basis, as a simple example) into namespaces , and as a result, in order to see everything within a cluster, you need to ask for --all-namespaces .
+kubectl get pods -n namespace_name
+
+kubectl get pod nginx-dep-54b9c79874-b9dzh -o wide
+	-o wide option offers more networking information than the standard command
+
+kubectl describe pod nginx-dep-54b9c79874-b9dzh
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+$ kubectl get deployment #. To get the deployments running in the default namespace
+kubectl get deployment -o wide # -o wide &#x27;&#x27; addition to view the replicas
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get svc
+	
+
+NodePort
+	NodePort exposes the service on a static port of the node IP address. 
+	NodePorts are in the 30000-32767 range. The NodePort is therefore unlikely to match a service&#x27;s well known port.
+ClusterIP
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl describe nodes
+
+kubectl describe node &lt;node-name&gt;	- It lists allocatable resources available in a cluster. # Allocatable = Capacity - Reserved - Eviction Threshold
+
+
+	
+By default, kubectl looks for a file named config in the $HOME/.kube directory. You can specify other kubeconfig files by setting the KUBECONFIG environment variable or by setting the --kubeconfig flag.
+The KUBECONFIG environment variable holds a list of kubeconfig files. For Linux and Mac, the list is colon-delimited. For Windows, the list is semicolon-delimited. The KUBECONFIG environment variable is not required. If the KUBECONFIG environment variable doesn’t exist, kubectl uses the default kubeconfig file, $HOME/.kube/config.
+If the KUBECONFIG environment variable does exist, kubectl uses an effective configuration that is the result of merging the files listed in the KUBECONFIG environment variable.
+The loading order follows these rules:
+If the --kubeconfig flag is set, then only that file is loaded. The flag may only be set once and no merging takes place.
+If $KUBECONFIG environment variable is set, then it is used as a list of paths (normal path delimitting rules for your system). These paths are merged. When a value is modified, it is modified in the file that defines the stanza. When a value is created, it is created in the first file that exists. If no files in the chain exist, then it creates the last file in the list.
+Otherwise, ${HOME}/.kube/config is used and no merging takes place.
+
+
+
+
+
+	kubectl config get-contexts						- 
+	kubectl config current-context  				− It displays the current context.
+	kubectl config use-context &lt;contextName&gt;		− Sets the current context in kubectl file.
+	kubectl config delete-context &lt;contextName&gt;	  	− Delete specified context from kubeconfig.
+	kubectl config set-context NAME 				- Sets a context entry in kubernetes entrypoint.
+		[--cluster = cluster_nickname] 
+		[--user = user_nickname] 
+		[--namespace = namespace]
+	kubectl config view
+	kubectl config view –o jsonpath=&#x27;{.users[?(@.name == &quot;e2e&quot;)].user.password}&#x27;
+
+
+	  current-context Displays the current-context
+  delete-cluster  Delete the specified cluster from the kubeconfig
+  delete-context  Delete the specified context from the kubeconfig
+  get-clusters    Display clusters defined in the kubeconfig
+  get-contexts    Describe one or many contexts
+  rename-context  Renames a context from the kubeconfig file.
+  set             Sets an individual value in a kubeconfig file
+  set-cluster     Sets a cluster entry in kubeconfig
+  set-context     Sets a context entry in kubeconfig
+  set-credentials Sets a user entry in kubeconfig
+  unset           Unsets an individual value in a kubeconfig file
+  use-context     Sets the current-context in a kubeconfig file
+  view            Display merged kubeconfig settings or a specified kubeconfig file
+
+------------------------------------------------------------------------------------------------------------------------------------------
+kubectl describe pods ${POD_NAME}
+	Check the current state of the pod and recent events(Are all containers in the Pod Running? Have there been recent restarts?)
+------------------------------------------------------------------------------------------------------------------------------------------
+kubectl logs ${POD_NAME} ${CONTAINER_NAME}
+	look at the logs of the current container
+kubectl logs --previous ${POD_NAME} ${CONTAINER_NAME}
+	If your container has previously crashed, you can access the previous container’s crash log with:
+
+kubectl logs &lt;pod_name&gt; – Print the logs for a pod.
+
+kubectl logs --since=6h &lt;pod_name&gt; – Print the logs for the last 6 hours for a pod.
+
+kubectl logs --tail=50 &lt;pod_name&gt; – Get the most recent 50 lines of logs.
+
+kubectl logs -f &lt;service_name&gt; [-c &lt;$container&gt;] – Get logs from a service and optionally select which container.
+
+kubectl logs -f &lt;pod_name&gt; – Print the logs for a pod and follow new logs.
+
+kubectl logs -c &lt;container_name&gt; &lt;pod_name&gt; – Print the logs for a container in a pod.
+
+kubectl logs &lt;pod_name&gt; pod.log – Output the logs for a pod into a file named ‘pod.log’.
+
+kubectl logs --previous &lt;pod_name&gt; – View the logs for a previously failed pod.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+kubectl exec ${POD_NAME} -c ${CONTAINER_NAME} -- ${CMD} ${ARG1} ${ARG2} ... ${ARGN}
+	You can run commands inside that container with exec.
+	-c ${CONTAINER_NAME} is optional. You can omit it for pods that only contain a single container.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+ReplicationControllers
+
+kubectl describe rc ${CONTROLLER_NAME} to inspect events related to the replication controller.
+------------------------------------------------------------------------------------------------------------------------------------------
+kubectl create deployment hello-node --image=gcr.io/hello-minikube-zero-install/hello-node
+	It create a Deployment that manages a Pod. The Pod runs a Container based on the provided Docker image.
+kubectl get deployments
+kubectl get pods
+kubectl get events # View cluster events
+kubectl get services
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+	By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster. To make the hello-node Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes Service.
+	Expose the Pod to the public internet using the kubectl expose command.
+	--type=LoadBalancer flag indicates that you want to expose your Service outside of the cluster.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl delete service hello-node
+kubectl delete deployment hello-node
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+edit, patch, replace
+subcommands known as edit, patch, and replace can help to update live Kubernetes resources. All these functionalities change the settings by way of modifying a configuration file. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+docker/tcuser
+
+Minikube Features?
+	It support Kubernetes features such as:
+		- DNS
+		- NodePorts // for external connectivity
+		- ConfigMaps and secrets
+		- Dashboards
+		- Container runtime: Docker, rkt, CRI-O
+		- Enabling CNI(Container Network Interface)
+		- Ingress	// for load balacing
+
+kubectl configuration (~/.kube/config):
+	https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/
+	apiVersion - https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-apiversion-definition-guide.html
+		TODO: How to find list of possible versions?
+	clusters, users, and contexts
+https://kubernetes.io/docs/reference/kubectl/overview/
+http://gist-reveal.it/bit.ly/k8s-miniarch#/k8s-controllers
+http://gist-reveal.it/bit.ly/k8s-minidev#/local-development-with-minikube
+https://www.codeproject.com/Articles/1185089/An-Introduction-to-Kubernetes-with-Minikube
+https://richardroseblog.wordpress.com/2017/11/01/minikube-creating-a-cluster/
+https://opensource.com/article/18/10/getting-started-minikube
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.10/
+
+
+kubectl get cs # Check the health status of the cluster components
+kubectl get pods # List pods
+kubectl get nodes # List nodes
+kubectl get services # List services
+
+
+
+minikube version                # minikube version: v0.22.3
+kubectl version --client        # Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;8&quot;, GitVersion:&quot;v1.8.1&quot;, 	
+								GitCommit:&quot;f38e43b221d08850172a9a4ea785a86a3ffa3b3a&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2017-10-12T00:45:05Z&quot;, GoVersion:&quot;go1.9.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;darwin/amd64&quot;}
+
+minikube dashboard # Mikikube offers a simple dashboard GUI for managing the Kubernetes cluster
+minikube service nginx-node
+minikube addons list
+minikube service kubernetes-dashboard --namespace=kube-system
+minikube addons configure registry-creds
+minikube addons enable registry-creds
+
+kubectl run unicorn-worker --image=sadfasdf.amazonaws.com/signin_service/unicorn:10.2 --port=80
+kubectl describe pod unicorn-worker
+// pull image from ECR on AWS
+//	image: ACCOUNT.dkr.ecr.REGION.amazonaws.com/imagename:tag
+
+
+// Creating a simple service on local minikube
+kubectl run nginx-node --image=nginx --port=80
+kubectl get pod
+kubectl get deployment
+kubectl expose deployment nginx-node --type=NodePort
+kubectl get service
+kubectl describe service nginx-node
+minikube service nginx-node
+
+//  Creating a simple service on AWS Kubernetes
+kubectl run nginx-node --image=nginx --port=80
+kubectl get pod
+kubectl get deployment
+kubectl expose deployment nginx-node --type=LoadBalancer
+kubectl get service
+kubectl describe service nginx-node
+minikube service nginx-node
+
+
+// Minikube addon - Heapster
+minkube addons enable heapster
+minikube service monitoring-grafana --namespace=kube-system
+
+// HPA - Horizontal Pod Autoscaling
+kubectl run nginx-node --image=nginx --port=80 --limits=&#x27;cpu=20m&#x27;
+kubectl expose deployment nginx --type=NodePort 
+minikube service nginx
+kubectl autoscale deployment nginx --min=1 --max=5 --cpu-percent=20
+kubectl get hpa (horizontalpodautoscalers)
+
+kubectl exec nginx-ads3242r2324 -it bash
+	# apt-get update &amp;&amp; apt-get install stress
+	# stress --cpu=100 --io=100 --vm=10 -i 100
+kubectl get hpa // scale out, scale in
+
+// Minikube addon - Ingress
+kubectl run nginx-node --image=nginx --port=80 
+kubectl expose deployment nginx --type=NodePort 
+kubectl run php-apache --image=webdevops/php-apache --port=80
+kubectl expose deployment php-apache --type=NodePort
+
+kubectl create -f ingress_example.yaml
+kubectl get ingress
+LoadBalancer -&gt; Service -&gt; pod -&gt; Server : L4 load balancer (TCP)
+LoadBalancer -&gt; ingress service -&gt; ingress pod -&gt; pod -&gt; Server : L7 load balancer (HTTP)
+
+
+
+$ curl -k -v http://192.168.122.207:31867
+	curl command offers evidence that Kubernetes has ``exposed&#x27;&#x27; (or opened up) TCP port 31867 on the node for the nginx instance. 
+
+Rolling Updates: https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps
+
+kubectl -n &lt;namespace-name&gt; describe pod &lt;pod name&gt;
+
+kubectl -n mortgages-dev2 logs -p  &lt;pod name&gt; 
+																	# In this case, it returns the name of all container in that Pod.
+
+
+
+kubectl get pods --selector=app=service_test_pod -o jsonpath=&#x27;{.items[*].status.podIP}&#x27; // print IP Adress of all pods
+
+kubectl get pod &lt;pod-name&gt; --template={{.status.podIP}}			# Get IP Adress of a Pod
+$ kubectl run &lt;name of pod&gt; --image=&lt;name of the image from registry&gt;
+
+Script to print version of image in all  Pods of ReplicaSet
+	for i in $(kubectl get rs --no-headers -o custom-columns=:.metadata.name); do echo $i; kubectl describe rs/$i| grep Image; done
+
+Creating a cluster from scratch?
+	https://www.linode.com/docs/applications/containers/how-to-deploy-nginx-on-a-kubernetes-cluster/
+
+Direct querying API Server?
+	curl --cacert ca.crt --cert apiserver.crt --key apiserver.key  https://&lt;server&gt;:&lt;port&gt;/api/v1/namespaces/&lt;namespace&gt;/pods?fieldSelector=spec.nodeName%3Dsomenodename
+
+
+
+
+
+    docker run -p 8080:8080 in28min/hello-world-rest-api:0.0.1.RELEASE
+     
+    kubectl create deployment hello-world-rest-api --image=in28min/hello-world-rest-api:0.0.1.RELEASE
+    kubectl expose deployment hello-world-rest-api --type=LoadBalancer --port=8080
+    kubectl scale deployment hello-world-rest-api --replicas=3
+    kubectl delete pod hello-world-rest-api-58ff5dd898-62l9d
+    kubectl autoscale deployment hello-world-rest-api --max=10 --cpu-percent=70
+    kubectl edit deployment hello-world-rest-api #minReadySeconds: 15
+    kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+     
+    gcloud container clusters get-credentials in28minutes-cluster --zone us-central1-a --project solid-course-258105
+    kubectl create deployment hello-world-rest-api --image=in28min/hello-world-rest-api:0.0.1.RELEASE
+    kubectl expose deployment hello-world-rest-api --type=LoadBalancer --port=8080
+    kubectl set image deployment hello-world-rest-api hello-world-rest-api=DUMMY_IMAGE:TEST
+    kubectl get events --sort-by=.metadata.creationTimestamp
+    kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+    kubectl get events --sort-by=.metadata.creationTimestamp
+    kubectl get componentstatuses
+    kubectl get pods --all-namespaces
+     
+    kubectl get events
+    kubectl get pods
+    kubectl get replicaset
+    kubectl get deployment
+    kubectl get service
+     
+    kubectl get pods -o wide
+     
+    kubectl explain pods
+    kubectl get pods -o wide
+     
+    kubectl describe pod hello-world-rest-api-58ff5dd898-9trh2
+     
+    kubectl get replicasets
+    kubectl get replicaset
+     
+    kubectl scale deployment hello-world-rest-api --replicas=3
+    kubectl get pods
+    kubectl get replicaset
+    kubectl get events
+    kubectl get events --sort.by=.metadata.creationTimestamp
+     
+    kubectl get rs
+    kubectl get rs -o wide
+    kubectl set image deployment hello-world-rest-api hello-world-rest-api=DUMMY_IMAGE:TEST
+    kubectl get rs -o wide
+    kubectl get pods
+    kubectl describe pod hello-world-rest-api-85995ddd5c-msjsm
+    kubectl get events --sort-by=.metadata.creationTimestamp
+     
+    kubectl set image deployment hello-world-rest-api hello-world-rest-api=in28min/hello-world-rest-api:0.0.2.RELEASE
+    kubectl get events --sort-by=.metadata.creationTimestamp
+    kubectl get pods -o wide
+    kubectl delete pod hello-world-rest-api-67c79fd44f-n6c7l
+    kubectl get pods -o wide
+    kubectl delete pod hello-world-rest-api-67c79fd44f-8bhdt
+     
+    gcloud container clusters get-credentials in28minutes-cluster --zone us-central1-c --project solid-course-258105
+    docker login
+    docker push in28min/mmv2-currency-exchange-service:0.0.11-SNAPSHOT
+    docker push in28min/mmv2-currency-conversion-service:0.0.11-SNAPSHOT
+     
+    kubectl create deployment currency-exchange --image=in28min/mmv2-currency-exchange-service:0.0.11-SNAPSHOT
+    kubectl expose deployment currency-exchange --type=LoadBalancer --port=8000
+    kubectl get svc
+    kubectl get services
+    kubectl get pods
+    kubectl get po
+    kubectl get replicaset
+    kubectl get rs
+    kubectl get all
+     
+    kubectl create deployment currency-conversion --image=in28min/mmv2-currency-conversion-service:0.0.11-SNAPSHOT
+    kubectl expose deployment currency-conversion --type=LoadBalancer --port=8100
+     
+    kubectl get svc --watch
+     
+    kubectl get deployments
+     
+    kubectl get deployment currency-exchange -o yaml &gt;&gt; deployment.yaml 
+    kubectl get service currency-exchange -o yaml &gt;&gt; service.yaml 
+     
+    kubectl diff -f deployment.yaml
+    kubectl apply -f deployment.yaml
+     
+    kubectl delete all -l app=currency-exchange
+    kubectl delete all -l app=currency-conversion
+     
+    kubectl rollout history deployment currency-conversion
+    kubectl rollout history deployment currency-exchange
+    kubectl rollout undo deployment currency-exchange --to-revision=1
+     
+    kubectl logs currency-exchange-9fc6f979b-2gmn8
+    kubectl logs -f currency-exchange-9fc6f979b-2gmn8 
+     
+    kubectl autoscale deployment currency-exchange --min=1 --max=3 --cpu-percent=5 
+    kubectl get hpa
+     
+    kubectl top pod
+    kubectl top nodes
+    kubectl get hpa
+    kubectl delete hpa currency-exchange
+     
+    kubectl create configmap currency-conversion --from-literal=CURRENCY_EXCHANGE_URI=http://currency-exchange
+    kubectl get configmap
+     
+    kubectl get configmap currency-conversion -o yaml &gt;&gt; configmap.yaml
+     
+    watch -n 0.1 curl http://34.66.241.150:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+     
+    docker push in28min/mmv2-currency-conversion-service:0.0.12-SNAPSHOT
+    docker push in28min/mmv2-currency-exchange-service:0.0.12-SNAPSHOT
+
+
+
+ kubectl config view # Show Merged kubeconfig settings.
+
+# use multiple kubeconfig files at the same time and view merged config
+KUBECONFIG=~/.kube/config:~/.kube/kubconfig2
+
+kubectl config view
+
+# get the password for the e2e user
+kubectl config view -o jsonpath=&#x27;{.users[?(@.name == &quot;e2e&quot;)].user.password}&#x27;
+
+kubectl config view -o jsonpath=&#x27;{.users[].name}&#x27;    # display the first user
+kubectl config view -o jsonpath=&#x27;{.users[*].name}&#x27;   # get a list of users
+kubectl config get-contexts                          # display list of contexts
+kubectl config current-context                       # display the current-context
+kubectl config use-context my-cluster-name           # set the default context to my-cluster-name
+
+# add a new user to your kubeconf that supports basic auth
+kubectl config set-credentials kubeuser/foo.kubernetes.com --username=kubeuser --password=kubepassword
+
+# permanently save the namespace for all subsequent kubectl commands in that context.
+kubectl config set-context --current --namespace=ggckad-s2
+
+# set a context utilizing a specific username and namespace.
+kubectl config set-context gce --user=cluster-admin --namespace=foo \
+  &amp;&amp; kubectl config use-context gce
+
+kubectl config unset users.foo                       # delete user foo
+
+# short alias to set/show context/namespace (only works for bash and bash-compatible shells, current context to be set before using kn to set namespace) 
+alias kx=&#x27;f() { [ &quot;$1&quot; ] &amp;&amp; kubectl config use-context $1 || kubectl config current-context ; } ; f&#x27;
+alias kn=&#x27;f() { [ &quot;$1&quot; ] &amp;&amp; kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d&quot; &quot; -f6 ; } ; f&#x27;
+
+
+
+
+kubectl apply -f ./my-manifest.yaml            # create resource(s)
+kubectl apply -f ./my1.yaml -f ./my2.yaml      # create from multiple files
+kubectl apply -f ./dir                         # create resource(s) in all manifest files in dir
+kubectl apply -f https://git.io/vPieo          # create resource(s) from url
+kubectl replace --force -f ./pod.json 		   # Force replace, delete and then re-create the resource. Will cause a service outage.
+kubectl delete -f ./pod.json 
+
+
+kubectl logs my-pod                                 # dump pod logs (stdout)
+kubectl logs -l name=myLabel                        # dump pod logs, with label name=myLabel (stdout)
+kubectl logs my-pod --previous                      # dump pod logs (stdout) for a previous instantiation of a container
+kubectl logs my-pod -c my-container                 # dump pod container logs (stdout, multi-container case)
+kubectl logs -l name=myLabel -c my-container        # dump pod logs, with label name=myLabel (stdout)
+kubectl logs my-pod -c my-container --previous      # dump pod container logs (stdout, multi-container case) for a previous instantiation of a container
+kubectl logs -f my-pod                              # stream pod logs (stdout)
+kubectl logs -f my-pod -c my-container              # stream pod container logs (stdout, multi-container case)
+kubectl logs -f -l name=myLabel --all-containers    # stream all pods logs with label name=myLabel (stdout)
+
+
+kubectl exec my-pod -- ls /                         # Run command in existing pod (1 container case)
+kubectl exec --stdin --tty my-pod -- /bin/sh        # Interactive shell access to a running pod (1 container case)
+kubectl exec my-pod -c my-container -- ls /         # Run command in existing pod (multi-container case)
+
+
+Copy files and directories to and from containers 
+kubectl cp /tmp/foo_dir my-pod:/tmp/bar_dir            # Copy /tmp/foo_dir local directory to /tmp/bar_dir in a remote pod in the current namespace
+kubectl cp /tmp/foo my-pod:/tmp/bar -c my-container    # Copy /tmp/foo local file to /tmp/bar in a remote pod in a specific container
+kubectl cp /tmp/foo my-namespace/my-pod:/tmp/bar       # Copy /tmp/foo local file to /tmp/bar in a remote pod in namespace my-namespace
+kubectl cp my-namespace/my-pod:/tmp/foo /tmp/bar       # Copy /tmp/foo from a remote pod to /tmp/bar locally
+
+
+
+
+https://spacelift.io/blog/kubernetes-tools</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

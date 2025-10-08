@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>21.Chart</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>When creating a new application, there are lot of files and configurations that you need to deal with. 
+What if there is a way which can automatically generate all these files with a common template and we can just edit the values as per our requirements. 
+A Helm chart consists of a few files that define the k8s resources that will be created when the chart is installed.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm create &lt;chart_name&gt;            # It creates a chart directory, with most commonly used files in it;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+&gt; helm create hello-world
+&gt; cd hello-world 
+&gt; ls
+hello-world
+├── .helmignore         # You can specify all the files that you dont want to package(one per line); helm package will ignore all the matching files while packaging the chart;
+├── Chart.yaml          # It contains chart metadata: such as chart name, version etc;
+├── values.yaml         # It contains default values/configuration for your templates;
+│
+├── README.md           # It contains details such as: which repo contains this chart, how to add repo, how to install etc;
+├── LICENSE             # 
+│
+├── charts/                         # Charts that this chart depends on
+└── templates/                      # Template files(blueprints for k8s resources with supporting files); Any file that begins with _ doesn&#x27;t output a k8s manifest file;
+     │   deployment.yaml
+     │   hpa.yaml
+     │   ingress.yaml
+     │   NOTES.txt                  # Optional file; It provides information about the chart; Eg: how to access deployed application? Every install/update prints info from this file; It doesn&#x27;t output any k8s manifest file, but it is rendered same as other yml files, only thing is it&#x27;s output is not sent to k8s;
+     │   service.yaml
+     │   serviceaccount.yaml
+     │   _helpers.tpl               # Sometimes, you want to create some reusable parts(called named templates), in that case you can use this file; 
+     │
+     └── tests/                     # Tests are used to verify if an installation ends with success; helm test command is used to repeat those tests;
+
+
+Charts.yaml 
+    apiVersion
+        - It should be v2 for Helm charts that require at least Helm 3;
+    name 
+    description 
+    type  -&gt; application | library;
+        Library 
+            - They contain utility functions; Application charts can depend on the library charts;
+            - As they don&#x27;t define any templates, they can&#x27;t be deployed;
+        Application 
+            -
+    version
+        It represents the version of the helm chart; Major.Minor.Patch;
+        It should be incremented each time you make changes to the chart and its templates, including the app version;
+    appVersion 
+        It represents the version of the application;
+        For eg, a drupal chart with appVersion: &quot;8.2.1&quot;, indicates that the version of Drupal included in the chart (by default) is 8.2.1;
+        You can override it, during the packaging time: helm package . --app-version 9.1.2 
+        You can override it, during the release(install/upgrade) time: helm upgrade &lt;release_name&gt; &lt;chart&gt; --set &quot;image.tag=9.1.2&quot;
+
+Values.yml 
+    It contains default configuration for the chart;
+    You can override the values in the Values.yml, using: -f myValues.yml, --set key=value 
+
+charts folder 
+    - It is a folder containing all dependant/parent charts; // TODO: When this is populated? Which command downloads it?
+
+templates folder 
+    - It has all required yaml files such as deployment, service, ingress, HPA etc;
+    - Templates when combined with Values.yml, will generate valid k8s manifest files;
+    - Helm runs each file in this directory through a GO template rendering engine;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+&gt; pwd
+/root/code/my-devops/helm
+
+&gt; helm create 01-hello-world
+&gt; cd 01-hello-world
+&gt; ls -a
+    .helmignore  Chart.yaml  charts  templates  values.yaml
+&gt; ls -a templates/
+    NOTES.txt  _helpers.tpl  deployment.yaml  hpa.yaml  ingress.yaml  service.yaml  serviceaccount.yaml  tests
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Fetch values from values.yml
+Fetch values from built-in objects .Chart, .Release 
+conditional blocks such as if-else 
+functions, pipelines etc;
+
+
+
+
+
+While working on custom Helm charts, if the desired output isn’t the same as the one shown in the lesson, then a possible step can be to destroy the cluster, recreate it, and follow the steps again.
+
+    In Values.yaml, image.tag is empty; When it is empty, it defaults to appVersion in Chart.yaml and pulled that version of image;
+
+
+https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-create-first-helm-chart-index.html
+
+
+
+&gt; helm create myfirstapp
+&gt; cd myfirstapp 
+&gt; ls 
+    charts/
+    templates/
+    Charts.yml 
+    Values.yml 
+    .helmignore
+
+    Template folder -&gt; 
+    Values.yml -&gt;
+        # Declare variables to be passed into your templates.
+        In all yaml files, values are being referred via some kind of environment variable like .Values.service.type; no direct value used; It refers to Service.type section in Values.yml file;
+        Based on your need, you can edit only this file. Other yaml files need not to touch;
+        Based on your requirement, you just need to configure values in this file without touching anything in the yaml files available in templates folder.
+
+
+
+    templates/
+         templates directory contains the Kubernetes resource templates that will be used to create the actual resources in the cluster.
+helm install 
+
+
+
+
+Values.yaml 
+    serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: myfirstapp  &lt;--- Please do note this value
+  
+    Note : The serviceAccount section in the values.yaml file of a Helm chart provides configuration options for creating and configuring a Kubernetes service account to be used by the application deployed via the chart.
+    The create field specifies whether a service account should be created. 
+    If set to true, a service account will be created for the application. 
+    If set to false, the application will use the default service account.
+
+
+
+
+
+
+
+
+Deployment.yml specifies the desired state of a containerized application in Kubernetes, including replication, rolling updates, scaling, health checks, and resource allocation
+Services.yml defines a stable network endpoint for accessing a deployment.
+Ingress.yml provides routing rules for incoming traffic.
+hpa.yml sets up automatic scaling of deployments based on resource utilization</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

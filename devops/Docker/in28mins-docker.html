@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is Docker?
+	Docker is a platform/ecosystem, which is used to manage(create/publish/run/update) containerized applications;
+	create and run containers;
+	Ecosystem = Docker Client + Docker Server + Docker Machine + Docker Images + Docker Hub + Docker Compose;
+
+Why Docker?
+	As you saw earlier, you can develop microservices using many programming languages: Java, Python etc;
+	But, how about deployment? You don&#x27;t want different deployment procedures for different microservices;
+	That&#x27;s where docker comes into picture!
+	---
+	What you can do is, create docker image for each of the above service;
+	Docker image contains everything for the service to run: runtime, jdk, python, nodejs, application code etc;
+	Once you have created docker image, you can run it anywhere(your local, corporate datacenter, cloud);
+	---
+	In short, it makes it easy to install and run software, without worrying about dependencies;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Installation
+	1. Sign up for a Docker Hub account
+		Goto https://www.docker.com/
+		&#x27;Get Started&#x27; -&gt; &#x27;Developer&#x27; -&gt; &#x27;Download for Mac&#x27;
+		&#x27;Please login to Download&#x27; 
+		&#x27;Create Account&#x27;, if you don&#x27;t have it OR login using cheedhella/Welcome123
+	2. Download and install docker for Mac/Windows
+		Once you login, click on &#x27;Get Docker&#x27;
+	3. Login to Docker
+	4. Verify docker installation, by typing docker -v
+
+	References
+	https://www.thegeekdiary.com/how-to-install-docker-on-mac/
+	https://docs.docker.com/get-started/#test-docker-installation
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Traditional Deployment
+	- Procure the hardware
+	- Install OS
+	- Install Software - Java, Python, Tomcat etc;
+	- Install Application - Download this jar and run this command;
+
+Deploying a Spring Boot Application using Docker
+	docker run in28min/todo-rest-api-h2:1.0.0.RELEASE 		# One simple command, you don&#x27;t need to worry about anything else! that&#x27;s the magic of Docker!!
+
+How does it works?
+	When you run &#x27;docker run&#x27;, docker downloads an image from Docker Hub: http://hub.docker.com/r/in28min/todo-rest-api-h2
+	Docker Hub(hub.dockr.com) contains lot of Repositories; You can create a Repository of your own;
+	Each Repository can have lot of appliations of different Versions/Tags;
+	Docker Hub is a public registry; Typically, enterprises use their own private repositories, so that only authorized people can access it;
+
+	In http://hub.docker.com/r/in28min/todo-rest-api-h2
+		- hub.oracle.com is a Registry
+		- in28min/todo-rest-api-h2 is a Repository
+		- 1.0.0.RELEASE is the Version/Tag;
+
+	Once it downloads the image, it executes it as an appllication; Running application is called Container;
+
+	How to access the application?
+		http://localhost:8080/hello-world-bean 	# You get an error: Site is unreachable!
+
+	How to resovle the error?
+		By default, any container that you run is part of bridge network in Docker;
+		You can think of it like a docker internal network;
+		Nobody can access it, unless you expose it onto the host system, where your container is running;
+		To expose container port as a host port, use: -p {HostPort}:{ContainerPort}
+
+		docker run -p 5000:5000 in28min/todo-rest-api-h2:1.0.0.RELEASE 
+		Now, try accessing http://localhost:8080/hello-world-bean, you will get response!
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+# Container Related
+# docker run is a shortcut to docker continer run;
+docker run -p 5000:5000 -d in28min/todo-rest-api-h2:1.0.0.RELEASE  	# Run the container in the background(detached mode); It prints container ID;
+docker logs &lt;containerID&gt; 											# It prints some latest logs;
+docker logs -f &lt;containerID&gt; 										# It tails the logs;
+docker container ls 												# List of all running containers
+docker container ls -a												# List of all containers
+
+docker container inspect &lt;containerId&gt; 	# Lot of details about container: when it was creted, image used, port bindings, volumes, status etc;
+docker container pause &lt;containerId&gt; 	# To pause a running container! It won&#x27;t respond to any requests!
+docker container unpause &lt;containerId&gt; 	# To unpause a running container!
+docker container stop &lt;containerId&gt; 	# To gracefully shutdown a running container!
+docker container kill &lt;containerId&gt; 	# To stop a running container immediately! // kill -9
+docker container prune; 				# It will remove all stopped containers;
+
+# restart: always | no(default); 
+# When docker is restarted, any stopped containers with restart policy always are started automatically!
+# If you want to stop it from restarting: once you stop the container, prune it;
+docker run -p 5000:5000 -d --restart=always in28min/todo-rest-api-h2:1.0.0.RELEASE
+
+# CPU -&gt; 100000 = 100%, 5000=5%
+# You can specify the maximum memory and CPU that a container can consume!
+docker run -p 5000:5000 -d -m 512m --cpu-quota 5000 in28min/todo-rest-api-h2:1.0.0.RELEASE 
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+docker events 					# It displays all events happening in the background, like container started, stopped, network disconnected etc;
+docker top &lt;containerId&gt;		# What is the top process running in a container?
+docker stats 					# It dispalys information about all running containers: how much CPU and memory it is taking etc;
+docker system df 				# It lists all resources managed by the docker-daemon;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

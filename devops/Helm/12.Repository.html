@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is Repository?
+    It is a artifact server which hosts a collection of charts/packages;
+    It allows developers to share their charts with other other developers;
+
+    You might be thinking that there is a predefined single repository containing every single software package in the world; 
+	Unfortunately, that&#x27;s not the case; If you want a software package, you need find a repository containing it;
+
+    Helm doesn&#x27;t come with any repositories added, during installation;
+
+    Artifact Hub -&gt; helm repo add artifact-hub https://artifacthub.github.io/helm-charts    # By far, the biggest helm repository;
+    Nginx        -&gt; helm repo add nginx-stable https://helm.nginx.com/stable
+    Bitnami      -&gt; helm repo add bitnami https://charts.bitnami.com/bitnami
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm repo add &lt;name&gt; &lt;url&gt;                # Add repository; It downloads index.yaml of specified repository into local cache directory; HELM_REPOSITORY_CACHE env variable specifies the cache directory;   
+helm repo list                            # List all configured repositories;
+helm repo update &lt;name&gt;                   # It fetches latest index.yaml for the specified repository and updates cache(which is used by search); 
+helm repo update                          # It fetches latest index.yaml for all repositories added and updates cache;
+helm repo remove &lt;name&gt;                   # Delete the repository;
+
+helm repo index &lt;dir&gt;                     # Every repository must have a valid index file; 
+                                          # It reads given directory/repository and generates index file with all the charts found;
+                                          # It is useful when you are setting up your own repository;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm search repo &lt;keyword&gt;                # It scans through all repositories configured in the system and prints latest stable version of charts found in them;
+                                          # helm search repo nginx                      -&gt; Returns latest stable version of each chart whose name matches &#x27;nginx&#x27;
+                                          # helm search repo nginx --devel              -&gt; Returns latest version(could be stable/alpha/beta/release candidate etc) of each chart whose name matches &#x27;nginx&#x27;
+                                          # helm search repo nginx --versions           -&gt; Returns all versions(could be stable/alpha/beta/release candidate etc) of each chart whose name matches &#x27;nginx&#x27;
+                                          # helm search repo nginx --version ^1.0.0     -&gt; Returns all stable charts whose name matche nginx and major version of 1
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

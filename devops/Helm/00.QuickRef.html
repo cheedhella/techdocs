@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>Commands:
+Registry: registry login, registry logout;
+Repository: repo add, repo ls, repo update, repo remove, repo index; search repo;
+Release: install, ls, upgrade, history, rollback, uninstall; get values/manifest/notes/hooks/all, status; --dry-run VS template;
+Test: lint, 
+General: env, version, help, lint;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Hub VS Repo VS Registry;
+    Hub is like a collection of repos, like Artificat Hub; You can check Artifact Hub for available Helm chart repositories;
+
+show vs get vs status 
+    - show is for inspecting a chart; get is for inspecting a release; status shows only release metadata;
+
+The Artifact Hub is a CNCF project to make discovering distributed cloud native artifacts easy. This includes Helm charts. 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+completion  generate autocompletion scripts for the specified shell
+  create      create a new chart with the given name
+  dashboard   A simplified way of working with Helm
+  dependency  manage a chart&#x27;s dependencies
+  diff        Preview helm upgrade changes as a diff
+  get         download extended information of a named release
+  lint        examine a chart for possible issues
+  list        list releases
+  package     package a chart directory into a chart archive
+  plugin      install, list, or uninstall Helm plugins
+  pull        download a chart from a repository and (optionally) unpack it in local directory
+  push        push a chart to remote
+  search      search for a keyword in charts
+  starter     Fetch, list, and delete helm starters from github.
+  template    locally render templates
+  test        run tests for a release
+  verify      verify that a chart at the given path has been signed and is valid
+
+  
+Chart: create, package, lint, pull, dependency list, test, show chart/values/readme/crds/all;
+Release monitoring: list/ls, status, status --show-resources, , env; get all/hooks/manifest/notes/values;
+Plugin: plugin install/ls/update/uninstall; &lt;plugin_name&gt; &lt;plugin_command&gt;;
+
+Hooks:
+Tests:
+
+
+Built-in Objects: ., .Release, .Chart, .Values, .Capabilities, .Template, .Files, .Subcharts;
+Template Action, Action Elements, Template Functions, Pipeline;
+Named Template: define, template, include, printf, named template calling another named template;
+
+----------------------------------
+Functions:
+General: default;
+String Functions: squote, quote;
+----------------------------------
+
+Helmfile: 
+
+myapps:
+    config1:
+        appName: myapp1
+        appType: webserver 
+        appTech: HTML
+
+{{- range $key, $value := .Values.myapps.config1 }}
+{{- $key | nindent 2}}:{{ $value }}-{{$chartName}}
+{{- end}}
+
+
+
+Named Templates;
+
+
+
+Quote/Lower Function, Pipeline, Default Function, Manage whitespace, indent, nindent, toYaml;
+
+
+
+YAML Formatter
+
+
+You must specify the --reuse-values parameter, otherwise the Helm upgrade command resets all previously configured settings.
+
+
+find . | sed -e &quot;s/[^-][^\/]*\// |/g&quot; -e &quot;s/|\([^ ]\)/|-\1/&quot;
+
+helm template, notes;
+
+2024-07-02T05:34:31.535Z  INFO 241554 --- [Topology Service-TS1] [controlInventoryConsumer-0-C-1] c.b.n.t.inventory.InventoryProcessor     : Requesting DA for full inventory...
+2024-07-02T05:39:21.833Z  INFO 241554 --- [Topology Service-TS1] [controlInventoryConsumer-0-C-1] c.b.n.t.inventory.InventoryProcessor     : Sync Completed..
+
+2024-07-02T05:31:25.280Z DEBUG 241554 --- [Topology Service-TS1] [main] c.b.n.g.dao.GraphStoreRepository         : Query: MATCH (n:global_cluster_config) WHERE n.itemID=$itemID  RETURN n
+
+----------------------------------
+
+
+2024-07-02T05:34:37.772Z  INFO 241554 --- [Topology Service-TS1] [fullInventoryConsumer-3-C-1] c.b.n.t.inventory.InventoryProcessor     : Processing a new batch of 100 records
+2024-07-02T05:34:39.346Z  INFO 241554 --- [Topology Service-TS1] [fullInventoryConsumer-3-C-1] c.b.n.t.inventory.InventoryProcessor     : Completed processing of current batch of records
+curl -X POST http://10.252.22.162:9090/-/reload
+
+
+
+
+helm template [RELEASE_NAME] [CHART] [flags]
+helm template .
+helm template . -f values-override.yaml 
+helm template . -f values-override.yaml --output-dir .
+https://medium.com/@maorfr/template-everything-with-helm-48e5a32ff72d
+
+
+
+&#x27;helm show&#x27; is replacement for &#x27;helm inspect&#x27;;
+You can use helm show on packaged charts, without unpacking them;
+
+
+
+helm show all &lt;chart-name&gt; -&gt; It prints all the information about the chart;
+
+
+
+ of README file;
+
+
+
+CRD -&gt; https://helm.sh/docs/chart_best_practices/custom_resource_definitions/
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

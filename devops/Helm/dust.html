@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>
+Why Helm?
+    Reduces the complexity of installing an application on Kubernetes: It can be achieved using a single command.
+    Easy configuration of applications: Helm chart developers provide a high-level abstraction that makes it easy to work with the chart without knowing about the  Kubernetes API.
+    Keeps track of the history of revisions: We can roll back to the state at any point in time.
+    Provides out-of-the-box Kubernetes solutions for many popular open-source solutions: Many Helm charts are available for free on 
+    you can quickly and easily deploy complex Kubernetes applications. Helm charts also make it easy to manage application upgrades and rollbacks. 
+
+    With Helm, you can easily define, install, and manage complex Kubernetes applications, making it easier to manage your applications at scale.
+     The Helm chart repository also provides a large number of pre-built charts, which can save you time and effort when deploying popular applications. 
+
+What is a Chart?
+    It is a package that contains everything to deploy an application to k8s cluster;
+    It includes YAML configuration files for deployments, services, secrets, and config maps that define the desired state of your application;
+
+	
+What is Template?
+    These templates are written in the Helm template language, which is based on the Go template language and Sprig template functions. Each template file looks very similar to the Kubernetes resource definition which it is. Here is a simple example from a previous lesson for Deployment definition:
+	A blueprint file which is used by Helm to generate a Kubernetes YAML file
+
+
+
+What is GitHub Pages?
+    It is a service that allows you to host a static website directly from a GitHub repository;
+    It is a good choice for sharing your charts code, rather than  your own web server and increasing operational costs;
+
+
+
+
+
+     It is a service 
+    GitHub pages is a static site hosting service provided by GitHub, which can host your pages directly from a GitHub repository. 
+    Since we need is to host a single index.yaml file along with a bunch of .tgz files so 
+    Github Pages is a good choice rather maintaining.
+
+GitHub Pages is a static site hosting service that takes HTML, CSS, and JavaScript files straight from a repository on GitHub, optionally runs the files through a build process, and publishes a website. 
+
+ It is a service that allows you to host a static website directly from a GitHub repository.
+
+
+Github has a feature called Github Pages, which makes it easy and free for you to create a multi-file website hosted at yourusername.github.io.
+
+
+
+
+
+There are two ways to override a default value during installation. We can either pass it with a --set option and then a key/value pair or with a --values/-f flag and location of a values.yaml file, which consists of one or more values to be overwritten.
+
+
+
+
+Helm is a package manager that also happens to include templating capabilities. 
+Unfortunately, a lot of people focus only on the usage of Helm as a template manager and nothing else.
+Technically Helm can be used as only a templating engine by stopping the deployment process in the manifest level. 
+It is perfectly possible to use Helm only to create plain Kubernetes manifests and then install them on the cluster using the standard methods (such as kubectl). 
+But then you miss all the advantages of Helm (especially the application registry aspect).
+At the time of writing Helm is the only package manager for Kubernetes, so if you want a way to group your manifests and a registry of your running applications, there are no off-the-shelf alternative apart from Helm.
+
+
+Helm Features 
+Templating
+Manifest grouping (entity/package)
+Application/package dependencies
+Runtime view of cluster packages
+Registry of applications
+Direct rollbacks and Upgrades
+
+ It also provides features for static analysis, dynamic testing, rollbacks and more.
+
+ 
+
+
+This MongoDB chart will have all these template files already in it, and also it comes with default set of values which we can override if required.
+
+install
+update
+Release history
+Rollback to older version
+
+
+Advanced chart topics
+	- adding dependencies
+	- passing values from one chart to another;
+	- creating and using hooks that will hook into the life cycle of the installation;
+	- how to run the test to ensure that installations and upgrades to k8s cluster are happening as expected;
+	- how to host the chart in a repository;
+	- how to host your own repository using a local webserver, GitHub pages, OCI repositories;
+	- how to secure your chart using the PGP key algorithms and do signatures and hashing as well;
+
+What is Package Manager?
+	In Linux, we use package managers to manage(install, update, uninstall) an application;
+	For eg, to install nginx, a well known webserver and reverse proxy, run this command: sudo apt install nginx;
+		It installs nginx just in a few seconds; You can check the installation, by navigating to: http://localhost in the browser;
+		Behind the scene, app manager does lot of work, to make this happen!
+	Different operating systems comes with different package managers; 
+	-------------------------------------------------------------------------------------------------
+	K8s is often referred to as a Cloud operating system;
+	K8s enables you to deploy distributed microservices through containers on almost any environment;
+
+	Let&#x27;s say we need to deploy nginx in a K8s cluster; It needs the following atleast: 
+		- A deployment that will manage the nginx pods;
+		- A service, ingress and configmap to hold server configuration;
+		- Some secrets, service account and some RBAC rules;
+	With a simple command like: helm install nginx, whole deployment is automated for you!
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Artifact Hub
+	- Goto https://artifacthub.io
+	  A web-based application that is used to find, install and publish k8s packages;
+	  Search for nginx and navigate to it;
+	- In order to use bitnami repository to deploy nginx chart, you need to add the repository to your system first;
+	  This is very similar to adding a repository to your ubutu system, when you want to install a package that is not present in default respository, except that helm doesn&#x27;t come with a default repository; So, we need to add our own;
+	  $ helm repo add bitnami https://charts.bitnami.com/bitnami 	# helm repo list - to check list of repos added;
+	- helm search repo nginx      									# Another way to search, once repo is added!
+	  helm search repo --versions &quot;nginx server&quot;
+		# CHART VERSION -&gt; version of the chart; APP VERSION -&gt; nginx version that this chart provides;
+	- To install the chart, use this command: helm install &lt;name-of-installation&gt; &lt;reponame&gt;/&lt;chartname&gt;
+	  helm install nginx01 bitnami/nginx
+	  helm allows you to install same chart to the same cluster multiple times; So, give installation a name;
+
+	 - kubectl get svc nginx01 		# Examine the status of the service!
+	 	The service is of type load balancer, and since we are using minikube, a load balancer will not be created for us; 
+	 	So the status will always be pending;  But, we can still access our installation through a node port;
+	 - minikube service -n web --url nginx01 		# prints the IP address of the above service;
+
+	 - kubectl get all 		# To know what helm chart does on your behalf; 
+	 						# We have an employment that created a replica set that created a pod. And we also have a service.
+
+
+Helm client should use same configuration as kubectl;
+	- kubectl config get-contexts 			# we are currently using minikube cluster in default namespace;
+	- kubectl create ns web; // we don&#x27;t want to install nginx in the same napespace, let&#x27;s create one;
+	- kubectl config set-context --current --namespace=web; // change the context;
+
+Often, we ned to install more than one instance of a installation; 
+For example, what if you have another web site that we want to deploy to default namespce on the same cluster and it needs nginx instance of its own?
+You don&#x27;t need to swtich the context; helm allows you to select a namespace; 
+	helm install nginx02 --version --version 9.3.5 -n default bitnami/nginx
+
+	kubectl get pods -n default 		# you can see a new instance of nginx running
+	kubectl -n default exec -it nginx02-dsafdsfa bash 		# 
+
+	Now, we have 2 nginx installations in our cluster; 
+	There are many decisiongs that helm made on our behalf; Service is of type load balancer; nginx is listening on default port 80;
+	How can we modify those 2 parameters? In helm, those 2 parameters are value type; There are 2 ways to modify values;
+	First one is using the values in the YAML file;
+	&gt; cat values.yaml
+		service:
+			type: NodePort
+ 
+	&gt; helm install nginx03 --values values.yaml 		# Way 1
+	&gt; helm install nginx03 --values values.yaml --set service.port=8080 bitnami/nginx  	# Way 2
+
+	# We have changed default values of a chart;
+	# What if you want to upgrade a specific installation/existing chart to to use new values?
+	# Let&#x27;s upgrade nginx01 to use port 8080 and change service type from load balancer to NodePort;
+	helm upgrade nginx01 --set service-type=NodePort --set service-port=8080 bitnami/nginx
+	
+	# Note: You can also pass values using yaml file while upgrading or creating a new chart;
+
+	&gt; kubectl get svc 		# You can see the change is reflected
+
+	# You can also change the chart version!
+	helm upgrade nginx01 --version 9.3.5 bignami/nginx
+
+	&gt; helm list 			# You can see the chart is upgraded!
+	# always supply command line arguments, when upgrading! Otherwise, helm may revert to default values;
+
+	# Ensure all your modified values are retained from one installation to another;
+
+	# Uninstall a chart
+	helm uninstall nginx01 
+
+	# helm is namespace bound; Supply namespace explicitly, if you want to uninstall a chart which is in another namespace;
+	helm uninstall nginx02 -n default
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Artifact Hub is a web-based application that enables finding, installing, and publishing Kubernetes packages. 
+
+	It can be written in YAML or JSON format;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Deploy nginx to k8s using helm
+	- Add a chart repository;
+	- Get nginx from the repository; // Search the repository for the desired application;
+	- Install the selected chart using helm; 
+	- Examine what was intalled;
+	- Upgrade the chart installed;
+	- Remove the installation from the cluster;
+
+
+We just have seen how easier it is to deploy an application on k8s cluster with just one command using helm;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Testing the waters
+	- Test helm releases using dry-run, without affecting the cluster;
+	- Inspect a helm chart/release for its values;
+	- View Helm release history;
+	- Advanced installation and upgrade techniques;
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+How to get info about a helm release?
+	- helm list 		# It will list all helm releases installed in the configured namespace, along with it&#x27;s version;
+
+	How can we access a nginx installation?
+		If you notice, most of the helm charts offer a help message, once the chart is deployed successfully;
+		It prints few commands to fetch some of the information; 
+		But, what if you have closed that tab and opened in a new one? This is where helm get command comes in handy;
+		It accepts a number of sub command that allow you to get almost everything that you want about a helm release;
+
+		helm get notes nginx01 			# It displays the helath message again!
+		helm get values nginx01 		# which values are used for this particular release! 
+										# It provides only values that are provided through command line, not all defaults;
+		helm get value nginx01 --all 	# It prints all values, along with defaults
+		helm get manifest nginx 		# which manifest files are release to the cluster;
+			dry-run - before applying the manifest to the cluster; this is after applying the manifest;
+			If the application deployed using helm is not behaving correctly, the first step in the debugging would be to check manifests it used;
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+helm history and rollback
+	release statuses
+		- pending-install -&gt; manifests are generated, but not sent to k8s yet;
+		- deployed -&gt; manifests are sent to k8s and are accepted; k8s started deploying the applicaiton; it doesn&#x27;t mean the application is ready;
+		- pending-upgrade -&gt; upgrade manifests are generated, but not sent to k8s yet;
+		- superseded -&gt; status changes to superseded, when the upgrade is completed successfully;
+		- pending-rollback -&gt; 
+		- uninstalling -&gt; when you uninstall a release, it&#x27;s status changes immediately to uninstalling, while the process is going on; 		
+		- uninstalled -&gt; once uninstall is completed, it&#x27;s status changes to uninstalled;
+		- failed -&gt; status changes to failed, ONLY if k8s rejects the manifest files sent by helm for any operation;
+
+	Say, when the status is failed, if you want to find what went wrong?
+		helm history nginx01 	# you can examine all the previous releases
+		# since the status is failed, you can either upgrade to another release or rollback to one of the previous releases;
+		# rollback
+		helm rollback nginx01 1 		# It adds new revision to history
+		helm uninstall nginx01 			# it delete the revision history
+		helm uninstall nginx01 --keep-history 			# it keeps the history, so that you can revert uninstall as well
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Tips useful when installing or upgrading a helm release
+	1. auto-generate release name
+		If you are running helm through a script like ansible or terraform OR if you are deploying it through CI/CD server like jenkins, you would have
+		to generate a unique name for each release;
+		Way #1
+			One simple way of doing this is: create a random string in bash like this;
+			export RELEASE_SUFFIX=$(tr -dc a-z0-9 &lt; /dev/urandom | head -c 13 ; echo)
+			helm install nginx-$RELEASE_SUFFIX bitnami/nginx
+		Way #2
+			Fortunately, helm already has a flag that does exactly same as this;
+			helm install bitnami/nginx --generate-name
+
+	2. auto-generate namespace
+		If you use a namespace that doesn&#x27;t exist yet, 
+		helm install nginx01 -n apps bitmani/nginx 		# It will fail, as apps namespace doesn&#x27;t exist;
+
+		Obviously, we can add namespace creation step to the deployment script; But, helm has a shortcut for this;
+		helm install nginx01 -n apps bitmani/nginx --create-namespace
+
+	3. install the release or upgrade it if it already exists
+		As soon as the developers make their code to the GIT repository, it automatically triggers the appropriate build pipeline;
+		After validating the input and doing all relevant tests, build server attempts to deploy the changes to configured environment;
+		But, what if this is not the first time the pipeline runs and a release with specified name already exists?
+		Fortunately, helm already has a flag for doing this;
+			helm upgrade --install nginx01 --set service.port=8080 bitname/nginx
+
+	4. verify that the application is running
+		helm marks the release as deployed, it doesn&#x27;t necessary mean that application is properly running;
+		status is still deployed, if the pod fails to run; 
+		In the CICD pipeline, it require an extra step to verify that the application is indeed upgraded;
+		But, helm has a workaround for it;
+		--wait flag not only ensures that API server accepted the mainfest but it also wait until new pods are in running state;
+		By default, helm will wait for 300secs or 5 minutes before timing out;
+		We can override the timeout value, by passing: --timeout 10s
+		Usually pods take some time to be ready due to environment issues such as large image size, slow network etc;
+		You are adivsed to set the time out value to a reasonable time period;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+So far, we are using ready made charts, charts that are created and maintained by other people; Now, we will see how to create a chart;
+
+Chart is nothing but a bunch of files and directories with specific structure that helm understands;
+You can create those files manually, but helm provided a command to do it: helm create myapp
+
+helm install myapp01 myapp  	# Note that in this case, we are referring to a chart that actually exists on the disk, not downloaded from repository;
+
+
+sudo docker run -d -p 8080:80 afakharany/hellonodejs:1.0.0 
+sudo docker ps
+docker kill &lt;container-id&gt;
+helm list
+helm uninstall &lt;appname&gt;
+helm install myapp . 		# chart is in pwd
+
+helm makes it extremely easy to deploy our applications to k8s;
+if you have deploy using kubectl: kubectl apply -f abc.yaml for each yaml file generated;
+
+
+
+share with other collegues
+	- tar -cvf myapp .
+	- helm package . 	# It automatically creates archive 
+	- helm install myapp02 &lt;path-to-package-archive&gt;
+
+
+
+
+
+chart.yaml
+	- 
+
+For example, we have a deployment, a service, an ingress, a service account and even a horizontal pod auto scaler;
+
+If we want to access nginx on the cluster IP service, we can simply run a port forward command: 
+	kubectl port-forward &lt;pod-name&gt; &lt;port-to-be-use&gt;:&lt;container-port&gt;
+
+
+
+https://medium.com/geekculture/helm-create-helm-chart-7084666fab90
+
+kubectx 
+Kubectx is helpful for multi-cluster installations, where you need to switch context between one cluster and another. 
+
+$ kubectl config use-context minikube
+
+$ kubectx minikube
+
+kubectl namespace related commands
+	kubectl create ns &lt;ns-name&gt;
+	kubectl get ns
+
+	uninstalling the release will not release the namespace from the cluster;
+
+		/etc/nginx/nginx.conf
+		/usr/sbin/nginx
+		/etc/systemd/system/multi-user.target.wants/nginx.service
+
+
+https://medium.com/@pratikjoy7/helm-charts-for-creating-kubernetes-cron-jobs-92610b2e68c3
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+We know that we can inject parameters to helm chart using values.yaml or command line flag; But, that is not the only source of parameters;
+
+.Chart.Version -&gt; gives you access to Chart.yaml file;
+
+
+
+https://github.com/devops4solutions/kubernetes-sample-deployment
+https://medium.com/rahasak/spark-cluster-deployment-with-kubernetes-1848d061cfc9?source=explore---------15-83--------------------3dd50abd_eb8c_41bb_8def_b72bd605e8f5-------15
+
+
+
+I interrupted a Jenkins job that was issuing a helm command and now I can’t seem to do anything with helm on our namespace (cmos-sr-automation-dev-ns) in the CMOS OKE cluster.
+helm upgrade --kube-context prodapp-dev -n cmos-sr-automation-dev-ns -i cmos-srauto-poller -f ./helm-chart/values-prodapp-dev.yaml 
+
+
+ the blueprint deployment does more than what helm can do… blueprint deployment includes helm deployment.  meaning that jarvis is still deployed using blueprints, even though most services are deployed with helm charts
+ However, since MARs using Helm chart, not blueprint,
+
+ helm template foo osvc-helm-virtual/tms-bridge-service --version 1.0.0-22-04-26-b0001
+
+ helm template --set-string images.boss.repository=xxx --set-string images.boss.tag=yyy --set-string bossIdcsIntegration=enabled intg/helm/ | grep image
+
+&gt; helm upgrade &lt;mychart&gt; &lt;chart-name&gt;  	# If you don&#x27;t provide any configuration, helm will use default configuration, not the configuration provided at install time;
+&gt; helm upgrade &lt;mychart&gt; &lt;chart-name&gt; --set mykey2=newvalue2 --reuse-values 			# result-values is used provide extra customization to the existing values;
+
+kubectl get secrets 			# Helm maintains the release records as secrets; It contains all yaml files and metadata about installation/upgrade;
+								# It creates a secret for every installation; It also creates a secret for every upgrade;
+								# When you uninstall a chart, release records are also deleted;
+								# helm ls actually reads data from these secrets;
+
+kubectl get secret &lt;secret-name&gt; 	# based64 encoded data;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+In case of upgrade, k8s will not restart all pods; It restarts only pods whose values have changed; Use --force option, to recreate all the pods; Internally, k8s deletes the deployement and recreates it; So, there will be some downtime;
+
+
+helm upgrade myinstall bitnami/apache --cleanup-on-fail 		# If a upgrade fails, it cleans up all the resources created;
+
+--set mykey2=newvalue2 --reuse-values 			# result-values is used provide extra customization to the existing values;
+
+
+
+
+
+
+
+
+In 
+
+
+In coming sections:
+Alternatives to bitnami
+how to customize a predefined helm chart
+downsides to helm
+how to generate the yaml for the monitoring stack that we used earlier in the course?
+how to write a helm template?
+
+
+
+https://github.com/bitnami/charts/tree/master/bitnami -&gt; It has source code for many of the charts;
+
+
+
+helm list 									# List all charts/packages;
+helm repo list 								# List all repositories added;
+
+helm repo update 							# It updates the state of your local with remote repository;
+
+
+
+stateful set will give the pods guaranteed name rather than generating a random string of nonsense characters for the pod name.
+elk, promethes, graphana; mongodb
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - Install a ELK monitoring stack using Helm
+--------------------------------------------------
+Find the repository: https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
+
+&gt; helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+&gt; helm repo update 		# Whenever you add a new repository;
+
+&gt; helm install my-prometheus-monitoring prometheus-community/kube-prometheus-stack
+
+&gt; helm list
+NAME                    	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                       	APP VERSION
+my-prometheus-monitoring	default  	1       	2022-05-13 23:54:48.803297 +0530 IST	deployed	kube-prometheus-stack-35.2.0	0.56.2   
+
+&gt; kubectl get all
+NAME                                                              READY   STATUS              RESTARTS   AGE
+pod/alertmanager-my-prometheus-monitoring-k-alertmanager-0        0/2     ContainerCreating   0          107s
+pod/my-prometheus-monitoring-grafana-85bfc9bfb-khsvs              0/3     ContainerCreating   0          2m22s
+pod/my-prometheus-monitoring-k-operator-f48c4886b-c8t94           1/1     Running             0          2m22s
+pod/my-prometheus-monitoring-kube-state-metrics-5d6768cf5-gqd77   1/1     Running             0          2m22s
+pod/my-prometheus-monitoring-prometheus-node-exporter-7v659       1/1     Running             0          2m23s
+pod/prometheus-my-prometheus-monitoring-k-prometheus-0            0/2     PodInitializing     0          106s
+
+NAME                                                        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+service/alertmanager-operated                               ClusterIP   None             &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   107s
+service/kubernetes                                          ClusterIP   10.96.0.1        &lt;none&gt;        443/TCP                      2d7h
+service/my-prometheus-monitoring-grafana                    ClusterIP   10.106.220.55    &lt;none&gt;        80/TCP                       2m23s
+service/my-prometheus-monitoring-k-alertmanager             ClusterIP   10.99.233.101    &lt;none&gt;        9093/TCP                     2m23s
+service/my-prometheus-monitoring-k-operator                 ClusterIP   10.104.115.119   &lt;none&gt;        443/TCP                      2m23s
+service/my-prometheus-monitoring-k-prometheus               ClusterIP   10.101.71.7      &lt;none&gt;        9090/TCP                     2m23s
+service/my-prometheus-monitoring-kube-state-metrics         ClusterIP   10.106.20.142    &lt;none&gt;        8080/TCP                     2m23s
+service/my-prometheus-monitoring-prometheus-node-exporter   ClusterIP   10.111.187.93    &lt;none&gt;        9100/TCP                     2m23s
+service/prometheus-operated                                 ClusterIP   None             &lt;none&gt;        9090/TCP                     106s
+
+NAME                                                               DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/my-prometheus-monitoring-prometheus-node-exporter   1         1         1       1            1           &lt;none&gt;          2m23s
+
+NAME                                                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-prometheus-monitoring-grafana              0/1     1            0           2m23s
+deployment.apps/my-prometheus-monitoring-k-operator           1/1     1            1           2m23s
+deployment.apps/my-prometheus-monitoring-kube-state-metrics   1/1     1            1           2m23s
+
+NAME                                                                    DESIRED   CURRENT   READY   AGE
+replicaset.apps/my-prometheus-monitoring-grafana-85bfc9bfb              1         1         0       2m23s
+replicaset.apps/my-prometheus-monitoring-k-operator-f48c4886b           1         1         1       2m23s
+replicaset.apps/my-prometheus-monitoring-kube-state-metrics-5d6768cf5   1         1         1       2m23s
+
+NAME                                                                    READY   AGE
+statefulset.apps/alertmanager-my-prometheus-monitoring-k-alertmanager   0/1     107s
+statefulset.apps/prometheus-my-prometheus-monitoring-k-prometheus       0/1     106s
+
+
+# service/my-prometheus-monitoring-grafana is actually the frontend; To access it, let&#x27;s change the type to NodePort and add nodePort: 30001;
+# Let&#x27;s do it manually for now; In later section, we will see how to customize helm chart;
+&gt; kubectl edit svc my-prometheus-monitoring-grafana
+
+&gt; minikube service my-prometheus-monitoring-grafana --url
+http://192.168.59.101:30001
+
+&gt; http://192.168.59.101:30001 			# It should take you to Grafana login UI;
+
+# How to get the login credentials?
+# Any chart that we use is going to have some configuration that comes with it, those are called Values in a Helm chart;
+# admin is the username; Find the password using below command;
+&gt; helm show values prometheus-community/kube-prometheus-stack | grep -i passw
+  adminPassword: prom-operator
+
+# Login using admin/prom-operator
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo - Customize default values, after Helm chart installation
+-----------------------------------------------------------------
+# In the above example, you already installed prometheus; But, we want to change the default password to admin;
+
+# While upgrading, you can also completly switch to a chart from another community;
+# Every time you upgrade, it will set all other values to default values;
+&gt; helm upgrade my-prometheus-monitoring prometheus-community/kube-prometheus-stack --set grafana.adminPassword=admin	
+
+# In order to access Graphana UI, you again need to edit the service and change the type to NodePort and add nodePort: 30001, as above creates a new service;
+&gt; kubectl edit svc my-prometheus-monitoring-grafana
+
+------------------------------------------------------------------
+# Demo - Customize default values, before Helm chart installation
+------------------------------------------------------------------
+&gt; helm install my-prometheus-monitoring prometheus-community/kube-prometheus-stack --set grafana.adminPassword=admin
+
+------------------------------------------------------
+# Demo - Customize default values, without using --set
+------------------------------------------------------
+&gt; helm show values prometheus-community/kube-prometheus-stack &gt; values.yaml
+
+# Edit values.yaml file as needed; You may need to refer chart official doc, to edit it properly;
+
+&gt; helm upgrade my-prometheus-monitoring prometheus-community/kube-prometheus-stack --values=values.yam
+
+Reference: https://www.udemy.com/course/kubernetes-microservices/learn/lecture/27935032#content
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is a snowflakeserver?
+	If you install a chart directly using helm install, then it could cause a issue;
+	Over the time, any thing could happen to that chart; Over the time, if you decide to move another cloud provider, you may not be able find same chart;
+
+	# Solution
+	&gt; helm pull prometheus-community/kube-prometheus-stack --tar		# It downloads the remote chart and extracts it to a folder;
+
+	&gt; helm install &lt;name&gt; ./kube-prometheus-stack 						# Instruct helm to use local chart, not remote chart;
+
+	&gt; touch myvalues.yaml 												# Create a file for overrides;
+
+	&gt; helm upgrade &lt;name&gt; ./kube-prometheus-stack  --values=myvalues.yaml
+
+	Instead of helm install, we could also use helm template command to install a local chart;
+	&gt; helm template &lt;name&gt; ./kube-prometheus-stack  --values=myvalues.yaml 		# It prints exact yaml that is sent to the k8s cluster;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	So we would use a configuration management tool, such as Ansible, puppet chef, there are plenty of others, but I&#x27;d say they&#x27;re the big ones.
+
+ A remote chart is one you don&#x27;t have any control of.
+
+If you try to do that Helm instal tomorrow, or in a week&#x27;s
+
+time, that remote chart might have gone, and therefore, you
+
+can&#x27;t restore this cluster, if you need to. 
+
+
+
+
+
+
+
+
+before we go into the more advanced concepts of how to build your own charts, a
+
+
+
+in the next video, we&#x27;ll see how we can make
+
+changes to the config file, the values dot yaml file, and how we
+
+can apply that instead of using dash dash set. That&#x27;s coming up
+
+
+a common solution for monitoring of Kubernetes cluster is to use Prometheus is to gather the data from your nodes;
+WE certainly need Prometheus, Grafana and a alert manager;
+
+
+I bet much doubt that the, the,
+
+whatever defaults we&#x27;ve got with this chart are going to be
+
+suitable for us, we&#x27;re going to want to choose something. So I
+
+think we&#x27;ll look at how to change the configuration in the
+
+next video. 
+
+--set &lt;name-of-prpert&gt;=&lt;value&gt;
+
+
+actually, what I want to show you here is that we can also do
+
+that, after we have installed the charts and the commands
+
+almost identical to what we did at the instal. 
+
+
+
+Helm as a
+
+generator to generate regular Kubernetes yaml 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Excercise #1: Install tomcat, upgrade it and destroy it!
+--------------------------------------------------------
+&gt; helm install my-tomcat bitnami/tomcat
+
+&gt; minikube service my-tomcat --url
+http://192.168.59.102:31646
+
+# Default username: user
+&gt; kubectl get secret --namespace default my-tomcat -o jsonpath=&quot;{.data.tomcat-password}&quot; | base64 --decode
+rzZdf6E4zG
+
+# By default, tomcat chart uses LoadBalancer to expose the tomcat; Let&#x27;s upgrade it to NodePort and change the default password;
+&gt; pwd
+/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/tomcat-demo
+
+&gt;  cat custom-values.yaml
+tomcatPassword: Welcome123
+service:
+   type: NodePort
+   nodePort: 30007
+
+&gt; helm upgrade my-tomcat bitnami/tomcat --values custom-values.yaml --reuse-values 
+
+&gt; minikube ip
+192.168.59.102
+
+&gt; http://192.168.59.102:31646/
+
+&gt; helm uninstall my-tomcat
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+The first thing Helm does when you do a Helm install is to load the chart and its dependencies.
+If it is a local chart, it will simply load it from your local machine.
+If it is a chart living on a repository, it will pull that chart and it will load it.
+
+business - support, training/developing 
+
+
+helm install bitnami/apache --generate-name --name-template &quot;mywebserver-{{randAlpha 7 | lower}}&quot;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Demo: So far, we used existing charts; Let&#x27;s see how to create our own chart;
+-------------------------------------------------------------------------------
+&gt; pwd
+/Users/mcheedhe/Data-new/Technical/Backend/Helm/code
+
+&gt; ls
+mysql-custom-password	tomcat-demo
+
+&gt; helm create firstchart 									# By default, it is of type nginx chart;
+Creating firstchart
+
+&gt; ls
+firstchart		mysql-custom-password	tomcat-demo
+
+&gt; cd firstchart
+&gt; ls
+Chart.yaml	charts		templates	values.yaml
+
+Chart.yaml 		-&gt; It contains chart metadata: apiVersion is v2, if you use helm3; name is the name of the chart; Tools like artifacthub use this information to render the UI; 
+charts 			-&gt; Dependant charts; Any dependant charts are pulled and stored here;
+templates 		-&gt; Contains yaml files;
+	notes.yaml 	-&gt; release notes; It is printed after install/upgrade command;
+values.yaml 	-&gt; Default values are part of yaml files in template folder; contains all overriding values;
+.helmignore 	-&gt; any files you want to ignore as part of package you created;
+
+&gt; cd ..
+&gt; pwd
+/Users/mcheedhe/Data-new/Technical/Backend/Helm/code
+&gt; helm install firstchart01 firstchart
+
+# helm lint -&gt; It checks all template and values yaml files, to see if there are any syntax OR intendation issues;
+&gt; helm lint firstchart
+
+# package the chart
+&gt; pwd
+/Users/mcheedhe/Data-new/Technical/Backend/Helm/code
+&gt; helm package firstchart/
+Successfully packaged chart and saved it to: /Users/mcheedhe/Data-new/Technical/Backend/Helm/code/firstchart-0.1.0.tgz
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is Template?
+	Template files are used to specify what resources to be created on the k8s cluster;
+	Place holders in the template files are replaced with values in the values.yaml and generated yaml is sent to k8s API server;
+	Helm uses text template engine in the GO programming language;
+
+heml template -&gt; This is command is used to generate the yaml spec that is sent to k8s; It doesn&#x27;t validate the generated yaml with k8s API server;
+	helm install/upgrade --dry-run VS helm template
+		- dry run validates the syntax and schema of yaml files, where as template command only validates the syntax;
+		  For eg, If you remove a brace in one of the yaml files, both dry-run and template catches it;
+		          If you remove kind property from one of the yaml files, only dry-run catches it;
+
+Actions
+	- They start with {{ and end with }}
+	- They are used to define variables, conditional logic, using loops, invoking function etc;
+	- Anything outside action is rendered as is to the final yaml file that is sent to k8s API server;
+	- {{-  -&gt; is used to remove the leading spaces in the generated text;
+	- -}}  -&gt; is used to remove the trailing spaces in the generated text;
+	- Examples:
+		{{ .Values.autoscaling.enabled }} 			-&gt; Output the values of autoscling.enabled in values.yaml;
+		{{ .Chart.Name }} 							-&gt; Name of chart, as defined in Chart.yaml;
+		{{ .Release.Name }} 						-&gt; Release name;
+		{{ .Release.Namespace }} 					-&gt; namespace;
+		{{ .Release.IsInstall }} 					-&gt; Is installation;
+		{{ .Release.IsUpgrade }} 					-&gt; Is upgrade;
+		{{ .Release.Service }} 						-&gt; Helm;
+		{{ .Template.Name }} 						-&gt; Name of template that is currently rendered;
+		{{ .Template.BasePath }} 					-&gt; 
+
+pipe
+	- It is used chain multiple commands; Output of the command on LHS will be passed to the command on RHS;
+	- Eg: 
+		{{- include &quot;firstchart.fullname&quot; . | nindent 4 }}
+		{{ .Values.autoscaling.enabled | default false }}  		# default is used to provide a default value; If values.yaml doesn&#x27;t provide any value, default value is used; 
+		{{- include &quot;firstchart.fullname&quot; . | uppper }} 		# upper is used to convert the text to upper case;
+
+functions
+	- Helm uses functions to transform data; Eg: default, upper etc;
+	- Eg: nindent 4 -&gt; It adds new line and 4 spaces;
+	- List of functions: https://helm.sh/docs/chart_template_guide/function_list/
+
+variables
+	{{ $myFLAG := true }}
+	{{ if myFLAG }}
+	{{ &quot;myFLAG is true&quot; }}
+	{{ else }}
+	{{ &quot;myFLAG is false&quot; }}
+	{{ end }}
+
+if-else
+	{{ if .Values.autoscaling.enabled }}
+	{{ &quot;Output of if&quot; | nindent 2 }}
+	{{ else }}
+	{{ &quot;Output of else&quot; | nindent 2 }}
+	{{ end }}
+
+
+	{{ if not .Values.autoscaling.enabled }}
+	{{ &quot;Output of if not&quot; | nindent 2 }}
+	{{ end }}
+
+
+	{{ if and .Values.autoscaling.enabled (not (hasKey .Values.ingress.annotations &quot;kubernetes.io/ingress.class&quot;))}}
+	{{ &quot;condition1 and condition2&quot; | nindent 2 }}
+	{{ end }}
+
+with 
+	values.yaml
+	my
+	  countries:
+	    - usa
+	    - india
+	    - mexico
+	    - brazil
+	  codes:
+	  	c1: 101
+	  	c2: 102
+
+	 {{- with .Values.my.countries }}
+	 {{- toYaml . | nindent 2 }} 			# . points to current value;
+	 {{ end }}
+
+range
+	{{- range .Values.my.countries }}
+	{{- . | nindent 2 }} 					# . points to current value;
+	{{ end }}
+
+	{{- range $key,$value := .Values.my.codes }}  			# loop through a Map/Dictionary
+	{{ $key }}: {{ $value }}				
+	{{ end }}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+.tpl files are template files; They hosts several template definitions that can be used across our template files;
+
+test.tpl
+{{- &quot;firstchart.name&quot; -}} 					
+{{- default .Chart.name .Values.nameOverride | trunc 63 | trimSuffix &quot;-&quot; }}
+{{- end }}
+
+To call firstchart.name in any template file, use include or template keyword; include supports piping, where as template keyword doesn&#x27;t support piping;
+You can also call template definition in any other chart; So, to avoid collision, make sure your template definitions are namespaced;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Chart Dependencies
+	- Let&#x27;s say we are releasing a webapplication to k8s cluster, which depends on MySQL database;
+	  Instead of we manually deploying the MySQL chart first and then deploying our webapplication chart next, we can define the MySQL chart as a dependency to our chart;
+	  When we package our application as a chart, MySQL chart also included in our application chart;
+	  When you install our application, helm installs MySQL as well as our application;
+	  Main chart and dependant chart can also exchange values;
+
+	- To add a dependency, goto Chart.yaml
+	  dependencies:
+	    - name: mysql
+	      version: &quot;8.8.6&quot;
+	      repository: &quot;http://chart.bitnami.com/bitnami&quot; # You can specify repo name, prefixed by @ OR repo URL; It is recommended to use URL, as it works across environments;
+
+	- To pull the dependencies: 
+		&gt; pwd
+		/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/firstchart
+		&gt; helm dependency update . 				# It downloads the dependant charts to charts folder;
+
+	- To add a dependency conditionally, based on a flag in values.yaml
+	  dependencies:
+	    - name: mysql
+	      version: &quot;8.8.6&quot;
+	      repository: &quot;http://chart.bitnami.com/bitnami&quot;
+	      condition: mysql.enabled
+
+	  values.yaml
+	  mysql
+	    enabled: false
+
+	- A chart can have multiple dependencies; Instead of defining conditions for each and every chart, helm supports tags;
+	
+	- Parent chart can exchange data with it&#x27;s dependant;
+	  firstchart/values.yaml
+	  mysql:
+	    auth:
+	      rootPassword: test1234
+	    primary:
+	      service:
+	        type: NodePort
+	        nodePort: 30788
+
+	- A chart can export values to it&#x27;s parent charts; Check export element in the values.yaml, to see if a chart is exporting any data;
+      Unfortually, mysql doesn&#x27;t export any data;
+      
+      Assume, mysql/values.yaml has below:
+      export:
+      	service:
+      		port: 8080
+
+      dependencies:
+	    - name: mysql
+	      version: &quot;8.8.6&quot;
+	      repository: &quot;http://chart.bitnami.com/bitnami&quot;
+	      tags: 
+	      	 - enabled
+	      import-values:
+	      	 - service 			# Parent chart can refer it in it&#x27;s yaml files, as if service is defined in it&#x27;s values.yaml: {{ .Values.service.port }}
+
+	 - Child chart can export any property to it&#x27;s parent; parent need not to export;
+      	firstchart/Charts.yaml has below:
+	      dependencies:
+		    - name: mysql
+		      version: &quot;8.8.6&quot;
+		      repository: &quot;http://chart.bitnami.com/bitnami&quot;
+		      tags: 
+		      	 - enabled
+		      import-values:
+		      	 - child: primary.Service 		# value of primary.Service in mysql/values.yaml is exported as mysqlService in this chart;
+		      	   parent: mysqlService 		# {{ .Values.mysqlService.type }} prints ClusterIP
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Repository
+	- It is a simple http server, from which we can download the charts;
+	- It will have index.yaml, which have information about all the charts it hosts;
+
+Local Repository
+	- You can host it using any folder on your machine;
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/testrepo
+
+	- You can create index.yaml either manually or use below command:
+	&gt; helm repo index
+	&gt; ls
+	index.yaml
+
+	- Let&#x27;s add first chart to this repository;
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code
+	
+	&gt; helm package firstchart -d testrepo/ 					# Package the chart and copy it to specified directory;
+	Successfully packaged chart and saved it to: testrepo/firstchart-0.1.0.tgz
+
+	- update index.yaml
+	&gt; helm repo index testrepo/ 		# If there are any new charts in testrepo, it updates the index.yaml;
+
+Host a Local Repository
+	- To host a local repository, we need a webserver, like nginx or even eaiser python, up and running;
+	- Make sure you have python3 installed: python3 --version
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/testrepo
+	&gt; pypthon3 -m http.server --bind 127.0.0.1 8080
+
+	- Open the browser and access http://127.0.0.1:8080
+
+Use a Local Repository
+	&gt; helm repo list
+	&gt; helm repo add localrepo http://127.0.0.1:8080
+	
+	# Install a chart using local repo
+	&gt; helm install mylocal01 localrepo/firstchart
+
+	# another way to install a chart using local repo
+	&gt; helm pull localrepo/firstchart 		# It downloads the specified chart to pwd;
+	&gt; helm install mylocal02 firstchart*.tgz
+
+TODO:
+	How to host chart repository using GitHub pages? It&#x27;s a free service;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Hook
+	- You can use hook, if you want to take some action, such as backing up your database, during release process;
+	- Hook is just like any other template file, under templates folder;
+	- pre-install, post-install, pre-delete, post-delete, pre-upgrade, post-upgrade, pre-rollback, post-rollback, test, before-hook-creation, hook-succeeded, hook-failed;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+What is Helm?
+	It is a package manager for k8s;
+
+What is a Package Manager?
+	It enables you to install/upgrade/uninstall a wide range of software packages with a simple command;
+	For eg, brew is a package manager for MacOS; yum is a package manager for Linux; npm is the package manager for Node JS applications;
+
+What is Chart?
+	In helm world, charts are nothing but packages; Internally, it is a directory containing all files that are needed to install the application in the k8s cluster;
+
+Why Helm?
+	Advantage #1:
+		Imagine you are working on k8s cluster - doesn&#x27;t matter if it is running on AWS or minikube and you have been given the job of installing a database in your cluster;
+		
+		Without helm package manager, you have to find a MySQL docker image, identify the best configuration(like ports, requests, limits etc) for MySQL, write 
+		yaml files for Pods, Deployment, stateful sets, daemon set etc; If you are not a MySQL expert and if you feel it difficult, helm offers a solution;
+
+		If you have helm installed, it as simple as running a command: helm install mysql;
+		Helm will download a standard set of yaml and that will work as a great starting point for any MySQL installation in k8s;
+
+	Advantage #2:
+		As we install and update applications, k8s doesn&#x27;t maintain any history of resources, unless you maintain history using GitHub;
+		Helm maintains a history, it creates a new revision everytime you install/update; It also helps you in getting back to revision you want;
+
+	Advantage #3: Dynamic configuration
+		All yaml files created directly by us are static, they don&#x27;t accept any values;
+		Helm chart contains templates and values.yaml, which are used to generate final yaml that will be sent to k8s;
+		Helm allows you to override the default specified in values.yaml;
+
+	Advantage #4:
+		Helm knows the order in which k8s resources should be created; 
+
+	Advantage #5: Lifecycle hooks
+		If there is any work that you want to do during install/upgrade/uninstall time, helm supports lifecycle hooks/events;
+
+Helm Installation
+	&gt; brew install helm 		# It is written in GO, which means it is a self executable binary file; It doesn&#x27;t need any dependencies to work;
+								# Having a k8s cluster is a prerequisite to it, as it is intended to work with a k8s cluster; 
+
+How does helm know about the k8s cluster?
+	Helm uses the same config file(.kube/config), which kubectl command uses;
+	If you don&#x27;t want helm to use that file, you can always override it by setting KUBECONFIG environment variable;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+24 Commands:
+
+create, install, upgrade, rollback, package, list, repo, search;
+lint, template, get, history, pull, plugin, show, status;
+test, verify, version, env, dependency, push, uninstall, help;
+
+Built-in Objects: .Release, .Chart, .Files, .Values;
+
+Chart/Package 
+
+Reporsitory 
+
+namespace 
+Template 
+Hook
+
+Variables;
+Template Actions, Control white space, default, lower, nindent;
+Flow Control: if-else, with, range; dictionary;
+Template Functions: EQ, AND, NOT, OR, toYaml;
+Named Template: write helper template, call one template from another template; call template from k8s helm template;
+
+
+create, package heml charts;
+dependency: alias, condition, tags;
+subcharts: global values, override subchart values, import values; pass variables from parent to child; pass values from subchart to parent - explict and implict manner;
+Starters - create a chart and using it create multiple other charts;
+Plugins;
+Hooks: Type of hooks, preinstall, ; deletion policy, weight, tests; test hook; 
+sign and verify charts - security of chart depends on it;
+How to host helm repo in github;
+Integrate github with artifacthub;
+Helm - validate values.yml, implement restirictions on it;
+
+https://github.com/stacksimplify/helm-masterclass
+
+https://github.com/stacksimplify/helm-masterclass/tree/main/course-presentation
+
+https://github.com/stacksimplify/helm-charts
+
+https://github.com/stacksimplify/helm-charts-repo
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+helm repo 
+Add bitnami repo 
+
+helm lint
+
+Installing Public Helm Charts: Here, we’ll start to use Helm, and learn the most basic Helm CLI commands.
+
+Building Custom Helm Chart: In this part, we’ll switch from being a consumer of a Helm chart to becoming its developer. 
+
+Using Helm on a Cloud: In this chapter, everything that we build and test locally; we will it transfer to a public cloud.
+
+Helmfile: In the last chapter, we’ll learn about another tool that is built on top of Helm and makes its maintenance even simpler.
+
+
+
+--output=yaml 
+--output=json
+
+
+
+
+
+# Chart Specific Commands!
+helm install &lt;mychart&gt; bitnami/apache --namespace=web 			# installation name should be unique at namespace level;
+helm install bitnami/apache --generate-name 					# installation name is auto-generated!
+helm install &lt;mychart&gt; bitnami/apache --wait 					# By default, helm submits the manifest to k8s API server and considers it successful installation;
+																# It doesn&#x27;t wait until API server creates resources;
+																# With --wait option, helm waits upto 5mins for API server to create resources;
+																# If Pods are not up within that duration, installation is considered as failed;
+																# Use --timeout 10m12s, to configure the timeout;
+helm install &lt;mychart&gt; bitnami/apache --atomic 					# In case if the installation fails, it rolls back the installation to previous successful release;
+helm upgrade &lt;mychart&gt; bitnami/apache --namespace=web
+helm upgrade --install &lt;mychart&gt; bitnami/apache 				# If installation doesn&#x27;t exist, it installs the chart; Else, it upgrades it; Useful in CI/CD pipeline;
+helm status &lt;mychart&gt; 											# Status of install/update
+helm list/ls 													# Shows all installations in current namespace;
+helm list --all-namepsaces  									# Shows all installations cluster-wide;
+helm rollback &lt;mychart&gt; 1 --namespace=web 						# Rollback a chart to specified version
+helm uninstall &lt;mychart&gt; 										# It cleans up all resources that are created by this chart in the k8s cluster; It deletes history as well;
+helm uninstall &lt;mychart&gt; --keep-history							# Keep the history OR release records OR secrets;
+
+# helm ls gives only minimum information about an installation; If you want more information, use helm get:
+helm get notes &lt;install-name&gt; 									# Shows release notes of an installation;
+helm get values &lt;install-name&gt; 									# Shows only custom values, not default values, that you provided during installation;
+helm get values &lt;install-name&gt; --all							# Shows both default and custom values;
+helm get values &lt;install-name&gt; --revision 1						# Shows custom values of specified revision;
+helm get manifest &lt;install-name&gt; 								# It fetches the manifest(template that is sent to k8s) for the current release; get yaml from installation;
+helm get manifest &lt;install-name&gt; --revision 1					# It fetches the manifest for the specified release;
+
+helm history &lt;install-name&gt;										# It shows the history of install/upgrade;
+helm rollback &lt;install-name&gt; &lt;version&gt;							# Rollback the installation to specified version;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What happens when you run helm install OR helm upgrade?
+	- Helm allows you to install/upgrade a remote chart OR a chart in your local hard disk, maybe developed by you;
+	- Helm searches for the chart that you want to install and fetches it to local disk from remote repository, if not present locally;
+	- It passes templates of the chart + values in the values.yaml file + any values passed from the command line;
+	- The result is a set of defintion files, that k8s understands: like deployment, service, ingress and so on;
+	- Finally, those defintion files are sent to API server and we will have an application running or upgraded on k8s cluster;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is Dry Run?
+	- What if you want to inspect the content of yaml files before helm sends it to k8s; This is where dry-run comes into picture!
+	- If you pass --dry-run flag to helm install command, it will not apply defintion files to k8s; Instead, it dumps the files to the screen;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is template?
+	- Several teams are misusing the dry run; They are taking the yaml files generated by dry run, doing modifications and applying them manually using kubectl;
+	- template is similar to dry run, but it differs in several ways: helm template &lt;myinstance&gt; &lt;chart&gt; -values valeus.yaml
+
+	- dry-run needs k8s cluster up and running, as it validates the generated yaml files;
+	  template doesn&#x27;t need the cluster up and running, as it doesn&#x27;t validate;
+	- 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Demo #1 - How to bring up MySQL deployment, using Helm Chart on minikube?
+-------------------------------------------------------------------------
+	- Find the Repository containing mysql helm chart;
+	  Goto https://artifacthub.io -&gt; search for mysql -&gt; you might find more than one result; 
+	  For now, pick the result that mentions Bitnami; It is actually a division of VMware;
+	  In that page, you will find instructions to install mysql;
+
+	&gt; helm repo add bitnami https://charts.bitnami.com/bitnami 		# It adds repo to your list of repositories: helm repo list;
+
+	&gt; helm repo list
+	NAME   	URL                               
+	bitnami	https://charts.bitnami.com/bitnami
+
+	&gt; helm install my-mysql bitnami/mysql 							# It brings up pods, services and so many k8s objects in your cluster; 
+																	# Helm uses name of installation as a prefix to all objects that it creates;
+																	# name of installation also allows us to manage it later on;
+
+	&gt; helm list --all-namepsaces 
+	NAME    	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART       	APP VERSION
+	my-mysql	default  	1       	2022-05-13 23:00:47.102486 +0530 IST	deployed	mysql-8.8.33	8.0.28 
+
+	&gt; kubectl get all
+	NAME             READY   STATUS    RESTARTS   AGE
+	pod/my-mysql-0   1/1     Running   0          2m19s
+
+	NAME                        TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+	service/kubernetes          ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP    13h
+	service/my-mysql            ClusterIP   10.99.87.235   &lt;none&gt;        3306/TCP   2m19s
+	service/my-mysql-headless   ClusterIP   None           &lt;none&gt;        3306/TCP   2m19s
+
+	NAME                        READY   AGE
+	statefulset.apps/my-mysql   1/1     2m19s
+
+
+	# Username: root; Use below command to find the default password;
+	&gt; kubectl get secret --namespace default my-mysql -o jsonpath=&quot;{.data.mysql-root-password}&quot; | base64 --decode
+	BgRBNHeyiB
+
+
+	# Run a pod that you can use as a client; Client pod gets deleted, the moment you exit from it;
+	&gt; kubectl run my-mysql-client --rm --tty -i --restart=&#x27;Never&#x27; --image  docker.io/bitnami/mysql:8.0.29-debian-10-r15 --namespace default --env MYSQL_ROOT_PASSWORD=BgRBNHeyiB --command -- bash
+
+	# To connect to primary service (read/write);
+	[I have no name!@my-mysql-client:/$    mysql -h my-mysql.default.svc.cluster.local -uroot -pBgRBNHeyiB
+
+	mysql&gt; show databases;
+	mysql&gt; exit;
+
+
+	&gt; helm uninstall my-mysql
+	release &quot;my-mysql&quot; uninstalled
+
+	We haven&#x27;t wrote even a single yaml file, but brought up a mysql deployment;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Demo #2 - How can I choose my own password, while bringing up MySQL deployment, as above;
+-----------------------------------------------------------------------------------------
+# Approach #1
+&gt; helm install my-mysql bitnami/mysql --set auth.rootPassword=Welcome123 		
+
+# Approach #2
+&gt; cd /Users/mcheedhe/Data-new/Technical/Backend/Helm/code/mysql-custom-password
+&gt; cat values.yaml
+auth:
+   rootPassword: &quot;Welcome123&quot;
+
+&gt; helm install my-mysql bitnami/mysql --values values.yaml	
+
+&gt; kubectl run my-mysql-client --rm --tty -i --restart=&#x27;Never&#x27; --image  docker.io/bitnami/mysql:8.0.29-debian-10-r15 --namespace default --env MYSQL_ROOT_PASSWORD=Welcome123  --command -- bash
+
+&gt; mysql -h my-mysql.default.svc.cluster.local -uroot -pWelcome123
+
+mysql&gt;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Demo #3 - How to upgrade an existing installation?
+--------------------------------------------------
+# Update the local copy of the charts to latest available;
+&gt; helm repo update
+
+&gt; helm status my-mysql-1 			# If there are updates to mysql chart, this command prints the steps required to upgrade the mysql installation;
+
+&gt; helm upgrade my-mysql-1 bitnami/apache --set auth.rootPassword=Welcome123 		# rootPassword is mandatory in case of mysql installation update; 
+
+&gt; helm upgrade my-mysql-1 bitnami/apache --values values.yaml
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Demo: Deploy a Microservice to k8s cluster using Helm;
+------------------------------------------------------
+Docker Image: bharatht19/couponservice  	-&gt; It exposes some restful API; http://127.0.0.1:32761/couponapi/coupons/SUPERSALE
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Docker is a containerization platform that allows you to pack your applications into containers. It packages the services into different containers that run on the same or different hosts, but have isolated environments
+
+Kubernetes is an open-source platform that lets you deploy and manage containerized applications. Kubernetes takes and manages services from the deployment stage to the final stage of exposure. Together with its plug-ins, Kubernetes also provides other services like auto-scaling, availability, and fault tolerance.
+
+Helm is a package manager for Kubernetes. It bundles a couple of Kubernetes resource files into a single package, known as helm chart, that can be easily deployed. Through Helm, we can install applications with a single command. These applications contain a default configuration. It also enables adjusting some of the configurations.
+
+In this project, you’ll start by using Docker to containerize your application. Then you’ll push the image to Docker Hub. After this, you will set up Helm and the Kubernetes cluster. You’ll then create our Helm Chart. After configuring this chart, you’ll deploy it. Finally, you will use port-forwarding to access your application.
+
+
+
+
+Task 1: Containerize and Push Your Application
+You’ll start by containerizing the web application. You don’t need to worry about creating an application and a Docker file.
+
+We have already created a simple React application that displays a “Hello from Educative” message. This application is available inside the “Application” folder residing in the /usercode directory.
+
+You also do not worry about creating a Dockerfile. We have already prepared a Dockerfile inside the “/usercode/Application” folder.
+
+Build and push the image
+Your task is to:
+
+Create a Docker image
+Push this image to Docker Hub
+After building the image, you can verify your image by using the following command:
+
+docker images
+If you’re unsure how to create an image and push it to Docker Hub, click the “Show Hint” button to get a hint about the solution.
+
+Hide Hint
+Use the docker build command to build the Docker image.
+Name your Docker image using your Docker Hub username and the repository name.
+Log into Docker Hub.
+Push the image, using the username and repository name.
+If you’re stuck, click on the “Show Solution” button to view the solution for this task.
+
+
+Use the cd usercode/Application command to change the directory to the application.
+Use the docker build -t username/my-image_name . command to build your Docker image.
+Use the following commands to push your image to Docker Hub:
+docker login -u my-username -p my-password
+docker push my-username/my-image-name
+
+
+Helm charts also provide versioning, rollback, and dependency management capabilities, making it easy to upgrade, roll back, and manage dependencies between different components of your application. 
+
+
+kubectl describe pod &lt;podname&gt;
+
+
+
+    It specifies default value
+
+
+
+
+
+
+
+     follow the syntax functionName arg1 arg2.... In the snippet above, quote .Values.favorite.drink calls the quote function and passes it a single argument.
+Helm has over 60 available functions.
+
+quote 
+    - While working with string data, it is always safer to quote them, rather than leaving them as bare words;
+    - name: {{ .Values.MyName | quote }}
+  availability-zone: {{quote .Values.availability-zone }}
+
+
+    -    derived-variable: {{ now | date “2021-09-21” | quote  }}
+For example, now is the function that will give you the current DateTime then it will be formatted in the given format and then the function quote will add the quotes to the DateTime.
+
+    - Environment: {{ .Values.Env | default “stage” | quote}}
+     Env value will be taken from the Variable file. And if the value file is not having the value in the file, then the default value will be appended. That is stage. If you add the Env Value while running the command, That will be appended in the template file but not the default. 
+
+
+     apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+data:
+  myvalue: &quot;Hello World&quot;
+  drink: {{ quote .Values.favorite.drink }}
+  food: {{ quote .Values.favorite.food }}
+
+
+     th you are working with string data, you are always safer quoting the strings than leaving them as bare words:
+
+
+
+
+
+| default &quot;TCP&quot;
+{{ .Values.service.protocol | default &quot;TCP&quot; }}
+
+
+
+
+kubectl proxy --address 0.0.0.0 --accept-hosts=&#x27;.*&#x27;
+    The kubectl proxy command mentioned at the beginning of this lesson enabled us to expose the dashboard over the Internet.
+    If we are working locally there is another approach. Instead of a proxy command, we can use kubectl port-forward:
+
+    kubectl -n monitoring port-forward service/dashboard-kubernetes-dashboard 443:443
+
+
+
+Release 
+    A Release is an instance of a chart running in a Kubernetes cluster;
+
+Version
+    Helm versions are expressed as x.y.z, where x is the major version, y is the minor version, and z is the patch version, following Semantic Versioning terminology.
+
+
+Bitnami is one of famous packaging solution for most of the open source applications;
+bitnami.com/stacks/helm  -&gt; nginx, mysql, postgresql, mongodb, kafka, elasticsearch, jenkins, prometheus, graffana, kibana, redis etc;
+
+--------
+As you might remember, in Helm v3, the Tiller, the server component of Helm, has been removed and Kubernetes Secrets are used instead as a storage for releases’ information.
+kubectl get secrets -n monitoring
+----------
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

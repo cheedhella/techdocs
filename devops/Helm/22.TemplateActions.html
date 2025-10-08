@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>Template Action 
+    - {{ }} is called a Template Action;
+    - Anything between flower brackets {{ }} is called a Action element; 
+    - It helps in retrieve data from other sources;
+    - Template engine replaces anything inside flower brackets with it&#x27;s value;
+    - Anything outside {{ }} is returned as is;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Template function
+    It is used to format text, manipulate arrays and objects, perform calculations etc;
+    Helm provides over 60 functions;
+    Syntax: function arg1 arg2...
+    Eg: quote .Values.favorite.drink
+
+Pipeline
+    Pipeline is powerful tool for chaining multiple functions together to create a powerful workflow;
+    It redirects the output of one function to the input of the next function;
+    Eg: {{ cat .Chart.Name &quot;Container&quot; | snakecase | lower }}  // fetch chart name | append &#x27;Container&#x27; | snakecase | lowercase; Ouput: mychart_container
+------------------------------------------------------------------------------------------------------------------------------------------------------
+default 
+    - If the input is not defined, it returns a default value;
+    - Definition of undefined depends on type:
+        -- number: 0
+        -- string: &#x27;&#x27;
+        -- Lists: []
+        -- Dicts: {}
+        -- Boolean: false 
+        -- null
+
+    - Eg: drink: {{ .Values.favorite.drink | default &quot;tea&quot; | quote }}
+    - Eg: default &#x27;tea&#x27; .Values.favorite.drink      # If .Values.favorite.drink is not defined, it defaults to tea;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Controlling whitespaces 
+    {{- .Chart.name }}  -&gt; Leading white space is ignored during rendering;
+    {{ .Chart.name -}}  -&gt; Trailing white space is ignored during rendering;
+    - Eg:
+            name1: &quot;hello  {{- .Chart.name  }}  kalyan&quot;         -&gt; &quot;hello  kalyan&quot;
+            name2: &quot;hello  {{  .Chart.name -}}    kalyan&quot;       -&gt; &quot;hello    kalyan&quot;
+            name3: &quot;hello  {{- .Chart.name -}}  kalyan&quot;         -&gt; &quot;hellokalyan&quot;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+    indent
+        - It indents every line in a given string to the specified indent width(defaults 4 spaces); 
+        Eg: indent: {{ indent 4 .Values.myVal }}
+
+    nindent
+        - It is same as indent, but prepends the output with a newline;
+
+    toYaml 
+        - Used to convert an array or object to indented YAML string;
+        Eg: 
+            // values.yaml 
+            items: [&#x27;first&#x27;, &#x27;second&#x27;]
+
+            example: {{- .Values.items | toYaml | nindent 2}}
+
+            // Output:
+            example:
+              - first 
+              - second
+
+    fromYaml
+        - 
+
+    https://helm.sh/docs/chart_template_guide/function_list/
+    
+    printf function 
+    - It returns a string based on formatting string; We need to pass arguments in order;
+    - Eg: {{- printf &quot;%s-%s&quot; .Release.Name .Chart.Name }}
+    - {{- define &quot;chart.chart&quot; -}}
+      {{- printf &quot;%s-%s&quot; .Chart.Name .Chart.Version | replace &quot;+&quot; &quot;_&quot; | trunc 63 | trimSuffix &quot;-&quot; }}
+      {{- end }}
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

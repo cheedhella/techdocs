@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>docker run -d -p 1010:80 nginx:alpine  # create a container 
+docker ps -l
+curl http://&lt;ip&gt;:1010
+docker rm -fv &lt;containerid&gt;
+
+namespace 
+
+	- a namespace is basically the ID or the name of the process of these container.
+
+secrets 
+	- It allows us to limit CPU, memory and a lot of resources so you can limit your container to do only the things that you want it to do, right?
+
+A container contains a process which runs in a namespace and has secrets to control it.
+	
+
+you could spin up another process which will live with this process and these processes will be able
+
+to talk to each other because they are in the same container, they are sharing the same namespace and
+
+they are sharing these secrets here.
+
+
+Scratch is base image for every image; It is an empty image;
+
+
+jq tool
+
+docker images -q
+//remove all images
+2- docker image rm $(docker images -q)  
+
+
+RootFS 
+    - It shows ordered list of layer&#x27;s digests;
+    - 
+    
+    and OverlayFS
+
+Dive
+
+docker exec -e TEST=sammy container-name env
+docker exec --env-file .env container-name env
+If you’d like to pass in a file full of environment variables you can do that with the --env-file flag.
+
+
+
+
+
+
+which tenancy, which namespace, which region - This is migration pod. Saasdevresponsys. Namespace migdev1, Phx1
+kubectl -n migdev1 get svc
+
+
+TODO: https://www.baeldung.com/dockerizing-spring-boot-application 
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.youtube.com/@AbhishekVeeramalla
+
+
+What is Docker Registry?
+	A Service(such as https://hub.docker.com or self-hosted) that helps you in storing and distributing the docker images;
+	Docker images can be public(everyone can use it), private, restricted to an organization or set of users;
+	When you do &#x27;docker run&#x27;, image is downloaded from hub.docker.com;
+	It provides API to build, pubish, search, download images;
+	----
+	Imagine a workflow where you push a commit, that triggers a build on your CI provider, which in turn pushes a new image into your registry;
+	Your registry can then fire off a webhook and trigger a deployment, all without a human having to do anything manually;
+	Registries make it much easier to implement a fully automated workflow like this;
+	----
+	It is a collection of Repositories;
+
+What is Docker Repository?
+	It is a collection of images with same name, that can have different tags/versions;
+
+What does a Docker Image contains?
+	It contains everything needed to run the application -- code, runtime, libraries, environment variables and config files;
+
+What is a Docker Container?
+	It is nothing but a docker image that is running;
+	docker pull - It just downloads the image; It is called container, if it is running;
+
+docker pull in28min/todo-rest-api-h2:1.0.0.RELEASE
+	It will download image from Default Registry(hub.docker.com) -&gt; Repository(in28min/todo-rest-api-h2) -&gt; Tag(1.0.0.RELEASE);
+
+docker run in28min/todo-rest-api-h2:1.0.0.RELEASE
+	# In traditional deployment, you need to procure specified hardware and install operating system, software(java, tomcat etc) 
+	# and deploy applications; But, with docker, Your local system need to have only docker installed; 
+	# Other depedencies such as Java are not needed! You just need to run &#x27;docker run&#x27; command;
+
+docker run -p5000:5000 in28min/todo-rest-api-h2:1.0.0.RELEASE 	# -phostPost:containerPort
+	By default, any container you run, runs in internal network with container port 5000; No one outside can access it;
+
+docker run -p5000:5000 -d in28min/todo-rest-api-h2:1.0.0.RELEASE 	# -d is for running the container in background(detached mode);
+	# It will print only container id;
+	# If you want to see logs, &#x27;docker logs &lt;container-id&gt;&#x27;
+	# docker logs -f &lt;container-id&gt;  -&gt; tail the logs, if any new log entry, keep displaying it;
+	--restart=always -&gt; Whenever docker desktop is restarted, it starts this container;
+	--restart=no  	 -&gt; Default; If you restart docker desktop, this container is not started;
+	# If you want a container with always restart policy not to restart, stop it and prune it;
+
+How to access the application?
+	http://localhost:8080/hello-world
+
+docker container ls 					# It prints the list of containers running;
+docker container ls -a 					# It lists all containers, not just running;
+docker container stop &lt;container-id&gt; 	# To stop a running container gracefully;
+docker container kill &lt;container-id&gt; 	# To stop a running container immediately;
+docker container run &lt;container-id&gt;	 	# docker run is the shorthand for this;
+docker container pause &lt;container-id&gt;
+docker container unpause &lt;container-id&gt;
+docker container inspect &lt;container-id&gt; 	
+docker container prune &lt;container-id&gt;; 	# It will remove all stopped containers;
+
+
+What is Image Tag?
+	Tag is alphanumeric identifier of the image within a repository(such as 1.1 or latest);
+	You can attach more than one tag to an iamge; # docker tag &lt;repository&gt;:&lt;tag&gt; &lt;repository&gt;:&lt;new_tag&gt;
+	Note: image with latest tag may not be the latest;
+
+Why is docker popular?
+	You can install docker on cloud very easily; Most of the cloud providers provide container based services;
+	Azure provides Azure Container Service; AWS provides elastic container service;
+
+	Prior to Docker, virtual machines are very famous;
+	You need to install virtualbox/hypervisor on host os;
+	Post that, you can create virtual machine with guest os/software/applciations;
+	It is heavy weight process;
+
+	If you use docker, there is only host os; So, it is light weight;
+	So, it is very easy to use docker on local and cloud;
+
+
+docker search mysql 	# Search for an image named mysql
+docker image history &lt;image-id&gt; 	# It prints the steps involved in creating that image;
+docker image inspect &lt;image-id&gt; 	# It ;
+docker image remove &lt;image-id&gt; 		# To remove the image from local;
+
+
+
+What is Image Layer?
+	Docker images contain read-only layers, which means that once an image is created it is never modified. 
+	https://medium.com/@jessgreb01/digging-into-docker-layers-c22f948ed612
+	https://www.learnitguide.net/2018/06/docker-images-explained-with-examples.html
+
+What is Docker Container?
+	It is a runtime instance of an image(running program)
+
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+	
+Docker Container
+	
+
+	docker command reaches docker hub and it downloads a single file(with all code and dependencies) called docker image.
+	
+	Docker Container is a running instance of a Docker Image and they hold the entire package needed to run the application.
+
+
+	Container image: A package with all the dependencies and information needed to create a container. An image includes all the dependencies (such as frameworks) plus deployment and execution configuration to be used by a container runtime. Usually, an image derives from multiple base images that are layers stacked on top of each other to form the container&#x27;s filesystem. An image is immutable once it has been created.
+
+Dockerfile: A text file that contains instructions for how to build a Docker image. It&#x27;s like a batch script, the first line states the base image to begin with and then follow the instructions to install required programs, copy files and so on, until you get the working environment you need.
+
+Build: The action of building a container image based on the information and context provided by its Dockerfile, plus additional files in the folder where the image is built. You can build images with the Docker docker build command.
+
+Container: An instance of a Docker image. A container represents the execution of a single application, process, or service. It consists of the contents of a Docker image, an execution environment, and a standard set of instructions. When scaling a service, you create multiple instances of a container from the same image. Or a batch job can create multiple containers from the same image, passing different parameters to each instance.
+
+Volumes: Offer a writable filesystem that the container can use. Since images are read-only but most programs need to write to the filesystem, volumes add a writable layer, on top of the container image, so the programs have access to a writable filesystem. The program doesn&#x27;t know it is accessing a layered filesystem, it is just the filesystem as usual. Volumes live in the host system and are managed by Docker.
+
+Tag: A mark or label you can apply to images so that different images or versions of the same image (depending on the version number or the target environment) can be identified.
+
+Multi-stage Build: Is a feature, since Docker 17.05 or higher, that helps to reduce the size of the final images. In a few sentences, with multi-stage build you can use, for example, a large base image, containing the SDK, for compiling and publishing the application and then using the publishing folder with a small runtime-only base image, to produce a much smaller final image
+
+Repository (repo): A collection of related Docker images, labeled with a tag that indicates the image version. Some repos contain multiple variants of a specific image, such as an image containing SDKs (heavier), an image containing only runtimes (lighter), etc. Those variants can be marked with tags. A single repo can contain platform variants, such as a Linux image and a Windows image.
+
+Registry: A service that provides access to repositories. The default registry for most public images is Docker Hub (owned by Docker as an organization). A registry usually contains repositories from multiple teams. Companies often have private registries to store and manage images they&#x27;ve created. Azure Container Registry is another example.
+
+Multi-arch image: For multi-architecture, is a feature that simplifies the selection of the appropriate image, according to the platform where Docker is running, e.g. when a Dockerfile requests a base image FROM microsoft/dotnet:2.1-sdk from the registry it actually gets 2.1-sdk-nanoserver-1709, 2.1-sdk-nanoserver-1803 or 2.1-sdk-alpine, depending on the operating system and version where Docker is running.
+
+Docker Hub: A public registry to upload images and work with them. Docker Hub provides Docker image hosting, public or private registries, build triggers and web hooks, and integration with GitHub and Bitbucket.
+
+Azure Container Registry: A public resource for working with Docker images and its components in Azure. This provides a registry that is close to your deployments in Azure and that gives you control over access, making it possible to use your Azure Active Directory groups and permissions.
+
+Docker Trusted Registry (DTR): A Docker registry service (from Docker) that can be installed on-premises so it lives within the organization&#x27;s datacenter and network. It is convenient for private images that should be managed within the enterprise. Docker Trusted Registry is included as part of the Docker Datacenter product. For more information, see Docker Trusted Registry (DTR).
+
+Docker Community Edition (CE): Development tools for Windows and macOS for building, running, and testing containers locally. Docker CE for Windows provides development environments for both Linux and Windows Containers. The Linux Docker host on Windows is based on a Hyper-V virtual machine. The host for Windows Containers is directly based on Windows. Docker CE for Mac is based on the Apple Hypervisor framework and the xhyve hypervisor, which provides a Linux Docker host virtual machine on Mac OS X. Docker CE for Windows and for Mac replaces Docker Toolbox, which was based on Oracle VirtualBox.
+
+Docker Enterprise Edition (EE): An enterprise-scale version of Docker tools for Linux and Windows development.
+
+Compose: A command-line tool and YAML file format with metadata for defining and running multi-container applications. You define a single application based on multiple images with one or more .yml files that can override values depending on the environment. After you have created the definitions, you can deploy the whole multi-container application with a single command (docker-compose up) that creates a container per image on the Docker host.
+
+Cluster: A collection of Docker hosts exposed as if it were a single virtual Docker host, so that the application can scale to multiple instances of the services spread across multiple hosts within the cluster. Docker clusters can be created with Kubernetes, Azure Service Fabric, Docker Swarm and Mesosphere DC/OS.
+
+Orchestrator: A tool that simplifies management of clusters and Docker hosts. Orchestrators enable you to manage their images, containers, and hosts through a command line interface (CLI) or a graphical UI. You can manage container networking, configurations, load balancing, service discovery, high availability, Docker host configuration, and more. An orchestrator is responsible for running, distributing, scaling, and healing workloads across a collection of nodes. Typically, orchestrator products are the same products that provide cluster infrastructure, like Kubernetes and Azure Service Fabric, among other offerings in the market.
+-------------------------------------------------------------------------------------------------------------------
+
+Docker Hub(https://hub.docker.com/), Docker Images, Docker Container &amp; Docker Compose
+Each environment composed of many containers. 
+Resource
+
+
+docker ps - lists all running containers.
+docker attach &lt;container_name&gt; - switches to that container.
+exit - kills that container
+docker rm &lt;container_name&gt; - removes the specified container.
+
+docker images - displays all downloaded images.
+docker rmi -f &lt;image-name&gt; - removes the specified image. // remove image
+
+docker image ls
+docker container ls --all
+docker
+docker container --help
+
+
+
+
+docker login [OPTIONS] [SERVER] - Used to Log in to a Docker Registry
+	docker login -u &lt;username&gt; -p &lt;password&gt;		- If no SERVER is specified, it defaults to Docker Hub Registry.
+	docker login -u &lt;username&gt; --password-stdin		- You can prevent storing password in shell&#x27;s history by providing password through STDIN.
+----------------------------------------------------------------------------------------------------------------------------
+docker logout [SERVER] - Used to Log out from a Docker Registry
+----------------------------------------------------------------------------------------------------------------------------
+docker search [OPTIONS] KEYWORD - Search the Docker Registry for images matching given KEYWORD 
+	docker search centos - It returns all the images containing &#x27;centos&#x27; in their name.
+		It displays following information about each matching image.
+			NAME - name of the docker image
+			DESCRIPTION - A short description on what the image is about
+			STARS - how many people have liked this image
+			OFFICIAL - Specifies whether the image is built from a trusted source
+			AUTOMATED - Tells whether the images is built automatically with a push in GitHub or Bitbucket repositories
+	docker search --filter stars=30 --filter is-automated=true --filter is-official=true centos
+		It returns all images whose name contains &#x27;centos&#x27; and having atleast 30 starts and automated and official
+----------------------------------------------------------------------------------------------------------------------------
+docker pull [OPTIONS] NAME[:TAG|@DIGEST] - Used to pull an image or a repository from a registry	
+	docker pull ubuntu					// pull an image by it&#x27;s name (Docker Engine uses :latest tag as default)
+	docker pull ubuntu:14.04 			// pull an image by it&#x27;s name and tag
+	docker pull ubuntu@sha256:45b23de	// pull an image by it&#x27;s name and digest - most accurate way
+										// digest is found in FROM section of docker file
+	docker pull --all-tags ubuntu		// pull all the tagged images from a Repository
+
+	TODO: By deafult, docker pulls from Docker Hub. How to pull from another Registry?
+----------------------------------------------------------------------------------------------------------------------------
+docker image ls [OPTIONS] [REPOSITORY[:TAG]] - Used to list images(in your local system)
+	docker image ls -a 					- List(Repository, Tag, Image ID, Created, Size) all the images(By default, intermediate images are not shown)
+	docker image ls -q 					- List only numeric IDs(quiet mode).
+
+docker image inspect [OPTIONS] IMAGE [IMAGE...]
+----------------------------------------------------------------------------------------------------------------------------
+docker run [OPTIONS] IMAGE [COMMAND] [ARG...] - Used to start a new Container
+	docker run &lt;imageName&gt;		- It starts the Container in attached mode(means output from running process is displayed on the terminal).
+								  It means terminal session is hijacked by the running process. Pressing Ctrl+C will release terminal session and 
+								  stops the container. You can open another terminal and type &#x27;docker ps&#x27;, to check running processes.
+	docker run -d &lt;imageName&gt;	- It starts the Container in detached mode(like Unix background job)
+	docker run --name &lt;containerName&gt; &lt;imageName&gt; 		- By default, docker generates a unique name for each container started. You can also 
+														  specify your own name. You are not allowed to run multiple containers with same name.
+	docker run -p &lt;host_ip:host_port:container_port&gt; &lt;imageName&gt;	- It is used to publish container ports.
+																	  It means anyone connecting this host over host_port will be routed to the container via port container_port. You can publish multiple container ports, by using -p flag multiple times.
+
+docker exec -it &lt;containerId&gt; sh - used to open a shell on running contaniner.	(used to access file system of a running container)																												 
+----------------------------------------------------------------------------------------------------------------------------
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+67bbd0858ef5        redis               &quot;docker-entrypoint...&quot;   30 seconds ago      Up 27 seconds       6379/tcp            redis
+
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+docker push
+docker pull
+
+docker commit 
+	https://www.infoworld.com/article/3077875/linux/containers-101-docker-fundamentals.html
+docker inspect
+	https://www.thegeekdiary.com/how-to-get-information-about-a-container-in-docker/
+
+----------------------------------------------------------------------------------------------------------------------------
+docker container ls			- shows only running contianers
+docker container ls -a		- shows all(running + stopped) the contianers
+docker ps -l 				- shows recently created container
+d
+docker ps -n=-1		- 
+docker image ls			| Show all images
+						|
+						|
+
+Repository - 
+Tag - 
+Image ID - Uniquely identifies an image.
+Virtual Size - size of the image.
+Create Dt - number of days since the image was created.
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+docker login --username=yourhubusername --password=yourpassword
+docker version
+docker -v
+docker info - to view even more details about your docker installation
+----------------------------------------------------------------------------------------------------------------------------
+docker images -
+
+docker image ls - list all available images.
+
+docker image build	Build an image from a Dockerfile
+docker image history	Show the history of an image
+docker image import	Import the contents from a tarball to create a filesystem image
+docker image inspect	Display detailed information on one or more images
+docker image load	Load an image from a tar archive or STDIN
+docker image ls	List images
+docker image prune	Remove unused images
+docker image pull	Pull an image or a repository from a registry
+docker image push	Push an image or a repository to a registry
+docker image rm	Remove one or more images
+docker image save	Save one or more images to a tar archive (streamed to STDOUT by default)
+docker image tag	Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+
+docker rmi ImageID
+	Docker images on the system can be removed via the docker rmi command.
+
+docker images -q 
+	The output will show only the Image ID’s of the images on the Docker host.
+
+docker inspect Repository 
+
+
+----------------------------------------------------------------------------------------------------------------------------
+docker ps - lists all running containers.
+docker run &lt;image-name&gt; - run the specified image
+docker container ls - lists all running containers.
+docker container ls --all - lists all available containers.
+docker container ls -aq - lists all available containers in quiet mode.
+---------------------------------------------------------------------
+docker run hello-world
+	It looks for a docker image with name &#x27;hello-world&#x27; in your local machine(exact location?).
+	If not found, it downloads it from docker hub.
+	If found, it runs it.
+
+docker run -it ubuntu
+	Install image with name ubuntu.
+	
+docker run -it --name james ubuntu
+	Create container
+
+
+docker image push adityaprabhakara/mypage-jan28:1
+docker image tag mypage-jan28:1 adityaprabhakara/mypage-jan28:1
+docker image history - list of commands used to build that image
+docker container run -d alpine ping google.com
+docker container logs &lt;containerId&gt; - whatever written to stdout of that container, fetch it
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+You can deploy the docker image in any cloud;
+Azure provides Azure container service;
+AWS provides Elastic container service;
+
+ 
+
+
+
+
+
+
+We&#x27;ll look at all these commands a little later, entrypoint, env, add, expose, volume. We will talk about all these commands a little later.
+
+You can see the Entrypoint, which is basically the command which would be run.
+when you create a container out of this image and launch it. You can see that it&#x27;s running some complex version of Java -jar /app.jar
+
+
+
+Virtual Machine
+
+How docker is different from Virtual Machine?
+
+Docker Architecture
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Log in to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  builder     Manage builds
+  buildx*     Docker Buildx
+  compose*    Docker Compose
+  container   Manage containers
+  context     Manage contexts
+  image       Manage images
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container&#x27;s changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container&#x27;s filesystem
+  events      Get real time events from the server
+  export      Export a container&#x27;s filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Containerized application 
+    An application that is running as a container;
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+     runtime, libraries, environment variables, and configurations;
+
+
+
+
+Open Container Initiative
+    The OCI is a governance council responsible for standardizing the low-level fundamental components of container infrastructure. 
+    In particular, it focuses on image format and container runtime;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Why Docker?
+    When developers build the software application, they install it on dev servers to test it. 
+    Then it is handed over test team, it is again installed on a test environment, and the test team tests the application. 
+    Finally, once everything is “go green” it is installed and deployed to the production environment.
+    In this process, the same application was getting configured and set up in different environments which is time-consuming and tedious. 
+    That is where Docker comes into the picture.
+    
+    With the help of Docker, we can create a software package of our application called an image and this image can be deployed just 
+    with a single command on different environments as long as the environment also has Docker installed on it. 
+    This saves a lot of time deploying the Application in different environments.
+
+
+
+A containerized app is an application running as a container.
+Kubernetes is the most popular tool for deploying and managing containerized apps.
+
+Note: A containerized app is an application running as a container.
+
+
+Docker  is currently the most popular container runtime used by Kubernetes.
+
+
+Docker
+Docker packages an application and all its dependencies in a virtual container that can run on any Linux server.
+Unlike VM, it doesn&#x27;t require Guest OS;
+Docker provides mechanisms to limit resources for a container, such as CPU, memory, and I/O. 
+
+
+
+Docker Compose 
+    Docker Compose is a tool for defining and running multi-container Docker applications. 
+
+
+
+
+Creating Docker images for microservices;
+Docker image contains everything to run the application: Runtime(java/python/nodejs etc), application code, dependencies;
+You can run these containers the same way on any infrastructure - local, corporate data center, cloud; 
+
+
+Docker simplifies the process of building, shipping, and running applications, making it easier for developers to focus on writing code rather than managing infrastructure.
+
+Docker Engine
+
+Docker Desktop
+    Linux containers can be run on Mac using Docker Desktop. This works by running containers inside of a lightweight Linux VM on Mac.
+    Docker Desktop includes the Docker daemon (dockerd), the Docker client (docker), Docker Compose, Docker Content Trust, Kubernetes, and Credential Helper.
+    Another Docker client is Docker Compose, which lets you work with applications consisting of a set of containers.
+
+Docker Hub
+
+
+
+Image 
+    Docker images are created from Dockerfiles, which contain instructions for building an image layer by layer
+
+    a set of program files packed together having its own file system and a
+    It contains the application code, runtime, libraries, environment variables, and configurations.
+
+    Containers are lightweight, portable, and self-sufficient units that contain everything needed to run a piece of software, including the code, runtime, system tools, system libraries, and settings
+    Docker images, which are read-only templates that contain the application and its dependencies, using a simple text file called a Dockerfile. 
+     These images can then be used to create containers, which are instances of the image that can be run on any Docker-compatible platform.
+     
+    An image describes everything that is needed to create a container; 
+    You may create as many containers as needed from a single image.
+
+ I might be running Python 2.7 on my PC from which I developed and tested my applications. Another environment might be running Python 3.6 which might not necessarily run my application the same way.
+Docker virtualizes the application layer and sits on top of the OS and solves the above mentioned problem by building containerized applications that hold the right versions of all dependencies allowing it to run on any environment correctly.
+
+
+Container
+    is nothing but an isolated process running on a host machine that is built out of the image.
+    From a conceptual point of view, a container runs inside the Docker host isolated from the other containers and even the host OS. It cannot see the other containers, physical storage, or get incoming connections unless you explicitly state that it can. It contains everything it needs to run: OS, packages, runtimes, files, environment variables, standard input, and output.
+
+
+
+Orchestration
+
+
+Kubernetes
+    Kubernetes is the most popular tool for deploying and managing containerized apps.
+    Kubernetes is an open-source project out of Google that has quickly emerged as the de facto orchestrator of containerized apps. 
+    A containerized app is an application running as a container.
+
+Kubernetes uses Docker as its default container runtime, which is the low-level technology that pulls images and starts and stops containers. However, Kubernetes has a pluggable container runtime interface (CRI) that makes it easy to swap-out Docker for a different container runtime.
+
+In the future, Docker might be replaced by containerd as the default container runtime in Kubernetes, but more on containerd later in the course.
+
+Docker also provides tools for orchestrating and managing containers at scale, such as Docker Compose for defining multi-container applications, 
+and Docker Swarm and Kubernetes for container orchestration in production environments. 
+
+Docker Compose 
+    Docker Compose is well-suited for deploying applications on a single host.
+
+If you are networking containers within the same host go for docker compose.
+
+If you are networking containers across multiple hosts go for kubernetes.
+
+Docker Compose is designed to run containers on a single host system. In contrast, Kubernetes can manage containers deployed across multiple nodes(computers).
+
+K8s = Docker Compose + self healing containers + auto scaling;
+
+
+networks 
+volumes
+storage 
+plugins
+
+Docker Host
+Docker Host is used to provide an environment to execute and run containerized applications.
+
+
+
+
+
+
+
+
+Even local installation of docker uses client-server architecture;
+When you install Docker Desktop, it will install both Docker Client and Docker Daemon;
+
+
+
+containerd
+    It is the core component of Docker platform;
+    It manages the entire lifecycle of a container, including pulling images, creating network interfaces, and managing lower-level runc instances. 
+
+    containerd is available as a daemon for Linux and Windows. It manages the complete container lifecycle of its host system, from image transfer and storage to container execution and supervision to low-level storage to network attachments and beyond.
+
+
+
+Docker Daemon (dockerd): The Docker daemon runs on the host machine and is responsible for managing Docker objects, such as images, containers, networks, and volumes.
+Docker Client: The Docker client is a command-line interface (CLI) tool that allows users to interact with the Docker daemon through commands. Users can build, run, stop, and manage Docker containers using the Docker CLI.
+
+
+dockerd 
+
+    The Docker daemon (dockerd) sits above containerd and performs higher-level tasks, such as exposing the Docker remote API, managing images, managing volumes, managing networks, and more.
+    A major job of the Docker daemon is to provide an easy-to-use standard interface that abstracts the lower levels.
+
+    The Docker daemon sits above containerd and performs higher-level tasks, such as exposing the Docker remote API, managing images, managing volumes, managing networks, etc.
+
+In a default Linux installation, the client talks to the daemon via a local IPC/Unix socket at /var/run/docker.sock. 
+On Windows, this happens via a named pipe at npipe:////./pipe/docker_engine. 
+Once installed, you can use the docker version command to test that the client and daemon (server) are running and talking to each other.
+
+
+
+
+    commit    Create a new image from a container&#x27;s changes
+    diff      Inspect changes on a container&#x27;s filesystem
+    events    Get real time events from the server
+    history   Show the history of an image
+    inspect   Return low-level information on a container or image
+    logs      Fetch the logs of a container
+    network   Manage Docker networks
+    port      List port mappings or a specific mapping for the CONTAINER
+    search    Search the Docker Hub for images
+    stats     Display a live stream of container(s) resource usage statistics
+    top       Display the running processes of a container
+    update    Update configuration of one or more containers
+    volume    Manage Docker volumes
+    wait      Block until a container stops, then print its exit code
+
+    export    Export a container&#x27;s filesystem as a tar archive
+    import    Import the contents from a tarball to create a filesystem image
+
+    pause     Pause all processes within a container
+    unpause   Unpause all processes within a container
+
+    load      Load an image from a tar archive or STDIN
+    save      Save one or more images to a tar archive
+
+    info      Display system-wide information
+    version   Show the Docker version information
+
+https://medium.com/@dev0611ganindu/mastering-docker-commands-a-comprehensive-guide-6474637d65c5
+
+The docker network command is used to manage Docker networks. For example, to create a new network named mynetwork, you would run:
+
+docker network create mynetwork
+
+
+
+
+
+
+TODO:
+https://www.educative.io/courses/beginners-guide-to-docker
+https://www.educative.io/courses/working-with-containers-docker-docker-compose
+https://www.educative.io/courses/advanced-docker-techniques
+https://www.educative.io/courses/docker-for-developers
+https://www.udemy.com/course/spring-boot-tutorial-for-beginners/?couponCode=MCLARENT71824
+https://www.educative.io/courses/troubleshooting-docker-and-kubernetes-containers
+
+
+
+Webhooks − Webhooks allow automated responses to events that take place inside of repositories. Webhooks can be set up by users to initiate specific events, such as image pushes or updates, to initiate build processes, send out notifications, or perform other actions.
+Service Accounts − To authenticate and grant access to Docker Hub services and APIs, service accounts are needed. They make it possible for automated procedures to securely communicate with Docker Hub without the need for human intervention, such as CI/CD pipelines or external tools.
+Vulnerability Scanning − To find security flaws in Docker images, Docker Hub provides vulnerability scanning capabilities. This feature helps users mitigate possible security risks by scanning images for known vulnerabilities in their dependencies and offering useful insights.
+Mirroring − Organizations can mirror Docker Hub repositories to their own private infrastructure or internal registries by using this technique. This lowers latency, guarantees dependable image access, and gives the organization&#x27;s network administrators control over how images are distributed.
+Automated Builds − By starting builds automatically whenever changes are pushed to a linked repository, automated builds simplify the process of making Docker images. By doing away with manual intervention, this feature guarantees that images are continuously created and updated with the most recent modifications
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

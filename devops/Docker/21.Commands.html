@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>
+docker run &lt;image&gt; &lt;command-to-run-in-container&gt;
+    - It creates a new container, pulling the image if needed;
+    - Every container is uniquely assigned an ID;
+    - Alternatively, you can specify a unique name to each container;
+    - Eg: docker run in28min/todo-rest-api-h2:1.0.0.RELEASE
+
+    - Options
+        -d              -&gt; Run container in background(as a daemon) and print container ID;
+        -l &lt;label&gt;      -&gt; Add label to the container;
+        -m &lt;limit&gt;      -&gt; memory limit;
+        --name &lt;name&gt;   -&gt; specify container name;
+        -it             -&gt; 
+
+    - 
+
+
+    docker run in28min/todo-rest-api-h2:1.0.0.RELEASE 
+docker run ubuntu cat /etc/issue
+docker run --name ubuntu20.04 ubuntu cat /etc/issue
+
+docker run -it ubuntu bash      # Run an Interactive Session into a Container
+    -i is used to start an interactive session.
+    -t allocates a TTY and attaches stdin and stdout.
+    ubuntu is the image that we used to create the container.
+    bash (or /bin/bash) is the command that we are running inside the Ubuntu container.
+    &gt; exit          # exit command terminates all the container processes and stops it.
+
+    &gt; If you’re interactively logged on container terminal prompt and you need to keep the container in running state but exit from the interactive session, you can quit the console and return to host terminal by pressing Ctrl+p and Ctrl+q keys.
+
+    &gt; To reconnect to the running container you need the container ID or name. Issue docker ps command to get the ID or name and, then, run docker attach command by specifying container ID or name, as illustrated in the image above:
+    # docker attach &lt;container id&gt;
+docker run -it --rm alpine /bin/sh
+
+# Run a container 
+docker run --name my-nginx-c1 --detach nginx
+
+
+
+&gt; docker run -it ubuntu /bin/bash 
+
+When you run this command, the following happens:
+
+If you don’t have the ubuntu image locally, Docker pulls it from your configured registry, as though you had run docker pull ubuntu manually.
+Docker creates a new container, as though you had run a docker container create command manually.
+Docker allocates a read-write filesystem to the container, as its final layer. This allows a running container to create or modify files and directories in its local filesystem.
+Docker creates a network interface to connect the container to the default network, since you didn’t specify any networking options. This includes assigning an IP address to the container. By default, containers can connect to external networks using the host machine’s network connection.
+Docker starts the container and executes /bin/bash. Because the container is running interactively and attached to your terminal (due to the -i and -t flags), you can provide input using your keyboard while Docker logs the output to your terminal.
+When you run exit to terminate the /bin/bash command, the container stops but isn&#x27;t removed. You can start it again or remove it.
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

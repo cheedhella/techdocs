@@ -1,8 +1,0 @@
-During dry run Helm contacts Kubernetes API Server for validation. You must have a Kubernetes cluster credential to execute a dry run.
-If you don’t have credentials for the Kubernetes server, you can use the helm template command to generate template YAML.
-As Helm does not contact the API server output of the commands --dry-run and template can differ.
-
-helm template appdb bitnami/mysql --values values.yaml
-
-
-we can treat templates as a blueprint for a Kubernetes object.

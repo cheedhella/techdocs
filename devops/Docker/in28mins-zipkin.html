@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>Distributed Tracing
+	Microservices usually have complex call chain, one service calling another;
+	When a request fails, how to trace the request across microservices and identify the specific microservice where the request failed?
+	That&#x27;s where distributed tracing helps us!
+
+How does it works?
+	All the microservices involved would actually send all the information out to a single Distributed Tracing Server and it would store
+	everything to a database; Database can be a in-memory database or a real database;
+
+In this example, we will use Zipkin as distributed tracing server;
+We will see how to launch Zipkin as a docker container and how to connect all our microservices to Zipkin;
+	Launching Zipkin Container
+		docker run -p 9411:9411 openzipkin/zipkin:2.23
+	Access Zipkin Container
+		http://localhost:9411/zipkin
+	Connecting Currency Exchange Microservice with Zipkin?
+		- add org.springframework.cloud:spring-cloud-starter-sleuth dependency;
+		  It assigns a unique id to each request;
+		  As request travels from one service to another, id is maintained and each service sents information to tracing server;
+		  This allows us to trace request across multiple microservices;
+		- add org.springframework.cloud:spring-cloud-sleuth-zipkin dependency;
+		- add org.springframework.amqp:spring-rabbit dependency;
+			Once you connect your services directly to distributed tracing server, they start sending data directly to zipkin server over HTTP;
+			Zipkin server would be storing it to an in-memory database and be providing a UI around it;
+			What if the Zipkin server is down? We lose the data!
+			To get around it, we can have queue like Rabbit MQ in between; MQ adds resilency to the application;
+			All services send data to queues and Zipkin can pick the data from queues;
+			This is called Asynchronous Distributed Tracing;
+		- If you track every request, it will cause performance issues;
+			application.properties -&gt; spring.sleuth.sampler.probability=0.05 	# trace only 5% of requests
+
+How are the microservices able to locate the distributed tracing server, Zipkin?
+	spring.zipkin.baseUrl defaults to localhost:9411; You can customize it as needed!
+
+How to add Rabbit MQ to the application?
+	- Add this dependency: org.springframework.amqp:spring-rabbit
+	- Add this to application.properties: spring.zipkin.sender.type=rabbit
+	</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is StatefulSet?
+	It is used to deploy stateful applications;
+
+What are the characterstics of stateful applications?
+	- Persistent and Unique Pod Name
+		-- Every Pod created by a StatefulSet gets a unique pod name;
+		-- That identity is persisted even after pod restarts, rescheduling and even cluster upgrades;
+		-- For eg, If you create a StatefulSet with name mysql and 3 replicas, it creates 3 pods: mysql-0, mysql-1, mysql-2;
+		-- Why is it important?
+			-- It is needed for ordered start and scaling, persistent DNS, persistent storage mapping;
+	- Persistent and Unique DNS Name
+		-- Headless service(ClusterIP: None) is used for stable DNS;
+	- Persistent and Unique storage 
+		-- When a Pod is created, a persistent volume is created based on volumeClaimTemplate and associated with the Pod;
+		-- When a Pod is deleted or rescheduled, associated volume is not deleted, this ensures data persistence;
+	- Ordered deployment and scaling 
+		-- Pods are created/updated in forward order (0 -&gt; N), one after one;
+		-- Pods are deleted in reverse order (N -&gt; 0), one after one;
+		-- Pods are scaled in order;
+
+Usecases
+	- Databases such as MySQL, PostgreSQL, Cassandra, ElasticSearch;
+	- Message queues such as Kafka, RabbitMQ;
+	- Distributed key-value stores such as Zookeeper, etcd;
+	- Streaming platforms such as Spark, Flink;
+	- Any service that requires:
+		-- Persistent storage; // Stateful monitoring with prometheus;
+		-- Stable network identity;
+		-- Ordered startup/shutdown;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is headless service?
+	It is a special type of service that doesn&#x27;t have assigned any IP;
+	It is useful when you want to expose the underlying Pods directly, rather than load balancing or routing the traffic through a single IP address;
+
+How it works?
+	Instead of resolving to a single service IP, a headless service&#x27;s DNS name (like my-service.default.svc.cluster.local) returns multiple A (or SRV) records, one for each Pod backing the service, each contains IP of the Pod;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+			
+
+
+
+	
+		
+	Persistent Volume Binding 
+	Ordered deployment, scaling and rolling updates;
+
+Applications of StatefulSet?
+	 that need persistent storage and unique network identity, such as:
+		- All databases like MySql, MongoDB, Cassandra; 
+		- All caches, message queues;
+		- Consensus-based applications such as etcd, Zookeeper, Kafka;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+					StatefulSet 									 			Deployment 
+Pod Identity 		Pods get unique and stable identity;						Pods don&#x27;t get stable identity;
+Pod Replacement		If a pod fails, it creates a new pod with same identity;	If a pod fails, it creates a new pod with different identity;
+Ordered Deployment  It creates one Pod at a time and wait for it to be running  Deployment starts all Pods at once;
+                    before starting the next;
+Scaling 			Scaling up is also ordered;									On scale up, it creates all new pods at once; It deletes the 
+					For eg, if you changes replicas from 3 to 5, it will start  On scale down, it randomly delete pods(pod-deletion-cost annotation can be used influence the pod selection)
+					a new pod tkb-sts-3 and wait for it to be running before 
+					creating tkb-sts-4;
+					Scaling down also follows same rule but in reverse; 
+Deletion 			Deleting statefulset doesnt delete any of it&#x27;s pods; So,	
+                    you need to scale it down to 0 replicas before deleting it;
+					Set terminationGracePeriodSeconds to 10 seconds, so that 
+					applications can flush any buffers and safely commit writes 
+					that are still in flight;
+Persistence 		Each Pod gets it&#x27;s own storage and stable; 					All Pods share the same volume(stable or ephemeral);	
+Network Identity 	Each Pod gets a stable DNS name via headless service;		Load balanced;
+Update strategy 	OnDelete, RollingUpdate;									RollingUpdate, Recreate; 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Why the Pods are started one after another and on order(1 to n)?
+	If you start all Pods at once, then each pod fails to joins the cluster as DNS refereces to offline pods, causing each pod creating a separate cluster;
+
+What is the need to delete one Pod after another, on scale down?
+	As Statefulset is for stateful applications, clustered apps can potentially lose data if multiple replicas are terminated simultaneously;
+	StatefulSets ensures there is no data loss, by deleting the pods one after another;
+
+
+
+	
+
+	- Deployment is for stateless applications; StatefulSet is for stateful applications;
+	- StatefulSets 
+	  StatefulSet follows same rules for scale up;
+	  For eg, scaling from 3 to 5 replicas will start a new Pod  and ready before creating  
+	  Scaling down follows same rule in reverse;
+	  For eg, controller terminates the Pod with the highest index ordinal and waits for it to fully terminate, before terminating the Pod with the next highest number;
+	  Knowing the order in which Pods will be scaled down and knowing that Kubernetes will not terminate them in parallel can be vital for stateful apps. 
+	- StatefulSet controller does its own self-healing and scaling. This is architecturally different from Deployments, which use the ReplicaSet controller for these operations.
+
+
+ 
+	
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+How persistent name helps Kafka?
+	- Kafka requires each broker to have unique broker.id in the cluster; broker.id = POD_ORDINAL; Set in server.properties;
+	- Why?
+		-- Each broker acts as Leader for some of the paritions and as Follower for some other partitions;
+		-- Each broker stores all of it&#x27;s data on it&#x27;s volume;
+		-- So, even if a Pod is restarted or rescheduled, it must get the same volume back;
+		-- StatefulSet ensures that kafka-0 always gets data-kafka-0, preserving the data;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Persistent and Unique DNS 
+	- Every Pod create a StatefulSet gets a unique DNS name - &lt;statefulset-name&gt;-&lt;ordinal&gt;.&lt;headless-service-name&gt;.&lt;namespace&gt;.svc.cluster.local;
+	- How it helps in Peer Discovery?
+		-- Each Pod is configured with all it&#x27;s peer addresses upfront, like:
+			server.1=zk-0.zk-headless.default.svc.cluster.local:2888:3888
+			server.2=zk-1.zk-headless.default.svc.cluster.local:2888:3888
+			server.3=zk-2.zk-headless.default.svc.cluster.local:2888:3888
+		-- When a node starts up(server.1), it resolves DNS names for other nodes(server.2 and server.3);
+		   K8s DNS handles the DNS to IP mapping - no need of external service registries like Consul or Eureka;
+		-- Once all IP addresses are resolved, headless service(ClusterIP: None) helps in establishing direct TCP connection to peers(without load balancing);
+		
+		
+		
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ElasticSearch; Message Queues;
+
+
+How is unique ID is useful?
+	- Unique Identify
+		-- Every Pod created by a StatefulSet gets a unique ID, like my-pod-0, my-pod-1 etc; That identity is persisted even after pod restarts, rescheduling and even cluster upgrades;
+		-- Applications like Kafka, Zookeeper require this;
+		-- How unique ID helps Zookeeper?
+			-- ZooKeeper is a quorum-based system where each node (called a server) must have a unique ID, written in a file called myid;
+			-- Quorum specifies the minimum number of nodes that must agree to take a decision; For eg, in a 3-node cluster, if 2 nodes acknowledge, then the write operation is considered completed;
+			-- How voting works?
+				When Zookeeper starts:
+					-- Each node broadcasts it&#x27;s id and epoch;
+					-- A voting round begins, where each node proposes itself or another node as leader;
+					-- ZooKeeper selects the leader based on:
+						-- Highest transaction ID (zxid) (i.e, who has the most up-to-date data);
+						-- If tie: higher myid wins the vote
+		-- How unique ID helps Kafka?
+			-- Each kafka broker will have a unique broker.id;
+			-- How controller voting works?
+				-- Controller is a special broker that manages partition leadership and cluster metadata;
+				-- The broker with the lowest broker.id typically becomes the controller;
+	- Stable DNS Name
+		
+	- Ordered deployment and scaling 
+		-- It deploys Pods sequentially, one after another, from lower index to higher; Specifically, it checks the pod&#x27;s readiness probe;
+		   This helps in:
+		   	Cluster bootstrapping
+			Peer discovery
+			Leader election
+			Ensuring quorum nodes are ready before followers start
+		-- Pods are terminated in reverse order, one after another, from higher index to lower;
+			This helps with:
+				Letting followers shut down before leaders (e.g., Kafka)
+				Avoiding loss of quorum
+				Giving clients time to migrate connections
+				Flushing logs, closing connections, etc.
+		-- If pods start randomly or shut down simultaneously, it could cause: Split-brain scenarios, Failures in leader election, Temporary unavailability;
+		-- Scaling 
+			-- When you increase replicas from 3 to 5, Kubernetes will: Create my-app-3, Wait for it to be Ready, Then create my-app-4;
+			-- When scaling down from 5 to 3 replicas: Kubernetes deletes my-app-4, Waits for it to shut down cleanly, Then deletes my-app-3;
+	- Persistent Storage Binding 
+		- StatefulSet creates volumes that are indexed;
+		  For eg, it creates volumes: data-mysql-0, data-mysql-1 etc;
+			volumeClaimTemplates:
+				- metadata:
+				  name: data
+		  Each pod keeps its volume even if it restarts or moves. This ensures data isn&#x27;t lost and is always matched to the right pod by name.
+
+
+		  	
+		When a pod is deleted, Kubernetes ensures that any associated persistent volumes are not deleted until the pod is completely terminated. 
+		This ensures that data is not lost when pods are scaled down or replaced.
+	
+	
+	
+	Volumes: Each pod has its own PersistentVolumeClaim (PVC), e.g., data-my-app-3. When scaled down, PVCs are not deleted by default — they persist unless explicitly removed.
+Persistent volume binding
+	Each Pod gets its own PersistentVolumeClaim. Deleting the Pod does not delete its volume.
+	Every Pod will have dedicated storage using PVC;
+
+
+		
+Statefulset VS Deployment
+	StatefulSets do not support rolling updates that change the pod template, and they do not support rollingUpdate or maxSurge settings.
+
+
+
+
+		This is useful for applications that require peer discovery, such as databases or clustered services (e.g., Cassandra, Elasticsearch).
+		Each Pod gets a stable network identity, like pod-0.service-name.namespace.svc.cluster.local.
+
+how deployment decides which pods to scale down?
+
+
+
+
+
+Peer discovery is the process where each node in a distributed system finds and connects to other nodes (its peers) so they can work together as a cluster.
+
+
+
+Deleting a StatefulSet doesn&#x27;t automatically delete its associated PersistentVolumes. 
+
+
+Stable Pod Names (zookeeper-0, zookeeper-1, etc.)	Lets each pod generate a consistent myid based on its hostname
+Persistent Volume Claims (PVCs)	Ensures the myid file and ZK data survive pod restarts
+Ordered Start	ZooKeeper nodes can start in order, allowing leader election to stabilize
+
+If your web application needs to communicate with its replicas using known predefined network identifiers, you can blindly trust StatefulSet. 
+
+
+	By running Pods using a StatefulSet, k8s assigns each Pod a persistent and unique identity;
+	StatefulSet = Deployment + below 3 features;
+		- Predictable and persistent Pod names
+		- Predictable and persistent DNS hostnames
+		- Predictable and persistent volume bindings
+		These three properties form a Pod’s state, which we sometimes refer to as its sticky ID. 
+		StatefulSets ensure that all three persist across failures, scaling operations and other scheduling events.
+
+
+
+
+
+how sharding works with Statefulset
+
+
+https://medium.com/building-the-open-data-stack/reclaiming-persistent-volumes-in-kubernetes-5e035ba8c770
+
+
+
+In infinity-data-collector, we use StatefulSet, rathern than Deployment; Why?
+	- We basically use a websocket based client, to connect to infinity kafka cluster;
+	- It supports 3 API:
+		- Connect     - it creates a new consumer and subscribes to the topic; If requestId is new, it creates a new topic;
+		- hold 		  - It is like asking infinity to slow down, for duration configured;
+		- disconnect  - disconnect the websocket connection;
+
+What if load increases for an account?
+
+Replicating stateful applications is more difficult than stateless applications;
+
+For eg, mysql pod replicas can&#x27;t be created/deleted at the same time; reason being replica pods are not same; They have their own identity;
+Those pods are created from same specification, but they are not interchangeable;
+
+Why is the identity needed?
+	In case of MySQL pods, all are same; But, only master pod can handle writes; 
+	All pods can handle reads; If you allow all pods to handle writes, it could cause data inconsistency;
+
+HorizontalPodAutoscaler
+
+
+How Deployment Chooses Pods to Scale Down
+When reducing replicas (e.g., from 5 to 3), Kubernetes uses the ReplicaSet controller behind the scenes, which handles the actual Pods. Here&#x27;s the key logic:
+
+Pod Deletion is Randomized (but fair):
+
+Kubernetes doesn&#x27;t have a strict order (like oldest/youngest).
+
+It picks any of the Pods associated with the ReplicaSet—selection can seem random but is actually based on internal implementation, like the order in the API server.
+
+Pod Priority &amp; Graceful Termination:
+
+If any PodDisruptionBudgets (PDBs) or terminationGracePeriodSeconds are set, those are respected.
+
+Kubernetes also honors Pod priority, taints, and node pressure if those are configured.
+
+Deletion Cost (Kubernetes v1.21+):
+
+You can influence which Pod is deleted using the controller.kubernetes.io/pod-deletion-cost annotation.
+
+Higher value = less likely to be deleted.
+
+Lower value = more likely to be deleted.
+
+This is useful in multi-zone or cost-sensitive deployments.
+
+
+
+Structure of a StatefulSet Manifest
+A StatefulSet manifest, defined in YAML, describes the desired state of your application. It&#x27;s similar to a Deployment manifest but includes key additions for stateful applications. Your StatefulSet manifest must define:
+
+serviceName: This field specifies the headless service that manages network identities for your pods.
+replicas: Like Deployments, this indicates the desired number of pods.
+selector: This ensures the StatefulSet manages the correct pods, matching labels defined in the pod template.
+template: This section defines the pod template, similar to Deployments, specifying the container images, resource requests, and other pod configurations. It also includes the labels that link back to the StatefulSet&#x27;s selector.
+volumeClaimTemplates: This section, specific to StatefulSets, defines the PersistentVolumeClaims that provide persistent storage to each pod. Each pod gets its own PersistentVolume based on this template, ensuring data persists across restarts and rescheduling.
+
+
+kubectl get statefulsets															# List all statefulsets;
+kubectl describe statefulset &lt;name&gt;													# Describe given statefulset;
+kubectl get pods -l app=&lt;label&gt; 													# Get all pods managed by a statefulset; Lable sel
+
+# Update
+kubectl edit statefulset &lt;name&gt;
+kubectl patch statefulset &lt;name&gt; -p &#x27;{&quot;spec&quot;: {&quot;replicas&quot;: 3}}&#x27;
+kubectl scale statefulset &lt;name&gt; --replicas=&lt;desired-replica-count&gt;					# Scale a statefulset;
+
+kubectl set image statefulset &lt;name&gt; &lt;container-name&gt;=&lt;image:new_version&gt;			# It is used to rollout new version the application; 
+kubectl rollout restart statefulset &lt;name&gt;											# It restarts all Pods in a statefulset one by one in the defined order;
+																					# It deletes pod-0 and waits until a new pod pod-0 is ready; Then delete pod-1 and wait until pod-1 is ready; and so on;
+																					# It is useful when your configuration mounted on ConfigMap or Secret changes and you want your pods to re-read it;
+kubectl rollout status statefulset &lt;name&gt;											# It is used to check the status of rollout(set image or restart);
+kubectl rollout history statefulset &lt;name&gt;											# It shows revision history; Each time the pod template spec changes (like with kubectl set image), a new revision is created;
+
+kubectl delete statefulset &lt;name&gt; --cascade=false									# It deletes the StatefulSet object only, but leaves its pods (and PVCs) running;
+kubectl delete statefulsets &lt;name&gt;													# It deletes StatefulSet and it&#x27;s Pods, but not associated volumes;
+
+kubectl delete statefulset &lt;name&gt;			# This deletes the StatefulSet but not the associated PVCs by default.
+kubectl delete pvc -l app=&lt;label&gt;
+
+
+
+kubectl set image statefulset &lt;name&gt; ...
+
+
+
+kubectl scale statefulset mysql --replicas=5
+kubectl scale statefulset mysql --replicas=1
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# StatefulSet to deploy a MySQL cluster;
+
+# Create a headless service, which provides stable DNS for each Pod, allowing them to discover each other directly for replication;
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless-svc 									# Name of the service and it&#x27;s labels;
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306												# Expose port 3306, default MySQL port;
+    name: mysql
+  clusterIP: None											# Headless service - Critical for stateful apps like mysql clusters, where each node must be accessible directly;
+  selector:													# It selects all Pods with label - app: mysql-pod
+    app: mysql-pod
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+type: Opaque 												# Opaque secrets are base64 encoded, but not encrypted at rest by default
+data:
+  # Base64 encoded values for passwords.
+  # You should generate these outside of Kubernetes and paste them here,
+  # or use `kubectl create secret generic ... --from-literal` as shown below.
+
+  # Example of how to generate base64 encoded values:
+  # echo -n &#x27;YOUR_ROOT_PASSWORD&#x27; | base64
+  # echo -n &#x27;YOUR_USER_PASSWORD&#x27; | base64
+
+  mysql-root-password: &lt;BASE64_ENCODED_ROOT_PASSWORD&gt; 		# Replace with your base64 encoded root password
+  mysql-user-password: &lt;BASE64_ENCODED_USER_PASSWORD&gt; 		# Replace with your base64 encoded user password
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-pod
+spec:
+  serviceName: mysql-headless-svc 							# It specifies the headless service to use for forming the cluster;
+  replicas: 3												# 3 Pods/replicas - named mysql-0, mysql-1, and mysql-2;
+  selector:													# It manages all the pods with label app: mysql-pod only;
+    matchLabels:
+      app: mysql-pod 										
+  template:													# Template for each Pod;
+    metadata:
+      labels:												# Labels for each Pod;
+        app: mysql
+    spec:
+      containers:											# Containers specification;
+        - name: mysql
+          image: mysql:5.7
+          env:
+		    - name: MYSQL_ROOT_PASSWORD 					# It gets the root password to use from the specified secret;
+              valueFrom:
+				secretKeyRef:
+				  name: mysql-secret 						# Assumes a secret named &#x27;mysql-secret&#x27; exists
+				  key: mysql-root-password
+            - name: MYSQL_DATABASE 							# Optional: Define a default database
+              value: &quot;mydatabase&quot;
+            - name: MYSQL_USER 								# Optional: Define a default user
+              value: &quot;myuser&quot;
+            - name: MYSQL_PASSWORD 							# Optional: Define password for the default user
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-user-password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:										# Mount volume at /var/lib/mysql, where MySQL stores data;
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+		  # Health checks for robust operation
+		  livenessProbe:
+		    tcpSocket:
+			  port: 3306
+			initialDelaySeconds: 30
+			periodSeconds: 10
+			timeoutSeconds: 5
+			successThreshold: 1
+			failureThreshold: 3
+		  readinessProbe:
+			tcpSocket:
+				port: 3306
+			initialDelaySeconds: 10
+			periodSeconds: 5
+			timeoutSeconds: 3
+			successThreshold: 1
+			failureThreshold: 3
+		  resources: 										# Define resource requests and limits
+			requests:
+				memory: &quot;512Mi&quot;
+				cpu: &quot;250m&quot;
+			limits:
+				memory: &quot;1Gi&quot;
+				cpu: &quot;500m&quot;
+  volumeClaimTemplates: 									# Each Pod gets it&#x27;s own PersistentVolumeClaim created from this template, which provisions a persistent storage for each Pod;
+    - metadata:
+        name: mysql-data
+      spec:
+        accessModes: [ &quot;ReadWriteOnce&quot; ] 					# Only one Pod can mount the volume at a time;
+        resources:
+          requests:
+            storage: 1Gi 									# Requests 1GB of storage for each Pod;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# StatefulSet to deploy a ngnix;
+
+# Create a headless service, which provides stable DNS for each Pod, allowing them to discover each other directly for replication;
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless-svc 									# Name of the service and it&#x27;s labels;
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306												# Expose port 3306, default MySQL port;
+    name: mysql
+  clusterIP: None											# Headless service - Critical for stateful apps like mysql clusters, where each node must be accessible directly;
+  selector:													# It selects all Pods with label - app: mysql-pod
+    app: mysql-pod
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-ss
+spec:
+  serviceName: nginx-svc 									# It specifies the headless service to use for forming the cluster;
+  replicas: 3												# 3 Pods/replicas - named mysql-0, mysql-1, and mysql-2;
+  selector:													# It manages all the pods with label app: mysql-pod only;
+    matchLabels:
+      app: nginx-pod 										
+  template:													# Template for each Pod;
+    metadata:
+      labels:												# Labels for each Pod;
+        app: nginx-pod
+    spec:
+      containers:											# Containers specification;
+        - name: nginx
+          image: nginx
+          volumeMounts:										# Mount volume at /var/lib/mysql, where MySQL stores data;
+            - name: nginx-data
+              mountPath: /usr/share/nginx/html
+  volumeClaimTemplates: 									# It is a template/blueprint to dynamically provision a persistent volume for each pod that it creates;
+    - metadata:
+        name: nginx-data
+      spec:
+        accessModes: [ &quot;ReadWriteOnce&quot; ] 					# Only one Pod can mount the volume at a time;
+        resources:
+          requests:
+            storage: 1Gi 									# Requests 1GB of storage for each Pod;
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+If the StorageClass&#x27;s reclaim policy is Delete, then deleting the PVCs will also delete the PVs.
+
+This template is used as a blueprint to dynamically provision a new Persistent Volume (PV) for each Pod that the StatefulSet creates</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

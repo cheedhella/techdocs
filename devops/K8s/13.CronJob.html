@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>
+What is CronJob?
+CronJobs run Jobs on a scheduled basis.
+Manages the creation of Jobs on a scheduled basis.
+Uses cron syntax to define the schedule.
+CronJobs are perfect for scheduling these tasks to run on a recurring basi
+CronJobs are useful for tasks that need to be performed periodically, such as backups, report generation, or system maintenance.
+The CronJob controller, which is part of the kube-controller-manager, implements the primary logic. By default, it checks every 10 seconds to see if a CronJob should be run
+When the controller identifies a CronJob that needs to be executed (i.e., the current time matches the time specified in cron syntax), it creates a new object called a Job. Each Job tracks a specific invocation and contains information inherited from the CronJob about what to do
+Once Kubernetes detects a new Job object, it immediately attempts to execute it. It schedules the creation of a new Pod based on the configuration passed down from the CronJob via the Job in jobTemplate. When the Pod is running, it performs the cron task
+
+
+
+Scheduled Execution: CronJobs run at specified times, defined using Cron syntax.
+Time-based Triggers: You can schedule tasks to run daily, weekly, monthly, etc.
+
+The schedule field uses the standard cron format: * * * * *
+  minute (0 - 59), hour (0 - 23), day of the month (1 - 31), month (1 - 12), day of the week (0 - 6) (Sunday to Saturday)
+
+schedule: &quot;* * * * *&quot;                   # Every minute
+schedule: &quot;*/15 * * * *&quot;                # Every 15 minutes
+schedule: &quot;0 * * * *&quot;                   # Every hour at minute 0
+schedule: &quot;30 2 * * *&quot;                  # Daily at 2:30 AM
+schedule: &quot;0 9 * * 1&quot;                   # Every Monday at 9:00 AM
+
+# Shorthand expressions
+schedule: &quot;@hourly&quot;    # Every hour
+schedule: &quot;@daily&quot;     # Every day at midnight
+schedule: &quot;@weekly&quot;    # Every Sunday at midnight
+schedule: &quot;@monthly&quot;   # First day of each month at midnight
+schedule: &quot;@yearly&quot;    # January 1st at midnight
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Running a CronJob to Back Up a Database
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-backup-cronjob
+spec:
+  schedule: &quot;0 0 * * *&quot;
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: db-backup
+            image: busybox
+            command: [&quot;sh&quot;, &quot;-c&quot;, &quot;echo Backing up database...; sleep 10; echo Database backed up!&quot;]
+          restartPolicy: OnFailure
+  backoffLimit: 3
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://medium.com/@salwan.mohamed/mastering-kubernetes-jobs-and-cronjobs-a-platform-engineers-complete-guide-7515e10b884a
+
+
+
+    It is used to create one or more instances of a Pod, each Pod contains one or more containers, each container performs a specific task and then terminate; // one-time tasks 
+    If parallelism is 2 and completions is 5, then the job runs 2 pods concurrently, until 5 pods are completed successfully, subjecting to backoffLimit;
+    Pod is considered failed, if any of it&#x27;s containers fail(exits with non-zero return code); Pod failures accumulates toward the backoff limit;
+
+CronJob Configuration
+    1. successfulJobsHistoryLimit: &lt;n&gt;                   # You can specify successfulJobsHistoryLimit and failedJobsHistoryLimit to retain a certain number of successful and failed Job histories.
+
+
+parallelism: &lt;n&gt;                             # Number of pods that can run parallely; Defaults to 1;
+    2. completions: &lt;n&gt;                             # Number of successful pods needed to mark the Job as completed; Defaults to 1;
+    3. backoffLimit: &lt;n&gt;                            # If a Pod fails, it is retried; After backoffLimit retries, Job is marked as failed; Defaults to 6;
+    4. restartPolicy: Never | OnFailure;            # Job doesn&#x27;t have any default; It must be set to Never or OnFailure;
+                                                    # Never - when a container fails, Pod is marked failed and spwans a new Pod, subjecting to backoffLimit;
+                                                    # OnFailure - when a container fails, kubelet retries it endlessly in the same pod, until the job controller intervenes;
+    5. activeDeadlineSeconds: 300                   # If a job runs longer than this duration, it is terminated and marked as failed; By default, no deadline, job runs indenfinitely until is completed(successful or failed);
+    6. ttlSecondsAfterFinished: 60                  # It specifies how long to retain the job object, after it is completed(successful or failed); By default, no ttl, Jobs stay forever unless manually deleted; Set it to 0, to delete it immediately;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get cronjobs
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

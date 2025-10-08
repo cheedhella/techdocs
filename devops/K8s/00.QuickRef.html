@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is k8s? why? 
+Architecture: Master(API Server, etcd, Scheduler, Controller), Workers(Container runtime, kubelet, kube-proxy); kubectl, kubeconfig;
+
+
+
+
+
+
+
+
+Images: alpine, busybox;
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Pod, Replicaset, Deployment;
+Pod: Probes(liveness, readiness);
+
+labels vs. annotations;
+events
+Cluster 
+Container, Pod, ReplicaSet, Deployment;  
+
+Namespace: what, why(grouping n isolation, access control, resource control), default namespaces(default, kube-system, kube-public, kube-node-lease);
+Node: Get all, get by label, add/replace/delete node, capacity planning, node auto scaling;
+ServiceAccount: purpose, token(short term, long term), Role, RoleBinding, ClusterRole, ClusterRoleBinding;
+Container: 
+Pod: Lifecycle(Pending), Lifecycle events;
+Replicaset: Pod + self-healing + scaling;
+Deployment: Replicaset + Rollout and Rollback; // Stateless apps;Every Deployment manages one or more identical Pods.
+
+
+
+
+Challenges Faced:
+    1. Different ways of setting up a k8s cluster?
+    2. How to ensure master node is HA?
+    
+Statefulset: You can deploy your database using stateful set and provide them storage using persistent volumes;
+ConfigMap and Secret: You can separate configuration(non-senstive and sensitive) from code using ConfigMap;
+Ingress Controller: You can control external access to your services to using ingress controller;
+HPA(Horizontal pod autoscaler): 
+K8s Operator: Automate the deployment and management of applications;
+
+Why K8s?
+    https://broadcom-1.udemy.com/course/kubernetes-training-learn-kubernetes-from-zero-to-cloud/learn/lecture/45002009#overview
+    - Declarative deployment
+    - Resource management
+    - Resilency and self healing 
+    - Service discovery and networking 
+    - Load balancing 
+    - Storage orchestration 
+    - Vendor neutrality 
+    - Horizontal Pod Autoscaling 
+    - Configuration management 
+    - Rolling updates 
+    - Extensibility 
+
+What is a cloud native application?
+    Each microservice handles a specific task, allowing for easier updates and consistent performance across various environments, aligning well with modern cloud computing practices.
+
+
+Install Docker 
+
+VSC 
+    - Extensions -&gt; search for kubernetes -&gt; install kubernetes
+
+https://github.com/anveshmuppeda/kubernetes - Kubernetes Complete Hands-On Guides
+https://anveshmuppeda.github.io/kubernetes/docs/intro/ 
+https://github.com/saimanasak/kubernetes/tree/main/pods/pod-lifecycle</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

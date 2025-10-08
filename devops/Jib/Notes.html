@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is Jib?
+    - Jib takes your spring boot application and builds a docker image, compliant to OCI(Open Container Initiative) format, without any Dockerfile; 
+      So, it is ideal choice for CI/CD environments;
+    - You don&#x27;t need to know best practices for creating Dockerfiles;
+    - You don&#x27;t need to install Docker to create image; // Docker is needed if you want to install image;
+    - It is open-source and developed by Google;
+    - Alternatives: Buildpacks, Spotify, Fabric8.io;
+
+Why Jib?
+    - Speed 
+        The application is divided into multiple layers, splitting dependencies from classes. There’s no need to rebuild the container image as is necessary for Dockerfiles; Jib takes care of deploying the layers that changed.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+docker.io/cheedhella/jib-demo:latest        -&gt; registry -&gt; docker.io; namespace -&gt; cheedhella; repo -&gt; jib-demo; tag -&gt; latest;
+image name      -&gt; image name -&gt; gc1133/${project.artifactId}          -&gt; gc1133 -&gt; repository; ${project.artifactId} -&gt; image name;
+                -&gt; tags - ${project.version}; Tag defaults to latest;
+
+
+Google Jib: Jib organizes your application into distinct layers, dependencies, resources, and classes and
+utilizes the Docker image layer caching to keep builds fast by only rebuilding changes. Jib&#x27;s layer organization
+and the small base image keep the overall image size small which improves performance and portability. You
+don&#x27;t need to know the best practices for creating Docker files or having Docker installed.
+
+&lt;plugin&gt;
+    &lt;groupId&gt;&lt;/groupId&gt;
+&lt;/plugin&gt;
+
+mvn compile jib:build \
+    -Djib.to.image=myregistry/myimage:latest \
+    -Djib.to.auth.username=$USERNAME \
+    -Djib.to.auth.password=$PASSWORD
+
+&lt;executions&gt;
+        &lt;execution&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;dockerBuild&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+
+&lt;to&gt;
+    &lt;image&gt;gcr.io/my-gcp-project/my-app&lt;/image&gt;
+    &lt;auth&gt;
+      &lt;username&gt;${env.REGISTRY_USERNAME}&lt;/username&gt;
+      &lt;password&gt;${env.REGISTRY_PASSWORD}&lt;/password&gt;
+    &lt;/auth&gt;
+  &lt;/to&gt;
+----------------------------------------------------------------------------------------------------------------------------------
+mvn clean compile jib:build  -DskipTests=true -Djib.from.auth.username=rtcbuild -Djib.from.auth.password= -Djib.to.auth.username=cheedhella -Djib.to.auth.password=
+docker run -d -p 8080:8080 cheedhella/jib-repo:v5 
+docker run -d -p 8080:8080 cheedhella/jib-repo:v5 -e DATABASE_IP=10.1.2.33
+docker run -d -p 8080:8080 -v /root/code/devops/docker/env/application.yml:/config/application.yml cheedhella/jib-repo:v6 -e DATABASE_USERNAME=rootcli
+
+
+-e MYSQL_ROOT_PASSWORD=my-secret-pw
+----------------------------------------------------------------------------------------------------------------------------------
+1. Create Docker Repo 
+    Login https://hub.docker.com -&gt; Create Repository 
+    Namespace: cheedhella, Repository Name: jib-repo
+2. git clone https://github.com/karthiksai231/googleJibExample.git
+3. cd googleJibExample
+4. vi pom.xml -&gt; Add below under &lt;build&gt;/&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+        &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;${jib-maven-plugin.version}&lt;/version&gt;
+        &lt;configuration&gt;
+            &lt;to&gt;
+                &lt;image&gt;docker.io/cheedhella/jib-repo:v2&lt;/image&gt;     # Use ${project.version} as tag;
+            &lt;/to&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+5. mvn compile jib:dockerBuild
+6. docker images
+    cheedhella/jib-repo                      v1        aa6254e345d3   54 years ago    147MB
+    cheedhella/jib-repo                      v2        aa6254e345d3   54 years ago    147MB
+7. docker login -u cheedhella -p   
+   To get access token: https://hub.docker.com/ -&gt; Login -&gt; Account Settings -&gt; Personal Access Tokens -&gt; Generate new token;
+8. docker push cheedhella/jib-repo:v1
+9. Install: docker run -d -p 8080:8080 cheedhella/jib-repo:v2
+10. Test: http://localhost:8080/api/example/GoogleJib
+
+docker run -d -v /root/application.yml:/config/application.yml -e DATABASE_USERNAME=&quot;user&quot; -e com.cmr.DATABASE_PORT=&quot;1122&quot; cheedhella/jib-demo:1.0.1-SNAPSHOT
+----------------------------------------------------------------------------------------------------------------------------------
+docker run -d -p 8080:8080 -e jib.container.environment.DATABASE_IP=12.2.2.2 cheedhella/jib-repo:v3
+jib.container.environment
+Set some environment variables: jib.container.environment
+Specify some volumes: jib.container.volumes
+Copy arbitrary files to your image with jib.extraDirectories
+
+mvn compile jib:build -Djib.to.auth.username=$DOCKER_REGISTRY_USER -Djib.to.auth.password=$DOCKER_REGISTRY_PWD
+jib:build -&gt; doesn&#x27;t require docker;
+jib:dockerBuild -&gt; It require docker on build machine;
+
+Build image without making chagens to pom.xml
+mvn compile com.google.cloud.tools:jib-maven-plugin:3.1.1:build \
+        -Djib.from.image=eclipse-temurin \
+        -Djib.to.image=gcr.io/PROJECT/IMAGE
+
+# After build, automatically push the image to registry; 
+    - There are few ways to authenticatie with registry -&gt; https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
+    - mvn jib:build -Djib.to.auth.username=prgnr173 -Djib.to.auth.password=         # easiest way is specify credentials on command line;
+
+Jib supports numerous Java runtime configurations:
+    jvmFlags is for indicating what startup flags to pass to the JVM.
+    mainClass is for indicating the main class, which Jib will attempt to infer automatically by default.
+    args is where we’d specify the program arguments passed to the main method.
+----------------------------------------------------------------------------------------------------------------------------------
+Spring Boot Maven Plugin allows you to package your application into an executable jar or war file and run it in place;
+Spring Boot Maven Plugin requires you to create a Dockerfile to build the container image, whereas Jib automatically generates a Dockerfile for you based on the configuration you provide.
+
+
+mvn compile jib:dockerBuild     # Use this command, if you have docker installed, while building image; to Docker daemon
+mvn compile jib:build           # If you don&#x27;t docker installed, you can use this;
+
+Bind to a lifecycle - use mvn package, to build the image;
+    &lt;plugin&gt;
+    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+    ...
+    &lt;executions&gt;
+               &lt;execution&gt;
+                  &lt;phase&gt;package&lt;/phase&gt;  &lt;!-- jib:build gets invoked when package is invoked --&gt;
+                  &lt;goals&gt;
+                     &lt;goal&gt;build&lt;/goal&gt;
+                  &lt;/goals&gt;
+               &lt;/execution&gt;
+            &lt;/executions&gt;
+
+    &lt;/plugin&gt;
+
+https://github.com/GoogleContainerTools/jib/tree/master/examples/multi-module - Multi module project with jib;
+
+$ docker run -p 8080:8080 --name springboot-jib springboot-jib
+&lt;container&gt;
+    &lt;ports&gt;
+        &lt;port&gt;8080&lt;/port&gt;
+    &lt;/ports&gt;
+&lt;/container&gt;
+
+For JARs, default base image is adoptjdk; For WARs, default base image is jetty;
+
+&lt;configuration&gt;
+                    &lt;from&gt;
+                        &lt;image&gt;openjdk:8&lt;/image&gt;
+                    &lt;/from&gt;
+                    &lt;container&gt;
+                        &lt;ports&gt;
+                            &lt;port&gt;8080&lt;/port&gt;
+                        &lt;/ports&gt;
+                        &lt;format&gt;OCI&lt;/format&gt;
+                    &lt;/container&gt;
+                &lt;/configuration&gt;
+
+    mvn clean install jib:dockerBuild -Djib.to.image=spring-docker-demo:v1
+
+mvn clean install jib:build -Djib.to.image=betulsahinn/spring-docker-demo:v1
+&lt;properties&gt;
+   &lt;java.version&gt;1.8&lt;/java.version&gt;
+   &lt;app.image.name&gt;spring-docker-demo&lt;/app.image.name&gt;
+   &lt;app.image.tag/&gt;
+&lt;/properties&gt;
+
+It created three separate image layers for our application. Our default base layer is gcr.io/distroless/java:8 (more about distroless images). 
+From there we get a separate image layer for our dependencies, our resources, and our classes. 
+This means that changes to our application source code will only need to rebuild the classes layer.
+Jib also automatically discovered out main method in SpringBootJibApplication. Thats really cool !!
+
+
+$ git clone https://github.com/mkyong/spring-boot.git $ cd spring-rest-hello-world $ mvn spring-boot:run $ curl -v localhost:8080/books
+mvn compile jib:build \
+ -Djib.to.image=registry.hub.docker.com/&lt;repo&gt;:latest \
+ -Djib.to.auth.username=&lt;username&gt;
+ -Djib.to.auth.password=&lt;passsword&gt;
+
+ docker run -it -p 8080:8080 &lt;imagePath&gt;:latest
+ curl -v localhost:8080/books
+ 
+
+# The first profile is for pushing to dockerhub and the second profile is for pushing to locale.
+# mvn clean install -P jib-push-to-dockerhub -Dapp.image.tag=v2
+&lt;plugin&gt;
+                        &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+                        &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+                        &lt;version&gt;2.5.2&lt;/version&gt;
+                        &lt;configuration&gt;
+                            &lt;from&gt;
+                                &lt;image&gt;openjdk:8&lt;/image&gt;
+                            &lt;/from&gt;
+                            &lt;container&gt;
+                                &lt;ports&gt;
+                                    &lt;port&gt;8080&lt;/port&gt;
+                                &lt;/ports&gt;
+                                &lt;format&gt;OCI&lt;/format&gt;
+                            &lt;/container&gt;
+                        &lt;/configuration&gt;
+                        &lt;executions&gt;
+                            &lt;execution&gt;
+                                &lt;id&gt;push-custom-tag&lt;/id&gt;
+                                &lt;phase&gt;package&lt;/phase&gt;
+                                &lt;configuration&gt;
+                                    &lt;to&gt;
+                                        &lt;image&gt;docker.io/betulsahinn/${app.image.name}:${app.image.tag}&lt;/image&gt;
+                                    &lt;/to&gt;
+                                &lt;/configuration&gt;
+                                &lt;goals&gt;
+                                    &lt;goal&gt;build&lt;/goal&gt;
+                                &lt;/goals&gt;
+                            &lt;/execution&gt;
+                            &lt;execution&gt;
+                                &lt;id&gt;push-latest-tag&lt;/id&gt;
+                                &lt;phase&gt;package&lt;/phase&gt;
+                                &lt;configuration&gt;
+                                    &lt;to&gt;
+                                        &lt;image&gt;docker.io/betulsahinn/${app.image.name}:latest&lt;/image&gt;
+                                    &lt;/to&gt;
+                                &lt;/configuration&gt;
+                                &lt;goals&gt;
+                                    &lt;goal&gt;build&lt;/goal&gt;
+                                &lt;/goals&gt;
+                            &lt;/execution&gt;
+                        &lt;/executions&gt;
+                    &lt;/plugin&gt;
+---------------------------------------------------------------------------------------------------------------------------------------
+
+The recommended way by Google is to use helper tools, which can store the credentials in an encrypted format in the file system. 
+In this example, we could have used docker-credential-helpers instead of storing plain-text credentials in settings.xml, 
+
+
+
+
+&lt;plugin&gt;
+                    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+                    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+                    &lt;version&gt;${jib-maven-plugin.version}&lt;/version&gt;
+                    &lt;configuration&gt;
+                      &lt;from&gt;
+                          &lt;image&gt;openjdk:8-jre-alpine&lt;/image&gt;
+                      &lt;/from&gt;
+                      &lt;to&gt;
+                          &lt;image&gt;bookstore:latest&lt;/image&gt;
+                      &lt;/to&gt;
+                      &lt;container&gt;
+                          &lt;entrypoint&gt;
+                              &lt;shell&gt;sh&lt;/shell&gt;
+                              &lt;option&gt;-c&lt;/option&gt;
+                              &lt;arg&gt;chmod +x /entrypoint.sh &amp;amp;&amp;amp; sync &amp;amp;&amp;amp; /entrypoint.sh&lt;/arg&gt;
+                          &lt;/entrypoint&gt;
+                          &lt;ports&gt;
+                              &lt;port&gt;8080&lt;/port&gt;
+                          &lt;/ports&gt;
+                          &lt;environment&gt;
+                              &lt;SPRING_OUTPUT_ANSI_ENABLED&gt;ALWAYS&lt;/SPRING_OUTPUT_ANSI_ENABLED&gt;
+                              &lt;JHIPSTER_SLEEP&gt;0&lt;/JHIPSTER_SLEEP&gt;
+                          &lt;/environment&gt;
+                          &lt;useCurrentTimestamp&gt;true&lt;/useCurrentTimestamp&gt;
+                      &lt;/container&gt;
+                  &lt;/configuration&gt;
+                &lt;/plugin&gt;
+
+
+ &lt;extraDirectories&gt;
+                        &lt;paths&gt;
+                            &lt;path&gt;
+                                &lt;from&gt;../event-metadata-repository&lt;/from&gt;
+                                &lt;into&gt;${container.workingDirectory}/event-metadata-repository&lt;/into&gt;
+                            &lt;/path&gt;
+                        &lt;/paths&gt;
+                    &lt;/extraDirectories&gt;
+
+
+
+/builds/apache-maven-3.8.5/bin/mvn 
+
+
+
+
+export M2_HOME=/root/tools/apache-maven-3.8.5
+export M2=$M2_HOME/bin 
+export PATH=$M2:$PATH
+
+docker login -u rtcbuild esd-netops-docker-virtual.packages.broadcom.net
+docker login -u rtcbuild esd-netops-docker-dev-local.packages.broadcom.net
+
+
+docker login -u rtc
+
+
+/opt/neo4j/data/databases/neo4j/schema/index/range-1.0/36
+
+
+docker run -d --net=&quot;host&quot; -v/builds/workspace/IFM/:/builds/workspace/IFM -p7687:7687 -p7474:7474 --env NEO4J_AUTH=neo4j/interOP@123 --env NEO4J_ACCEPT_LICENSE_AGREEMENT=yes esd-netops-docker-dev-local.packages.broadcom.net/netops/ifm-neo4j:5.26.0 
+
+docker pull esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+docker run -d -p 8981:8081 -v /root/code/devops/gas-config/gas-application.yml:/config/application.yml -v /root/code/devops/gas-config/gas-api-config.yml:/config/gas-api-config.yml -v /root/code/devops/gas-config/logback.xml:/config/logback.xml -e logging.config=&quot;/config/logback.xml&quot; esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+sudo docker run --privileged=true -d -p 8981:8081 -v /root/code/devops/gas-config/gas-application.yml:/config/application.yml -v /root/code/devops/gas-config/gas-api-config.yml:/config/gas-api-config.yml -v /root/code/devops/gas-config/logback.xml:/config/logback.xml -v /root/code/devops/gas-config/logs/gas.log:/config/logs/gas.log:rw -e logging.config=&quot;/config/logback.xml&quot; esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+sudo docker run -d -p 8981:8081 -v /root/code/devops/gas-config/gas-application.yml:/config/application.yml -v /root/code/devops/gas-config/gas-api-config.yml:/config/gas-api-config.yml -v /root/code/devops/gas-config/logback.xml:/config/logback.xml -v /root/code/devops/gas-config/logs/gas.log:/config/logs/gas.log:rw -e logging.config=&quot;/config/logback.xml&quot; esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+sudo docker run -d -p 8981:8081 -v /root/code/devops/gas-config/gas-application.yml:/config/application.yml -v /root/code/devops/gas-config/gas-api-config.yml:/config/gas-api-config.yml -v /root/code/devops/gas-config/logback.xml:/config/logback.xml -v /root/code/devops/gas-config/logs/gas.log:/config/logs/gas.log:rw -e logging.config=&quot;/config/logback.xml&quot; esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+
+$ docker run -d -p 5000:5000 --name registry registry:2.7       # Run local registry 
+localhost:5000/ubuntu       # push to local registry
+
+
+
+[root@netops-rl8-1965 gas-config]# docker ps
+CONTAINER ID   IMAGE                                                                                  COMMAND                  CREATED         STATUS         PORTS                                                                                                                                  NAMES
+3187bd2b6611   esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service   &quot;java -cp @/app/jib-…&quot;   3 seconds ago   Up 3 seconds   0.0.0.0:8981-&gt;8081/tcp, :::8981-&gt;8081/tcp                                                                                              xenodochial_nightingale
+5d01f3ff
+
+# docker exec -it 3187bd2b6611 bash
+[default@3187bd2b6611 opt]$ curl http://localhost:8081/topology
+Welcome to Topology Service!
+
+
+
+1. Inspect what all layers the image contains?
+2. Resolving placeholders in application.yml 
+2. How to place resolved application.yml in calsspath?
+4. How to additional config dependencies, such as api-config.yml and txn.jar etc?
+5. How to create containers? Who calls &#x27;helm install&quot;?
+
+
+[root@netops-rl8-1965 ~]# docker history esd-netops-docker-dev-local.packages.broadcom.net/netops/dev/graph-store-api-service
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+4a5e58384862   N/A             jib-maven-plugin:3.4.0                          5.39kB    jvm arg files
+&lt;missing&gt;      N/A             jib-maven-plugin:3.4.0                          102kB     classes
+&lt;missing&gt;      N/A             jib-maven-plugin:3.4.0                          7.66kB    resources
+&lt;missing&gt;      N/A             jib-maven-plugin:3.4.0                          401kB     snapshot dependencies
+&lt;missing&gt;      N/A             jib-maven-plugin:3.4.0                          82.9MB    dependencies
+&lt;missing&gt;      3 months ago    USER default                                    0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c dnf makecache --refresh &amp;&amp;   …   385MB     buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    COPY bashrc /home/default/.bashrc # buildkit    152B      buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    COPY bashrc /root/.bashrc # buildkit            152B      buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    USER root                                       0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    CMD [&quot;/bin/sh&quot; &quot;-c&quot; &quot;/bin/bash&quot;]                0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    USER 1010                                       0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN |2 AUTHORS=Broadcom Cloud Platform Engin…   0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    USER root                                       0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    LABEL broadcom-container-images.image.create…   0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    LABEL broadcom-container-images.image.author…   0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    ARG CREATED                                     0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    ARG AUTHORS                                     0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    CMD [&quot;/bin/sh&quot; &quot;-c&quot; &quot;/bin/bash&quot;]                0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c chmod +x /CIS-LBK/RHEL8_LBK.s…   60.8MB    buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c dnf -y upgrade &amp;&amp;     dnf -y …   184MB     buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    ADD CIS-LBK-8 /CIS-LBK # buildkit               2.02MB    buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c mkdir -p /CIS-LBK/logs &amp;&amp; mkd…   0B        buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c sed -i &#x27;s!#baseurl=http://dl.…   12.4kB    buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    RUN /bin/sh -c sed -i &#x27;s!mirrorlist=!#mirror…   11.5kB    buildkit.dockerfile.v0
+&lt;missing&gt;      3 months ago    USER root                                       0B        buildkit.dockerfile.v0
+&lt;missing&gt;      10 months ago   CMD [&quot;/bin/bash&quot;]                               0B        buildkit.dockerfile.v0
+&lt;missing&gt;      10 months ago   ADD layer.tar.xz / # buildkit                   198MB     buildkit.dockerfile.v0
+
+
+
+References:
+https://www.youtube.com/watch?v=KohC6cSw1yA
+
+
+// Specify docker registry credentials in your .m2/settings.xml
+&lt;settings&gt;
+    &lt;servers&gt;
+        &lt;server&gt;
+            &lt;id&gt;MY_REGISTRY&lt;/id&gt;
+            &lt;username&gt;MY_USERNAME&lt;/username&gt;
+            &lt;password&gt;MY_PASSWORD&lt;/password&gt;       # mvn --encrypt-master-password &lt;password&gt;
+        &lt;/server&gt;
+    &lt;/servers&gt;
+&lt;/settings&gt;
+
+
+
+Digging into the image
+https://snyk.io/blog/building-java-container-images-using-jib/ - inspect jib image using dive tool;
+https://www.youtube.com/watch?v=ug3NqPcjjsk
+https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#extended-usage
+
+
+
+
+ publish-artifacts-docker
+ 
+
+ docker inspect -f &quot;{{ .Size }}&quot; esd-netops-docker-dev-local.packages.broadcom.net/netops/flow-base | numfmt --to=si
+
+
+
+
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

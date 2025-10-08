@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>What is Docker Compose?
+	Instead of launching each service individually, is there any way to launch all services in one go? Docker Compose is the way!
+	It is a tool for defining and running multi-container applications;
+	You can define all services in a single yaml file and you can launch all services with a single command;
+	It also automates some of the long-winded arguments that we pass to &#x27;docker run&#x27;;
+
+How to install Docker Compose?
+	If you are using Mac/Windows, it is already bundled with Docker Desktop;
+	If you are using Linux: https://docs.docker.com/compose/install/
+	Run this command, to see if it is already installed: docker-compose --version
+
+
+# Pre-requisite: Make sure, all the images you want to use are pushed to Registry;
+
+&gt; touch docker-compose.yml 		# Formatting is very important, as per as YAML is concerned!
+&gt; cat docker-compose.yml
+version: &#x27;3.7&#x27;
+services: 						# Each container that we launch is a service;
+	currency-exchange: 			# Name of the service;
+		image: in28min/mmv2-currency-exchange-service:0.0.1-SNAPSHOT 		# What image to use!
+		mem_limit: 700m 													# Can use max of 700MB
+		ports: 
+			- &quot;8000:8000&quot;
+
+&gt; docker-compose up
+
+docker-compose up -d 		# Brings up all containers in the background; 
+docker-compose down 		# Stops each container gracefully;
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# docker push docker.io/in28min/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+# docker push in28min/mmv2-naming-server:0.0.1-SNAPSHOT
+# docker push in28min/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
+# docker push in28min/mmv2-api-gateway:0.0.1-SNAPSHOT
+
+https://github.com/in28minutes/spring-microservices-v2/tree/main/04.docker/backup
+
+One good practice when creating docker compose file is: create your own network, instead of using defalt network;
+
+Note: 
+	Insdie the container, localhost doesn&#x27;t refer host/your machine, it refers to localhost inside the Docker container;
+	As currency-exchange and eureka naming server are 2 different containers, currency exchange service startup will fail!
+	
+	Option #1: Docker supports service discovery based on the names;
+		currency-exchange-service/application.properties
+			Change
+			eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka
+			to
+			eureka.client.serviceUrl.defaultZone=http://naming-service:8761/eureka  		# name of naming service as per docker-compose.yml
+		This requires a rebuild of currency-exchange service;
+
+	Option #2: Define a environment variable!
+		EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-service:8761/eureka 
+
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>&lt;configuration&gt;
+   &lt;from&gt;
+      &lt;image&gt;openjdk:8u222-jre&lt;/image&gt;
+      &lt;auth&gt;
+            &lt;username&gt;sadf&lt;/username&gt;
+            &lt;password&gt;xxx&lt;/password&gt;
+      &lt;/auth&gt;
+   &lt;/from&gt;
+   &lt;to&gt;
+      &lt;image&gt;localhost:5000/my-image:24-1-SNAPSHOT&lt;/image&gt;
+      &lt;credHelper&gt;wincred&lt;/credHelper&gt;
+      &lt;tags&gt;
+         &lt;tag&gt;customtag&lt;/tag&gt;
+         &lt;tag&gt;latest&lt;/tag&gt;                                                                                      
+      &lt;/tags&gt;
+   &lt;/to&gt;
+   &lt;container&gt;
+   &lt;labels&gt;
+&lt;git.remote.origin.url&gt;${git.remote.origin.url}&lt;/git.remote.origin.url&gt;
+&lt;git.commit.id&gt;${git.commit.id}&lt;/git.commit.id&gt;
+&lt;mvn.build.version&gt;${project.version}&lt;/mvn.build.version&gt;
+&lt;/labels&gt;
+      &lt;ports&gt;
+         &lt;port&gt;7575&lt;/port&gt;
+         &lt;port&gt;9000&lt;/port&gt;
+         &lt;port&gt;9001&lt;/port&gt;
+         &lt;port&gt;9002&lt;/port&gt;
+      &lt;/ports&gt;
+      &lt;jvmFlags&gt;
+         &lt;jvmFlag&gt;-Xms512m&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-Xmx2048m&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-Xdebug&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-XX:+PrintGCDetails&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-XX:+HeapDumpOnOutOfMemoryError&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-Duser.timezone=GMT&lt;/jvmFlag&gt;
+         &lt;jvmFlag&gt;-Dfile.encoding=utf-8&lt;/jvmFlag&gt;
+      &lt;/jvmFlags&gt;
+      &lt;environment&gt;
+           &lt;SPRING_OUTPUT_ANSI_ENABLED&gt;ALWAYS&lt;/SPRING_OUTPUT_ANSI_ENABLED&gt;
+            &lt;JHIPSTER_SLEEP&gt;0&lt;/JHIPSTER_SLEEP&gt;
+      &lt;/environment&gt;
+      &lt;volumes&gt;
+         &lt;volume&gt;/tmp&lt;/volume&gt;
+      &lt;/volumes&gt;
+      &lt;mainClass&gt;com.toomuch2learn.springboot2.crud.catalogue.CrudCatalogueApplication&lt;/mainClass&gt;
+      &lt;args&gt;
+         &lt;arg&gt;arg1&lt;/arg&gt;
+         &lt;arg&gt;arg2&lt;/arg&gt;
+      &lt;/args&gt;
+      &lt;labels&gt;
+         &lt;key1&gt;value1&lt;/key1&gt;
+         &lt;key2&gt;value2&lt;/key2&gt;
+      &lt;/labels&gt;
+      &lt;format&gt;OCI&lt;/format&gt;
+   &lt;/container&gt;
+&lt;/configuration&gt;
+&lt;executions&gt;
+    &lt;execution&gt;
+        &lt;phase&gt;package&lt;/phase&gt;          &lt;!-- when user runs mvn package, jib:build gets executed --&gt;          
+        &lt;goals&gt;
+            &lt;goal&gt;build&lt;/goal&gt; 
+        &lt;/goals&gt;
+    &lt;/execution&gt;
+ &lt;/executions&gt;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+from.image                       -&gt; It specifies the base image, same as FROM in dockerfile; Defaults to adoptopenjdk:jre-8 for JARs, jetty for WARs;
+from.auth.username/password      -&gt; You can specify repo username/password in configuration;
+                                    You can specify username/password from command line as well, using jib.from.auth.username and jib.from.auth.password; 
+                                    Alternatively, run docker login, it saves credentials to ~/.docker/config.json; Once you login, jib autoatmically recognises you;
+                                    Alternatively, you can specify it in .m2/settings.xml as well;
+
+to.tags                         -&gt; If you don&#x27;t specify tag in to.image, then latest tag is not needed; It defaults to latest; YOu can give more than 1 tag;
+to.auth.username/password       -&gt; You can specify repo username/password in configuration OR from command line as well; jib.to.auth.username and jib.to.auth.password;
+
+container.appRoot               -&gt; Directory in the container, where out application files are copied; Defaults to /app, useful for war containers;
+container.workingDirectory      -&gt;
+container.labels                -&gt; Similar to LABELS in dockerfile, you can add 1 or more labels to an image;
+
+
+Ports are equivalent to EXPOSE instruction in Docker to open up a port inside your container. 
+Finally, the user or group the container will run as. The value can be a username along with an optional group name. It is a best practice to set this as something so your containers are not run as root.
+
+
+
+You’ll also note there is no RUN command equivalent like you would typically use for something like an apt-get in a traditional Dockerfile. This is because the Jib team noted that these slow builds and should be done in a base image that you would use for your Jib image.
+
+&lt;workingDirectory&gt;${image.workdir}&lt;/workingDirectory&gt;
+
+ENTRYPOINT
+port 
+jvmFlags is for indicating what startup flags to pass to the JVM.
+mainClass is for indicating the main class, which Jib will attempt to infer automatically by default. 
+args is where we’d specify the program arguments passed to the main method.
+
+extraDirectories                -&gt; Used to add arbitary files to the image;
+outputPaths                     -&gt; Specifies the location of additional artifacts generated by Jib;
+skip                            -&gt; If set to true, Jib execution is skipped(useful for multi-module projects); Alternatively, you can use -Djib.skip;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+mvn clean package jib:build 
+-Djib.to.image=deepu105/store
+
+mvn compile com.google.cloud.tools:jib-maven-plugin:2.8.0:build↳
+-Dimage=docker.io/modernizingjavaappsbook/catalog-spring-boot:latest
+-Djib.from.auth.username=&lt;&gt;
+-Djib.from.auth.password=&lt;&gt;
+-Djib.to.auth.username=&lt;USERNAME&gt;↳
+-Djib.to.auth.password=&lt;PASSWORD&gt;
+
+
+mvn compile jib:build 
+mvn compile jib:dockerBuild 
+
+
+
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

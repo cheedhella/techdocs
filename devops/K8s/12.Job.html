@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>
+What is Job?
+    It is used to create one or more instances of a Pod, each Pod contains one or more containers, each container performs a specific task and then terminate; // one-time tasks 
+    If parallelism is 2 and completions is 5, then the job runs 2 pods concurrently, until 5 pods are completed successfully, subjecting to backoffLimit;
+    Pod is considered failed, if any of it&#x27;s containers fail(exits with non-zero return code); Pod failures accumulates toward the backoff limit;
+
+Job Configuration
+    1. parallelism: &lt;n&gt;                             # Number of pods that can run parallely; Defaults to 1;
+    2. completions: &lt;n&gt;                             # Number of successful pods needed to mark the Job as completed; Defaults to 1;
+    3. backoffLimit: &lt;n&gt;                            # If a Pod fails, it is retried; After backoffLimit retries, Job is marked as failed; Defaults to 6;
+    4. restartPolicy: Never | OnFailure;            # Job doesn&#x27;t have any default; It must be set to Never or OnFailure;
+                                                    # Never - when a container fails, Pod is marked failed and spwans a new Pod, subjecting to backoffLimit;
+                                                    # OnFailure - when a container fails, kubelet retries it endlessly in the same pod, until the job controller intervenes;
+    5. activeDeadlineSeconds: 300                   # If a job runs longer than this duration, it is terminated and marked as failed; By default, no deadline, job runs indenfinitely until is completed(successful or failed);
+    6. ttlSecondsAfterFinished: 60                  # It specifies how long to retain the job object, after it is completed(successful or failed); By default, no ttl, Jobs stay forever unless manually deleted; Set it to 0, to delete it immediately;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Example #1
+------------
+&gt; cat job1.yaml 
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job1
+spec:
+  template:
+    spec:
+      containers:
+        - name: job1-c1
+          image: busybox
+          command: [&quot;echo&quot;, &quot;Hello from job1-c1!&quot;]
+      restartPolicy: Never
+  backoffLimit: 4           # No of retries;
+-----------------
+&gt; kubectl apply -f job1.yaml            # Create job
+
+&gt; kubectl get jobs                      # List all jobs in current namespace
+NAME   COMPLETIONS   DURATION   AGE
+job1   0/1           4s         4s
+
+&gt; kubectl describe job job1             #  Shows the job status;
+
+&gt; kubectl get pods -l job-name=job1
+NAME         READY   STATUS      RESTARTS   AGE
+job1-fvbqj   0/1     Completed   0          2m55s
+
+&gt; kubectl logs job1-fvbqj -c job1-c1
+Hello from job1-c1!
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+&gt; cat job2.yaml 
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job2
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: job2-c1
+          image: busybox
+          command: [&quot;sh&quot;, &quot;-c&quot;, &quot;exit 0&quot;]
+        - name: job2-c2
+          image: busybox
+          command: [&quot;sh&quot;, &quot;-c&quot;, &quot;exit 1&quot;]
+-----------------
+&gt; kubectl apply -f job2.yaml 
+&gt;  kubectl describe job job2        # Pod statuses: 0 Active (0 Ready) / 0 Succeeded / 4 Failed
+&gt; kubectl get pods -l job-name=job2
+NAME         READY   STATUS      RESTARTS   AGE
+job2-6w499   0/2     Completed   0          2m6s
+job2-9dgsk   0/2     Completed   0          3m10s
+job2-m6hkh   0/2     Completed   0          44s
+job2-mh7p6   0/2     Completed   0          3m22s
+job2-rbsds   0/2     Completed   0          2m48s
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+kubectl get jobs                                            # List all jobs in current namespace
+kubectl describe job &lt;job-name&gt;                             # Check job status - success/failure, howmany times failed etc;
+kubectl get pods -l job-name=&lt;job-name&gt;                     # List all pods created by given job;
+kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt;                 # Once the Job completes successfully, the pod will terminate, and you can see the output logs
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Best Practices:
+  Make your tasks resilient to being restarted — Kubernetes will recreate your Pods if they fail, so it’s important your tasks can withstand being restarted in a different Pod. This applies even for single-Pod non-parallel Jobs, as on rare occasions Kubernetes may still have to start the Pod multiple times.
+  Ensure your tasks support concurrency — If you’re using one of the parallel execution Job modes, then the tasks running in your Pods should be resilient to the possibility of other instances being live at the same time.
+
+
+Dashboard 
+  Alternatively, we can use the Kubernetes dashboard to create, manage, and monitor Jobs. The dashboard provides a graphical interface that allows us to perform various operations on Kubernetes resources.
+  To access the dashboard, we need to run the following command
+
+  kubectl proxy
+  This will start a proxy server that will forward requests to the Kubernetes API server. We can then open a browser and navigate to http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+  The dashboard will ask us to authenticate using a token or a kubeconfig file. We can obtain a token by running the following command
+
+  kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk &#x27;{print $1}&#x27;)
+  This will output a token that we can copy and paste into the dashboard. Once we are authenticated, we can see an overview of our cluster and its resources. We can click on the Workloads tab and then on Jobs to see a list of Jobs in our cluster. We can also create a new Job by clicking on the Create button and filling in the required fields.
+
+  The dashboard also allows us to view the details of each Job, such as its status, events, pods, logs, and YAML definition. We can also perform actions such as scaling, editing, or deleting Jobs from the dashboard.
+-------------------------
+
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

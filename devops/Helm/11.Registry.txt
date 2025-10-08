@@ -1,3 +1,0 @@
-helm registry login                       # Login to a Registry/Repository; Login is needed if you want to push/pull your chart to/from a private repository; Eg: helm registry login registry-1.docker.io -u hubuser
-helm registry logout                      # Logout from a Registry
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------

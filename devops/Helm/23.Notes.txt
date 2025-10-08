@@ -1,1 +1,0 @@
- NOTES.txt file is rendered just like Helm's regular template file. The only difference is that after it's rendered, it's not sent out to ..

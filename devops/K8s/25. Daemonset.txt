@@ -1,2 +1,0 @@
-DaemonSets: Use for node-specific services that need to run on every node, such as logging, monitoring, or system-level services.
-
