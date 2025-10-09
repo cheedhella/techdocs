@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>DeQueue</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is DeQueue(Double-Ended Queue)?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a linear data structure that allows insertion and deletion of elements from both ends — front and rear;</li>
+            <li>It is like a combination of stack and queue;</li>
+            <li>It supports mainly these operations: addFirst(x), addLast(x), removeFirst(), removeLast(), peekFirst(), peekLast();</li>
+            <li>addFirst(x) - insert at front; Time Complexity: O(1);</li>
+            <li>addLast(x) - insert at rear; Time Complexity: O(1);</li>
+            <li>removeFirst() - delete from front; Time Complexity: O(1);</li>
+            <li>removeLast() - delete from rear; Time Complexity: O(1);</li>
+            <li>peekFirst() - get element from front; Time Complexity: O(1);</li>
+            <li>peekLast() - get element from rear; Time Complexity: O(1);</li>
+
+            <li>java.util.ArrayDeque - Backed by a resizable array (fast, no capacity limit);</li>
+            <li>java.util.LinkedList - It uses a double linked list to implement dequeue(slightly slower but more flexible)</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">DeQueue implementation using ArrayDeque</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Deque<Integer> deque = new ArrayDeque<>();
+
+        // Add elements at both ends
+        deque.addFirst(10);
+        deque.addLast(20);
+        deque.addLast(30);
+        deque.addFirst(5);
+
+        System.out.println("Deque: " + deque);
+
+        // Remove elements
+        deque.removeFirst(); // removes 5
+        deque.removeLast();  // removes 30
+
+        System.out.println("After removals: " + deque);
+
+        // Peek at both ends
+        System.out.println("Front element: " + deque.peekFirst());
+        System.out.println("Rear element: " + deque.peekLast());
+    }
+}
+
+<b>Output:</b>
+Deque: [5, 10, 20, 30]
+After removals: [10, 20]
+Front element: 10
+Rear element: 20
+
+        </code>
+      </pre>
+    </div>
+
+    <br/><br/>
+    <div class="code-block">
+        <div class="code-block-title">DeQueue implementation using LinkedList;</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class Main {
+    public static void main(String[] args) {
+        // Create a Deque using LinkedList
+        Deque<Integer> deque = new LinkedList<>();
+
+        // Add elements at both ends
+        deque.addFirst(10);  // front
+        deque.addLast(20);   // rear
+        deque.addLast(30);   // rear
+        deque.addFirst(5);   // front
+
+        System.out.println("Initial Deque: " + deque);
+
+        // Access elements
+        System.out.println("Front element: " + deque.peekFirst());
+        System.out.println("Rear element: " + deque.peekLast());
+
+        // Remove elements from both ends
+        deque.removeFirst();  // removes 5
+        deque.removeLast();   // removes 30
+
+        System.out.println("After removals: " + deque);
+
+        // Add more elements
+        deque.addFirst(100);
+        deque.addLast(200);
+        System.out.println("After adding more: " + deque);
+
+        // Remove all elements
+        while (!deque.isEmpty()) {
+            System.out.println("Removing: " + deque.removeFirst());
+        }
+
+        System.out.println("Deque is now empty: " + deque);
+    }
+}
+
+<b>Output:</b>
+Initial Deque: [5, 10, 20, 30]
+Front element: 5
+Rear element: 30
+After removals: [10, 20]
+After adding more: [100, 10, 20, 200]
+Removing: 100
+Removing: 10
+Removing: 20
+Removing: 200
+Deque is now empty: []
+
+        </code>
+      </pre>
+    </div>
+
+    <div class="question"><strong>2. When to use LinkedList as Deque?</strong></div>
+    <div class="answer">
+        <li>When frequent insertions/removals are needed at both ends;</li>
+        <li>When you don’t need random access (LinkedList traversal is slower than arrays);</li>
+        <li>Good for task scheduling, sliding window problems etc;</li>
+        <li>Use ArrayDeque, for palindrome checking etc;</li>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+    
+</body>
+
+</html>
