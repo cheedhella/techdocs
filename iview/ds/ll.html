@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Linked List</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Linked List?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A linear data structure in which elemenets are not stored at contiguous memory locations;</li>
+            <li>Each node in the list has 2 parts: data and a reference to the next node;</li>
+            <li>A special pointer, named head, always points to the first node in the list; It can be null, when the list is empty;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Array VS Linked List?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Size
+                <ul>
+                    <li>In case of Arrays, size is fixed(you must know the maximum number of elements to be stored in advance);</li>
+                    <li>In case of Linked List, size can grow/shrink dynamically, as insert/delete elements;</li>
+                </ul>
+            </li>
+            <li>Storage
+                <ul> 
+                    <li>In case of Arrays, elements are stored contiguously;</li>
+                    <li>In case of Linked List, elements are not stored contiguously;</li>
+                </ul>
+            </li>
+            <li>Memory Allocation
+                <ul> 
+                    <li>In case of Array, memory is allocated at compile time;</li>
+                    <li>In case of Linked List, memory is allocated at run time;</li>
+                </ul>
+            </li>
+            <li>Memory Efficiency
+                <ul> 
+                    <li>For a given number of elements, Linked List takes more memory, as each node need to maintain a reference to next node;</li>
+                </ul>
+            </li>
+            <li>Operations
+                <ul> 
+                    <li>Insertion/Deletion is faster in Linked Lists; Random Access(by index) is not possible in Arrays, so, we can't use it for binary search;</li>
+                    <li>Accessing/Modifying an element is faster in Arrays;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What is Single Linked List?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each node points only to the next node;</li>
+            <li>Navigation is one-way;</li>
+            <li>Implementation is <a href="./sll.html">here</a>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. What is Double Linked List?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each node has two pointers — one to the next node and one to the previous;</li>
+            <li>Allows forward and backward traversal;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. What is Double Linked List?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The last node points back to the first node, forming a loop;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Time Complexicity</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Insertion - O(1) at head to O(n) at middle/end;</li>
+            <li>Deletion - O(1) at head to O(n) at middle/end;;</li>
+            <li>Search - O(n);</li>
+            <li>Traversal - O(n);</li>
+        </ul>
+    </div>
+</body>
+
+</html>
