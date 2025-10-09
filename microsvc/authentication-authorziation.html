@@ -3,8 +3,8 @@
 
 <head>
     <title>Authentication and Authorization</title>
-    <link rel="stylesheet" href="../../../resources/css/styles.css" />
-    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
 </head>
 
 <body>
@@ -39,8 +39,6 @@
         </ul>
     </div>
 
-
-
     <div class="question"><strong>4. How it works?</strong></div>
     <div class="answer">
         <ul>
@@ -50,6 +48,15 @@
            
 
 
+React app loads config (Auth URL + API URL).
+
+User clicks “Login”.
+
+React redirects to the IdP’s login endpoint (OIDC / OAuth2).
+
+After successful login, IdP redirects back to React with tokens.
+
+React stores the JWT and uses it for all API calls to the Gateway.
 
             Access token(for APIs) or ID token;
             User logs in via frontend → redirected to Identity Provider.
@@ -67,10 +74,49 @@ OPA responds allow = true or false.
 Service processes or rejects request.
 
 
+
+React redirects to:
+
+https://auth.mycompany.com/realms/myrealm/protocol/openid-connect/auth
+  ?client_id=my-react-app
+  &redirect_uri=https://app.mycompany.com/callback
+  &response_type=code
+  &scope=openid
+
+
+IdP authenticates and redirects to /callback with an authorization code.
+
+React exchanges the code for tokens via IdP’s /token endpoint.
+
+React stores access_token (in memory) and uses it for API requests:
+
+fetch(`${apiUrl}/users`, {
+  headers: { Authorization: `Bearer ${token}` }
+});
+
+
+
+
+Frontend calls API Gateway
+    The frontend app sends API requests like:
+
+    Authorization: Bearer eyJhbGciOiJIUzI1...
+
+
+The API Gateway verifies the token (using the IdP’s public key).
+
+    If valid, it forwards the request to the backend service.
+
+4. Microservices trust the Gateway
+
+    Microservices trust that any request with a valid token has been authenticated.
+
+    They can perform authorization based on token claims (roles, groups, etc.).
+
         </ul>
     </div>
 
-    <div class="question"><strong>4. What IDP stores user information and tokens?</strong></div>
+    <div class="question"><strong>5. What IDP stores user information and tokens?</strong></div>
     <div class="answer">
         <ul>
             <li></li>
@@ -91,6 +137,115 @@ Token blacklists or introspection endpoints
 
             <li>Client further includes the access token in API requests;</li>
             <li>API verifies token signature using IdP’s public key;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. How Does the React App Know the IdP and API Gateway?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>We need to configure it via environment variables or a config file during build time;</li>
+            <li>For eg, if IDP is running at: https://auth.mycompany.com and API gateway is running at: https://api.mycompany.com, define this in .env file:</li>
+            <li>REACT_APP_AUTH_URL=https://auth.mycompany.com/realms/myrealm
+REACT_APP_API_URL=https://api.mycompany.com/
+REACT_APP_CLIENT_ID=my-react-app</li>
+            <li>Then, in React:
+                const authUrl = process.env.REACT_APP_AUTH_URL;
+const apiUrl = process.env.REACT_APP_API_URL;
+const clientId = process.env.REACT_APP_CLIENT_ID;
+            </li>
+        </ul>
+    </div>
+
+
+<div class="question"><strong>7. How React App Stores the JWT Token?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>3 ways: Memory(React state/context), sessionStorage, localStorage, Secure http-only cookies;</li>
+            <ul>
+                <li>React state
+                    <ul>
+                        <li>Pros:
+                            <ul>
+                                <li>Very secure (cannot be stolen by XSS since it’s never written to disk);</li>
+                            </ul>
+                        </li>
+                        <li>Cons:
+                            <ul>
+                                <li>Token lost on page reload — you’ll need a refresh token mechanism or silent re-login;</li>
+                            </ul>
+                        </li>
+                        <li>Applications:
+                            <ul>
+                                <li>high-security apps (banking, healthcare);</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>sessionStorage
+                    <ul>
+                        <li>Eg: sessionStorage.setItem('access_token', token);</li>
+                        <li>Pros:
+                            <ul>
+                                <li>Available until browser/tab is closed;</li>
+                            </ul>
+                        </li>
+                        <li>Cons:
+                            <ul>
+                                <li>Not shared across tabs;</li>
+                                <li>Vulnerable to XSS if malicious scripts run in the page</li>
+                            </ul>
+                        </li>
+                        <li>Applications:
+                            <ul>
+                                <li>moderately secure apps, single-tab usage;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>localStorage
+                    <ul>
+                        <li>Eg: localStorage.setItem('access_token', token);</li>
+                        <li>Pros:
+                            <ul>
+                                <li>Persists even after closing the browser;</li>
+                            </ul>
+                        </li>
+                        <li>Cons:
+                            <ul>
+                                <li>XSS vulnerable — scripts can read it;</li>
+                                <li>Cannot be automatically cleared on logout (you must handle it);</li>
+                            </ul>
+                        </li>
+                        <li>Applications:
+                            <ul>
+                                <li>Not recommended for highly sensitive apps;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Secure HTTP-only Cookies
+                    <ul>
+                        <li>Eg: Set-Cookie: access_token=...; HttpOnly; Secure; SameSite=Strict;</li>
+                        <li>Pros:
+                            <ul>
+                                <li>Very secure — browser handles it, and JS can’t access it;</li>
+                                <li>Works well with session-based flows;</li>
+                            </ul>
+                        </li>
+                        <li>Cons:
+                            <ul>
+                                <li>Harder to use in SPA (React) + cross-domain setups;</li>
+                                <li>CORS and CSRF protection must be configured correctly;</li>
+                            </ul>
+                        </li>
+                        <li>Applications:
+                            <ul>
+                                <li>Best for enterprise SPAs with strong backend integration (e.g., via API Gateway session handling);</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </ul>
     </div>
 
