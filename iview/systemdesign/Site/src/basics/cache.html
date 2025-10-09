@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cache</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><strong>What is Cache?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Cache is a temporary data storage; It need not to be RAM in all cases;</li>
+                <li>By storing frequently accessed data in cache, we can improve the response time;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>Caching Applications</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Web browsers cache JS/CSS/Images in order to load websites more quickly;</li>
+                <li>DNS servers cache DNS records for faster lookups;</li>
+                <li>CDN servers cache content to reduce latency;</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How Caching Works?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>When the client needs data, it first checks the Cache;</li>
+                <li>If the data is found in the cache(cache hit), it proceeds further with that data;</li>
+                <li>If the data is not found in the cache(cache miss), client fetches the data from original data source, stores a copy of it in the cache, before using it;</li>
+
+                <br>
+                <li><b>Caching Strategy - when the Cache is initialized with data?</b>
+                    <ul>
+                        <li><b>Lazy Loading or Read Through</b>
+                            <ul>
+                                <li>In this case, cache is intially empty;</li>
+                                <li>Data is loaded into the cache, after the cache-miss;</li>
+                                <li><b>Pros</b>
+                                    <ul>
+                                        <li>It caches only the data that is needed;</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cons</b>
+                                    <ul>
+                                        <li>Since data is loaded into the cache, when there is a cache miss, first read takes more time;</li>
+                                        <li>When the data in the database is updated/deleted, the data in cache will become stale;</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>Write Through</b>
+                            <ul>
+                                <li>When the user insert/update/delete data in the database, same operation is performed on cache as well;</li>
+                                <li><b>Pros</b>
+                                    <ul>
+                                        <li>Data in the cache is never stale;</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cons</b>
+                                    <ul>
+                                        <li>Write takes little bit longer than usual;</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>Write Behind</b>
+                            <ul>
+                                <li>When the user insert/update/delete data in the database, it is first written only to the cache and successful acknowledgement is sent to the client;</li>
+                                <li>After configured delay, the data in the cache is synched to underlying data source asynchronously;</li>
+                                <li><b>Pros</b>
+                                    <ul>
+                                        <li>Read and Write happens directly on the cache, thus faster;</li>
+                                    </ul>
+                                </li>
+                                <li><b>Cons</b>
+                                    <ul>
+                                        <li>any chances of data loss?</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>Refresh Ahead</b>
+                            <ul>
+                                <li>Refresh-ahead offers reduced latency compared to read-through, but only if you could acurately predict which items are needed in the future;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>When to use which Caching Strategy?</b>
+                            <ul>
+                                <li>While a designing a system, identify whether it is read-heavy, write-heavy or a mix of both;</li>
+                                <li>Different systems have different requirements - It is hard to come up with full-proof strategy;</li>
+                                <li>You can choose one or a combination of more strategies as per your requirement;</li>
+                                <br>
+                                <li>So, which strategy to use? There is no definite answer; You should choose one based on the nature of the data and needs of your application;</li>
+                                <li>What is the nature of data? frequently updated etc;</li>
+                                <li>Needs of application? More reads, more writes etc;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <br>
+                <li><b>How big the cache can be?</b>
+                    <ul>
+                        <li>You cannot expect cache to hold all of your data;</li>
+                        <li>There is a limit on the amount of data that a cache can store;</li>
+                    </ul>
+                </li>
+                
+                <br>
+                <li><b>Cache Eviction Policies - On what basis, to delete the data from Cache?</b>
+                    <ul>
+                        <li><b>First In First Out</b>
+                            <ul>
+                                <li>It follows insertion order;</li>
+                                <li>First written record is evicted before others, without any any regard to how often or how many times it was accessed before;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>Last In First Out</b>
+                            <ul>
+                                <li>Most recently written record is evicted before others, without any any regard to how often or how many times it was accessed before;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>LRU - Least Recently Used - Most Popular!</b>
+                            <ul>
+                                <li>Discards the least recently used items first;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>MRU - Most Recently Used</b>
+                            <ul>
+                                <li>In contrast to LRU, MRU discards the most recently used items first;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>LFU - Least Frequently Used</b>
+                            <ul>
+                                <li>Counts how often an item is needed; Those that are used least often are discarded first;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>Time to Live</b>
+                            <ul>
+                                <li>Data gets deleted after specified time;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>How to pick a eviction policy?</b>
+                            <ul>
+                                <li>TODO;</li>
+                            </ul>
+                        </li>
+                        <br>
+                        <li><b>At what point, eviction process is triggered?</b>
+                            <ul>
+                                <li>TODO; daily? hourly? every minute? when cache is reached some size?</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </p>
+
+        Both Cache Aside and Read Through are useful, when the data is immutable;
+        In both cases, app server is writing directly to source-of-truth datastore;
+        https://vijayt.com/post/cache-aside-vs-read-through-cache/
+
+        In write through, 
+            In case of write, appserver writes to cache, cache replicates it to source-of-truth datastore(sync or async?);
+            In case of read, 
+            Cons:
+                writing to cache and sout-of-truth data stores happens in the same call, thus write takes longer time;
+
+        In Write behind,
+            In case of write, appserver writes to cache, cache replicates it to source-of-truth datastore(async job);
+            cons:
+                - dataloss;
+                - any process directly reading from source-of-truth datastore may get stale data;
+                - it allows out-of-order of updates to source-of-truth datastore;
+
+        In Read/Refresh ahead,
+            complex to implement; could require machine learning in predicting;
+
+        
+    </body>
+</html>

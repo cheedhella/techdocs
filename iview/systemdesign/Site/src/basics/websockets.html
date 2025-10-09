@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>WebSocket</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        In case of traditional client-server architecture, client makes an API call that fetches some data from database and returns it to the client;
+        In this architecture, only client can initiate the connection to server; Server cannot initiate the connection to client;
+
+        What if server also want to send some data to the client? For eg, like in a chat application;
+        You can achieve it using websocket connection;
+
+        With websocket connections, initially the connection is established and stays open and then both client and server can talk to each other;
+        Client can send messages to server, using either Load Balancer or API Gateway;
+
+        Applications:
+        This is primary used in chat applications such as whatsapp, chatbot, telegram etc;
+        
+    </body>
+</html>

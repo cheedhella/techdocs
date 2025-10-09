@@ -1,0 +1,9 @@
+2 Key features
+	- Send a message to individual;
+	- Status of message - not sent, sent, delivered, seen;
+	- messages are temporary/permant;
+	- type of messages supported: text, images, video;
+	- User management
+		- online, last seen;
+	- Send a message to group;
+	

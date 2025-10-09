@@ -1,0 +1,36 @@
+Design a Reservation and Payment system for parking garage? // 2000 2-wheeler, 1000 4-wheeler, out of which few are reserved by special people;
+	- User should be able to reserve a parking slot and get a receipt;
+	- checkout or release the parking slot;
+	- Pay for it; // Billing creteria: 2-wheeler 20/hour
+
+consistency -> no 2 people should be able to book the same spot; 
+
+
+Services:
+	UI: main service, used by user/helper;
+	Booking
+		- State
+			-- 2000 2-wheeler
+			-- 1000 4-wheeler
+			-- 100 2-wheeler for special people
+			-- 200 4-wheeler for special people
+		- booking bookSlot(BookingMetadata); // 
+		- releaseSlot(bookingId);
+	Receipt
+		- generates receipt with bar code;
+	Billing
+		- State
+			-- 2-wheeler 20/hr
+			-- 4-wheeler 30/hr
+			-- 10% discount to special people;
+		- API
+			-- calculatePrice(BookingMetadata, duration);
+				-- up_round(duration) * cost(vehicle_type)
+				-- if(BookingMetadata.specialPerson)
+					price = price * 0.9; // 10% discount;
+	Payment
+		- API
+			- pay(bookingId, amount) -> complete it using a third party payment system;
+
+
+3 types of vehicles:

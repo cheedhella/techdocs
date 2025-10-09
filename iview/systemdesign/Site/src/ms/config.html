@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Spring Cloud Config</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="question"><b>What is API Gateway?</b></p>
+        <p class="answer">
+            <ul>
+                <li><b>Config Server</b></li>
+                <li>spring-cloud-config-server</li>
+                <li>This story has the step by step instructions on how to create a config server using Spring Cloud Config for externalizing application configurations. </li>
+                <li>Config server can source the properties from 2 sources, a local file system (profile = native) and external source control, in our case it is github (profile = git) . There are other sources like bitbucket which are supported as well.</li>
+                <li>How to create profile?</li>
+                <li>Under the src/main/resources, lets add 2 application.yml files. <br>
+
+                    application.yml — native profile
+                    application-git.yml — git profile
+                </li>
+                <li>spring.cloud.config.server.git.uri=https://github.com/imdurgadas/config-repository.git</li>
+                <li>Spring boot provides lot of enormous flexibility in externalizing configuration properties via properties or yaml files. Using profile specific configuration files we can also provide different values for each of the environments like dev, prod i.e application.properties, application-dev.properties, application-prod.properties etc. But once the application is started we can not update the properties at runtime. If we change the properties we need to restart the application to use the updated configuration properties.</li>
+                <li>We could also have too many microservices and it’s important to have the ability to configure and manage the configuration properties of all the microservices from a centralized place.
+                </li><li></li>
+                <li>@EnableConfigServer - It reads the config and exposes endpoints for other services; http://localhost:config-server-port/name-of-file/profile Eg: http://localhost:8888/limits-service/default</li>
+
+               <br>
+               <br>
+               <li>client - <b>spring-cloud-starter-config</b> </li>
+               <li>spring-cloud-starter-config is the library to let client apps connect to config server;</li>
+               <li>It reads config from src/main/resources/Bootstrap.yml</li>
+               <li>spring.cloud.config.uri — this is the fixed url of your config server.</li>
+               <li>spring.profiles.active=dev -> whichever config you want to load; vs spring.cloud.config.profile=qa;</li>
+               <li>@ConfigurationProperties("my-limits-service") - my-limits-service is the prefix of properties to read; if the service is not running, it will fallback to any defaults mentioned in it's application.properties;</li>
+               
+            </ul>
+
+        </p>
+
+        <p class="question"><b>TODO</b></p>
+        <p class="answer">
+            <ul>
+                <li>https://medium.com/@athulravindran/bootstrapping-spring-cloud-config-server-8c32b7d9c0ab - Try examples here when you get time;</li>
+                <li>https://www.linkedin.com/pulse/config-management-using-spring-cloud-server-durgadas-kamath/ - another one to try;</li>
+                <li>https://www.springcloud.io/post/2021-12/external-configuration-in-microservices-spring-cloud-config/#gsc.tab=0</li>
+                <li>https://o7planning.org/11727/understanding-spring-cloud-config-client-with-example</li>
+                <li>https://www.youtube.com/watch?v=gb1i4WyWNK4</li>
+            </ul>
+        </p>        
+    </body>
+</html>

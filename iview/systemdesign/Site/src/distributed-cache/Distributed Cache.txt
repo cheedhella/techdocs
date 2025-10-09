@@ -1,0 +1,387 @@
+
+
+
+
+
+
+
+
+
+
+
+
+Implementation
+
+
+
+Any server in the farm running the Distributed Cache service is known as a cache host. A cache cluster is a group of all cache hosts in a SharePoint Server 2013 farm. A cache host joins a cache cluster when a new application server running the Distributed Cache service is added to the farm. When using a cache cluster, the Distributed Cache spans all application servers and creates one cache in the server farm. Distributed Cache service can be deployed in two modes:
+
+Dedicated mode
+Collocated mode.
+When running in dedicated mode, the Distributed Cache service is started, and all other services are stopped on the server. 
+In collocated mode, the Distributed Cache service is running along with other services on the server. 
+The recommendation is to have dedicated servers hosting your cache for large-scale production use. 
+If you have over 10000 users, you should look into a dedicated server (dedicated mode) Distributed Cache.
+
+
+Now, we have implemented local cache, how to make it distributed?
+	To accomidate more data, we need to split the cache into multiple pieces, called shard, distribute all of the shards across all available servers/nodes;
+	We run cache as a separate process in each Node;
+
+	Dedicated cache cluster
+		Cache is created in a separate nodes from the nodes where service is running;
+
+	Colocated cache cluster
+		Cache runs in the same nodes as that of service;
+
+	In both cases, service host know about all the shards, they forward put and get request to particular shard;
+
+	Dedicated cache cluster
+		- Both the cache and service do not share memory and CPU any more; It helps in isolation of resources b/w service and cache;
+		- They can scale on their own;
+		- It can be used by several micro services;
+
+	Colocated cache cluster
+		- No extra hardware and operational cost;
+		- Scales together with the service;
+
+How does the cache client know which shard to call?
+	Approach #1:Mod function
+		Cache Host Number = Hash(key) Mod NumberOfCacheHosts;
+		What happens if a Node dies? or when we add a new host?
+			Service host selects a wrong cache host, resulting in high number of cache misses;
+			So, Mod function is a poor choice!
+	Approach #2: Consistent hashing
+		Consistent hashing is based on mapping each object to a point on the circle;
+		We pick an arbitary point on the circle and assign 0 to it;
+		We move clockwise along the circle and assign values;
+		We then take list of cache hosts and calculate a hash for each host based on host identifier, for eg, ip address or host name;
+		The hash value tells us where on the consistent hashing circle that host lives;
+		Each host will own all the cache items that live between it and the nearest clockwise neighbour; // it could be counter clockwise manner as well, doesn't matter;
+		So, for a particular item, when we need to lookup which cache host stores it, we calculate the hash and move backwards to identify the host;
+		What happens if we add a new host?
+			We calculate a hash for the new host and this host becomes responsible for it's own range of keys on the circle;
+			While it's counter clockwise neighbour becomes responnsible for a smaller set of keys;
+			new host takes over the responsibility of subset of keys from a counter clockwise neighbour;
+			Nothing has changed for all other hosts; which is what we wanted, to minimize the number of keys to re-hash;
+
+		Consistent hashing is far better than mod function, where only a significant set of keys are rehashed, when a new host is added or removed from a cache cluster;
+
+		
+
+
+
+
+Now, we know how the cache cluster host is selected for both put and get, but, who is actually doing the selection?
+On service side, who is responsible for running all the hash calculations and routing the requests to selected cache host?
+CacheClient is small and lightweight library, it knows about all cache hosts, it is responsible for selecting the cache host;
+All cacheclients should have the same list; 
+otherwise, different clients will have their own view of the consistent hasing circle and same key might be routed to different cache hosts;
+Clients store list of cache servers in sorted order(eg, by hash value) for faster lookup; Binary search can be used to find the cache server that owns the key;
+Cache Client talks to hosts using TCP or UDP; 
+If cache host is unavailable, client proceeds as though it was a cache miss;
+As you see, lists of cache hosts is the most important knowledge for cache client;
+What we need to understand is how this list is created, maintained and shared among all the clients;
+Let's discuss several options:
+	Option #1: 
+		We store the list of cache servers in a file and deploy this file to service host, using some CI/CD pipeline;
+		We can also use configuration management tool such as chef and puppet to deploy the file to every service host;
+		This is the simplest option, but not filexible;
+		Everytime there is a change to the file, we need to deploy it to every service host;
+
+	Option #2:
+		What if we keep the file and simplify the deployment process?
+			we may put the file in shared storage, such as S3 and make the service hosts poll for the file periodically;
+			To implement this, we may need to introduce a daemon process that runs on each service host and polls data from service once a minute or several minutes;
+			The drawback of this approach is we still need to maintain this file manually;
+			Make changes and deploy it manually, everytime a new host is added or removed;
+
+	Option #3:
+		It would be great if we could monitor the cache server health;
+		If something bad happens to the cache server, all service hosts are notified and they stop sending any requests to the unavilable cache server;
+		If a new cache server is added, all service hosts are notified and they start sending requests to it;
+		To implement this service, we will need a new service, called configuration service, like zookeeper, whose purpose is to discover cache hosts and monitor their health;
+		Each cache host registers itself with the configuration service and sends heartbeats to the configuration service periodically;
+		As long as heartbeats come, cache server kept registered in the system;
+		If heartbeats stop coming, configuration service unregisters a cache server that is no longer alive or accessible;
+		Every cache client grabs the list of registered cache hosts from the configuration service;
+
+		The third option is hardest from implementation standpoint and it's operational cost is higher;
+
+		one other benefit of using a configuration service for a distributed cache: 
+
+
+
+How to replicate data?
+	There are 2 cateogires of protocols for data replication;
+	Cat#1: gossip, epidemic broadcast trees, bimodal broadcast;
+	Cat#2: 2 or 3 phase commit, paxos, raft, chain replication;
+
+	Let's keep simple and use leader follower(known as master-slave) replication;
+
+	For each shard, we designate a master cache server  and several read replicas;
+	Replicas or follower try to be an exact copy of the master;
+	Everytime the connection b/w master and replica breaks, replica attempts to automatically reconnect to the master;
+	Replicas generally live in different data centers, so cache data is still available when one data center is not available;
+	All put calls go to the master node, while get calls are handled by both master and slave;
+
+	While talking about leaders, we need to mention how leaders are elected?
+		There are 2 options: 
+			We can rely on a separate component, called configuration service;
+			Configuration service is responsible for monitoring of both leaders and followers and failover;
+			If some leader is not working as expected, configuration service can promote a follower to leader;
+			Clients use configuration service to discover all cache servers;
+			configuration service is a distributed service by it's nature;
+			It usually consists of odd number of nodes(to achieve quorum easier), nodes are located on machine that fail independantly;
+			So that, configuration service remains available, incase of network failure;
+			Zookeeper is good candidate for configuration service;
+			Redis also implemented Redis Sentinel for this purpose;
+
+			If you want avoid separate component, we can implement leader election in the cache cluster;
+
+ok, by using replication, we increased availability, but did we achieve high availability? No!
+Why? there are still points of failure! We do data replication asynchronously, to have a better performance;
+We dont want to wait until leader replicates data to all followers;
+If leader got some data, but if it fails before passing it to any of the followers, data is lost!
+
+The first priority of cache is to be fast, if it loses data in some scenarios, it shouldn't be a big deal!
+
+Distributed cache we build favors performance and avialability over consistency; There are several things that lead to inconsistency;
+We replicate data asynchronously to have a better performance; So, a get call processed by master node may return a different value than a get call for same key processed by a replica node;
+
+Another incosistency is clients can have a different list of cache servers; Cache servers may go down and up again, and it is possible that a client writes values that no other client can read; yes, we can fix these issues;
+
+How to expire the data in cache?
+
+
+Security
+Monitoring and Logging
+	What if there is a complaint that deploying a cache doesn't improve the performance? how can we debug? 
+
+
+
+
+
+
+https://www.youtube.com/watch?v=iuqZvajTOyA
+
+Applications:
+	- 
+
+In next video, we will design a system for identifying heavy hitters(top k most frequent items), a popular system design iview question that takes many forms:
+	- Find most frequest search queries on Google;
+	- most viewed videos on youtube;
+	- most played songs on spotify;
+	- most shared posts on twiter/facebook/instagram;
+
+Memcache is most popular cache which is used by Google Cloud in its Platform As A Service.
+Besides Redis is an open-source in-memory distributed system which supports other data structures too such as distributed lists, queues, strings, sets, sorted sets. Besides caching, Redis is also often treated as a NoSQL data store.
+
+If you recollect CAP theorem, availability requirement may be replaced with consistency;
+
+
+
+
+
+                
+                
+                
+                 - 
+                
+                 
+
+
+                
+                
+                
+                There are 3 approaches: 
+                Single Master/Leader
+                Multi Master/Leader 
+                Masterless
+
+                
+                To accomidate more data, we need to split the cache into multiple pieces, called shard, distribute all of the shards across all available servers/nodes;
+Every cache client knows about all cache shards;
+Cache client uses a consistent hashing algorithm to pick a shard for storing and retrieving a particular cache key;
+
+Let's recall non-funcational requirements we defined in the beginning;
+we want to build fast, highly available, scalable distributed cache;
+
+Have we build highly performant cache? Yes, LRU cache implementation uses constant time operations;
+Cache client picks cache server in log n time, very fast;
+Connection b/w cache client and server is also fast;
+So performance is there;
+
+Scalability is also there; We can add more shards as needed and store more data;
+
+high availability is not there; if a node is not available, all cache data in that shard is not available, thus causing cache misses;
+
+So, how can we achieve high availability? replication!
+
+            </ul>
+        </p>
+
+        <p class="question"><strong>Why is it needed?</strong></p>
+        <p class="answer">
+            <ol>
+                <li>Problem Statement</li>
+            </ol>
+        </p>
+
+        <p class="question"><strong>What is Distributed Cache?</strong></p>
+        <p class="answer">
+            <ol>
+                <li>Problem Statement</li>
+            </ol>
+        </p>
+
+       
+       
+
+       
+
+
+        Distributed Cache Implementations: memcached, Redis, Aerospike, Hazelcast, Couchbase etc;
+        Cache As a Service: Amazon ElastiCache is a managed caching service for Redis and Memcached;
+
+        <br><br><br>
+        DUST:
+
+----------------------------
+Wht is the purpose of Distributed Cache?
+	It cuts downs the operational latency by minimizing network calls; It avoids recomputation;
+	It also avoid unnecessary load on source-of-truth data store;
+----------------------------
+        <p class="question"><strong>Why do we need a Cache?</strong></p>
+        <p class="answer">
+            
+	- For every request, instead of fetching the data from DB, we could store data in cache and retrieve from there; 
+	- If the required data is not available or stale, there in cache, then read from DB and store it cache;
+	- It improves the system performance;
+            <ul>
+                <li>As you know, accessing data from RAM is always faster than accessing it from the hard drive;</li>
+                <li>Caching means saving frequently accessed data in-memory, thus making data retrieval very fast;</li>
+                <li>You only want to go to database when you absolutely need it because scaling up database is relatively harder and also expensive.</li>
+                <li>With cache, the retrieval system first checks the cache for data needed; If it is not available, then it queries the main database and inserts it into cache;</li>
+            </ul>
+        </p>
+
+        Let's say you are using API Gateway and you need to cache some of the API responses instead of caching it on the backend.
+        You can cache it using the caching feature of API Gateway itself.
+        If service does not provide caching, then use cache database.
+        Most popular cache in AWS is Amazon ElasticCache for Redis and Amazon ElasticCache for memcached;
+
+        If you are exposing your API or a static website using Amazon Cloud Front, Cloud Front can also cache content;
+
+        Which business use-cases in your system require high throughput, fast response or low latency?
+Are you fine with data inconsistency if you use the cache?
+What kind of data do you want to store? Objects, static data, simple key-value pairs or in-memory data structures?
+Do you need to maintain the cache for transactional / master data?
+Do you need in-process cache or shared cache in a single node or distributed cache for n number of nodes?
+Do you need an open-source, commercial, or framework-provided cache solution?
+If you use distributed cache, what about performance, reliability, scalability, and availability?
+
+       memcached vs Redis
+       Memcached only supports LRU memory management. So analyze your use case carefully before choosing this solution.
+
+       <li>Both Redis and memcached are open source and Amazon Elasticsearch does some of heavy lifting for some of the management aspects of the Redis and memcached;</li>
+       <li>Amazon Elasticsearch is fully managed in-memory cache database, compatible with Redis and memcached;</li>
+
+       <li>When should you use Redis and when should you use memcached?</li>
+       <li>memcached is much simpler;</li>
+       <li>Redis supports a more complex use cases such as sorting or ranking all in-memory data etc;</li>
+       
+       <li>memcached supports only simple datatypes, where as Redis supports complex datatypes;</li>
+
+       <ul>Choose a Cache
+            <li>Caching Prerequisites</li>
+            <li>Before even deciding on the caching layer, you need to ask yourself the following questions:</li> 
+            <li>Which business use-cases in your system require high throughput, fast response or low latency?</li>
+            <li>Are you fine with data inconsistency if you use the cache?</li>
+            <li>What kind of data do you want to store? Objects, static data, simple key-value pairs or in-memory data structures?</li>
+            <li>Do you need to maintain the cache for transactional / master data?</li>    
+            <li>Do you need in-process cache or shared cache in a single node or distributed cache for n number of nodes?</li>
+            <li>Do you need an open-source, commercial, or framework-provided cache solution?</li>
+            <li>If you use distributed cache, what about performance, reliability, scalability, and availability?</li>
+       </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       - Approach #2 - Sharding
+           -- We divide the whole of set of keys that put in the cache into multiple shards;
+           -- Each partition is stored in a separate node;
+           
+           Goal of consistent hashing to distribute the load across all nodes evenly; It also makes the system scalable;
+           Each node is responsible for a range of keys;
+           However, as a node doesn't have any replicas, the system is still not highly available, fault-tolerant;
+   
+           <li>We could increase number of replicas of each node to 2 or more, to make it;</li>
+           
+           <li>In this scenario: 3 questions:</li>
+           <li>How to write? How to read? How to make all nodes a group have same data?</li>
+
+           <li>There are 2 approaches:</li>
+           <li>Single Master
+               <ul>
+                   <li>There is only 1 master;</li>
+                   <li>All writes go to master node;</li>
+                   <li>Master node is responsible for the order of writes;</li>
+                   <li>Master node is also responsible to replicate the data to secondary;</li>
+                   <li>how does the master replicates data? sync or async?</li>
+                   <li>It depends on the type of data;</li>
+                   
+                   <br>
+                   <li>If the data is never updated, then it can copy data asynchronously; </li>
+                   <li>What if master node dies? new master/leader election happens, one of the replicas is elected as master;</li>
+                   <li>New master doesn't have that data, causes cache miss;</li>
+                   <li>While master is copying data to replica, replica is in stand-by mode, it is never used for reading;</li>
+                   <li>Infact, we never use replicas for reading?</li>
+                   
+                   <br>
+                   <li>Since we have a non-functional requirement, that our data should be strongly consistent, let's go for synchronous replication;</li>
+                   <li>In the scenario, where data in teh cache can be updated at any point in time, we can't use asynchrnous replication; </li>
+                   <li>Reason: If a write happens and master node dies, another node became master; another update happens on same data; it will break strong consistency requirement;</li>
+                   <li></li>
+                   <li>when you write to master node, what if one of the secondary nodes goes down?</li>
+                   <li></li>
+                   <li>Recall CAP Theorem and Think about your requirements; You need to compromise on availability OR consistency;</li>
+
+               </ul>
+           </li>
+
+           <li>Multi Master
+               <ul>
+                   <li>There are 2 or more masters;</li>
+                   <li>Writes can go to any of the master node and those master nodes are responsible for replicating the data to other nodes;</li>
+               </ul>
+           </li>
+           <li>Masterless
+               <ul>
+                   <li>There is no master, as such;</li>
+                   <li>Writes can go to any of the node and each node is responsible for replicating the data to other nodes;</li>
+               </ul>
+           </li>
+
+
+        <ul>References
+            <li>https://medium.datadriveninvestor.com/all-things-caching-use-cases-benefits-strategies-choosing-a-caching-technology-exploring-fa6c1f2e93aa</li>
+        </ul>
+
+        <br>
+        <br>
+        <ul>TODO
+            <li>https://www.educative.io/courses/complete-guide-to-redis</li>
+            https://www.techtalksbyanvita.com/post/caching-strategies-for-distributed-systems
+
+        </ul>

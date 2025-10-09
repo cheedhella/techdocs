@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>System Design Basics</title>
+        <link rel="stylesheet" href="../resources/css/styles.css" />
+        <link rel="stylesheet" href="../resources/css/highlight.min.css" />
+        <script src="../resources/js/highlight.min.js"></script>
+
+        <script>
+            hljs.initHighlightingOnLoad();
+        </script>
+        <style>
+            code {
+                width: 900px;
+            }
+        </style>
+    </head>
+    <body>
+        <ul>
+            <li>What do you think is the most important thing required for a successful system design interview?</li>
+            <li>Interviewer asked us to design a system that does counting, for eg, something that counts views of a video OR likes on instagram/facebook?</li>
+            <li>More often that not, problem statement is vague OR more general manner;</li>
+            <li>For eg, we need to monitor performance of different applications;</li>
+            <li>We need to count how many requests go through the service, how many errors the service produce, average response time;</li>
+            <li>There is nothing that stops the Interviewer to ask the question in generic manner, like analyze data in real time;</li>
+            <li>What does data analysis means? who sends us data? who uses results of this analysis? What real-time really means?</li>
+            <li>This and many other questions need to be clarified;</li>
+            <li>Even if the question is clear you, there are 2 reasons why you should ask questions:</li>
+            <li>It gives the interviewer an idea on, how you deal with ambiguity?</li>
+            <li>Whether you can identify the key pieces of the system and define a scope of the problem;</li>
+            <li>Because, system design problems are usually open ended;</li>
+            <li>It is impossible to solve those problems within 60 or 90 minute interview;</li>
+            <li>second reason</li>
+            <li>There might be many solutions to a problem;</li>
+            <li>Only when we fully understand the features of the system to be designed, we can come up with proper set of technologies and building blocks; </li>
+
+            <li>If you ask MySQL developer to solve count problem, he will explain you why mysql is a good fit; </li>
+            <li>Engineer with profound experience in NoSQL databases will explain why cassandra is a good fit for counting things at large scale;</li>
+            we mgiht use distributed cache such redis for count stuff;
+            Experts in cloud computing will solve the problem using public cloud services only;
+            Engineers with experience in batch processing can solve the problem using hadoop map-reduce; 
+            So, there are so many approaches to solve a problem; 
+            But, all of them are not equal, they have their pros and cons;
+
+            <li>MY recommendtaion is based on 4 things:
+            </li>
+            <li>Users, 
+                <ul>
+                    <li>Who will use the system? Is it all youtube viewers who will see the views count for a video OR is it per hour statistic that is available only to video owner OR may be it is used by machine learning models to generate recommendations?</li>
+                    <li>How the system will be used? Data generated may be used by marketing department only to generate montly reports, it means data is not retrieved often; Data is sent to recommendation service in real-time, it means data is retrieved at very high pace; </li>
+                    <li>Questions in this catogory will help to understand what data we store?</li>
+                </ul>
+            </li>
+            <li>Scale, 
+                <ul>
+                    <li>It gives us a clue on how much data is coming to the system and how much data is retrieved from the system?</li>
+                    <li>So, we should ask:</li>
+                    <li>how many read requests per second, the system need to process?</li>
+                    <li>how much data is queried per request?</li>
+                    <li>how many video views are processed per second?</li>
+                    <li>Can there be spikes in the traffic? Should we deal with it? </li>
+
+                </ul>
+                how our system will handle growing amount of data?</li>
+            <li>Performance, know how fast our system must be;
+<ul>
+    <li>What is the expected write-to-read delay? For eg, If we count the views several hours later than these views actually happended, both batch processing and stream processing options can be considered;</li>
+    <li>What if time matters? i.e. we need the views count in real time? In this case, batch processing is not an option; </li>
+    <li>What is the expected latency for read queries? how fast data must be retrieved from the system? If interviewer tells response time must be as small as possible, it's a hint that we must count views when we write data, we should do minimal or no counting, while we read data; In other words, data must be already aggregated;</li>
+</ul>
+
+            </li>
+            <li>Cost, understand budget constraints;
+                Cost of developement, Cost of maintanance;
+                <ul><li>questions in cost category will help us evaluate technology stack;</li>
+                    <li>For eg, if asked to minimize development cost, we should lean towards well regarded open source frameworks;</li>
+                    <li>If maintanance cost is a primary concern, we should lean towards public cloud services;</li>
+                </ul>
+            </li>
+
+            During requirements clarification, interviewer starts to understand your level of expertise in system design;
+            As with coding interviews, if you don't ask questions, that is a warning sign for the interviewer;
+            along with 4 categories, think about data - what data, how it gets in and how it gets out of the system? dont worry about time too much;
+            Spend additional 5 minutes clarifying requirements and scope than find yourself solving a different or more complex problem than the interviewer actually asked;
+            The end goal of requirement clarification is to get us closer to defining both functional and non-functional requirements;
+
+            Functional requirement: It refers system behavior or APIs - a set of operations that the system supports; This is what our system will do;
+                countViewEvent(videoId);
+                countEvent(videoId, EventType(view/like/share etc)); // more generalized
+                We can go one step further, and make the system calculate not only count function, but other functions as well, like sum, avg etc;
+                processEvent(videoId, EventType, function such as sum/count/average); // By supporting sum function, we can calculate a metric such as total watch time for a video;
+                processEvents(List of video event); // Batch processing
+                
+                Simillarly thought process can be applied for data retrieval API;
+                // System has to return video views count for a time period;
+                getViewCount(videoId, startTime, endTime); // getViewCount is an action; 
+                getViewCount(videoId, EventType, startTime, endTime); // If you want count not only for views, but also for likes and shares?
+                getStats(videoId, EventType, aggregationType, startTime, endTime); // get statistics
+
+
+            Non-functional requirement: system qualities such as fast, fault-tolerant, secure; This is how a system supposed to be;
+                Mostly interview will not tell us non functional requirements; He will challenge us by mentioning big scale and high performance, as it is hard to achieve both at the same time; we need to find trade-offs;
+                I recommend you focus on scalability, performance, availability as a top priority requirements;
+                We need to design a system, that is:
+                scalable - system should handle tens of thousands of requests per second;
+                highly performance - few tens of milliseconds to return view count for a video;
+                high availability - we want view count statistic to be shown to the users all the time, even when there are n/w or hardware failures in the system;
+
+
+                Although, these 3 are interesting our primary concerns, lets talk about 2 other interesting concerns;
+                Consistency - Let's recall CAP theorm and talk about consistency a bit; CAP theorem tells me I should choose b/w availability and consistency; I will choose availability;
+                Cost minimization - 
+
+
+                
+                
+        </ul>
+
+
+        <ul>We have come to next stage of system design: High Level Architecture;
+            We need a database to store data;
+            We will need a webservice that processes incoming video view events and stores them in database;
+            To retrieve data from database, let's introduce another webservice;
+            Nothing scary, so far, right?
+            At this point, we don't yet have a clear vision of all pieces of the design;
+            So, we just throw some very high level components to the whiteboard;
+            But, what do we do next?
+            High chances that interviewer may start asking questions about any of the components that we outlined;
+            But, we might not be just comfortable discussing any component just yet;
+
+            I have so many questions; I would better drive this conversation, otherwise, I may quickly get lost myself in questions;
+            This is like assembling a puzzle; Interviewer can assemble the puzzle starting from any color group;
+            You can start with something that is very simple;
+
+            Start with data - what data we want to store and how?
+            We have 2 options for what data we want to store?  There are pros and cons of each option:
+                We might store each individual view event; 
+                    When we store individual event, we store all attributes of the event: video identifier, timestamp, country, device type, operating system etc;
+                    Pros:
+                        - fast writes -> - individual events can be stored really fast; we just get the event and push it to database;
+                        - Later we can slice and dice the data however we need; // we can filter based on specific attributes and aggregate based on some rules;
+                        - If there is a bug in the business logic, we can recalculate the numbers from scratch;
+                    Cons
+                        - slow read -> We can't read data quickly;
+                        - When view count is requested, we need to count each and every individual event; It takes time;
+                        - another biggest disadvantage is: It takes lot of money to store all the raw events; Youtube generates billions of view events per day;
+                We may aggregate events on the fly and store aggregated data;
+                we can calculate total count for some time period, let's say one minute, and we discard the event;
+                    Pros
+                        - another nice property of aggregated data: we can use this for decision making in real time; data is ready for decision making; we can send the data to a recommedanation service or trending service;
+                        - fast reads 
+                    Cons
+                        - slow writes;
+                        - ability to filter data or aggregate it differently is very limited;
+                        - This approach requires us to build data aggregation pipeline;
+                            -- we somehow need to pre-aggregate data in-memory before storing it in database;
+                            -- This is not an easy task, later you will see why?
+                        - It is hard or even impossible to fix any errors; 
+                            -- Let's say there is a bug in the aggregation logic, how do we fix after the total count is fixed?
+            So, which option to choose? This is where we need interviewer to help us make the decision;
+                Ask the interviewer about expected data delay b/w when event happended and when it is processed?
+                If it is no more than several minutes, we should aggregate the data on the fly;
+                If several hours is ok, we can store raw events and process them in the background;
+                Former approach is called stream data processing; Later approach is called batch data processing;
+                Interviewer will let us know what option he is interested in more;
+            In this case, I will combine both the approaches;
+                - We can store the raw events; because there are lot of them, let's store them only for few days or weeks and purge old data;
+                - We can also calculate and store numbers in real-time; So, statistics are available to users right away;
+                - By storing both raw events and aggregated data, we get best of both the worlds: fast reads, ability to aggregate data differently and recalculate statistics, if there are any bugs or failures on real-time path;
+                - But, there is a price to pay for this flexibility, the system becomes more complex and expensive;
+
+            Further, in this topic, we focus on real-time aggregation option, as I find it more educational from the system design perspective;
+
+            
+            
+
+
+
+
+
+        
+
+                -     
+        
+
+
+
+
+        </ul>
+
+
+        <ul>
+            Where to store the data?
+            Interviewer wants to know the specific database name? and why?
+            We should know that both SQL and NoSQL databases can scale and perform well;
+            So, we want to evaluate both the options;
+            <ul>
+                <li>For this, we should recall non-functional requirements;</li>
+                <li>Scalability</li>
+                <li>Performance</li>
+                <li>Availability</li>
+                <li>So, we should evaluate databases against above requirements; Database choosen should scale well for both reads and writes;</li>
+                <li>How to scale writes?</li>
+                <li>How to scale reads?</li>
+                <li>How to make both reads and writes fast?</li>
+                <li>How not to lose data, in case of network faults and network partitions?</li>
+                <li>How to achieve strong consistency? What are the tradeoffs?</li>
+                <li>How to recover data incase of an outage?</li>
+                <li>How to ensure data security?</li>
+                <li>How to make it extensible for data model changes in the future?</li>
+                <li>We need to pick hardware - cloud or on-premise data centers;</li>
+                <li>evaluate the cost of the solution - how much money will it cost all?</li>
+                
+                Let's add more requirements to the list along the way; 
+            </ul>
+
+            <ul>
+                <li>SQL Databases</li>
+                <li>Things are simple when we store all our data in a single database machine;</li>
+                <li>But, when a single machine is not enough, we need to introduce more machines and split data between them;</li>
+                <li>This procedure is called Sharding or horizontal Partitioning;</li>
+
+                <li>Each shard stores a subset of all the data;</li>
+                <li>Because we have several machines, services that talk to the database need to know how many machines exist and which one to pick to store and retrieve the data;</li>
+                <li>We discussed before that, we have processing service that stores data in the database and query service that retrieves data from the database;</li>
+                <li>We could have made both of these services to call every database machine directly;</li>
+                <li>A better option is introduce a light weight proxy server that knows about all database servers and routes traffic to the correct shard;</li>
+                <li>Now, both processing and query services can talk to proxy only; They don't need to know about each and every database machine anymore; But, cluster proxy has to know;</li>
+                <li>Moreover, proxy needs to know when some shard dies or become unavailable due to network partition;</li>
+                <li>If a new shard has been added to database cluster, proxy need to know about it;</li>
+                <li>How do we achieve it?</li>
+                <li>We introduce a new component called configuration-service;</li>
+                <li>configuration-service maintains a health check connection to all shards; So, it always knows what database machines are available;</li>
+                <li>So, cluster proxy calls a particular shard;</li>
+                <li>Instead of calling database instance directly, we can introduce one more proxy - shard-proxy, that sits in front of the database;</li>
+                <li>Shard proxy will help us in many different ways: it can cache query results, monitor database instance health, publish metrics, terminate queries that take too long to return data and many more;</li>
+                <li>Great! This setup will help us to address requirements such as: scalability and performance;</li>
+                <li>But, availability is not yet addressed;</li>
+
+                <li>What if database shard is dies? How to make sure data is not lost?</li>
+                <li>Answer is replicate the data;</li>
+
+                <li>Let's call each existing shard a master shard or a leader;</li>
+                <li>For every master shard, we introduce a copy of it, called replica or follower or read replica;</li>
+                <li>We call it read replica b/c writes still go through a master shard, but reads may go through both master or follower;  </li>
+                <li>We also put some replicas to a different datacenter than the master shard, so that if the whole data center goes down, we still have a copy of the data available;</li>
+                
+                <li>So, when store data request comes, based on the information provided by configuration-service, cluster proxy sends data a shard;</li>
+                <li>Data is either synchronously or asynchronously replicated to a corresponding read replica;</li>
+                <li>When read data request comes, cluster proxy may retrieve data either from a master or replica;</li>
+
+                <li>Idea we just discussed is actually what Youtube is actually using;</li>
+                <li>They have built a database solution to scale and manage large clusters of MySQL instances; It's called Vitess;</li>
+
+                <li>Great, we know how to scale SQL databases; But, this solution doesn't seem simple, right?</li>
+                <li>We have all these proxies, configuration-service, leaders, followers etc;</li>
+                
+                <li>Maybe, we can simply the things little bit;</li>
+                <li>Let's take a look at what NoSQL databases can offer us; More specifically, Apache Cassandra;</li>
+                <li>In NoSQL world, we also split data into chunks - shards, also known as nodes;</li>
+                <li>But, instead of having leaders and followers, we say each shard is equal;</li>
+                <li>We, no longer need configuration-service to monitor the health of the nodes;</li>
+                <li>Instead, let's allow shards to talk to each other and exchange information about their state;</li>
+                <li>To reduce network load, we don't need each shard to talk to every other shard;</li>
+                <li>Every second a shard may exchange information with few other shards, no more than 3;</li>
+                <li>Quicly enough state information about every node propagates throughout the cluster; This procedure is called a gossip protocol;</li>
+                <li>ok, each node in the cluster knows about other nodes; and this is a big deal;</li>
+                <li>Remember, previously we used cluster proxy component to route requests to a particular shard;</li>
+                <li>As cluster proxy was the only one who knew about all shards; But, now every node knows about each other;</li>
+                <li>So, clients of our database no longer need a special component, called cluster proxy;</li>
+                <li>Clients can call any node in the cluster and that node decides where to forward the request further;</li>
+                
+                <li>Let's elaborate on this;</li>
+                <li>Processing service makes a call to store views count for video B; and let's say node 4 is selected to serve this request;</li>
+                <li>We can choose a simple round robin algorithm or may be a node that is closer to the client in terms of network distance, to choose the initial node;</li>
+                <li>Let's call this node 4 a coordinator node;</li>
+                <li>The coordinator node needs to decide which node stores data for the requested video;</li>
+                <li>We can consistent hashing algorithm to pick the node;</li>
+
+                <li>As you see, node1 should be used to store the data for the video B;</li>
+                <li>Coordinator node will make a call to node 1 and wait for the response;</li>
+                <li>Actually, nothing stops coordinator node to call multiple nodes to replicate data;</li>
+                <li>For example, 3 nodes if want 3 copies of data; Waiting for 3 acknowledgements from replicas may be too slow, so, we may consider the write as successful, as soon as only 2 replication requests are succeeded;</li>
+                <li>This approach is called quorum writes;</li>
+                <li>Similar to quorum writes, there is a quorum reads approach;</li>
+
+                <li>When query service retries views count for video B, coordinator node 4 will initiate several read requests in parallel;</li>
+                <li>In theory, coordinator node may get different responses from replica nodes;</li>
+                <li>Why because, some node could have been unavailable when write request happended;</li>
+                <li>That node has stale data right now, other 2 nodes has up-to-data right now;</li>
+                <li>read quorum defines a minimum number of nodes that have to agree on the response;</li>
+                <li>Cassandra uses version numbers to determine staleness of the data;</li>
+                <li>Similar to SQL databases, we want to store copies of data across several different data centers, for high availability;</li>
+            </ul>
+
+            <ul>
+                <li>Do you remmeber where else on this channel, we saw a practical application of consistent hashing algorithm?</li>
+                <li>Right, when we designed distributed cache;</li>
+            </ul>
+
+            <ul>
+                <li>Another important concept is consistency;</li>
+                <li>Remember when we define non-functional requirements, we choose availability over consistency;</li>
+                <li>It means we prefer to show stale data rather than showing no data at all;</li>
+
+                <li>Let me clarify this!</li>
+                <li>Synchronous data replication is slower, we usually replicate data asynchronously;</li>
+                <li>In case of a leader-follower replciation, for example, some read replicas may be behind their master;</li>
+                <li>That leads to a situation, where different users see different views count for a video;</li>
+                <li>This consistency is temporary, over time all writes will propagate to replicas;</li>
+                <li>This effect is known as eventual consistency;</li>
+
+                <li>Cassandra actully extends the concept of eventual consistency by offering tunable consistency;</li>
+                <li>Let's discuss this big topic separately and in more details;</li>
+                <li>After discussing what we store and where, let's think how we can store the data;</li>
+
+                <li>There is a big difference how we do data modelling for SQL and NoSQL databases;</li>
+                <li>In case of RDBMS, we usually start with defining nouns in the system;</li>
+                <li>We then convert these nouns into tables and use foreign keys to refer related data in these tables;</li>
+                
+                <li>Let's take a look at the example;</li>
+                <li>We want to build a report that shows the following 3 entites: information about video, number of total views per hour for last several hours, information about the channel this video belongs to; </li>
+                <li>We pass video identifier as input for this report;</li>
+                <li>In a relational database, we would define the following 3 tables: Video info table that contains info about videos;</li>
+                <li>video stats table that contains total views accumulated for each hour;</li>
+                <li>channel_info table that stores information about video channels;</li>
+
+                <li>To generate report mentioned above, we run a join query that retrieves data from all 3 tables;</li>
+                <li>Important property of RDBMS is - data is normalized;</li>
+                <li>It simply means we minimize data duplication across different tables;</li>
+                <li>For eg, we store video names in the video info table only; Otherwise, if some video name changes, we have to change it in several places, which may lead to inconsistent data;</li>
+                <li>So, normalization is good for relation databases;</li>
+
+                <li>But, NoSQL databases promote a different paradigm;</li>
+                <li>They say we no longer think in terms of nouns, but in terms of queries that will be executed in the system we design and denormalization is perfectly normal;</li>
+                <li>Not something that we always have to do, but something that we should not be afraid of;</li>
+                <li>In Cassandra, report mentioned above can be logically represented as shown in below table;</li>
+
+                <li>We store everything required for the report together;</li>
+                <li>Unlike RDBMS, isntead of adding rows, we keep adding columns for every next hour;</li>
+                <li>Great! we have covered storage portion of our design;</li>
+                <li>By now, you must have got an idea how SQL and NoSQL can be used for our solution;</li>
+                <li>What database would you choose? let me know in the comments! </li>
+
+                <li>I also would like to clarify one thing!</li>
+                <li>As you know, there are 4 types of NoSQL databases: column, document, key-value and graph;</li>
+                <li>So far, we have used Cassandra as a representative of NoSQL databases;</li>
+                <li>We choose Cassandra, b/c it is fault-tolerant, scalable(both read and write throughput increases linearly as new machiens are added); </li>
+                <li>It supports multi-datacenter replication and works well with time-series data;</li>
+                <li>Ofcourse, other options are available!</li>
+
+                <li>For a typical system design interview, we usually don't need to know architectures of different databases;</li>
+                <li>But, we need to know advatnages and disadvantages of it, when to use what;</li>
+                <li>Please don't think that all NoSQL databases have same architecture as the one we discussed;</li>
+                <li>Cassandra is a wide column database, that supports asynchronous masterclass replication;</li>
+                <li>But, no other NoSQL databases have different architectures;</li>
+
+                <li>For eg, MongoDB is a documente-oriented database, uses leder based replication;</li>
+                <li>HBase is column oriented data store, similar to Cassandra, has a master based architecture as well;</li>
+                <li>We will talk about different database design principles on this channel and when to use which particular database type;</li>
+            </ul>
+
+            <ul>
+                <li>Let's define what data processign really means?</li>
+                <li>When youtube users open some video, we want total view count for this video to be displayed immediately;</li>
+                <li>It means we need to calculate view count on the fly, in real-time;</li>
+                <li>When the video owner opens video statistics for the video, we want to show per hour counts;</li>
+                <li>So, processign basically means we get a video view event, and increment several counters - total, per hour counters;</li>
+            </ul>
+
+            <ul>
+                <li>How to scale? - We want processing service to scale together with increase in video views?</li>
+                <li>How to achieve high throughput? - we want to process events quickly;</li>
+                <li>We don't want to lose data, either when some processing node crashes or when database becomes unavailable?</li>
+                <li>Ask yourself how to make event processing scalable, reliable, and fast?</li>
+                <li>This is another example of why knowledge and preparation are crucial for system design interviews;</li>
+                <li>For example, Scalable = partitioning; Reliable = replication and checkpointing; Fast = keep things in-memory and avoid disk reads;</li>
+                <li></li>
+            </ul>
+
+            <ul>
+                <li>Before diving into Detailed Design, let's agree on few things:</li>
+                <li>Should we pre-aggregate data in the processing service?</li>
+                <li>We have 2 options on how to update counters in the database?</li>
+                <li>In the first option, the processing service increments counter for every incoming event; </li>
+                <li>Meaning if 3 users open video A, the processing service simply increments the total count in the database 3 times;</li>
+                <li>In the 2nd option, we accumulate data in the processing service memory for some period of time, say several seconds and add accumulated value to database counter;</li>
+                <li>I claim 2nd option is better, for large scale systems;</li>
+                <li>Please provide your arguments in comments;</li>
+            </ul>
+
+            <ul>
+                <li>Push or Pull?</li>
+                <li>Push means other service sends the events synchronously to the processing service;</li>
+                <li>Pull means processing service pull events from some temporary storage;</li>
+                <li>Although, the answer is that, both options are totally valid, and we can make both work, pull option has more advantages;</li>
+                <li>As it provides better support for fault-tolerant, and easier to scale;</li>
+                <li>For eg, we have 2 users opening 2 different videos A and B;</li>
+                <li>processing-service updates the counter in-memory and returns successful response back to the clients and the machine crashes without sending this data to the database; Data is lost!</li>
+                <li>In case of pull approach, events generated are stored in a temporary storage first;</li>
+                <li>processing-service machine pulls the events and updates in-memory counters; If the machine crashes, we still have events in the storage and can re-process them;</li>
+                <li></li>
+            </ul>
+
+            <ul>
+                <li>Checkpointing</li>
+                <li>Here we have temporary storage and as you may see, I intentionally draw it as a queue;</li>
+                <li>Because, when events arrive, we put them into storage in order, one by one;</li>
+                <li>Fixed order allows us to assign an offset for each event in the storage;</li>
+                <li>This offset indicates event position in the sequence;</li>
+                <li>Events are consumed always sequentially;</li>
+                <li>Everytime an event is read from the storage, the current offset moves forward;</li>
+                <li>After we processed several events and successfully stored them in the database, we write checkpoint to some persistent storage;</li>
+                <li>If processign service machine fails, it will be replaced with another one and this new machine will resume processing where the failed machine left off;</li>
+                <li>It is very important concept in stream data processing;</li>
+            </ul>
+
+            <ul>
+                <li>Partitioning</li>
+                <li>We already discussed it when we talked about databases;</li>
+                <li>Main idea remains same when applied to stream data processing;</li>
+                <li>Instead of putting all events in a single queue, let's have several queues;</li>
+                <li>Each queue is independant from the others;</li>
+                <li>Every queue physically lives on it's own machine and stores a subset of all the events;</li>
+                <li>For eg, we compute a hash based on video identifier and use this hash number to pick a queue;</li>
+                <li>As you may see, partitioning allows us to parallelize events processing;</li>
+                <li>More the events we get, we create more partitions;</li>
+            </ul>
+
+            <ul>
+                <li>Processign Service</li>
+                <li>We discussed so far that processign service reads events one by one, counts events in memory and flushes these counts to database periodically;</li>
+                <li>So, we need a component to read events;</li>
+                <li>Parition consumer establishes and maintains a TCP connection with paritition to fetch data;</li>
+                <li>Wecan think of it as an infinity loop that polls data from the partition;</li>
+                <li>When consumer reads events, it desieralizes it;</li>
+                <li>Meaning it converts byte array into actual object;</li>
+                <li>Usually, consumer is a single threaded component; Meaning we have a single thread that reads events;</li>
+                <li>We can implement multi-threaded access;</li>
+                <li>When several threads read from the partition in parallel;</li>
+                <li>But, this approach comes with a cost, checkpointing becomes more complicated and it is hard to preserve order of events if needed;</li>
+                <li>Consumer does one more important thing - helps to eliminate duplicate events;</li>
+                <li>If the same message was submitted to the partition several times(later we will see why this happens?), we need a mechanism to avoid double counting;</li>
+                <li>To achieve this we use a cache that stores unique event identifiers, for say last 10 minutes;</li>
+                <li>If several identical messages arrive within 10 minutes interval, only one of them(the first one) will be processed;</li>
+                
+                <li>Event then comes to the component that does in-memory counting, let's call it aggregator;</li>
+                <li>Think of it as a hash table that accumulates data for some period of time;</li>
+                <li>Periodically, we stop writing to the current hashtable and create a new one;</li>
+                <li>A new hashtable keeps accumulating incoming data;</li>
+                <li>While old hashtable is no longer counting any data and each counter from the old hashtable is sent to the internal queue for further processing;</li>
+                
+                <li>Why do we need internal queue? Why can't we directly send data to database?</li>
+                <li>Glad you asked! Remember we have a single thread that reads events from the partition;</li>
+                <li>But, nothing stops us from processing these events by multiple threads, to speed up processing; especially, if processing takes time;</li>
+                <li>By sending data to the internal queue, we decouple consumption and processing;</li>
+                <li>The best analogy that I could think of is a security check queue at the airport;</li>
+                <li>We can have a single person that quickly checks passport and ticket for every passenger, but we need several lines for bags screening, as it takes much more time;</li>
+                <li>You may argue whether we should put internal queue before aggregator component, it is up to you;</li>
+                <li>Both options are fine!</li>
+                <li>Now, we are ready to send pre-aggregated values to database;</li>
+                <li>We need a component responsible for it, let's call it database writer;</li>
+                <li>Database writer could be a single threaded or multi-threaded component;</li>
+                <li>Each thread takes a message from the internal queue and stores pre-aggregated views count in the database;</li>
+                <li>Single threaded version makes checkpointing easier;</li>
+                <li>But, multi-threaded version increases throughput;</li>
+                <li>Think about it for a moment and let me know in the comments which version you like better;</li>
+                <li>No need to worry if data flow is not completely clear to you, we will have a simple simulation a bit later;</li>
+                <li>It should help to further clarify the whole process;</li>
+                <li>Meanwhile, I would like to point 2 more important features of the database writer;</li>
+                <li>The first concept is called a dead letter queue;</li>
+                <li>Dead letter queue is a queue to which messages are sent if they can't be routed to their correct destination;</li>
+                <li>Why do you thing we may need one?</li>
+                <li>You are correct, to protect ourselves from database performance or availability issues;</li>
+                <li>If database becomes slow or we cannot reach database due to network issues, we simply push messages to the dead letter queue;</li>
+                <li>There is a separate process that reads messages from this queue and sends them to the database;</li>
+                <li>This concept is widely used when you need to preserve data incase of downstream services degradation;</li>
+                <li>So, you may apply it in many system designs;</li>
+                <li>Another viable option is to store undelivered messages on a local disk of the processing of the service machine;</li>
+                
+                <li>The second concept is data enrichment;</li>
+                <li>Remember, how we store data in Cassandra? We store it the way data is queried, right?</li>
+                <li>For eg, if we want to show video title in the report, we need to store video title together with views count;</li>
+                <li>Same is true for channel name and many other attributes that we may want to dispaly;</li>
+                <li>But, all these attributes don't come to the processing service with every video view event;</li>
+                <li>Event contains minimum information, like video identifier and timestamp;</li>
+                <li>It doesn't need to contain video title, channel name or video creation date;</li>
+                <li>So, this information comes from somewhere else, right? some database</li>
+                <li>But, the trick here is that this database lives on the same machine as the processing service;</li>
+                <li>All these additional attributes should be retrieved from this database really quickly;</li>
+                <li>Thus having it on the same machine eliminates a need for remote calls; </li>
+                <li>Such databases are called embedded databases;</li>
+                <li>For eg, linkedin uses this concept for who viewed your profile feature;</li>
+                <li>When they show additional information about people who viewed your profile.</li>
+                <li>For eg, how many people have recruiter job title;</li>
+                
+                <li>One last concept, I would like to mention is state management;</li>
+                <li>We keep counters in memory for some period of time - either in in-memory store or internal queue;</li>
+                <li>Everytime we keep anything in memory, we need to understand what to do when machine fails and this in-memory state is lost;  </li>
+                <li>But, that is easy, you may say;</li>
+                <li>We have events stored in the partition, let's just recreate the state from the point where we failed;</li>
+
+                <li>In other words, we just reprocess events one more time; This is a good idea!</li>
+                <li>It will work well if we store data in-memory for a relatively short period of time and state is small;</li>
+                <li>Sometimes, it may be hard to recreate the state from raw events from scratch;</li>
+                <li>The solution in this case is periodically save the entire in-memory data to a durable storage;</li>
+                <li>and the new machine just reloads this state into it's memory when started;</li>
+                <li>We have looked inside the processing service;</li>
+                <li>We are now ready to finalize the data ingetion pipeline;</li>
+
+                <li>From the moment, events appear in our counting system, </li>
+                <li>we know already that we have a set of partitions and processign service that reads events from them, count the data in memory for some short period of time and stores total count in the database; </li>
+                <li>Someone needs to distribute data across partitions, right?</li>
+                <li>Let's have a component called partitioner-service;</li>
+                <li>Let's also have a load balancer component in front of our partitioner service;</li>
+                <li>To evenly distribute events across partitioner service machines, </li>
+                <li>when user opens a video, request goes through API gateway, component that represents a single - entry point into the video content delivery system;</li>
+                <li>API gateway routes client requests to backend services;</li>
+                <li>Our counting system may be one of such backend services;</li>
+
+                
+
+            </ul>
+            <ul>
+                <li>We talked about database and processign service in detail;</li>
+                <li>One more important component to mention is the partitioner service client;</li>
+                <li>Now, lets cover remaining 3 components of the data ingetion path: partitioner service client, load balancer, partitioner service and partitions;</li>
+                <li>We will discuss many ideas these components are built upon and we will start with some basics;</li>
+                
+                <li>blocking vs non-blocking IO</li>
+                <li>When client makes a request to the server, server processes the request and sends back a response;</li>
+                <li>Client intiates the connection by using sockets;</li>
+                <li>When client makes a request, socket that handles the connection on the server side is blocked;</li>
+                <li>This happens within a single execution thread;</li>
+                <li>So, the thread that handles that connection is blocked as well;</li>
+                <li>When another client sends a request at the same time, we need to create one more thread to process that request;</li>
+                <li>This is how blocking systems work;</li>
+                <li>They create one thread per connection;</li>
+
+                <li>Modern multi-core machines can handle hundreds of concurrent connections each;</li>
+                <li>But, let's say server starts to experience a slow down and number of active connections and thread increases.</li>
+                <li>When this happens, machines can go into death spiral and the whole cluster of machines may die;</li>
+                <li>Remember, we designed rate limiter in one of the previous videos;</li>
+                <li>This is exactly why we need rate limiting solution, to help to keep the systems stable during traffic peeks;</li>
+                
+                <li>Alternative to blocking IO is non-blocking IO;</li>
+                <li>When we can use a single thread on the server side to handle multiple concurrent connections;</li>
+                <li>Server just queues the request and the actual IO is processed at some point later;</li>
+                <li>Piling up requests in the queue are far less expensive than piling up threads;</li>
+                <li>Non-blocking systems are more efficient and as a result has high throughput;</li>
+                
+                <li>You may be wondering, if non-blocking systems are so great, why we still have so many blocking systems out there?</li>
+                <li>Because, everythign has a price!</li>
+                <li>The price of non-blocking systems increased complexity of operations;</li>
+                <li>Blocking systems are easy to debug and this is a big deal!</li>
+                <li>In blocking systems we have a thread per request, and we can easily track progress of the request, by looking into the thread stack;</li>
+                <li>Exceptions pop up the stack and it is easy to catch and handle them!</li>
+                <li>We can use thread local variables in blocking systems;</li>
+                <li>All these familar concepts either don't work at all OR work differently in non-blcoking world;</li>
+                
+                <li>Moving on to batching and buffering, there are thousands of video events happening on youtube every second;</li>
+                <li>To process all these requests, API gateway has to be big in size; thousands of machines;</li>
+                <li>If we then pass each individual event to the paritioner service, partiioner service cluster of machines has to be big as well;</li>
+                <li>This is not efficient!</li>
+                <li>we somehow combine events together and send several of them in a single request to the partitioner service;</li>
+                <li>This is what batching is about!</li>
+                <li>Instead of sending each event individually, we first put events into a buffer.  </li>
+                <li>We can then wait upto several seconds before sending buffer's content or until batch fills up, whichever comes first;</li>
+                <li>There are many benefits of batching:</li>
+                <li>It increases throughput and it helps to save on cost, request compression is more effective;</li>
+                <li>But, there are drawbacks as well!</li>
+                <li>It introduces some complexity both on the client and server side;</li>
+                <li>For eg, think of a scenario when a partitioner service processes a batch request and several events from the batch fail, while other succeed;</li>
+                <li>Should we resend the whole batch? or only failed events? what do you think? </li>
+
+            </ul>
+
+            <ul>
+                <li>The next concept is timeouts!</li>
+                <li>Timeouts define how much time a client is willing to wait for a response from the server;</li>
+                <li>We have 2 timeouts: connection timeout and request timeout;</li>
+                <li>Connection timeout defines how much time a client is willing to wait a connection to establish;</li>
+                <li>Usually this value is relatively small, tens of milliseconds;</li>
+                <li>Because, we only try to establish a connection, no heavy request processing is happening just yet;</li>
+                <li>Request timeout happens when request processing takes too much time, and a client is not willing to wait any longer;</li>
+                <li>To choose a request timeout value, we need to analyze latency percentiles;</li>
+                <li>For eg, we measure latency of 1% of the slowest requests in the system and set this value as a request timeout;</li>
+                <li>It means that about 1% of requests in the system will timeout;</li>
+                <li>What should we do with these failed requests?</li>
+                <li>Let's retry them;</li>
+                <li>May be we just hit a bad server machien with the first request;</li>
+                <li>The second attempt may hit a different machine, increasing our chances to succeed;</li>
+                <li>But, we shold be smart when we retry!</li>
+                <li>Because, if all clients retry at the same time or do it aggressively, we may create a so-called retry strom event and overload the server with too many requests;</li>
+                <li>To prevent this, we should use exponential backoff and jitter algorithms;</li>
+                <li>exponential backoff algorithm increases the waiting time between retries upto a maximum backoff time;</li>
+                <li>We retry requests several times, but wait a bit longer with every retry attempt;</li>
+                <li>and jitter adds randomness to retry intervals to spread out the load;</li>
+                <li>If we don't add jitter, backoff algorithm will retry the requests at the same time;</li>
+                <li>Jitter helps to spread out the retries;</li>
+                <li>Using exponential backoff and jitter, we may still be in the danger of too many retries;</li>
+                <li>For eg, when the paritioner service is down or degraded, and majority of the requests are retried;</li>
+                <li>The circuit breaker pattern stops a cilent from repeatedly trying to execute an operation, that is likely to fail;</li>
+                <li>we simply calculate howmany requests have failed recently and if the error threshold is exceeded we stop calling a downstream service;</li>
+                <li>Some time later, limited number of requests from the client are allowed to pass through and invoke the operation;</li>
+                <li>If these requests are successful, it's assumed that the fault that was previously causing the failure has been fixed;</li>
+                <li>We allow all requests at this point and and start counting failed requests from scratch; The loop completes;</li>
+
+                <li>The circuit breaker pattern also has drawbacks;</li>
+                <li>It makes the system more difficult to test;</li>
+                <li>It may be hard to properly set error threshold and timers;</li>
+                <li>By the way, have you noticed that everything we discussed so far has tradeoffs?</li>
+                <li>None of these concepts are a silver bullet!</li>
+                <li>This is true for almost all concepts in distributed systems;</li>
+                <li>we should always know and remember about tradefoffs; It's hard and I agree!</li>
+                <li>More knowledge and experience you have, easier it becomes;</li>
+                <li>Let's now talk about load balancing!</li>
+            </ul>
+            
+            
+            <ul>
+                <li>Load balancing is a big topic, we will consider only selected concepts;</li>
+                <li>As you know, load balancers distribute data traffic between multiple servers;</li>
+                <li>There are 2 types of load balancers: hardware and software;</li>
+                <li>Hardware load balancers are network devices that we buy from known organizations;</li>
+                <li>These are powerful machiens with many CPU cores, memory and they are optimized to handle very high throughput;</li>
+                <li>Millions of requests per second;</li>
+                
+                <li>Software load balancer is only software that we install on hardware we choose;</li>
+                <li>We don't need big fancy machines, and many software load balancers are open source;</li>
+                <li>Load balancers are provided by public clouds(for eg ELB from AWS);</li>
+                <li>Another gradation of software load balancers is what traffic they sever: TCP or HTTP;</li>
+                <li>It is a bit more complicated than that, but I don't want to overload you with terminology too much;</li>
+                <li>Let's keep things simple for now!</li>
+                <li>TCP load balancers are simply forward network packets without inspecting the content of the packets;</li>
+                <li>Think of it as if we established a single end-to-end TCP connection between a client and a server;</li>
+                <li>This allows TCP load balancers to be super fast and handle millions of requests per second;</li>
+                <li>HTTP load balancers, on contrast, terminate the connection;</li>
+                <li>Load balancer gets an HTTP request from a client, establishes a connection to the server and sends the request to this server;</li>
+                <li>HTTP load balancer can look inside a message and make a load balancing decision based on the content of the message;</li>
+                <li>For eg, based on the cookie information or a header;</li>
+                <li>Load balancers may use several algorithms to distribute the load;</li>
+                <li>Round robin algorithm distributes requests in order across the list of servers;</li>
+                <li>Least connections algorithm sends requests to the server with the lowest number of active connections;</li>
+                <li>Least response time algorithm sends requests to the server with fastest response time;</li>
+                <li>Hash based algorithms distributes requests based on a key we define, such as client IP address or URL;</li>
+                <li>Ok, you got it, there are many benefits of using load balancers;</li>
+                <li></li>
+            </ul>
+
+            <ul>
+                <li>How does partitioning service client knows about load balancer?</li>
+                <li>How does load balancer knows about partitioner service machines?</li>
+                <li>How does load balancer guarantee high availability? Because, it look like a single point of failure;</li>
+                <li>Here is where we should recall DNS, domain naming system;</li>
+                <li>DNS is like a phone book for the internet;</li>
+                <li>It maintains a directory of domain names and translates them into IP addresses;</li>
+                <li>We register our partitioner service in DNS, specify domain name, for example, partitionerservice.domain.com;</li>
+                <li>and associate it with IP address of the load balancer device;</li>
+                <li>So, when client hits domain name, requests are forwarded to the load balancer device;</li>
+                <li>So, when clients hit domain name, requests are forwarded to the load balancer device;</li>
+                <li>For the load balancer to know about partitioner service machines, we need to explicitly tell the load balancer the IP address of the each machine;</li>
+                <li>Both software and hardware load balancers provide APIs to register and unregister servers;</li>
+                <li>Load balancers need to know which server from the registerd list are healthy and which are unavailable at the moment; </li>
+                <li>This way load balancers ensure that traffic is routed to healthy servers only;</li>
+                <li>Load balancer pings each server periodically and if unhealthy server is identified, load balancer stops to send traffic to it;</li>
+                <li>It will then resume routing traffic to that server when it detects that the server is healthy again;</li>
+                <li>As for the high availability of load balancers, they utilize a concept of primary and secondary nodes;</li>
+                <li>The primary load balancer accepts connections and serves requests, while the secondary load balancer monitors the primary; </li>
+                <li>If, for any reason, the primary load balancer is unable to accept connections, the secondary one takes over;</li>
+                <li>Primary and secondary also live in different data centers, in case one data center goes.</li>
+                <li>There are several other interesting topics related to load balancing, and we should definitely cover those in a separate video;</li>
+                <li>But, now let's move on to next 2 components of our design: partiioner service and partitions;</li>
+            </ul>
+
+            <ul>
+                <li>With partitioner service, it is more or less clear;</li>
+                <li>It is a webservice that gets requests from clients, looks inside each request to retrieve individual video view events(because remember we batch events on the client side), and route each such event to some paritition;</li>
+                <li>But, what are partitions? Partition is also a webservice, that gets messages and stores them on disk in the form of append-only log file;</li>
+                <li>So, we have a totally ordered sequence of messages ordered by time;</li>
+                <li>This is not a single very large file, but a set of log files of the predefined size;</li>
+                <li>Paritioner service has to use some rule, partition strategy, that defines which partition gets what messages; </li>
+                <li>A simple strategy is to calculate a hash function based on some key, let's say video idnetifier and choose a machine based on this hash;</li>
+                <li>This simple strategy does not work very well with large scale;</li>
+                <li>As it may lead some thing called hot partitions;</li>
+                <li>For eg, when we have a very popular video or set of videos and all view events for them go to same partition;</li>
+                <li>One approach to deal with hot partitions is to include event time, for example in minutes, into partition key;</li>
+                <li>All video events within the current minute interval are forwarded to some partition;</li>
+                <li>Next minute, all events go to a different partition;</li>
+
+                <li>Within one minute interval, a single partition gets lot of data, but over several minutes data is spread more evenly among partitions;</li>
+                <li>Another solution to hot partitions problem is to split the hot partition into 2 new parttitions;</li>
+                <li>To get an idea how this approach works, remember consistent hashing algorithm and how adding a new node to the consistent hashing ring splits a range of keys into 2 new ranges;</li>
+                <li>and if to push this idea of partition split even further, we may explicitly allocate dedicated partitions for some popular video channels;</li>
+                <li>All video view events from such channels go to their allocated partitions;</li>
+                <li>and view events from other channels never go to those partitions;</li>
+                <li>These are the powerful techniques and there is little information on hot partitions topic on the internet;</li>
+                
+                <li>To send messages to partitions, partitioner service need to know about every partition; </li>
+                <li>This is where the concetp of service discovery comes into picture;</li>
+                <li>In the world of microservices, there are 2 main service discovery patterns: server-side discovery and client-side discovery;</li>
+                <li>We already looked at server-side discovery, when we talked about load balancers;</li>
+                <li>Clients know about load balancer, load balancer knows about server-side instances; Easy!</li>
+                <li>But, we don't need a load balancer between paritioner service and parittions;</li>
+                <li>Partitioner service itself acts like a load balancer by distributing events over parittions;</li>
+                <li>This is perfect match for the client side discovery pattern;</li>
+                <li>With client side discovery, every server instance registers itself in some common place, named service registry;</li>
+
+                <li>service registry is another highly available webservice, which can perform health checks to determine the health of each registered instance;</li>
+                <li>Clients then query service registry and obtain a list of available servers;</li>
+                <li>Example of such registry service is zookeeper;</li>
+
+                <li>In our case, each partition registers itself in zookeeper, while every partitioner service instance queries zookeeper for the list of parttions; </li>
+                <li>Do you remember where else we discussed client-side discovery pattern, although we did not name it there that way?</li>
+                <li>When we talked about distributed cache design;</li>
+                <li>When cache client needs to pick a cache shard that stores the data;</li>
+                <li>Then we discussed several other options as well;</li>
+                <li>please go and check that video;</li>
+
+                <li>One more option for service discovery is similar to what cassandra does;</li>
+                <li>Remember I mentioned before that cassandra nodes talk to each other;</li>
+                <li>So, every node in the cluster knows about every other nodes;</li>
+                <li>It means clients only need to contact one node from the server cluster to figure out information about the whole cluster;</li>
+                <li>Think about this;</li>
+                
+                
+            </ul>
+
+            <ul>
+                <li>Next important concept is replication;</li>
+                <li>We must not lose events when we store them in parittions;</li>
+                <li>So, when event is persisted in a partition, we need to replicate it;</li>
+                <li>If the partition machine goes down, events are not lost;</li>
+                <li>There are 3 main approaches to replication: single leader replication, multi leader replication, leaderless replication;</li>
+                <li>Do you remember where we used single leader replciation?</li>
+                <li>Correct, when we discussed how to scale a SQL database;</li>
+                <li>Great! Do you remember when we talked about leaderless replication?</li>
+                <li>Right, when we discussed about how cassandra works;</li>
+
+                <li>So far, we didn't talk about multi leader replication;</li>
+                <li>Let me make separate deep dive into replication topic;</li>
+                <li>And only mention right now that multi leader replication is mostly used to replicate between several data centers;</li>
+                <li>So, which approach should we choose for partitions? </li>
+
+                <li>Lets go with single leader replciation; Each partition will have a leader and several followers;</li>
+                <li>We always write events and read them from the leader only;</li>
+                <li>While a leader stays alive, all followers copy events from their leader;</li>
+                <li>And if the leader dies, we choose a new leader from its followers;</li>
+                <li>The leader keeps track of it's followers: checks whether followers are alive and whether any of the followers are too far behind;</li>
+                <li>If a follower dies, gets struck, or falls behind, the leader will remove it from the list of it's followers;</li>
+
+                <li>Do you remember the concept of quorum write in cassandra? </li>
+                <li>We consider a write to be successful, when predefined number of replicas acknowledgement the write;</li>
+                <li>Similar concept applies to partitions;</li>
+                <li>When the parititoner service makes a call to partition, we may send response back as soon as leader partition persisted the message;</li>
+                <li>or only when a message was replicated to a specified number of replicas;</li>
+
+                <li>When we write to a leader only, we may still lose data if leader goes down before replication really happened; </li>
+                <li>When we wait for the repilcation to complete, we increase the durability of the system, but latency will increase;</li>
+                <li>Plus, if the required number of replicas are not available at the moment, availability will suffer;</li>
+                <li>Tradeoffs, as usual;</li>
+                
+            </ul>
+
+            <ul>
+                <li>Next topic is the last topic: Lets talk about messge formats;</li>
+                <li>We an use either texual or binary formats for messages;</li>
+                <li>Popular textual formats are XML, CSV, JSON;</li>
+                <li>Popular binary formats are Thrift, Protocol, Buffers, Avro;</li>
+                <li>What's great about message format - they are human readable;</li>
+                <li>They are well known, widely supported and heavily used by many distributed systems;</li>
+                <li>But, for large scale real-time processing systems, biinary formats provide much more benefits;</li>
+                <li>Messages in binary format are more compact and faster to parse; and why is this?</li>
+                <li>As mentioned before, messages contain several attributes, such as video identifier, timestamp,  user related information etc;</li>
+                <li>When represened in JSON format, for example, every message contains field names, which greatly increases total message size;</li>
+                <li>Binary formats are smarter;</li>
+                <li>Formats we mentioend before require a schema;</li>
+                <li>When schema is defined, we no longer need to keep field names;</li>
+                <li>For eg, apache thrift and protocol buffers use field tags instead of field names;</li>
+                <li>Tags are just numbers and they act like aliases for fields;</li>
+                <li>Tags occupy less space when encoded;</li>
+                <li>Schemas are crucial for binary formats;</li>
+                <li>Message produceers or clients need to know the schema to serialize the data;</li>
+                <li>Message consumers(processing service in our case) requires the schema to deserialize the message;</li>
+                <li>So, schemas are usually stored in some shared database where both producers and consumers can retrieve them;</li>
+
+                <li>Important to metnion: schemas may change over time;</li>
+                <li>We may want to add more attributes into messages and use them later for counting or filtering;</li>
+                <li>Apache Avro is a good choice for our countign system;</li>
+                <li>That was tough? ok!</li>
+
+                <li>Talking about all these concepts completed our discussion of the data ingestion path!</li>
+                <li>all most difficult stuff is behind us!</li>
+            </ul>
+
+            <ul>
+                <li>Do not worry if some mentioned before concepts are not completely clear to you right now!</li>
+                <li>Each of them deserves a video on it's own;</li>
+                <li>Now, let's take a look at data retrieval path!</li>
+            </ul>
+
+            <ul>
+                <li>When users open a video on youtube, we need to show total views count for that video;</li>
+                <li>To build a video webpage, several web pages are called;</li>
+                <li>A webservice that retrieves information about the video, a webservice that retrieves comments, another one for recommendations;</li>
+                <li>Among them there is our Query webservice, that is reponsible for video statistics;</li>
+                <li>All these webservices are typically hidden behind an API gateway service, a single-entry point;</li>
+                <li>API gateway routes cllient requests to backend services; </li>
+                <li>So, get total views count request comes to the query service;</li>
+                <li>WE can retrieve the total count number directly from the database;</li>
+                <li>Remember, we discussed before how both SQL and NoSQL databases scale for reads;</li>
+                <li>But, total views count scenario is probably the simplest one;</li>
+                <li>This is just a single value in the database per video;</li>
+                <li>The more interesting usecase is when users retrieve time-series data, which is a sequence of data points ordered in time;</li>
+                <li>For eg, when channel owner wants to see statistics for his video;</li>
+                <li>As discussed before, we aggregate data in the database per some time interval, let's say per hour;</li>
+                <li>Every hour for every video. That's lot of data, right? It grows over time; </li>
+                <li>Fortunately, this is not a new problem and solution is known;</li>
+
+                <li>Monitoring systems, for example, aggregate data for every 1 minute interval or even 1 second;</li>
+                <li>You can imagine how huge those datasets could be;</li>
+                <li>So, we can't afford to store time series data, at this low granularity for a long period of time;</li>
+                <li>The solution to this problem is to rollup the data;</li>
+                <li>For eg, we store per minute count for several days;</li>
+                <li>After let's say one week, per minute data is aggregated into per hour data;</li>
+                <li>and we store per hour count for several months;</li>
+                <li>Then we rollup counts even further and data that is older than lets say 3 months, is stored with 1 day granularity;</li>
+                <li>and the trick here is that we don't need to store old data in the database;</li>
+                <li>We keep data for the last several days in the database, but older data can be stored somewhere else, for eg, object storage such as s3;</li>
+
+                <li>In the industry, you may also hear terms like a hot storage and cold storage;</li>
+                <li>Hot storage represents frequently used data that must be accessed fast;</li>
+                <li>Cold storage doesn't require fast access;</li>
+                <li>It mostly represents achieved and infrequently accessed data;</li>
+                <li>When the request comes to query serivce, it does something called data-federation, when it may need to call several storages to fulfill the request;</li>
+                <li>Most recent statistics is retrieved from the database, while other statistics are retrieved from the object storage;</li>
+
+                <li>Query service then stitches the data; and this is ideal usecase for the cache;</li>
+                <li>We should store query results in a distributed cache;</li>
+                <li>This helps to further improve performance of queries and scale them;</li>
+                <li>We covered both data ingetion and data retrieval;</li>
+            </ul>
+
+            <ul><li>do it from 1:06</li></ul>
+        </ul>
+        <b>References:</b>
+        <ul>
+            <li><a href="https://www.youtube.com/watch?v=bUHFg8CZFws" target="_blank">Basics by Mikhail Smarshchok</a></li>
+        </ul>
+        
+        9972497433
+
+        Is it not a single point of failure?
+    </body>
+</html>
