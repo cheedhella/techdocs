@@ -1,0 +1,35 @@
+What is Mediator Pattern?
+	Mediator object takes the responsibility of communication among a group of objects(also called Collegues).
+
+	Advantage of using a mediator is
+		- It reduces the number of interconnections b/w Collegues.
+		- One collegue need to refer another Collegue explicitly, thus promoting loose coupling.
+
+	Mediator - It defines an interface for Collegue objects to communicate with each other.
+		It is the only Object which knows about all Collegues.
+	Collegue - Any object that need to send and receive messages from other Collegues.
+		Collegues never communicate directly, they know there is a Mediator and they communicate through Mediator.
+
+Example 1:
+	Ola is another example of Mediator pattern.
+
+-----------------------------------------------------------------------------------------------------------------------------
+	Allows loose coupling by encapsulating the way disparate sets of objects interact and communicate with each other.  
+	Allows for the actions of each object set to vary independently of one another. 
+
+	Example 1:
+		An airport control tower is an excellent example of the mediator pattern. 
+		The tower looks after who can take off and land - all communications are done from the airplane to control tower, rather than having plane-to-plane communication. 
+		This idea of a central controller is one of the key aspects to the mediator pattern.
+		--------
+		A great real world example of mediator pattern is traffic control room at airports. If all flights will have to interact with each other for finding which flight is going to land next, it will create a big mess.
+		Rather flights only send their status to the tower. These towers in turn send the signals to conform which airplane can take-off or land. We must note that these towers do not control the whole flight. They only enforce constraints in the terminal areas.
+		----
+		The mediator is that guy in the middle who works with you. A few examples of real-world mediators are lawyers, secretaries, and real estate agents. The real estate agent works with the buyer and seller to accomplish the task of changing ownership of a home. Typically, the buyer and seller never communicate directly; all communication flows through the real estate agent.
+
+
+
+
+
+Air traffic controller is a great example of mediator pattern where the airport control room works as a mediator for communication between different flights. Mediator works as a router between objects and it can have it’s own logic to provide way of communication.
+

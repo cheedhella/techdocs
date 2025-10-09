@@ -1,0 +1,20 @@
+Composite Pattern
+	It allows the clients treat individual objects(Parts) and composites(group of objects or whole objects) uniformly.
+	Composite object wraps a group of individual objects and implments same interface/operations as that of individual object.
+
+	It uses a tree to represent the part-whole hierarchy. Leafs are Parts and other nodes are whole/composite objects.
+
+
+
+	Eg:
+	Composites that contain components, each of which could be a composite.
+	Directories contain entries, each of which could be a directory.
+	Directories that contain files, each of which could be a directory.
+	Menus that contain menu items, each of which could be a menu.
+	Containers that contain Elements, each of which could be a Container.
+	Row-column GUI layout managers that contain widgets, each of which could be a row-column GUI layout manager.
+	
+	Best Example of composite: http://sourcemaking.com/design_patterns/composite/java/1
+	
+    java.awt.Container#add(Component) – in awt, we have containers and components – a classic implementation
+    javax.faces.component.UIComponent#getChildren()

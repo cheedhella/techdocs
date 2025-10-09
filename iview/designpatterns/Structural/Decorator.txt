@@ -1,0 +1,42 @@
+Decorator Design Pattern
+	It allows the user to add new functionality, dynamically at runtime, to an existing object without altering 
+	underlying class; You can also apply multiple decorators, one after another, each adding a new functionality;
+
+	While implementing this pattern, we prefer composition over inheritance – so that we can reduce the overhead
+	of subclassing again and again for each combination of decorations needed;
+
+	It is a Structural pattern because it involves creating a new class which wraps the original object and 
+	decorates it;
+
+	Example 1:
+		In Java, InputStream is an abstract class. 
+		All concrete implementations like FileInputStream, BufferedInputStream, GzipInputStream, ObjectInputStream etc 
+		have a constructor which takes an instance of the same abstract class. That might be an indication of decorator pattern.
+		
+		java.io.BufferedReader is a decorator and it dynamicallyprovides buffering capability to any 
+		java.io.OutputStream object;
+
+		Let's say, we have a bunch of serialized Java objects in a Gzipped file and that we want to read them a bit quickly.
+			// First open an inputstream of it
+			FileInputStream fis = new FileInputStream("/objects.gz");
+			// We want speed, so let's buffer it in memory:
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			// The file is gzipped, so we need to ungzip it
+			GzipInputStream gis = new GzipInputStream(bis);
+			// We need to unserialize those Java objects
+			ObjectInputStream ois = new ObjectInputStream(gis);
+			// we can finally use it
+			SomeObject someObject = (SomeObject) ois.readObject();
+
+		The benefit is that you have freedom to decorate the stream using one or more decorators as you need.
+		That's better than having a single class for every possible combination like ObjectGzipBufferedFileInputStream, ObjectBufferedFileInputStream, GzipBufferedFileInputStream, ObjectGzipFileInputStream, ObjectFileInputStream, GzipFileInputStream, BufferedFileInputStream etc.
+
+		Note that when you're about to close the stream, just closing the outermost decorator, ois.close(), is sufficient. It will delegate the close call all the way to the bottom.
+
+	Example 2: JScrollPane is a decorator and it is used to add scroll bar to any JComponent;
+		JTextArea textArea = new JTextArea(10, 50);
+		JScrollPane scrollPane1 = new JScrollPane(textArea);
+
+	Example 3: https://www.geeksforgeeks.org/decorator-pattern/
+	Example 4: https://dzone.com/articles/decorator-design-pattern-in-java
+

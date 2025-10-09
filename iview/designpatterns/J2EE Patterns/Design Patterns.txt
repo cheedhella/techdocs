@@ -1,0 +1,28 @@
+Value Objects, Data Access Object, Business Delegate, MVC, and Front Controller.
+
+Value Objects
+	This pattern provides the best way to exchange data across tiers or system boundaries. 
+	It is an object that encapsulates a set of values (namesake) and is itself moved across the boundary so that attempts to get the values of those attributes are local calls.
+	
+Data Access Object
+	This pattern provides the connection between the business logic tier and the resource (usually database or file) tier. 
+	The Data Access Object represents a general interface to the resources layer: It handles all calls to it. JDBC is an example of this.
+	---------------
+	This pattern is an object that encapsulates a set of behaviors for accessing databases, files, and other resources. 
+	This way you have only one API to deal with rather than a different one for every type of resource.
+	--------
+	There needs to be a layer that has a uniform API to access these disparate data sources. The pattern applies to any application that requires access to several data source types, or even an application that accesses only one but that may switch between sources in the future. You use this pattern to design a Data Access Object that abstracts the access API to various data sources. For example, JDBC represents this pattern.
+	
+Business Delegate
+	
+What is 2-tier architecture and 3-tier architecture?
+
+Front Controller
+	http://java.dzone.com/articles/understanding-front-controller
+	http://techbus.safaribooksonline.com/book/certification/scjp/078972992x/design-patterns/ch16lev1sec3?query=%28%28Front+Controller+pattern%29%29&reader=html&imagepage=#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTAtNzg5Ny0yOTkyLXglMkZjaDE2bGV2MXNlYzImcXVlcnk9KChGcm9udCUyMENvbnRyb2xsZXIlMjBwYXR0ZXJuKSk=
+	http://techbus.safaribooksonline.com/book/programming/java/0596004273/presentation-tier-architecture/j2eedp-chp-3-sect-3?query=%28%28Front+Controller+pattern%29%29&reader=html&imagepage=#snippet
+
+For every one minute OR until timeout
+	if sessionCount is 0
+		end loop;
+In case of timeout, log saying that 'timeout happened';

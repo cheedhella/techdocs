@@ -1,0 +1,45 @@
+What is Visitor Design Pattern?
+	Visitor refers to an operation that you want to perform on a set(array/hierarchy/tree) of objects;
+	
+Advantages
+	1. It allows you to define a new operation/behaviour without modifying set of objects on which it operates;
+	    In other words, it decouples the operation from the model; 
+		Usually, it is the operation that changes frequently, not the model;
+		So, you can add new operation OR change existing operation, without modifying model classes;
+
+Disadvantages
+	1. Double Dispatch
+		Client calls accept(visitor) on each object in the set of objects, which 
+		further calls polymorphic visit(object) of the visitor;
+
+Why this is a Behavioural Pattern?
+	It basically splits the model data and its operations into distinct structures;
+
+Visitor 
+	An interface which declares one visit operation for each type of visitable class;
+
+ConcreteVisitor
+	We can have multiple implementations of Visitor; For Eg, One for XML serialization, another for JSON serialization;
+
+Visitable
+	An interface or base class for set of objects, which contains accept(Visitor) methods;
+
+ConcreateVisitable
+	Implementation of accept() seems to be identical for all visitable classes(tree of classes);
+	However, we can’t move the code into the base class because IVisitor doesn’t have an method 
+    visit(DocumentPart) but only for the concrete implementations;
+	We could solve this through reflection, though, but would lose compile-time checking;
+	
+Client
+	Client creates a set of objects, a Visitor object and calls eachObject.accept(visitor);
+
+---------------------------------------------------------------------------------------------------------
+Example 1: Shopping Cart
+	While shopping, You can add different type of items to your cart, few of them have a fixed price and others need to weighed;
+	So, when you checkout, a cashier(who acts as Visitor) takes the disparate set of items in the cart and 
+	calculates the price of each item and provides you with the total amount to be paid;
+	Each item will have it's way of calculating it's price;
+	You can keep the calculation logic in the item class itself or you can move it out to another class using Visitor pattern;
+
+Example 2: XML/JSON Serializer
+

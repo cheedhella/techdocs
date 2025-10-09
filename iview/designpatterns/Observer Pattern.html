@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Array</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Hello</strong></div>
+    <div class="answer">
+    <pre>Observer Pattern
+	It is used to define one-to-many relationship between objects so that when one object(Subject/Observable) changes it&#x27;s 
+	state, all it&#x27;s dependants(Observers) are notified automatically.
+
+	Example 1: In Flipkart, Notify me when product is available
+	If you open any product that is out of stock, you will see an option called &#x27;Notify me when product is 
+	available&#x27;. If you subscribe to that option, when the state of the product changes(i.e. it is available), you will get 
+	a notification saying &#x27;product is available now, you can buy it&#x27;. 
+	In this case, you are an Observer and product is Observable/Subject.
+
+	Example 2: In Twitter, follow option
+	Your twitter account is an Observer and the person you are following is Observable/Subject.
+	When you follow someone, twitter adds you to their followers list. 
+	When they sent a new tweet, you&#x27;ll see it in your input.
+
+	Example 3: In Javascript, you can use this pattern to attach multiple handlers(event listeners) to an element.
+------------------------------------------------------------------------------------------------------------------------------
+java.util.Observable
+	public void addObserver(Observer o); // add an Observer to the list of observers of this object
+	public void deleteObserver(Observer o); // delete the specified Observer from the list of observers of this object
+	public void deleteObservers(); // delete all the observers of this object
+	protected void setChanged(); // Marks this object as changed
+	protected void clearChanged(); 
+		// Once all observers of this object are notified about recent change, call this method to mark this object unchanged.
+	public boolean hasChanged(); 
+		// Returns true, if setChanged() has been called more recently than clearChanged(). Else returns false.
+	public void notifyObservers(); // same as notifyObservers(null)
+	public void notifyObservers(Object arg); 
+		// If the object state is changed, as indicated by hasChanged(), it notifies all it&#x27;s observers by
+		// calling observer.update(this, arg), and then calls clearChanged() to indicate all observers are notified.
+
+java.util.Observer interface
+	void update(Observable o, Object arg)
+		This method is called whenever the observed object is changed.
+------------------------------------------------------------------------------------------------------------------------------
+The Observable class and the Observer interface have been deprecated in Java 9.
+Reactive Streams or Flow API:
+
+Flow is a class introduced in Java 9 and has 4 interrelated interfaces : Processor, Publisher, Subscriber and Subscription.
+
+Flow.Processor : A component that acts as both a Subscriber and Publisher.
+
+Flow.Publisher : A producer of items received by Subscribers.
+
+Flow.Subscriber : A receiver of messages.
+
+Flow.Subscription: Message control linking a Flow.Publisher and Flow.Subscriber.
+------------------------------------------------------------------------------------------------------------------------------
+	
+
+observer pattern allows for the Open Closed principle. This principle states that a class should be open for extensions without the need to change the class.
+
+Using the observer pattern a subject can register an unlimited number of observers. If a new listener wants to register with the subject, no code change in the subject is necessary.
+</pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>
