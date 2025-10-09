@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Queue</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Queue?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A linear data structure that follows the principle of FIFO — First In, First Out;</li>
+            <li>It means the first element added to the queue will be the first one removed;</li>
+            <li>It supports mainly 2 operations: enqueue(x) and dequeue();</li>
+            <li>enqueue(x) - It inserts the given object at the end of the queue; Queue overflow occurs if you try to enqueue, when the queue is already full; Time Complexity: O(1);</li>
+            <li>dequeue() - It removes the first object from the queue; Queue underflow occurs if you try to dequeue, when the queue is already empty; Time Complexity: O(1);</li>
+            <li>peek() - It returns the first object from the queue without removing it; Time Complexity: O(1);</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Queue implementation</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+class Queue {
+    int front, rear, size, capacity;
+    int[] arr;
+
+    Queue(int capacity) {
+        this.capacity = capacity;
+        arr = new int[capacity];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    // Add element to the queue
+    void enqueue(int x) {
+        if (isFull()) {
+            System.out.println("Queue Overflow");
+            return;
+        }
+        rear = (rear + 1) % capacity;  // circular increment
+        arr[rear] = x;
+        size++;
+    }
+
+    // Remove element from the queue
+    int dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue Underflow");
+            return -1;
+        }
+        int item = arr[front];
+        front = (front + 1) % capacity;
+        size--;
+        return item;
+    }
+
+    // Get front element
+    int front() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return -1;
+        }
+        return arr[front];
+    }
+
+    // Check if full or empty
+    boolean isFull() { return size == capacity; }
+    boolean isEmpty() { return size == 0; }
+
+    // Display queue
+    void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return;
+        }
+        for (int i = 0; i < size; i++) {
+            System.out.print(arr[(front + i) % capacity] + " ");
+        }
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Queue q = new Queue(5);
+
+        q.enqueue(10);
+        q.enqueue(20);
+        q.enqueue(30);
+        q.display();
+
+        System.out.println("Front element: " + q.front());
+        q.dequeue();
+        q.display();
+    }
+}
+
+<b>Output:</b>
+
+10 20 30
+Front element: 10
+20 30
+
+        </code>
+      </pre>
+    </div>
+    <script src="../../resources/js/codeblock.js"></script>
+    
+</body>
+
+</html>

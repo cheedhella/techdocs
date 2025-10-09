@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Priority Queue</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Priority Queue?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Priority Queue is a special type of queue in which each element is associated with a priority, and elements with higher priority are dequeued first (even if they arrived later);</li>
+            <li>It supports mainly 2 operations: insert(x, priority) and delete();</li>
+            <li>Priority queues are usually implemented using a binary heap, because it efficiently maintains order by priority;</li>
+            <li>Min-Heap → smallest element has the highest priority;</li>
+            <li>Max-Heap → largest element has the highest priority;</li>
+            <li>java.util.PriorityQueue
+                <ul>
+                    <li>min-heap based implementation;</li>
+                    <li>It supports these operations: add(x) and poll() -> Time Complexity: O(log n); peek() -> Time Complexity: O(1);</li>
+                    <li>It orders elements according to their natural ordering (e.g., numbers in ascending order, strings alphabetically) or provide a custom comparator, if you want to use max-heap;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Priority Queue implementation</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.PriorityQueue;
+
+public class Main {
+    public static void main(String[] args) {
+        // Min-heap by default (smallest number = highest priority)
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        pq.add(30);
+        pq.add(10);
+        pq.add(20);
+
+        System.out.println("Priority Queue elements: " + pq);
+
+        System.out.println("Head (highest priority): " + pq.peek());
+        pq.poll(); // removes the highest priority element
+        System.out.println("After removing head: " + pq);
+    }
+}
+
+
+<b>Output:</b>
+Priority Queue elements: [10, 30, 20]
+Head (highest priority): 10
+After removing head: [20, 30]
+
+        </code>
+      </pre>
+    </div>
+
+    <br/><br/>
+    <div class="code-block">
+        <div class="code-block-title">Priority Queue implementation for object with custom priority;</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.*;
+
+class Task {
+    String name;
+    int priority;
+
+    Task(String name, int priority) {
+        this.name = name;
+        this.priority = priority;
+    }
+
+    public String toString() {
+        return name + " (priority " + priority + ")";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Higher priority value = higher importance
+        PriorityQueue<Task> taskQueue = new PriorityQueue<>(
+            (a, b) -> b.priority - a.priority
+        );
+
+        taskQueue.add(new Task("Email reply", 2));
+        taskQueue.add(new Task("Server crash fix", 5));
+        taskQueue.add(new Task("Code review", 3));
+
+        while (!taskQueue.isEmpty()) {
+            System.out.println("Processing: " + taskQueue.poll());
+        }
+    }
+}
+
+<b>Output:</b>
+Processing: Server crash fix (priority 5)
+Processing: Code review (priority 3)
+Processing: Email reply (priority 2)
+
+        </code>
+      </pre>
+    </div>
+    <script src="../../resources/js/codeblock.js"></script>
+    
+</body>
+
+</html>
