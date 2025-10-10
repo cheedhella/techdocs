@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Emmet</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>		
+	  <div class="question"><strong>1. What is Emmet?</strong></div>
+      <div class="answer">
+         <ul>
+            <li>It is useful for coding and editing HTML/XML/XSL in a faster way;</li>
+			<li>Abbreviations: Id, Class, Attribute, Child, Sibling, Level Up, Multiplier, Grouping, Numbering, Lorem Ipsum.</li>
+			<li>By default, Abbreviation is expanded when you press Enter.</li>
+         </ul>
+      </div>
+
+	  <div class="question"><strong>2. Emmet Abbreviations</strong></div>
+	  <div class="border-less-table">
+		<table>
+			<thead>
+				<tr>
+					<th>Abbreviation</th>
+					<th>Expansion</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr><td>!</td><td>Creates basic skeleton of HTML file</td></tr>
+				<tr><td>c</td><td>&lt;!-- --&gt;</td></tr>
+				<tr><td>#id</td><td>&lt;div id='id'&gt;&lt;/div&gt;</td></tr>
+				<tr><td>p#id</td><td>&lt;p id='id'&gt;&lt;/p&gt;</td></tr>
+				<tr><td>.mycls</td><td>&lt;div class="mycls"&gt;&lt;/div&gt;</td></tr>
+				<tr><td>p.mycls</td><td>&lt;p class="mycls"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p.cls1.cls2</td><td>&lt;p class="cls1 cls2"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p#id.mycls</td><td>&lt;p id="id" class="mycls"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>[]</td><td>Attributes other than id and class are adding using this operator</td></tr>
+				<tr><td>p[x]</td><td>&lt;p x=""&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p[x='10']</td><td>&lt;p x="10"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p[x='10' y='11']</td><td>&lt;p x="10" y="11"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p[style='color:red']</td><td>&lt;p style="color:red"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>&gt;</td><td>Child</td></tr>
+				<tr><td>+</td><td>Sibling</td></tr>
+				<tr><td>^</td><td>Level up</td></tr>
+				<tr><td>*</td><td>Multiplier</td></tr>
+				<tr><td>()</td><td>Multiply Grouped content</td></tr>
+				<tr><td>$</td><td>Incremental value for repeated elements, starts with 1</td></tr>
+				<tr><td>$@10</td><td>Incremental value for repeated elements, starts with 10</td></tr>
+				<tr><td>{}</td><td>text</td></tr>
+				<tr><td>p&gt;span</td><td>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;/p&gt;</td></tr>
+				<tr><td>h2+p</td><td>&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</td></tr>
+				<tr><td>ul&gt;li*3</td><td>&lt;ul&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>ul&gt;li.item$*2&gt;p</td><td>&lt;ul&gt;&lt;li class="item1"&gt;&lt;p&gt;&lt;/p&gt;&lt;/li&gt;&lt;li class="item2"&gt;&lt;p&gt;&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>p.mycls$*3</td><td>&lt;p class="mycls1"&gt;&lt;/p&gt;&lt;p class="mycls2"&gt;&lt;/p&gt;&lt;p class="mycls3"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>p.cls$@3*3</td><td>&lt;p class="mycls3"&gt;&lt;/p&gt;&lt;p class="mycls4"&gt;&lt;/p&gt;&lt;p class="mycls5"&gt;&lt;/p&gt;</td></tr>
+				<tr><td>ul&gt;li.myCls${Item $}*2</td><td>&lt;ul&gt;&lt;li class="myCls1"&gt;Item 1&lt;/li&gt;&lt;li class="myCls2"&gt;Item 2&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>div{This is div $$}*2</td><td>&lt;div&gt;This is div 01&lt;/div&gt;&lt;div&gt;This is div 02&lt;/div&gt;</td></tr>
+				<tr><td>p&gt;span{hi}</td><td>&lt;p&gt;&lt;span&gt;hi&lt;/span&gt;&lt;/p&gt;</td></tr>
+				<tr><td>ul&gt;li.cls$*2&gt;span{hi $}</td><td>&lt;ul&gt;&lt;li class="cls1"&gt;&lt;span&gt;hi 1&lt;/span&gt;&lt;/li&gt;&lt;li class="cls2"&gt;&lt;span&gt;hi 2&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>ul&gt;li*2&gt;a&gt;{Link $}</td><td>&lt;ul&gt;&lt;li&gt;&lt;a href=""&gt;Link 1&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=""&gt;Link 2&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>lorem</td><td>Lorem Ipsum(place holder text)</td></tr>
+				<tr><td>lorem10</td><td>10 Word Text</td></tr>
+				<tr><td>ul&gt;li*2&gt;lorem3</td><td>&lt;ul&gt;&lt;li&gt;Lorem, ipsum dolor.&lt;/li&gt;&lt;li&gt;Voluptates, maxime laudantium.&lt;/li&gt;&lt;/ul&gt;</td></tr>
+				<tr><td>script:src</td><td>&lt;script src=""&gt;&lt;/script&gt;</td></tr>
+				<tr><td>link</td><td>&lt;link rel="stylesheet" href=""&gt;</td></tr>
+				<tr><td>input:p</td><td>&lt;input type="password" name="" id="" /&gt;</td></tr>
+				<tr><td>input:c</td><td>&lt;input type="checkbox" name="" id=""&gt;</td></tr>
+				<tr><td>input:r</td><td>&lt;input type="radio" name="" id=""&gt;</td></tr>
+				<tr><td>input:b</td><td>&lt;input type="button" value="" /&gt;</td></tr>
+				<tr><td>input:s</td><td>&lt;input type="submit" value="" /&gt;</td></tr>
+				<tr><td>table&gt;tr*2&gt;td*3</td><td>&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</td></tr>
+			</tbody>
+		</table>
+	  </div>
+   </body>
+</html>

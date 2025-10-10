@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Shortcuts</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+	  <div class="question"><strong>1. VS Code Overview</strong></div>
+      <div class="answer">
+         <ul>
+            <li><strong>Side Panel:</strong> Has 5 options: Explorer, Search, Source Control, Run and Debug, Extensions.
+				<ul>
+					<li><code>Cmd + B</code>: Show/Hide Side Panel</li>
+					<li><code>Cmd + Shift + E</code>: Open Explorer</li>
+					<li><code>Cmd + Shift + F</code>: Open Find/Search in the workspace</li>
+					<li><code>Cmd + Shift + X</code>: Open Extensions</li>
+				</ul>
+			</li>
+            <li><strong>Mini-map:</strong> A helpful overview on the right-hand side for very long files.</li>
+            <li><strong>Title Bar:</strong> By default, it shows the file name and the project it belongs to.</li>
+            <li><strong>File Explorer:</strong> For working with files.
+				<ul>
+					<li>Single-click a file to open it temporarily (soft open).</li>
+					<li>Double-click a file to open it permanently.</li>
+					<li><code>Cmd + P</code>: Quickly open a file by its name.</li>
+					<li><code>Cmd + W</code>: Close the current file.</li>
+				</ul>
+			</li>
+            <li><strong>Workspace:</strong> Creates a settings file and allows you to group multiple project folders.</li>
+         </ul>
+      </div>
+
+	  <div class="question"><strong>2. Shortcuts Quick Reference</strong></div>
+	  <div class="border-less-table">
+		<table>
+			<thead><tr><th>Category</th><th>Shortcut</th><th>Description</th></tr></thead>
+			<tbody>
+				<tr><td>General</td><td><code>Cmd + B</code></td><td>Show/Hide Side Panel</td></tr>
+				<tr><td>General</td><td><code>Cmd + Shift + P</code></td><td>Open Command Palette</td></tr>
+				<tr><td>Files</td><td><code>Cmd + P</code></td><td>Quickly open a file by its name</td></tr>
+				<tr><td>Files</td><td><code>Cmd + W</code></td><td>Close current file</td></tr>
+				<tr><td>Files</td><td><code>Ctrl + tab</code></td><td>Switch between open files</td></tr>
+				<tr><td>Files</td><td><code>Ctrl + Shift + tab</code></td><td>Switch between open files in reverse</td></tr>
+				<tr><td>Navigating</td><td><code>Cmd + Up arrow</code></td><td>Jump to file beginning</td></tr>
+				<tr><td>Navigating</td><td><code>Cmd + Down arrow</code></td><td>Jump to file ending</td></tr>
+				<tr><td>Navigating</td><td><code>Cmd + Left Arrow</code></td><td>Go to line beginning</td></tr>
+				<tr><td>Navigating</td><td><code>Cmd + Right Arrow</code></td><td>Go to line ending</td></tr>
+				<tr><td>Navigating</td><td><code>fn + Up</code></td><td>Page up</td></tr>
+				<tr><td>Navigating</td><td><code>fn + down</code></td><td>Page down</td></tr>
+				<tr><td>Editing</td><td><code>Cmd + X</code></td><td>Cut current line (no selection needed)</td></tr>
+				<tr><td>Editing</td><td><code>Cmd + C</code></td><td>Copy current line (no selection needed)</td></tr>
+				<tr><td>Editing</td><td><code>Cmd + V</code></td><td>Paste</td></tr>
+				<tr><td>Find/Replace</td><td><code>Cmd + F</code></td><td>Find in Current File</td></tr>
+				<tr><td>Find/Replace</td><td><code>Cmd + H</code></td><td>Replace in Current File</td></tr>
+				<tr><td>Find/Replace</td><td><code>Cmd + Shift + F</code></td><td>Search all files in the workspace</td></tr>
+				<tr><td>Find/Replace</td><td><code>Cmd + Shift + H</code></td><td>Search and Replace in all files</td></tr>
+				<tr><td>Terminal</td><td><code>Ctrl + `</code></td><td>Open/Close Integrated Terminal</td></tr>
+				<tr><td>Terminal</td><td><code>Cmd + Shift + C</code></td><td>Open External Terminal</td></tr>
+				<tr><td>Terminal</td><td><code>code .</code></td><td>Open current directory in VS Code</td></tr>
+			</tbody>
+		</table>
+	  </div>
+
+	  <div class="question"><strong>3. Key Features</strong></div>
+      <div class="answer">
+         <ul>
+            <li><strong>Integrated Terminal:</strong> Allows you to run commands from within VS Code.
+				<ul>
+					<li><code>Ctrl + `</code>: Open/Close Integrated Terminal.</li>
+					<li><code>Cmd + Shift + C</code>: Open in an external terminal.</li>
+				</ul>
+			</li>
+			<li><strong><code>code</code> command:</strong> After installation, you can open folders from your command line with <code>code .</code>.</li>
+            <li><strong>Intellisense:</strong> Provides smart code completions, parameter info, and quick info for variables and functions.
+				<ul>
+					<li>Trigger with <code>Ctrl+Space</code> or by typing <code>.</code>.</li>
+					<li>Works out-of-the-box for JS, TS, JSON, HTML, CSS, etc.</li>
+					<li>Can be extended with language-specific extensions.</li>
+				</ul>
+			</li>
+         </ul>
+      </div>
+
+	  <div class="question"><strong>4. Emmet Actions via Command Palette</strong></div>
+      <div class="answer">
+		 <p>Open the Command Palette (<code>Cmd + Shift + P</code>) and search for these commands:</p>
+         <ul>
+            <li><strong>Wrap with Abbreviation:</strong> Takes an Emmet abbreviation, expands it, and places the selected content inside the last element of the generated snippet.</li>
+            <li><strong>Wrap Individual Lines with Abbreviation:</strong> Wraps each selected line with an abbreviation. For example, select multiple lines and use <code>li*</code> to wrap each one in an `<li>` tag.</li>
+            <li><strong>Update Tag:</strong> Renames an HTML tag. Useful for changing a `<span>` to a `<div>` while keeping its content.</li>
+            <li><strong>Remove Tag:</strong> Removes the parent tag, leaving the inner content.</li>
+            <li><strong>Go to Matching Pair:</strong> Jumps between an opening and closing tag.</li>
+            <li><strong>Merge Lines:</strong> Collapses all selected lines into a single line.</li>
+            <li><strong>Evaluate Math Expression:</strong> Select a simple math expression like `10+5` and run this command to replace it with the result `15`.</li>
+         </ul>
+      </div>
+   </body>
+</html>
