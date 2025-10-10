@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Sort the words of given String</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
-    </head>
-    <body>
-        <ul>
-            <li>Given a String, sort all words in it by it's length and if word length is same, sort by alphabetical order;</li>
-        </ul>
-      <pre>
-        <code class="language-java">
 
+<head>
+    <title>Sort the words of given String</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <ul>
+        <li>Given a String, sort all words in it by it's length and if word length is same, sort by alphabetical order;
+        </li>
+    </ul>
+
+    <div class="code-block">
+        <div class="code-block-title">ss</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -58,15 +55,18 @@ public class OrderingEg {
     }
 }
 
-Output:
+<b>Output:</b>
 Before sorting: [Mobile, and, Laptop, are, not, exempt]
 After sorting by length: [and, are, not, Mobile, Laptop, exempt]
 
 Before sorting: [Mobile, and, Laptop, are, not, exempt]
 After sorting by length and alphabetically: [and, are, not, exempt, Laptop, Mobile]
-
         </code>
       </pre>
+    </div>
 
-    </body>
+    <script src="../../../resources/js/codeblock.js"></script>
+    
+</body>
+
 </html>

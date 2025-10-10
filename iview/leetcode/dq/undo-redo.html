@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Undo Redo</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Undo and Redo?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Undo</b> - Reverting the most recent change;</li>
+            <li><b>Redo</b> - Reversing undo, restoring an action that you just undid;</li>
+            <li>If your application need only Undo, then single stack is enough;</li>
+            <li>If your application need only Undo and Redo, then it can be implemented using either 2 stacks OR 1 Deque;</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Undo using Stack</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Stack;
+
+public class SimpleUndo {
+    private Stack<String> actions = new Stack<>();
+    private StringBuilder text = new StringBuilder();
+
+    // Perform a typing action
+    public void type(String word) {
+        actions.push(text.toString());  // Save current state before change
+        text.append(word);
+        System.out.println("Typed: " + word);
+    }
+
+    // Undo the last action
+    public void undo() {
+        if (!actions.isEmpty()) {
+            text = new StringBuilder(actions.pop() + " ");  // Restore previous state
+            System.out.println("Undo performed.");
+        } else {
+            System.out.println("Nothing to undo!");
+        }
+    }
+
+    // Display current text
+    public void show() {
+        System.out.println("Current text: " + text);
+    }
+
+    public static void main(String[] args) {
+        SimpleUndo editor = new SimpleUndo();
+
+        editor.type("one");
+        editor.type("two");
+        editor.type("three");
+        editor.show();
+
+        editor.undo();
+        editor.show();
+
+        editor.undo();
+        editor.show();
+
+        editor.undo();
+        editor.show();
+
+        editor.undo();  // Nothing to undo
+    }
+}
+
+<b>Output:</b>
+Typed: one 
+Typed: two
+Typed: three
+Current text: one two three
+Undo performed.
+Current text: one two 
+Undo performed.
+Current text: one
+Undo performed.
+Current text: 
+Nothing to undo!
+        </code>
+      </pre>
+    </div>
+
+    <br/><br/>
+    <div class="code-block">
+        <div class="code-block-title">Undo-Redo using 2 Stacks</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Stack;
+
+public class UndoRedoUsingStacks {
+    private Stack<String> undoStack = new Stack<>();
+    private Stack<String> redoStack = new Stack<>();
+
+    public void doAction(String action) {
+        undoStack.push(action);
+        redoStack.clear(); // Once a new action happens, redo history resets
+        System.out.println("Performed: " + action);
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            String action = undoStack.pop();
+            redoStack.push(action);
+            System.out.println("Undo: " + action);
+        } else {
+            System.out.println("Nothing to undo");
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            String action = redoStack.pop();
+            undoStack.push(action);
+            System.out.println("Redo: " + action);
+        } else {
+            System.out.println("Nothing to redo");
+        }
+    }
+
+    public static void main(String[] args) {
+        UndoRedoUsingStacks editor = new UndoRedoUsingStacks();
+        editor.doAction("Type A");
+        editor.doAction("Type B");
+        editor.undo();
+        editor.redo();
+    }
+}
+
+<b>Output:</b>
+Performed: Type A
+Performed: Type B
+Undo: Type B
+Redo: Type B
+        </code>
+      </pre>
+    </div>
+
+    <br/><br/>
+    <div class="code-block">
+        <div class="code-block-title">Undo-Redo using Deque</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class UndoRedoUsingDeque {
+    private Deque<String> undoDeque = new LinkedList<>();
+    private Deque<String> redoDeque = new LinkedList<>();
+
+    public void doAction(String action) {
+        undoDeque.push(action);    // Add to top
+        redoDeque.clear();         // Clear redo history
+        System.out.println("Performed: " + action);
+    }
+
+    public void undo() {
+        if (!undoDeque.isEmpty()) {
+            String action = undoDeque.pop();
+            redoDeque.push(action);
+            System.out.println("Undo: " + action);
+        } else {
+            System.out.println("Nothing to undo");
+        }
+    }
+
+    public void redo() {
+        if (!redoDeque.isEmpty()) {
+            String action = redoDeque.pop();
+            undoDeque.push(action);
+            System.out.println("Redo: " + action);
+        } else {
+            System.out.println("Nothing to redo");
+        }
+    }
+
+    public static void main(String[] args) {
+        UndoRedoUsingDeque editor = new UndoRedoUsingDeque();
+        editor.doAction("Draw Circle");
+        editor.doAction("Draw Square");
+        editor.undo();
+        editor.redo();
+    }
+}
+
+<b>Output:</b>
+Performed: Draw Circle
+Performed: Draw Square
+Undo: Draw Square
+Redo: Draw Square
+        </code>
+      </pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+    
+</body>
+
+</html>
