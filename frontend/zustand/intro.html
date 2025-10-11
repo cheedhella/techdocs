@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Introduction</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Zustand?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a global state manager, which helps you in sharing data/state b/w multiple components in a React application;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How to create a Store?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>create((set) => ({ ... }));</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Accessing the Store?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>const value = useStore((state) => state.value);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Updating the State?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Actions (functions inside the store)</li>
+        </ul>
+    </div>
+
+ <div class="question"><strong>5. Multiple Stores</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Actions (functions inside the store)</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">1D Array</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class OneDApp {
+    public static void main(String[] args) {
+        // Declaration
+        int[] a1 = new int[4];
+
+        // Initialization
+        a1[0] = 10;
+        a1[1] = 20;
+        a1[2] = 30;
+        a1[3] = 40;
+
+        // Accessing elements in an array
+        for (int i = 0; i < a1.length; i++) {
+            System.out.println(a1[i]);
+        }
+
+        // Update value of element at index 3
+        a1[3] = 900;
+
+        // Accessing elements in the updated array
+        System.out.println("Updated Array: " + IntStream.of(a1).mapToObj(Integer::toString)
+                .collect(Collectors.joining(", ")));
+
+        // Declare & Initialize
+        int[] myArray2 = { 13, 14, 15 };
+        int[] myArray3 = IntStream.range(1, 11).toArray();
+        int[] myArray4 = IntStream.rangeClosed(1, 10).toArray();
+        int[] myArray5 = IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).toArray();
+    }
+}
+
+<b>Output:</b>
+10
+20
+30
+40
+Updated Array: 10, 20, 30, 900
+
+</code></pre>
+    </div>
+
+    <br />
+    <br />
+    <div class="code-block">
+        <div class="code-block-title">2D Array</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>public class TwoDApp {
+    public static void main(String[] args) {
+        // Declaration
+        int[][] a1 = new int[5][];
+
+        // Initialization
+        for (int i = 0; i < a1.length; i++) {
+            a1[i] = new int[10];
+            for (int j = 0; j < a1[i].length; j++) {
+                a1[i][j] = i;
+            }
+        }
+
+        // Access
+        for (int i = 0; i < a1.length; i++) {
+            for (int j = 0; j < a1[i].length; j++) {
+                System.out.print(a1[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        // Declaration & Intialization
+        int marks[][] = { { 50, 60, 55, 67, 70 }, { 62, 65, 70, 70, 81 }, { 72, 66, 77, 80, 69 } };
+        for (int i = 0; i < marks.length; i++) {
+            for (int j = 0; j < marks[i].length; j++) {
+                System.out.print(marks[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+<b>Output:</b>
+0 0 0 0 0 0 0 0 0 0 
+1 1 1 1 1 1 1 1 1 1 
+2 2 2 2 2 2 2 2 2 2 
+3 3 3 3 3 3 3 3 3 3 
+4 4 4 4 4 4 4 4 4 4 
+50 60 55 67 70 
+62 65 70 70 81 
+72 66 77 80 69
+
+</code></pre>
+    </div>
+
+
+    <script src="../../resources/js/codeblock.js"></script>
+
+</body>
+
+</html>

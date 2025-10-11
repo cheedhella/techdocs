@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Zustand</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Zustand</h2>
+        </div>
+
+        <div class="toc-container">
+            <ul>
+                <li>Basics
+                    <ul>
+                        <li><a href="./what.html">What is Zustand?</a></li>
+                        <li><a href="./install.html">Install Typescript</a></li>
+                        <li><a href="./create-project.html">Create a Typescript project</a></li>
+                    </ul>
+                </li>
+                <li>Datatypes
+                    <ul>
+                        <li><a href="./what.html">What is Typescript?</a></li>
+                        <li><a href="./install.html">Install Typescript</a></li>
+                        <li><a href="./create-project.html">Create a Typescript project</a></li>
+                    </ul>
+                </li>
+                <li><a href="./functions.html">Functions</a>
+                    <ul>
+                        <li>Basic Function;</li>
+                        <li>Function Expression;</li>
+                        <li>Arrow Function;</li>
+                        <li>Optional Parameters;</li>
+                        <li>Default Parameters;</li>
+                        <li>Rest Parameters;</li>
+                        <li>Function Types;</li>
+                        <li>Void Functions;</li>
+                        <li>Never Functions;</li>
+                        <li>Overload Functions;</li> 
+                    </ul>
+                </li>
+                <li>Interfaces
+                    <ul>
+                        <li><a href="./interfaces-1.html">Interfaces</a></li>
+                        <li><a href="./interfaces-2.html">Interface extending Interface</a></li>
+                        <li><a href="./interfaces-3.html">Interface vs Type</a></li>
+                        <li><a href="./interfaces-4.html">Callable Interfaces</a></li>
+                        <li><a href="./interfaces-5.html">Interfaces as Indexable Types</a></li>
+                    </ul>
+                </li>
+                <li>Type
+                    <ul>
+                        <li><a href="./type-aliases.html">Type Aliases</a></li>
+                        <li><a href="./type-assertion.html">Type Assertion</a></li>
+                    </ul>
+                </li>
+                <li>Asynchronous TypeScript
+                    <ul>
+                        <li><a href="./promise.html">Promise</a></li>
+                        <li><a href="./type-assertion.html">Type Assertion</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+                        
+
+Intermediate Level — Practical Usage
+
+Multiple Stores
+
+When and how to split your state across multiple stores
+
+Asynchronous State Updates
+
+Handling async/await or API calls inside actions
+
+Derived / Computed State
+
+Creating values based on other parts of the state
+
+Middleware
+
+Using built-in middlewares (persist, devtools, subscribeWithSelector)
+
+Persisting State
+
+Saving data to localStorage or sessionStorage
+
+Zustand DevTools
+
+Integration with Redux DevTools for debugging
+
+Resetting or Hydrating State
+
+Useful for logout flows, SSR hydration, or clearing data
+
+🔵 Advanced Level — Architecture & Optimization
+
+Selectors and Shallow Comparison
+
+Using shallow to prevent unnecessary re-renders
+
+Subscribe API
+
+Subscribing outside React (e.g., vanilla JS or non-component logic)
+
+Using Zustand in Next.js or Remix
+
+SSR (server-side rendering) patterns with Zustand
+
+TypeScript Integration
+
+Strongly typing your store and actions
+
+Combining with Other Libraries
+
+Zustand + React Query
+
+Zustand + React Router
+
+Code Organization Patterns
+
+Folder structure for large Zustand stores
+
+Testing Zustand Stores
+
+Writing unit tests for state and actions
+
+🧠 Expert Level — Deep Dives
+
+Custom Middleware
+
+Creating your own middleware (e.g., analytics, logging)
+
+Cross-tab Synchronization
+
+Keeping multiple browser tabs in sync
+
+Selectors with Equality Functions
+
+Fine-tuning render performance
+
+Integration with UI frameworks
+
+Zustand + ShadCN/UI, Zustand + TanStack Table
+
+Migrating from Redux to Zustand
+
+How to refactor step by step
+
+🧩 Optional — Real-World Examples
+
+Theme toggler
+
+Cart management in an e-commerce app
+
+Auth store with persisted tokens
+
+Global modal or notification store
+
+Filter/sorting state in dashboards
+
+
+
+            <br/><br/><br/><br/>
+           
+Phase 1 — Foundations (Basics First)
+
+Goal: Understand what Zustand is and how to manage simple state.
+
+🧩 Topics
+
+What is Zustand and why use it?
+
+Installing Zustand (npm install zustand)
+
+Creating your first store
+
+Reading and updating state
+
+Selectors (reading only part of the state)
+
+🧠 Practice Project
+
+Mini App: Simple Counter
+
+Create a count state with increase, decrease, and reset actions.
+
+Use a selector so only the counter display re-renders.
+
+Resources
+
+Zustand Official Docs – Getting Started
+
+React Docs – State and Lifecycle
+
+🟡 Phase 2 — Core Features & Realistic Use
+
+Goal: Learn how to structure stores and handle async or complex logic.
+
+🧩 Topics
+
+Multiple stores (modular state)
+
+Async actions (e.g., fetching from an API)
+
+Derived/computed state
+
+Persisting data (persist middleware)
+
+Zustand DevTools (devtools middleware)
+
+🧠 Practice Project
+
+Mini App: Todo List / Notes App
+
+Store todos globally.
+
+Add persistence to localStorage.
+
+Include actions like add, toggle, remove.
+
+View state in DevTools.
+
+Resources
+
+Zustand Middleware Docs
+
+DevTools Integration Guide
+
+🔵 Phase 3 — TypeScript, Optimization & Patterns
+
+Goal: Write scalable, typed, and performant Zustand stores.
+
+🧩 Topics
+
+TypeScript integration (strongly type store & actions)
+
+Selectors with shallow comparison (import { shallow } from 'zustand/shallow')
+
+Organizing stores for large apps
+
+Resetting and hydrating state (for logout or SSR)
+
+🧠 Practice Project
+
+Mini App: User Dashboard
+
+Use a userStore for authentication.
+
+Add a settingsStore for theme and preferences.
+
+Implement a “logout” that resets all stores.
+
+Resources
+
+Zustand + TypeScript Docs
+
+Shallow Comparison Example
+
+🟣 Phase 4 — Advanced Patterns & Integration
+
+Goal: Master Zustand in real-world React apps (Next.js, React Query, etc.)
+
+🧩 Topics
+
+Zustand with Next.js SSR hydration
+
+Zustand with React Query (for async server state)
+
+Custom middleware (e.g., analytics, logging)
+
+Cross-tab synchronization
+
+Testing Zustand stores
+
+🧠 Practice Project
+
+Mini App: Full Stack Notes App
+
+Store auth token & user data in Zustand (persisted).
+
+Use React Query for fetching notes.
+
+Sync logout or theme changes across multiple tabs.
+
+Resources
+
+Next.js + Zustand Example (Official)
+
+Testing Zustand Stores Guide
+
+🧠 Phase 5 — Real-World Projects & Deep Dives
+
+Goal: Cement your skills through production-style projects.
+
+💡 Project Ideas
+
+E-Commerce Storefront
+
+Cart store, wishlist store, user auth, persisted state.
+
+Dashboard / Admin Panel
+
+Filters, modals, user preferences, data caching.
+
+Chat App
+
+Global message store, async updates, optimistic UI.
+
+📚 Continue Learning
+
+Explore Valtio, Jotai, and Redux Toolkit for comparison.
+
+Read Zustand source code — it’s small and easy to follow.
+
+
+    </body>
+</html>
