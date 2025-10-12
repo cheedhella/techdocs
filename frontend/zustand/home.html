@@ -431,6 +431,102 @@ Lots of time was spent to deal with common pitfalls, like the dreaded zombie chi
 
 
 
+Actions and Immer (state mutation patterns)
+
+Learn how to keep your store clean and predictable.
+Example:
+
+import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
+
+const useStore = create(immer((set) => ({
+  count: 0,
+  increment: () => set((state) => { state.count += 1 }),
+  decrement: () => set((state) => { state.count -= 1 }),
+})));
+
+
+👉 This teaches you about immutable updates, actions inside the store, and the immer middleware.
+
+💾 2. Persistence (saving store to localStorage / sessionStorage)
+
+Use the persist middleware to make your Zustand store survive page reloads.
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+const useStore = create(
+  persist(
+    (set) => ({
+      field1: 0,
+      field2: 0,
+      increment1: () => set((s) => ({ field1: s.field1 + 1 })),
+    }),
+    { name: "my-app-storage" }
+  )
+);
+
+
+✅ Helps you understand middlewares and state hydration.
+
+⚙️ 3. Selectors and equality functions
+
+You’ve already seen simple selectors.
+Next, learn to use shallow comparison when selecting multiple values:
+
+import { shallow } from "zustand/shallow";
+
+const [a, b] = useStore((state) => [state.a, state.b], shallow);
+
+
+👉 Prevents unnecessary re-renders when you select multiple fields.
+
+🧠 4. Computed / derived state
+
+Sometimes you don’t need to store everything — just compute on the fly.
+
+const total = useStore((s) => s.field1 + s.field2);
+
+
+Or use libraries like zustand-middleware-computed for more complex derived logic.
+
+⚡ 5. Async actions (fetching data)
+
+Zustand doesn’t have “thunks,” but async actions are simple:
+
+const useUserStore = create((set) => ({
+  user: null,
+  fetchUser: async (id) => {
+    const res = await fetch(`/api/user/${id}`);
+    set({ user: await res.json() });
+  },
+}));
+
+
+This will teach you about side effects and async handling inside Zustand.
+
+🧩 6. Splitting stores (modular architecture)
+
+When your app grows, split related logic into separate stores:
+
+useUserStore
+
+useSettingsStore
+
+useUIStore
+You can even combine them when needed.
+
+🚀 7. Middleware chaining and devtools
+
+For debugging and advanced control:
+
+import { devtools } from "zustand/middleware";
+
+const useStore = create(
+  devtools((set) => ({ count: 0, inc: () => set((s) => ({ count: s.count + 1 })) }))
+);
+
+Immutable state and merging
 
 
     </body>
