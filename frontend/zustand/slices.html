@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Slicing a Store</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>How to slice a store?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It demonstrates the how to slice the store, so that a component is re-rendered not on every change to store, but on changes related to a particular state;</li>
+            <li>When counter1 changes, only Component 1 and Component 2 are re-rendered;</li>
+            <li>When counter2 changes, only Component 2 and Component 3 are re-rendered;</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">src/store/counterStore.ts</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import { create } from 'zustand'
+
+interface CounterStoreType {
+  count1: number;
+  count2: number;
+  getCount1: () => number;
+  increase1: () => void;
+  decrease1: () => void;
+  getCount2: () => number;
+  increase2: () => void;
+  decrease2: () => void;
+}
+
+const useCounterStore = create<CounterStoreType>((set, get) => ({
+  count1: 0,
+  count2: 0,
+  getCount1: () => get().count1,
+  increase1: () => set((state) => ({ count1: state.count1 + 1 })),
+  decrease1: () => set((state) => ({ count1: state.count1 - 1 })),
+  getCount2: () => get().count2,
+  increase2: () => set((state) => ({ count2: state.count2 + 1 })),
+  decrease2: () => set((state) => ({ count2: state.count2 - 1 })),
+}))
+
+export default useCounterStore
+
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component1.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Typography } from '@mui/material'
+
+const Component1: React.FC = () => {
+  const count1 = useCounterStore((state) => state.count1);
+
+  console.log("Re-rendering Component1..");
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid red',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%',
+      }}
+    &gt;
+      &lt;Typography variant="h5" color="red"&gt;
+        Counter #1 Value: {count1}
+      &lt;/Typography&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default Component1
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component2.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Button, Typography, Stack } from '@mui/material'
+
+const Counter: React.FC<{ title: string; getCount: () => number; onIncrease: () => void; onDecrease: () => void }> = ({
+  title,
+  getCount,
+  onIncrease,
+  onDecrease,
+}) => (
+  &lt;Box sx={{ mb: 2 }}&gt;
+    &lt;Typography variant="h5" sx={{ mb: 2 }}&gt;
+      {title}: {getCount()}
+    &lt;/Typography&gt;
+    &lt;Stack direction="row" spacing={2} justifyContent="center"&gt;
+      &lt;Button variant="contained" color="primary" onClick={onDecrease}&gt;
+        -
+      &lt;/Button&gt;
+      &lt;Button variant="contained" color="secondary" onClick={onIncrease}&gt;
+        +
+      &lt;/Button&gt;
+    &lt;/Stack&gt;
+  &lt;/Box&gt;
+);
+
+const Component2: React.FC = () => {
+  const {
+    getCount1,
+    increase1,
+    decrease1,
+    getCount2,
+    increase2,
+    decrease2,
+  } = useCounterStore();
+
+  console.log("Re-rendering Component2..");
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid gray',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%',
+      }}
+    &gt;
+      &lt;Counter title="Counter 1" getCount={getCount1} onIncrease={increase1} onDecrease={decrease1} /&gt;
+      &lt;Box sx={{ borderTop: '1px solid lightgray', pt: 2, mt: 2 }}&gt;
+        &lt;Counter title="Counter 2" getCount={getCount2} onIncrease={increase2} onDecrease={decrease2} /&gt;
+      &lt;/Box&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default Component2
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component3.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Typography } from '@mui/material'
+
+const Component3: React.FC = () => {
+  const count2 = useCounterStore((state) => state.count2);
+
+  console.log("Re-rendering Component3..");
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid blue',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%',
+      }}
+    &gt;
+      &lt;Typography variant="h5" color="blue"&gt;
+        Counter #2 Value: {count2}
+      &lt;/Typography&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default Component3
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/App.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import { Container, Grid } from '@mui/material'
+import Component1 from './components/Component1'
+import Component2 from './components/Component2'
+import Component3 from './components/Component3'
+
+const App: React.FC = () => {
+  return (
+      &lt;Grid container spacing={4} justifyContent="center"&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component1 /&gt;	
+        &lt;/Grid&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component2 /&gt;	
+        &lt;/Grid&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component3 /&gt;	
+        &lt;/Grid&gt;	
+      &lt;/Grid&gt;	
+    &lt;/Container&gt;
+  )
+}
+
+export default App
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="photo-box">
+        <p>Output</p>
+        <img src="imgs/slices-1.png" alt="Output">
+        <img src="imgs/slices-2.png" alt="Output">
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

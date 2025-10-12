@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Global State Manager</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>Purpose of this demo?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It demonstrates the how to manage(create and share) global state(state that is shared b/w components) using zustand;</li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">src/store/counterStore.ts</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+// 1️⃣ Define the store's shape - store contains both state and actions;
+interface CounterStoreType {
+  count: number;
+  getCount: () => number;
+  increase: () => void;
+  decrease: () => void;
+}
+
+// 2️⃣ create() is used to create the store;
+// set function is used to set initial state and actions;
+const useCounterStore = create<CounterStoreType>((set, get) => ({
+  count: 0,
+  getCount: () => get().count,
+/*
+When you call set((state) => ({ count: state.count + 1 })), Zustand:
+  Reads the current state.
+  Applies your update.
+  Notifies all React components using the store, so they re-render automatically.
+*/
+  increase: () => set((state) => ({ count: state.count + 1 })),
+  decrease: () => set((state) => ({ count: state.count - 1 })),
+}))
+
+export default useCounterStore
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component1.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Typography } from '@mui/material'
+
+const Component1: React.FC = () => {
+  // Another way get to get state;
+  const count = useCounterStore((state) => state.count);
+
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid red',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%',
+      }}
+    &gt;	
+      &lt;Typography variant="h5" color="red"&gt;
+        Counter Value: {count}
+      &lt;/Typography&gt;
+    &lt;/Box&gt;	
+  )
+}
+
+export default Component1
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component2.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Button, Typography, Stack } from '@mui/material'
+
+const Component2: React.FC = () => {
+  const { getCount, increase, decrease } = useCounterStore();
+
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid gray',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%',
+      }}
+    &gt;
+      &lt;Typography variant="h5" sx={{ mb: 2 }}&gt;
+        Counter Value: {getCount()}
+      &lt;/Typography&gt;
+      &lt;Stack direction="row" spacing={2} justifyContent="center"&gt;
+        &lt;Button variant="contained" color="primary" onClick={decrease}&gt;
+          -
+        &lt;/Button&gt;
+        &lt;Button variant="contained" color="secondary" onClick={increase}&gt;
+          +
+        &lt;/Button&gt;
+      &lt;/Stack&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default Component2
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/components/Component3.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import useCounterStore from '../store/counterStore'
+import { Box, Typography } from '@mui/material'
+
+const Component3: React.FC = () => {
+  // Another way to read state
+  const count = useCounterStore((state) => state.getCount());
+
+  return (
+    &lt;Box
+      sx={{
+        border: '2px solid blue',
+        borderRadius: '16px',
+        p: 1,
+        textAlign: 'center',
+        width: '100%'
+      }}
+    &gt;
+      &lt;Typography variant="h5" color="blue"&gt;
+        Counter Value: {getCount()}
+      &lt;/Typography&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default Component3
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="code-block">
+        <div class="code-block-title">src/App.tsx</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import React from 'react'
+import { Container, Grid } from '@mui/material'
+import Component1 from './components/Component1'
+import Component2 from './components/Component2'
+import Component3 from './components/Component3'
+
+const App: React.FC = () => {
+  return (
+      &lt;Grid container spacing={4} justifyContent="center"&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component1 /&gt;	
+        &lt;/Grid&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component2 /&gt;	
+        &lt;/Grid&gt;	
+        &lt;Grid item xs={12} sm={4}&gt;	
+          &lt;Component3 /&gt;	
+        &lt;/Grid&gt;	
+      &lt;/Grid&gt;	
+    &lt;/Container&gt;
+  )
+}
+
+export default App
+</code></pre>
+    </div>
+
+    <br /><br />
+    <div class="photo-box">
+        <p>Output</p>
+        <img src="imgs/counter-op.png" alt="Output">
+        <div>
+          Note: If you reload the page, state gets reset to initial state;
+        </div>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

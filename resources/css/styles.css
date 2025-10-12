@@ -3,8 +3,10 @@ body {
     font-family: monospace;
     padding: 20px;
 }
-a:visited, a:link {
-    color:purple;
+
+a:visited,
+a:link {
+    color: purple;
 }
 
 .main-grid-container {
@@ -15,7 +17,8 @@ a:visited, a:link {
 }
 
 .grid-wide-column {
-    grid-column: span 2; /* takes up 2 columns */
+    grid-column: span 2;
+    /* takes up 2 columns */
 }
 
 .main-grid-item {
@@ -29,6 +32,7 @@ a:visited, a:link {
     grid-column-end: 4;
     text-align: center;
 }
+
 /*
 .question {
     font-size: 1.17em;
@@ -42,35 +46,42 @@ div.question {
     margin-bottom: 10px;
     color: brown;
 }
+
 div.answer {
     margin-left: 10px;
 }
+
 div.answer ul li {
     font-size: 12px;
     margin-top: 10px;
 }
+
 .tab1 {
     display: inline-block;
     margin-left: 25px;
 }
+
 .tab2 {
     display: inline-block;
     margin-left: 50px;
 }
+
 .tab3 {
     display: inline-block;
     margin-left: 75px;
 }
+
 .tab4 {
     display: inline-block;
     margin-left: 100px;
 }
 
-div.command-table > table {
+div.command-table>table {
     border: 2px dotted grey;
-    border-spacing: 40px 10px; /* horizontal=40px, vertical=10px */
+    border-spacing: 40px 10px;
+    /* horizontal=40px, vertical=10px */
 }
-  
+
 div.command-table th,
 div.command-table td {
     text-align: left;
@@ -81,7 +92,7 @@ div.command-table th {
     font-weight: bold;
 }
 
-div.toc-container > ul > li {
+div.toc-container>ul>li {
     margin-top: 20px;
 }
 
@@ -95,5 +106,23 @@ div.toc-container li {
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
+}
+
+.photo-box {
+    width: 350px;
+    margin: 20px 0;
+    padding: 10px;
+    //border: 2px solid #333;
+    // border-radius: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.photo-box img {
+    width: 100%;
+}
+
+.image-container {
+    text-align: center;
 }
