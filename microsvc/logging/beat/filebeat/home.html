@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Filebeat</title>
+    <link rel="stylesheet" href="../../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>Filebeat</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Beats?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a collection of data shippers, each for a different purpose;</li>
+            <li><b>Filebeat</b> - It is used to collect log files and send them to Elasticsearch or Logstash;</li>
+            <li><b>Packetbeat</b> - It collects, ships, and analyzes network data from our servers and containers;</li>
+            <li><b>Auditbeat</b> - It collects and ships our Linux audit data and monitors the integrity of our files;
+            </li>
+            <li><b>Functionbeat</b> - It collects, ships, and monitors data from our cloud services;</li>
+            <li><b>Metricbeat</b> - It collects metrics from our systems and service, ranging from CPU to memory, Redis
+                to NGINX, and much more;</li>
+            <li><b>Winlogbeat</b> - It collects and ships Windows event logs;</li>
+            <li><b>Heartbeat</b> - It collects and ships Windows event logs; It monitors services for their
+                availability. For example, if given a list of URLs, Heartbeat will send the requests using these URLs
+                and ship the response information, such as response time;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What is Filebeat?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Filebeat is a lightweight log shipper, which monitors the log files or locations that you specify and
+                forwards them either to Logstash or Elasticsearch or another destination such as Kafka, Redis, S3;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How it works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It has mainly 2 components: Inputs and Harvesters;</li>
+            <li><b>Inputs</b> -> It defines what logs to read(For eg, specific files or directories);</li>
+            <li><b>Harvesters</b>
+                <ul>
+                    <li>For each log that Filebeat locates, It starts a new harvester;</li>
+                    <li>Harvester is a lightweight thread, that monitors a single log file for new entries and sends the
+                        content to the output that you’ve configured;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Install Filebeat</strong></div>
+    <div class="answer">
+        <ul>
+            <li>curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.15.2-linux-x86_64.tar.gz
+            </li>
+            <li>tar -xzf filebeat-8.15.2-linux-x86_64.tar.gz</li>
+            <li>cd filebeat-8.15.2-linux-x86_64</li>
+            <li>vi filebeat.yml</li>
+            <li>
+                <pre>filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/*.log
+
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+</pre>
+            </li>
+            <li>Test config: ./filebeat test config</li>
+            <li>Start: sudo ./filebeat -e -c filebeat.yml # -e → logs to stdout (useful for debugging)</li>
+            <li>Stop: sudo ./filebeat stop</li>
+            <li>Restart: sudo ./filebeat restart</li>
+            <li>Status: sudo ./filebeat status</li>
+            <li>Delete: sudo ./filebeat delete</li>
+            <li>To run it in background: nohup sudo ./filebeat > filebeat.log 2>&1 &</li>
+            <li>Run as a Systemd Service:
+                <pre>
+sudo vi /etc/systemd/system/filebeat.service
+[Unit]
+Description=Filebeat Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/filebeat/filebeat -c /usr/local/filebeat/filebeat.yml
+Restart=always
+User=root
+WorkingDirectory=/usr/local/filebeat
+
+[Install]
+WantedBy=multi-user.target
+
+
+# Reload systemd to detect new service
+sudo systemctl daemon-reload
+
+# Enable it to auto-start at boot
+sudo systemctl enable filebeat
+
+# Start it now
+sudo systemctl start filebeat
+
+# Check status
+sudo systemctl status filebeat
+
+# Logs
+journalctl -u filebeat -f
+
+# Verify it is Working
+sudo ./filebeat test output
+
+
+    </pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Configure Filebeat</strong></div>
+    <div class="answer">
+        <pre>
+// /etc/filebeat/filebeat.yml
+##########################################
+# FILEBEAT CONFIGURATION TEMPLATE
+# ----------------------------------------
+# Works for: manual installs, Docker, or systemd service
+# Purpose: collect logs (e.g., Spring Boot apps) and ship to ELK
+##########################################
+
+# =========================================
+# Filebeat Inputs — what logs to read
+# =========================================
+filebeat.inputs:
+
+  # --- Log input example ---
+  - type: log
+    enabled: true
+    # Paths to your application logs
+    paths:
+      - /opt/spring/logs/*.log
+      - /var/log/*.log
+
+    # Optional: exclude compressed or rotated logs
+    exclude_files: ['\.gz$']
+
+    # Optional custom fields
+    fields:
+      app: spring-boot-demo
+      environment: production
+    fields_under_root: true
+
+    # If your logs are in JSON format (Spring Boot JSON logging)
+    json.keys_under_root: true
+    json.add_error_key: true
+    json.message_key: message
+
+    # Handle multi-line logs (e.g., Java stack traces)
+    multiline.pattern: '^[[:space:]]'
+    multiline.negate: false
+    multiline.match: after
+
+    # Performance / cleanup
+    ignore_older: 24h
+    clean_inactive: 72h
+    close_inactive: 5m
+
+# =========================================
+# Filebeat Modules — prebuilt configs
+# =========================================
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+  reload.period: 10s
+  # Example: enable system logs → sudo filebeat modules enable system
+
+# =========================================
+# Autodiscover — dynamic log discovery (optional)
+# =========================================
+# For Docker/Kubernetes environments
+# filebeat.autodiscover:
+#   providers:
+#     - type: docker
+#       hints.enabled: true
+#     - type: kubernetes
+#       hints.enabled: true
+#       include_annotations: ["co.elastic.logs/enabled"]
+
+# =========================================
+# Processors — add metadata or modify events
+# =========================================
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+  # Drop unwanted fields
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "ecs.version"]
+
+# =========================================
+# Outputs — where logs go
+# =========================================
+
+# --- Elasticsearch (direct output) ---
+output.elasticsearch:
+  enabled: true
+  hosts: ["http://localhost:9200"]
+  index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+  username: "elastic"        # optional
+  password: "changeme"       # optional
+  # ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]
+
+# --- Logstash output (if using Logstash as a buffer/parser) ---
+# output.logstash:
+#   enabled: true
+#   hosts: ["localhost:5044"]
+#   loadbalance: true
+#   ssl.certificate_authorities: ["/etc/pki/root/ca.pem"]
+
+# --- Kafka output (alternative) ---
+# output.kafka:
+#   hosts: ["localhost:9092"]
+#   topic: "filebeat"
+#   codec.json:
+#     pretty: false
+
+# --- Console output (for testing/debug) ---
+# output.console:
+#   enabled: false
+#   pretty: true
+
+# =========================================
+# Logging — Filebeat's own logs
+# =========================================
+logging:
+  level: info           # debug, info, warning, error
+  to_files: true
+  to_syslog: false
+  files:
+    path: /var/log/filebeat
+    name: filebeat
+    keepfiles: 7
+    permissions: 0644
+  selectors: ["*"]      # use ["*"] for all, or ["publish", "output"] for less noise
+
+# =========================================
+# Monitoring — send internal metrics to Elasticsearch
+# =========================================
+monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: ["http://localhost:9200"]
+  metrics_period: 10s
+
+# =========================================
+# Kibana Setup — for dashboards
+# =========================================
+setup.kibana:
+  host: "http://localhost:5601"
+
+# =========================================
+# Index Template & Dashboard Setup
+# =========================================
+setup.template.enabled: true
+setup.template.name: "filebeat"
+setup.template.pattern: "filebeat-*"
+setup.dashboards.enabled: true
+
+# =========================================
+# General Runtime Settings
+# =========================================
+name: "filebeat-node1"
+tags: ["spring", "prod"]
+max_procs: 1
+queue.mem:
+  events: 4096
+  flush.min_events: 512
+  flush.timeout: 5s
+
+
+        </pre>
+    </div>
+
+    <div class="question"><strong>7. Configuration Description</strong></div>
+    <div class="answer">
+      <pre>
+| Category         | Key Setting                                                                 | Description                                              |
+| ---------------- | --------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Inputs**       | `filebeat.inputs`                                                           | Defines log sources (files, containers, syslog, etc.)    |
+| **Modules**      | `filebeat.config.modules`                                                   | Prebuilt configs for popular apps (nginx, system, mysql) |
+| **Autodiscover** | `filebeat.autodiscover`                                                     | Dynamically discover containers/pods                     |
+| **Processors**   | `processors`                                                                | Add metadata or modify events                            |
+| **Outputs**      | `output.elasticsearch`, `output.logstash`, `output.kafka`, `output.console` | Send events to destinations                              |
+| **Logging**      | `logging.*`                                                                 | Configure Filebeat’s own logging                         |
+| **Monitoring**   | `monitoring.*`                                                              | Send Filebeat internal metrics to Elasticsearch          |
+| **Setup**        | `setup.kibana`, `setup.template`, `setup.dashboards`                        | Preload templates and dashboards                         |
+| **General**      | `max_procs`, `name`, `tags`, `queue.mem`                                    | Miscellaneous runtime options                            |
+      </pre>
+    </div>
+
+
+    <div class="question"><strong>8. Minimal Configuration</strong></div>
+    <div class="answer">
+        <pre>
+// /etc/filebeat/filebeat.yml
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /path/to/your/spring-boot-app/logs/*.log
+    fields:
+      app: "spring-boot-demo"
+    fields_under_root: true
+
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+  index: "spring-boot-logs-%{+yyyy.MM.dd}"
+  </pre>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Elasticsearch</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Elasticsearch</h2>
+        </div>
+
+        <div class="toc-container">
+            <ul>
+                <li>Basics
+                    <ul>
+                        <li><a href="./what.html">What is Elasticsearch?</a></li>
+                        <li><a href="./state-manager.html">Global State Manager</a></li>
+                        <li><a href="./slices.html">State as multiple slices</a></li>
+                    </ul>
+                </li>
+                <li>Middleware
+                    <ul>
+                        <li>persist</li>
+                        <li>devtools</li>
+                        <li>subscribeWithSelector</li>
+                        Zustand supports “middlewares” for extra features:
+                        devtools → Redux DevTools integration
+
+persist → Saves state to localStorage
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+<pre>
+    1. Core Foundations
+
+Before diving into Elasticsearch itself, you should understand:
+
+What is Elasticsearch? — Purpose, use cases, and architecture overview.
+
+The ELK/Elastic Stack — Elasticsearch, Logstash, Kibana (and Beats).
+
+When to use Elasticsearch — Full-text search, analytics, logging, etc.
+
+RESTful API basics — CRUD operations over HTTP/JSON.
+
+🏗️ 2. Architecture & Internals
+
+Understand how Elasticsearch works internally:
+
+Cluster — A collection of nodes.
+
+Node — A single instance of Elasticsearch.
+
+Index — Logical namespace for documents (like a database).
+
+Document — A JSON object (like a row in SQL).
+
+Shard — Data partition; can be primary or replica.
+
+Replica — Copy of a shard for fault tolerance and read scaling.
+
+Segment — Low-level Lucene data storage unit.
+
+Cluster state — Metadata maintained by the master node.
+
+Distributed architecture concepts — Quorum, routing, consistency.
+
+🧮 3. Data Modeling
+
+Mapping — Schema definition for documents.
+
+Field types — text, keyword, numeric, date, boolean, geo, etc.
+
+Dynamic mapping — Automatic field detection and typing.
+
+Custom analyzers — Control how text is processed.
+
+Nested & object fields — Representing complex JSON structures.
+
+Index templates — Predefined mappings/settings for similar indices.
+
+Aliases — Logical names or filters over indices.
+
+🔍 4. Search Fundamentals
+
+Query vs Filter context
+
+Query DSL (Domain-Specific Language) — JSON-based query language.
+
+Full-text queries — match, match_phrase, multi_match.
+
+Term-level queries — term, terms, range, exists.
+
+Boolean queries — must, should, must_not.
+
+Pagination — from/size, search_after.
+
+Sorting and relevance scoring.
+
+🧠 5. Text Analysis
+
+Analyzers — Tokenizer + token filters + character filters.
+
+Built-in analyzers — standard, simple, whitespace, keyword, etc.
+
+Custom analyzers — Combining components for language-specific analysis.
+
+Tokenizers — standard, ngram, edge_ngram, etc.
+
+Stopwords and stemming.
+
+Synonyms handling.
+
+📊 6. Aggregations
+
+Metric aggregations — avg, sum, min, max, count.
+
+Bucket aggregations — terms, range, date_histogram, etc.
+
+Pipeline aggregations — moving_avg, derivative, etc.
+
+Nested aggregations — Combining metrics within buckets.
+
+Cardinality and percentiles.
+
+Composite aggregations — for pagination of large aggregation results.
+
+⚙️ 7. Index Management
+
+Index lifecycle management (ILM) — rollovers, hot/warm/cold phases.
+
+Reindexing and update by query.
+
+Force merge and refresh.
+
+Settings — number_of_shards, number_of_replicas.
+
+Aliases and rollover indices.
+
+Snapshot and restore — backup and recovery.
+
+🧰 8. Ingestion and Data Pipelines
+
+Ingest nodes — pipelines that process documents before indexing.
+
+Processors — set, rename, remove, grok, date, geoip, etc.
+
+Logstash — external pipeline tool.
+
+Beats — lightweight data shippers.
+
+Elasticsearch ingestion API.
+
+🖥️ 9. Administration & Operations
+
+Cluster health and state APIs.
+
+Monitoring and metrics — _cat APIs, Kibana Monitoring, Elastic APM.
+
+Scaling and load balancing.
+
+Snapshot & restore.
+
+Upgrading clusters.
+
+Security and user roles (X-Pack features).
+
+TLS/SSL and authentication.
+
+🔐 10. Security (X-Pack)
+
+Role-based access control (RBAC).
+
+Users, roles, and privileges.
+
+Document and field-level security.
+
+Audit logging.
+
+API keys and token-based authentication.
+
+Encrypted communication.
+
+🚀 11. Performance & Tuning
+
+Indexing performance — bulk API, refresh intervals, mappings.
+
+Search performance — caching, filters, doc_values.
+
+Memory management — JVM heap sizing, fielddata cache.
+
+Shard sizing and scaling best practices.
+
+Profiling queries.
+
+Force merge & index optimization.
+
+🧩 12. Advanced Features
+
+Percolator queries — reverse search.
+
+Search templates and stored scripts.
+
+Cross-cluster search and replication (CCS/CCR).
+
+Runtime fields.
+
+Vector search and similarity algorithms (dense_vector, knn).
+
+Elastic Machine Learning — anomaly detection, data frame analytics.
+
+Alerting (Watcher).
+
+💡 13. Ecosystem & Integration
+
+Kibana — dashboards, visualizations, Dev Tools.
+
+Logstash — ETL for data ingestion.
+
+Beats — Filebeat, Metricbeat, etc.
+
+Elastic APM — Application performance monitoring.
+
+Elastic Security & Observability.
+
+🧾 14. APIs & Clients
+
+REST API.
+
+Bulk API.
+
+Scroll & Search After APIs.
+
+Python (Elasticsearch-py), Java, Node.js, Go clients.
+
+Elasticsearch SQL API.
+
+Async search.
+
+📘 15. Practical Skills
+
+Setting up a cluster locally (Docker, Elastic Cloud, or manual setup).
+
+Writing search queries in Kibana Dev Tools.
+
+Indexing and searching sample datasets.
+
+Monitoring cluster health.
+
+Handling scaling, failures, and migrations.
+
+
+
+
+
+
+Query Processing & Relevance
+
+Elasticsearch’s Query DSL lets you mix:
+
+Full-text queries (match, match_phrase, multi_match)
+
+Structured filters (term, range, bool)
+
+Aggregations (for analytics)
+
+Boolean logic (must, should, must_not)
+
+Relevance scores consider:
+
+Term frequency (how often a term appears in a document),
+
+Inverse document frequency (how rare it is across all documents),
+
+Field length normalization (shorter fields rank higher for matches).
+
+📊 5. Aggregations (Analytics Engine)
+
+Elasticsearch can also do real-time analytics using aggregations (like SQL GROUP BY):
+
+Metric aggregations: avg, sum, min, max, count.
+
+Bucket aggregations: terms, date_histogram, range.
+
+Pipeline aggregations: moving averages, derivatives.
+
+These run in parallel on each shard and are merged across nodes — very efficient at scale.
+
+🚀 6. Distribution & Scalability
+
+Because indices are split into shards:
+
+Indexing can be parallelized (multiple shards handle inserts).
+
+Search can be parallelized (each shard searches its part of data).
+
+Adding more nodes lets Elasticsearch scale horizontally.
+
+Data is automatically replicated for fault tolerance and load balancing:
+
+If a node fails, replicas serve requests.
+
+When a node joins, shards are rebalanced automatically.
+
+🧰 7. Resiliency & Cluster Management
+
+Elasticsearch maintains a cluster state, managed by a master node:
+
+Tracks which nodes exist.
+
+Tracks which indices and shards exist.
+
+Decides shard placement.
+
+Handles node failures and shard recovery.
+
+The data nodes do the actual indexing and search work.
+
+🧮 8. Updates & Deletes
+
+Elasticsearch is near real-time, not immediate:
+
+When you update a document, a new version is indexed; the old one is marked deleted.
+
+The index is refreshed every second (configurable) — making changes visible.
+
+This is handled through Lucene segments:
+
+New data is written to new segments.
+
+Old segments are merged periodically (background process called merge or force merge).
+
+🔐 9. Security & Extensions (X-Pack)
+
+Elasticsearch can include features for:
+
+Authentication & authorization (RBAC),
+
+TLS/SSL encryption,
+
+Audit logging,
+
+Alerting & monitoring,
+
+Machine learning (anomaly detection),
+
+Cross-cluster replication.
+
+These come via X-Pack, which is now built into the Elastic Stack.
+</pre>
+
+    </body>
+</html>

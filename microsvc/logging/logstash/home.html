@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Logstash</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Logstash</h2>
+        </div>
+
+        <div class="toc-container">
+            <ul>
+                <li>Basics
+                    <ul>
+                        <li><a href="./what.html">What is Elasticsearch?</a></li>
+                        <li><a href="./state-manager.html">Global State Manager</a></li>
+                        <li><a href="./slices.html">State as multiple slices</a></li>
+                    </ul>
+                </li>
+                <li>Middleware
+                    <ul>
+                        <li>persist</li>
+                        <li>devtools</li>
+                        <li>subscribeWithSelector</li>
+                        Zustand supports “middlewares” for extra features:
+                        devtools → Redux DevTools integration
+
+persist → Saves state to localStorage
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+<pre>
+    A data processing pipeline that ingests data and consists of a family of lightweight data shippers that can send data from various systems and services to Logstash or Elasticsearch.
+
+
+    Logstash is an open-source and server-side data processing pipeline that ingests data from multiple sources, transforms it, and sends it to our desired destination. Traditionally, Logstash has been used to process logs from applications and send them to Elasticsearch. Still, Logstash has evolved into a more general-purpose tool, which means the Logstash pipeline receives data as events, which can be of our choice: e-commerce orders, chat messages, log files, reports, etc. Then, these events are processed by Logstash and shipped to one or more destinations, such as Elasticsearch, message queue, HTTP endpoint, etc.
+
+The Logstash pipeline consists of three stages (inputs, filters, and outputs):
+
+Inputs: They ingest data of all shapes, sizes, and sources. Logstash supports different input plugins that pull events to read from multiple data sources simultaneously. It can ingest from our logs, metrics, web applications, data stores, and various AWS services, all in a continuous streaming fashion.
+
+Filters: They parse and transform our data. Logstash dynamically transforms and prepares our data regardless of format or complexity. It parses each event, then identifies field names, and converts them into a standard format to be read for the output stage.
+
+Outputs: They choose our format and transport our data. After filtering the data, Logstash sends it to a specific destination, such as Elasticsearch. Like the inputs stage, Logstash offers many output plugins that quickly ship event data to a particular destination.
+
+</pre>
+
+    </body>
+</html>

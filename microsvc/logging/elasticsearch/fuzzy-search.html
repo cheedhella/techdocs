@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Full Text Search</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is Fuzziness Search?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is all about guessing what the user means, in case if he typed it wrong;</li>
+         <li>Fuzziness is applied at the query time, not during indexing;</li>
+         <li>When you search for foxx, It looks for nearby words like: fog, fox, box etc;</li>
+         <li>It uses edit distance (Levenshtein algorithm) to measure similarity;</li>
+         <li>It returns matches based on closeness, even if not exact;</li>
+         <li>Edit distance -> number of single-character edits (insertions, deletions, or substitutions) needed to turn one word into another word;</li>
+         <li>By default, if the edit distance between your query and a word in the index is small (e.g. ≤ 2), elasticsearch considers it a match; You can configure it in your query parameter;</li>
+         <li>
+            GET /articles/_search
+{
+  "query": {
+    "match": {
+      "content": {
+        "query": "quik foxx",
+        "fuzziness": "AUTO"
+      }
+    }
+  }
+}
+
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

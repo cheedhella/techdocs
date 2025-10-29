@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Distributed Logging</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>Distributed Logging</h2>
+    </div>
+
+    <div class="question"><strong>1. Purpose of Distributed or Centralised Logging?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Imagine you are managing a large-scale application that consists of multiple microservices, each
+                handling different aspects of your system, such as user authentication, payment processing etc;</li>
+            <li>As your application grows, tracking down issues becomes increasingly challenging;</li>
+            <li>When a user reports a problem, you need to sift through logs from various services to identify the root
+                cause;</li>
+            <li>If each service logs data independently, finding relevant information can feel like searching for a
+                needle in a haystack;</li>
+            <li>Distributed Logging provides a robust solution to above problem by centralizing log data from all
+                microservices into a single system;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Centralized Logging Solutions</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>ELK (<a href="./elasticsearch/home.html">Elasticsearch</a>, <a href="./logstash/home.html">Logstash</a>,
+                <a href="./kibana/home.html">Kibana</a>) Stack</b>
+                <ul>
+                    <li>Log shippers (like <a href="./beat/filebeat/home.html">Filebeat</a>, Fluent Bit) run on each
+                        VM/container and send logs;</li>
+                    <li>Logstash aggregates, parses, and transforms logs;</li>
+                    <li>Elasticsearch stores and indexes logs;</li>
+                    <li>Kibana visualizes and queries logs in real time;</li>
+                    <li>Pros:
+                        <ul>
+                            <li>Open-source and mature ecosystem;</li>
+                            <li>Highly customizable (filters, pipelines, dashboards);</li>
+                        </ul>
+                    </li>
+                    <li>Cons:
+                        <ul>
+                            <li>Can be heavy to manage at scale;</li>
+                            <li>Needs tuning for performance and storage;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>Grafana Loki Stack</b>
+                <ul>
+                    <li>Promtail agents ship logs;</li>
+                    <li>Loki stores them in an efficient, label-based way;</li>
+                    <li>Grafana visualizes;</li>
+                    <li>Pros:
+                        <ul>
+                            <li>Lightweight compared to ELK;</li>
+                            <li>Highly customizable (filters, pipelines, dashboards);</li>
+                        </ul>
+                    </li>
+                    <li>Cons:
+                        <ul>
+                            <li>Less powerful full-text search (optimized for structured logs);</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div style="display: none;">
+<pre>
+Distributed logging is the process of collecting, storing, and analysing logs from multiple microservices in a centralised manner.
+
+        Logging in distributed systems means recording what happens across different parts of a system that work together.
+        Unlike traditional monolithic applications where logs are stored in a single place, microservices architectures spread logs across numerous services, each running in isolated environments. This distribution poses challenges in tracing requests, debugging issues, and monitoring system health.
+
+
+        Tracing 
+        Traceability: In a microservices architecture, a single user request may traverse multiple services. Distributed logging enables developers to trace the entire path of a request across these services, making it easier to identify where issues arise.
+
+        Debugging: When something goes wrong, having logs from all services in one place allows for faster diagnosis and troubleshooting. Without centralised logs, developers would have to manually gather logs from each service, which is time-consuming and error-prone.
+
+        Monitoring and Alerting: Centralised logs can be integrated with monitoring tools to detect anomalies and trigger alerts. This proactive approach helps in identifying potential issues before they impact the end-user.
+
+        Compliance and Auditing: Many industries have regulations requiring detailed logs for auditing purposes. Distributed logging ensures that logs from all microservices are available for compliance checks.
+
+        </pre>
+    </div>
+    
+
+</body>
+
+</html>

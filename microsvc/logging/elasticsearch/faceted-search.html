@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Faceted Search</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is Faceted Search?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It allows users to filter and refine search results using multiple facets - such as brand, price range, color, date, or rating;</li>
+         <li>
+GET /products/_search
+{
+  "query": {
+    "match": { "name": "laptop" }
+  },
+  "aggs": {
+    "brands": {
+      "terms": { "field": "brand.keyword" }
+    },
+    "price_ranges": {
+      "range": {
+        "field": "price",
+        "ranges": [
+          { "to": 500 },
+          { "from": 500, "to": 1000 },
+          { "from": 1000, "to": 2000 }
+        ]
+      }
+    }
+  }
+}
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

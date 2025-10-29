@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Full Text Search</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is Full Text Search?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It’s allows you to type few words into a search box and instantly get the most relevant results, even if the exact phrase doesn’t match perfectly;</li>
+         <li>It doesn't just look for exact matches; It searches through all the text to find documents that best match the user’s query;</li>
+         <li>For example, if you search for "quick brown fox", a full-text search engine can find documents like:
+            <ul>
+               <li>The quick brown fox jumps over the lazy dog</li>
+               <li>A brown animal ran quickly into the forest</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. How Indexing works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>When you add text to full-text search engine, it goes through several steps:</li>
+         <li><b>Tokenization</b>
+            <ul>
+               <li>Breaks text into words (tokens);</li>
+               <li>Example: “The quick brown fox” → ["the", "quick", "brown", "fox"]</li>
+            </ul>
+         </li>
+         <li><b>Normalization</b>
+            <ul>
+               <li>Converts all text to lowercase, removes punctuation, handles accents etc; Eg: Quick and quick are treated the same;</li>
+            </ul>
+         </li>
+         <li><b>Stemming/Lemmatization(similar words)</b> - Not the case with normal SQL Like search
+            <ul>
+               <li>Reduces words to their root form; Eg: Running, runs, ran → run</li>
+            </ul>
+         </li>
+         <li><b>Inverted Index</b>
+            <ul>
+               <li>Builds a map of which words appear in which documents;</li>
+               <li>"quick" → [Doc1, Doc3], "fox" → [Doc1, Doc2]</li>
+            </ul>
+         </li>
+         <li><b>Relevance Scoring</b> - Not the case with normal SQL Like search
+            <ul>
+               <li>When you search, it calculates a relevance score for each document using BM25 (a modern ranking algorithm), which consider:
+                  <ul>
+                     <li>How often the word appears in the document (term frequency)?</li>
+                     <li>How rare the word is across all documents (inverse document frequency)?</li>
+                     <li>Field weights, proximity, etc.</li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+</body>
+
+</html>

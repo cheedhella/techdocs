@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Installation</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Install</strong></div>
+   <div class="answer">
+      <ul>
+         <li>
+            <pre>
+Go to the Elasticsearch download page at https://www.elastic.co/downloads/elasticsearch and download the appropriate package for your operating system. Elasticsearch is available for Windows, Linux, and Mac OS X.
+Extract the downloaded package to a directory on your computer. On Windows, you can extract the package by right-clicking on the downloaded file and selecting “Extract All”. On Linux and Mac OS X, you can extract the package using the command line.
+Elasticsearch requires Java to be installed on your system. If you do not have Java installed, download and install the latest version from https://www.java.com/en/download/.
+Open a terminal or command prompt window and navigate to the directory where you extracted the Elasticsearch package.
+Run the Elasticsearch executable by typing the following command:what is elasticsearch
+Elasticsearch should start running and you should see log messages in the terminal or command prompt window indicating that Elasticsearch is starting up.
+Verify that Elasticsearch is running by opening a web browser and going to http://localhost:9200. You should see a JSON response that contains information about your Elasticsearch clusters, such as the version number and the cluster name.
+            </pre>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>1. Configure</strong></div>
+   <div class="answer">
+      <ul>
+         <li>
+            <pre>
+Navigate to the Elasticsearch config directory. This directory is located in the root directory of your Elasticsearch installation.
+Open the elasticsearch.yml file in a text editor. This file contains the main configuration settings for Elasticsearch.
+Configure the settings in the elasticsearch.yml file. Some of the important settings that you may want to configure include:
+‘cluster.name’: This setting specifies the name of your Elasticsearch cluster. Make sure that all nodes in your cluster have the same cluster name.
+‘node.name’: This setting specifies the name of the current node. Each node in your cluster must have a unique node name.
+‘network.host’: This setting specifies the network address that Elasticsearch will bind to. By default, Elasticsearch binds to the loopback address (127.0.0.1), which means that it can only be accessed from the same machine. If you want to access Elasticsearch from other machines, you should set this setting to the IP address of your machine.
+‘http.port’: This setting specifies the port that Elasticsearch will listen on for HTTP traffic. By default, Elasticsearch listens on port 9200.
+‘path.data and path.logs’: These settings specify the directory where Elasticsearch will store its data and logs, respectively.
+4. Save the elasticsearch.yml file. 5. Restart Elasticsearch for the changes to take effect. 6. Verify that Elasticsearch is running with the updated configuration by going to ‘http://localhost:9200’ in a web browser. In addition to the ‘elasticsearch.yml’ file, there are other configuration files that you may want to modify, such as ‘jvm.options’, which contains JVM settings for Elasticsearch, and ‘log4j2.properties’, which controls Elasticsearch’s logging behaviour.
+            </pre>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>
