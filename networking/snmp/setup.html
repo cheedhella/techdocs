@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Install</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="question"><strong>1. Install Net-SNMP</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You can install either net-snmp OR libsnmp-dev libraries;</li>
+            <li><b>MacOS</b>
+                <ul>
+                    <li>brew install net-snmp</li>
+                    <li>sudo dnf install net-snmp-devel net-snmp-utils - Installs Net-SNMP development package(net-snmp-config.h etc)</li>
+                </ul>
+            </li>
+            <li><b>Linux</b>
+                <ul>
+                    <li># Debian/Ubuntu
+                        sudo apt update
+                        sudo apt install libsnmp-dev snmp snmp-mibs-downloader
+
+                        # Fedora / RHEL / CentOS
+                        sudo dnf install net-snmp net-snmp-utils net-snmp-devel
+                    </li>
+                </ul>
+            </li>
+            <li><b>Verify</b>: snmpget --version # If you see version, then no errors!</li>
+            <li><b>Test device side: </b> ./snmp_tool 192.168.1.100 public get 1.3.6.1.2.1.1.1.0    # If the device allows SNMP access, you should see something like: SNMPv2-MIB::sysDescr.0 = STRING: Linux router 5.15.0-105-generic</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>
