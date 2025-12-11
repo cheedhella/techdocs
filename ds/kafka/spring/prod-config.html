@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Producer Config</title>
+  <link rel="stylesheet" href="../../../resources/css/styles.css" />
+  <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+  <div class="question"><strong>Purpose of this demo?</strong></div>
+  <div class="answer">
+    <ul>
+      <li>It demonstrates the how to manage(create and share) global state(state that is shared b/w components) using
+        zustand;</li>
+    </ul>
+  </div>
+
+  <div class="question">
+    <strong>What is the purpose of `spring.json.type.mapping`?</strong>
+  </div>
+  <div class="answer">
+    <p>This is spring-kafka specific config, not kafka config; When sending json messages over the wire, spring-kafka
+      includes a type header (`__TypeId__`) so that the deserializer knows which Java class to convert the JSON into;
+      However, sending the full class name over the wire is often undesirable because: It leaks internal package
+      structure, it creates tight coupling b/w producer and consumer (renaming package breaks compatibility), larger
+      message headers; To avoid this, you can define a short alias for the full qualified class name for the model.</p>
+  </div>
+
+  <div class="question">
+    <strong>What are `acks` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies how many Kafka brokers must confirm the write before the producer considers the message successfully
+      sent;</p>
+    <ul>
+      <li><b>0</b> - fire and forget (no server ack); Message is written to the socket and considered “sent"; Producer
+        does not wait for any broker acknowledgment;</li>
+      <li><b>1</b> - wait for leader to ack; leader writes the message to local memory(need to be disk), sends ack to
+        producer; replicas may not have the data yet;</li>
+      <li><b>all</b> - all leader + replicas should ack; Leader waits for all in-sync replicas (ISR) to confirm the
+        write; After replication, leader ACKs the producer;</li>
+    </ul>
+  </div>
+
+  <div class="question">
+    <strong>When to use different `acks` configurations?</strong>
+  </div>
+  <div class="answer">
+    <ul>
+      <li>Use <b>0</b>, for metrics data;</li>
+      <li>Use <b>1</b>, for general apps;</li>
+      <li>Use <b>all</b>, for critical data;</li>
+    </ul>
+  </div>
+
+  <div class="question">
+    <strong>What is `client-id` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>A human-readable identifier for a Kafka producer/consumer instance used for logs (both client and broker logs),
+      monitoring, and debugging. When Kafka logs an issue, it will include the client ID: `[SocketServer brokerId=1]
+      Connection with client heartbeat-producer disconnected`. This lets you trace problems back to the exact
+      producer/consumer instance; You can set it manually or kafka can auto-generate it;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `enable.idempotence = true`?</strong>
+  </div>
+  <div class="answer">
+    <p>Set to true to avoid duplicates in case of retries. Defaults to true;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `max-in-flight-requests-per-connection`?</strong>
+  </div>
+  <div class="answer">
+    <p>When the producer sends a batch to Kafka, it normally waits for the broker acknowledgment before sending the next
+      batch to the same connection; But with multiple in-flight requests, the producer can send: multiple batches
+      without waiting for the acks; This may cause out-of-order processing of batches; If a request fails and the
+      producer retries it, earlier and later batches may get reordered on the broker; Use strict ordering, if You want
+      to avoid reordering even during retries;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `retries` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies how many times to retry a batch, when send fails due to retriable error; Defaults to
+      Integer.MAX_VALUE (effectively unlimited); This ensures the producer keeps retrying until `delivery.timeout.ms` is
+      reached;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `retry.backoff.ms`?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies pause (sleep time) between retrials; It prevents immediately hammering Kafka after a transient
+      failure; It gives time for metadata refresh; Defaults to 100ms; If it is too low, faster retries but harder on
+      Kafka; If it is too high, smoother retries but increases message delivery latency;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `request.timeout.ms` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies the maximum amount of time producer waits to get a response from the broker, before considering it
+      as failed; Defaults to 30000 ms (30 seconds);</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `delivery.timeout.ms`?</strong>
+  </div>
+  <div class="answer">
+    <p>Before Kafka 2.1, people often misconfigured: retries, `retry.backoff.ms`, `request.timeout.ms`; Thus causing
+      retries to outlive the application’s expectations (sometimes retrying for hours); To avoid that, kafka introduced
+      `delivery.timeout.ms`; It defines maximum amount of time the producer will try to deliver a record including
+      retries, before giving up and failing the send; It is the deadline for the batch; Default: 120,000 ms (2 minutes);
+    </p>
+  </div>
+
+  <div class="question">
+    <strong>How does `delivery.timeout.ms` work?</strong>
+  </div>
+  <div class="answer">
+    <p>When you send a record, producer</p>
+    <ul>
+      <li>Buffer it (in `buffer.memory`)</li>
+      <li>Put it in a batch (controlled by `batch.size`, `linger.ms`)</li>
+      <li>Attempt to send the batch to the broker; Starts a timer;</li>
+      <li>If no response within `request.timeout.ms` → that attempt fails;</li>
+      <li>Waits `retry.backoff.ms` -> retry starts on retriable errors (network issues, leader changes, transient broker
+        problems)</li>
+      <li>This loop continues until: the record is acknowledged (SUCCESS), or the total time > `delivery.timeout.ms`
+        (FAILURE)</li>
+      <li>If time is exceeded → producer throws: `TimeoutException: Expiring record due to delivery timeout`;</li>
+    </ul>
+  </div>
+
+  <div class="question">
+    <strong>What is `batch-size` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>When you call send (sync/async), producer groups all messages destined for a partition in the same batch; Once
+      the batch reaches the configured `batch-size`, then messages are actually sent to broker immediately; Defaults to
+      16 KB; If `batch-size` is high, it increases throughput (as more messages are compressed at once); Note that,
+      increasing `batch-size` alone doesn't increase latency, unless combined with `linger.ms`;</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `linger.ms` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies how long the producer should wait to fill up a batch before sending it, even if the batch is not
+      full; Default: 0 ms (send immediately);</p>
+  </div>
+
+  <div class="question">
+    <strong>What is `buffer-memory` in Kafka producer configuration?</strong>
+  </div>
+  <div class="answer">
+    <p>All batches are stored in `buffer.memory` (default: 32MB); If the buffer is full (due to slower networks, brokers
+      overloaded or batching too large etc), then producer will: block, for synchronous sends; throw
+      `BufferExhaustedException` (in async mode);</p>
+  </div>
+
+  <div class="question">
+    <strong>How does Kafka producer batching work?</strong>
+  </div>
+  <div class="answer">
+    <p>Messages accumulate in memory (`buffer-memory`); Messages targeting the same partition enter a batch; A
+      background sender thread pushes those batches to the broker, when:</p>
+    <ul>
+      <li>When `batch.size` is reached;</li>
+      <li>If the batch sits for more than `linger.ms`;</li>
+      <li>On `flush()` or `close()`;</li>
+      <li>If messages that need batching exceed buffer capacity → producer blocks or fails.</li>
+    </ul>
+  </div>
+
+  <div class="question">
+    <strong>What are the different `compression-type` options and their characteristics?</strong>
+  </div>
+  <div class="answer">
+    <p>Before sending, producer compresses the batch of messages (not individual message) using the algorithm specified;
+    </p>
+    <ul>
+      <li><b>Pros</b>: It reduces size of data sent on the network and size of data on the disk, thus increasing
+        throughput;</li>
+      <li><b>Cons</b>: It consumes CPU cycles;</li>
+    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Speed (Fastest → Slowest)</th>
+          <th>Compression Ratio (Best → Worst)</th>
+          <th>CPU Usage</th>
+          <th>Best Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>lz4</b></td>
+          <td>⭐⭐⭐⭐⭐ Fast</td>
+          <td>⭐⭐⭐ Good</td>
+          <td>Low</td>
+          <td>High throughput, low latency</td>
+        </tr>
+        <tr>
+          <td><b>snappy</b></td>
+          <td>⭐⭐⭐⭐</td>
+          <td>⭐⭐ Medium</td>
+          <td>Medium</td>
+          <td>General purpose, stable choice</td>
+        </tr>
+        <tr>
+          <td><b>zstd</b></td>
+          <td>⭐⭐⭐⭐</td>
+          <td>⭐⭐⭐⭐ Very Good</td>
+          <td>Medium</td>
+          <td>Modern, efficient, great compression</td>
+        </tr>
+        <tr>
+          <td><b>gzip</b></td>
+          <td>⭐ Slow</td>
+          <td>⭐⭐⭐⭐⭐ Best</td>
+          <td>High</td>
+          <td>When minimizing data size matters</td>
+        </tr>
+        <tr>
+          <td><b>none</b></td>
+          <td>⭐⭐⭐⭐⭐</td>
+          <td>⭐ Worst</td>
+          <td>Lowest</td>
+          <td>Very low traffic, minimal CPU</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="question">
+    <strong>What is `request-timeout-ms` in Kafka producer configuration (revisited)?</strong>
+  </div>
+  <div class="answer">
+    <p>It specifies how much time the producer will wait for a broker response, after sending the request; If producer
+      doesn't get a response within `request-timeout.ms`, it considers the request as failed and it either retries (if
+      `retries` > 0) OR throws a timeout exception; Defaults to 30000ms (30 seconds); If it is too low, and if brokers
+      are slow or under load, it can cause unnecessary timeouts; If it is too high, producer may hang for too long
+      waiting for Kafka;</p>
+  </div>
+
+  <div class="question"><strong>metadata.max.age.ms</strong></div>
+  <div class="answer">
+    <ul>
+      <li>It specifies how often the producer forcibly refreshes the metadata;</li>
+      <li></li>
+    </ul>
+    <p> Metadata includes: list of brokers in the
+      cluster, detect leader changes, pick up new partitions, checking topic existence etc; It defaults to: 300,000 ms
+      (5 minutes); If it is too low, producer reacts faster to metadata changes but it can cause more load on brokers;
+      If it is too high, it is efficient but producer is slower to react to the metadata changes;</p>
+  </div>
+
+  <div class="question"><strong>Headers: </strong>__KeyTypeId__, __TypeId__, __ContentTypeId__</div>
+  <div class="answer">
+    <ul>
+      <li><b>__KeyTypeId__</b>
+        <ul>
+          <li>It specifies the type of the message key;</li>
+          <li>If your key is simple (String, UUID, Integer), you often don’t care;</li>
+          <li>But for custom key objects (rare), this is useful;</li>
+        </ul>
+      </li>
+      <li><b>__TypeId__</b>
+        <ul>
+          <li>If you are sending Order, then set it to com.example.Order;</li>
+          <li>If you are sending ListOrder, then set it to java.util.ArrayList;</li>
+        </ul>
+      </li>
+      <li><b>__ContentTypeId__</b>
+        <ul>
+          <li>If you are sending a collection, it specifies the type of collection element;</li>
+          <li>If you are sending Order, then this header is of no use;</li>
+          <li>If you are sending ListOrder, then set it to com.example.Order;</li>
+        </ul>
+      </li>
+      <li>These headers contain type metadata that allow Spring Kafka consumers to deserialize JSON into the correct Java
+      classes;</li>
+      <li>Without these headers, consumers often deserialize the data into: LinkedHashMap, raw collections, incorrect types;</li>
+    </ul>
+  </div>
+
+
+  <div class="code-block">
+    <div class="code-block-title">src/store/counterStore.ts</div>
+    <button class="copy-btn">Copy</button>
+    <pre><code>
+</code></pre>
+  </div>
+  <br /><br />
+
+  <br /><br />
+  <div class="photo-box">
+    <p>Output</p>
+    <img src="imgs/counter-op.png" alt="Output">
+    <div>
+      Note: If you reload the page, state gets reset to initial state;
+    </div>
+  </div>
+
+  <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

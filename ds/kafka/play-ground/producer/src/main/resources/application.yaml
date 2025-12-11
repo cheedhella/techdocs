@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: Kafka Producer Demo
+  kafka:
+    bootstrap-servers: localhost:9092 # Replace with your Kafka broker address
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      
+      # Reliability & correctness
+      acks: all
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5   # safe with idempotence
+        retries: 2147483647                       # effectively unlimited (or just omit, this is Kafka default)
+        delivery.timeout.ms: 120000               # 2 minutes overall per record
+        request.timeout.ms: 30000                 # 30s per attempt
+        retry.backoff.ms: 100                     # wait between retries
+        client.id: mc-producer-1
+        spring.json.add.type.headers: true
+        spring.json.type.mapping: heartbeat:com.cmr.kafka.producer.HeartBeat
+
+      # Batching & throughput
+      batch-size: 65536            # 64 KB per partition
+      linger-ms: 5                 # wait up to 5ms to fill a batch
+      buffer-memory: 67108864      # 64 MB total producer buffer
+
+      # Compression
+      compression-type: lz4        # or "zstd" if your cluster supports it
+
+server:
+  port: 9091
+
+kafka:
+  topic:
+    name: mc-heartbeat-topic
+
+
+
+
+# Best practices
+# KafkaTemplate API

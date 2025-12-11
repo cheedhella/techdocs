@@ -1,32 +1,62 @@
 <!doctype html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>AI Agents</title>
-      <link rel="stylesheet" href="../resources/css/styles.css" />
-      <link rel="stylesheet" href="../resources/css/codeblock.css" />
-   </head>
-   <body>
-	  <div class="question"><strong>1. New Terms</strong></div>
-	  <div class="border-less-table">
-		<table>
-			<tbody>
-			<tr>
-				<td>ls</td>
-				<td>Lists files and directories in the current directory</td>
-			</tr>
-			<tr>
-				<td>cd</td>
-				<td>Changes the current directory</td>
-			</tr>
-			<tr>
-				<td>pwd</td>
-				<td>Prints the current working directory</td>
-			</tr>
-			</tbody>
-		</table>
-	  </div>
-	  
-   </body>
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>New Terms</title>
+   <link rel="stylesheet" href="../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. New Terms</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Traditional AI vs Generative AI</b>
+            <ul>
+               <li>AI that learns from data and creates new content(human-like outputs) - not just a copy of existing data;</li>
+            </ul>
+         </li>
+         <li><b>What is Deep Learning?</b>
+            <ul>
+               <li>The system that asks for info or sends SNMP commands;</li>
+            </ul>
+         </li>
+         <li><b>MIB</b> - Management Information Base;
+            <ul>
+               <li>It is a structured database of information about a network device, such as: CPU usage, Iface status,
+                  number of packets transmitted;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. How SNMP works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>SNMP Polling</b>
+            <ul>
+               <li>Manager sends a request: For eg, Hey router, what's your CPU usage?</li>
+               <li>Agent replies with the requested data;</li>
+            </ul>
+         </li>
+         <li><b>SNMP Traps</b>
+            <ul>
+               <li>Sometimes, Agent sends alerts(called traps) to manager without asking; For eg, CPU utilization on a
+                  device exceeded 80 percent for one minute;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. SNMP Versions</strong></div>
+   <div class="answer">
+      <ul>
+         <li>SNMPv1 - Simple;</li>
+         <li>SNMPv2c - Added lot of performance improvments; But, still insecure(uses community strings);</li>
+         <li>SNMPv3 - Added support for authentication and encryption; Most secure;</li>
+      </ul>
+   </div>
+</body>
+
 </html>
