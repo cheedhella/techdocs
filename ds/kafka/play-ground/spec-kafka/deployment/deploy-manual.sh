@@ -45,9 +45,12 @@ if [ ! -d "$WEBAPPS_DIR" ]; then
     exit 1
 fi
 
-if [ ! -f "$TOMCAT_HOME/bin/catalina" ] && [ ! -f "$TOMCAT_HOME/bin/catalina.sh" ]; then
+if [ ! -f "$TOMCAT_HOME/bin/catalina.sh" ] && [ ! -f "$TOMCAT_HOME/bin/catalina" ]; then
     echo ""
     echo "ERROR: Tomcat catalina script not found at $TOMCAT_HOME/bin/"
+    echo ""
+    echo "Available files:"
+    ls -la $TOMCAT_HOME/bin/ 2>/dev/null || echo "  Directory not accessible"
     echo ""
     echo "Please run the fix script first:"
     echo "  sudo ./fix-tomcat-structure.sh"
@@ -83,7 +86,14 @@ echo "✓ Build complete"
 # Stop Tomcat
 echo ""
 echo "Stopping Tomcat..."
-$TOMCAT_HOME/bin/catalina stop 2>/dev/null || true
+if [ -f "$TOMCAT_HOME/bin/catalina.sh" ]; then
+    $TOMCAT_HOME/bin/catalina.sh stop 2>/dev/null || true
+elif [ -f "$TOMCAT_HOME/bin/catalina" ]; then
+    $TOMCAT_HOME/bin/catalina stop 2>/dev/null || true
+else
+    echo "⚠️  catalina script not found, trying systemctl..."
+    systemctl stop tomcat 2>/dev/null || true
+fi
 sleep 5
 pkill -9 -f tomcat 2>/dev/null || true
 echo "✓ Tomcat stopped"
@@ -105,7 +115,14 @@ echo "✓ WARs deployed to $WEBAPPS_DIR"
 # Start Tomcat
 echo ""
 echo "Starting Tomcat..."
-$TOMCAT_HOME/bin/catalina start
+if [ -f "$TOMCAT_HOME/bin/catalina.sh" ]; then
+    $TOMCAT_HOME/bin/catalina.sh start
+elif [ -f "$TOMCAT_HOME/bin/catalina" ]; then
+    $TOMCAT_HOME/bin/catalina start
+else
+    echo "⚠️  catalina script not found, trying systemctl..."
+    systemctl start tomcat
+fi
 echo "✓ Tomcat started"
 
 # Wait for deployment
@@ -141,6 +158,10 @@ echo "View logs:"
 echo "  tail -f $LOGS_DIR/catalina.out"
 echo ""
 echo "Stop Tomcat:"
-echo "  $TOMCAT_HOME/bin/catalina stop"
+if [ -f "$TOMCAT_HOME/bin/catalina.sh" ]; then
+    echo "  $TOMCAT_HOME/bin/catalina.sh stop"
+else
+    echo "  systemctl stop tomcat"
+fi
 echo ""
 
