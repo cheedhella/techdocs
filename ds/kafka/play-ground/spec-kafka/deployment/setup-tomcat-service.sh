@@ -79,11 +79,36 @@ fi
 # Set ownership
 print_info "Setting ownership..."
 chown -R tomcat:tomcat $TOMCAT_HOME
+
+# Fix symlink ownership if exists
+if [ -L "/opt/tomcat" ] && [ "$TOMCAT_HOME" != "/opt/tomcat" ]; then
+    chown -h tomcat:tomcat /opt/tomcat
+fi
+
 print_success "Ownership set"
+
+# Set correct permissions
+print_info "Setting permissions..."
+
+# Directory permissions
+chmod 755 $TOMCAT_HOME
+chmod 755 $TOMCAT_HOME/bin
+chmod 755 $TOMCAT_HOME/lib
+chmod 755 $TOMCAT_HOME/conf
+chmod 755 $TOMCAT_HOME/webapps
+
+# Writable directories for tomcat user
+chmod 770 $TOMCAT_HOME/logs
+chmod 770 $TOMCAT_HOME/temp
+chmod 770 $TOMCAT_HOME/work
 
 # Make scripts executable
 chmod +x $TOMCAT_HOME/bin/*.sh
-print_success "Scripts made executable"
+
+# Config files
+chmod 640 $TOMCAT_HOME/conf/* 2>/dev/null || true
+
+print_success "Permissions set"
 
 # Check if service already exists
 if systemctl list-unit-files | grep -q "tomcat.service"; then

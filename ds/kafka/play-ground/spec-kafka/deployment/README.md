@@ -357,3 +357,43 @@ For issues:
 3. Test connectivity: `nc -zv 10.253.229.13 9092`
 4. Check documentation in parent directory
 
+
+
+sudo ./deployment/deploy-rocky-unified.sh
+
+# Application logs
+/opt/tomcat/logs/spec-producer.log          # Current producer log
+/opt/tomcat/logs/spec-consumer.log          # Current consumer log
+
+# Rolled logs (daily rotation, keeps 30 days)
+/opt/tomcat/logs/spec-producer.2025-12-27.log
+/opt/tomcat/logs/spec-consumer.2025-12-27.log
+
+# Tomcat logs
+/opt/tomcat/logs/catalina.out               # Main Tomcat log
+
+# Watch producer logs
+tail -f /opt/tomcat/logs/spec-producer.log
+
+# Watch consumer logs
+tail -f /opt/tomcat/logs/spec-consumer.log
+
+# Watch all application logs
+tail -f /opt/tomcat/logs/spec-*.log
+
+# Watch Tomcat logs
+tail -f /opt/tomcat/logs/catalina.out
+
+
+
+# 2. Reload systemd
+sudo systemctl daemon-reload
+
+# 3. Enable service
+sudo systemctl enable tomcat
+
+# 4. Start Tomcat
+sudo systemctl start tomcat
+
+# 5. Verify
+systemctl status tomcat

@@ -8,9 +8,9 @@
     </appender>
     
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/spec-consumer.log</file>
+        <file>${catalina.base:-/tmp}/logs/spec-consumer.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/spec-consumer.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${catalina.base:-/tmp}/logs/spec-consumer.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
