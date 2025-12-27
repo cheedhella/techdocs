@@ -6,7 +6,8 @@ This folder contains all deployment-related scripts for the Spec Kafka applicati
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `install-dependencies-rocky.sh` | Install JDK, Maven, Tomcat (Rocky Linux) | `sudo ./install-dependencies-rocky.sh` |
+| `install-dependencies-rocky-dnf.sh` | Install JDK, Maven, Tomcat (Rocky Linux - DNF) | `sudo ./install-dependencies-rocky-dnf.sh` |
+| `install-dependencies-rocky.sh` | Install JDK, Maven, Tomcat (Rocky Linux - Manual) | `sudo ./install-dependencies-rocky.sh` |
 | `deploy-native.sh` | Full deployment using brew services | `./deploy-native.sh` |
 | `deploy-manual.sh` | Manual deployment (recommended) | `./deploy-manual.sh` |
 | `start-services.sh` | Start Tomcat only | `./start-services.sh` |
@@ -79,17 +80,24 @@ Tests all endpoints and verifies deployment.
 
 ### For Rocky Linux
 
-1. **Install all dependencies automatically:**
+1. **Install all dependencies automatically (Recommended - DNF):**
+   ```bash
+   sudo ./install-dependencies-rocky-dnf.sh
+   ```
+   
+   Or use manual download version:
    ```bash
    sudo ./install-dependencies-rocky.sh
    ```
    
-   This installs:
+   Both install:
    - OpenJDK 17
-   - Apache Maven 3.9.5
-   - Apache Tomcat 9.0.84
+   - Apache Maven (latest from repo or 3.9.6)
+   - Apache Tomcat 9.0.96
    - Configures systemd service
    - Opens firewall port 8080
+   
+   **Note:** The DNF version is recommended as it's faster and avoids 404 errors from Apache mirrors.
 
 ### For All Systems
 

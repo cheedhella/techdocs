@@ -1,8 +1,9 @@
 #!/bin/bash
 
 ################################################################################
-# Dependency Installation Script for Rocky Linux
+# Quick Dependency Installation Script for Rocky Linux (Using DNF)
 # Installs: JDK 17, Maven, Apache Tomcat 9
+# Uses Rocky Linux repositories - faster and more reliable
 ################################################################################
 
 set -e
@@ -16,8 +17,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 JDK_VERSION="17"
-MAVEN_VERSION="3.9.6"  # Updated to latest stable version
-TOMCAT_VERSION="9.0.96"  # Updated to latest 9.x version
+TOMCAT_VERSION="9.0.96"
 INSTALL_DIR="/opt"
 TOMCAT_USER="tomcat"
 TOMCAT_GROUP="tomcat"
@@ -61,7 +61,7 @@ check_os() {
 
 # Function to install JDK
 install_jdk() {
-    print_info "Installing OpenJDK $JDK_VERSION..."
+    print_info "Installing OpenJDK $JDK_VERSION from repository..."
     
     # Check if already installed
     if command -v java &> /dev/null; then
@@ -98,7 +98,7 @@ EOF
 
 # Function to install Maven
 install_maven() {
-    print_info "Installing Apache Maven $MAVEN_VERSION..."
+    print_info "Installing Apache Maven from repository..."
     
     # Check if already installed
     if command -v mvn &> /dev/null; then
@@ -110,75 +110,28 @@ install_maven() {
             print_info "Skipping Maven installation"
             return
         fi
-        # Remove old installation
-        rm -rf $INSTALL_DIR/maven
-        rm -f /usr/local/bin/mvn
     fi
     
-    # Download Maven
-    cd /tmp
+    # Install Maven from repository
+    dnf install -y maven
     
-    # Try multiple mirror URLs
-    MAVEN_URLS=(
-        "https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
-        "https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
-        "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}/apache-maven-${MAVEN_VERSION}-bin.tar.gz"
-    )
-    
-    DOWNLOAD_SUCCESS=false
-    for MAVEN_URL in "${MAVEN_URLS[@]}"; do
-        print_info "Trying to download Maven from $MAVEN_URL"
-        if wget --timeout=30 --tries=2 $MAVEN_URL -O apache-maven-${MAVEN_VERSION}-bin.tar.gz 2>/dev/null; then
-            DOWNLOAD_SUCCESS=true
-            print_success "Maven downloaded successfully"
-            break
-        else
-            print_warning "Failed to download from this mirror, trying next..."
-        fi
-    done
-    
-    if [ "$DOWNLOAD_SUCCESS" = false ]; then
-        print_error "Failed to download Maven from all mirrors"
-        print_info "Trying to install Maven from Rocky Linux repository..."
-        dnf install -y maven
-        if [ $? -eq 0 ]; then
-            print_success "Maven installed from repository"
-            # Create symlink for consistency
-            MAVEN_BIN=$(which mvn)
-            if [ -n "$MAVEN_BIN" ]; then
-                MAVEN_HOME=$(dirname $(dirname $MAVEN_BIN))
-                ln -sf $MAVEN_HOME $INSTALL_DIR/maven 2>/dev/null || true
-            fi
-            return
-        else
-            print_error "Failed to install Maven"
-            exit 1
-        fi
-    fi
-    
-    # Extract and install
-    tar -xzf apache-maven-${MAVEN_VERSION}-bin.tar.gz
-    mv apache-maven-${MAVEN_VERSION} $INSTALL_DIR/maven
-    
-    # Create symlink
-    ln -sf $INSTALL_DIR/maven/bin/mvn /usr/local/bin/mvn
+    # Get Maven home
+    MAVEN_BIN=$(which mvn)
+    MAVEN_HOME_PATH=$(dirname $(dirname $(readlink -f $MAVEN_BIN)))
     
     # Set Maven environment
     cat > /etc/profile.d/maven.sh << EOF
-export M2_HOME=$INSTALL_DIR/maven
-export MAVEN_HOME=$INSTALL_DIR/maven
+export M2_HOME=$MAVEN_HOME_PATH
+export MAVEN_HOME=$MAVEN_HOME_PATH
 export PATH=\$MAVEN_HOME/bin:\$PATH
 EOF
     
     chmod +x /etc/profile.d/maven.sh
     source /etc/profile.d/maven.sh
     
-    # Cleanup
-    rm -f apache-maven-${MAVEN_VERSION}-bin.tar.gz
-    
     # Verify installation
     mvn -version
-    print_success "Maven $MAVEN_VERSION installed successfully"
+    print_success "Maven installed successfully from repository"
 }
 
 # Function to create Tomcat user
@@ -213,19 +166,18 @@ install_tomcat() {
     # Create Tomcat user
     create_tomcat_user
     
-    # Download Tomcat
+    # Download Tomcat with fallback mirrors
     cd /tmp
     
-    # Try multiple mirror URLs
     TOMCAT_URLS=(
-        "https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
         "https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
+        "https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
     )
     
     DOWNLOAD_SUCCESS=false
     for TOMCAT_URL in "${TOMCAT_URLS[@]}"; do
         print_info "Trying to download Tomcat from $TOMCAT_URL"
-        if wget --timeout=30 --tries=2 $TOMCAT_URL -O apache-tomcat-${TOMCAT_VERSION}.tar.gz 2>/dev/null; then
+        if wget --timeout=30 --tries=2 -q $TOMCAT_URL -O apache-tomcat-${TOMCAT_VERSION}.tar.gz; then
             DOWNLOAD_SUCCESS=true
             print_success "Tomcat downloaded successfully"
             break
@@ -236,8 +188,23 @@ install_tomcat() {
     
     if [ "$DOWNLOAD_SUCCESS" = false ]; then
         print_error "Failed to download Tomcat from all mirrors"
-        print_info "Please download Tomcat manually from https://tomcat.apache.org/download-90.cgi"
-        exit 1
+        print_info "Trying latest available version from archive..."
+        
+        # Try to get the latest 9.0.x version
+        LATEST_URL="https://archive.apache.org/dist/tomcat/tomcat-9/"
+        LATEST_VERSION=$(curl -s $LATEST_URL | grep -oP 'v9\.0\.\d+' | sort -V | tail -1 | sed 's/v//')
+        
+        if [ -n "$LATEST_VERSION" ]; then
+            print_info "Found latest version: $LATEST_VERSION"
+            wget -q "https://archive.apache.org/dist/tomcat/tomcat-9/v${LATEST_VERSION}/bin/apache-tomcat-${LATEST_VERSION}.tar.gz" \
+                -O apache-tomcat-${LATEST_VERSION}.tar.gz
+            TOMCAT_VERSION=$LATEST_VERSION
+            print_success "Downloaded Tomcat $LATEST_VERSION"
+        else
+            print_error "Could not download Tomcat"
+            print_info "Please download manually from https://tomcat.apache.org/download-90.cgi"
+            exit 1
+        fi
     fi
     
     # Extract and install
@@ -266,7 +233,7 @@ EOF
     create_tomcat_service
     
     # Cleanup
-    rm -f apache-tomcat-${TOMCAT_VERSION}.tar.gz
+    rm -f apache-tomcat-*.tar.gz
     
     print_success "Tomcat $TOMCAT_VERSION installed successfully"
 }
@@ -359,14 +326,13 @@ display_summary() {
     if command -v mvn &> /dev/null; then
         MVN_VER=$(mvn -version | head -n 1)
         echo -e "${GREEN}✓${NC} Maven: $MVN_VER"
-        echo "  M2_HOME: $M2_HOME"
     else
         echo -e "${RED}✗${NC} Maven: Not installed"
     fi
     
     # Tomcat
     if [ -d "$INSTALL_DIR/tomcat" ]; then
-        TOMCAT_VER=$(cat $INSTALL_DIR/tomcat/RELEASE-NOTES | grep "Apache Tomcat Version" | head -n 1)
+        TOMCAT_VER=$(cat $INSTALL_DIR/tomcat/RELEASE-NOTES 2>/dev/null | grep "Apache Tomcat Version" | head -n 1 || echo "Tomcat 9")
         echo -e "${GREEN}✓${NC} Tomcat: $TOMCAT_VER"
         echo "  CATALINA_HOME: $INSTALL_DIR/tomcat"
         echo "  Service: systemctl start|stop|status tomcat"
@@ -395,21 +361,17 @@ display_summary() {
     echo "   cp spec-producer-webapp/target/spec-producer.war $INSTALL_DIR/tomcat/webapps/"
     echo "   cp spec-consumer-webapp/target/spec-consumer.war $INSTALL_DIR/tomcat/webapps/"
     echo ""
-    echo "5. Check deployment:"
-    echo "   curl http://localhost:8080/spec-producer/status"
-    echo "   curl http://localhost:8080/spec-consumer/status"
-    echo ""
 }
 
 # Main installation flow
 main() {
     echo "========================================="
-    echo "Rocky Linux Dependency Installer"
+    echo "Rocky Linux Quick Installer (DNF)"
     echo "========================================="
     echo ""
     echo "This script will install:"
-    echo "  - OpenJDK $JDK_VERSION"
-    echo "  - Apache Maven $MAVEN_VERSION"
+    echo "  - OpenJDK $JDK_VERSION (from repository)"
+    echo "  - Apache Maven (from repository)"
     echo "  - Apache Tomcat $TOMCAT_VERSION"
     echo ""
     echo "Installation directory: $INSTALL_DIR"

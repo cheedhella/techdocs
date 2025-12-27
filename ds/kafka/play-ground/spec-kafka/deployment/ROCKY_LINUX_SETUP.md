@@ -6,18 +6,31 @@ Complete guide for setting up the Spec Kafka application on Rocky Linux.
 
 ### Step 1: Install Dependencies
 
+**Option A: DNF-based Installation (Recommended - Faster & More Reliable)**
+
 ```bash
 # Download or copy the script to your Rocky Linux server
 cd /path/to/spec-kafka/deployment
 
-# Run the installation script as root
+# Run the DNF-based installation script as root
+sudo ./install-dependencies-rocky-dnf.sh
+```
+
+This uses Rocky Linux's package repositories for Java and Maven, which is faster and more reliable.
+
+**Option B: Manual Download Installation**
+
+```bash
+# If you need specific versions or DNF packages are not available
 sudo ./install-dependencies-rocky.sh
 ```
 
-The script will install:
+This downloads specific versions from Apache mirrors (may encounter 404 errors if versions are moved to archive).
+
+Both scripts install:
 - ✅ OpenJDK 17
-- ✅ Apache Maven 3.9.5
-- ✅ Apache Tomcat 9.0.84
+- ✅ Apache Maven
+- ✅ Apache Tomcat 9.0.96
 - ✅ Additional tools (wget, curl, git, nc)
 - ✅ Systemd service for Tomcat
 - ✅ Firewall configuration (port 8080)
@@ -467,9 +480,48 @@ sudo userdel -r tomcat
 sudo dnf remove -y java-17-openjdk*
 ```
 
+## Troubleshooting 404 Download Errors
+
+If you encounter 404 errors when downloading Maven or Tomcat:
+
+### Solution 1: Use DNF-based Script (Recommended)
+
+```bash
+sudo ./install-dependencies-rocky-dnf.sh
+```
+
+This uses Rocky Linux repositories instead of downloading from Apache mirrors.
+
+### Solution 2: Manual Installation
+
+```bash
+# Install Java and Maven from repository
+sudo dnf install -y java-17-openjdk java-17-openjdk-devel maven
+
+# Download Tomcat manually
+cd /tmp
+wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+
+# Or visit https://tomcat.apache.org/download-90.cgi to get the latest version
+```
+
+### Solution 3: Update Version Numbers
+
+The Apache mirrors may have moved older versions to archive. Check for the latest versions:
+- Maven: https://maven.apache.org/download.cgi
+- Tomcat 9: https://tomcat.apache.org/download-90.cgi
+
 ## Summary
 
-**Quick Setup:**
+**Quick Setup (Recommended):**
+```bash
+sudo ./install-dependencies-rocky-dnf.sh
+sudo systemctl start tomcat
+mvn clean install
+sudo cp *-webapp/target/*.war /opt/tomcat/webapps/
+```
+
+**Alternative Setup:**
 ```bash
 sudo ./install-dependencies-rocky.sh
 sudo systemctl start tomcat
