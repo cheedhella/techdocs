@@ -6,10 +6,17 @@ This folder contains all deployment-related scripts for the Spec Kafka applicati
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
+| **Installation** | | |
 | `install-dependencies-rocky-dnf.sh` | Install JDK, Maven, Tomcat (Rocky Linux - DNF) | `sudo ./install-dependencies-rocky-dnf.sh` |
 | `install-dependencies-rocky.sh` | Install JDK, Maven, Tomcat (Rocky Linux - Manual) | `sudo ./install-dependencies-rocky.sh` |
-| `deploy-native.sh` | Full deployment using brew services | `./deploy-native.sh` |
-| `deploy-manual.sh` | Manual deployment (recommended) | `./deploy-manual.sh` |
+| **Deployment** | | |
+| `deploy-rocky-unified.sh` | **Advanced Rocky Linux deployment** ⭐ | `sudo ./deploy-rocky-unified.sh` |
+| `deploy-rocky.sh` | Rocky Linux deployment (basic) | `sudo ./deploy-rocky.sh` |
+| `deploy-manual.sh` | Manual deployment (catalina.sh) | `./deploy-manual.sh` |
+| `deploy-native.sh` | macOS deployment (brew services) | `./deploy-native.sh` |
+| `redeploy-quick.sh` | Quick redeploy (no checks) | `sudo ./redeploy-quick.sh` |
+| **Utilities** | | |
+| `fix-tomcat-structure.sh` | Fix Tomcat directory structure | `sudo ./fix-tomcat-structure.sh` |
 | `start-services.sh` | Start Tomcat only | `./start-services.sh` |
 | `stop-services.sh` | Stop Tomcat and applications | `./stop-services.sh` |
 | `test-application.sh` | Test all endpoints | `./test-application.sh` |
@@ -68,6 +75,35 @@ cd deployment
 ```
 
 Tests all endpoints and verifies deployment.
+
+## Quick Start (Rocky Linux)
+
+### First Time Setup
+```bash
+# 1. Install dependencies
+sudo ./install-dependencies-rocky-dnf.sh
+
+# 2. Deploy application
+cd /path/to/spec-kafka
+sudo ./deployment/deploy-rocky-unified.sh
+```
+
+### Redeployment
+```bash
+# Full redeploy (rebuild + deploy)
+sudo ./deployment/deploy-rocky-unified.sh
+
+# Quick redeploy (skip build)
+sudo ./deployment/deploy-rocky-unified.sh --skip-build
+
+# Skip Kafka check
+sudo ./deployment/deploy-rocky-unified.sh --skip-kafka
+
+# Custom wait time
+sudo ./deployment/deploy-rocky-unified.sh --wait 60
+```
+
+---
 
 ## Prerequisites
 
