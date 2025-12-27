@@ -243,8 +243,18 @@ install_tomcat() {
     # Extract and install
     tar -xzf apache-tomcat-${TOMCAT_VERSION}.tar.gz -C $INSTALL_DIR
     
+    # Remove old symlink if exists
+    rm -f $INSTALL_DIR/tomcat
+    
     # Create symlink
     ln -s $INSTALL_DIR/apache-tomcat-${TOMCAT_VERSION} $INSTALL_DIR/tomcat
+    
+    # Verify symlink
+    if [ ! -d "$INSTALL_DIR/tomcat/bin" ]; then
+        print_error "Tomcat installation failed - bin directory not found"
+        ls -la $INSTALL_DIR/tomcat/
+        exit 1
+    fi
     
     # Set ownership
     chown -R $TOMCAT_USER:$TOMCAT_GROUP $INSTALL_DIR/apache-tomcat-${TOMCAT_VERSION}
