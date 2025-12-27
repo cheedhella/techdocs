@@ -29,6 +29,32 @@ echo "========================================="
 echo "Spec Kafka - Manual Tomcat Deployment"
 echo "========================================="
 echo "Tomcat Home: $TOMCAT_HOME"
+
+# Verify Tomcat structure
+if [ ! -d "$WEBAPPS_DIR" ]; then
+    echo ""
+    echo "ERROR: Tomcat webapps directory not found at $WEBAPPS_DIR"
+    echo ""
+    echo "Current structure:"
+    ls -la $TOMCAT_HOME/ 2>/dev/null || ls -la /opt/ | grep tomcat
+    echo ""
+    echo "It looks like your Tomcat installation has an incorrect directory structure."
+    echo "Please run the fix script first:"
+    echo "  sudo ./fix-tomcat-structure.sh"
+    echo ""
+    exit 1
+fi
+
+if [ ! -f "$TOMCAT_HOME/bin/catalina" ] && [ ! -f "$TOMCAT_HOME/bin/catalina.sh" ]; then
+    echo ""
+    echo "ERROR: Tomcat catalina script not found at $TOMCAT_HOME/bin/"
+    echo ""
+    echo "Please run the fix script first:"
+    echo "  sudo ./fix-tomcat-structure.sh"
+    echo ""
+    exit 1
+fi
+
 echo ""
 
 # Check Kafka connectivity
