@@ -42,6 +42,7 @@ public class OrderConsumerService {
     @KafkaListener(
         id = LISTENER_ID,
         topics = "${kafka.topic.name:orders}",
+        groupId = "${kafka.consumer.group.id:order-consumer-group}",
         containerFactory = "kafkaListenerContainerFactory",
         autoStartup = "false"
     )
