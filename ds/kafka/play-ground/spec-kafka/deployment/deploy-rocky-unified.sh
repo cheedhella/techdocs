@@ -200,6 +200,19 @@ fi
 # Start Tomcat
 echo ""
 print_info "Starting Tomcat..."
+
+# Check if systemd service exists
+if ! systemctl list-unit-files | grep -q "tomcat.service"; then
+    print_error "Tomcat systemd service not found"
+    echo ""
+    print_info "Please set up the Tomcat service first:"
+    echo "  sudo ./deployment/setup-tomcat-service.sh"
+    echo ""
+    print_info "Or start Tomcat manually:"
+    echo "  $TOMCAT_HOME/bin/startup.sh"
+    exit 1
+fi
+
 $SUDO systemctl start tomcat
 
 # Verify Tomcat started
