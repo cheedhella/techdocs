@@ -11,16 +11,13 @@
 
 ## 📋 Prerequisites
 
+### macOS (Homebrew)
+
 ```bash
 # Check prerequisites
 java -version    # Need Java 11+
 mvn -version     # Need Maven 3.6+
-```
 
-### Tomcat Setup
-
-**Homebrew (macOS - Recommended):**
-```bash
 # Install Tomcat 9 (required for javax.servlet compatibility)
 brew install tomcat@9
 brew services start tomcat@9
@@ -33,7 +30,19 @@ brew install tomcat@9
 brew services start tomcat@9
 ```
 
-**Manual Installation:**
+### Rocky Linux (Automated)
+
+```bash
+# One-command installation of ALL dependencies
+cd deployment
+sudo ./install-dependencies-rocky.sh
+
+# This installs: JDK 17, Maven 3.9.5, Tomcat 9.0.84
+# See deployment/ROCKY_LINUX_SETUP.md for details
+```
+
+### Manual Installation (Any Linux)
+
 ```bash
 export TOMCAT_HOME=/opt/tomcat
 ```
@@ -42,22 +51,25 @@ export TOMCAT_HOME=/opt/tomcat
 
 ## 🎯 Deploy in 30 Seconds
 
-### Option 1: Automatic (with brew services)
+### Option 1: Manual Deployment (Recommended)
 ```bash
-./deploy-native.sh
-```
-
-### Option 2: Manual (if brew services has issues)
-```bash
+cd deployment
 ./deploy-manual.sh
 ```
 
-**Note:** If you see `brew services` errors, use `deploy-manual.sh` which starts Tomcat directly.
+### Option 2: Automatic (with brew services)
+```bash
+cd deployment
+./deploy-native.sh
+```
+
+**Note:** All deployment scripts are in the `deployment/` folder. Use `deploy-manual.sh` for most reliable results.
 
 ## 🧪 Test in 10 Seconds
 
 ```bash
 # Automated testing
+cd deployment
 ./test-application.sh
 ```
 
@@ -100,7 +112,8 @@ curl http://localhost:8080/spec-consumer/stop
 
 ```bash
 mvn clean install
-./deploy-native.sh
+cd deployment
+./deploy-manual.sh
 ```
 
 ### Check Status
@@ -141,12 +154,15 @@ mvn clean install
 
 ## 🛠️ Scripts Reference
 
+All scripts are in the `deployment/` folder:
+
 | Script | What It Does |
 |--------|-------------|
-| `./deploy-native.sh` | Build, stop Tomcat, deploy, start Tomcat |
-| `./start-services.sh` | Start Tomcat, check Kafka connectivity |
-| `./stop-services.sh` | Stop Tomcat and applications |
-| `./test-application.sh` | Test all endpoints automatically |
+| `deployment/deploy-manual.sh` | Build, stop Tomcat, deploy, start Tomcat (recommended) |
+| `deployment/deploy-native.sh` | Same as above but uses brew services |
+| `deployment/start-services.sh` | Start Tomcat, check Kafka connectivity |
+| `deployment/stop-services.sh` | Stop Tomcat and applications |
+| `deployment/test-application.sh` | Test all endpoints automatically |
 
 ## 🔍 Troubleshooting
 
@@ -239,10 +255,10 @@ ls -l $TOMCAT_HOME/webapps/
 mvn clean install
 
 # Deploy
-./deploy-native.sh
+cd deployment && ./deploy-manual.sh
 
 # Test
-./test-application.sh
+cd deployment && ./test-application.sh
 
 # Start consumer
 curl http://localhost:8080/spec-consumer/start
@@ -259,11 +275,10 @@ curl http://localhost:8080/spec-producer/stop
 curl http://localhost:8080/spec-consumer/stop
 
 # Logs
-tail -f $TOMCAT_HOME/logs/catalina.out
+tail -f /opt/homebrew/opt/tomcat@9/libexec/logs/catalina.out
 
 # Restart Tomcat
-$TOMCAT_HOME/bin/shutdown.sh
-$TOMCAT_HOME/bin/startup.sh
+cd deployment && ./stop-services.sh && ./start-services.sh
 ```
 
 ## 📊 Project Structure
@@ -275,8 +290,13 @@ spec-kafka/
 ├── 📄 CONFIGURATION.md           ← Configuration guide
 ├── 📄 README.md                  ← Full documentation
 │
-├── 🔧 deploy-native.sh           ← Main deployment script
-├── 🔧 test-application.sh        ← Test script
+├── 🚀 deployment/                ← Deployment scripts
+│   ├── deploy-manual.sh          ← Main deployment (recommended)
+│   ├── deploy-native.sh          ← Deployment with brew services
+│   ├── start-services.sh         ← Start Tomcat
+│   ├── stop-services.sh          ← Stop Tomcat
+│   ├── test-application.sh       ← Test endpoints
+│   └── README.md                 ← Deployment guide
 │
 ├── 📦 6 Maven modules            ← Application code
 │   ├── spec-model
@@ -309,8 +329,8 @@ After deployment, verify:
 Your application is configured and ready to use with your Kafka cluster.
 
 **Next steps:**
-1. Run `./deploy-native.sh`
-2. Run `./test-application.sh`
+1. Run `cd deployment && ./deploy-manual.sh`
+2. Run `cd deployment && ./test-application.sh`
 3. Start using the application!
 
 **Need help?**
