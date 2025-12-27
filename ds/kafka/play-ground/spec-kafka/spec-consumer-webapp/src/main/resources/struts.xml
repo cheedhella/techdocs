@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.objectFactory.spring.autoWire" value="name" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.ui.theme" value="simple" />
+    
+    <package name="consumer-api" extends="json-default" namespace="/">
+        
+        <!-- Start endpoint -->
+        <action name="start" class="consumerAction" method="start">
+            <result type="json">
+                <param name="includeProperties">status,message,consuming,messageCount</param>
+            </result>
+        </action>
+        
+        <!-- Stop endpoint -->
+        <action name="stop" class="consumerAction" method="stop">
+            <result type="json">
+                <param name="includeProperties">status,message,consuming,messageCount</param>
+            </result>
+        </action>
+        
+        <!-- Status endpoint -->
+        <action name="status" class="consumerAction" method="status">
+            <result type="json">
+                <param name="includeProperties">status,message,consuming,messageCount</param>
+            </result>
+        </action>
+        
+        <!-- Reset endpoint -->
+        <action name="reset" class="consumerAction" method="reset">
+            <result type="json">
+                <param name="includeProperties">status,message,consuming,messageCount</param>
+            </result>
+        </action>
+        
+    </package>
+</struts>
+

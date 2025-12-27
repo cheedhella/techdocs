@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.objectFactory.spring.autoWire" value="name" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.ui.theme" value="simple" />
+    
+    <package name="producer-api" extends="json-default" namespace="/">
+        
+        <!-- Produce endpoint -->
+        <action name="produce" class="producerAction" method="produce">
+            <result type="json">
+                <param name="includeProperties">status,message,producing</param>
+            </result>
+        </action>
+        
+        <!-- Stop endpoint -->
+        <action name="stop" class="producerAction" method="stop">
+            <result type="json">
+                <param name="includeProperties">status,message,producing</param>
+            </result>
+        </action>
+        
+        <!-- Status endpoint -->
+        <action name="status" class="producerAction" method="status">
+            <result type="json">
+                <param name="includeProperties">status,message,producing</param>
+            </result>
+        </action>
+        
+    </package>
+</struts>
+
