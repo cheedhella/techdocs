@@ -84,11 +84,14 @@ public class OrderConsumerService {
      * Start the consumer listener
      */
     public void startConsumer() {
+        logger.info("Starting order consumer listener with id: {}", LISTENER_ID);
         if (isConsuming.compareAndSet(false, true)) {
+            logger.info("obtained lock for starting consumer listener");
             MessageListenerContainer listenerContainer = 
                 kafkaListenerEndpointRegistry.getListenerContainer(LISTENER_ID);
             
             if (listenerContainer != null) {
+                logger.info("listener container found for id: {}", LISTENER_ID);
                 if (!listenerContainer.isRunning()) {
                     listenerContainer.start();
                     logger.info("Order consumer listener started");
@@ -97,6 +100,7 @@ public class OrderConsumerService {
                 }
             } else {
                 logger.error("Listener container not found for ID: {}", LISTENER_ID);
+                logger.error("setting isConsuming to false because listener container not found");
                 isConsuming.set(false);
             }
         } else {

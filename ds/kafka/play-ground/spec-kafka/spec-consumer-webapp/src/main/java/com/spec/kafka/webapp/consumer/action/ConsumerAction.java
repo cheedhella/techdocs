@@ -35,7 +35,7 @@ public class ConsumerAction extends ActionSupport {
             consuming = true;
             messageCount = orderConsumerService.getMessageCount();
             
-            logger.info("Order consumer started");
+            logger.info("Order consumer started: messageCount: {}", messageCount);
             return SUCCESS;
             
         } catch (Exception e) {
