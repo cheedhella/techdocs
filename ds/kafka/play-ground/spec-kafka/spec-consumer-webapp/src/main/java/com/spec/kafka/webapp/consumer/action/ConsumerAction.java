@@ -31,11 +31,11 @@ public class ConsumerAction extends ActionSupport {
             orderConsumerService.startConsumer();
             
             status = "success";
-            message = "Order consumer started successfully";
-            consuming = true;
+            consuming = orderConsumerService.isConsuming();
             messageCount = orderConsumerService.getMessageCount();
+            message = "Order consumer started successfully. Active: " + consuming;
             
-            logger.info("Order consumer started: messageCount: {}", messageCount);
+            logger.info("Order consumer started: active: {}, messageCount: {}", consuming, messageCount);
             return SUCCESS;
             
         } catch (Exception e) {

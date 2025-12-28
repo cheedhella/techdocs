@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.listener.MessageListenerContainer;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OrderConsumerService {
     
     private static final Logger logger = LoggerFactory.getLogger(OrderConsumerService.class);
-    private static final String LISTENER_ID = "order-consumer-group";
+    private static final String LISTENER_ID = "orderListener";
     
     private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
     private final AtomicBoolean isConsuming = new AtomicBoolean(false);
@@ -46,8 +45,16 @@ public class OrderConsumerService {
         containerFactory = "kafkaListenerContainerFactory",
         autoStartup = "false"
     )
-    public void consumeOrder(@Payload Order order) {
+    public void consumeOrder(Order order) {
+        logger.info("Order message received in listener thread: {}", Thread.currentThread().getName());
+        
         if (!isConsuming.get()) {
+            logger.warn("Received order but isConsuming flag is FALSE. Ignoring message.");
+            return;
+        }
+        
+        if (order == null) {
+            logger.error("Received NULL order object!");
             return;
         }
         
