@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class OrderConsumerService {
     
     private static final Logger logger = LoggerFactory.getLogger(OrderConsumerService.class);
-    private static final String LISTENER_ID = "orderListener";
+    private static final String LISTENER_ID = "order-consumer-group";
     
     private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
     private final AtomicBoolean isConsuming = new AtomicBoolean(false);
