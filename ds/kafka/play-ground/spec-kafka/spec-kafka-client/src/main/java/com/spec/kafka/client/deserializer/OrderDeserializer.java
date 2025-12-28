@@ -39,6 +39,8 @@ public class OrderDeserializer implements Deserializer<Order> {
             return null;
         }
         
+        logger.info("Attempting to deserialize message from topic: {}, size: {} bytes", topic, data.length);
+        
         try {
             String jsonString;
             
