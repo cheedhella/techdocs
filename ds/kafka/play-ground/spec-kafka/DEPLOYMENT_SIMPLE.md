@@ -3,8 +3,6 @@
 ## Quick Deployment (Using Your Kafka Cluster)
 
 Your application is already configured to use your Kafka cluster at:
-- `10.253.229.13:9092`
-- `10.253.228.68:9092`
 - `10.253.228.200:9092`
 
 ### Prerequisites
@@ -108,7 +106,7 @@ tail -f $TOMCAT_HOME/logs/catalina.out
 ### Check Kafka Connectivity
 
 ```bash
-nc -zv 10.253.229.13 9092
+nc -zv 10.253.228.200 9092
 ```
 
 ### Check Tomcat
@@ -191,8 +189,8 @@ curl http://localhost:8080/spec-consumer/stop
 
 ```bash
 # Test connectivity
-nc -zv 10.253.229.13 9092
-ping 10.253.229.13
+nc -zv 10.253.228.200 9092
+ping 10.253.228.200
 
 # Check firewall
 # Contact network admin if needed
@@ -239,7 +237,7 @@ The application is configured in:
 
 Current settings:
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 kafka.topic.name=orders
 kafka.serialization.format=JSON
 kafka.consumer.group.id=order-consumer-group

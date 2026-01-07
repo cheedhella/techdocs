@@ -5,8 +5,6 @@
 **The application is already configured to use your production Kafka cluster:**
 
 ```
-10.253.229.13:9092
-10.253.228.68:9092
 10.253.228.200:9092
 ```
 
@@ -17,7 +15,7 @@
 The application is configured in `spec-kafka-client/src/main/resources/kafka.properties`:
 
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 kafka.topic.name=orders
 kafka.serialization.format=JSON
 kafka.consumer.group.id=order-consumer-group
@@ -152,7 +150,7 @@ sudo ln -s kafka_2.13-3.6.1 kafka
 
 `spec-kafka-client/src/main/resources/kafka.properties`:
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 ```
 
 Rebuild and redeploy:
@@ -182,8 +180,6 @@ mvn clean install
 
 ```bash
 # For production Kafka
-nc -zv 10.253.229.13 9092
-nc -zv 10.253.228.68 9092
 nc -zv 10.253.228.200 9092
 
 # For local Kafka
@@ -194,7 +190,7 @@ nc -zv localhost 9092
 
 ```bash
 # Production Kafka
-kafka-topics.sh --list --bootstrap-server 10.253.229.13:9092
+kafka-topics.sh --list --bootstrap-server 10.253.228.200:9092
 
 # Local Kafka
 kafka-topics.sh --list --bootstrap-server localhost:9092
@@ -205,7 +201,7 @@ kafka-topics.sh --list --bootstrap-server localhost:9092
 ```bash
 # Production Kafka
 kafka-topics.sh --create --topic orders \
-  --bootstrap-server 10.253.229.13:9092 \
+  --bootstrap-server 10.253.228.200:9092 \
   --partitions 3 --replication-factor 2
 
 # Local Kafka
@@ -220,7 +216,7 @@ kafka-topics.sh --create --topic orders \
 # Production Kafka
 kafka-console-consumer.sh --topic orders \
   --from-beginning \
-  --bootstrap-server 10.253.229.13:9092 \
+  --bootstrap-server 10.253.228.200:9092 \
   --max-messages 5
 
 # Local Kafka
@@ -236,8 +232,8 @@ kafka-console-consumer.sh --topic orders \
 
 1. **Check network connectivity:**
    ```bash
-   ping 10.253.229.13
-   telnet 10.253.229.13 9092
+   ping 10.253.228.200
+   telnet 10.253.228.200 9092
    ```
 
 2. **Check firewall rules** - Ensure port 9092 is not blocked

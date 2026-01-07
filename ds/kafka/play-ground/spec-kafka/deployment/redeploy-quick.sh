@@ -9,6 +9,8 @@ set -e
 
 TOMCAT_HOME=${TOMCAT_HOME:-/opt/tomcat}
 WEBAPPS_DIR="$TOMCAT_HOME/webapps"
+HOST_IP=$(hostname -I | awk '{print $1}')
+HOST_IP=${HOST_IP:-localhost}
 
 echo "========================================="
 echo "Quick Redeploy"
@@ -75,15 +77,15 @@ echo "Testing endpoints..."
 sleep 5
 
 if curl -s http://localhost:8080/spec-producer/status > /dev/null 2>&1; then
-    echo "✓ Producer is accessible: http://localhost:8080/spec-producer"
+    echo "✓ Producer is accessible: http://$HOST_IP:8080/spec-producer"
 else
-    echo "⚠️  Producer not accessible yet"
+    echo "⚠️  Producer not accessible yet: http://$HOST_IP:8080/spec-producer"
 fi
 
 if curl -s http://localhost:8080/spec-consumer/status > /dev/null 2>&1; then
-    echo "✓ Consumer is accessible: http://localhost:8080/spec-consumer"
+    echo "✓ Consumer is accessible: http://$HOST_IP:8080/spec-consumer"
 else
-    echo "⚠️  Consumer not accessible yet"
+    echo "⚠️  Consumer not accessible yet: http://$HOST_IP:8080/spec-consumer"
 fi
 
 echo ""
@@ -91,7 +93,24 @@ echo "========================================="
 echo "Redeploy Complete!"
 echo "========================================="
 echo ""
-echo "Check logs if needed:"
-echo "  tail -f $TOMCAT_HOME/logs/catalina.out"
+echo "Access the applications:"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
+echo ""
+echo "API Endpoints:"
+echo "  Producer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-producer/produce"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-producer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-producer/status"
+echo ""
+echo "  Consumer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-consumer/start"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-consumer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-consumer/status"
+echo ""
+echo "View logs:"
+echo "  Producer: tail -f $TOMCAT_HOME/logs/spec-producer.log"
+echo "  Consumer: tail -f $TOMCAT_HOME/logs/spec-consumer.log"
+echo "  Tomcat:   tail -f $TOMCAT_HOME/logs/catalina.out"
 echo ""
 

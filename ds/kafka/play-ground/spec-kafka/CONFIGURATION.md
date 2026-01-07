@@ -7,8 +7,6 @@
 The application is configured to use your production Kafka cluster:
 
 **Brokers:**
-- `10.253.229.13:9092`
-- `10.253.228.68:9092`
 - `10.253.228.200:9092`
 
 **Configuration File:**
@@ -17,7 +15,7 @@ The application is configured to use your production Kafka cluster:
 ```properties
 # Kafka Configuration Properties
 # Using existing Kafka cluster
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 kafka.topic.name=orders
 kafka.serialization.format=JSON
 kafka.consumer.group.id=order-consumer-group
@@ -58,7 +56,7 @@ Then update `kafka.properties` to use `localhost:9092` and rebuild.
 
 **Current (Production):**
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 ```
 
 **For Local Testing:**
@@ -117,9 +115,7 @@ mvn clean install
 ### Check Network Connectivity
 
 ```bash
-# Test each broker
-nc -zv 10.253.229.13 9092
-nc -zv 10.253.228.68 9092
+# Test broker
 nc -zv 10.253.228.200 9092
 ```
 
@@ -127,7 +123,7 @@ nc -zv 10.253.228.200 9092
 
 ```bash
 kafka-topics.sh --list \
-  --bootstrap-server 10.253.229.13:9092
+  --bootstrap-server 10.253.228.200:9092
 ```
 
 ### View Messages
@@ -136,7 +132,7 @@ kafka-topics.sh --list \
 kafka-console-consumer.sh \
   --topic orders \
   --from-beginning \
-  --bootstrap-server 10.253.229.13:9092 \
+  --bootstrap-server 10.253.228.200:9092 \
   --max-messages 5
 ```
 
@@ -145,7 +141,7 @@ kafka-console-consumer.sh \
 ```bash
 kafka-topics.sh --create \
   --topic orders \
-  --bootstrap-server 10.253.229.13:9092 \
+  --bootstrap-server 10.253.228.200:9092 \
   --partitions 3 \
   --replication-factor 2
 ```
@@ -257,7 +253,7 @@ export PATH=$KAFKA_HOME/bin:$PATH
 
 | Setting | File | Default Value |
 |---------|------|---------------|
-| Kafka Brokers | kafka.properties | 10.253.229.13:9092,... |
+| Kafka Brokers | kafka.properties | 10.253.228.200:9092 |
 | Topic Name | kafka.properties | orders |
 | Serialization | kafka.properties | JSON |
 | Consumer Group | kafka.properties | order-consumer-group |
@@ -271,8 +267,8 @@ export PATH=$KAFKA_HOME/bin:$PATH
 
 1. **Verify network connectivity:**
    ```bash
-   ping 10.253.229.13
-   telnet 10.253.229.13 9092
+   ping 10.253.228.200
+   telnet 10.253.228.200 9092
    ```
 
 2. **Check firewall rules**
@@ -298,7 +294,7 @@ export PATH=$KAFKA_HOME/bin:$PATH
 1. **Create topic manually:**
    ```bash
    kafka-topics.sh --create --topic orders \
-     --bootstrap-server 10.253.229.13:9092 \
+     --bootstrap-server 10.253.228.200:9092 \
      --partitions 3 --replication-factor 2
    ```
 
@@ -307,7 +303,7 @@ export PATH=$KAFKA_HOME/bin:$PATH
 ## Summary
 
 ✅ **Application is pre-configured for your Kafka cluster**
-- Brokers: 10.253.229.13:9092, 10.253.228.68:9092, 10.253.228.200:9092
+- Brokers: 10.253.228.200:9092
 - Topic: orders
 - Format: JSON
 - Consumer Group: order-consumer-group

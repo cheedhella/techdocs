@@ -17,6 +17,7 @@ test_endpoint() {
     local expected=$3
     
     echo -n "Testing $name... "
+    # Using localhost for internal test, but will show the public URL in summary
     response=$(curl -s "$url")
     
     if [[ $response == *"$expected"* ]]; then
@@ -29,6 +30,14 @@ test_endpoint() {
         return 1
     fi
 }
+
+# Get Host IP
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    HOST_IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1 || echo "localhost")
+else
+    HOST_IP=$(hostname -I | awk '{print $1}')
+    HOST_IP=${HOST_IP:-localhost}
+fi
 
 echo ""
 echo "1. Testing Producer Endpoints"
@@ -111,10 +120,16 @@ echo "========================================="
 echo ""
 echo "All endpoints are working correctly!"
 echo ""
+echo "Application URLs:"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
+echo ""
 echo "To view consumed orders in logs:"
-echo "  tail -f \$TOMCAT_HOME/logs/catalina.out"
+echo "  Producer: tail -f \$TOMCAT_HOME/logs/spec-producer.log"
+echo "  Consumer: tail -f \$TOMCAT_HOME/logs/spec-consumer.log"
+echo "  Tomcat:   tail -f \$TOMCAT_HOME/logs/catalina.out"
 echo ""
 echo "To view messages in Kafka:"
-echo "  kafka-console-consumer --topic orders --from-beginning --bootstrap-server localhost:9092 --max-messages 5"
+echo "  kafka-topics.sh --list --bootstrap-server 10.253.228.200:9092"
 echo ""
 

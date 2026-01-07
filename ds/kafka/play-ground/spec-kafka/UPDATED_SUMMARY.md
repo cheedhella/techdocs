@@ -10,7 +10,7 @@ The application is now configured to use your production Kafka cluster:
 
 ```properties
 # Using existing Kafka cluster
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 kafka.topic.name=orders
 kafka.serialization.format=JSON
 kafka.consumer.group.id=order-consumer-group
@@ -57,7 +57,7 @@ All deployment scripts now:
 - Java 11+
 - Maven 3.6+
 - Apache Tomcat 9+
-- Network access to: 10.253.229.13:9092, 10.253.228.68:9092, 10.253.228.200:9092
+- Network access to: 10.253.228.200:9092
 
 ### Deploy in 3 Steps
 
@@ -135,7 +135,7 @@ spec-kafka/
 
 **Production (Default):**
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 ```
 
 **For Local Testing (Optional):**
@@ -173,7 +173,7 @@ docker-compose up -d
 ### After
 - ✅ Kafka setup separated to `kafka-setup/` folder
 - ✅ Scripts work with production Kafka cluster
-- ✅ Configured for your Kafka: 10.253.229.13:9092, ...
+- ✅ Configured for your Kafka: 10.253.228.200:9092
 - ✅ No Kafka installation required
 - ✅ Optional local Kafka for testing
 
@@ -203,9 +203,7 @@ docker-compose up -d
 ### Verify Kafka Connectivity
 
 ```bash
-# Test each broker
-nc -zv 10.253.229.13 9092
-nc -zv 10.253.228.68 9092
+# Test broker
 nc -zv 10.253.228.200 9092
 ```
 
@@ -238,7 +236,7 @@ tail -f $TOMCAT_HOME/logs/catalina.out
 ### For Kafka Connectivity Issues
 - Verify network access to Kafka brokers
 - Check firewall rules
-- Test with: `nc -zv 10.253.229.13 9092`
+- Test with: `nc -zv 10.253.228.200 9092`
 
 ### For Local Kafka Testing
 - See `kafka-setup/README.md`

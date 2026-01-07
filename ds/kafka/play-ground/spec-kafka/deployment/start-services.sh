@@ -2,6 +2,14 @@
 
 TOMCAT_HOME=${TOMCAT_HOME:-/opt/tomcat}
 
+# Get Host IP
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    HOST_IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1 || echo "localhost")
+else
+    HOST_IP=$(hostname -I | awk '{print $1}')
+    HOST_IP=${HOST_IP:-localhost}
+fi
+
 # Detect Homebrew Tomcat on macOS
 if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/opt/homebrew/opt/tomcat" ]; then
     TOMCAT_HOME="/opt/homebrew/opt/tomcat/libexec"
@@ -16,7 +24,7 @@ echo "========================================="
 # Check Kafka cluster connectivity
 echo ""
 echo "Checking Kafka cluster connectivity..."
-KAFKA_SERVERS=("10.253.229.13" "10.253.228.68" "10.253.228.200")
+KAFKA_SERVERS=("10.253.228.200")
 KAFKA_REACHABLE=false
 
 for server in "${KAFKA_SERVERS[@]}"; do
@@ -66,16 +74,27 @@ echo "========================================="
 echo ""
 echo "Service Status:"
 echo "  Kafka Cluster:"
-echo "    - 10.253.229.13:9092"
-echo "    - 10.253.228.68:9092"
 echo "    - 10.253.228.200:9092"
-echo "  Tomcat: localhost:8080"
+echo "  Tomcat: $HOST_IP:8080"
 echo ""
 echo "Application URLs:"
-echo "  Producer: http://localhost:8080/spec-producer"
-echo "  Consumer: http://localhost:8080/spec-consumer"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
+echo ""
+echo "API Endpoints:"
+echo "  Producer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-producer/produce"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-producer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-producer/status"
+echo ""
+echo "  Consumer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-consumer/start"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-consumer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-consumer/status"
 echo ""
 echo "View logs:"
-echo "  tail -f $TOMCAT_HOME/logs/catalina.out"
+echo "  Producer: tail -f $TOMCAT_HOME/logs/spec-producer.log"
+echo "  Consumer: tail -f $TOMCAT_HOME/logs/spec-consumer.log"
+echo "  Tomcat:   tail -f $TOMCAT_HOME/logs/catalina.out"
 echo ""
 

@@ -3,8 +3,6 @@
 ## ✅ Your Application is Ready!
 
 **Configured for your Kafka cluster:**
-- 10.253.229.13:9092
-- 10.253.228.68:9092
 - 10.253.228.200:9092
 
 **No Kafka installation needed!**
@@ -201,10 +199,10 @@ See `TOMCAT_VERSION_FIX.md` for details.
 
 ```bash
 # Test connectivity
-nc -zv 10.253.229.13 9092
+nc -zv 10.253.228.200 9092
 
 # Check firewall/network
-ping 10.253.229.13
+ping 10.253.228.200
 ```
 
 ### Application not responding

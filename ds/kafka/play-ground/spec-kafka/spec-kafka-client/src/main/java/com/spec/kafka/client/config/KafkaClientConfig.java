@@ -27,7 +27,7 @@ import java.util.Map;
 @PropertySource("classpath:kafka.properties")
 public class KafkaClientConfig {
     
-    @Value("${kafka.bootstrap.servers:localhost:9092}")
+    @Value("${kafka.bootstrap.servers:10.253.228.200:9092}")
     private String bootstrapServers;
     
     @Value("${kafka.serialization.format:JSON}")

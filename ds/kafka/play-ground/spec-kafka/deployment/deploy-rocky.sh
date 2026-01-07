@@ -10,6 +10,8 @@ set -e
 TOMCAT_HOME=${TOMCAT_HOME:-/opt/tomcat}
 WEBAPPS_DIR="$TOMCAT_HOME/webapps"
 LOGS_DIR="$TOMCAT_HOME/logs"
+HOST_IP=$(hostname -I | awk '{print $1}')
+HOST_IP=${HOST_IP:-localhost}
 
 echo "========================================="
 echo "Spec Kafka - Rocky Linux Deployment"
@@ -29,7 +31,7 @@ fi
 
 # Check Kafka connectivity
 echo "Checking Kafka cluster..."
-KAFKA_SERVERS=("10.253.229.13" "10.253.228.68" "10.253.228.200")
+KAFKA_SERVERS=("10.253.228.200")
 KAFKA_REACHABLE=false
 
 for server in "${KAFKA_SERVERS[@]}"; do
@@ -93,15 +95,15 @@ sleep 30
 echo ""
 echo "Testing endpoints..."
 if curl -s http://localhost:8080/spec-producer/status > /dev/null 2>&1; then
-    echo "✓ Producer is accessible"
+    echo "✓ Producer is accessible: http://$HOST_IP:8080/spec-producer"
 else
-    echo "⚠️  Producer is not accessible yet (may need more time)"
+    echo "⚠️  Producer is not accessible yet: http://$HOST_IP:8080/spec-producer"
 fi
 
 if curl -s http://localhost:8080/spec-consumer/status > /dev/null 2>&1; then
-    echo "✓ Consumer is accessible"
+    echo "✓ Consumer is accessible: http://$HOST_IP:8080/spec-consumer"
 else
-    echo "⚠️  Consumer is not accessible yet (may need more time)"
+    echo "⚠️  Consumer is not accessible yet: http://$HOST_IP:8080/spec-consumer"
 fi
 
 echo ""
@@ -110,16 +112,25 @@ echo "Deployment Complete!"
 echo "========================================="
 echo ""
 echo "Access the applications:"
-echo "  Producer: http://localhost:8080/spec-producer"
-echo "  Consumer: http://localhost:8080/spec-consumer"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
 echo ""
-echo "Quick test commands:"
-echo "  curl http://localhost:8080/spec-consumer/start"
-echo "  curl http://localhost:8080/spec-producer/produce"
+echo "API Endpoints:"
+echo "  Producer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-producer/produce"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-producer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-producer/status"
+echo ""
+echo "  Consumer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-consumer/start"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-consumer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-consumer/status"
 echo ""
 echo "View logs:"
-echo "  tail -f $LOGS_DIR/catalina.out"
-echo "  journalctl -u tomcat -f"
+echo "  Producer: tail -f $LOGS_DIR/spec-producer.log"
+echo "  Consumer: tail -f $LOGS_DIR/spec-consumer.log"
+echo "  Tomcat:   tail -f $LOGS_DIR/catalina.out"
+echo "  Journal:  journalctl -u tomcat -f"
 echo ""
 echo "Manage Tomcat:"
 echo "  systemctl status tomcat"

@@ -369,8 +369,6 @@ curl http://localhost:8080/spec-producer/status
 
 1. **Check network connectivity:**
 ```bash
-nc -zv 10.253.229.13 9092
-nc -zv 10.253.228.68 9092
 nc -zv 10.253.228.200 9092
 ```
 

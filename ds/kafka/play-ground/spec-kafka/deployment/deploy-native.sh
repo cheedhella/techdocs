@@ -6,6 +6,14 @@ set -e
 TOMCAT_HOME=${TOMCAT_HOME:-/opt/tomcat}
 TOMCAT_SERVICE="tomcat"
 
+# Get Host IP
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    HOST_IP=$(ipconfig getifaddr en0 || ipconfig getifaddr en1 || echo "localhost")
+else
+    HOST_IP=$(hostname -I | awk '{print $1}')
+    HOST_IP=${HOST_IP:-localhost}
+fi
+
 # Detect Homebrew Tomcat on macOS (prefer Tomcat 9 for javax.servlet compatibility)
 if [[ "$OSTYPE" == "darwin"* ]] && [ -d "/opt/homebrew/opt/tomcat@9" ]; then
     TOMCAT_HOME="/opt/homebrew/opt/tomcat@9/libexec"
@@ -61,7 +69,7 @@ echo "✓ Tomcat: $TOMCAT_HOME"
 # Check if Kafka is reachable
 echo ""
 echo "Checking Kafka cluster..."
-KAFKA_SERVERS=("10.253.229.13" "10.253.228.68" "10.253.228.200")
+KAFKA_SERVERS=("10.253.228.200")
 KAFKA_REACHABLE=false
 
 for server in "${KAFKA_SERVERS[@]}"; do
@@ -74,7 +82,7 @@ done
 
 if [ "$KAFKA_REACHABLE" = false ]; then
     echo "WARNING: Cannot reach Kafka cluster"
-    echo "  Servers: 10.253.229.13:9092, 10.253.228.68:9092, 10.253.228.200:9092"
+    echo "  Server: 10.253.228.200:9092"
     echo "  Please check network connectivity"
     read -p "Continue anyway? (y/n) " -n 1 -r
     echo
@@ -141,15 +149,15 @@ echo ""
 echo "Testing endpoints..."
 
 if curl -s http://localhost:8080/spec-producer/status > /dev/null; then
-    echo "✓ Producer is accessible"
+    echo "✓ Producer is accessible: http://$HOST_IP:8080/spec-producer"
 else
-    echo "✗ Producer is not accessible yet"
+    echo "✗ Producer is not accessible yet: http://$HOST_IP:8080/spec-producer"
 fi
 
 if curl -s http://localhost:8080/spec-consumer/status > /dev/null; then
-    echo "✓ Consumer is accessible"
+    echo "✓ Consumer is accessible: http://$HOST_IP:8080/spec-consumer"
 else
-    echo "✗ Consumer is not accessible yet"
+    echo "✗ Consumer is not accessible yet: http://$HOST_IP:8080/spec-consumer"
 fi
 
 echo ""
@@ -158,15 +166,23 @@ echo "Deployment Complete!"
 echo "========================================="
 echo ""
 echo "Access the applications:"
-echo "  Producer: http://localhost:8080/spec-producer"
-echo "  Consumer: http://localhost:8080/spec-consumer"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
 echo ""
-echo "Quick test commands:"
-echo "  curl http://localhost:8080/spec-consumer/start"
-echo "  curl http://localhost:8080/spec-producer/produce"
-echo "  tail -f $TOMCAT_HOME/logs/catalina.out"
+echo "API Endpoints:"
+echo "  Producer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-producer/produce"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-producer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-producer/status"
+echo ""
+echo "  Consumer:"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-consumer/start"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-consumer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-consumer/status"
 echo ""
 echo "View logs:"
-echo "  tail -f $TOMCAT_HOME/logs/catalina.out"
+echo "  Producer: tail -f $TOMCAT_HOME/logs/spec-producer.log"
+echo "  Consumer: tail -f $TOMCAT_HOME/logs/spec-consumer.log"
+echo "  Tomcat:   tail -f $TOMCAT_HOME/logs/catalina.out"
 echo ""
 

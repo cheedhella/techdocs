@@ -3,8 +3,6 @@
 **⚠️ NOTE: This folder is OPTIONAL - only use if you need to install/run Kafka locally.**
 
 **The main application is configured to use the existing Kafka cluster:**
-- `10.253.229.13:9092`
-- `10.253.228.68:9092`
 - `10.253.228.200:9092`
 
 This folder contains instructions and scripts for setting up Kafka locally if needed for development or testing purposes.
@@ -15,7 +13,7 @@ The application is already configured to use the production Kafka cluster. See:
 - `spec-kafka-client/src/main/resources/kafka.properties`
 
 ```properties
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 ```
 
 ## When to Use This Folder
@@ -66,7 +64,5 @@ cd ..
 ```
 
 The application will connect to:
-- `10.253.229.13:9092`
-- `10.253.228.68:9092`
 - `10.253.228.200:9092`
 

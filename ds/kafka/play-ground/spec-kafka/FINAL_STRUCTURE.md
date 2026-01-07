@@ -151,7 +151,7 @@ cd deployment
 ./start-services.sh
 
 # Test connectivity
-nc -zv 10.253.229.13 9092
+nc -zv 10.253.228.200 9092
 ```
 
 ## 📊 Module Dependencies
@@ -218,8 +218,6 @@ After deployment:
 ## ⚙️ Configuration
 
 **Kafka Cluster:**
-- 10.253.229.13:9092
-- 10.253.228.68:9092
 - 10.253.228.200:9092
 
 **Topic:** orders (must be created manually)
@@ -234,7 +232,7 @@ After deployment:
 
 ```bash
 kafka-topics.sh --create --topic orders \
-  --bootstrap-server 10.253.229.13:9092 \
+  --bootstrap-server 10.253.228.200:9092 \
   --partitions 3 --replication-factor 2
 ```
 
@@ -265,7 +263,7 @@ Most reliable method for macOS.
 2. **Create Kafka topic:**
    ```bash
    kafka-topics.sh --create --topic orders \
-     --bootstrap-server 10.253.229.13:9092 \
+     --bootstrap-server 10.253.228.200:9092 \
      --partitions 3 --replication-factor 2
    ```
 

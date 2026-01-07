@@ -55,7 +55,7 @@ If you have Kafka credentials, configure them:
 2. **Use with commands:**
    ```bash
    kafka-consumer-groups.sh \
-     --bootstrap-server 10.253.229.13:9092 \
+     --bootstrap-server 10.253.228.200:9092 \
      --command-config deployment/kafka-cli-config.properties \
      --describe --group order-consumer-group
    ```
@@ -113,7 +113,7 @@ Kafka producer sent message to topic: orders
 Your application configuration (`kafka.properties`) might have:
 ```properties
 # These work for your application
-kafka.bootstrap.servers=10.253.229.13:9092,10.253.228.68:9092,10.253.228.200:9092
+kafka.bootstrap.servers=10.253.228.200:9092
 
 # Possibly also has (but commented out or you haven't seen):
 # kafka.security.protocol=SASL_PLAINTEXT

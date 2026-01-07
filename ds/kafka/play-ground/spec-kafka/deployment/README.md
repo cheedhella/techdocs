@@ -138,14 +138,12 @@ sudo ./deployment/deploy-rocky-unified.sh --wait 60
 ### For All Systems
 
 2. **Kafka cluster accessible:**
-   - 10.253.229.13:9092
-   - 10.253.228.68:9092
    - 10.253.228.200:9092
 
 3. **Topic created:**
    ```bash
    kafka-topics.sh --create --topic orders \
-     --bootstrap-server 10.253.229.13:9092 \
+     --bootstrap-server 10.253.228.200:9092 \
      --partitions 3 --replication-factor 2
    ```
 
@@ -218,12 +216,12 @@ export TOMCAT_HOME=/path/to/tomcat
 
 Check connectivity:
 ```bash
-nc -zv 10.253.229.13 9092
+nc -zv 10.253.228.200 9092
 ```
 
 Ensure topic exists:
 ```bash
-kafka-topics.sh --list --bootstrap-server 10.253.229.13:9092 | grep orders
+kafka-topics.sh --list --bootstrap-server 10.253.228.200:9092 | grep orders
 ```
 
 ### Deployment Fails
@@ -354,7 +352,7 @@ export KAFKA_HOME=/opt/kafka
 For issues:
 1. Check logs: `tail -f /opt/homebrew/opt/tomcat@9/libexec/logs/catalina.out`
 2. Verify Tomcat is running: `ps aux | grep tomcat`
-3. Test connectivity: `nc -zv 10.253.229.13 9092`
+3. Test connectivity: `nc -zv 10.253.228.200 9092`
 4. Check documentation in parent directory
 
 

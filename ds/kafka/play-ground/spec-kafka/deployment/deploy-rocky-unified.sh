@@ -16,6 +16,8 @@ set -e
 TOMCAT_HOME=${TOMCAT_HOME:-/opt/tomcat}
 WEBAPPS_DIR="$TOMCAT_HOME/webapps"
 LOGS_DIR="$TOMCAT_HOME/logs"
+HOST_IP=$(hostname -I | awk '{print $1}')
+HOST_IP=${HOST_IP:-localhost}
 SKIP_BUILD=false
 SKIP_KAFKA=false
 WAIT_TIME=40
@@ -112,7 +114,7 @@ fi
 if [ "$SKIP_KAFKA" = false ]; then
     echo ""
     print_info "Checking Kafka cluster connectivity..."
-    KAFKA_SERVERS=("10.253.229.13" "10.253.228.68" "10.253.228.200")
+    KAFKA_SERVERS=("10.253.228.200")
     KAFKA_REACHABLE=false
 
     for server in "${KAFKA_SERVERS[@]}"; do
@@ -125,7 +127,7 @@ if [ "$SKIP_KAFKA" = false ]; then
 
     if [ "$KAFKA_REACHABLE" = false ]; then
         print_warning "Cannot reach Kafka cluster"
-        print_info "Servers: 10.253.229.13:9092, 10.253.228.68:9092, 10.253.228.200:9092"
+        print_info "Server: 10.253.228.200:9092"
         print_info "Application will deploy but may not function correctly"
     fi
 fi
@@ -265,17 +267,17 @@ PRODUCER_OK=false
 CONSUMER_OK=false
 
 if curl -s http://localhost:8080/spec-producer/status > /dev/null 2>&1; then
-    print_success "Producer is accessible: http://localhost:8080/spec-producer"
+    print_success "Producer is accessible: http://$HOST_IP:8080/spec-producer"
     PRODUCER_OK=true
 else
-    print_warning "Producer not accessible yet: http://localhost:8080/spec-producer"
+    print_warning "Producer not accessible yet: http://$HOST_IP:8080/spec-producer"
 fi
 
 if curl -s http://localhost:8080/spec-consumer/status > /dev/null 2>&1; then
-    print_success "Consumer is accessible: http://localhost:8080/spec-consumer"
+    print_success "Consumer is accessible: http://$HOST_IP:8080/spec-consumer"
     CONSUMER_OK=true
 else
-    print_warning "Consumer not accessible yet: http://localhost:8080/spec-consumer"
+    print_warning "Consumer not accessible yet: http://$HOST_IP:8080/spec-consumer"
 fi
 
 # Final status
@@ -291,27 +293,29 @@ echo ""
 
 # Display application URLs
 echo "Application URLs:"
-echo "  Producer: http://localhost:8080/spec-producer"
-echo "  Consumer: http://localhost:8080/spec-consumer"
+echo "  Producer: http://$HOST_IP:8080/spec-producer"
+echo "  Consumer: http://$HOST_IP:8080/spec-consumer"
 echo ""
 
 # Display API endpoints
 echo "API Endpoints:"
 echo "  Producer:"
-echo "    - Start: curl -X POST http://localhost:8080/spec-producer/produce"
-echo "    - Stop:  curl -X POST http://localhost:8080/spec-producer/stop"
-echo "    - Status: curl http://localhost:8080/spec-producer/status"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-producer/produce"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-producer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-producer/status"
 echo ""
 echo "  Consumer:"
-echo "    - Start: curl -X POST http://localhost:8080/spec-consumer/start"
-echo "    - Stop:  curl -X POST http://localhost:8080/spec-consumer/stop"
-echo "    - Status: curl http://localhost:8080/spec-consumer/status"
+echo "    - Start: curl -X POST http://$HOST_IP:8080/spec-consumer/start"
+echo "    - Stop:  curl -X POST http://$HOST_IP:8080/spec-consumer/stop"
+echo "    - Status: curl http://$HOST_IP:8080/spec-consumer/status"
 echo ""
 
 # Display log commands
 echo "View Logs:"
-echo "  tail -f $LOGS_DIR/catalina.out"
-echo "  journalctl -u tomcat -f"
+echo "  Producer: tail -f $LOGS_DIR/spec-producer.log"
+echo "  Consumer: tail -f $LOGS_DIR/spec-consumer.log"
+echo "  Tomcat:   tail -f $LOGS_DIR/catalina.out"
+echo "  Journal:  journalctl -u tomcat -f"
 echo ""
 
 # Display management commands
@@ -329,11 +333,11 @@ if [ "$PRODUCER_OK" = false ] || [ "$CONSUMER_OK" = false ]; then
     echo ""
     echo "  2. Wait a bit longer and test again:"
     echo "     sleep 30"
-    echo "     curl http://localhost:8080/spec-producer/status"
-    echo "     curl http://localhost:8080/spec-consumer/status"
+    echo "     curl http://$HOST_IP:8080/spec-producer/status"
+    echo "     curl http://$HOST_IP:8080/spec-consumer/status"
     echo ""
     echo "  3. Check if Kafka topic exists:"
-    echo "     kafka-topics.sh --list --bootstrap-server 10.253.229.13:9092"
+    echo "     kafka-topics.sh --list --bootstrap-server 10.253.228.200:9092"
     echo ""
 fi
 

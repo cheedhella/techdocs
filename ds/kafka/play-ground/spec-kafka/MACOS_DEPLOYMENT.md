@@ -205,12 +205,10 @@ tail -50 /opt/homebrew/var/log/tomcat/catalina.out
 
 ```bash
 # Test connectivity to your Kafka cluster
-nc -zv 10.253.229.13 9092
-nc -zv 10.253.228.68 9092
 nc -zv 10.253.228.200 9092
 
 # Check network/VPN connection
-ping 10.253.229.13
+ping 10.253.228.200
 ```
 
 ## 📁 Project Structure on macOS

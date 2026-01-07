@@ -8,8 +8,6 @@ echo "========================================="
 echo ""
 echo "⚠️  NOTE: This is OPTIONAL!"
 echo "The application is already configured to use:"
-echo "  - 10.253.229.13:9092"
-echo "  - 10.253.228.68:9092"
 echo "  - 10.253.228.200:9092"
 echo ""
 read -p "Do you want to install a LOCAL Kafka instance? (y/n) " -n 1 -r
