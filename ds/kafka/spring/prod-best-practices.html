@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Producer Best Practices</title>
+  <link rel="stylesheet" href="../../../resources/css/styles.css" />
+  <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+  <div class="question"><strong>Best Practices, When writing a Producer:</strong></div>
+  <div class="answer">
+    <ul><b>Mandatory</b>
+      <li>Idempotence - Ensure producer can create no duplicates, during retries;</li>
+      <li>Control Retry Duration - Retries are bound by time, not count;</li>
+      <li>Kafka retries are for only transport failures; Add retry support for application level errors(that are retriable only);</li>
+      <li>If you combine kafka internal retries with application level retries: ensure there are no duplicate sends, excessive latency, message reordering;</li>
+      <li>Fail fast on errors like authorization - no point in retrying;</li>
+      <li>Send permanent failures to DLQ or dead letter topic;</li>
+      <li>Use meaningful Key - Keys control partitioning, ordering, consumer scalability;</li>
+      <li>Avoid random keys - Use random keys only when you don't care about ordering;</li>
+      <li>Keep message size small - Kafka is optimized for small messages(less than 1MB) only; For large payloads, use large blobs in DB/S3 and send reference;</li>
+      <li>Graceful shutdown - Always flush before shutdown - producer.flush(); producer.close(); It prevents data loss;</li>
+      <li>Don't create a producer for each message; Create only one producer per application instance;</li>
+      <li>Internal Batching vs Application level batching - In case of application level batching, One bad event poisons the entire batch; breaks ordering; harder to implement partial batch retry handling;</li>
+      <li>Bottomline: Kafka guarantees delivery — not correctness; Correctness is your application’s responsibility;</li>
+    </ul>
+  </div>
+
+  <div class="code-block">
+    <div class="code-block-title">src/store/counterStore.ts</div>
+    <button class="copy-btn">Copy</button>
+    <pre><code>
+</code></pre>
+  </div>
+  <br /><br />
+
+  <br /><br />
+  <div class="photo-box">
+    <p>Output</p>
+    <img src="imgs/counter-op.png" alt="Output">
+    <div>
+      Note: If you reload the page, state gets reset to initial state;
+    </div>
+  </div>
+
+  <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

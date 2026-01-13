@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Dead Letter Topic</title>
+  <link rel="stylesheet" href="../../../resources/css/styles.css" />
+  <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+  <div class="question"><strong>What is Dead letter topic or queue?</strong></div>
+  <div class="answer">
+    <ul>
+      <li>If you combine kafka internal retries with application level retries: ensure there are no duplicate sends, excessive latency, message reordering;</li>
+    </ul>
+  </div>
+
+  <div class="code-block">
+    <div class="code-block-title">src/store/counterStore.ts</div>
+    <button class="copy-btn">Copy</button>
+    <pre><code>
+</code></pre>
+  </div>
+  <br /><br />
+
+  <br /><br />
+  <div class="photo-box">
+    <p>Output</p>
+    <img src="imgs/counter-op.png" alt="Output">
+    <div>
+      Note: If you reload the page, state gets reset to initial state;
+    </div>
+  </div>
+
+  <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
