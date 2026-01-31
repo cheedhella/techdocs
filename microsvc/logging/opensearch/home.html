@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Opensearch</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Opensearch</h2>
+        </div>
+
+        <div class="toc-container">
+            <ul>
+                <li>Basics
+                    <ul>
+                        <li><a href="./what.html">What is Opensearch?</a></li>
+                        <li><a href="./os-vs-es.html">Opensearch vs Elasticsearch</a></li>
+                        <li><a href="./install.html">Install</a></li>
+                        <li><a href="./config.html">Config</a></li>
+                    </ul>
+                </li>
+                <li>Middleware
+                    <ul>
+                        <li>persist</li>
+                        <li>devtools</li>
+                        <li>subscribeWithSelector</li>
+                        Zustand supports “middlewares” for extra features:
+                        devtools → Redux DevTools integration
+
+persist → Saves state to localStorage
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <pre>
+| Level      | Concept                    | What to Learn                                | Why It Matters                         |
+| ---------- | -------------------------- | -------------------------------------------- | -------------------------------------- |
+| **Basics** | Search Engine Fundamentals | Inverted index, documents, fields            | Core mental model of how search works  |
+| Basics     | OpenSearch Architecture    | Nodes, clusters, shards, replicas            | Scaling, fault tolerance               |
+| Basics     | Index & Mapping            | Index creation, field types, dynamic mapping | Correct schema = good performance      |
+| Basics     | Documents                  | CRUD operations, bulk indexing               | Data ingestion                         |
+| Basics     | REST APIs                  | `_search`, `_index`, `_bulk`                 | Everything in OpenSearch is API-driven |
+| Basics     | Query DSL                  | `match`, `term`, `bool` queries              | Writing effective searches             |
+| Basics     | Text Analysis              | Analyzer, tokenizer, filters                 | Search relevance quality               |
+
+| Level            | Concept              | What to Learn                   | Why It Matters             |
+| ---------------- | -------------------- | ------------------------------- | -------------------------- |
+| **Intermediate** | Aggregations         | Metrics, bucket aggregations    | Analytics & dashboards     |
+| Intermediate     | Pagination           | `from/size`, `search_after`     | Handling large result sets |
+| Intermediate     | Relevance Scoring    | BM25, boosting                  | Better search results      |
+| Intermediate     | Index Lifecycle Mgmt | ISM policies                    | Cost & storage control     |
+| Intermediate     | Aliases              | Read/write aliases              | Zero-downtime reindexing   |
+| Intermediate     | Reindexing           | `_reindex` API                  | Schema migrations          |
+| Intermediate     | Ingest Pipelines     | Processors (grok, date, rename) | Data normalization         |
+| Intermediate     | Dashboards           | Visualizations, index patterns  | Observability & analytics  |
+| Intermediate     | Security             | Users, roles, permissions       | Production readiness       |
+
+| Level        | Concept              | What to Learn           | Why It Matters               |
+| ------------ | -------------------- | ----------------------- | ---------------------------- |
+| **Advanced** | Cluster Tuning       | Heap size, thread pools | Performance & stability      |
+| Advanced     | Shard Strategy       | Shard count, shard size | Scaling without pain         |
+| Advanced     | Query Optimization   | Filters vs queries      | Speed & cost                 |
+| Advanced     | k-NN / Vector Search | Embeddings, ANN         | Semantic search & AI         |
+| Advanced     | Cross-Cluster Search | CCS setup               | Federated search             |
+| Advanced     | Snapshots & Restore  | S3 repositories         | Backup & disaster recovery   |
+| Advanced     | Security Hardening   | TLS, audit logs         | Compliance                   |
+| Advanced     | Monitoring           | Slow logs, metrics      | Debugging performance issues |
+| Advanced     | Failure Recovery     | Node loss, split brain  | High availability            |
+
+Suggested learning order (TL;DR)
+
+Index + Mapping
+
+Query DSL
+
+Aggregations
+
+Security
+
+Dashboards
+
+Shard strategy
+
+Performance tuning
+
+Vector search
+
+        </pre>
+    </body>
+</html>

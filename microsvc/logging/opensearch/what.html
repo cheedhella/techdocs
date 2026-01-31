@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Introduction</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What is Opensearch?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>It is a open-source, distributed, scalable full-text search and analytics engine that allows you store,
+            search and analyze large volumes of data(using aggregation queries) in near real-time(not immediate);</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. New Terms</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Cluster</b>
+            <ul>
+               <li>A collection of one or more nodes working together;</li>
+            </ul>
+         </li>
+         <li><b>Node</b>
+            <ul>
+               <li>A single instance of Opensearch;</li>
+            </ul>
+         </li>
+         <li><b>Document</b>
+            <ul>
+               <li>A basic unit of data stored in JSON format;</li>
+            </ul>
+         </li>
+         <li><b>Index</b>
+            <ul>
+               <li>A logical namespace that contains documents (like a database);</li>
+               <li>Inverted index - Instead of storing documents by (ID → content), Opensearch stores term → list of
+                  documents that contain it;</li>
+            </ul>
+         </li>
+         <li><b>Shard</b>
+            <ul>
+               <li>A subdivision of an index that allows horizontal scaling;</li>
+            </ul>
+         </li>
+         <li><b>Replica</b>
+            <ul>
+               <li>A copy of a shard for fault tolerance and load balancing;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. How it stores data?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>User inserts data(a JSON document) to an index via a REST API, such as:</li>
+         <li>
+            <pre>
+POST /my_index/_doc/1   # If you don't specify document id, it is auto-generated;
+{
+  "Name": "Chris",
+  "Age": "seven",
+  "parents": {
+    "father_name": "Robert",
+    "mother_name": "stella"
+  }
+}
+               </pre>
+         </li>
+         <li>Elasticsearch decides which shard will hold the document (using a hash of the document ID)</li>
+         <li>Ealsticsearch indexes the document using inverted indices;</li>
+         <li>Text fields goes through an analyzer:
+            <ul>
+               <li>Character filters (e.g., remove punctuation)</li>
+               <li>Tokenizer (split text into tokens)</li>
+               <li>Token filters (lowercasing, stemming, synonyms, etc.)</li>
+            </ul>
+         </li>
+         <li>The processed tokens are written to Lucene’s inverted index — a structure optimized for text search;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. How search works?</strong></div>
+   <div class="answer">
+      <ul>
+         <li>You can query data using a powerful RESTful API or the Elasticsearch Query DSL (Domain Specific Language);</li>
+         <li>Your query (in JSON) is sent to any node (a coordinating node);</li>
+         <li>That node forwards the query to all relevant shards;</li>
+         <li>Each shard searches its local data using Lucene and returns top matching documents with scores;</li>
+         <li>The coordinating node merges results, sorts them, and returns the final list;</li>
+         <li>Relevance scoring (default algorithm: BM25) determines how well each document matches your query;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. Features</strong></div>
+   <div class="answer">
+      <ul>
+         <li><a href="./full-text-search.html">Full-text search</a></li>
+         <li><a href="./fuzzy-search.html">Fuzzy search</a> - It provides the ability to handle typos in the input;</li>
+         <li><a href="./faceted-search.html">Faceted search</a></li>
+
+         <li> Elasticsearch provides a feature called fuzzy search that allows us to find an instance that approximately
+            matches the searched text. This helps Elasticsearch handle user typos in the search.</li>
+         <li>It allows us to search for various data types such as textual, numerical, geospatial (GeoQuery),
+            structured, and unstructured data types;</li>
+         <li>Elasticsearch provides aggregation requests that help us explore trends and patterns in our data;</li>
+      </ul>
+   </div>
+
+</body>
+
+</html>
