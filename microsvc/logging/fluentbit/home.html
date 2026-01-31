@@ -16,29 +16,152 @@
     <div class="question"><strong>1. What is FluentBit?</strong></div>
     <div class="answer">
         <ul>
-            <li>It collects </li>
-            <li>It is a collection of data shippers, each for a different purpose;</li>
-            <li><b>Filebeat</b> - It is used to collect log files and send them to Elasticsearch or Logstash;</li>
-            <li><b>Packetbeat</b> - It collects, ships, and analyzes network data from our servers and containers;</li>
-            <li><b>Auditbeat</b> - It collects and ships our Linux audit data and monitors the integrity of our files;
-            </li>
-            <li><b>Functionbeat</b> - It collects, ships, and monitors data from our cloud services;</li>
-            <li><b>Metricbeat</b> - It is used to collect system(such as CPU, memory, disk, network) metrics and service metrics;</li>
-            <li><b>Winlogbeat</b> - It collects and ships Windows event logs;</li>
-            <li><b>Heartbeat</b> - It collects and ships Windows event logs; It monitors services for their
-                availability. For example, if given a list of URLs, Heartbeat will send the requests using these URLs
-                and ship the response information, such as response time;</li>
+            <li>It collects logs, optionally parses/enriches them, and sends them to systems like OpenSearch;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. What is Filebeat?</strong></div>
+    <div class="question"><strong>2. How it works?</strong></div>
     <div class="answer">
         <ul>
-            <li>Filebeat is a lightweight log shipper, which monitors the log files or locations that you specify and
-                forwards them either to Logstash or Elasticsearch or another destination such as Kafka, Redis, S3;</li>
+            <li>It has a simple, but powerful pipeline -  [ INPUT ] → [ FILTER ] → [ OUTPUT ];</li>
+            <li>Input
+              <ul>
+                <li>
+[INPUT]
+    Name        tail                  # Name of the plugin 
+    Path        /var/log/syslog       # 
+    Tag         system.logs           # Tag is used to match this data to a [FILTER] or [OUTPUT]
+    Mem_Buf_Limit                     # It Prevents Fluent Bit from consuming too much memory if the output is slow. It forces the engine to stop reading until the buffer clears;
+    Alias                             # A human-readable name for the input instance (useful for monitoring);
+    Parsers                           # Many inputs (like tail or tcp) allow a Parser field to immediately convert raw text into structured JSON;
+    Storage Type                      # You can set storage.type filesystem to buffer data to the disk instead of memory, which prevents data loss if the service restarts.
+                </li>
+                <li>Fluent Bit supports over 100 plugins; 
+                  <ul>
+                    <li><b>tail</b> - Reads text files, tracks checkpoints (offsets), and supports multiline parsing;</li>
+                    <li><b>Systemd</b> - Specifically designed to read from journald;</li>
+                    <li><b>CPU / Mem</b> - Collects local system resource usage metrics;</li>
+                  </ul>
+                </li>
+                <li>Every input plugin can be assigned a Tag, which is essential for routing that specific data to a specific output later;</li>
+                <li></li>
+
+              </ul>
+            </li>
         </ul>
     </div>
 
+    <div class="question"><strong>3. FluentBit Config?</strong></div>
+    <div class="answer">
+        <pre>
+It continas 4 sections:
+[SERVICE]   -> It contains global settings for the running service;
+[INPUT]     -> It specifies sources of log records to collect;
+[FILTER]    -> It applies transformations to log records;
+[OUTPUT]    -> It determines the destination where Fluent Bit sends the processed logs;
+
+SERVICE = Fluent Bit itself
+INPUT = where logs come from
+FILTER = transform(modify/enrich/drop) logs
+OUTPUT = where logs go
+PARSER = structure logs
+
+You can have: 1 [SERVICE], Many [INPUT], Many [FILTER], Many [OUTPUT];
+
+[SERVICE]
+    Flush           1                   # How often (seconds) data is flushed to outputs
+    Log_Level       info                # error, warn, info, debug, trace
+    Daemon          off                 # Run in background(usually off with systemd)
+    Parsers_File    parsers.conf        # External file with parsers
+    HTTP_Server     On                  # Enables metrics & health endpoint
+    HTTP_Listen     0.0.0.0             # 
+    HTTP_Port       2020                # Exposes /api/v1/metrics
+
+[INPUT]
+    Name    tail                        # Name of the plugin; Fluentbit supports over 100 plugins;
+    Path    /var/log/syslog             # Files to read;
+    DB      /var/lib/fluent-bit/tail.db # Keeps track of read offsets; Prevents log duplication on restart; Always set DB in production(over Path);
+    Tag     syslog                      # Logical name for records; Used by filters & outputs (Match);
+
+Parsers 
+    Parsers are the magic that turns messy text logs into structured, searchable fields. 
+    Without parsers, OpenSearch just gets a blob of text; with parsers, you get real fields like level=ERROR, user_id=123, etc.
+    Eg: 
+      Raw log: 2026-01-25 10:15:32 ERROR user=42 login failed
+      After parsing:
+      {
+        "timestamp": "2026-01-25 10:15:32",
+        "level": "ERROR",
+        "user": 42,
+        "message": "login failed"
+      }
+    
+    Parsers are not automatic.
+    You must apply them via: [FILTER] parser or or directly in [INPUT] (some plugins)
+
+    Where parsers live?
+      Parsers are defined in a separate file, usually: parsers.conf and referenced in [SERVICE] -> Parsers_File
+
+    Types of Parsers 
+      JSON parser 
+      Regex parser -> Used for nginx/apache logs
+        [PARSER]
+            Name   nginx
+            Format regex
+            Regex  ^(?<remote>[^ ]*) - (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+) (?<path>\S+) \S+" (?<status>\d+)
+      LTSV parser -> Used for Key:value log formats; Eg: time:2026-01-25 level:info user:42
+      Logfmt parser -> 
+      Multiline parsers (stack traces) 
+          - Used when one logical log = multiple lines.
+      
+      Time_Key time         @# Specifies which field contains the timestamp.
+      Time_Format %Y-%m-%d %H:%M:%S     # Without this, Fluent Bit uses ingestion time.
+
+
+[FILTER]
+    Name   modify
+    Match  *                            # Applies the filter to only matching tags;
+    Add    env prod
+
+[FILTER]
+    Name      parser
+    Match     *
+    Key_Name  log
+    Parser    nginx
+
+Common filter plugins
+| Filter            | Purpose                    |
+| ----------------- | -------------------------- |
+| `parser`          | Parse raw text into fields |
+| `modify`          | Add/remove fields          |
+| `kubernetes`      | Add pod metadata           |
+| `grep`            | Include/exclude logs       |
+| `lua`             | Custom logic               |
+| `record_modifier` | Add static fields          |
+
+
+[OUTPUT]                                      # It defines the destination(OpenSearch, Kafka, S3 etc); You can have multiple [OUTPUT] blocks to send different logs to different destinations;
+    Name   opensearch                         # 
+    Match  *                                  # Matches all records, regardless of tags; 
+    Host   opensearch.example.com             #  
+    Port   9200
+    TLS       On                              # Use TLS if target is running on HTTPS;
+    TLS.Verify On
+    Index  logs-%Y.%m.%d                      # Indexes based on event timestamp(not system timestamp);
+
+Common output plugins:
+| Output          | Use case         |
+| --------------- | ---------------- |
+| `opensearch`    | OpenSearch       |
+| `elasticsearch` | Elasticsearch    |
+| `stdout`        | Debugging        |
+| `kafka`         | Streaming        |
+| `s3`            | Archival         |
+| `http`          | Custom endpoints |
+
+        </pre>
+    </div>
+    ß
     <div class="question"><strong>3. How it works?</strong></div>
     <div class="answer">
         <ul>

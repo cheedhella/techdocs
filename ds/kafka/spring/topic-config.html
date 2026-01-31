@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Topic Config</title>
+  <link rel="stylesheet" href="../../../resources/css/styles.css" />
+  <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+  <div class="question"><strong>cleanup.policy</strong> - compact | delete | compact,delete</div>
+  <div class="answer">
+    <ul>
+      <li>It defines the cleanup mechanism for a topic;</li>
+      <li><b>compact</b>
+        <ul>
+          <li>In a compacte topic, Kafka retains the latest record for each key indefinitely — unless you delete it with a tombstone;</li>
+        </ul>
+      </li>
+      <li><b>delete</b> - default
+        <ul>
+          <li>In a delete topic, kafka cleans up the records based on time or size; Cleanup is triggered: when <b>retention.ms</b> is exceeded or <b>retention.bytes</b> is exceeded;</li>
+          <li>retention.ms limits how long Kafka keeps data, and retention.bytes limits how much data it keeps — Kafka deletes old segments when either limit is exceeded;</li>
+        </ul>
+      </li>
+      <li><b>compact,delete</b>
+        <ul>
+          <li>It means latest is not permanent anymore; Kafka keeps latest value per key; But deletes it once it exceeds retention time;</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="question"><strong>retention.ms</strong> - Defaults to 7 days;</div>
+  <div class="answer">
+    <ul>
+      <li>It specifies how long to keep the records in a topic(when cleanup.policy=delete is in-effect);</li>
+      <li>Once data is older than this time, Kafka marks it for deletion;</li>
+      <li>-1 means keep forever (unless size limit applies);</li>
+    </ul>
+  </div>
+
+  <div class="question"><strong>retention.bytes</strong> - Defaults to -1(unlimited);</div>
+  <div class="answer">
+    <ul>
+      <li>It specifies limits the total size of data per partition;</li>
+      <li>When the partition size exceeds this value, kafka deletes oldest log segments first;</li>
+    </ul>
+  </div>
+
+
+// create alarm topic 
+  bin/kafka-topics.sh --bootstrap-server <servername>:<port> --command-config config/client_security.properties --create 
+    --topic  netops.spectrum.alarm --partitions 10 --config cleanup.policy=compact --config segment.ms=3600000 --config segment.bytes=1073741824  
+    --config delete.retention.ms=604800000  --config max.compaction.lag.ms=3600000  --config min.cleanable.dirty.ratio=0.05
+
+// create netops.product.heartbeat
+bin/kafka-topics.sh --bootstrap-server <servername>:<port> --command-config config/client_security.properties --create --topic netops.product.heartbeat
+   --partitions 1 --config retention.ms=86400000
+
+// netops.spectrum.alarm.notification
+bin/kafka-topics.sh --bootstrap-server <servername>:<port> --command-config config/client_security.properties --create --topic netops.spectrum.alarm.notification 
+  --partitions 10 --config retention.ms=86400000
+
+// netops.spectrum.landscape.events
+bin/kafka-topics.sh --bootstrap-server <servername>:<port> --command-config config/client_security.properties --create --topic netops.spectrum.landscape.events 
+  --partitions 10
+
+// netops.eventmanager.events
+bin/kafka-topics.sh --bootstrap-server <servername>:<port> --command-config config/client_security.properties --create --topic netops.eventmanager.events --partitions 10
+
+
+
+
+
+  delete.retention.ms -> Kafka keeps the tombstone for delete.retention.ms; After that, the key and its latest value are removed;
+
+  Retention + replication + partitions + cleanup.policy are the core knobs you must understand for Kafka topic design.
+
+Control how long data is kept and how it’s removed.
+| Config                      | Description                                         |
+| --------------------------- | --------------------------------------------------- |
+| `cleanup.policy`            | `delete`, `compact`, or `compact,delete`            |
+| `retention.ms`              | How long messages are kept (time-based)             |
+| `retention.bytes`           | Max size of topic before deleting old data          |
+| `delete.retention.ms`       | How long tombstones are kept (for compacted topics) |
+| `min.cleanable.dirty.ratio` | When log compaction is triggered                    |
+| `segment.ms`                | Time before a new log segment is rolled             |
+| `segment.bytes`             | Size before a new log segment is rolled             |
+
+Control fault tolerance and data safety.
+| Config                           | Description                                               |
+| -------------------------------- | --------------------------------------------------------- |
+| `replication.factor`             | Number of replicas per partition                          |
+| `min.insync.replicas`            | Minimum replicas required for writes                      |
+| `unclean.leader.election.enable` | Allow data loss to recover availability (not recommended) |
+
+Affect throughput, latency, and scalability.
+| Config                | Description                                  |
+| --------------------- | -------------------------------------------- |
+| `num.partitions`      | Number of partitions in the topic            |
+| `segment.index.bytes` | Index size per log segment                   |
+| `segment.jitter.ms`   | Randomizes segment roll time to avoid spikes |
+| `flush.messages`      | Messages before forcing disk flush           |
+| `flush.ms`            | Time before forcing disk flush               |
+
+Protect brokers and consumers from large records.
+| Config                                | Description                     |
+| ------------------------------------- | ------------------------------- |
+| `max.message.bytes`                   | Max size of a single message    |
+| `message.timestamp.type`              | `CreateTime` or `LogAppendTime` |
+| `message.timestamp.difference.max.ms` | Allowed timestamp difference    |
+
+Optimize disk usage and network IO.
+| Config             | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `compression.type` | `producer`, `gzip`, `snappy`, `lz4`, `zstd` |
+
+
+Relevant only for compacted topics.
+| Config                  | Description                                   |
+| ----------------------- | --------------------------------------------- |
+| `min.compaction.lag.ms` | Minimum time before a record can be compacted |
+| `max.compaction.lag.ms` | Maximum delay before compaction must occur    |
+| `delete.retention.ms`   | How long tombstones are retained              |
+
+
+// Most commonly used settings
+cleanup.policy=delete
+retention.ms=604800000
+replication.factor=3
+min.insync.replicas=2
+num.partitions=6
+compression.type=producer
+max.message.bytes=1048576
+
+// 👉 Topic configs control retention, durability, performance, size limits, and compaction behavior — choosing the right ones is critical for Kafka reliability and cost.
+
+  <div class="question"><strong>What is Compact Topic?</strong></div>
+  <div class="answer">
+    <ul>
+      <li>Every message written to compact topic must have a key;</li>
+      <li>A topic where Kafka keeps only the latest record for each key, instead of keeping all records forever;</li>
+      <li>Compaction is asynchronous (not immediate);</li>
+      <li>Consumers may see old records until compaction runs;</li>
+      <li>Tombstone messages (key + null value) delete keys after compaction;</li>
+    </ul>
+  </div>
+
+
+=compact,delete
+
+  <div class="code-block">
+    <div class="code-block-title">src/store/counterStore.ts</div>
+    <button class="copy-btn">Copy</button>
+    <pre><code>
+</code></pre>
+  </div>
+  <br /><br />
+
+  <br /><br />
+  <div class="photo-box">
+    <p>Output</p>
+    <img src="imgs/counter-op.png" alt="Output">
+    <div>
+      Note: If you reload the page, state gets reset to initial state;
+    </div>
+  </div>
+
+  <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
+
+
+
+

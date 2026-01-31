@@ -1,0 +1,240 @@
+1. Set hostname # If you don't set hostname, opensearch fall back to system hostname;
+    hostnamectl set-hostname opensearch-node-1
+    Add to /etc/hosts 
+        127.0.0.1   localhost
+        YOUR_SERVER_IP opensearch-node-1
+
+2. Increase system limits
+    # Without increasing them, OpenSearch will eventually crash, stall, or corrupt performance in production.
+    # nofile = how many files a process can have open at once
+    # What happens if it is low? Default Linux limit is often 1024 or 4096; 
+    # When OpenSearch hits the limit: Nodes drop out of cluster, Writes get rejected, Shards fail to open;
+    # Why 65536? High enough for large shard counts; Think of it as “don’t think about it again”;
+    # memlock = how much memory a process can lock into RAM; Unlimited here doesn’t mean reckless — it means don’t let Linux swap it; You already control memory via JVM heap (-Xms/-Xmx);
+    # Soft vs Hard limits (why both?)
+    # | Limit    | Meaning                    |
+    # | -------- | -------------------------- |
+    # | **soft** | Enforced during runtime    |
+    # | **hard** | Maximum soft limit allowed |
+
+    Add to /etc/security/limits.conf
+        opensearch soft nofile 65536
+        opensearch hard nofile 65536
+        opensearch soft memlock unlimited
+        opensearch hard memlock unlimited
+
+3. Increase memory map count
+    # What is a memory map? A memory map is what Linux uses when a process says: “Map this file directly into memory.”
+    # vm.max_map_count -> Maximum number of memory mappings a process can have;
+    echo "vm.max_map_count=262144" | sudo tee -a /etc/sysctl.conf           # Allow enough mappings so Lucene can breathe;
+
+4. Install Java 
+
+5. create opensearch user 
+    # Is it mandatory? Production services should run as non-root; 
+    # If you run it as root and something goes wrong, full system is compromised; 
+    $ if you run it as opensearch, damanage is contained; This is called least privilege, and auditors expect it;
+    sudo useradd -r -m -s /bin/bash opensearch
+
+6. Download and install opensearch
+    cd /opt
+    sudo wget https://artifacts.opensearch.org/releases/bundle/opensearch/2.12.0/opensearch-2.12.0-linux-x64.tar.gz
+    sudo tar -xzf opensearch-2.12.0-linux-x64.tar.gz
+    sudo mv opensearch-2.12.0 opensearch
+    sudo chown -R opensearch:opensearch /opt/opensearch
+
+7. Configure OpenSearch - vi /opt/opensearch/config/opensearch.yml
+    cluster.name: prod-opensearch
+    node.name: opensearch-node-1
+
+    path.data: /var/lib/opensearch
+    path.logs: /var/log/opensearch
+
+    network.host: 0.0.0.0
+    http.port: 9200
+    transport.port: 9300
+
+    discovery.type: single-node
+
+    bootstrap.memory_lock: true
+
+8. Create directories:
+    sudo mkdir -p /var/lib/opensearch /var/log/opensearch
+    sudo chown -R opensearch:opensearch /var/lib/opensearch /var/log/opensearch
+
+9. JVM tuning 
+    sudo vi /opt/opensearch/config/jvm.options
+
+    Rule of thumb:
+        Heap = 50% of RAM
+        Max heap ≤ 32GB
+        Example (16GB server):
+        -Xms8g
+        -Xmx8g
+
+        ❗ Xms and Xmx must be equal
+10. SSL
+    sudo -u opensearch /opt/opensearch/plugins/opensearch-security/tools/install_demo_configuration.sh
+
+11. Run as a Systemd Service - sudo vi /etc/systemd/system/opensearch.service
+[Unit]
+Description=OpenSearch
+After=network.target
+
+[Service]
+Type=simple
+User=opensearch
+Group=opensearch
+ExecStart=/opt/opensearch/bin/opensearch
+LimitNOFILE=65536
+LimitMEMLOCK=infinity
+TimeoutStopSec=0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+12. 
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable opensearch
+sudo systemctl start opensearch
+
+13. Test 
+Verify Installation - curl -k https://localhost:9200 admin/admin 
+
+
+Cluster setup:
+discovery.seed_hosts:
+  - os-node-1
+  - os-node-2
+  - os-node-3
+
+Those names must: Resolve via DNS or Exist in /etc/hosts        # If your hostname isn’t set correctly, nodes simply won’t find each other.
+
+Best Practice:
+opensearch-master-1
+opensearch-data-1
+opensearch-data-2
+
+
+
+# -------------------------------------------------- opensearch.yml --------------------------------------------------
+1️⃣ Cluster & Node Identity
+    cluster.name: prod-opensearch       # Logical name of the cluster; Nodes with different names will NOT join;
+    node.name: opensearch-node-1        # Unique ID of this node inside the cluster; match it with hostname;
+
+2️⃣ Node Roles (VERY important for scaling)
+    node.roles: [ master, data, ingest ]
+    | Role                    | Purpose                         |
+    | ----------------------- | ------------------------------- |
+    | `master`                | Cluster state, shard allocation |
+    | `data`                  | Stores & searches data          |
+    | `ingest`                | Runs ingest pipelines           |
+    | `ml`                    | ML features                     |
+    | `remote_cluster_client` | CCS / CCR                       |
+
+    # Never put data on master-only nodes;
+    # Single node prod: 
+        node.roles: [ master, data, ingest ]
+    # Multi node 
+        # master nodes
+        node.roles: [ master ]
+        # data nodes
+        node.roles: [ data ]
+        # ingest nodes
+        node.roles: [ ingest ]
+
+3️⃣ Paths (data & logs)
+    path.data: /var/lib/opensearch
+    path.logs: /var/log/opensearch
+
+    # Keeps data/logs outside install directory; Safer upgrades;
+
+4️⃣ Network Settings
+    network.host: 0.0.0.0
+    http.port: 9200
+    transport.port: 9300
+
+    network.host → bind address
+    http.port → REST API
+    transport.port → node-to-node traffic
+
+5️⃣ Discovery & Cluster Formation
+    discovery.type: single-node         # Disables quorum checks — required for 1-node prod
+
+    Multi-node - Used only once during cluster bootstrap;
+        discovery.seed_hosts:
+        - opensearch-master-1
+        - opensearch-master-2
+        - opensearch-master-3
+
+        cluster.initial_master_nodes:
+        - opensearch-master-1
+        - opensearch-master-2
+        - opensearch-master-3
+
+6️⃣ Memory & Bootstrap Checks
+    bootstrap.memory_lock: true     # Prevents JVM memory from being swapped
+
+7️⃣ Security (TLS & Auth)
+    plugins.security.disabled: false    # Security is on by default
+
+    Common TLS settings:
+        plugins.security.ssl.transport.enabled: true
+        plugins.security.ssl.http.enabled: true
+    Certificates:
+        plugins.security.ssl.transport.pemcert_filepath: node.pem
+        plugins.security.ssl.transport.pemkey_filepath: node-key.pem
+        plugins.security.ssl.transport.pemtrustedcas_filepath: root-ca.pem
+
+    Note: ⚠️ Transport TLS is mandatory in multi-node clusters.
+
+8️⃣ Shard Allocation & Awareness (Advanced but important)
+    cluster.routing.allocation.awareness.attributes: rack
+    node.attr.rack: rack1
+
+    Prevents replicas on same rack/AZ, thus increasing availability; Used in cloud / multi-AZ setups;
+
+9️⃣ Disk & Watermarks
+    cluster.routing.allocation.disk.threshold_enabled: true
+    cluster.routing.allocation.disk.watermark.low: 85%
+    cluster.routing.allocation.disk.watermark.high: 90%
+    cluster.routing.allocation.disk.watermark.flood_stage: 95%
+
+🔟 Performance / Stability Tweaks (Safe defaults)
+    indices.memory.index_buffer_size: 10%       # Controls memory for indexing.
+    thread_pool.write.queue_size: 1000          # Avoids write rejections under burst load.
+
+
+# Minimal config(single node)
+cluster.name: prod-opensearch
+node.name: opensearch-node-1
+node.roles: [ master, data, ingest ]
+path.data: /var/lib/opensearch
+path.logs: /var/log/opensearch
+network.host: 0.0.0.0
+http.port: 9200
+discovery.type: single-node
+bootstrap.memory_lock: true
+
+
+
+
+What happens when disk is (almost) full in OpenSearch
+    Threshold,Watermark Type,Action Taken
+    85% Full,   Low Watermark,      OpenSearch stops allocating new shards to the node. Existing data stays, but no new work moves there;
+    90% Full,   High Watermark,     OpenSearch actively tries to move (relocate) shards away from this node to other nodes with more space;
+    95% Full,   Flood Stage,        The node enforces a Total Write Block. All indices on that node are set to read-only;
+
+    When you hit that 95% mark, opensearch marks all indices as read-only, it blocks all writes; But, you are allowed to delete indices, snapshots cache;
+    A common frustration is that once indices are read-only, deleting data does not automatically resume writes, even if there is enough space; 
+    OpenSearch keeps the read-only block in place as a safety precaution;
+    You must manually tell the cluster to unlock the indices once you've cleared the space;
+
+    curl -k -u admin:admin -X PUT "https://localhost:9200/_all/_settings" -H 'Content-Type: application/json' -d '{ "index.blocks.read_only_allow_delete": null }'
+
+    Verify cluster health: curl -k https://localhost:9200/_cluster/health?pretty        # "status" : "green"
+
+
+
