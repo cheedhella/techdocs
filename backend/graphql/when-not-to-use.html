@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>When NOT to Use GraphQL</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Simple CRUD Applications</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>When REST is Better</b>
+            <ul>
+               <li>Simple create, read, update, delete operations;</li>
+               <li>Predictable data requirements;</li>
+               <li>No complex relationships;</li>
+               <li>REST is simpler and faster to implement;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. File-Heavy Applications</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>File Operations</b>
+            <ul>
+               <li>File uploads/downloads are primary feature;</li>
+               <li>REST handles multipart form data better;</li>
+               <li>GraphQL can do it but adds complexity;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. When HTTP Caching is Critical</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Caching Challenges</b>
+            <ul>
+               <li>GraphQL typically uses POST requests;</li>
+               <li>Can't leverage HTTP caching easily;</li>
+               <li>REST GET requests cache naturally;</li>
+               <li>CDN caching works better with REST;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Team Lacks GraphQL Experience</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Learning Curve</b>
+            <ul>
+               <li>GraphQL requires learning new concepts;</li>
+               <li>Schema design is an art;</li>
+               <li>Performance optimization differs from REST;</li>
+               <li>May slow down initial development;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. Public APIs with Simple Needs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>REST Advantages</b>
+            <ul>
+               <li>Easier for third-party developers;</li>
+               <li>More familiar to most developers;</li>
+               <li>Better documentation tools;</li>
+               <li>Simpler rate limiting;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>6. When You Need HTTP Status Codes</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Status Code Semantics</b>
+            <ul>
+               <li>GraphQL typically returns 200 OK;</li>
+               <li>Errors in response body, not status code;</li>
+               <li>REST status codes (404, 401, 500) more explicit;</li>
+               <li>Some tools rely on status codes;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>7. Bottom Line</strong></div>
+   <div class="answer">
+      <ul>
+         <li>GraphQL is powerful but not always necessary;</li>
+         <li>Consider complexity vs benefits;</li>
+         <li>REST is still excellent for many use cases;</li>
+         <li>Choose based on actual requirements, not hype;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

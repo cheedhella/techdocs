@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>What GraphQL Is (and What It Isn't)</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is GraphQL?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>GraphQL is a query language for APIs and a runtime for executing those queries;</li>
+               <li>Developed by Facebook in 2012, open-sourced in 2015;</li>
+               <li>Provides a complete description of data in your API;</li>
+            </ul>
+         </li>
+         <li><b>Key Characteristics</b>
+            <ul>
+               <li>Ask for exactly what you need, get exactly that;</li>
+               <li>Single endpoint instead of multiple REST endpoints;</li>
+               <li>Strongly typed schema;</li>
+               <li>Hierarchical structure matches how data is used;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. What GraphQL Is NOT</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Not a Database</b>
+            <ul>
+               <li>GraphQL is a query language for APIs, not databases;</li>
+               <li>Works with any database or data source;</li>
+               <li>Sits between client and data sources;</li>
+            </ul>
+         </li>
+         <li><b>Not a Storage Solution</b>
+            <ul>
+               <li>Doesn't store data itself;</li>
+               <li>Fetches data from existing sources;</li>
+            </ul>
+         </li>
+         <li><b>Not REST Replacement (Always)</b>
+            <ul>
+               <li>Different paradigm, not strictly better or worse;</li>
+               <li>Each has its use cases;</li>
+               <li>Can coexist with REST;</li>
+            </ul>
+         </li>
+         <li><b>Not Magic</b>
+            <ul>
+               <li>Requires thoughtful schema design;</li>
+               <li>Performance optimization still needed;</li>
+               <li>Security considerations apply;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Core Components</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Schema</b> - Defines types and relationships;</li>
+         <li><b>Queries</b> - Read operations to fetch data;</li>
+         <li><b>Mutations</b> - Write operations to modify data;</li>
+         <li><b>Subscriptions</b> - Real-time data updates;</li>
+         <li><b>Resolvers</b> - Functions that fetch the data;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. How It Works</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Client Side</b>
+            <ul>
+               <li>Client sends query describing needed data;</li>
+               <li>Query specifies exact fields required;</li>
+               <li>Single request can fetch related data;</li>
+            </ul>
+         </li>
+         <li><b>Server Side</b>
+            <ul>
+               <li>Server validates query against schema;</li>
+               <li>Executes resolvers to fetch data;</li>
+               <li>Returns JSON response matching query structure;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

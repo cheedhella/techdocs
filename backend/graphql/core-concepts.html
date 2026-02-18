@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Core GraphQL Concepts</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+   <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+   <div class="main-grid-item-1 grid-wide-column">
+      <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+      <h2>Core GraphQL Concepts</h2>
+   </div>
+
+   <div class="question"><strong>1. Schema & Type System</strong></div>
+   <div class="answer">
+      <p>The schema is the heart of GraphQL - it defines what data can be queried and how.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">type User {
+  id: ID!
+  name: String!
+  email: String!
+  age: Int
+  posts: [Post!]!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  published: Boolean!
+}</code></pre>
+      </div>
+      <ul>
+         <li><b>Types</b> - Define structure of your data;</li>
+         <li><b>Fields</b> - Properties on types;</li>
+         <li><b>Relationships</b> - Fields can reference other types;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Queries</strong></div>
+   <div class="answer">
+      <p>Queries are read operations - fetching data from the server.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">query GetUser {
+  user(id: "123") {
+    name
+    email
+    posts {
+      title
+      published
+    }
+  }
+}</code></pre>
+      </div>
+      <ul>
+         <li>Specify exactly which fields you want;</li>
+         <li>Nest queries to get related data;</li>
+         <li>Single request for all data;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Mutations</strong></div>
+   <div class="answer">
+      <p>Mutations are write operations - creating, updating, or deleting data.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">mutation CreatePost {
+  createPost(input: {
+    title: "My First Post"
+    content: "Hello GraphQL!"
+    authorId: "123"
+  }) {
+    id
+    title
+    author {
+      name
+    }
+  }
+}</code></pre>
+      </div>
+      <ul>
+         <li>Modify data on the server;</li>
+         <li>Return the modified data;</li>
+         <li>Execute sequentially (queries run in parallel);</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Subscriptions</strong></div>
+   <div class="answer">
+      <p>Subscriptions enable real-time updates via WebSocket.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">subscription OnPostAdded {
+  postAdded {
+    id
+    title
+    author {
+      name
+    }
+  }
+}</code></pre>
+      </div>
+      <ul>
+         <li>Push updates to clients;</li>
+         <li>Perfect for chat, notifications, live data;</li>
+         <li>Uses WebSocket protocol;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. Fields & Arguments</strong></div>
+   <div class="answer">
+      <p>Fields can accept arguments for filtering, pagination, etc.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">query {
+  posts(
+    limit: 10
+    offset: 0
+    orderBy: CREATED_DESC
+    where: { published: true }
+  ) {
+    id
+    title
+  }
+}</code></pre>
+      </div>
+      <ul>
+         <li>Arguments customize field behavior;</li>
+         <li>Common uses: filtering, sorting, pagination;</li>
+         <li>Can have default values;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>6. Scalars vs Object Types</strong></div>
+   <div class="answer">
+      <p><b>Scalar Types</b> - Primitive values that resolve to concrete data:</p>
+      <ul>
+         <li><b>Int</b> - 32-bit integer;</li>
+         <li><b>Float</b> - Floating point number;</li>
+         <li><b>String</b> - UTF-8 character sequence;</li>
+         <li><b>Boolean</b> - true or false;</li>
+         <li><b>ID</b> - Unique identifier (serialized as String);</li>
+      </ul>
+      <p><b>Object Types</b> - Complex types with fields:</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">type User {
+  id: ID!        # Scalar
+  name: String!  # Scalar
+  age: Int       # Scalar
+  posts: [Post!]! # Object type (list of Posts)
+}</code></pre>
+      </div>
+      <p><b>Custom Scalars</b> - Define your own:</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">scalar DateTime
+scalar Email
+scalar URL
+
+type User {
+  createdAt: DateTime!
+  email: Email!
+  website: URL
+}</code></pre>
+      </div>
+   </div>
+
+   <div class="question"><strong>7. Nullability (!)</strong></div>
+   <div class="answer">
+      <p>The exclamation mark (!) indicates a field cannot be null.</p>
+      <div class="code-block">
+         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-graphql">type User {
+  id: ID!           # Required, never null
+  name: String!     # Required, never null
+  email: String     # Optional, can be null
+  age: Int          # Optional, can be null
+  posts: [Post!]!   # Required list, items never null
+  tags: [String]    # Optional list, items can be null
+}</code></pre>
+      </div>
+      <ul>
+         <li><b>Field!</b> - Field is required;</li>
+         <li><b>[Type!]</b> - List items cannot be null;</li>
+         <li><b>[Type]!</b> - List itself cannot be null;</li>
+         <li><b>[Type!]!</b> - Neither list nor items can be null;</li>
+      </ul>
+   </div>
+
+   <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphQL Complete Guide</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>GraphQL Complete Guide</h2>
+        <p>A comprehensive resource covering all aspects of GraphQL from basics to advanced topics.</p>
+    </div>
+
+    <div class="toc-container">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#intro">1. Introduction</a></li>
+            <li><a href="#core">2. Core Concepts</a></li>
+            <li><a href="#schema">3. Schema Design</a></li>
+            <li><a href="#queries">4. Writing Queries</a></li>
+            <li><a href="#mutations">5. Mutations</a></li>
+            <li><a href="#subscriptions">6. Subscriptions</a></li>
+            <li><a href="#resolvers">7. Resolvers</a></li>
+            <li><a href="#clients">8. GraphQL Clients</a></li>
+            <li><a href="#tools">9. Tools & Libraries</a></li>
+            <li><a href="#frontend">10. Frontend Frameworks</a></li>
+            <li><a href="#auth">11. Authentication & Authorization</a></li>
+            <li><a href="#performance">12. Performance & Optimization</a></li>
+            <li><a href="#errors">13. Error Handling</a></li>
+            <li><a href="#testing">14. Testing</a></li>
+            <li><a href="#security">15. Security</a></li>
+            <li><a href="#evolution">16. Schema Evolution</a></li>
+            <li><a href="#federation">17. Federation & Microservices</a></li>
+            <li><a href="#tooling">18. Dev Tooling</a></li>
+            <li><a href="#deployment">19. Deployment</a></li>
+            <li><a href="#advanced">20. Advanced Topics</a></li>
+            <li><a href="#resources">21. Learning Resources</a></li>
+        </ul>
+    </div>
+
+    <p style="padding: 20px; background: #fef3c7; border-left: 4px solid #f59e0b; margin: 20px 0;">
+        <strong>Note:</strong> This is a comprehensive guide. Individual topic pages are available in the navigation menu for focused learning.
+    </p>
+
+    <div id="intro" class="question"><strong>1. Introduction to GraphQL</strong></div>
+    <div class="answer">
+        <p>For detailed introduction topics, see:</p>
+        <ul>
+            <li><a href="./what-is-graphql.html">What GraphQL Is (and What It Isn't)</a></li>
+            <li><a href="./why-graphql-created.html">Why GraphQL Was Created</a></li>
+            <li><a href="./rest-vs-graphql.html">REST vs GraphQL</a></li>
+            <li><a href="./when-not-to-use.html">When NOT to Use GraphQL</a></li>
+            <li><a href="./real-world-use-cases.html">Real-World Use Cases</a></li>
+        </ul>
+    </div>
+
+    <div id="core" class="question"><strong>2. Core Concepts</strong></div>
+    <div class="answer">
+        <p><a href="./core-concepts.html">View Complete Core Concepts Guide</a></p>
+        <p>Covers: Schema & Type System, Queries, Mutations, Subscriptions, Fields & Arguments, Scalars vs Object Types, Nullability</p>
+    </div>
+
+    <div id="schema" class="question"><strong>3. GraphQL Schema Design</strong></div>
+    <div class="answer">
+        <p>Best practices for designing GraphQL schemas:</p>
+        <ul>
+            <li><b>Defining Types</b> - Create meaningful, reusable types;</li>
+            <li><b>Query Type</b> - Entry point for read operations;</li>
+            <li><b>Mutation Type</b> - Entry point for write operations;</li>
+            <li><b>Input Types</b> - Special types for mutation arguments;</li>
+            <li><b>Enums</b> - Predefined set of values;</li>
+            <li><b>Interfaces</b> - Shared fields across types;</li>
+            <li><b>Unions</b> - One of several possible types;</li>
+        </ul>
+    </div>
+
+    <div id="queries" class="question"><strong>4. Writing GraphQL Queries</strong></div>
+    <div class="answer">
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql"># Basic Query
+query {
+  user(id: "123") {
+    name
+    email
+  }
+}
+
+# Nested Query
+query {
+  user(id: "123") {
+    name
+    posts {
+      title
+      comments {
+        text
+        author {
+          name
+        }
+      }
+    }
+  }
+}
+
+# With Aliases
+query {
+  user1: user(id: "123") { name }
+  user2: user(id: "456") { name }
+}
+
+# With Fragments
+fragment UserInfo on User {
+  id
+  name
+  email
+}
+
+query {
+  user(id: "123") {
+    ...UserInfo
+    posts { title }
+  }
+}
+
+# With Variables
+query GetUser($userId: ID!) {
+  user(id: $userId) {
+    name
+    email
+  }
+}
+
+# Pagination
+query {
+  posts(first: 10, after: "cursor") {
+    edges {
+      node { title }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div id="mutations" class="question"><strong>5. Mutations in Depth</strong></div>
+    <div class="answer">
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql"># Creating Data
+mutation {
+  createUser(input: {
+    name: "Alice"
+    email: "alice@example.com"
+  }) {
+    id
+    name
+  }
+}
+
+# Updating Data
+mutation {
+  updateUser(id: "123", input: {
+    name: "Alice Smith"
+  }) {
+    id
+    name
+    updatedAt
+  }
+}
+
+# Deleting Data
+mutation {
+  deleteUser(id: "123") {
+    success
+    message
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div id="subscriptions" class="question"><strong>6. Subscriptions (Real-Time Data)</strong></div>
+    <div class="answer">
+        <p>For a complete working example, see: <a href="./neo4j/subscriptions-example.html">Live Updates with GraphQL Subscriptions</a></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription {
+  messageAdded {
+    id
+    text
+    user {
+      name
+    }
+  }
+}</code></pre>
+        </div>
+        <ul>
+            <li>Uses WebSocket protocol;</li>
+            <li>Perfect for chat, notifications, live dashboards;</li>
+            <li>Requires special server setup;</li>
+        </ul>
+    </div>
+
+    <div id="resolvers" class="question"><strong>7. GraphQL Execution & Resolvers</strong></div>
+    <div class="answer">
+        <p>Resolvers are functions that fetch data for each field:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">const resolvers = {
+  Query: {
+    user: (parent, args, context, info) => {
+      return context.db.getUserById(args.id);
+    },
+  },
+  User: {
+    posts: (parent, args, context) => {
+      return context.db.getPostsByUserId(parent.id);
+    },
+  },
+  Mutation: {
+    createUser: (parent, args, context) => {
+      return context.db.createUser(args.input);
+    },
+  },
+};</code></pre>
+        </div>
+        <ul>
+            <li><b>parent</b> - Result from parent resolver;</li>
+            <li><b>args</b> - Arguments passed to field;</li>
+            <li><b>context</b> - Shared across all resolvers (db, user, etc);</li>
+            <li><b>info</b> - Query execution info;</li>
+        </ul>
+    </div>
+
+    <div id="clients" class="question"><strong>8. GraphQL Clients</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Fetch API</b> - Simple POST requests;</li>
+            <li><b>Apollo Client</b> - Most popular, full-featured;</li>
+            <li><b>Relay</b> - Facebook's client, opinionated;</li>
+            <li><b>urql</b> - Lightweight alternative;</li>
+            <li><b>Features</b> - Caching, optimistic updates, subscriptions;</li>
+        </ul>
+    </div>
+
+    <div id="tools" class="question"><strong>9. Popular GraphQL Tools & Libraries</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Apollo Server</b> - Production-ready GraphQL server;</li>
+            <li><b>Apollo Client</b> - Client-side state management;</li>
+            <li><b>Relay</b> - Facebook's GraphQL framework;</li>
+            <li><b>GraphQL Yoga</b> - Batteries-included server;</li>
+            <li><b>Prisma</b> - Database toolkit with GraphQL;</li>
+            <li><b>Hasura</b> - Instant GraphQL on Postgres;</li>
+        </ul>
+    </div>
+
+    <div id="frontend" class="question"><strong>10. GraphQL with Frontend Frameworks</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>React</b> - Apollo Client, Relay;</li>
+            <li><b>Next.js</b> - Built-in API routes, Apollo integration;</li>
+            <li><b>Vue</b> - Apollo Vue, villus;</li>
+            <li><b>Angular</b> - Apollo Angular;</li>
+            <li><b>State Management</b> - GraphQL can replace Redux/Vuex;</li>
+        </ul>
+    </div>
+
+    <div id="auth" class="question"><strong>11. Authentication & Authorization</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Authentication</b> - JWT tokens, OAuth, sessions;</li>
+            <li><b>Authorization</b> - Check permissions in resolvers;</li>
+            <li><b>Schema-Based</b> - @auth directives;</li>
+            <li><b>RBAC</b> - Role-based access control;</li>
+            <li><b>Field-Level</b> - Protect individual fields;</li>
+        </ul>
+    </div>
+
+    <div id="performance" class="question"><strong>12. Performance & Optimization</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Query Complexity</b> - Limit expensive queries;</li>
+            <li><b>Depth Limiting</b> - Prevent deeply nested queries;</li>
+            <li><b>DataLoader</b> - Batch and cache database requests;</li>
+            <li><b>Persisted Queries</b> - Pre-approved query IDs;</li>
+            <li><b>Caching</b> - Response caching, CDN;</li>
+        </ul>
+    </div>
+
+    <div id="errors" class="question"><strong>13. Error Handling & Validation</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>GraphQL Error Format</b> - Standardized error structure;</li>
+            <li><b>Custom Errors</b> - Application-specific errors;</li>
+            <li><b>Validation</b> - Schema validation, custom rules;</li>
+            <li><b>Partial Data</b> - Return data + errors;</li>
+            <li><b>Debugging</b> - Error extensions, stack traces;</li>
+        </ul>
+    </div>
+
+    <div id="testing" class="question"><strong>14. Testing GraphQL APIs</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Unit Testing</b> - Test resolvers in isolation;</li>
+            <li><b>Integration Testing</b> - Test full queries;</li>
+            <li><b>Mocking</b> - Mock GraphQL responses;</li>
+            <li><b>Snapshot Testing</b> - Test query results;</li>
+            <li><b>Load Testing</b> - Performance under load;</li>
+        </ul>
+    </div>
+
+    <div id="security" class="question"><strong>15. Security Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Query Abuse</b> - Prevent expensive queries;</li>
+            <li><b>Rate Limiting</b> - Limit requests per user;</li>
+            <li><b>Depth Limiting</b> - Max query depth;</li>
+            <li><b>Cost Analysis</b> - Calculate query cost;</li>
+            <li><b>Introspection</b> - Disable in production;</li>
+        </ul>
+    </div>
+
+    <div id="evolution" class="question"><strong>16. Schema Evolution & Versioning</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Breaking Changes</b> - Avoid removing fields;</li>
+            <li><b>Non-Breaking</b> - Add fields safely;</li>
+            <li><b>Deprecation</b> - Mark fields as @deprecated;</li>
+            <li><b>Schema Stitching</b> - Combine multiple schemas;</li>
+            <li><b>Federation</b> - Distributed schema;</li>
+        </ul>
+    </div>
+
+    <div id="federation" class="question"><strong>17. GraphQL Federation & Microservices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Monolith vs Federated</b> - Single vs distributed graph;</li>
+            <li><b>Apollo Federation</b> - Industry standard;</li>
+            <li><b>Schema Composition</b> - Combine service schemas;</li>
+            <li><b>Service Boundaries</b> - Each service owns domain;</li>
+            <li><b>Cross-Service Queries</b> - Query across services;</li>
+        </ul>
+    </div>
+
+    <div id="tooling" class="question"><strong>18. Dev Tooling & Developer Experience</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>GraphiQL</b> - In-browser IDE;</li>
+            <li><b>Apollo Studio</b> - Schema registry, monitoring;</li>
+            <li><b>Documentation</b> - Auto-generated from schema;</li>
+            <li><b>Code Generation</b> - TypeScript types from schema;</li>
+            <li><b>Linting</b> - GraphQL ESLint;</li>
+        </ul>
+    </div>
+
+    <div id="deployment" class="question"><strong>19. Deploying GraphQL APIs</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Self-Hosted</b> - Node.js servers, Docker;</li>
+            <li><b>Serverless</b> - AWS Lambda, Vercel, Netlify;</li>
+            <li><b>Edge Functions</b> - Cloudflare Workers;</li>
+            <li><b>Monitoring</b> - Apollo Studio, Datadog;</li>
+            <li><b>Observability</b> - Logs, metrics, traces;</li>
+        </ul>
+    </div>
+
+    <div id="advanced" class="question"><strong>20. Advanced GraphQL Topics</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Schema Stitching vs Federation</b> - Different approaches;</li>
+            <li><b>GraphQL over REST</b> - Wrap existing APIs;</li>
+            <li><b>GraphQL at Scale</b> - Large organizations;</li>
+            <li><b>Multi-Tenant</b> - Isolate tenant data;</li>
+            <li><b>Large Organizations</b> - Governance, standards;</li>
+        </ul>
+    </div>
+
+    <div id="resources" class="question"><strong>21. Learning Resources & Next Steps</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Official Docs</b> - graphql.org;</li>
+            <li><b>How to GraphQL</b> - Comprehensive tutorial;</li>
+            <li><b>Apollo Docs</b> - apollo.com/docs;</li>
+            <li><b>Courses</b> - Frontend Masters, Egghead.io;</li>
+            <li><b>Books</b> - "Learning GraphQL" by Eve Porcello;</li>
+            <li><b>Practice</b> - Build a full-stack app;</li>
+        </ul>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+</html>

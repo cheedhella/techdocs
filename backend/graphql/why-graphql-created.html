@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Why GraphQL Was Created</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. The Problem Facebook Faced</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Mobile App Challenges (2012)</b>
+            <ul>
+               <li>Slow network connections on mobile devices;</li>
+               <li>Multiple REST endpoints required many round trips;</li>
+               <li>Over-fetching wasted bandwidth;</li>
+               <li>Under-fetching required additional requests;</li>
+            </ul>
+         </li>
+         <li><b>News Feed Complexity</b>
+            <ul>
+               <li>News feed needed data from many sources;</li>
+               <li>Different views needed different data shapes;</li>
+               <li>REST endpoints became numerous and complex;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. REST API Limitations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Over-Fetching</b>
+            <ul>
+               <li>Endpoints return all fields, even if not needed;</li>
+               <li>Wastes bandwidth, especially on mobile;</li>
+               <li>Example: GET /users returns 20 fields, need only 3;</li>
+            </ul>
+         </li>
+         <li><b>Under-Fetching</b>
+            <ul>
+               <li>One endpoint doesn't provide all needed data;</li>
+               <li>Requires multiple requests;</li>
+               <li>Example: Get user, then get their posts, then comments;</li>
+            </ul>
+         </li>
+         <li><b>Versioning Complexity</b>
+            <ul>
+               <li>API changes require new versions (/v1/, /v2/);</li>
+               <li>Multiple versions to maintain;</li>
+               <li>Clients stuck on old versions;</li>
+            </ul>
+         </li>
+         <li><b>Frontend-Backend Coupling</b>
+            <ul>
+               <li>Backend defines what data frontend gets;</li>
+               <li>New UI requirements need backend changes;</li>
+               <li>Slows down development;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. GraphQL's Solutions</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Precise Data Fetching</b>
+            <ul>
+               <li>Client specifies exactly what fields needed;</li>
+               <li>No over-fetching or under-fetching;</li>
+               <li>Single request for all related data;</li>
+            </ul>
+         </li>
+         <li><b>No Versioning Needed</b>
+            <ul>
+               <li>Add new fields without breaking existing queries;</li>
+               <li>Deprecate old fields gradually;</li>
+               <li>Clients request only what they understand;</li>
+            </ul>
+         </li>
+         <li><b>Frontend Empowerment</b>
+            <ul>
+               <li>Frontend developers query what they need;</li>
+               <li>Less backend changes for UI updates;</li>
+               <li>Faster iteration;</li>
+            </ul>
+         </li>
+         <li><b>Strong Typing</b>
+            <ul>
+               <li>Schema provides clear API contract;</li>
+               <li>Validation at query time;</li>
+               <li>Better tooling and documentation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Evolution and Adoption</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>2012</b> - Facebook creates GraphQL for internal use;</li>
+         <li><b>2015</b> - Open-sourced and specification released;</li>
+         <li><b>2016+</b> - Rapid adoption by GitHub, Twitter, Shopify;</li>
+         <li><b>Today</b> - Industry standard for modern APIs;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

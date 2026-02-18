@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>REST vs GraphQL</title>
+   <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Key Differences</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Endpoints</b>
+            <ul>
+               <li>REST: Multiple endpoints (/users, /posts, /comments);</li>
+               <li>GraphQL: Single endpoint (/graphql);</li>
+            </ul>
+         </li>
+         <li><b>Data Fetching</b>
+            <ul>
+               <li>REST: Server determines response structure;</li>
+               <li>GraphQL: Client specifies exact data needed;</li>
+            </ul>
+         </li>
+         <li><b>Over/Under-Fetching</b>
+            <ul>
+               <li>REST: Common problem with fixed endpoints;</li>
+               <li>GraphQL: Fetch exactly what you need;</li>
+            </ul>
+         </li>
+         <li><b>Versioning</b>
+            <ul>
+               <li>REST: Requires /v1/, /v2/ versions;</li>
+               <li>GraphQL: Evolve schema without versions;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. REST Advantages</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Simplicity</b> - Easier to understand and implement;</li>
+         <li><b>HTTP Caching</b> - Built-in browser and CDN caching;</li>
+         <li><b>Mature Ecosystem</b> - More tools, libraries, knowledge;</li>
+         <li><b>File Operations</b> - Better for file uploads/downloads;</li>
+         <li><b>Stateless</b> - Each request independent;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. GraphQL Advantages</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Flexible Queries</b> - Get exactly what you need;</li>
+         <li><b>Single Request</b> - Fetch related data in one call;</li>
+         <li><b>Strong Typing</b> - Schema provides validation;</li>
+         <li><b>Introspection</b> - Self-documenting API;</li>
+         <li><b>Real-Time</b> - Built-in subscription support;</li>
+         <li><b>Developer Experience</b> - Better tooling, autocomplete;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. When to Use REST</strong></div>
+   <div class="answer">
+      <ul>
+         <li>Simple CRUD operations with predictable data needs;</li>
+         <li>Caching is critical (HTTP caching works great);</li>
+         <li>File uploads/downloads are primary use case;</li>
+         <li>Team unfamiliar with GraphQL;</li>
+         <li>Public API with simple requirements;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. When to Use GraphQL</strong></div>
+   <div class="answer">
+      <ul>
+         <li>Complex, interconnected data;</li>
+         <li>Multiple clients with different data needs (web, mobile, IoT);</li>
+         <li>Rapid frontend iteration;</li>
+         <li>Real-time features needed;</li>
+         <li>Bandwidth optimization important (mobile apps);</li>
+         <li>Microservices architecture (with Federation);</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>6. Can They Coexist?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Yes! Common Patterns:</b>
+            <ul>
+               <li>GraphQL for main API, REST for file operations;</li>
+               <li>Gradual migration from REST to GraphQL;</li>
+               <li>GraphQL wrapping existing REST APIs;</li>
+               <li>Different APIs for different use cases;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>
