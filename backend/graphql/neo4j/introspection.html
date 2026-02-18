@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>GraphQL Introspection</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Introspection?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>GraphQL's ability to query its own schema;</li>
+               <li>Ask the API what queries, types, and fields are available;</li>
+               <li>Built into every GraphQL server;</li>
+            </ul>
+         </li>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Auto-generate documentation;</li>
+               <li>Enable IDE autocomplete and validation;</li>
+               <li>Power tools like GraphQL Playground;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Introspection Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Get All Types</b>
+            <ul>
+               <li>{ __schema { types { name, kind } } }</li>
+               <li>Returns all types in the schema;</li>
+            </ul>
+         </li>
+         <li><b>Get Type Details</b>
+            <ul>
+               <li>{ __type(name: "User") { name, fields { name, type { name } } } }</li>
+               <li>Returns fields and structure of User type;</li>
+            </ul>
+         </li>
+         <li><b>Get Query Root</b>
+            <ul>
+               <li>{ __schema { queryType { name, fields { name } } } }</li>
+               <li>Shows all available queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Tools Using Introspection</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>GraphQL Playground</b> - Interactive API explorer with docs;</li>
+         <li><b>Apollo Studio</b> - Schema registry and analytics;</li>
+         <li><b>GraphiQL</b> - In-browser IDE for GraphQL;</li>
+         <li><b>Code Generators</b> - Generate TypeScript types from schema;</li>
+         <li><b>IDE Extensions</b> - VSCode, IntelliJ autocomplete;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Security Considerations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Production Concerns</b>
+            <ul>
+               <li>Introspection exposes entire API structure;</li>
+               <li>Consider disabling in production;</li>
+               <li>Or limit to authenticated users;</li>
+            </ul>
+         </li>
+         <li><b>Best Practices</b>
+            <ul>
+               <li>Enable in development for better DX;</li>
+               <li>Disable or restrict in production;</li>
+               <li>Use query whitelisting for public APIs;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

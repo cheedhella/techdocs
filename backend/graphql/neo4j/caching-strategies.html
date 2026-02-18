@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Caching Strategies</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Caching Is Challenging</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>GraphQL Characteristics</b>
+            <ul>
+               <li>Single endpoint (usually POST);</li>
+               <li>Can't use HTTP caching like REST;</li>
+               <li>Flexible queries make caching complex;</li>
+            </ul>
+         </li>
+         <li><b>Graph Data Challenges</b>
+            <ul>
+               <li>Interconnected data changes frequently;</li>
+               <li>Hard to invalidate related data;</li>
+               <li>Need smart cache invalidation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Client-Side Caching</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Apollo Client Cache</b>
+            <ul>
+               <li>Normalized cache by ID;</li>
+               <li>Automatic cache updates;</li>
+               <li>Optimistic UI updates;</li>
+            </ul>
+         </li>
+         <li><b>Cache Policies</b>
+            <ul>
+               <li>cache-first - use cache, fallback to network;</li>
+               <li>network-only - always fetch from network;</li>
+               <li>cache-and-network - return cache, then update;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Server-Side Caching</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Response Caching</b>
+            <ul>
+               <li>Cache entire query results;</li>
+               <li>Use query + variables as cache key;</li>
+               <li>Works well for public, read-heavy data;</li>
+            </ul>
+         </li>
+         <li><b>DataLoader Caching</b>
+            <ul>
+               <li>Request-scoped cache;</li>
+               <li>Prevents duplicate queries in single request;</li>
+               <li>Automatic with DataLoader;</li>
+            </ul>
+         </li>
+         <li><b>Redis/Memcached</b>
+            <ul>
+               <li>External cache for query results;</li>
+               <li>Shared across server instances;</li>
+               <li>Set TTL based on data volatility;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Cache Invalidation</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Time-Based (TTL)</b>
+            <ul>
+               <li>Cache expires after set time;</li>
+               <li>Simple but may serve stale data;</li>
+               <li>Good for data that changes predictably;</li>
+            </ul>
+         </li>
+         <li><b>Event-Based</b>
+            <ul>
+               <li>Invalidate cache on mutations;</li>
+               <li>Clear related data when entity changes;</li>
+               <li>More complex but more accurate;</li>
+            </ul>
+         </li>
+         <li><b>Tag-Based</b>
+            <ul>
+               <li>Tag cache entries by entity type;</li>
+               <li>Invalidate all entries with tag;</li>
+               <li>Example: clear all "User:123" tagged entries;</li>
+            </ul>
+         </li>
+         <li><b>Hybrid Approach</b>
+            <ul>
+               <li>Combine TTL with event-based;</li>
+               <li>TTL as fallback, events for immediate updates;</li>
+               <li>Balance freshness and performance;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

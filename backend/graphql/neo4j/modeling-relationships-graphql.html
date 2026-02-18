@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Modeling Relationships in GraphQL</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Relationships as Fields</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Basic Pattern</b>
+            <ul>
+               <li>Neo4j relationships become GraphQL fields;</li>
+               <li>Neo4j: (u:User)-[:POSTED]->(p:Post);</li>
+               <li>GraphQL: type User { posts: [Post] };</li>
+            </ul>
+         </li>
+         <li><b>Naming Conventions</b>
+            <ul>
+               <li>Use descriptive field names (posts, author, friends);</li>
+               <li>Singular for one-to-one (profile, company);</li>
+               <li>Plural for one-to-many (posts, comments);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Relationship Properties</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Edge Types</b>
+            <ul>
+               <li>Create separate types for relationships with properties;</li>
+               <li>Neo4j: (u)-[:FRIENDS_WITH {since: 2020}]->(f);</li>
+               <li>GraphQL: type Friendship { since: DateTime!, friend: User! };</li>
+               <li>GraphQL: type User { friendships: [Friendship] };</li>
+            </ul>
+         </li>
+         <li><b>When to Use Edge Types</b>
+            <ul>
+               <li>Relationship has meaningful properties;</li>
+               <li>Need to query or filter by relationship data;</li>
+               <li>Example: ratings, timestamps, weights;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Directionality</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Neo4j Relationships Are Directed</b>
+            <ul>
+               <li>But can be traversed in either direction;</li>
+               <li>(a)-[:KNOWS]->(b) - a knows b;</li>
+            </ul>
+         </li>
+         <li><b>GraphQL Hides Direction</b>
+            <ul>
+               <li>type User { friends: [User] };</li>
+               <li>Resolver determines which direction to traverse;</li>
+               <li>Can expose both directions if needed;</li>
+            </ul>
+         </li>
+         <li><b>Bidirectional Access</b>
+            <ul>
+               <li>type User { posts: [Post] };</li>
+               <li>type Post { author: User };</li>
+               <li>Same relationship, accessed from both sides;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Using @relationship Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Neo4j GraphQL Library</b>
+            <ul>
+               <li>type User { posts: [Post] @relationship(type: "POSTED", direction: OUT) };</li>
+               <li>Explicitly maps GraphQL field to Neo4j relationship;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Auto-generates resolvers;</li>
+               <li>Handles filtering, sorting, pagination;</li>
+               <li>Reduces boilerplate code;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

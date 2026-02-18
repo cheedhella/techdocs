@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>GraphQL Schema Design for Graph Databases</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Aligning GraphQL with Graph Structure</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Natural Fit</b>
+            <ul>
+               <li>GraphQL types map to Neo4j node labels;</li>
+               <li>GraphQL fields map to Neo4j properties;</li>
+               <li>GraphQL relationships map to Neo4j relationships;</li>
+            </ul>
+         </li>
+         <li><b>Example Mapping</b>
+            <ul>
+               <li>Neo4j: (u:User {name, email})-[:POSTED]->(p:Post {title});</li>
+               <li>GraphQL: type User { name: String!, posts: [Post] };</li>
+               <li>GraphQL: type Post { title: String!, author: User };</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Design Principles</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Think in Graphs</b>
+            <ul>
+               <li>Design schema around relationships, not just entities;</li>
+               <li>Leverage nested queries for traversals;</li>
+            </ul>
+         </li>
+         <li><b>Query-Driven Design</b>
+            <ul>
+               <li>Start with client needs - what data do they need?;</li>
+               <li>Design types to match common query patterns;</li>
+               <li>Avoid over-fetching and under-fetching;</li>
+            </ul>
+         </li>
+         <li><b>Balance Flexibility and Performance</b>
+            <ul>
+               <li>Deep nesting is powerful but can be expensive;</li>
+               <li>Use pagination for large result sets;</li>
+               <li>Consider query complexity limits;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Common Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Bidirectional Relationships</b>
+            <ul>
+               <li>type User { posts: [Post] };</li>
+               <li>type Post { author: User };</li>
+               <li>Navigate from either direction;</li>
+            </ul>
+         </li>
+         <li><b>Connection Pattern</b>
+            <ul>
+               <li>type User { postsConnection: PostConnection };</li>
+               <li>Includes pagination metadata (hasNextPage, cursor);</li>
+            </ul>
+         </li>
+         <li><b>Aggregations</b>
+            <ul>
+               <li>type User { postCount: Int, friendCount: Int };</li>
+               <li>Computed fields from graph queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

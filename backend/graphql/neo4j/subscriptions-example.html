@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Live Updates with GraphQL Subscriptions</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <img src="../../../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>Live Updates with GraphQL Subscriptions</h2>
+    </div>
+
+    <div class="question"><strong>1. Project Setup</strong></div>
+    <div class="answer">
+        <p><b>Initialize Project</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Create project directory
+mkdir neo4j-graphql-subscriptions
+cd neo4j-graphql-subscriptions
+
+# Initialize npm project
+npm init -y
+
+# Install dependencies
+npm install @neo4j/graphql neo4j-driver apollo-server graphql \
+  graphql-subscriptions dotenv ws</code></pre>
+        </div>
+        <p><b>Project Structure</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-plaintext">neo4j-graphql-subscriptions/
+├── .env
+├── package.json
+├── server/
+│   ├── index.js
+│   ├── schema.js
+│   └── resolvers.js
+└── client/
+    └── index.html</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>2. Environment Configuration</strong></div>
+    <div class="answer">
+        <p>Create <code>.env</code> file:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># .env
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=your_password_here
+PORT=4000</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>3. Define Schema with Subscriptions</strong></div>
+    <div class="answer">
+        <p>Create <code>server/schema.js</code>:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// server/schema.js
+const { gql } = require('apollo-server');
+
+const typeDefs = gql`
+  type Message {
+    id: ID! @id
+    text: String!
+    username: String!
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    room: Room! @relationship(type: "IN_ROOM", direction: OUT)
+  }
+
+  type Room {
+    id: ID! @id
+    name: String! @unique
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    messages: [Message!]! @relationship(type: "IN_ROOM", direction: IN)
+  }
+
+  type User {
+    id: ID! @id
+    username: String! @unique
+    online: Boolean! @default(value: false)
+    lastSeen: DateTime
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+  }
+
+  type Notification {
+    id: ID!
+    type: NotificationType!
+    message: String!
+    timestamp: DateTime!
+    user: User
+  }
+
+  enum NotificationType {
+    MESSAGE
+    USER_JOINED
+    USER_LEFT
+    ROOM_CREATED
+  }
+
+  # Custom mutations for real-time features
+  type Mutation {
+    sendMessage(roomId: ID!, username: String!, text: String!): Message!
+    joinRoom(roomId: ID!, username: String!): Room!
+    leaveRoom(roomId: ID!, username: String!): Boolean!
+    setUserOnline(username: String!, online: Boolean!): User!
+  }
+
+  # Subscriptions for live updates
+  type Subscription {
+    messageAdded(roomId: ID!): Message!
+    userJoined(roomId: ID!): User!
+    userLeft(roomId: ID!): User!
+    userStatusChanged(username: String!): User!
+    roomCreated: Room!
+    notification(username: String!): Notification!
+  }
+`;
+
+module.exports = typeDefs;</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>4. Implement Custom Resolvers</strong></div>
+    <div class="answer">
+        <p>Create <code>server/resolvers.js</code>:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// server/resolvers.js
+const { PubSub } = require('graphql-subscriptions');
+
+const pubsub = new PubSub();
+
+// Subscription event names
+const MESSAGE_ADDED = 'MESSAGE_ADDED';
+const USER_JOINED = 'USER_JOINED';
+const USER_LEFT = 'USER_LEFT';
+const USER_STATUS_CHANGED = 'USER_STATUS_CHANGED';
+const ROOM_CREATED = 'ROOM_CREATED';
+const NOTIFICATION = 'NOTIFICATION';
+
+const resolvers = {
+  Mutation: {
+    sendMessage: async (_, { roomId, username, text }, { driver }) => {
+      const session = driver.session();
+      try {
+        // Create message in Neo4j
+        const result = await session.run(
+          `
+          MATCH (r:Room {id: $roomId})
+          CREATE (m:Message {
+            id: randomUUID(),
+            text: $text,
+            username: $username,
+            createdAt: datetime()
+          })
+          CREATE (m)-[:IN_ROOM]->(r)
+          RETURN m, r
+          `,
+          { roomId, text, username }
+        );
+
+        const message = result.records[0].get('m').properties;
+        const room = result.records[0].get('r').properties;
+
+        // Convert Neo4j DateTime to ISO string
+        message.createdAt = message.createdAt.toString();
+
+        // Publish to subscribers
+        pubsub.publish(MESSAGE_ADDED, {
+          messageAdded: message,
+          roomId,
+        });
+
+        // Send notification
+        pubsub.publish(NOTIFICATION, {
+          notification: {
+            id: Math.random().toString(),
+            type: 'MESSAGE',
+            message: `${username} sent a message in ${room.name}`,
+            timestamp: new Date().toISOString(),
+            user: { username },
+          },
+          username: null, // Broadcast to all
+        });
+
+        return message;
+      } finally {
+        await session.close();
+      }
+    },
+
+    joinRoom: async (_, { roomId, username }, { driver }) => {
+      const session = driver.session();
+      try {
+        // Get or create user and room
+        const result = await session.run(
+          `
+          MERGE (u:User {username: $username})
+          ON CREATE SET u.id = randomUUID(), u.createdAt = datetime()
+          SET u.online = true, u.lastSeen = datetime()
+          
+          MATCH (r:Room {id: $roomId})
+          
+          RETURN u, r
+          `,
+          { roomId, username }
+        );
+
+        const user = result.records[0].get('u').properties;
+        const room = result.records[0].get('r').properties;
+
+        // Publish user joined event
+        pubsub.publish(USER_JOINED, {
+          userJoined: user,
+          roomId,
+        });
+
+        // Send notification
+        pubsub.publish(NOTIFICATION, {
+          notification: {
+            id: Math.random().toString(),
+            type: 'USER_JOINED',
+            message: `${username} joined ${room.name}`,
+            timestamp: new Date().toISOString(),
+            user,
+          },
+          username: null,
+        });
+
+        return room;
+      } finally {
+        await session.close();
+      }
+    },
+
+    leaveRoom: async (_, { roomId, username }, { driver }) => {
+      const session = driver.session();
+      try {
+        await session.run(
+          `
+          MATCH (u:User {username: $username})
+          SET u.online = false, u.lastSeen = datetime()
+          `,
+          { username }
+        );
+
+        const user = { username, online: false };
+
+        // Publish user left event
+        pubsub.publish(USER_LEFT, {
+          userLeft: user,
+          roomId,
+        });
+
+        return true;
+      } finally {
+        await session.close();
+      }
+    },
+
+    setUserOnline: async (_, { username, online }, { driver }) => {
+      const session = driver.session();
+      try {
+        const result = await session.run(
+          `
+          MATCH (u:User {username: $username})
+          SET u.online = $online, u.lastSeen = datetime()
+          RETURN u
+          `,
+          { username, online }
+        );
+
+        const user = result.records[0].get('u').properties;
+
+        // Publish status change
+        pubsub.publish(USER_STATUS_CHANGED, {
+          userStatusChanged: user,
+          username,
+        });
+
+        return user;
+      } finally {
+        await session.close();
+      }
+    },
+  },
+
+  Subscription: {
+    messageAdded: {
+      subscribe: (_, { roomId }) => {
+        return pubsub.asyncIterator([MESSAGE_ADDED]);
+      },
+      resolve: (payload, { roomId }) => {
+        // Filter messages by room
+        if (payload.roomId === roomId) {
+          return payload.messageAdded;
+        }
+        return null;
+      },
+    },
+
+    userJoined: {
+      subscribe: (_, { roomId }) => {
+        return pubsub.asyncIterator([USER_JOINED]);
+      },
+      resolve: (payload, { roomId }) => {
+        if (payload.roomId === roomId) {
+          return payload.userJoined;
+        }
+        return null;
+      },
+    },
+
+    userLeft: {
+      subscribe: (_, { roomId }) => {
+        return pubsub.asyncIterator([USER_LEFT]);
+      },
+      resolve: (payload, { roomId }) => {
+        if (payload.roomId === roomId) {
+          return payload.userLeft;
+        }
+        return null;
+      },
+    },
+
+    userStatusChanged: {
+      subscribe: (_, { username }) => {
+        return pubsub.asyncIterator([USER_STATUS_CHANGED]);
+      },
+      resolve: (payload, { username }) => {
+        if (!username || payload.username === username) {
+          return payload.userStatusChanged;
+        }
+        return null;
+      },
+    },
+
+    roomCreated: {
+      subscribe: () => pubsub.asyncIterator([ROOM_CREATED]),
+    },
+
+    notification: {
+      subscribe: () => pubsub.asyncIterator([NOTIFICATION]),
+      resolve: (payload, { username }) => {
+        // If username specified, filter; otherwise broadcast
+        if (!username || !payload.username || payload.username === username) {
+          return payload.notification;
+        }
+        return null;
+      },
+    },
+  },
+};
+
+module.exports = { resolvers, pubsub };</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>5. Create Server with WebSocket Support</strong></div>
+    <div class="answer">
+        <p>Create <code>server/index.js</code>:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// server/index.js
+require('dotenv').config();
+const { ApolloServer } = require('apollo-server');
+const neo4j = require('neo4j-driver');
+const { Neo4jGraphQL } = require('@neo4j/graphql');
+const typeDefs = require('./schema');
+const { resolvers } = require('./resolvers');
+
+// Create Neo4j driver
+const driver = neo4j.driver(
+  process.env.NEO4J_URI,
+  neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
+);
+
+async function startServer() {
+  try {
+    // Verify connectivity
+    await driver.verifyConnectivity();
+    console.log('✓ Connected to Neo4j');
+
+    // Create Neo4jGraphQL instance
+    const neoSchema = new Neo4jGraphQL({
+      typeDefs,
+      driver,
+      resolvers, // Add custom resolvers
+    });
+
+    // Generate schema
+    const schema = await neoSchema.getSchema();
+
+    // Create Apollo Server with subscription support
+    const server = new ApolloServer({
+      schema,
+      context: ({ req }) => ({ req, driver }),
+      subscriptions: {
+        path: '/subscriptions',
+        onConnect: (connectionParams) => {
+          console.log('Client connected to subscriptions');
+          return { driver };
+        },
+        onDisconnect: () => {
+          console.log('Client disconnected from subscriptions');
+        },
+      },
+    });
+
+    // Start server
+    const { url, subscriptionsUrl } = await server.listen(
+      process.env.PORT || 4000
+    );
+
+    console.log(`🚀 Server ready at ${url}`);
+    console.log(`🔔 Subscriptions ready at ${subscriptionsUrl}`);
+
+    // Create sample room if not exists
+    await createSampleData();
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+async function createSampleData() {
+  const session = driver.session();
+  try {
+    await session.run(
+      `
+      MERGE (r:Room {name: "General"})
+      ON CREATE SET r.id = randomUUID(), r.createdAt = datetime()
+      RETURN r
+      `
+    );
+    console.log('✓ Sample room created');
+  } finally {
+    await session.close();
+  }
+}
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('\nShutting down...');
+  await driver.close();
+  process.exit(0);
+});
+
+startServer();</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>6. Create Interactive Web Client</strong></div>
+    <div class="answer">
+        <p>Create <code>client/index.html</code>:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Real-Time Chat - GraphQL Subscriptions&lt;/title&gt;
+  &lt;style&gt;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
+      height: 90vh;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      padding: 20px;
+      background: #667eea;
+      color: white;
+      border-radius: 10px 10px 0 0;
+    }
+    .header h1 { font-size: 24px; margin-bottom: 5px; }
+    .header .status { font-size: 14px; opacity: 0.9; }
+    .status.connected { color: #4ade80; }
+    .status.disconnected { color: #f87171; }
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+    .message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .message.own {
+      background: #dbeafe;
+      margin-left: 20%;
+    }
+    .message.system {
+      background: #fef3c7;
+      text-align: center;
+      font-style: italic;
+    }
+    .message .username {
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+    .message .text { color: #374151; }
+    .message .time {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 5px;
+    }
+    .input-area {
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      border-radius: 0 0 10px 10px;
+    }
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+    input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    button:hover { background: #5568d3; }
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      background: #10b981;
+      color: white;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(400px); }
+      to { transform: translateX(0); }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="container"&gt;
+    &lt;div class="header"&gt;
+      &lt;h1&gt;Real-Time Chat&lt;/h1&gt;
+      &lt;div class="status" id="status"&gt;Connecting...&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="messages" id="messages"&gt;&lt;/div&gt;
+    &lt;div class="input-area"&gt;
+      &lt;div class="input-group"&gt;
+        &lt;input 
+          type="text" 
+          id="messageInput" 
+          placeholder="Type a message..." 
+          disabled
+        /&gt;
+        &lt;button id="sendBtn" disabled&gt;Send&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    const WS_URL = 'ws://localhost:4000/subscriptions';
+    const HTTP_URL = 'http://localhost:4000/graphql';
+    const ROOM_ID = 'general-room-id'; // Replace with actual room ID
+    const USERNAME = 'User' + Math.floor(Math.random() * 1000);
+
+    let ws;
+    let subscriptionId = 1;
+
+    // Initialize WebSocket connection
+    function connect() {
+      ws = new WebSocket(WS_URL, 'graphql-ws');
+
+      ws.onopen = () => {
+        console.log('WebSocket connected');
+        ws.send(JSON.stringify({ type: 'connection_init' }));
+      };
+
+      ws.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        handleMessage(message);
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        updateStatus('disconnected');
+      };
+
+      ws.onclose = () => {
+        console.log('WebSocket disconnected');
+        updateStatus('disconnected');
+        setTimeout(connect, 3000); // Reconnect
+      };
+    }
+
+    function handleMessage(message) {
+      switch (message.type) {
+        case 'connection_ack':
+          console.log('Connection acknowledged');
+          updateStatus('connected');
+          subscribeToMessages();
+          joinRoom();
+          break;
+        case 'data':
+          if (message.payload.data.messageAdded) {
+            displayMessage(message.payload.data.messageAdded);
+          }
+          break;
+      }
+    }
+
+    function subscribeToMessages() {
+      const subscription = {
+        id: String(subscriptionId++),
+        type: 'start',
+        payload: {
+          query: `
+            subscription MessageAdded($roomId: ID!) {
+              messageAdded(roomId: $roomId) {
+                id
+                text
+                username
+                createdAt
+              }
+            }
+          `,
+          variables: { roomId: ROOM_ID }
+        }
+      };
+      ws.send(JSON.stringify(subscription));
+    }
+
+    async function sendMessage(text) {
+      const mutation = `
+        mutation SendMessage($roomId: ID!, $username: String!, $text: String!) {
+          sendMessage(roomId: $roomId, username: $username, text: $text) {
+            id
+            text
+            username
+            createdAt
+          }
+        }
+      `;
+
+      const response = await fetch(HTTP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: mutation,
+          variables: { roomId: ROOM_ID, username: USERNAME, text }
+        })
+      });
+
+      const result = await response.json();
+      if (result.errors) {
+        console.error('Error sending message:', result.errors);
+      }
+    }
+
+    async function joinRoom() {
+      const mutation = `
+        mutation JoinRoom($roomId: ID!, $username: String!) {
+          joinRoom(roomId: $roomId, username: $username) {
+            id
+            name
+          }
+        }
+      `;
+
+      await fetch(HTTP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: mutation,
+          variables: { roomId: ROOM_ID, username: USERNAME }
+        })
+      });
+    }
+
+    function displayMessage(message) {
+      const messagesDiv = document.getElementById('messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message' + (message.username === USERNAME ? ' own' : '');
+      
+      messageDiv.innerHTML = `
+        &lt;div class="username"&gt;${message.username}&lt;/div&gt;
+        &lt;div class="text"&gt;${message.text}&lt;/div&gt;
+        &lt;div class="time"&gt;${new Date(message.createdAt).toLocaleTimeString()}&lt;/div&gt;
+      `;
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function updateStatus(status) {
+      const statusDiv = document.getElementById('status');
+      const input = document.getElementById('messageInput');
+      const button = document.getElementById('sendBtn');
+      
+      if (status === 'connected') {
+        statusDiv.textContent = `Connected as ${USERNAME}`;
+        statusDiv.className = 'status connected';
+        input.disabled = false;
+        button.disabled = false;
+      } else {
+        statusDiv.textContent = 'Disconnected';
+        statusDiv.className = 'status disconnected';
+        input.disabled = true;
+        button.disabled = true;
+      }
+    }
+
+    // Event listeners
+    document.getElementById('sendBtn').addEventListener('click', () => {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (text) {
+        sendMessage(text);
+        input.value = '';
+      }
+    });
+
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('sendBtn').click();
+      }
+    });
+
+    // Start connection
+    connect();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>7. Run the Application</strong></div>
+    <div class="answer">
+        <p><b>Step 1: Start the Server</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Start the GraphQL server
+node server/index.js
+
+# Output:
+# ✓ Connected to Neo4j
+# ✓ Sample room created
+# 🚀 Server ready at http://localhost:4000/
+# 🔔 Subscriptions ready at ws://localhost:4000/subscriptions</code></pre>
+        </div>
+
+        <p><b>Step 2: Open the Client</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Serve the client HTML file
+# Option 1: Use Python's built-in server
+cd client
+python3 -m http.server 8000
+
+# Option 2: Use Node's http-server
+npx http-server client -p 8000
+
+# Open in browser: http://localhost:8000</code></pre>
+        </div>
+
+        <p><b>Step 3: Test Real-Time Updates</b></p>
+        <ul>
+            <li>Open multiple browser tabs/windows at <code>http://localhost:8000</code></li>
+            <li>Send messages from one tab - see them appear in all tabs instantly!</li>
+            <li>Each tab gets a unique username (User123, User456, etc.)</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Testing Subscriptions in Apollo Studio</strong></div>
+    <div class="answer">
+        <p>Open <code>http://localhost:4000</code> and test subscriptions:</p>
+        
+        <p><b>Subscribe to Messages</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription MessageAdded {
+  messageAdded(roomId: "general-room-id") {
+    id
+    text
+    username
+    createdAt
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Send a Message (in another tab)</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation SendMessage {
+  sendMessage(
+    roomId: "general-room-id"
+    username: "TestUser"
+    text: "Hello from Apollo Studio!"
+  ) {
+    id
+    text
+    username
+    createdAt
+  }
+}</code></pre>
+        </div>
+
+        <p>The subscription will receive the new message in real-time!</p>
+    </div>
+
+    <div class="question"><strong>9. Subscribe to User Status Changes</strong></div>
+    <div class="answer">
+        <p><b>Monitor User Online Status</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription UserStatusChanged {
+  userStatusChanged(username: "Alice") {
+    username
+    online
+    lastSeen
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Update User Status</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation SetUserOnline {
+  setUserOnline(username: "Alice", online: true) {
+    username
+    online
+    lastSeen
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>10. Subscribe to Room Events</strong></div>
+    <div class="answer">
+        <p><b>Monitor Users Joining</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription UserJoined {
+  userJoined(roomId: "general-room-id") {
+    username
+    online
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Monitor Users Leaving</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription UserLeft {
+  userLeft(roomId: "general-room-id") {
+    username
+    online
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>11. Global Notifications</strong></div>
+    <div class="answer">
+        <p><b>Subscribe to All Notifications</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription Notifications {
+  notification {
+    id
+    type
+    message
+    timestamp
+    user {
+      username
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p>This subscription will receive notifications for:</p>
+        <ul>
+            <li>New messages</li>
+            <li>Users joining/leaving</li>
+            <li>New rooms created</li>
+            <li>Any custom events</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>12. Production Considerations</strong></div>
+    <div class="answer">
+        <p><b>Use Redis PubSub for Scaling</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Install Redis PubSub
+npm install graphql-redis-subscriptions ioredis</code></pre>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// Replace in-memory PubSub with Redis
+const { RedisPubSub } = require('graphql-redis-subscriptions');
+const Redis = require('ioredis');
+
+const options = {
+  host: process.env.REDIS_HOST || 'localhost',
+  port: process.env.REDIS_PORT || 6379,
+  retryStrategy: times => Math.min(times * 50, 2000),
+};
+
+const pubsub = new RedisPubSub({
+  publisher: new Redis(options),
+  subscriber: new Redis(options),
+});</code></pre>
+        </div>
+
+        <p><b>Authentication for Subscriptions</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">subscriptions: {
+  onConnect: (connectionParams) => {
+    if (connectionParams.authToken) {
+      // Verify JWT token
+      const user = verifyToken(connectionParams.authToken);
+      return { user, driver };
+    }
+    throw new Error('Missing auth token');
+  },
+}</code></pre>
+        </div>
+
+        <p><b>Rate Limiting</b></p>
+        <ul>
+            <li>Limit subscription connections per user</li>
+            <li>Throttle message publishing frequency</li>
+            <li>Set maximum subscription duration</li>
+        </ul>
+
+        <p><b>Monitoring</b></p>
+        <ul>
+            <li>Track active WebSocket connections</li>
+            <li>Monitor subscription performance</li>
+            <li>Log subscription errors</li>
+            <li>Alert on connection spikes</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>13. Advanced Use Cases</strong></div>
+    <div class="answer">
+        <p><b>Typing Indicators</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription UserTyping {
+  userTyping(roomId: "general-room-id") {
+    username
+    isTyping
+  }
+}
+
+mutation SetTyping {
+  setUserTyping(roomId: "general-room-id", username: "Alice", isTyping: true)
+}</code></pre>
+        </div>
+
+        <p><b>Presence Detection</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription OnlineUsers {
+  onlineUsers(roomId: "general-room-id") {
+    username
+    online
+    lastSeen
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Live Data Updates</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">subscription DataUpdated {
+  dataUpdated(entityType: "Product") {
+    id
+    operation # CREATE, UPDATE, DELETE
+    data
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>14. Troubleshooting</strong></div>
+    <div class="answer">
+        <p><b>WebSocket Connection Issues</b></p>
+        <ul>
+            <li>Check firewall settings allow WebSocket connections</li>
+            <li>Verify correct WebSocket URL (ws:// or wss://)</li>
+            <li>Ensure server supports WebSocket upgrades</li>
+        </ul>
+
+        <p><b>Subscriptions Not Receiving Updates</b></p>
+        <ul>
+            <li>Verify pubsub.publish() is called after mutations</li>
+            <li>Check subscription filters match published data</li>
+            <li>Ensure WebSocket connection is active</li>
+        </ul>
+
+        <p><b>Performance Issues</b></p>
+        <ul>
+            <li>Use Redis PubSub instead of in-memory</li>
+            <li>Implement subscription filtering server-side</li>
+            <li>Limit subscription payload size</li>
+            <li>Add connection limits per user</li>
+        </ul>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

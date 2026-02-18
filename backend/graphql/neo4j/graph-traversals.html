@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Graph Traversals with GraphQL</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Are Graph Traversals?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Following relationships from node to node;</li>
+               <li>Exploring connected data in the graph;</li>
+               <li>Core strength of graph databases;</li>
+            </ul>
+         </li>
+         <li><b>In GraphQL</b>
+            <ul>
+               <li>Nested queries represent traversals;</li>
+               <li>{ user { posts { comments { author } } } };</li>
+               <li>Traverse: User → Posts → Comments → Authors;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Depth of Traversal</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Shallow Traversals</b>
+            <ul>
+               <li>1-2 levels deep;</li>
+               <li>{ user { name, posts { title } } };</li>
+               <li>Fast and efficient;</li>
+            </ul>
+         </li>
+         <li><b>Deep Traversals</b>
+            <ul>
+               <li>3+ levels deep;</li>
+               <li>{ user { friends { friends { friends } } } };</li>
+               <li>Powerful but can be expensive;</li>
+               <li>Consider query complexity limits;</li>
+            </ul>
+         </li>
+         <li><b>Variable Depth</b>
+            <ul>
+               <li>Cypher: (a)-[:KNOWS*1..3]->(b);</li>
+               <li>Find connections within 1-3 hops;</li>
+               <li>Useful for "degrees of separation" queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Common Traversal Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Friends of Friends</b>
+            <ul>
+               <li>{ user { friends { friends { name } } } };</li>
+               <li>Find second-degree connections;</li>
+            </ul>
+         </li>
+         <li><b>Recommendation Paths</b>
+            <ul>
+               <li>{ user { purchased { similarProducts { purchasedBy } } } };</li>
+               <li>"Users who bought X also bought Y";</li>
+            </ul>
+         </li>
+         <li><b>Hierarchical Data</b>
+            <ul>
+               <li>{ category { subcategories { products } } };</li>
+               <li>Navigate tree structures;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Optimizing Traversals</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use Pagination</b>
+            <ul>
+               <li>{ user { posts(first: 10) { title } } };</li>
+               <li>Limit results at each level;</li>
+            </ul>
+         </li>
+         <li><b>Field Selection</b>
+            <ul>
+               <li>Only request fields you need;</li>
+               <li>Reduces data transfer and processing;</li>
+            </ul>
+         </li>
+         <li><b>Indexes</b>
+            <ul>
+               <li>Index properties used in WHERE clauses;</li>
+               <li>Speeds up starting points for traversals;</li>
+            </ul>
+         </li>
+         <li><b>Query Complexity Limits</b>
+            <ul>
+               <li>Prevent excessively deep or wide queries;</li>
+               <li>Protect server from expensive operations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

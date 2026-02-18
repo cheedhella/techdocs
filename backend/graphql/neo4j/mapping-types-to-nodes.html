@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Mapping GraphQL Types to Neo4j Nodes</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Direct Type-to-Label Mapping</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Basic Pattern</b>
+            <ul>
+               <li>Each GraphQL type corresponds to a Neo4j label;</li>
+               <li>GraphQL: type User { id: ID!, name: String! };</li>
+               <li>Neo4j: (u:User {id: "123", name: "Alice"});</li>
+            </ul>
+         </li>
+         <li><b>Conventions</b>
+            <ul>
+               <li>Use same names for consistency;</li>
+               <li>GraphQL type = Neo4j label (PascalCase);</li>
+               <li>Makes code easier to understand and maintain;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Property Mapping</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Scalar Fields</b>
+            <ul>
+               <li>GraphQL scalars map to Neo4j property types;</li>
+               <li>String → String, Int → Integer, Boolean → Boolean;</li>
+               <li>ID → String (typically);</li>
+            </ul>
+         </li>
+         <li><b>Custom Scalars</b>
+            <ul>
+               <li>DateTime → Neo4j DateTime;</li>
+               <li>JSON → String (serialized);</li>
+               <li>Define custom scalar resolvers;</li>
+            </ul>
+         </li>
+         <li><b>Computed Fields</b>
+            <ul>
+               <li>GraphQL: fullName: String;</li>
+               <li>Not stored in Neo4j, computed from firstName + lastName;</li>
+               <li>Resolved in application layer;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Handling Multiple Labels</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>GraphQL Interfaces</b>
+            <ul>
+               <li>interface Node { id: ID! };</li>
+               <li>type User implements Node { id: ID!, name: String! };</li>
+               <li>Neo4j: (u:Node:User {id: "123", name: "Alice"});</li>
+            </ul>
+         </li>
+         <li><b>Union Types</b>
+            <ul>
+               <li>union SearchResult = User | Post | Comment;</li>
+               <li>Query multiple node types at once;</li>
+               <li>Use __typename to distinguish;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. ID Management</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Best Practices</b>
+            <ul>
+               <li>Always have an id field in GraphQL types;</li>
+               <li>Use UUID or unique constraint in Neo4j;</li>
+               <li>Consider using Neo4j's internal ID cautiously (can be reused);</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>GraphQL: type User { id: ID! @id };</li>
+               <li>Neo4j: CREATE CONSTRAINT FOR (u:User) REQUIRE u.id IS UNIQUE;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

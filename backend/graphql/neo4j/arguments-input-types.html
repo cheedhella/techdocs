@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Arguments and Input Types</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Field Arguments</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Pass parameters to fields for filtering, sorting, pagination;</li>
+               <li>Make queries flexible and dynamic;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>type Query { users(limit: Int, role: String): [User] }</li>
+               <li>Query: { users(limit: 10, role: "admin") { name } }</li>
+            </ul>
+         </li>
+         <li><b>Common Patterns</b>
+            <ul>
+               <li>Pagination: limit, offset, first, after;</li>
+               <li>Filtering: where, filter;</li>
+               <li>Sorting: orderBy, sortBy;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Input Types</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Special object types used as arguments;</li>
+               <li>Defined with 'input' keyword instead of 'type';</li>
+               <li>Can only contain scalar fields and other input types;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>input CreateUserInput { name: String!, email: String!, age: Int }</li>
+               <li>mutation { createUser(input: CreateUserInput): User }</li>
+            </ul>
+         </li>
+         <li><b>Why Use Input Types?</b>
+            <ul>
+               <li>Group related arguments together;</li>
+               <li>Reusable across multiple mutations;</li>
+               <li>Cleaner, more maintainable schema;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Default Values and Validation</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Default Values</b>
+            <ul>
+               <li>users(limit: Int = 10): [User];</li>
+               <li>If no argument provided, use default;</li>
+            </ul>
+         </li>
+         <li><b>Required Arguments</b>
+            <ul>
+               <li>user(id: ID!): User;</li>
+               <li>Exclamation mark makes argument mandatory;</li>
+            </ul>
+         </li>
+         <li><b>Custom Validation</b>
+            <ul>
+               <li>Implement in resolvers;</li>
+               <li>Check business rules, constraints;</li>
+               <li>Return meaningful error messages;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

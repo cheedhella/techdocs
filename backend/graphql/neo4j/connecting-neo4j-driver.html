@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Connecting to Neo4j (Driver Basics)</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Neo4j Driver Overview</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What Is the Driver?</b>
+            <ul>
+               <li>Official client library for connecting to Neo4j;</li>
+               <li>Handles connection pooling, transactions;</li>
+               <li>Executes Cypher queries;</li>
+            </ul>
+         </li>
+         <li><b>Installation</b>
+            <ul>
+               <li>npm install neo4j-driver;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Connection Configuration</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Connection URI</b>
+            <ul>
+               <li>bolt://localhost:7687 - local instance;</li>
+               <li>neo4j://localhost:7687 - routing driver;</li>
+               <li>neo4j+s://xxx.databases.neo4j.io - AuraDB (encrypted);</li>
+            </ul>
+         </li>
+         <li><b>Authentication</b>
+            <ul>
+               <li>Basic auth: username and password;</li>
+               <li>Default: neo4j / neo4j (change on first login);</li>
+            </ul>
+         </li>
+         <li><b>Driver Options</b>
+            <ul>
+               <li>maxConnectionPoolSize - connection pool size;</li>
+               <li>connectionTimeout - timeout in milliseconds;</li>
+               <li>encrypted - enable/disable encryption;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Basic Usage</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Create Driver</b>
+            <ul>
+               <li>const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));</li>
+            </ul>
+         </li>
+         <li><b>Verify Connectivity</b>
+            <ul>
+               <li>await driver.verifyConnectivity();</li>
+               <li>Throws error if can't connect;</li>
+            </ul>
+         </li>
+         <li><b>Execute Query</b>
+            <ul>
+               <li>const session = driver.session();</li>
+               <li>const result = await session.run('MATCH (n) RETURN count(n)');</li>
+               <li>await session.close();</li>
+            </ul>
+         </li>
+         <li><b>Close Driver</b>
+            <ul>
+               <li>await driver.close();</li>
+               <li>Call on application shutdown;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Single Driver Instance</b>
+            <ul>
+               <li>Create driver once, reuse throughout app;</li>
+               <li>Driver manages connection pool;</li>
+               <li>Don't create driver per request;</li>
+            </ul>
+         </li>
+         <li><b>Always Close Sessions</b>
+            <ul>
+               <li>Use try-finally or async/await with proper cleanup;</li>
+               <li>Prevents connection leaks;</li>
+            </ul>
+         </li>
+         <li><b>Handle Errors</b>
+            <ul>
+               <li>Catch connection errors;</li>
+               <li>Retry logic for transient failures;</li>
+               <li>Log errors for debugging;</li>
+            </ul>
+         </li>
+         <li><b>Environment-Specific Config</b>
+            <ul>
+               <li>Different URIs for dev, staging, production;</li>
+               <li>Use environment variables;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Queries, Mutations, and Subscriptions</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Read operations - fetch data from the server;</li>
+               <li>Similar to GET requests in REST;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>query { user(id: "123") { name, email, posts { title } } }</li>
+               <li>Fetch user with nested posts in one request;</li>
+            </ul>
+         </li>
+         <li><b>Features</b>
+            <ul>
+               <li>Can fetch multiple resources in one query;</li>
+               <li>Specify exactly which fields to return;</li>
+               <li>Support arguments for filtering and pagination;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Mutations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Write operations - create, update, delete data;</li>
+               <li>Similar to POST, PUT, DELETE in REST;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>mutation { createUser(name: "Alice", email: "alice@example.com") { id, name } }</li>
+               <li>Create user and return specific fields;</li>
+            </ul>
+         </li>
+         <li><b>Characteristics</b>
+            <ul>
+               <li>Execute sequentially (queries run in parallel);</li>
+               <li>Return the modified data;</li>
+               <li>Can perform multiple operations in one request;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Subscriptions</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Real-time updates - push data to clients;</li>
+               <li>Uses WebSocket for persistent connection;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>subscription { messageAdded { id, content, author { name } } }</li>
+               <li>Client receives updates when new messages are added;</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Chat applications;</li>
+               <li>Live notifications;</li>
+               <li>Real-time dashboards;</li>
+               <li>Collaborative editing;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

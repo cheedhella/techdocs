@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Modeling Graph Data Effectively</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Core Principles</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Model for Queries</b>
+            <ul>
+               <li>Design based on how you'll query the data;</li>
+               <li>Optimize for common access patterns;</li>
+               <li>Different from relational normalization;</li>
+            </ul>
+         </li>
+         <li><b>Relationships Are Cheap</b>
+            <ul>
+               <li>Don't be afraid to create many relationships;</li>
+               <li>Traversing relationships is fast;</li>
+               <li>More relationships = more query flexibility;</li>
+            </ul>
+         </li>
+         <li><b>Denormalization Is OK</b>
+            <ul>
+               <li>Duplicate data when it improves query performance;</li>
+               <li>Graph databases handle redundancy differently;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. When to Use Nodes vs Properties</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use Nodes When:</b>
+            <ul>
+               <li>Entity has its own identity;</li>
+               <li>Need to connect to other entities;</li>
+               <li>Need to query or filter by it;</li>
+               <li>Example: User, Product, Company;</li>
+            </ul>
+         </li>
+         <li><b>Use Properties When:</b>
+            <ul>
+               <li>Simple attribute of an entity;</li>
+               <li>Not connected to other entities;</li>
+               <li>Example: name, age, email, price;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>Good: (u:User)-[:LIVES_IN]->(c:City) - City is a node;</li>
+               <li>Bad: (u:User {city: "New York"}) - if you need to query by city;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Relationship Modeling Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Specific Relationship Types</b>
+            <ul>
+               <li>Use meaningful names: :MANAGES, :REPORTS_TO, :PURCHASED;</li>
+               <li>Avoid generic: :RELATED_TO, :CONNECTED;</li>
+            </ul>
+         </li>
+         <li><b>Intermediate Nodes</b>
+            <ul>
+               <li>For many-to-many with metadata;</li>
+               <li>(u:User)-[:MADE]->(o:Order)-[:CONTAINS]->(p:Product);</li>
+               <li>Order stores purchase details;</li>
+            </ul>
+         </li>
+         <li><b>Qualified Relationships</b>
+            <ul>
+               <li>Add properties to relationships for context;</li>
+               <li>-[:KNOWS {since: 2020, strength: 0.8}]-></li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Common Anti-Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Storing Lists of IDs</b>
+            <ul>
+               <li>Bad: {friendIds: [1, 2, 3]};</li>
+               <li>Good: Use actual relationships;</li>
+            </ul>
+         </li>
+         <li><b>Dense Nodes</b>
+            <ul>
+               <li>Nodes with millions of relationships;</li>
+               <li>Can cause performance issues;</li>
+               <li>Solution: Use intermediate nodes or time-based bucketing;</li>
+            </ul>
+         </li>
+         <li><b>Over-Normalization</b>
+            <ul>
+               <li>Don't apply relational database rules blindly;</li>
+               <li>Some duplication is acceptable;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

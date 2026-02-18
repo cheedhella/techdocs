@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Indexes and Constraints</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Indexes?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Performance</b>
+            <ul>
+               <li>Speed up queries that filter by properties;</li>
+               <li>Without indexes, Neo4j scans all nodes;</li>
+               <li>Essential for large graphs;</li>
+            </ul>
+         </li>
+         <li><b>When to Use</b>
+            <ul>
+               <li>Properties frequently used in WHERE clauses;</li>
+               <li>Properties used for lookups (id, email, username);</li>
+               <li>Starting points for graph traversals;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Creating Indexes</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Single Property Index</b>
+            <ul>
+               <li>CREATE INDEX FOR (u:User) ON (u.email);</li>
+               <li>Speeds up queries filtering by email;</li>
+            </ul>
+         </li>
+         <li><b>Composite Index</b>
+            <ul>
+               <li>CREATE INDEX FOR (u:User) ON (u.firstName, u.lastName);</li>
+               <li>Index on multiple properties;</li>
+            </ul>
+         </li>
+         <li><b>Full-Text Index</b>
+            <ul>
+               <li>CREATE FULLTEXT INDEX userSearch FOR (u:User) ON EACH [u.name, u.bio];</li>
+               <li>Enables text search capabilities;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Constraints</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Uniqueness Constraint</b>
+            <ul>
+               <li>CREATE CONSTRAINT FOR (u:User) REQUIRE u.email IS UNIQUE;</li>
+               <li>Ensures no duplicate emails;</li>
+               <li>Automatically creates an index;</li>
+            </ul>
+         </li>
+         <li><b>Existence Constraint</b>
+            <ul>
+               <li>CREATE CONSTRAINT FOR (u:User) REQUIRE u.name IS NOT NULL;</li>
+               <li>Ensures property always exists (Enterprise only);</li>
+            </ul>
+         </li>
+         <li><b>Node Key</b>
+            <ul>
+               <li>CREATE CONSTRAINT FOR (u:User) REQUIRE (u.id, u.email) IS NODE KEY;</li>
+               <li>Combination must be unique and exist (Enterprise only);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Managing Indexes and Constraints</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>List All</b>
+            <ul>
+               <li>SHOW INDEXES;</li>
+               <li>SHOW CONSTRAINTS;</li>
+            </ul>
+         </li>
+         <li><b>Drop Index</b>
+            <ul>
+               <li>DROP INDEX index_name;</li>
+            </ul>
+         </li>
+         <li><b>Drop Constraint</b>
+            <ul>
+               <li>DROP CONSTRAINT constraint_name;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

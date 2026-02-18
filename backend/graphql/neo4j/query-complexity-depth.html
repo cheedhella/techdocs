@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Query Complexity and Depth Limiting</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Limit Queries?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Security Concerns</b>
+            <ul>
+               <li>Malicious users can craft expensive queries;</li>
+               <li>Deeply nested or wide queries can DoS server;</li>
+               <li>Need protection against abuse;</li>
+            </ul>
+         </li>
+         <li><b>Performance Protection</b>
+            <ul>
+               <li>Some queries are legitimately expensive;</li>
+               <li>Prevent accidental server overload;</li>
+               <li>Maintain quality of service;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Query Depth Limiting</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Limits how many levels deep a query can go;</li>
+               <li>{ user { friends { friends { friends } } } } - depth 4;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>Use graphql-depth-limit package;</li>
+               <li>Set maximum depth (e.g., 5-7 levels);</li>
+               <li>Reject queries exceeding limit;</li>
+            </ul>
+         </li>
+         <li><b>Considerations</b>
+            <ul>
+               <li>Too strict limits break legitimate queries;</li>
+               <li>Too loose allows expensive queries;</li>
+               <li>Balance based on your data model;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Query Complexity Analysis</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Assigns cost to each field in query;</li>
+               <li>Calculates total cost;</li>
+               <li>Rejects if exceeds maximum;</li>
+            </ul>
+         </li>
+         <li><b>Cost Calculation</b>
+            <ul>
+               <li>Scalar field: cost 1;</li>
+               <li>Object field: cost of nested fields;</li>
+               <li>List field: multiplier based on limit;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>Use graphql-query-complexity package;</li>
+               <li>Define cost per field type;</li>
+               <li>Set maximum complexity;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Other Protection Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Pagination Requirements</b>
+            <ul>
+               <li>Force pagination on list fields;</li>
+               <li>Require first/limit argument;</li>
+               <li>Prevent unbounded lists;</li>
+            </ul>
+         </li>
+         <li><b>Timeout Limits</b>
+            <ul>
+               <li>Set maximum query execution time;</li>
+               <li>Kill queries that run too long;</li>
+            </ul>
+         </li>
+         <li><b>Rate Limiting</b>
+            <ul>
+               <li>Limit requests per user/IP;</li>
+               <li>Prevent abuse;</li>
+            </ul>
+         </li>
+         <li><b>Query Whitelisting</b>
+            <ul>
+               <li>Only allow pre-approved queries;</li>
+               <li>Used with persisted queries;</li>
+               <li>Maximum security;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

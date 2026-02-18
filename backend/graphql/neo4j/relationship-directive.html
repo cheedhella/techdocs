@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@relationship Directive</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is @relationship?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Maps GraphQL fields to Neo4j relationships;</li>
+               <li>Specifies relationship type and direction;</li>
+               <li>Enables auto-generated relationship queries;</li>
+            </ul>
+         </li>
+         <li><b>Syntax</b>
+            <ul>
+               <li>@relationship(type: "RELATIONSHIP_TYPE", direction: OUT|IN|OUT_IN);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Basic Usage</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Outgoing Relationship</b>
+            <ul>
+               <li>type User { posts: [Post] @relationship(type: "POSTED", direction: OUT) };</li>
+               <li>(User)-[:POSTED]->(Post);</li>
+            </ul>
+         </li>
+         <li><b>Incoming Relationship</b>
+            <ul>
+               <li>type Post { author: User @relationship(type: "POSTED", direction: IN) };</li>
+               <li>(User)-[:POSTED]->(Post), queried from Post side;</li>
+            </ul>
+         </li>
+         <li><b>Bidirectional</b>
+            <ul>
+               <li>type User { friends: [User] @relationship(type: "FRIENDS_WITH", direction: OUT_IN) };</li>
+               <li>Matches relationships in either direction;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Relationship Properties</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Edge Types</b>
+            <ul>
+               <li>type User { actedIn: [Movie] @relationship(type: "ACTED_IN", direction: OUT, properties: "ActedIn") };</li>
+               <li>interface ActedIn @relationshipProperties { role: String!, year: Int };</li>
+            </ul>
+         </li>
+         <li><b>Querying Properties</b>
+            <ul>
+               <li>query { users { actedInConnection { edges { role, node { title } } } } };</li>
+               <li>Access relationship properties via Connection API;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Advanced Features</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Filtering on Relationships</b>
+            <ul>
+               <li>query { users { posts(where: {title_CONTAINS: "GraphQL"}) { title } } };</li>
+               <li>Filter related nodes;</li>
+            </ul>
+         </li>
+         <li><b>Nested Mutations</b>
+            <ul>
+               <li>mutation { createUsers(input: [{name: "Alice", posts: {create: [{title: "Hello"}]}}]) { users { name } } };</li>
+               <li>Create nodes and relationships in one operation;</li>
+            </ul>
+         </li>
+         <li><b>Connect/Disconnect</b>
+            <ul>
+               <li>mutation { updateUsers(where: {id: "123"}, connect: {posts: {where: {id: "456"}}}) { users { name } } };</li>
+               <li>Manage relationships without recreating nodes;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

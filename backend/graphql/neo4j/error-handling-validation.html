@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Error Handling and Validation</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Types of Errors</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Validation Errors</b>
+            <ul>
+               <li>Invalid input data;</li>
+               <li>Type mismatches;</li>
+               <li>Missing required fields;</li>
+            </ul>
+         </li>
+         <li><b>Authorization Errors</b>
+            <ul>
+               <li>User not authenticated;</li>
+               <li>Insufficient permissions;</li>
+               <li>Access denied;</li>
+            </ul>
+         </li>
+         <li><b>Database Errors</b>
+            <ul>
+               <li>Connection failures;</li>
+               <li>Constraint violations;</li>
+               <li>Query errors;</li>
+            </ul>
+         </li>
+         <li><b>Business Logic Errors</b>
+            <ul>
+               <li>Custom validation failures;</li>
+               <li>Invalid state transitions;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. GraphQL Error Handling</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Error Response Format</b>
+            <ul>
+               <li>{ errors: [{ message, locations, path, extensions }], data: null };</li>
+               <li>Standardized error structure;</li>
+            </ul>
+         </li>
+         <li><b>Throwing Errors</b>
+            <ul>
+               <li>throw new Error("User not found");</li>
+               <li>throw new ApolloError("Custom error", "ERROR_CODE");</li>
+            </ul>
+         </li>
+         <li><b>Error Extensions</b>
+            <ul>
+               <li>Add custom data to errors;</li>
+               <li>{ code, statusCode, details };</li>
+               <li>Helpful for client error handling;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Validation Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Schema-Level Validation</b>
+            <ul>
+               <li>Type system enforces basic validation;</li>
+               <li>Required fields, type checking;</li>
+               <li>Automatic, no code needed;</li>
+            </ul>
+         </li>
+         <li><b>Custom Scalars</b>
+            <ul>
+               <li>Email, URL, DateTime with validation;</li>
+               <li>Validate on parse and serialize;</li>
+            </ul>
+         </li>
+         <li><b>Resolver Validation</b>
+            <ul>
+               <li>Check business rules in resolvers;</li>
+               <li>Validate complex constraints;</li>
+               <li>Example: age must be 18+;</li>
+            </ul>
+         </li>
+         <li><b>Database Constraints</b>
+            <ul>
+               <li>Uniqueness, existence constraints in Neo4j;</li>
+               <li>Enforced at database level;</li>
+               <li>Catch constraint violations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Meaningful Error Messages</b>
+            <ul>
+               <li>Clear, actionable messages;</li>
+               <li>"Email already exists" vs "Error 500";</li>
+               <li>Help clients handle errors;</li>
+            </ul>
+         </li>
+         <li><b>Error Codes</b>
+            <ul>
+               <li>Use consistent error codes;</li>
+               <li>UNAUTHENTICATED, FORBIDDEN, NOT_FOUND;</li>
+               <li>Easier for clients to handle;</li>
+            </ul>
+         </li>
+         <li><b>Don't Leak Sensitive Info</b>
+            <ul>
+               <li>Sanitize errors in production;</li>
+               <li>Don't expose database details;</li>
+               <li>Log full errors server-side;</li>
+            </ul>
+         </li>
+         <li><b>Partial Success Handling</b>
+            <ul>
+               <li>GraphQL can return data + errors;</li>
+               <li>Some fields succeed, others fail;</li>
+               <li>Design for graceful degradation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

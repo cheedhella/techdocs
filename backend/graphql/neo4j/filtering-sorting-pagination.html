@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Filtering, Sorting, and Pagination</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Filtering</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Basic Filters</b>
+            <ul>
+               <li>users(where: {name: "Alice"}) - exact match;</li>
+               <li>users(where: {age: 25}) - numeric equality;</li>
+            </ul>
+         </li>
+         <li><b>String Operators</b>
+            <ul>
+               <li>name_CONTAINS: "ali" - substring match;</li>
+               <li>name_STARTS_WITH: "A" - prefix match;</li>
+               <li>name_ENDS_WITH: "e" - suffix match;</li>
+               <li>name_IN: ["Alice", "Bob"] - one of list;</li>
+            </ul>
+         </li>
+         <li><b>Numeric Operators</b>
+            <ul>
+               <li>age_GT: 18 - greater than;</li>
+               <li>age_GTE: 18 - greater than or equal;</li>
+               <li>age_LT: 65 - less than;</li>
+               <li>age_LTE: 65 - less than or equal;</li>
+            </ul>
+         </li>
+         <li><b>Logical Operators</b>
+            <ul>
+               <li>AND: [{age_GT: 18}, {age_LT: 65}] - both conditions;</li>
+               <li>OR: [{name: "Alice"}, {name: "Bob"}] - either condition;</li>
+               <li>NOT: {age: 25} - negation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Sorting</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Single Field</b>
+            <ul>
+               <li>users(options: {sort: [{name: ASC}]}) - ascending;</li>
+               <li>users(options: {sort: [{age: DESC}]}) - descending;</li>
+            </ul>
+         </li>
+         <li><b>Multiple Fields</b>
+            <ul>
+               <li>users(options: {sort: [{lastName: ASC}, {firstName: ASC}]});</li>
+               <li>Sort by last name, then first name;</li>
+            </ul>
+         </li>
+         <li><b>Sorting Related Data</b>
+            <ul>
+               <li>users { posts(options: {sort: [{createdAt: DESC}]}) { title } };</li>
+               <li>Sort nested data;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Pagination</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Offset-Based</b>
+            <ul>
+               <li>users(options: {limit: 10, offset: 20});</li>
+               <li>Skip 20, return next 10;</li>
+               <li>Simple but has issues with data changes;</li>
+            </ul>
+         </li>
+         <li><b>Cursor-Based (Relay)</b>
+            <ul>
+               <li>users(first: 10, after: "cursor");</li>
+               <li>More stable for changing data;</li>
+               <li>Returns edges with cursor and node;</li>
+            </ul>
+         </li>
+         <li><b>Connection Pattern</b>
+            <ul>
+               <li>usersConnection { edges { cursor, node { name } }, pageInfo { hasNextPage } };</li>
+               <li>Full pagination metadata;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Combining All Three</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Example Query</b>
+            <ul>
+               <li>query {</li>
+               <li>  users(</li>
+               <li>    where: {age_GT: 18, name_CONTAINS: "a"},</li>
+               <li>    options: {sort: [{name: ASC}], limit: 10, offset: 0}</li>
+               <li>  ) { id, name, age }</li>
+               <li>};</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Search results with filters;</li>
+               <li>Data tables with sorting and pagination;</li>
+               <li>Infinite scroll feeds;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Role-Based Access Control</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is RBAC?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Access control based on user roles;</li>
+               <li>Users assigned roles (admin, editor, viewer);</li>
+               <li>Roles have specific permissions;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Centralized permission management;</li>
+               <li>Easy to add/remove permissions;</li>
+               <li>Scalable for large applications;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Implementing RBAC in GraphQL</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Store Roles in JWT</b>
+            <ul>
+               <li>Include roles array in JWT payload;</li>
+               <li>{ sub: "user123", roles: ["admin", "editor"] };</li>
+               <li>Available as $jwt.roles in @auth rules;</li>
+            </ul>
+         </li>
+         <li><b>Schema-Level Rules</b>
+            <ul>
+               <li>type Post @auth(rules: [{operations: [CREATE], roles: ["editor", "admin"]}]) {</li>
+               <li>  title: String!</li>
+               <li>};</li>
+               <li>Only editors and admins can create posts;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Common Role Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Admin Role</b>
+            <ul>
+               <li>Full access to all operations;</li>
+               <li>@auth(rules: [{roles: ["admin"]}]);</li>
+               <li>Can bypass other restrictions;</li>
+            </ul>
+         </li>
+         <li><b>Hierarchical Roles</b>
+            <ul>
+               <li>Admin > Editor > Viewer;</li>
+               <li>Higher roles inherit lower role permissions;</li>
+               <li>Implement in application logic;</li>
+            </ul>
+         </li>
+         <li><b>Resource-Specific Roles</b>
+            <ul>
+               <li>Project admin, team member;</li>
+               <li>Roles scoped to specific resources;</li>
+               <li>Store in graph relationships;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Advanced RBAC</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Combining Rules</b>
+            <ul>
+               <li>@auth(rules: [{roles: ["admin"]}, {allow: {owner: "$jwt.sub"}}]);</li>
+               <li>Admin OR owner can access;</li>
+               <li>Rules are OR'd by default;</li>
+            </ul>
+         </li>
+         <li><b>Graph-Based Roles</b>
+            <ul>
+               <li>Store roles as relationships in Neo4j;</li>
+               <li>(user:User)-[:HAS_ROLE]->(role:Role {name: "admin"});</li>
+               <li>Query roles dynamically;</li>
+               <li>More flexible than JWT roles;</li>
+            </ul>
+         </li>
+         <li><b>Permission Checks</b>
+            <ul>
+               <li>Use @cypher for complex permission logic;</li>
+               <li>Check graph relationships;</li>
+               <li>Example: user is member of project team;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

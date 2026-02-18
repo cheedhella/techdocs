@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Labels and Relationship Types</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Node Labels</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Categorize nodes into groups or types;</li>
+               <li>Enable efficient queries by filtering on labels;</li>
+               <li>Similar to table names in relational databases;</li>
+            </ul>
+         </li>
+         <li><b>Examples</b>
+            <ul>
+               <li>:Person, :Product, :Company, :City;</li>
+               <li>Convention: PascalCase, singular form;</li>
+            </ul>
+         </li>
+         <li><b>Multiple Labels</b>
+            <ul>
+               <li>A node can have multiple labels;</li>
+               <li>Example: :Person:Customer:VIP;</li>
+               <li>Useful for inheritance-like patterns;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Relationship Types</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Define the nature of connection between nodes;</li>
+               <li>Every relationship must have exactly one type;</li>
+               <li>Makes queries semantic and readable;</li>
+            </ul>
+         </li>
+         <li><b>Examples</b>
+            <ul>
+               <li>:FRIENDS_WITH, :WORKS_FOR, :PURCHASED, :LOCATED_IN;</li>
+               <li>Convention: UPPER_CASE with underscores;</li>
+               <li>Use verb or preposition to describe relationship;</li>
+            </ul>
+         </li>
+         <li><b>Best Practices</b>
+            <ul>
+               <li>Be specific - :MANAGES vs :WORKS_FOR;</li>
+               <li>Use consistent naming conventions;</li>
+               <li>Avoid generic types like :RELATED_TO;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Using Labels and Types in Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Filter by Label</b>
+            <ul>
+               <li>MATCH (p:Person) RETURN p;</li>
+               <li>Find all Person nodes;</li>
+            </ul>
+         </li>
+         <li><b>Filter by Relationship Type</b>
+            <ul>
+               <li>MATCH (p:Person)-[:FRIENDS_WITH]->(friend) RETURN friend;</li>
+               <li>Find all friends of Person nodes;</li>
+            </ul>
+         </li>
+         <li><b>Performance Benefits</b>
+            <ul>
+               <li>Labels and types enable index usage;</li>
+               <li>Narrow search space for faster queries;</li>
+               <li>Essential for large graphs;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

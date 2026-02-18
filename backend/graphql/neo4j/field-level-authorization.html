@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Field-Level Authorization</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Field-Level Authorization?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Control access to individual fields, not just types;</li>
+               <li>Some fields visible to some users;</li>
+               <li>Fine-grained access control;</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Hide sensitive fields (email, phone) from non-owners;</li>
+               <li>Admin-only fields (internal notes, flags);</li>
+               <li>Role-based field visibility;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Implementation</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Using @auth on Fields</b>
+            <ul>
+               <li>type User {</li>
+               <li>  id: ID!</li>
+               <li>  name: String!</li>
+               <li>  email: String! @auth(rules: [{allow: {id: "$jwt.sub"}}])</li>
+               <li>};</li>
+               <li>Email only visible to owner;</li>
+            </ul>
+         </li>
+         <li><b>Role-Based Field Access</b>
+            <ul>
+               <li>internalNotes: String @auth(rules: [{roles: ["admin"]}]);</li>
+               <li>Only admins can see this field;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Public vs Private Fields</b>
+            <ul>
+               <li>Public: name, avatar - no @auth;</li>
+               <li>Private: email, phone - @auth with owner check;</li>
+            </ul>
+         </li>
+         <li><b>Computed Field Authorization</b>
+            <ul>
+               <li>Check permissions in @cypher directive;</li>
+               <li>Return null if unauthorized;</li>
+            </ul>
+         </li>
+         <li><b>Relationship Authorization</b>
+            <ul>
+               <li>Control who can see relationships;</li>
+               <li>friends: [User] @auth(rules: [{allow: {id: "$jwt.sub"}}]);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Default Deny</b> - Make fields private by default, explicitly allow access;</li>
+         <li><b>Consistent Rules</b> - Use same patterns across schema;</li>
+         <li><b>Test Thoroughly</b> - Verify unauthorized users can't access fields;</li>
+         <li><b>Document Permissions</b> - Clear which fields require which permissions;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

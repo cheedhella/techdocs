@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Why Use GraphQL Instead of REST?</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. REST API Limitations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Over-fetching</b>
+            <ul>
+               <li>REST endpoints return fixed data structures;</li>
+               <li>Client receives more data than needed, wasting bandwidth;</li>
+            </ul>
+         </li>
+         <li><b>Under-fetching</b>
+            <ul>
+               <li>Need multiple API calls to get related data;</li>
+               <li>N+1 problem - one call for list, then one call per item;</li>
+            </ul>
+         </li>
+         <li><b>Versioning Complexity</b>
+            <ul>
+               <li>Need /v1/, /v2/ endpoints as API evolves;</li>
+               <li>Maintaining multiple versions is costly;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. GraphQL Advantages</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Precise Data Fetching</b> - Request exactly what you need;</li>
+         <li><b>Single Request</b> - Get all related data in one query;</li>
+         <li><b>No Versioning</b> - Add new fields without breaking existing queries;</li>
+         <li><b>Strongly Typed</b> - Schema provides clear contract and validation;</li>
+         <li><b>Better Developer Experience</b> - Auto-completion, introspection, documentation;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. When to Use Each?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use GraphQL When:</b>
+            <ul>
+               <li>Building complex, data-heavy applications;</li>
+               <li>Need flexible queries from different clients (web, mobile, etc);</li>
+               <li>Working with graph-like, interconnected data;</li>
+            </ul>
+         </li>
+         <li><b>Use REST When:</b>
+            <ul>
+               <li>Simple CRUD operations with predictable data needs;</li>
+               <li>File uploads/downloads;</li>
+               <li>Caching is critical (HTTP caching works well with REST);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

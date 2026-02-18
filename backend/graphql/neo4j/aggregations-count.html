@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Aggregations and Count Queries</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Count Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Simple Count</b>
+            <ul>
+               <li>query { usersCount };</li>
+               <li>Returns total number of User nodes;</li>
+               <li>Auto-generated for each type;</li>
+            </ul>
+         </li>
+         <li><b>Count with Filter</b>
+            <ul>
+               <li>query { usersCount(where: {age_GT: 18}) };</li>
+               <li>Count only matching nodes;</li>
+            </ul>
+         </li>
+         <li><b>Relationship Count</b>
+            <ul>
+               <li>type User { postCount: Int @cypher(statement: "MATCH (this)-[:POSTED]->(p) RETURN count(p)") };</li>
+               <li>Count related nodes;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Aggregation Functions</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Built-in Aggregations</b>
+            <ul>
+               <li>count() - count items;</li>
+               <li>sum() - sum numeric values;</li>
+               <li>avg() - average of values;</li>
+               <li>min() - minimum value;</li>
+               <li>max() - maximum value;</li>
+            </ul>
+         </li>
+         <li><b>Using in @cypher</b>
+            <ul>
+               <li>type Product {</li>
+               <li>  avgRating: Float @cypher(statement: "MATCH (this)<-[r:RATED]-() RETURN avg(r.score)")</li>
+               <li>  totalSales: Int @cypher(statement: "MATCH (this)<-[:CONTAINS]-(o:Order) RETURN sum(o.quantity)")</li>
+               <li>};</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Connection Aggregations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Aggregate Field</b>
+            <ul>
+               <li>type User { postsAggregate: PostAggregateSelection };</li>
+               <li>Auto-generated aggregate type;</li>
+            </ul>
+         </li>
+         <li><b>Query Example</b>
+            <ul>
+               <li>query {</li>
+               <li>  users {</li>
+               <li>    name</li>
+               <li>    postsAggregate {</li>
+               <li>      count</li>
+               <li>      node { title { longest, shortest } }</li>
+               <li>    }</li>
+               <li>  }</li>
+               <li>};</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Complex Aggregations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Group By Pattern</b>
+            <ul>
+               <li>Use @cypher for complex grouping;</li>
+               <li>type Query {</li>
+               <li>  usersByCountry: [CountryStats] @cypher(statement: """</li>
+               <li>    MATCH (u:User)-[:LIVES_IN]->(c:Country)</li>
+               <li>    RETURN c.name as country, count(u) as userCount</li>
+               <li>  """)</li>
+               <li>};</li>
+            </ul>
+         </li>
+         <li><b>Statistical Queries</b>
+            <ul>
+               <li>Percentiles, standard deviation;</li>
+               <li>Use Cypher's statistical functions;</li>
+               <li>Return as computed fields;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

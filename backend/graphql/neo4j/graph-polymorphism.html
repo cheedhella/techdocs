@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Graph Polymorphism with Interfaces</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Polymorphism in Graphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Multiple node types sharing common properties;</li>
+               <li>Query different types through common interface;</li>
+               <li>Flexible, extensible data models;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. GraphQL Interfaces</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Example</b>
+            <ul>
+               <li>interface Content { id: ID!, title: String!, createdAt: DateTime! };</li>
+               <li>type Article implements Content { id: ID!, title: String!, createdAt: DateTime!, body: String! };</li>
+               <li>type Video implements Content { id: ID!, title: String!, createdAt: DateTime!, duration: Int! };</li>
+            </ul>
+         </li>
+         <li><b>Querying</b>
+            <ul>
+               <li>{ content { id, title, ... on Article { body }, ... on Video { duration } } };</li>
+               <li>Query all content types together;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Neo4j Implementation</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Multiple Labels</b>
+            <ul>
+               <li>(a:Content:Article {title: "Hello", body: "..."});</li>
+               <li>(v:Content:Video {title: "Tutorial", duration: 300});</li>
+               <li>Both have Content label;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Query by common label: MATCH (c:Content);</li>
+               <li>Filter by specific type: MATCH (a:Article);</li>
+               <li>Flexible relationships;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Use Cases</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Content Management</b> - Articles, videos, podcasts all as Content;</li>
+         <li><b>User Types</b> - Admin, Editor, Viewer all as User;</li>
+         <li><b>Products</b> - Physical, digital, subscription products;</li>
+         <li><b>Notifications</b> - Email, SMS, push notifications;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

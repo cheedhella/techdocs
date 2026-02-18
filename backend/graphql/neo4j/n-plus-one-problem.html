@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Avoiding the N+1 Problem</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is the N+1 Problem?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Making N additional queries for N items;</li>
+               <li>1 query to get list + N queries for related data;</li>
+               <li>Common performance issue in GraphQL;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>Query: { users { name, posts { title } } };</li>
+               <li>Bad: 1 query for users, then 1 query per user for posts;</li>
+               <li>10 users = 11 queries total;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. How Neo4j GraphQL Library Solves It</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Automatic Query Optimization</b>
+            <ul>
+               <li>Library generates single Cypher query;</li>
+               <li>Traverses relationships in one database operation;</li>
+               <li>No N+1 problem with auto-generated resolvers;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>GraphQL: { users { name, posts { title } } };</li>
+               <li>Cypher: MATCH (u:User) OPTIONAL MATCH (u)-[:POSTED]->(p:Post) RETURN u, collect(p);</li>
+               <li>Single query, no matter how many users;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. N+1 in Custom Resolvers</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>The Problem</b>
+            <ul>
+               <li>Custom resolvers can reintroduce N+1;</li>
+               <li>If resolver makes database query per item;</li>
+               <li>Need batching solution;</li>
+            </ul>
+         </li>
+         <li><b>DataLoader Solution</b>
+            <ul>
+               <li>Batches multiple requests into one;</li>
+               <li>Caches results within single request;</li>
+               <li>Standard solution for GraphQL N+1;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>Create DataLoader instance per request;</li>
+               <li>Pass in context;</li>
+               <li>Use in resolvers instead of direct queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use Auto-Generated Resolvers</b>
+            <ul>
+               <li>They handle batching automatically;</li>
+               <li>No N+1 problem;</li>
+            </ul>
+         </li>
+         <li><b>For Custom Resolvers</b>
+            <ul>
+               <li>Always use DataLoader or similar batching;</li>
+               <li>Never query database in loop;</li>
+            </ul>
+         </li>
+         <li><b>Monitor Queries</b>
+            <ul>
+               <li>Log Cypher queries in development;</li>
+               <li>Check for repeated similar queries;</li>
+               <li>Profile performance;</li>
+            </ul>
+         </li>
+         <li><b>Use @cypher for Complex Cases</b>
+            <ul>
+               <li>Single Cypher query for complex logic;</li>
+               <li>Better than multiple resolver calls;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

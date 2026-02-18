@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Cypher Injection Prevention</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Cypher Injection?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Attack where malicious Cypher code is injected;</li>
+               <li>Similar to SQL injection;</li>
+               <li>Can read, modify, or delete data;</li>
+            </ul>
+         </li>
+         <li><b>Example Attack</b>
+            <ul>
+               <li>Input: "123") MATCH (u:User) DETACH DELETE u //";</li>
+               <li>Unsafe query: `MATCH (u:User {id: "${input}"}) RETURN u`;</li>
+               <li>Result: Deletes all users;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Prevention with Parameterized Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Always Use Parameters</b>
+            <ul>
+               <li>session.run('MATCH (u:User {id: $id}) RETURN u', {id: userInput});</li>
+               <li>Driver handles escaping;</li>
+               <li>Input treated as data, not code;</li>
+            </ul>
+         </li>
+         <li><b>Neo4j GraphQL Library</b>
+            <ul>
+               <li>Automatically uses parameters;</li>
+               <li>No injection risk with auto-generated queries;</li>
+               <li>Safe by default;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Risks with @cypher Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Dynamic Cypher</b>
+            <ul>
+               <li>@cypher with user input can be vulnerable;</li>
+               <li>Never concatenate user input;</li>
+               <li>Use $argumentName for parameters;</li>
+            </ul>
+         </li>
+         <li><b>Safe Example</b>
+            <ul>
+               <li>@cypher(statement: "MATCH (u:User {name: $name}) RETURN u");</li>
+               <li>$name is safely parameterized;</li>
+            </ul>
+         </li>
+         <li><b>Unsafe Example</b>
+            <ul>
+               <li>Don't build Cypher strings in resolvers;</li>
+               <li>Don't use template literals with user input;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Additional Safeguards</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Input Validation</b>
+            <ul>
+               <li>Validate format before using;</li>
+               <li>Whitelist allowed characters;</li>
+               <li>Reject suspicious input;</li>
+            </ul>
+         </li>
+         <li><b>Least Privilege</b>
+            <ul>
+               <li>Database user should have minimal permissions;</li>
+               <li>Read-only for read operations;</li>
+               <li>Limit what injection can do;</li>
+            </ul>
+         </li>
+         <li><b>Code Review</b>
+            <ul>
+               <li>Review all custom Cypher;</li>
+               <li>Look for string concatenation;</li>
+               <li>Ensure parameters used correctly;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

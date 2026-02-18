@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Authentication Strategies (JWT, OAuth)</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. JWT (JSON Web Tokens)</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>How It Works</b>
+            <ul>
+               <li>User logs in with credentials;</li>
+               <li>Server generates signed JWT;</li>
+               <li>Client stores JWT (localStorage, cookie);</li>
+               <li>Client sends JWT in Authorization header;</li>
+            </ul>
+         </li>
+         <li><b>JWT Structure</b>
+            <ul>
+               <li>Header: algorithm, type;</li>
+               <li>Payload: user info, roles, expiry;</li>
+               <li>Signature: verifies authenticity;</li>
+            </ul>
+         </li>
+         <li><b>Advantages</b>
+            <ul>
+               <li>Stateless - no server-side session;</li>
+               <li>Scalable - works across multiple servers;</li>
+               <li>Self-contained - includes user info;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. OAuth 2.0</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Authorization framework;</li>
+               <li>Delegate authentication to providers (Google, GitHub);</li>
+               <li>User grants permissions to your app;</li>
+            </ul>
+         </li>
+         <li><b>Flow</b>
+            <ul>
+               <li>User clicks "Login with Google";</li>
+               <li>Redirected to Google login;</li>
+               <li>User authorizes your app;</li>
+               <li>Google returns access token;</li>
+               <li>Your app uses token to access user info;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>No password management;</li>
+               <li>Trusted authentication;</li>
+               <li>Single sign-on;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Implementation with GraphQL</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Login Mutation</b>
+            <ul>
+               <li>mutation { login(email: "...", password: "...") { token, user { id, name } } };</li>
+               <li>Verify credentials;</li>
+               <li>Generate and return JWT;</li>
+            </ul>
+         </li>
+         <li><b>Token Verification</b>
+            <ul>
+               <li>Extract token from Authorization header;</li>
+               <li>Verify signature;</li>
+               <li>Decode payload;</li>
+               <li>Add user to context;</li>
+            </ul>
+         </li>
+         <li><b>Protected Queries</b>
+            <ul>
+               <li>Use @auth directive or check context.user;</li>
+               <li>Return error if not authenticated;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Security Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use HTTPS</b> - Always encrypt in transit;</li>
+         <li><b>Short Expiry</b> - JWT should expire (15min-1hr);</li>
+         <li><b>Refresh Tokens</b> - Long-lived tokens for getting new JWTs;</li>
+         <li><b>Secure Storage</b> - HttpOnly cookies or secure storage;</li>
+         <li><b>Validate Everything</b> - Check signature, expiry, issuer;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

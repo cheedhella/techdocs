@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Versioned Data Models</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Version Data?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Track Changes</b> - Know who changed what and when;</li>
+         <li><b>Rollback</b> - Restore previous versions;</li>
+         <li><b>Audit</b> - Compliance and debugging;</li>
+         <li><b>Collaboration</b> - Multiple users editing same data;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Versioning Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Version Number Property</b>
+            <ul>
+               <li>Add version field to nodes;</li>
+               <li>{id: "123", version: 5, data: "..."};</li>
+               <li>Increment on each update;</li>
+               <li>Simple but loses history;</li>
+            </ul>
+         </li>
+         <li><b>Version Chain</b>
+            <ul>
+               <li>(v1:Document)-[:NEXT_VERSION]->(v2:Document)-[:NEXT_VERSION]->(v3:Document);</li>
+               <li>Each version is separate node;</li>
+               <li>Full history preserved;</li>
+            </ul>
+         </li>
+         <li><b>Snapshot Pattern</b>
+            <ul>
+               <li>(doc:Document)<-[:VERSION_OF]-(v1:Snapshot {version: 1, timestamp: ...});</li>
+               <li>Current document + historical snapshots;</li>
+               <li>Query current easily, access history when needed;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. GraphQL Integration</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Current Version</b>
+            <ul>
+               <li>type Document { id: ID!, content: String!, version: Int! };</li>
+               <li>Default queries return current version;</li>
+            </ul>
+         </li>
+         <li><b>Version History</b>
+            <ul>
+               <li>type Document { versions: [DocumentVersion] };</li>
+               <li>Opt-in to historical data;</li>
+            </ul>
+         </li>
+         <li><b>Specific Version</b>
+            <ul>
+               <li>document(id: "123", version: 3) { content };</li>
+               <li>Query specific version;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Considerations</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Storage Growth</b> - Versions accumulate over time;</li>
+         <li><b>Query Performance</b> - More nodes to traverse;</li>
+         <li><b>Conflict Resolution</b> - Handle concurrent updates;</li>
+         <li><b>Retention Policy</b> - How long to keep old versions?;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

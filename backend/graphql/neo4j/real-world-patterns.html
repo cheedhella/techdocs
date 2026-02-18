@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Real-World Patterns & Case Studies</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Social Network APIs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Key Features</b>
+            <ul>
+               <li>User profiles, friendships, posts, comments;</li>
+               <li>News feed generation;</li>
+               <li>Friend suggestions;</li>
+            </ul>
+         </li>
+         <li><b>Graph Model</b>
+            <ul>
+               <li>(User)-[:FRIENDS_WITH]->(User);</li>
+               <li>(User)-[:POSTED]->(Post)-[:HAS_COMMENT]->(Comment);</li>
+               <li>(User)-[:LIKES]->(Post);</li>
+            </ul>
+         </li>
+         <li><b>Queries</b>
+            <ul>
+               <li>Friends of friends;</li>
+               <li>Mutual friends;</li>
+               <li>Activity feed from friends;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Recommendation Engines</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Collaborative Filtering</b>
+            <ul>
+               <li>Users who liked X also liked Y;</li>
+               <li>(User)-[:PURCHASED]->(Product)<-[:PURCHASED]-(OtherUser)-[:PURCHASED]->(Recommendation);</li>
+            </ul>
+         </li>
+         <li><b>Content-Based</b>
+            <ul>
+               <li>Similar items based on properties;</li>
+               <li>(Product)-[:IN_CATEGORY]->(Category)<-[:IN_CATEGORY]-(Similar);</li>
+            </ul>
+         </li>
+         <li><b>Hybrid</b>
+            <ul>
+               <li>Combine multiple signals;</li>
+               <li>User behavior + item similarity + social connections;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Knowledge Graph APIs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Structure</b>
+            <ul>
+               <li>Entities (people, places, concepts);</li>
+               <li>Relationships (born_in, works_for, related_to);</li>
+               <li>Properties (dates, descriptions);</li>
+            </ul>
+         </li>
+         <li><b>Queries</b>
+            <ul>
+               <li>Find all related entities;</li>
+               <li>Shortest path between concepts;</li>
+               <li>Semantic search;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Event Graphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Model</b>
+            <ul>
+               <li>Events as nodes with timestamps;</li>
+               <li>(Event)-[:CAUSED_BY]->(PreviousEvent);</li>
+               <li>(User)-[:PERFORMED]->(Event);</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Audit logs;</li>
+               <li>Event sourcing;</li>
+               <li>Workflow tracking;</li>
+               <li>Root cause analysis;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. GraphQL Federation</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Microservices Pattern</b>
+            <ul>
+               <li>Split graph across multiple services;</li>
+               <li>Each service owns part of schema;</li>
+               <li>Gateway composes into single API;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Team autonomy;</li>
+               <li>Independent deployment;</li>
+               <li>Scale services independently;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

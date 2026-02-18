@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>@id, @unique, and @timestamp</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. @id Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Marks field as unique identifier;</li>
+               <li>Auto-generates value if not provided;</li>
+               <li>Creates uniqueness constraint in Neo4j;</li>
+            </ul>
+         </li>
+         <li><b>Usage</b>
+            <ul>
+               <li>type User { id: ID! @id };</li>
+               <li>Generates UUID by default;</li>
+            </ul>
+         </li>
+         <li><b>Custom ID Generation</b>
+            <ul>
+               <li>@id(autogenerate: false) - provide your own IDs;</li>
+               <li>Useful for external IDs or custom schemes;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. @unique Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Ensures field value is unique across all nodes;</li>
+               <li>Creates uniqueness constraint in Neo4j;</li>
+               <li>Prevents duplicate values;</li>
+            </ul>
+         </li>
+         <li><b>Usage</b>
+            <ul>
+               <li>type User { email: String! @unique };</li>
+               <li>No two users can have same email;</li>
+            </ul>
+         </li>
+         <li><b>Common Use Cases</b>
+            <ul>
+               <li>Email addresses;</li>
+               <li>Usernames;</li>
+               <li>External IDs;</li>
+               <li>SKUs, serial numbers;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. @timestamp Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Auto-populates field with current timestamp;</li>
+               <li>Tracks creation and update times;</li>
+            </ul>
+         </li>
+         <li><b>Usage</b>
+            <ul>
+               <li>type User { createdAt: DateTime! @timestamp(operations: [CREATE]) };</li>
+               <li>type User { updatedAt: DateTime! @timestamp(operations: [UPDATE]) };</li>
+            </ul>
+         </li>
+         <li><b>Operations</b>
+            <ul>
+               <li>CREATE - set on node creation;</li>
+               <li>UPDATE - update on node modification;</li>
+               <li>[CREATE, UPDATE] - both;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Combining Directives</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Example Schema</b>
+            <ul>
+               <li>type User {</li>
+               <li>  id: ID! @id</li>
+               <li>  email: String! @unique</li>
+               <li>  createdAt: DateTime! @timestamp(operations: [CREATE])</li>
+               <li>  updatedAt: DateTime! @timestamp(operations: [UPDATE])</li>
+               <li>}</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Declarative constraints;</li>
+               <li>No manual implementation needed;</li>
+               <li>Database-level enforcement;</li>
+               <li>Consistent behavior across API;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

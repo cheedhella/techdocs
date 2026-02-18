@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Auto-Generated CRUD APIs</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Gets Auto-Generated?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Queries</b>
+            <ul>
+               <li>users - get all users;</li>
+               <li>users(where: {...}) - filter users;</li>
+               <li>users(options: {limit, offset, sort}) - pagination and sorting;</li>
+            </ul>
+         </li>
+         <li><b>Mutations</b>
+            <ul>
+               <li>createUsers - create one or more users;</li>
+               <li>updateUsers - update existing users;</li>
+               <li>deleteUsers - delete users;</li>
+            </ul>
+         </li>
+         <li><b>Relationship Operations</b>
+            <ul>
+               <li>Connect and disconnect nodes;</li>
+               <li>Create nested data in one mutation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Query Examples</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Get All</b>
+            <ul>
+               <li>query { users { id, name, email } };</li>
+            </ul>
+         </li>
+         <li><b>Filter</b>
+            <ul>
+               <li>query { users(where: {name: "Alice"}) { id, name } };</li>
+               <li>Supports: equals, contains, starts/ends with, gt/lt, etc;</li>
+            </ul>
+         </li>
+         <li><b>Pagination</b>
+            <ul>
+               <li>query { users(options: {limit: 10, offset: 20}) { name } };</li>
+            </ul>
+         </li>
+         <li><b>Sorting</b>
+            <ul>
+               <li>query { users(options: {sort: [{name: ASC}]}) { name } };</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Mutation Examples</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Create</b>
+            <ul>
+               <li>mutation { createUsers(input: [{name: "Alice", email: "alice@example.com"}]) { users { id } } };</li>
+            </ul>
+         </li>
+         <li><b>Update</b>
+            <ul>
+               <li>mutation { updateUsers(where: {id: "123"}, update: {name: "Alice Smith"}) { users { name } } };</li>
+            </ul>
+         </li>
+         <li><b>Delete</b>
+            <ul>
+               <li>mutation { deleteUsers(where: {id: "123"}) { nodesDeleted } };</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Benefits</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Zero Code</b> - No resolver implementation needed;</li>
+         <li><b>Consistent API</b> - Same patterns across all types;</li>
+         <li><b>Type Safety</b> - Generated input types ensure valid operations;</li>
+         <li><b>Performance</b> - Optimized Cypher queries;</li>
+         <li><b>Extensible</b> - Can add custom resolvers alongside auto-generated ones;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

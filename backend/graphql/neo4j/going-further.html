@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Going Further</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. GraphQL Federation and Subgraphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Apollo Federation</b> - Compose multiple GraphQL services;</li>
+         <li><b>Subgraphs</b> - Each service contributes part of schema;</li>
+         <li><b>Gateway</b> - Unified entry point for clients;</li>
+         <li><b>Use Case</b> - Microservices architecture;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Neo4j Graph Data Science</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Graph Algorithms</b> - PageRank, community detection, shortest path;</li>
+         <li><b>Machine Learning</b> - Node embeddings, link prediction;</li>
+         <li><b>Integration</b> - Call from Cypher, expose via GraphQL;</li>
+         <li><b>Use Cases</b> - Recommendations, fraud detection, network analysis;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Hybrid Architectures</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Graph + Relational</b> - Use both databases for different data;</li>
+         <li><b>Graph + Document</b> - Neo4j for relationships, MongoDB for documents;</li>
+         <li><b>Federation</b> - Combine multiple data sources in GraphQL;</li>
+         <li><b>When to Use</b> - Leverage strengths of each database;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Migrating from REST to GraphQL + Neo4j</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Incremental Approach</b> - Add GraphQL alongside REST;</li>
+         <li><b>Data Migration</b> - ETL from relational to graph;</li>
+         <li><b>Client Migration</b> - Gradually move clients to GraphQL;</li>
+         <li><b>Deprecation</b> - Phase out REST endpoints;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>5. Common Anti-Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Treating Graph Like Relational</b> - Don't over-normalize;</li>
+         <li><b>Ignoring Query Limits</b> - Always implement depth/complexity limits;</li>
+         <li><b>No Caching Strategy</b> - Plan for caching from start;</li>
+         <li><b>Exposing Internal IDs</b> - Use UUIDs, not database IDs;</li>
+         <li><b>No Monitoring</b> - Monitor queries, performance from day one;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

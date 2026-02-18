@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Introduction to Cypher</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Cypher?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Neo4j's query language for graph databases;</li>
+               <li>Declarative, pattern-matching language;</li>
+               <li>Inspired by SQL but designed for graphs;</li>
+            </ul>
+         </li>
+         <li><b>Key Features</b>
+            <ul>
+               <li>ASCII-art syntax - visually represents graph patterns;</li>
+               <li>Readable and intuitive;</li>
+               <li>Expressive for complex graph traversals;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Basic Syntax</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Nodes</b>
+            <ul>
+               <li>(n) - any node;</li>
+               <li>(p:Person) - node with Person label;</li>
+               <li>(u:User {name: "Alice"}) - node with label and property;</li>
+            </ul>
+         </li>
+         <li><b>Relationships</b>
+            <ul>
+               <li>--> - outgoing relationship;</li>
+               <li><-- - incoming relationship;</li>
+               <li>-[r:KNOWS]-> - typed relationship with variable;</li>
+               <li>-[:KNOWS {since: 2020}]-> - relationship with properties;</li>
+            </ul>
+         </li>
+         <li><b>Patterns</b>
+            <ul>
+               <li>(a)-[:KNOWS]->(b) - a knows b;</li>
+               <li>(a)-[:KNOWS*1..3]->(b) - a knows b within 1-3 hops;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Common Clauses</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>MATCH</b> - Find patterns in the graph;</li>
+         <li><b>WHERE</b> - Filter results;</li>
+         <li><b>RETURN</b> - Specify what to return;</li>
+         <li><b>CREATE</b> - Create nodes and relationships;</li>
+         <li><b>MERGE</b> - Create if doesn't exist, match if exists;</li>
+         <li><b>DELETE</b> - Remove nodes and relationships;</li>
+         <li><b>SET</b> - Update properties;</li>
+         <li><b>ORDER BY</b> - Sort results;</li>
+         <li><b>LIMIT</b> - Limit number of results;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Simple Examples</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Find All Users</b>
+            <ul>
+               <li>MATCH (u:User) RETURN u.name;</li>
+            </ul>
+         </li>
+         <li><b>Find Friends</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"})-[:FRIENDS_WITH]->(friend) RETURN friend.name;</li>
+            </ul>
+         </li>
+         <li><b>Create Node</b>
+            <ul>
+               <li>CREATE (u:User {name: "Bob", age: 25}) RETURN u;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

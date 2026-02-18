@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Setting Up a GraphQL Server (Node.js)</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Prerequisites</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Required Tools</b>
+            <ul>
+               <li>Node.js (v14 or later);</li>
+               <li>npm or yarn package manager;</li>
+               <li>Neo4j database (local or cloud);</li>
+            </ul>
+         </li>
+         <li><b>Key Packages</b>
+            <ul>
+               <li>@neo4j/graphql - Neo4j GraphQL library;</li>
+               <li>neo4j-driver - Official Neo4j driver;</li>
+               <li>apollo-server or apollo-server-express - GraphQL server;</li>
+               <li>graphql - GraphQL.js implementation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Basic Setup Steps</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>1. Initialize Project</b>
+            <ul>
+               <li>npm init -y;</li>
+               <li>npm install @neo4j/graphql neo4j-driver apollo-server graphql;</li>
+            </ul>
+         </li>
+         <li><b>2. Define Schema</b>
+            <ul>
+               <li>Create type definitions with GraphQL SDL;</li>
+               <li>Add @relationship directives;</li>
+            </ul>
+         </li>
+         <li><b>3. Connect to Neo4j</b>
+            <ul>
+               <li>Create driver instance with connection URI;</li>
+               <li>Provide credentials;</li>
+            </ul>
+         </li>
+         <li><b>4. Create Neo4jGraphQL Instance</b>
+            <ul>
+               <li>Pass type definitions and driver;</li>
+               <li>Generate executable schema;</li>
+            </ul>
+         </li>
+         <li><b>5. Start Apollo Server</b>
+            <ul>
+               <li>Create ApolloServer with schema;</li>
+               <li>Listen on port;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Minimal Example</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Structure</b>
+            <ul>
+               <li>Import dependencies;</li>
+               <li>Define type definitions;</li>
+               <li>Create Neo4j driver;</li>
+               <li>Create Neo4jGraphQL instance;</li>
+               <li>Generate schema;</li>
+               <li>Start server;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Development Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Environment Variables</b>
+            <ul>
+               <li>Store connection URI, credentials in .env;</li>
+               <li>Use dotenv package;</li>
+               <li>Never commit credentials;</li>
+            </ul>
+         </li>
+         <li><b>Error Handling</b>
+            <ul>
+               <li>Wrap driver creation in try-catch;</li>
+               <li>Handle connection errors gracefully;</li>
+               <li>Log errors for debugging;</li>
+            </ul>
+         </li>
+         <li><b>Development Tools</b>
+            <ul>
+               <li>nodemon for auto-restart;</li>
+               <li>GraphQL Playground for testing;</li>
+               <li>TypeScript for type safety;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

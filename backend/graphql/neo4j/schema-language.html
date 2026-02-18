@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>GraphQL Schema Language (SDL)</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is SDL?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Schema Definition Language</b>
+            <ul>
+               <li>Human-readable syntax for defining GraphQL schemas;</li>
+               <li>Describes types, fields, and relationships in your API;</li>
+               <li>Forms the contract between client and server;</li>
+            </ul>
+         </li>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Define what data can be queried;</li>
+               <li>Specify types and their relationships;</li>
+               <li>Enable validation and introspection;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Basic SDL Syntax</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Type Definition</b>
+            <ul>
+               <li>type User { id: ID!, name: String!, email: String! }</li>
+               <li>Defines a User type with three fields;</li>
+            </ul>
+         </li>
+         <li><b>Scalar Types</b>
+            <ul>
+               <li>Int, Float, String, Boolean, ID;</li>
+               <li>Custom scalars: DateTime, JSON, etc;</li>
+            </ul>
+         </li>
+         <li><b>Exclamation Mark (!)</b>
+            <ul>
+               <li>Indicates non-nullable field;</li>
+               <li>Field must always return a value;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Schema Structure</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Root Types</b>
+            <ul>
+               <li>Query - entry point for read operations;</li>
+               <li>Mutation - entry point for write operations;</li>
+               <li>Subscription - entry point for real-time updates;</li>
+            </ul>
+         </li>
+         <li><b>Example Schema</b>
+            <ul>
+               <li>type Query { user(id: ID!): User }</li>
+               <li>type Mutation { createUser(name: String!): User }</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Custom Resolvers vs Auto-Generated Resolvers</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Auto-Generated Resolvers</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What They Do</b>
+            <ul>
+               <li>Neo4j GraphQL Library creates resolvers automatically;</li>
+               <li>Handle CRUD operations, filtering, pagination;</li>
+               <li>Traverse relationships;</li>
+            </ul>
+         </li>
+         <li><b>Advantages</b>
+            <ul>
+               <li>Zero code required;</li>
+               <li>Optimized Cypher generation;</li>
+               <li>Consistent behavior;</li>
+               <li>Faster development;</li>
+            </ul>
+         </li>
+         <li><b>Limitations</b>
+            <ul>
+               <li>Limited to what library supports;</li>
+               <li>Can't add custom business logic;</li>
+               <li>May not fit all use cases;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Custom Resolvers</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>When to Use</b>
+            <ul>
+               <li>Complex business logic;</li>
+               <li>Integration with external services;</li>
+               <li>Custom validation;</li>
+               <li>Performance optimizations;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>Define resolver functions;</li>
+               <li>Pass to Neo4jGraphQL constructor;</li>
+               <li>Access driver via context;</li>
+            </ul>
+         </li>
+         <li><b>Example Use Cases</b>
+            <ul>
+               <li>Send email after user creation;</li>
+               <li>Calculate complex derived fields;</li>
+               <li>Call external APIs;</li>
+               <li>Custom authentication logic;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Mixing Both Approaches</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Best Practice</b>
+            <ul>
+               <li>Use auto-generated for standard operations;</li>
+               <li>Add custom resolvers where needed;</li>
+               <li>Override specific fields/operations;</li>
+            </ul>
+         </li>
+         <li><b>Example Pattern</b>
+            <ul>
+               <li>Auto-generated: users query, createUsers mutation;</li>
+               <li>Custom: login mutation, sendPasswordReset mutation;</li>
+               <li>Hybrid: users query with custom computed field;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Decision Guide</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Use Auto-Generated When:</b>
+            <ul>
+               <li>Simple CRUD operations;</li>
+               <li>Standard filtering and pagination;</li>
+               <li>Direct graph traversals;</li>
+               <li>No external dependencies;</li>
+            </ul>
+         </li>
+         <li><b>Use Custom When:</b>
+            <ul>
+               <li>Need side effects (emails, logs, webhooks);</li>
+               <li>Complex validation rules;</li>
+               <li>Integration with other systems;</li>
+               <li>Performance-critical paths;</li>
+               <li>Business logic that doesn't fit in @cypher;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

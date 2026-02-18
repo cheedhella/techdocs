@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Rate Limiting and Query Whitelisting</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Rate Limiting</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Limit number of requests per time period;</li>
+               <li>Prevents abuse and DoS attacks;</li>
+               <li>Ensures fair resource usage;</li>
+            </ul>
+         </li>
+         <li><b>Strategies</b>
+            <ul>
+               <li>Per IP address - limit anonymous users;</li>
+               <li>Per user - limit authenticated users;</li>
+               <li>Per API key - for third-party integrations;</li>
+               <li>Sliding window or token bucket algorithms;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>Use middleware (express-rate-limit);</li>
+               <li>Redis for distributed rate limiting;</li>
+               <li>Return 429 Too Many Requests;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Query Whitelisting</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Only allow pre-approved queries;</li>
+               <li>Reject any query not on whitelist;</li>
+               <li>Maximum security;</li>
+            </ul>
+         </li>
+         <li><b>How It Works</b>
+            <ul>
+               <li>Client sends query ID instead of full query;</li>
+               <li>Server looks up query from approved list;</li>
+               <li>Executes only if found;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Prevents malicious queries;</li>
+               <li>Smaller request size;</li>
+               <li>Can optimize approved queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Persisted Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Automatic Persisted Queries (APQ)</b>
+            <ul>
+               <li>Client sends query hash;</li>
+               <li>Server caches query by hash;</li>
+               <li>Subsequent requests use hash only;</li>
+            </ul>
+         </li>
+         <li><b>Build-Time Persisted Queries</b>
+            <ul>
+               <li>Extract queries during build;</li>
+               <li>Generate query IDs;</li>
+               <li>Server only accepts these IDs;</li>
+               <li>True whitelisting;</li>
+            </ul>
+         </li>
+         <li><b>Tools</b>
+            <ul>
+               <li>Apollo Client - built-in APQ support;</li>
+               <li>graphql-persisted-queries;</li>
+               <li>Relay - built-in persisted queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Combining Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Layered Security</b>
+            <ul>
+               <li>Rate limiting + query complexity limits;</li>
+               <li>Whitelisting for production;</li>
+               <li>Allow arbitrary queries in development;</li>
+            </ul>
+         </li>
+         <li><b>Different Limits for Different Users</b>
+            <ul>
+               <li>Higher limits for authenticated users;</li>
+               <li>Premium users get even higher limits;</li>
+               <li>Admins bypass limits;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

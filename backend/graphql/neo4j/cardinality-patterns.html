@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>One-to-One, One-to-Many, and Many-to-Many</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. One-to-One Relationships</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Pattern</b>
+            <ul>
+               <li>Each entity relates to exactly one other entity;</li>
+               <li>GraphQL: type User { profile: Profile };</li>
+               <li>GraphQL: type Profile { user: User };</li>
+            </ul>
+         </li>
+         <li><b>Neo4j Implementation</b>
+            <ul>
+               <li>(u:User)-[:HAS_PROFILE]->(p:Profile);</li>
+               <li>Use uniqueness constraint to enforce one-to-one;</li>
+            </ul>
+         </li>
+         <li><b>Examples</b>
+            <ul>
+               <li>User → Profile;</li>
+               <li>Employee → Desk;</li>
+               <li>Country → Capital;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. One-to-Many Relationships</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Pattern</b>
+            <ul>
+               <li>One entity relates to multiple entities;</li>
+               <li>GraphQL: type User { posts: [Post] };</li>
+               <li>GraphQL: type Post { author: User };</li>
+            </ul>
+         </li>
+         <li><b>Neo4j Implementation</b>
+            <ul>
+               <li>(u:User)-[:POSTED]->(p1:Post);</li>
+               <li>(u:User)-[:POSTED]->(p2:Post);</li>
+               <li>One user, multiple POSTED relationships;</li>
+            </ul>
+         </li>
+         <li><b>Examples</b>
+            <ul>
+               <li>User → Posts;</li>
+               <li>Company → Employees;</li>
+               <li>Category → Products;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Many-to-Many Relationships</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Pattern</b>
+            <ul>
+               <li>Multiple entities relate to multiple entities;</li>
+               <li>GraphQL: type User { friends: [User] };</li>
+               <li>GraphQL: type Movie { actors: [Actor] };</li>
+               <li>GraphQL: type Actor { movies: [Movie] };</li>
+            </ul>
+         </li>
+         <li><b>Neo4j Implementation</b>
+            <ul>
+               <li>(u1:User)-[:FRIENDS_WITH]->(u2:User);</li>
+               <li>(a:Actor)-[:ACTED_IN]->(m:Movie);</li>
+               <li>Multiple relationships from both sides;</li>
+            </ul>
+         </li>
+         <li><b>With Metadata</b>
+            <ul>
+               <li>(a:Actor)-[:ACTED_IN {role: "Hero"}]->(m:Movie);</li>
+               <li>Store additional data on relationship;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Choosing the Right Pattern</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Consider Cardinality</b>
+            <ul>
+               <li>How many related entities typically exist?;</li>
+               <li>Will this change over time?;</li>
+            </ul>
+         </li>
+         <li><b>Query Patterns</b>
+            <ul>
+               <li>Do you need to traverse from both directions?;</li>
+               <li>Need to filter or sort by relationship properties?;</li>
+            </ul>
+         </li>
+         <li><b>Performance</b>
+            <ul>
+               <li>One-to-many: Use pagination for large lists;</li>
+               <li>Many-to-many: Consider intermediate nodes for complex cases;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

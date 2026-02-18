@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Nullability and Lists</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Nullability</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Nullable by Default</b>
+            <ul>
+               <li>Fields can return null unless marked with !;</li>
+               <li>name: String - can return string or null;</li>
+               <li>name: String! - must return string, never null;</li>
+            </ul>
+         </li>
+         <li><b>Why Nullable?</b>
+            <ul>
+               <li>Flexibility - partial failures don't break entire query;</li>
+               <li>Optional fields - not all data always available;</li>
+               <li>Backwards compatibility - can add fields without breaking clients;</li>
+            </ul>
+         </li>
+         <li><b>Best Practices</b>
+            <ul>
+               <li>Use ! for required fields (id, createdAt);</li>
+               <li>Keep nullable for optional fields (middleName, bio);</li>
+               <li>Consider client expectations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Lists</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>List Syntax</b>
+            <ul>
+               <li>[String] - nullable list of nullable strings;</li>
+               <li>[String]! - non-null list of nullable strings;</li>
+               <li>[String!] - nullable list of non-null strings;</li>
+               <li>[String!]! - non-null list of non-null strings;</li>
+            </ul>
+         </li>
+         <li><b>Examples</b>
+            <ul>
+               <li>tags: [String] - can be null, or array with null items;</li>
+               <li>tags: [String]! - must be array (can be empty), items can be null;</li>
+               <li>tags: [String!]! - must be array, all items must be strings;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Combining Nullability and Lists</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Common Patterns</b>
+            <ul>
+               <li>posts: [Post!]! - always return array, never null posts;</li>
+               <li>friends: [User] - can be null if not loaded;</li>
+               <li>emails: [String!] - nullable array, but if present, no null emails;</li>
+            </ul>
+         </li>
+         <li><b>Error Handling</b>
+            <ul>
+               <li>If non-null field fails, parent becomes null;</li>
+               <li>Can cascade up to nearest nullable field;</li>
+               <li>Design schema to contain failures;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

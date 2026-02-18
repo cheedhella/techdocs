@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>When GraphQL + Neo4j Makes Sense</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Perfect Match: GraphQL + Neo4j</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Natural Alignment</b>
+            <ul>
+               <li>Both are graph-based - GraphQL queries mirror graph database structure;</li>
+               <li>GraphQL's nested queries map directly to graph traversals;</li>
+               <li>Relationships in Neo4j translate naturally to GraphQL fields;</li>
+            </ul>
+         </li>
+         <li><b>Complementary Strengths</b>
+            <ul>
+               <li>GraphQL solves API flexibility; Neo4j solves data relationship complexity;</li>
+               <li>Both eliminate over-fetching and under-fetching;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. When This Combination Shines</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Highly Connected Data</b> - When entities have many relationships;</li>
+         <li><b>Variable Query Patterns</b> - Different clients need different data shapes;</li>
+         <li><b>Deep Traversals</b> - Need to follow relationships multiple levels deep;</li>
+         <li><b>Rapid Iteration</b> - Schema evolves frequently;</li>
+         <li><b>Complex Queries</b> - Need to filter, sort, and paginate across relationships;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. When to Consider Alternatives</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Simple CRUD Apps</b> - Relational DB + REST might be simpler;</li>
+         <li><b>Flat Data Structures</b> - Few relationships between entities;</li>
+         <li><b>Heavy Caching Needs</b> - HTTP caching harder with GraphQL;</li>
+         <li><b>File Operations</b> - REST better for uploads/downloads;</li>
+         <li><b>Team Expertise</b> - Learning curve if team unfamiliar with both;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

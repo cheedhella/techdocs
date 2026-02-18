@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Overview of Neo4j GraphQL Library</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Neo4j GraphQL Library?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Official library for building GraphQL APIs with Neo4j;</li>
+               <li>Automatically generates resolvers from schema;</li>
+               <li>Handles CRUD operations, filtering, pagination, and more;</li>
+            </ul>
+         </li>
+         <li><b>Key Features</b>
+            <ul>
+               <li>Schema-first development;</li>
+               <li>Auto-generated queries and mutations;</li>
+               <li>Built-in relationship handling;</li>
+               <li>Custom Cypher integration;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Why Use It?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Reduces Boilerplate</b>
+            <ul>
+               <li>No need to write resolvers for basic operations;</li>
+               <li>Automatically handles graph traversals;</li>
+               <li>Saves development time;</li>
+            </ul>
+         </li>
+         <li><b>Best Practices Built-In</b>
+            <ul>
+               <li>Optimized Cypher query generation;</li>
+               <li>Proper relationship handling;</li>
+               <li>Security features (auth directives);</li>
+            </ul>
+         </li>
+         <li><b>Flexibility</b>
+            <ul>
+               <li>Can override auto-generated resolvers;</li>
+               <li>Mix with custom logic;</li>
+               <li>Use @cypher directive for complex queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Basic Setup</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Installation</b>
+            <ul>
+               <li>npm install @neo4j/graphql neo4j-driver;</li>
+            </ul>
+         </li>
+         <li><b>Simple Example</b>
+            <ul>
+               <li>Define schema with type definitions;</li>
+               <li>Create Neo4jGraphQL instance;</li>
+               <li>Generate executable schema;</li>
+               <li>Use with Apollo Server or similar;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Core Concepts</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Directives</b> - Special annotations in schema (@relationship, @cypher, @auth);</li>
+         <li><b>Auto-Generated Types</b> - Input types, filter types, connection types;</li>
+         <li><b>Cypher Generation</b> - Library translates GraphQL to Cypher;</li>
+         <li><b>Driver Integration</b> - Uses official Neo4j driver for database access;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Basic CRUD Operations in Cypher</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Create (C)</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Create Node</b>
+            <ul>
+               <li>CREATE (u:User {name: "Alice", email: "alice@example.com"}) RETURN u;</li>
+               <li>Creates a new User node with properties;</li>
+            </ul>
+         </li>
+         <li><b>Create Relationship</b>
+            <ul>
+               <li>MATCH (a:User {name: "Alice"}), (b:User {name: "Bob"});</li>
+               <li>CREATE (a)-[r:FRIENDS_WITH {since: 2020}]->(b) RETURN r;</li>
+            </ul>
+         </li>
+         <li><b>Create Multiple</b>
+            <ul>
+               <li>CREATE (a:User {name: "Alice"}), (b:User {name: "Bob"}), (a)-[:KNOWS]->(b);</li>
+               <li>Create nodes and relationship in one statement;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Read (R)</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Find All Nodes</b>
+            <ul>
+               <li>MATCH (u:User) RETURN u;</li>
+               <li>Returns all User nodes;</li>
+            </ul>
+         </li>
+         <li><b>Find by Property</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) RETURN u;</li>
+               <li>Or: MATCH (u:User) WHERE u.name = "Alice" RETURN u;</li>
+            </ul>
+         </li>
+         <li><b>Find with Relationships</b>
+            <ul>
+               <li>MATCH (u:User)-[:FRIENDS_WITH]->(friend) RETURN u.name, friend.name;</li>
+               <li>Find users and their friends;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Update (U)</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Update Property</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) SET u.age = 31 RETURN u;</li>
+               <li>Updates Alice's age;</li>
+            </ul>
+         </li>
+         <li><b>Add Property</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) SET u.city = "New York" RETURN u;</li>
+               <li>Adds new property to existing node;</li>
+            </ul>
+         </li>
+         <li><b>Add Label</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) SET u:VIP RETURN u;</li>
+               <li>Adds VIP label to Alice;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Delete (D)</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Delete Node</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) DELETE u;</li>
+               <li>Fails if node has relationships;</li>
+            </ul>
+         </li>
+         <li><b>Delete Node and Relationships</b>
+            <ul>
+               <li>MATCH (u:User {name: "Alice"}) DETACH DELETE u;</li>
+               <li>Deletes node and all its relationships;</li>
+            </ul>
+         </li>
+         <li><b>Delete Relationship</b>
+            <ul>
+               <li>MATCH (a:User)-[r:FRIENDS_WITH]->(b:User) WHERE a.name = "Alice" DELETE r;</li>
+               <li>Removes specific relationship;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

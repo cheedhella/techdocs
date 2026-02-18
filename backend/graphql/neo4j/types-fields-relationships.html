@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Types, Fields, and Relationships</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Object Types</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Most common type in GraphQL schema;</li>
+               <li>Represents an entity with fields;</li>
+               <li>Example: type Post { id: ID!, title: String!, author: User! }</li>
+            </ul>
+         </li>
+         <li><b>Characteristics</b>
+            <ul>
+               <li>Can have scalar fields (String, Int, etc);</li>
+               <li>Can reference other object types;</li>
+               <li>Can have arguments on fields;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Fields</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Field Types</b>
+            <ul>
+               <li>Scalar fields - primitive values (id, name, age);</li>
+               <li>Object fields - references to other types (author, posts);</li>
+               <li>List fields - arrays of values ([String], [User]);</li>
+            </ul>
+         </li>
+         <li><b>Field Arguments</b>
+            <ul>
+               <li>posts(limit: Int, offset: Int): [Post];</li>
+               <li>Allow filtering, pagination, sorting;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Relationships</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>One-to-One</b>
+            <ul>
+               <li>type User { profile: Profile };</li>
+               <li>Each user has exactly one profile;</li>
+            </ul>
+         </li>
+         <li><b>One-to-Many</b>
+            <ul>
+               <li>type User { posts: [Post] };</li>
+               <li>User can have multiple posts;</li>
+            </ul>
+         </li>
+         <li><b>Many-to-Many</b>
+            <ul>
+               <li>type User { friends: [User] };</li>
+               <li>Users can have multiple friends;</li>
+            </ul>
+         </li>
+         <li><b>Bidirectional</b>
+            <ul>
+               <li>type Post { author: User } and type User { posts: [Post] };</li>
+               <li>Navigate relationship from either side;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

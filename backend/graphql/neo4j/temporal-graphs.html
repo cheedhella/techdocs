@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Temporal Graphs</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Are Temporal Graphs?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Graphs that track changes over time;</li>
+               <li>Store historical states;</li>
+               <li>Query data as it was at specific time;</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Audit trails;</li>
+               <li>Historical analysis;</li>
+               <li>Compliance requirements;</li>
+               <li>Time-travel queries;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Modeling Time in Graphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Timestamps on Properties</b>
+            <ul>
+               <li>Add createdAt, updatedAt to nodes;</li>
+               <li>Simple but loses history;</li>
+            </ul>
+         </li>
+         <li><b>Valid Time on Relationships</b>
+            <ul>
+               <li>(a)-[:WORKED_FOR {from: date("2020-01-01"), to: date("2022-12-31")}]->(company);</li>
+               <li>Track when relationship was valid;</li>
+            </ul>
+         </li>
+         <li><b>Event Sourcing</b>
+            <ul>
+               <li>Store all changes as events;</li>
+               <li>(user)-[:CREATED]->(event:Event {type: "USER_CREATED", timestamp: ...});</li>
+               <li>Rebuild state from events;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Querying Temporal Data</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Point-in-Time Queries</b>
+            <ul>
+               <li>MATCH (a)-[r:WORKED_FOR]->(c) WHERE $date >= r.from AND $date <= r.to;</li>
+               <li>Find relationships valid at specific date;</li>
+            </ul>
+         </li>
+         <li><b>Time Range Queries</b>
+            <ul>
+               <li>Find all changes in date range;</li>
+               <li>Useful for reports, analytics;</li>
+            </ul>
+         </li>
+         <li><b>GraphQL Integration</b>
+            <ul>
+               <li>Add date arguments to queries;</li>
+               <li>users(asOf: "2022-01-01") { name, company };</li>
+               <li>Implement with @cypher directive;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Choose Granularity</b> - Day, hour, or second precision?;</li>
+         <li><b>Index Temporal Properties</b> - Speed up time-based queries;</li>
+         <li><b>Archive Old Data</b> - Move historical data to separate storage;</li>
+         <li><b>Consider Performance</b> - Temporal queries can be expensive;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

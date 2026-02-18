@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Authentication and Authorization</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Authentication vs Authorization</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Authentication</b>
+            <ul>
+               <li>Verifying who the user is;</li>
+               <li>Login, JWT tokens, sessions;</li>
+               <li>"Are you who you say you are?";</li>
+            </ul>
+         </li>
+         <li><b>Authorization</b>
+            <ul>
+               <li>Determining what user can access;</li>
+               <li>Permissions, roles, access control;</li>
+               <li>"Are you allowed to do this?";</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Authentication Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>JWT (JSON Web Tokens)</b>
+            <ul>
+               <li>Most common for GraphQL APIs;</li>
+               <li>Stateless, self-contained;</li>
+               <li>Passed in Authorization header;</li>
+            </ul>
+         </li>
+         <li><b>Implementation</b>
+            <ul>
+               <li>User logs in, receives JWT;</li>
+               <li>Client includes JWT in subsequent requests;</li>
+               <li>Server verifies JWT signature;</li>
+               <li>Extract user info from token;</li>
+            </ul>
+         </li>
+         <li><b>Context Setup</b>
+            <ul>
+               <li>Parse JWT in Apollo Server context function;</li>
+               <li>Add user info to context;</li>
+               <li>Available in all resolvers;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Authorization with @auth Directive</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Neo4j GraphQL @auth</b>
+            <ul>
+               <li>Declarative authorization in schema;</li>
+               <li>Rules defined at type or field level;</li>
+               <li>Automatically enforced;</li>
+            </ul>
+         </li>
+         <li><b>Basic Example</b>
+            <ul>
+               <li>type User @auth(rules: [{operations: [READ], allow: {id: "$jwt.sub"}}]) {</li>
+               <li>  id: ID!</li>
+               <li>  email: String!</li>
+               <li>};</li>
+               <li>Users can only read their own data;</li>
+            </ul>
+         </li>
+         <li><b>Operations</b>
+            <ul>
+               <li>READ, CREATE, UPDATE, DELETE;</li>
+               <li>Apply rules to specific operations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Common Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Public vs Private</b>
+            <ul>
+               <li>Public: No @auth, anyone can access;</li>
+               <li>Private: @auth(rules: [{isAuthenticated: true}]);</li>
+            </ul>
+         </li>
+         <li><b>Owner-Based</b>
+            <ul>
+               <li>@auth(rules: [{allow: {owner: "$jwt.sub"}}]);</li>
+               <li>User can only access their own resources;</li>
+            </ul>
+         </li>
+         <li><b>Role-Based</b>
+            <ul>
+               <li>@auth(rules: [{roles: ["admin"]}]);</li>
+               <li>Only users with admin role can access;</li>
+            </ul>
+         </li>
+         <li><b>Field-Level</b>
+            <ul>
+               <li>type User { email: String! @auth(rules: [{allow: {id: "$jwt.sub"}}]) };</li>
+               <li>Protect sensitive fields;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

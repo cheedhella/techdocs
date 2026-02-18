@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Indexing for GraphQL Workloads</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Index for GraphQL?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>GraphQL Query Patterns</b>
+            <ul>
+               <li>Often start with specific node lookup (user(id: "123"));</li>
+               <li>Filter by properties (users(where: {email: "..."}));</li>
+               <li>Need fast starting points for traversals;</li>
+            </ul>
+         </li>
+         <li><b>Without Indexes</b>
+            <ul>
+               <li>Neo4j scans all nodes with label;</li>
+               <li>Slow for large datasets;</li>
+               <li>Poor user experience;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Essential Indexes</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>ID Fields</b>
+            <ul>
+               <li>CREATE CONSTRAINT FOR (u:User) REQUIRE u.id IS UNIQUE;</li>
+               <li>Most common lookup pattern;</li>
+               <li>Constraint automatically creates index;</li>
+            </ul>
+         </li>
+         <li><b>Unique Fields</b>
+            <ul>
+               <li>Email, username, external IDs;</li>
+               <li>Used for authentication and lookups;</li>
+               <li>CREATE CONSTRAINT FOR (u:User) REQUIRE u.email IS UNIQUE;</li>
+            </ul>
+         </li>
+         <li><b>Frequently Filtered Fields</b>
+            <ul>
+               <li>Status, type, category fields;</li>
+               <li>CREATE INDEX FOR (p:Post) ON (p.status);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Index Strategy</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Analyze Query Patterns</b>
+            <ul>
+               <li>Look at WHERE clauses in GraphQL queries;</li>
+               <li>Identify commonly filtered properties;</li>
+               <li>Index those properties;</li>
+            </ul>
+         </li>
+         <li><b>Composite Indexes</b>
+            <ul>
+               <li>For queries filtering on multiple properties;</li>
+               <li>CREATE INDEX FOR (u:User) ON (u.lastName, u.firstName);</li>
+               <li>Order matters - most selective first;</li>
+            </ul>
+         </li>
+         <li><b>Full-Text Search</b>
+            <ul>
+               <li>For text search functionality;</li>
+               <li>CREATE FULLTEXT INDEX searchPosts FOR (p:Post) ON EACH [p.title, p.content];</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Index Maintenance</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Monitor Performance</b>
+            <ul>
+               <li>Use PROFILE to check if indexes are used;</li>
+               <li>Look for NodeIndexSeek in query plans;</li>
+            </ul>
+         </li>
+         <li><b>Don't Over-Index</b>
+            <ul>
+               <li>Indexes have overhead on writes;</li>
+               <li>Only index frequently queried properties;</li>
+               <li>Remove unused indexes;</li>
+            </ul>
+         </li>
+         <li><b>Update Statistics</b>
+            <ul>
+               <li>Neo4j maintains statistics automatically;</li>
+               <li>Can manually trigger: CALL db.stats.retrieve();</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Custom Cypher with @cypher</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is @cypher Directive?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Purpose</b>
+            <ul>
+               <li>Execute custom Cypher queries for field resolution;</li>
+               <li>Handle complex logic not covered by auto-generation;</li>
+               <li>Compute derived fields;</li>
+            </ul>
+         </li>
+         <li><b>When to Use</b>
+            <ul>
+               <li>Complex aggregations;</li>
+               <li>Multi-hop traversals;</li>
+               <li>Business logic in database;</li>
+               <li>Performance optimizations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Basic Usage</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Computed Field</b>
+            <ul>
+               <li>type User {</li>
+               <li>  name: String!</li>
+               <li>  postCount: Int @cypher(statement: "MATCH (this)-[:POSTED]->(p:Post) RETURN count(p)")</li>
+               <li>};</li>
+            </ul>
+         </li>
+         <li><b>The 'this' Variable</b>
+            <ul>
+               <li>Refers to current node being resolved;</li>
+               <li>Available in all @cypher statements;</li>
+               <li>Use to traverse from current context;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. With Arguments</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Parameterized Queries</b>
+            <ul>
+               <li>type User {</li>
+               <li>  friendsOfFriends(limit: Int = 10): [User]</li>
+               <li>    @cypher(statement: """</li>
+               <li>      MATCH (this)-[:FRIENDS_WITH]-()-[:FRIENDS_WITH]->(fof)</li>
+               <li>      WHERE fof <> this</li>
+               <li>      RETURN DISTINCT fof LIMIT $limit</li>
+               <li>    """)</li>
+               <li>};</li>
+            </ul>
+         </li>
+         <li><b>Accessing Arguments</b>
+            <ul>
+               <li>Use $argumentName in Cypher;</li>
+               <li>Arguments automatically bound;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Advanced Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Aggregations</b>
+            <ul>
+               <li>avgRating: Float @cypher(statement: "MATCH (this)<-[r:RATED]-() RETURN avg(r.score)");</li>
+            </ul>
+         </li>
+         <li><b>Recommendations</b>
+            <ul>
+               <li>recommended: [Product] @cypher(statement: """</li>
+               <li>  MATCH (this)-[:PURCHASED]->(p:Product)<-[:PURCHASED]-(other)</li>
+               <li>  MATCH (other)-[:PURCHASED]->(rec:Product)</li>
+               <li>  WHERE NOT (this)-[:PURCHASED]->(rec)</li>
+               <li>  RETURN rec, count(*) as score ORDER BY score DESC LIMIT 10</li>
+               <li>""");</li>
+            </ul>
+         </li>
+         <li><b>Performance Tips</b>
+            <ul>
+               <li>Use indexes for starting points;</li>
+               <li>Limit results in Cypher;</li>
+               <li>Profile queries to optimize;</li>
+               <li>Consider caching for expensive computations;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

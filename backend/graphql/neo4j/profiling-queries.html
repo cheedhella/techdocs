@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Profiling GraphQL Queries</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Why Profile?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Identify Bottlenecks</b>
+            <ul>
+               <li>Find slow queries;</li>
+               <li>Understand where time is spent;</li>
+               <li>Prioritize optimizations;</li>
+            </ul>
+         </li>
+         <li><b>Validate Optimizations</b>
+            <ul>
+               <li>Measure impact of changes;</li>
+               <li>Ensure indexes are used;</li>
+               <li>Confirm performance improvements;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Profiling Cypher Queries</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Enable Query Logging</b>
+            <ul>
+               <li>Log generated Cypher queries;</li>
+               <li>Neo4j GraphQL Library has debug option;</li>
+               <li>See what queries GraphQL generates;</li>
+            </ul>
+         </li>
+         <li><b>Use PROFILE</b>
+            <ul>
+               <li>Run logged queries with PROFILE in Neo4j Browser;</li>
+               <li>See execution statistics;</li>
+               <li>Identify expensive operations;</li>
+            </ul>
+         </li>
+         <li><b>Key Metrics</b>
+            <ul>
+               <li>DB Hits - lower is better;</li>
+               <li>Rows - fewer rows processed = faster;</li>
+               <li>Time - actual execution time;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. GraphQL-Level Profiling</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Apollo Server Plugins</b>
+            <ul>
+               <li>Add timing to resolver execution;</li>
+               <li>Track which resolvers are slow;</li>
+               <li>Log query execution time;</li>
+            </ul>
+         </li>
+         <li><b>Apollo Studio</b>
+            <ul>
+               <li>Cloud-based monitoring;</li>
+               <li>Trace individual operations;</li>
+               <li>Aggregate performance metrics;</li>
+               <li>Identify slow fields;</li>
+            </ul>
+         </li>
+         <li><b>Custom Instrumentation</b>
+            <ul>
+               <li>Add timing logs in resolvers;</li>
+               <li>Track database query time;</li>
+               <li>Monitor external API calls;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Performance Testing</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Load Testing</b>
+            <ul>
+               <li>Use tools like k6, Artillery;</li>
+               <li>Simulate realistic query patterns;</li>
+               <li>Test under concurrent load;</li>
+            </ul>
+         </li>
+         <li><b>Benchmarking</b>
+            <ul>
+               <li>Measure query execution time;</li>
+               <li>Compare before/after optimizations;</li>
+               <li>Track performance over time;</li>
+            </ul>
+         </li>
+         <li><b>Real User Monitoring</b>
+            <ul>
+               <li>Track actual user query performance;</li>
+               <li>Identify slow queries in production;</li>
+               <li>Use APM tools (New Relic, Datadog);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

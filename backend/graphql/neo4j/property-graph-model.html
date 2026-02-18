@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Property Graph Model</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is the Property Graph Model?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Data model used by Neo4j and other graph databases;</li>
+               <li>Consists of nodes, relationships, and properties;</li>
+               <li>Both nodes and relationships can have properties;</li>
+            </ul>
+         </li>
+         <li><b>Core Components</b>
+            <ul>
+               <li><b>Nodes</b> - Entities or objects (Person, Product, City);</li>
+               <li><b>Relationships</b> - Named, directed connections between nodes;</li>
+               <li><b>Properties</b> - Key-value pairs storing data;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Key Characteristics</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Relationships Are First-Class</b>
+            <ul>
+               <li>Not just foreign keys - they have identity and properties;</li>
+               <li>Can store metadata about connections (since, weight, type);</li>
+            </ul>
+         </li>
+         <li><b>Directed Relationships</b>
+            <ul>
+               <li>Every relationship has a direction (from source to target);</li>
+               <li>Can traverse in either direction;</li>
+            </ul>
+         </li>
+         <li><b>Labeled and Typed</b>
+            <ul>
+               <li>Nodes have labels (Person, Product);</li>
+               <li>Relationships have types (FRIENDS_WITH, PURCHASED);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Example</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Nodes</b>
+            <ul>
+               <li>(alice:Person {name: "Alice", age: 30});</li>
+               <li>(bob:Person {name: "Bob", age: 25});</li>
+            </ul>
+         </li>
+         <li><b>Relationship</b>
+            <ul>
+               <li>(alice)-[:FRIENDS_WITH {since: 2020}]->(bob);</li>
+               <li>Alice is friends with Bob since 2020;</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Intuitive - matches how we think about connected data;</li>
+               <li>Flexible - easy to add new properties and relationships;</li>
+               <li>Performant - fast traversals without JOINs;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

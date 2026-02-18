@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Nodes, Relationships, and Properties</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Nodes</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What Are Nodes?</b>
+            <ul>
+               <li>Represent entities in your domain (users, products, locations);</li>
+               <li>Similar to rows in relational databases;</li>
+               <li>Can have zero or more labels;</li>
+            </ul>
+         </li>
+         <li><b>Node Syntax</b>
+            <ul>
+               <li>(variable:Label {property: value});</li>
+               <li>Example: (u:User {name: "Alice", email: "alice@example.com"});</li>
+            </ul>
+         </li>
+         <li><b>Multiple Labels</b>
+            <ul>
+               <li>(p:Person:Employee {name: "Bob"});</li>
+               <li>Bob is both a Person and an Employee;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Relationships</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What Are Relationships?</b>
+            <ul>
+               <li>Named, directed connections between nodes;</li>
+               <li>Always have a type (written in UPPER_CASE);</li>
+               <li>Can have properties like nodes;</li>
+            </ul>
+         </li>
+         <li><b>Relationship Syntax</b>
+            <ul>
+               <li>-[:TYPE {property: value}]-></li>
+               <li>Example: (alice)-[:KNOWS {since: 2020}]->(bob);</li>
+            </ul>
+         </li>
+         <li><b>Characteristics</b>
+            <ul>
+               <li>Must have exactly one type;</li>
+               <li>Must connect exactly two nodes;</li>
+               <li>Direction matters but can be traversed both ways;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Properties</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What Are Properties?</b>
+            <ul>
+               <li>Key-value pairs attached to nodes or relationships;</li>
+               <li>Store actual data about entities and connections;</li>
+            </ul>
+         </li>
+         <li><b>Supported Types</b>
+            <ul>
+               <li>String, Integer, Float, Boolean;</li>
+               <li>Date, DateTime, Time;</li>
+               <li>Lists of any type;</li>
+               <li>Point (spatial data);</li>
+            </ul>
+         </li>
+         <li><b>Best Practices</b>
+            <ul>
+               <li>Use properties for attributes of entities;</li>
+               <li>Use relationships for connections between entities;</li>
+               <li>Don't store relationships as properties (use actual relationships);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

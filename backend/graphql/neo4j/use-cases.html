@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Use Cases: Social Graphs, Knowledge Graphs, Recommendations</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Social Graphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Network of users and their relationships (friends, followers, connections);</li>
+            </ul>
+         </li>
+         <li><b>Common Queries</b>
+            <ul>
+               <li>Find friends of friends;</li>
+               <li>Suggest people you may know;</li>
+               <li>Calculate degrees of separation;</li>
+               <li>Find mutual connections;</li>
+            </ul>
+         </li>
+         <li><b>Why GraphQL + Neo4j?</b>
+            <ul>
+               <li>Efficiently traverse social connections;</li>
+               <li>Flexible queries for different views (timeline, profile, suggestions);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Knowledge Graphs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Interconnected facts, entities, and concepts;</li>
+               <li>Examples: Wikipedia, Google Knowledge Graph;</li>
+            </ul>
+         </li>
+         <li><b>Common Queries</b>
+            <ul>
+               <li>Find all related concepts to a topic;</li>
+               <li>Discover paths between entities;</li>
+               <li>Answer complex questions by connecting facts;</li>
+            </ul>
+         </li>
+         <li><b>Why GraphQL + Neo4j?</b>
+            <ul>
+               <li>Model complex, evolving knowledge structures;</li>
+               <li>Query arbitrary depths of relationships;</li>
+               <li>Support semantic search and inference;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Recommendation Engines</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>What It Is</b>
+            <ul>
+               <li>Systems that suggest items based on behavior and relationships;</li>
+            </ul>
+         </li>
+         <li><b>Common Patterns</b>
+            <ul>
+               <li>Collaborative filtering - "users like you also liked...";</li>
+               <li>Content-based - "similar to what you've viewed";</li>
+               <li>Graph-based - leverage network effects;</li>
+            </ul>
+         </li>
+         <li><b>Why GraphQL + Neo4j?</b>
+            <ul>
+               <li>Model users, items, and interactions as graph;</li>
+               <li>Real-time personalized recommendations;</li>
+               <li>Combine multiple signals (behavior, social, content);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

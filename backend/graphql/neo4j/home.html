@@ -13,186 +13,125 @@
 
         <div class="toc-container">
             <ul>
-                <li>Basics
+                <li><strong>1. Foundations</strong>
                     <ul>
-                        <li><a href="./what.html">What is GraphQL?</a></li>
-                        <li><a href="./os-vs-es.html">REST vs GraphQL</a></li>
-                        <li><a href="./install.html">Install</a></li>
-                        <li><a href="./config.html">Config</a></li>
+                        <li><a href="./what-is-graphql.html">1.1 What Is GraphQL?</a></li>
+                        <li><a href="./why-graphql-vs-rest.html">1.2 Why Use GraphQL Instead of REST?</a></li>
+                        <li><a href="./graph-databases-101.html">1.3 Graph Databases 101</a></li>
+                        <li><a href="./what-is-neo4j.html">1.4 What Is Neo4j?</a></li>
+                        <li><a href="./when-graphql-neo4j-makes-sense.html">1.5 When GraphQL + Neo4j Makes Sense</a></li>
+                        <li><a href="./use-cases.html">1.6 Use Cases: Social Graphs, Knowledge Graphs, Recommendations</a></li>
+                    </ul>
+                </li>
+                <li><strong>2. Core GraphQL Concepts</strong>
+                    <ul>
+                        <li><a href="./schema-language.html">2.1 GraphQL Schema Language (SDL)</a></li>
+                        <li><a href="./types-fields-relationships.html">2.2 Types, Fields, and Relationships</a></li>
+                        <li><a href="./queries-mutations-subscriptions.html">2.3 Queries, Mutations, and Subscriptions</a></li>
+                        <li><a href="./arguments-input-types.html">2.4 Arguments and Input Types</a></li>
+                        <li><a href="./enums-interfaces-unions.html">2.5 Enums, Interfaces, and Unions</a></li>
+                        <li><a href="./nullability-lists.html">2.6 Nullability and Lists</a></li>
+                        <li><a href="./introspection.html">2.7 GraphQL Introspection</a></li>
+                    </ul>
+                </li>
+                <li><strong>3. Neo4j Fundamentals</strong>
+                    <ul>
+                        <li><a href="./property-graph-model.html">3.1 Property Graph Model</a></li>
+                        <li><a href="./nodes-relationships-properties.html">3.2 Nodes, Relationships, and Properties</a></li>
+                        <li><a href="./labels-relationship-types.html">3.3 Labels and Relationship Types</a></li>
+                        <li><a href="./intro-to-cypher.html">3.4 Introduction to Cypher</a></li>
+                        <li><a href="./cypher-crud.html">3.5 Basic CRUD Operations in Cypher</a></li>
+                        <li><a href="./indexes-constraints.html">3.6 Indexes and Constraints</a></li>
+                        <li><a href="./modeling-graph-data.html">3.7 Modeling Graph Data Effectively</a></li>
+                    </ul>
+                </li>
+                <li><strong>4. Bridging GraphQL and Neo4j</strong>
+                    <ul>
+                        <li><a href="./schema-design-for-graphs.html">4.1 GraphQL Schema Design for Graph Databases</a></li>
+                        <li><a href="./mapping-types-to-nodes.html">4.2 Mapping GraphQL Types to Neo4j Nodes</a></li>
+                        <li><a href="./modeling-relationships-graphql.html">4.3 Modeling Relationships in GraphQL</a></li>
+                        <li><a href="./cardinality-patterns.html">4.4 One-to-One, One-to-Many, and Many-to-Many</a></li>
+                        <li><a href="./graph-traversals.html">4.5 Graph Traversals with GraphQL</a></li>
+                        <li><a href="./avoiding-over-under-fetching.html">4.6 Avoiding Over- and Under-Fetching</a></li>
+                    </ul>
+                </li>
+                <li><strong>5. Neo4j GraphQL Library</strong>
+                    <ul>
+                        <li><a href="./neo4j-graphql-library-overview.html">5.1 Overview of Neo4j GraphQL Library</a></li>
+                        <li><a href="./auto-generated-crud.html">5.2 Auto-Generated CRUD APIs</a></li>
+                        <li><a href="./relationship-directive.html">5.3 @relationship Directive</a></li>
+                        <li><a href="./schema-directives.html">5.4 @id, @unique, and @timestamp</a></li>
+                        <li><a href="./filtering-sorting-pagination.html">5.5 Filtering, Sorting, and Pagination</a></li>
+                        <li><a href="./custom-cypher-directive.html">5.6 Custom Cypher with @cypher</a></li>
+                        <li><a href="./aggregations-count.html">5.7 Aggregations and Count Queries</a></li>
+                    </ul>
+                </li>
+                <li><strong>6. API Development</strong>
+                    <ul>
+                        <li><a href="./setup-graphql-server.html">6.1 Setting Up a GraphQL Server (Node.js)</a></li>
+                        <li><a href="./connecting-neo4j-driver.html">6.2 Connecting to Neo4j (Driver Basics)</a></li>
+                        <li><a href="./authentication-authorization.html">6.3 Authentication and Authorization</a></li>
+                        <li><a href="./role-based-access-control.html">6.4 Role-Based Access Control</a></li>
+                        <li><a href="./custom-vs-auto-resolvers.html">6.5 Custom Resolvers vs Auto-Generated Resolvers</a></li>
+                        <li><a href="./error-handling-validation.html">6.6 Error Handling and Validation</a></li>
+                    </ul>
+                </li>
+                <li><strong>7. Performance & Optimization</strong>
+                    <ul>
+                        <li><a href="./query-planning.html">7.1 Query Planning in Neo4j</a></li>
+                        <li><a href="./indexing-graphql-workloads.html">7.2 Indexing for GraphQL Workloads</a></li>
+                        <li><a href="./n-plus-one-problem.html">7.3 Avoiding the N+1 Problem</a></li>
+                        <li><a href="./query-complexity-depth.html">7.4 Query Complexity and Depth Limiting</a></li>
+                        <li><a href="./caching-strategies.html">7.5 Caching Strategies</a></li>
+                        <li><a href="./profiling-queries.html">7.6 Profiling GraphQL Queries</a></li>
+                    </ul>
+                </li>
+                <li><strong>8. Advanced Graph Modeling</strong>
+                    <ul>
+                        <li><a href="./deeply-connected-data.html">8.1 Modeling Deeply Connected Data</a></li>
+                        <li><a href="./graph-polymorphism.html">8.2 Graph Polymorphism with Interfaces</a></li>
+                        <li><a href="./temporal-graphs.html">8.3 Temporal Graphs</a></li>
+                        <li><a href="./versioned-data.html">8.4 Versioned Data Models</a></li>
+                        <li><a href="./multi-tenant-graphs.html">8.5 Multi-Tenant Graph Architectures</a></li>
+                    </ul>
+                </li>
+                <li><strong>9. Security</strong>
+                    <ul>
+                        <li><a href="./auth-strategies.html">9.1 Authentication Strategies (JWT, OAuth)</a></li>
+                        <li><a href="./field-level-authorization.html">9.2 Field-Level Authorization</a></li>
+                        <li><a href="./security-pitfalls.html">9.3 GraphQL Security Pitfalls</a></li>
+                        <li><a href="./cypher-injection.html">9.4 Cypher Injection Prevention</a></li>
+                        <li><a href="./rate-limiting-whitelisting.html">9.5 Rate Limiting and Query Whitelisting</a></li>
+                    </ul>
+                </li>
+                <li><strong>10. Tooling & Ecosystem</strong>
+                    <ul>
+                        <li><a href="./tooling-summary.html">10.1-10.5 GraphQL Playground, Apollo Studio, Neo4j Browser, Schema Evolution, Testing</a></li>
+                    </ul>
+                </li>
+                <li><strong>11. Deployment & Operations</strong>
+                    <ul>
+                        <li><a href="./deployment-summary.html">11.1-11.5 Docker, AuraDB, Environment Config, Monitoring, Scaling</a></li>
+                    </ul>
+                </li>
+                <li><strong>12. Real-World Patterns & Case Studies</strong>
+                    <ul>
+                        <li><a href="./real-world-patterns.html">12.1-12.5 Social Networks, Recommendations, Knowledge Graphs, Events, Federation</a></li>
+                        <li><a href="./crud-example.html">12.6 Practical Example: CRUD Operations with Neo4j GraphQL</a></li>
+                        <li><a href="./subscriptions-example.html">12.7 Practical Example: Live Updates with GraphQL Subscriptions</a></li>
+                    </ul>
+                </li>
+                <li><strong>13. Going Further</strong>
+                    <ul>
+                        <li><a href="./going-further.html">13.1-13.5 Federation, Graph Data Science, Hybrid Architectures, Migration, Anti-Patterns</a></li>
+                    </ul>
+                </li>
+                <li><strong>14. Resources & Next Steps</strong>
+                    <ul>
+                        <li><a href="./resources.html">14.1-14.5 Official Docs, Sample Projects, Community, Books, Keeping Up</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
-
-        <pre>
-Here’s a **clean, progressive table of contents** you can use as a learning roadmap for **GraphQL + Neo4j**, from fundamentals to production patterns. Think of it like a syllabus you could turn into a course or docs set.
-
----
-
-## Table of Contents: **GraphQL with Neo4j**
-
----
-
-### 1. Foundations
-
-1.1 What Is GraphQL?
-1.2 Why Use GraphQL Instead of REST?
-1.3 Graph Databases 101
-1.4 What Is Neo4j?
-1.5 When GraphQL + Neo4j Makes Sense
-1.6 Use Cases: Social Graphs, Knowledge Graphs, Recommendations
-
----
-
-### 2. Core GraphQL Concepts
-
-2.1 GraphQL Schema Language (SDL)
-2.2 Types, Fields, and Relationships
-2.3 Queries, Mutations, and Subscriptions
-2.4 Arguments and Input Types
-2.5 Enums, Interfaces, and Unions
-2.6 Nullability and Lists
-2.7 GraphQL Introspection
-
----
-
-### 3. Neo4j Fundamentals
-
-3.1 Property Graph Model
-3.2 Nodes, Relationships, and Properties
-3.3 Labels and Relationship Types
-3.4 Introduction to Cypher
-3.5 Basic CRUD Operations in Cypher
-3.6 Indexes and Constraints
-3.7 Modeling Graph Data Effectively
-
----
-
-### 4. Bridging GraphQL and Neo4j
-
-4.1 GraphQL Schema Design for Graph Databases
-4.2 Mapping GraphQL Types to Neo4j Nodes
-4.3 Modeling Relationships in GraphQL
-4.4 One-to-One, One-to-Many, and Many-to-Many
-4.5 Graph Traversals with GraphQL
-4.6 Avoiding Over- and Under-Fetching
-
----
-
-### 5. Neo4j GraphQL Library
-
-5.1 Overview of **Neo4j GraphQL Library**
-5.2 Auto-Generated CRUD APIs
-5.3 @relationship Directive
-5.4 @id, @unique, and @timestamp
-5.5 Filtering, Sorting, and Pagination
-5.6 Custom Cypher with @cypher
-5.7 Aggregations and Count Queries
-
----
-
-### 6. API Development
-
-6.1 Setting Up a GraphQL Server (Node.js)
-6.2 Connecting to Neo4j (Driver Basics)
-6.3 Authentication and Authorization
-6.4 Role-Based Access Control
-6.5 Custom Resolvers vs Auto-Generated Resolvers
-6.6 Error Handling and Validation
-
----
-
-### 7. Performance & Optimization
-
-7.1 Query Planning in Neo4j
-7.2 Indexing for GraphQL Workloads
-7.3 Avoiding the N+1 Problem
-7.4 Query Complexity and Depth Limiting
-7.5 Caching Strategies
-7.6 Profiling GraphQL Queries
-
----
-
-### 8. Advanced Graph Modeling
-
-8.1 Modeling Deeply Connected Data
-8.2 Graph Polymorphism with Interfaces
-8.3 Temporal Graphs
-8.4 Versioned Data Models
-8.5 Multi-Tenant Graph Architectures
-
----
-
-### 9. Security
-
-9.1 Authentication Strategies (JWT, OAuth)
-9.2 Field-Level Authorization
-9.3 GraphQL Security Pitfalls
-9.4 Cypher Injection Prevention
-9.5 Rate Limiting and Query Whitelisting
-
----
-
-### 10. Tooling & Ecosystem
-
-10.1 GraphQL Playground & Apollo Studio
-10.2 Neo4j Browser & Bloom
-10.3 Schema-First vs Code-First Development
-10.4 Migrations and Schema Evolution
-10.5 Testing GraphQL APIs with Neo4j
-
----
-
-### 11. Deployment & Operations
-
-11.1 Running Neo4j in Docker
-11.2 Cloud Options (AuraDB)
-11.3 Environment Configuration
-11.4 Monitoring and Logging
-11.5 Scaling GraphQL APIs
-
----
-
-### 12. Real-World Patterns & Case Studies
-
-12.1 Social Network APIs
-12.2 Recommendation Engines
-12.3 Knowledge Graph APIs
-12.4 Event Graphs
-12.5 Microservices + GraphQL Federation
-
----
-
-### 13. Going Further
-
-13.1 GraphQL Federation and Subgraphs
-13.2 Neo4j Graph Data Science Integration
-13.3 Hybrid Graph + Relational Architectures
-13.4 Migrating from REST to GraphQL + Neo4j
-13.5 Common Anti-Patterns and Gotchas
-
----
-
-### 14. Resources & Next Steps
-
-14.1 Official Docs and Tutorials
-14.2 Sample Projects and Repos
-14.3 Community and Learning Paths
-14.4 Books, Talks, and Blogs
-14.5 Keeping Up with the Ecosystem
-
----
-
-If you want, I can:
-
-* Turn this into a **12-week study plan**
-* Add **hands-on labs** for each section
-* Tailor it for **backend devs**, **frontend devs**, or **data engineers**
-
-Just say the word 🚀
-
-
-
-        </pre>
     </body>
 </html>

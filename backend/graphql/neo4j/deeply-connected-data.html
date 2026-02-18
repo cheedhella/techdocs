@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Modeling Deeply Connected Data</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Challenges of Deep Connections</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Performance Concerns</b>
+            <ul>
+               <li>Deep traversals can be expensive;</li>
+               <li>Exponential growth in relationships;</li>
+               <li>Need careful optimization;</li>
+            </ul>
+         </li>
+         <li><b>Query Complexity</b>
+            <ul>
+               <li>Hard to limit depth dynamically;</li>
+               <li>Circular references possible;</li>
+               <li>Need safeguards;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Modeling Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Hierarchical Data</b>
+            <ul>
+               <li>Organizations, categories, file systems;</li>
+               <li>(parent)-[:HAS_CHILD]->(child);</li>
+               <li>Use depth limits in queries;</li>
+            </ul>
+         </li>
+         <li><b>Social Networks</b>
+            <ul>
+               <li>Friends of friends of friends;</li>
+               <li>Use variable-length patterns: -[:KNOWS*1..3]-></li>
+               <li>Limit depth to prevent explosion;</li>
+            </ul>
+         </li>
+         <li><b>Dependency Graphs</b>
+            <ul>
+               <li>Package dependencies, task dependencies;</li>
+               <li>Detect cycles;</li>
+               <li>Topological sorting;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Optimization Techniques</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Materialized Paths</b>
+            <ul>
+               <li>Store full path as property;</li>
+               <li>path: "/root/category1/subcategory";</li>
+               <li>Fast ancestor/descendant queries;</li>
+            </ul>
+         </li>
+         <li><b>Shortcut Relationships</b>
+            <ul>
+               <li>Create direct links for common paths;</li>
+               <li>(user)-[:DIRECT_REPORT]->(manager) and (user)-[:REPORTS_TO*]->(executive);</li>
+               <li>Trade space for speed;</li>
+            </ul>
+         </li>
+         <li><b>Pagination at Each Level</b>
+            <ul>
+               <li>Limit results at every depth;</li>
+               <li>Prevent combinatorial explosion;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. GraphQL Patterns</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Recursive Types</b>
+            <ul>
+               <li>type Category { subcategories: [Category] };</li>
+               <li>Allow arbitrary depth;</li>
+               <li>Use depth limiting;</li>
+            </ul>
+         </li>
+         <li><b>Connection Pattern</b>
+            <ul>
+               <li>Use connections for deep traversals;</li>
+               <li>Include pagination metadata;</li>
+               <li>Control result size;</li>
+            </ul>
+         </li>
+         <li><b>Specialized Queries</b>
+            <ul>
+               <li>ancestors, descendants queries;</li>
+               <li>Use @cypher for optimized traversals;</li>
+               <li>Return specific depths only;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

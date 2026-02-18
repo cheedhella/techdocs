@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Query Planning in Neo4j</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Query Planning?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Process of determining how to execute a Cypher query;</li>
+               <li>Neo4j creates execution plan before running query;</li>
+               <li>Chooses optimal path through graph;</li>
+            </ul>
+         </li>
+         <li><b>Why It Matters</b>
+            <ul>
+               <li>Different plans have vastly different performance;</li>
+               <li>Understanding plans helps optimize queries;</li>
+               <li>Identify bottlenecks and missing indexes;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. EXPLAIN and PROFILE</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>EXPLAIN</b>
+            <ul>
+               <li>EXPLAIN MATCH (u:User) RETURN u;</li>
+               <li>Shows execution plan without running query;</li>
+               <li>No actual data retrieved;</li>
+            </ul>
+         </li>
+         <li><b>PROFILE</b>
+            <ul>
+               <li>PROFILE MATCH (u:User) RETURN u;</li>
+               <li>Runs query and shows actual execution statistics;</li>
+               <li>Includes row counts, database hits;</li>
+               <li>More accurate than EXPLAIN;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Reading Query Plans</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Key Metrics</b>
+            <ul>
+               <li>Rows - number of rows processed;</li>
+               <li>DB Hits - database operations performed;</li>
+               <li>Estimated Rows - planner's estimate;</li>
+            </ul>
+         </li>
+         <li><b>Common Operators</b>
+            <ul>
+               <li>NodeByLabelScan - scan all nodes with label;</li>
+               <li>NodeIndexSeek - use index to find nodes;</li>
+               <li>Expand - traverse relationships;</li>
+               <li>Filter - apply WHERE conditions;</li>
+            </ul>
+         </li>
+         <li><b>What to Look For</b>
+            <ul>
+               <li>High DB hits - potential performance issue;</li>
+               <li>Label scans instead of index seeks - missing index;</li>
+               <li>Large row counts early in plan - inefficient starting point;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Optimization Tips</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Start with Indexed Properties</b>
+            <ul>
+               <li>Use indexed fields in WHERE clauses;</li>
+               <li>Narrow search space early;</li>
+            </ul>
+         </li>
+         <li><b>Filter Early</b>
+            <ul>
+               <li>Apply filters before expansions;</li>
+               <li>Reduce rows to traverse;</li>
+            </ul>
+         </li>
+         <li><b>Use LIMIT</b>
+            <ul>
+               <li>Stop processing once enough results found;</li>
+               <li>Especially important for large graphs;</li>
+            </ul>
+         </li>
+         <li><b>Avoid Cartesian Products</b>
+            <ul>
+               <li>Connect all patterns in MATCH;</li>
+               <li>Unconnected patterns multiply row counts;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

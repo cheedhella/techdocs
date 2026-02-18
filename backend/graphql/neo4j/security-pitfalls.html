@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>GraphQL Security Pitfalls</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Common Vulnerabilities</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Introspection in Production</b>
+            <ul>
+               <li>Exposes entire schema to attackers;</li>
+               <li>Disable in production or restrict to authenticated users;</li>
+            </ul>
+         </li>
+         <li><b>No Query Limits</b>
+            <ul>
+               <li>Allows expensive, deeply nested queries;</li>
+               <li>Can DoS your server;</li>
+               <li>Implement depth and complexity limits;</li>
+            </ul>
+         </li>
+         <li><b>Missing Authorization</b>
+            <ul>
+               <li>Forgetting @auth on sensitive types/fields;</li>
+               <li>Data leaks;</li>
+               <li>Audit all types and fields;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Injection Attacks</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Cypher Injection</b>
+            <ul>
+               <li>Similar to SQL injection;</li>
+               <li>Never concatenate user input into Cypher;</li>
+               <li>Always use parameterized queries;</li>
+            </ul>
+         </li>
+         <li><b>Safe</b>
+            <ul>
+               <li>session.run('MATCH (u:User {id: $id}) RETURN u', {id: userId});</li>
+            </ul>
+         </li>
+         <li><b>Unsafe</b>
+            <ul>
+               <li>session.run(`MATCH (u:User {id: "${userId}"}) RETURN u`);</li>
+               <li>Vulnerable to injection;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Information Disclosure</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Verbose Error Messages</b>
+            <ul>
+               <li>Don't expose stack traces in production;</li>
+               <li>Don't reveal database structure;</li>
+               <li>Return generic errors to clients;</li>
+            </ul>
+         </li>
+         <li><b>Timing Attacks</b>
+            <ul>
+               <li>Different response times reveal information;</li>
+               <li>Example: "user not found" vs "wrong password";</li>
+               <li>Use constant-time comparisons;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Mitigation Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Input Validation</b> - Validate all user input;</li>
+         <li><b>Rate Limiting</b> - Limit requests per user/IP;</li>
+         <li><b>Query Whitelisting</b> - Only allow approved queries;</li>
+         <li><b>HTTPS Only</b> - Encrypt all traffic;</li>
+         <li><b>Security Audits</b> - Regular security reviews;</li>
+         <li><b>Monitoring</b> - Log and alert on suspicious activity;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

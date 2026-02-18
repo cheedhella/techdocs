@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CRUD Operations with Neo4j GraphQL</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <img src="../../../resources/imgs/gears.gif" alt="" srcset="" />
+        <h2>CRUD Operations with Neo4j GraphQL</h2>
+    </div>
+
+    <div class="question"><strong>1. Project Setup</strong></div>
+    <div class="answer">
+        <p><b>Initialize Node.js Project</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Create project directory
+mkdir neo4j-graphql-crud
+cd neo4j-graphql-crud
+
+# Initialize npm project
+npm init -y
+
+# Install dependencies
+npm install @neo4j/graphql neo4j-driver apollo-server graphql dotenv</code></pre>
+        </div>
+        <p><b>Project Structure</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-plaintext">neo4j-graphql-crud/
+├── .env
+├── package.json
+├── index.js
+└── schema.js</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>2. Environment Configuration</strong></div>
+    <div class="answer">
+        <p>Create <code>.env</code> file with your Neo4j credentials:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># .env
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=your_password_here
+
+# For Neo4j AuraDB, use:
+# NEO4J_URI=neo4j+s://xxxxx.databases.neo4j.io
+# NEO4J_USER=neo4j
+# NEO4J_PASSWORD=your_aura_password</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>3. Define GraphQL Schema</strong></div>
+    <div class="answer">
+        <p>Create <code>schema.js</code> with type definitions:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// schema.js
+const { gql } = require('apollo-server');
+
+const typeDefs = gql`
+  type User {
+    id: ID! @id
+    name: String!
+    email: String! @unique
+    age: Int
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    updatedAt: DateTime! @timestamp(operations: [UPDATE])
+    posts: [Post!]! @relationship(type: "POSTED", direction: OUT)
+  }
+
+  type Post {
+    id: ID! @id
+    title: String!
+    content: String!
+    published: Boolean! @default(value: false)
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    updatedAt: DateTime! @timestamp(operations: [UPDATE])
+    author: User! @relationship(type: "POSTED", direction: IN)
+    comments: [Comment!]! @relationship(type: "HAS_COMMENT", direction: OUT)
+  }
+
+  type Comment {
+    id: ID! @id
+    text: String!
+    createdAt: DateTime! @timestamp(operations: [CREATE])
+    post: Post! @relationship(type: "HAS_COMMENT", direction: IN)
+    author: User! @relationship(type: "WROTE", direction: IN)
+  }
+`;
+
+module.exports = typeDefs;</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>4. Create GraphQL Server</strong></div>
+    <div class="answer">
+        <p>Create <code>index.js</code> with server setup:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-javascript">// index.js
+require('dotenv').config();
+const { ApolloServer } = require('apollo-server');
+const neo4j = require('neo4j-driver');
+const { Neo4jGraphQL } = require('@neo4j/graphql');
+const typeDefs = require('./schema');
+
+// Create Neo4j driver instance
+const driver = neo4j.driver(
+  process.env.NEO4J_URI,
+  neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD)
+);
+
+// Create Neo4jGraphQL instance
+const neoSchema = new Neo4jGraphQL({ 
+  typeDefs, 
+  driver,
+  // Enable debug to see generated Cypher queries
+  debug: true
+});
+
+// Start server
+async function startServer() {
+  try {
+    // Verify database connectivity
+    await driver.verifyConnectivity();
+    console.log('✓ Connected to Neo4j');
+
+    // Generate executable schema
+    const schema = await neoSchema.getSchema();
+
+    // Create Apollo Server
+    const server = new ApolloServer({
+      schema,
+      context: ({ req }) => ({ req }),
+    });
+
+    // Start listening
+    const { url } = await server.listen(4000);
+    console.log(`🚀 Server ready at ${url}`);
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('\nShutting down...');
+  await driver.close();
+  process.exit(0);
+});
+
+startServer();</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>5. Run the Server</strong></div>
+    <div class="answer">
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Start the server
+node index.js
+
+# Output:
+# ✓ Connected to Neo4j
+# 🚀 Server ready at http://localhost:4000/</code></pre>
+        </div>
+        <p>Open <code>http://localhost:4000</code> in your browser to access Apollo Studio.</p>
+    </div>
+
+    <div class="question"><strong>6. CREATE Operations</strong></div>
+    <div class="answer">
+        <p><b>Create a User</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation CreateUser {
+  createUsers(
+    input: [
+      {
+        name: "Alice Johnson"
+        email: "alice@example.com"
+        age: 30
+      }
+    ]
+  ) {
+    users {
+      id
+      name
+      email
+      age
+      createdAt
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Create User with Posts (Nested Creation)</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation CreateUserWithPosts {
+  createUsers(
+    input: [
+      {
+        name: "Bob Smith"
+        email: "bob@example.com"
+        age: 25
+        posts: {
+          create: [
+            {
+              node: {
+                title: "Getting Started with Neo4j"
+                content: "Neo4j is a powerful graph database..."
+                published: true
+              }
+            }
+            {
+              node: {
+                title: "GraphQL Best Practices"
+                content: "Here are some tips for building GraphQL APIs..."
+                published: false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  ) {
+    users {
+      id
+      name
+      posts {
+        id
+        title
+        published
+      }
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Create Comment</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation CreateComment {
+  createComments(
+    input: [
+      {
+        text: "Great article! Very helpful."
+        post: {
+          connect: {
+            where: { node: { id: "post-id-here" } }
+          }
+        }
+        author: {
+          connect: {
+            where: { node: { email: "alice@example.com" } }
+          }
+        }
+      }
+    ]
+  ) {
+    comments {
+      id
+      text
+      createdAt
+      author {
+        name
+      }
+      post {
+        title
+      }
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>7. READ Operations</strong></div>
+    <div class="answer">
+        <p><b>Get All Users</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetAllUsers {
+  users {
+    id
+    name
+    email
+    age
+    createdAt
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Get User by Email with Posts</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetUserByEmail {
+  users(where: { email: "bob@example.com" }) {
+    id
+    name
+    email
+    posts {
+      id
+      title
+      content
+      published
+      createdAt
+      comments {
+        text
+        author {
+          name
+        }
+      }
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Get Posts with Filtering and Sorting</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetPublishedPosts {
+  posts(
+    where: { published: true }
+    options: { 
+      sort: [{ createdAt: DESC }]
+      limit: 10
+    }
+  ) {
+    id
+    title
+    content
+    createdAt
+    author {
+      name
+      email
+    }
+    comments {
+      text
+      author {
+        name
+      }
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Search Posts by Title</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query SearchPosts {
+  posts(where: { title_CONTAINS: "Neo4j" }) {
+    id
+    title
+    author {
+      name
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Get User Count</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetUserCount {
+  usersAggregate {
+    count
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>8. UPDATE Operations</strong></div>
+    <div class="answer">
+        <p><b>Update User Information</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation UpdateUser {
+  updateUsers(
+    where: { email: "alice@example.com" }
+    update: { 
+      name: "Alice Johnson-Smith"
+      age: 31
+    }
+  ) {
+    users {
+      id
+      name
+      age
+      updatedAt
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Update Post and Publish</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation PublishPost {
+  updatePosts(
+    where: { id: "post-id-here" }
+    update: { 
+      published: true
+      content: "Updated content here..."
+    }
+  ) {
+    posts {
+      id
+      title
+      published
+      updatedAt
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Connect Existing Nodes (Add Relationship)</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation AddPostToUser {
+  updateUsers(
+    where: { email: "alice@example.com" }
+    connect: {
+      posts: {
+        where: { node: { id: "existing-post-id" } }
+      }
+    }
+  ) {
+    users {
+      name
+      posts {
+        title
+      }
+    }
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Disconnect Nodes (Remove Relationship)</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation RemovePostFromUser {
+  updateUsers(
+    where: { email: "alice@example.com" }
+    disconnect: {
+      posts: {
+        where: { node: { id: "post-id-to-remove" } }
+      }
+    }
+  ) {
+    users {
+      name
+      posts {
+        title
+      }
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>9. DELETE Operations</strong></div>
+    <div class="answer">
+        <p><b>Delete a Comment</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation DeleteComment {
+  deleteComments(
+    where: { id: "comment-id-here" }
+  ) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Delete Post and Its Comments</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation DeletePostWithComments {
+  deletePosts(
+    where: { id: "post-id-here" }
+    delete: {
+      comments: {
+        where: {}
+      }
+    }
+  ) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Delete User (with all relationships)</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">mutation DeleteUser {
+  deleteUsers(
+    where: { email: "user@example.com" }
+    delete: {
+      posts: {
+        where: {}
+        delete: {
+          comments: {
+            where: {}
+          }
+        }
+      }
+    }
+  ) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>10. Advanced Queries</strong></div>
+    <div class="answer">
+        <p><b>Pagination with Cursor</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetUsersWithPagination {
+  usersConnection(
+    first: 10
+    after: "cursor-string-here"
+    sort: [{ name: ASC }]
+  ) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        email
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Complex Filtering</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query ComplexFilter {
+  users(
+    where: {
+      OR: [
+        { age_GT: 25 }
+        { name_CONTAINS: "Smith" }
+      ]
+      AND: [
+        { email_ENDS_WITH: "@example.com" }
+      ]
+    }
+  ) {
+    name
+    email
+    age
+  }
+}</code></pre>
+        </div>
+
+        <p><b>Aggregations</b></p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-graphql">query GetUserStats {
+  users {
+    name
+    postsAggregate {
+      count
+      node {
+        title {
+          longest
+          shortest
+        }
+      }
+    }
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>11. Testing with cURL</strong></div>
+    <div class="answer">
+        <p>You can also test the API using cURL:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-bash"># Create a user
+curl -X POST http://localhost:4000/graphql \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "mutation { createUsers(input: [{name: \"Test User\", email: \"test@example.com\"}]) { users { id name } } }"
+  }'
+
+# Query users
+curl -X POST http://localhost:4000/graphql \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "{ users { id name email } }"
+  }'</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>12. Viewing Data in Neo4j Browser</strong></div>
+    <div class="answer">
+        <p>Open Neo4j Browser at <code>http://localhost:7474</code> and run Cypher queries to see your data:</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre><code class="language-cypher">// View all users and their posts
+MATCH (u:User)-[:POSTED]->(p:Post)
+RETURN u, p
+
+// View complete graph
+MATCH (n)
+RETURN n
+LIMIT 100
+
+// Count nodes by type
+MATCH (u:User) RETURN count(u) as users
+MATCH (p:Post) RETURN count(p) as posts
+MATCH (c:Comment) RETURN count(c) as comments</code></pre>
+        </div>
+    </div>
+
+    <div class="question"><strong>13. Next Steps</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Add Authentication</b> - Implement JWT-based auth with @auth directives;</li>
+            <li><b>Add Custom Resolvers</b> - Handle complex business logic;</li>
+            <li><b>Add Validation</b> - Validate input data before mutations;</li>
+            <li><b>Optimize Queries</b> - Add indexes, use PROFILE to analyze performance;</li>
+            <li><b>Add Tests</b> - Write integration tests for your API;</li>
+            <li><b>Deploy</b> - Deploy to production with proper environment configuration;</li>
+        </ul>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

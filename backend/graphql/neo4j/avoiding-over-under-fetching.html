@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Avoiding Over- and Under-Fetching</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. The Problem</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Over-Fetching</b>
+            <ul>
+               <li>Getting more data than needed;</li>
+               <li>REST: GET /users returns all user fields;</li>
+               <li>Wastes bandwidth, slows down responses;</li>
+            </ul>
+         </li>
+         <li><b>Under-Fetching</b>
+            <ul>
+               <li>Not getting enough data in one request;</li>
+               <li>Need multiple API calls to get related data;</li>
+               <li>N+1 problem: one call for list, then one per item;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. How GraphQL Solves This</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Precise Field Selection</b>
+            <ul>
+               <li>Client specifies exactly which fields to return;</li>
+               <li>{ user { name, email } } - only name and email;</li>
+               <li>No over-fetching;</li>
+            </ul>
+         </li>
+         <li><b>Nested Queries</b>
+            <ul>
+               <li>Get related data in one request;</li>
+               <li>{ user { name, posts { title, comments { text } } } };</li>
+               <li>No under-fetching, no multiple round trips;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Neo4j + GraphQL Benefits</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Efficient Traversals</b>
+            <ul>
+               <li>Neo4j follows relationships without JOINs;</li>
+               <li>GraphQL query maps directly to Cypher traversal;</li>
+               <li>One database query for nested GraphQL query;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>GraphQL: { user(id: "123") { name, posts { title } } };</li>
+               <li>Cypher: MATCH (u:User {id: "123"})-[:POSTED]->(p:Post) RETURN u.name, collect(p.title);</li>
+               <li>Single efficient query;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Design for Client Needs</b>
+            <ul>
+               <li>Create schema based on actual use cases;</li>
+               <li>Group related data that's often requested together;</li>
+            </ul>
+         </li>
+         <li><b>Use Fragments</b>
+            <ul>
+               <li>Reusable field selections;</li>
+               <li>fragment UserInfo on User { name, email };</li>
+               <li>Keeps queries DRY;</li>
+            </ul>
+         </li>
+         <li><b>Pagination</b>
+            <ul>
+               <li>For large lists, use pagination;</li>
+               <li>{ users(first: 10, after: "cursor") { edges { node } } };</li>
+               <li>Prevents fetching too much data;</li>
+            </ul>
+         </li>
+         <li><b>DataLoader Pattern</b>
+            <ul>
+               <li>Batch and cache database requests;</li>
+               <li>Prevents N+1 queries in resolvers;</li>
+               <li>Essential for performance;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Deployment & Operations Summary</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Running Neo4j</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Docker</b> - docker run neo4j for local development;</li>
+         <li><b>AuraDB</b> - Fully managed cloud service by Neo4j;</li>
+         <li><b>Self-Hosted</b> - Install on servers, configure clustering;</li>
+         <li><b>Cloud Providers</b> - AWS, GCP, Azure marketplaces;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Environment Configuration</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Environment Variables</b> - Connection URIs, credentials, API keys;</li>
+         <li><b>Config Files</b> - Different configs for dev, staging, production;</li>
+         <li><b>Secrets Management</b> - Use vaults (AWS Secrets Manager, HashiCorp Vault);</li>
+         <li><b>Feature Flags</b> - Toggle features without deployment;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Monitoring and Logging</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Application Logs</b> - Winston, Pino for structured logging;</li>
+         <li><b>Query Logging</b> - Log slow queries, errors;</li>
+         <li><b>Metrics</b> - Prometheus, Grafana for monitoring;</li>
+         <li><b>APM</b> - New Relic, Datadog for application performance;</li>
+         <li><b>Alerts</b> - Set up alerts for errors, high latency;</li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Scaling GraphQL APIs</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Horizontal Scaling</b> - Multiple server instances behind load balancer;</li>
+         <li><b>Caching</b> - Redis for response caching;</li>
+         <li><b>Connection Pooling</b> - Reuse database connections;</li>
+         <li><b>CDN</b> - Cache at edge for global distribution;</li>
+         <li><b>Database Scaling</b> - Neo4j clustering, read replicas;</li>
+      </ul>
+   </div>
+</body>
+
+</html>

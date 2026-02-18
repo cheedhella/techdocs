@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Enums, Interfaces, and Unions</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. Enums</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Special scalar type with predefined set of values;</li>
+               <li>Ensures field can only be one of allowed values;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>enum Role { ADMIN, USER, GUEST }</li>
+               <li>type User { name: String!, role: Role! }</li>
+            </ul>
+         </li>
+         <li><b>Benefits</b>
+            <ul>
+               <li>Type safety - prevents invalid values;</li>
+               <li>Self-documenting - clear what values are allowed;</li>
+               <li>Better IDE autocomplete;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Interfaces</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Abstract type that defines common fields;</li>
+               <li>Other types can implement the interface;</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>interface Node { id: ID!, createdAt: DateTime! }</li>
+               <li>type User implements Node { id: ID!, createdAt: DateTime!, name: String! }</li>
+               <li>type Post implements Node { id: ID!, createdAt: DateTime!, title: String! }</li>
+            </ul>
+         </li>
+         <li><b>Use Cases</b>
+            <ul>
+               <li>Polymorphic queries - query multiple types at once;</li>
+               <li>Enforce consistent fields across types;</li>
+               <li>Support for pagination patterns (Relay);</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Unions</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Type that can be one of several object types;</li>
+               <li>No common fields required (unlike interfaces);</li>
+            </ul>
+         </li>
+         <li><b>Example</b>
+            <ul>
+               <li>union SearchResult = User | Post | Comment;</li>
+               <li>type Query { search(term: String!): [SearchResult] }</li>
+            </ul>
+         </li>
+         <li><b>Querying Unions</b>
+            <ul>
+               <li>Use inline fragments to access type-specific fields;</li>
+               <li>{ search(term: "hello") { ... on User { name } ... on Post { title } } }</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+</body>
+
+</html>

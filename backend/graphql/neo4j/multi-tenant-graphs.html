@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Multi-Tenant Graph Architectures</title>
+   <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+   <div class="question"><strong>1. What Is Multi-Tenancy?</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Definition</b>
+            <ul>
+               <li>Multiple customers (tenants) share same application;</li>
+               <li>Data must be isolated between tenants;</li>
+               <li>Common in SaaS applications;</li>
+            </ul>
+         </li>
+         <li><b>Requirements</b>
+            <ul>
+               <li>Data isolation - tenants can't see each other's data;</li>
+               <li>Performance isolation - one tenant doesn't affect others;</li>
+               <li>Scalability - support many tenants;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>2. Isolation Strategies</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Database Per Tenant</b>
+            <ul>
+               <li>Each tenant has own Neo4j database;</li>
+               <li>Complete isolation;</li>
+               <li>Expensive, harder to manage;</li>
+            </ul>
+         </li>
+         <li><b>Graph Per Tenant (Shared Database)</b>
+            <ul>
+               <li>All tenants in one database;</li>
+               <li>Add tenantId property to all nodes;</li>
+               <li>Filter by tenantId in all queries;</li>
+               <li>Most common approach;</li>
+            </ul>
+         </li>
+         <li><b>Hybrid</b>
+            <ul>
+               <li>Small tenants share database;</li>
+               <li>Large tenants get dedicated database;</li>
+               <li>Balance cost and isolation;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>3. Implementation with GraphQL</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Tenant Context</b>
+            <ul>
+               <li>Extract tenantId from JWT or header;</li>
+               <li>Add to GraphQL context;</li>
+               <li>Available in all resolvers;</li>
+            </ul>
+         </li>
+         <li><b>Automatic Filtering</b>
+            <ul>
+               <li>Use @auth directive: @auth(rules: [{allow: {tenantId: "$jwt.tenantId"}}]);</li>
+               <li>Automatically filter by tenant;</li>
+               <li>Prevents data leaks;</li>
+            </ul>
+         </li>
+         <li><b>Schema Design</b>
+            <ul>
+               <li>type User { id: ID!, tenantId: ID!, name: String! };</li>
+               <li>Include tenantId in all types;</li>
+               <li>Index tenantId for performance;</li>
+            </ul>
+         </li>
+      </ul>
+   </div>
+
+   <div class="question"><strong>4. Best Practices</strong></div>
+   <div class="answer">
+      <ul>
+         <li><b>Always Filter by Tenant</b> - Never forget tenantId in queries;</li>
+         <li><b>Index tenantId</b> - Critical for performance;</li>
+         <li><b>Test Isolation</b> - Verify tenants can't access each other's data;</li>
+         <li><b>Monitor Per-Tenant Usage</b> - Identify resource-heavy tenants;</li>
+         <li><b>Plan for Growth</b> - Have migration path to dedicated databases;</li>
+      </ul>
+   </div>
+</body>
+
+</html>
