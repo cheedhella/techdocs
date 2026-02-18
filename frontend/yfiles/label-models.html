@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Label Models - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Label Models?</div>
+    <div class="answer">
+        Label Models control the positioning of labels relative to their owner elements (nodes, edges, or ports). They define where labels can be placed and how they move when the owner is modified.
+    </div>
+
+    <div class="question">What are the main label models for nodes?</div>
+    <div class="answer">
+        <pre><code>// InteriorLabelModel - Inside the node
+InteriorLabelModel.CENTER
+InteriorLabelModel.NORTH
+InteriorLabelModel.SOUTH
+InteriorLabelModel.EAST
+InteriorLabelModel.WEST
+InteriorLabelModel.NORTH_EAST
+InteriorLabelModel.NORTH_WEST
+InteriorLabelModel.SOUTH_EAST
+InteriorLabelModel.SOUTH_WEST
+
+// ExteriorLabelModel - Outside the node
+ExteriorLabelModel.NORTH
+ExteriorLabelModel.SOUTH
+ExteriorLabelModel.EAST
+ExteriorLabelModel.WEST
+
+// FreeNodeLabelModel - Anywhere relative to node
+const model = new FreeNodeLabelModel();
+const parameter = model.createParameter(
+    new Point(0.5, 0),  // Position
+    new Point(0, -10),  // Offset
+    new Point(0.5, 1),  // Anchor on node
+    new Point(0.5, 0),  // Anchor on label
+    0                    // Rotation
+);</code></pre>
+    </div>
+
+    <div class="question">What are the main label models for edges?</div>
+    <div class="answer">
+        <pre><code>// EdgePathLabelModel - Along the edge path
+const model = new EdgePathLabelModel({
+    distance: 10,        // Distance from edge
+    autoRotation: true   // Rotate with edge
+});
+
+// At specific ratio along edge
+const parameter = model.createRatioParameter(0.5);  // 50% along edge
+
+// EdgeSegmentLabelModel - On specific segment
+const segmentModel = new EdgeSegmentLabelModel({
+    distance: 10
+});
+
+// SmartEdgeLabelModel - Automatic optimal placement
+const smartModel = new SmartEdgeLabelModel({
+    autoRotation: true
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show practical examples?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Node with multiple labels at different positions
+const node = graph.createNode();
+
+// Title at top
+graph.addLabel(node, 'Title', InteriorLabelModel.NORTH);
+
+// Content in center
+graph.addLabel(node, 'Content', InteriorLabelModel.CENTER);
+
+// ID at bottom
+graph.addLabel(node, 'ID: 123', InteriorLabelModel.SOUTH);
+
+// Edge with labels
+const edge = graph.createEdge(node1, node2);
+
+// Label at start of edge
+const startModel = new EdgePathLabelModel();
+graph.addLabel(edge, 'Start', startModel.createRatioParameter(0.1));
+
+// Label in middle
+graph.addLabel(edge, 'Middle', startModel.createRatioParameter(0.5));
+
+// Label at end
+graph.addLabel(edge, 'End', startModel.createRatioParameter(0.9));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

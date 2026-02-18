@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Adjacency Graph Builder - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Adjacency Graph Builder?</div>
+    <div class="answer">
+        Adjacency Graph Builder creates graphs from data where each node contains references to its neighbors (adjacency list format).
+    </div>
+
+    <div class="question">How do you use it?</div>
+    <div class="answer">
+        <pre><code>// Data with adjacency information
+const nodesData = [
+    { id: 'A', name: 'Node A', neighbors: ['B', 'C'] },
+    { id: 'B', name: 'Node B', neighbors: ['C', 'D'] },
+    { id: 'C', name: 'Node C', neighbors: ['D'] },
+    { id: 'D', name: 'Node D', neighbors: [] }
+];
+
+// Create builder
+const builder = new AdjacencyGraphBuilder(graph);
+
+// Configure nodes
+const nodesSource = builder.createNodesSource({
+    data: nodesData,
+    id: 'id'
+});
+
+nodesSource.nodeCreator.createLabelBinding(data => data.name);
+
+// Define adjacency (neighbors)
+nodesSource.addSuccessorsSource(
+    data => data.neighbors,
+    nodesSource
+);
+
+// Build graph
+builder.buildGraph();
+
+// Apply layout
+await graphComponent.morphLayout(new OrganicLayout());</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

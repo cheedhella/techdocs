@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DataItem - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is DataItem binding?</div>
+    <div class="answer">
+        DataItem binding connects business objects to graph elements, allowing you to associate custom data with nodes, edges, and labels.
+    </div>
+
+    <div class="question">How do you bind data to graph elements?</div>
+    <div class="answer">
+        <pre><code>// Business data
+const personData = {
+    id: 1,
+    name: 'John Doe',
+    age: 30,
+    role: 'Developer',
+    email: 'john@example.com'
+};
+
+// Create node and attach data via tag
+const node = graph.createNode();
+node.tag = personData;
+
+// Add label from data
+graph.addLabel(node, personData.name);
+
+// Later, access the data
+const data = node.tag;
+console.log(`Name: ${data.name}, Role: ${data.role}`);</code></pre>
+    </div>
+
+    <div class="question">How do you use data for conditional styling?</div>
+    <div class="answer">
+        <pre><code>// Apply styles based on data
+graph.nodes.forEach(node => {
+    const data = node.tag;
+    
+    let style;
+    if (data.role === 'Manager') {
+        style = new ShapeNodeStyle({
+            fill: 'lightblue',
+            shape: 'hexagon'
+        });
+    } else if (data.role === 'Developer') {
+        style = new ShapeNodeStyle({
+            fill: 'lightgreen',
+            shape: 'round-rectangle'
+        });
+    } else {
+        style = new ShapeNodeStyle({
+            fill: 'lightgray',
+            shape: 'ellipse'
+        });
+    }
+    
+    graph.setStyle(node, style);
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

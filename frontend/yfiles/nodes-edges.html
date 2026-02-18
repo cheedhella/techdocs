@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nodes & Edges - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Nodes in yFiles?</div>
+    <div class="answer">
+        Nodes are the fundamental vertices or points in a graph. They represent entities in your data model and can be:
+        <ul>
+            <li>Positioned anywhere in 2D space</li>
+            <li>Sized with custom width and height</li>
+            <li>Styled with various visual appearances</li>
+            <li>Connected to other nodes via edges</li>
+            <li>Grouped into hierarchical structures</li>
+            <li>Associated with custom business data via tags</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you create nodes?</div>
+    <div class="answer">
+        There are several ways to create nodes:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create node with default size at origin
+const node1 = graph.createNode();
+
+// Create node with specific layout (position and size)
+const node2 = graph.createNode(
+    new Rect(100, 50, 80, 60)
+);
+
+// Create node at specific location with default size
+const node3 = graph.createNodeAt(
+    new Point(200, 100)
+);
+
+// Create node with custom style
+const node4 = graph.createNode({
+    layout: new Rect(300, 0, 100, 80),
+    style: new ShapeNodeStyle({
+        fill: 'lightblue',
+        stroke: 'darkblue'
+    })
+});</code></pre>
+    </div>
+
+    <div class="question">What are Edges in yFiles?</div>
+    <div class="answer">
+        Edges are connections between nodes that represent relationships. They have:
+        <ul>
+            <li>A source node (where the edge starts)</li>
+            <li>A target node (where the edge ends)</li>
+            <li>Optional source and target ports</li>
+            <li>Bends that define the edge path</li>
+            <li>Styles for visual appearance</li>
+            <li>Labels for annotations</li>
+            <li>Direction (can be directed or undirected)</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you create edges?</div>
+    <div class="answer">
+        Edges can be created in multiple ways:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create edge between two nodes
+const edge1 = graph.createEdge(sourceNode, targetNode);
+
+// Create edge with specific ports
+const sourcePort = graph.addPort(sourceNode);
+const targetPort = graph.addPort(targetNode);
+const edge2 = graph.createEdge(sourcePort, targetPort);
+
+// Create edge with custom style
+const edge3 = graph.createEdge({
+    source: sourceNode,
+    target: targetNode,
+    style: new PolylineEdgeStyle({
+        stroke: '2px red',
+        targetArrow: IArrow.TRIANGLE
+    })
+});
+
+// Create self-loop (edge from node to itself)
+const selfLoop = graph.createEdge(node1, node1);</code></pre>
+    </div>
+
+    <div class="question">How do you modify node properties?</div>
+    <div class="answer">
+        Node properties can be modified after creation:
+        <pre><code>const graph = graphComponent.graph;
+
+// Change node position and size
+graph.setNodeLayout(
+    node, 
+    new Rect(150, 200, 120, 80)
+);
+
+// Change node style
+graph.setStyle(
+    node,
+    new ShapeNodeStyle({
+        shape: 'ellipse',
+        fill: 'lightgreen'
+    })
+);
+
+// Attach custom data
+node.tag = {
+    id: 'node-1',
+    type: 'process',
+    data: { value: 42 }
+};
+
+// Move node relative to current position
+const currentLayout = node.layout;
+graph.setNodeLayout(
+    node,
+    new Rect(
+        currentLayout.x + 50,
+        currentLayout.y + 30,
+        currentLayout.width,
+        currentLayout.height
+    )
+);</code></pre>
+    </div>
+
+    <div class="question">How do you work with edge bends?</div>
+    <div class="answer">
+        Edge bends define the path an edge takes:
+        <pre><code>const graph = graphComponent.graph;
+
+// Add bends to an edge
+graph.addBend(edge, new Point(150, 100));
+graph.addBend(edge, new Point(200, 150));
+
+// Clear all bends
+graph.clearBends(edge);
+
+// Get edge bends
+const bends = edge.bends;
+for (const bend of bends) {
+    console.log(bend.location);
+}
+
+// Set multiple bends at once
+graph.setBends(edge, [
+    new Point(100, 50),
+    new Point(150, 100),
+    new Point(200, 50)
+]);</code></pre>
+    </div>
+
+    <div class="question">How do you query nodes and edges?</div>
+    <div class="answer">
+        yFiles provides powerful query methods:
+        <pre><code>const graph = graphComponent.graph;
+
+// Get all nodes
+const allNodes = graph.nodes.toArray();
+
+// Get all edges
+const allEdges = graph.edges.toArray();
+
+// Get edges connected to a node
+const connectedEdges = graph.edgesAt(node);
+
+// Get incoming edges
+const incomingEdges = graph.inEdgesAt(node);
+
+// Get outgoing edges
+const outgoingEdges = graph.outEdgesAt(node);
+
+// Get neighbor nodes
+const neighbors = graph.neighbors(node).toArray();
+
+// Check if edge exists
+const edgeExists = graph.contains(
+    graph.getEdge(sourceNode, targetNode)
+);
+
+// Get node degree
+const totalDegree = graph.degree(node);
+const inDegree = graph.inDegree(node);
+const outDegree = graph.outDegree(node);</code></pre>
+    </div>
+
+    <div class="question">How do you remove nodes and edges?</div>
+    <div class="answer">
+        Removing elements is straightforward:
+        <pre><code>const graph = graphComponent.graph;
+
+// Remove a single edge
+graph.remove(edge);
+
+// Remove a node (also removes connected edges)
+graph.remove(node);
+
+// Remove multiple nodes
+const nodesToRemove = graph.nodes
+    .filter(n => n.tag?.type === 'temporary')
+    .toArray();
+nodesToRemove.forEach(n => graph.remove(n));
+
+// Clear entire graph
+graph.clear();
+
+// Remove all edges but keep nodes
+const edgesToRemove = graph.edges.toArray();
+edgesToRemove.forEach(e => graph.remove(e));</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example with nodes and edges?</div>
+    <div class="answer">
+        Here's a complete example creating a simple workflow:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create nodes for a workflow
+const start = graph.createNode(new Rect(0, 0, 100, 60));
+start.tag = { type: 'start', name: 'Begin' };
+
+const process1 = graph.createNode(new Rect(150, 0, 100, 60));
+process1.tag = { type: 'process', name: 'Validate' };
+
+const decision = graph.createNode(new Rect(300, 0, 100, 60));
+decision.tag = { type: 'decision', name: 'Valid?' };
+
+const process2 = graph.createNode(new Rect(450, -50, 100, 60));
+process2.tag = { type: 'process', name: 'Process' };
+
+const error = graph.createNode(new Rect(450, 50, 100, 60));
+error.tag = { type: 'error', name: 'Error' };
+
+const end = graph.createNode(new Rect(600, 0, 100, 60));
+end.tag = { type: 'end', name: 'Complete' };
+
+// Create edges with labels
+const e1 = graph.createEdge(start, process1);
+const e2 = graph.createEdge(process1, decision);
+const e3 = graph.createEdge(decision, process2);
+graph.addLabel(e3, 'Yes');
+const e4 = graph.createEdge(decision, error);
+graph.addLabel(e4, 'No');
+const e5 = graph.createEdge(process2, end);
+const e6 = graph.createEdge(error, end);
+
+// Add labels to nodes
+graph.nodes.forEach(node => {
+    graph.addLabel(node, node.tag.name);
+});
+
+// Apply layout
+graphComponent.fitGraphBounds();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Setting up a TypeScript Project - TypeScript</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you install TypeScript?</div>
+    <div class="answer">
+        <pre><code>// Install globally
+npm install -g typescript
+
+// Install locally in project
+npm install --save-dev typescript
+
+// Verify installation
+tsc --version</code></pre>
+    </div>
+
+    <div class="question">How do you create a new TypeScript project?</div>
+    <div class="answer">
+        <pre><code>// Create project directory
+mkdir my-ts-project
+cd my-ts-project
+
+// Initialize npm
+npm init -y
+
+// Install TypeScript
+npm install --save-dev typescript
+
+// Initialize TypeScript config
+tsc --init
+
+// This creates tsconfig.json</code></pre>
+    </div>
+
+    <div class="question">What is tsconfig.json?</div>
+    <div class="answer">
+        `tsconfig.json` is the TypeScript configuration file that specifies compiler options and project settings:
+        <pre><code>{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}</code></pre>
+    </div>
+
+    <div class="question">How do you compile TypeScript?</div>
+    <div class="answer">
+        <pre><code>// Compile single file
+tsc file.ts
+
+// Compile entire project (uses tsconfig.json)
+tsc
+
+// Watch mode (recompile on changes)
+tsc --watch
+
+// Compile with specific config
+tsc --project tsconfig.prod.json</code></pre>
+    </div>
+
+    <div class="question">What is a basic project structure?</div>
+    <div class="answer">
+        <pre><code>my-ts-project/
+├── src/
+│   ├── index.ts
+│   ├── utils.ts
+│   └── types.ts
+├── dist/          (compiled JS output)
+├── node_modules/
+├── package.json
+└── tsconfig.json</code></pre>
+    </div>
+
+    <div class="question">How do you run TypeScript code?</div>
+    <div class="answer">
+        <pre><code>// Option 1: Compile then run
+tsc
+node dist/index.js
+
+// Option 2: Use ts-node (development)
+npm install --save-dev ts-node
+npx ts-node src/index.ts
+
+// Option 3: Add npm scripts
+// In package.json:
+{
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc --watch"
+  }
+}</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to TypeScript Home</a>
+</body>
+</html>

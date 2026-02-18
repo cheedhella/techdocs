@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Grouping (GroupNodes) - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Grouping in yFiles?</div>
+    <div class="answer">
+        Grouping allows you to create hierarchical structures where nodes can contain other nodes. Group nodes act as collapsible containers, organizing complex graphs into manageable sections.
+    </div>
+
+    <div class="question">How do you create group nodes?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Create a group node
+const groupNode = graph.createGroupNode();
+graph.addLabel(groupNode, 'Department A');
+
+// Create child nodes
+const child1 = graph.createNode();
+const child2 = graph.createNode();
+
+// Add nodes to group
+graph.setParent(child1, groupNode);
+graph.setParent(child2, groupNode);
+
+// Adjust group bounds to fit children
+graph.adjustGroupNodeLayout(groupNode);</code></pre>
+    </div>
+
+    <div class="question">How do you work with nested groups?</div>
+    <div class="answer">
+        <pre><code>// Create parent group
+const parentGroup = graph.createGroupNode();
+graph.addLabel(parentGroup, 'Company');
+
+// Create child group
+const childGroup = graph.createGroupNode();
+graph.addLabel(childGroup, 'Department');
+graph.setParent(childGroup, parentGroup);
+
+// Create nodes in child group
+const node1 = graph.createNode();
+const node2 = graph.createNode();
+graph.setParent(node1, childGroup);
+graph.setParent(node2, childGroup);
+
+// Adjust all group bounds
+graph.adjustGroupNodeLayout(childGroup);
+graph.adjustGroupNodeLayout(parentGroup);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

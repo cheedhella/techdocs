@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Webpack/Vite Setup - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you configure Vite for yFiles?</div>
+    <div class="answer">
+        <pre><code>// vite.config.js
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+    optimizeDeps: {
+        include: ['yfiles']
+    },
+    server: {
+        port: 3000
+    },
+    build: {
+        target: 'es2015',
+        outDir: 'dist'
+    }
+});
+
+// index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>yFiles App</title>
+    <style>
+        #graphComponent {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="graphComponent"></div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
+
+// src/main.js
+import { GraphComponent, GraphEditorInputMode } from 'yfiles';
+
+const graphComponent = new GraphComponent('#graphComponent');
+graphComponent.inputMode = new GraphEditorInputMode();</code></pre>
+    </div>
+
+    <div class="question">How do you configure Webpack for yFiles?</div>
+    <div class="answer">
+        <pre><code>// webpack.config.js
+const path = require('path');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            }
+        ]
+    },
+    resolve: {
+        extensions: ['.js']
+    },
+    devServer: {
+        contentBase: './dist',
+        port: 3000
+    }
+};</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ES Modules Setup - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you set up yFiles with ES Modules?</div>
+    <div class="answer">
+        yFiles for HTML is distributed as ES modules, allowing modern JavaScript import/export syntax.
+        <pre><code>// Import yFiles modules
+import {
+    GraphComponent,
+    GraphEditorInputMode,
+    DefaultGraph,
+    ShapeNodeStyle,
+    PolylineEdgeStyle,
+    HierarchicLayout
+} from 'yfiles';
+
+// Initialize GraphComponent
+const graphComponent = new GraphComponent('#graphComponent');
+
+// Set up input mode
+graphComponent.inputMode = new GraphEditorInputMode();
+
+// Get graph
+const graph = graphComponent.graph;
+
+// Set default styles
+graph.nodeDefaults.style = new ShapeNodeStyle({
+    fill: 'lightblue',
+    shape: 'round-rectangle'
+});
+
+graph.edgeDefaults.style = new PolylineEdgeStyle({
+    stroke: '2px gray'
+});
+
+// Create nodes and edges
+const node1 = graph.createNode();
+const node2 = graph.createNode();
+graph.createEdge(node1, node2);
+
+// Apply layout
+await graphComponent.morphLayout(new HierarchicLayout());</code></pre>
+    </div>
+
+    <div class="question">How do you configure package.json?</div>
+    <div class="answer">
+        <pre><code>{
+  "name": "yfiles-app",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "yfiles": "^26.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

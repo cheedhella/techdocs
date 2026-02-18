@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Selection Model - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the Selection Model?</div>
+    <div class="answer">
+        The Selection Model manages which graph elements are currently selected. It provides methods to select, deselect, and query selected items.
+    </div>
+
+    <div class="question">How do you work with selection?</div>
+    <div class="answer">
+        <pre><code>const selection = graphComponent.selection;
+
+// Select items
+selection.setSelected(node, true);
+selection.setSelected(edge, true);
+
+// Deselect items
+selection.setSelected(node, false);
+
+// Clear all selection
+selection.clear();
+
+// Check if selected
+if (selection.isSelected(node)) {
+    console.log('Node is selected');
+}
+
+// Get selected items
+const selectedNodes = selection.selectedNodes.toArray();
+const selectedEdges = selection.selectedEdges.toArray();
+console.log(`Selected: ${selection.size} items`);</code></pre>
+    </div>
+
+    <div class="question">How do you listen to selection changes?</div>
+    <div class="answer">
+        <pre><code>// Listen to selection changes
+graphComponent.selection.addItemSelectionChangedListener((sender, evt) => {
+    const item = evt.item;
+    const isSelected = evt.itemSelected;
+    
+    console.log(`Item ${isSelected ? 'selected' : 'deselected'}`);
+    
+    if (item instanceof INode) {
+        console.log('Node:', item.labels.first()?.text);
+    }
+});
+
+// Select all nodes of a certain type
+graph.nodes.forEach(node => {
+    if (node.tag?.type === 'important') {
+        selection.setSelected(node, true);
+    }
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

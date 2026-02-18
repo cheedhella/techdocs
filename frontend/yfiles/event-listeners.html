@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Event Listeners - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Event Listeners?</div>
+    <div class="answer">
+        Event Listeners allow you to react to changes in the graph, such as nodes being created, deleted, or modified. They're essential for keeping your application state synchronized with the graph.
+    </div>
+
+    <div class="question">What events are available?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Node events
+graph.addNodeCreatedListener((sender, evt) => {
+    console.log('Node created:', evt.item);
+});
+
+graph.addNodeRemovedListener((sender, evt) => {
+    console.log('Node removed:', evt.item);
+});
+
+// Edge events
+graph.addEdgeCreatedListener((sender, evt) => {
+    console.log('Edge created:', evt.item);
+});
+
+graph.addEdgeRemovedListener((sender, evt) => {
+    console.log('Edge removed:', evt.item);
+});
+
+// Label events
+graph.addLabelAddedListener((sender, evt) => {
+    console.log('Label added:', evt.item);
+});
+
+graph.addLabelTextChangedListener((sender, evt) => {
+    console.log('Label text changed:', evt.item.text);
+});
+
+// Layout events
+graph.addNodeLayoutChangedListener((sender, evt) => {
+    console.log('Node layout changed:', evt.item);
+});</code></pre>
+    </div>
+
+    <div class="question">How do you use GraphComponent events?</div>
+    <div class="answer">
+        <pre><code>// Mouse events
+graphComponent.addMouseClickListener((sender, evt) => {
+    console.log('Clicked at:', evt.location);
+});
+
+graphComponent.addMouseHoverListener((sender, evt) => {
+    if (evt.item) {
+        console.log('Hovering over:', evt.item);
+    }
+});
+
+// Viewport events
+graphComponent.addViewportChangedListener((sender, evt) => {
+    console.log('Viewport:', evt.newViewport);
+});
+
+graphComponent.addZoomChangedListener((sender, evt) => {
+    console.log('Zoom:', evt.newZoom);
+});
+
+// Selection events
+graphComponent.selection.addItemSelectionChangedListener((sender, evt) => {
+    console.log(evt.itemSelected ? 'Selected' : 'Deselected', evt.item);
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

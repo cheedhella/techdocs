@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EdgeRouter - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is EdgeRouter?</div>
+    <div class="answer">
+        EdgeRouter is a specialized layout algorithm that only routes edges without moving nodes. It's used to:
+        <ul>
+            <li>Improve edge routing in existing layouts</li>
+            <li>Minimize edge crossings</li>
+            <li>Create clean, orthogonal edge paths</li>
+            <li>Route edges around obstacles</li>
+            <li>Maintain fixed node positions while optimizing edges</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply EdgeRouter?</div>
+    <div class="answer">
+        <pre><code>// Basic edge routing
+const layout = new EdgeRouter();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new EdgeRouter({
+    scope: EdgeRouterScope.ROUTE_ALL_EDGES,
+    minimumEdgeToEdgeDistance: 10
+});
+
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        <pre><code>const layout = new EdgeRouter({
+    // Which edges to route
+    scope: EdgeRouterScope.ROUTE_ALL_EDGES,
+    // or ROUTE_AFFECTED_EDGES, ROUTE_EDGES_AT_AFFECTED_NODES
+    
+    // Routing style
+    defaultEdgeRoutingStyle: EdgeRoutingStyle.ORTHOGONAL,
+    // or POLYLINE, OCTILINEAR, CURVED
+    
+    // Spacing
+    minimumEdgeToEdgeDistance: 5,
+    minimumNodeToEdgeDistance: 10,
+    
+    // Optimization
+    maximumDuration: 30000,  // 30 seconds
+    
+    // Consider existing bends
+    rerouting: true
+});</code></pre>
+    </div>
+
+    <div class="question">How do you route edges around obstacles?</div>
+    <div class="answer">
+        <pre><code>const layout = new EdgeRouter();
+const layoutData = new EdgeRouterData();
+
+// Define obstacles (nodes to route around)
+layoutData.obstacles.items = graph.nodes;
+
+// Or specific nodes
+layoutData.obstacles.items = [node1, node2, node3];
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">Can you show an example?</div>
+    <div class="answer">
+        <pre><code>// Create graph with fixed node positions
+const graph = graphComponent.graph;
+
+// Create nodes at specific positions
+const node1 = graph.createNode(new Rect(0, 0, 80, 60));
+const node2 = graph.createNode(new Rect(300, 0, 80, 60));
+const node3 = graph.createNode(new Rect(150, 150, 80, 60));
+const node4 = graph.createNode(new Rect(0, 300, 80, 60));
+const node5 = graph.createNode(new Rect(300, 300, 80, 60));
+
+// Add labels
+[node1, node2, node3, node4, node5].forEach((n, i) => {
+    graph.addLabel(n, `Node ${i + 1}`);
+});
+
+// Create edges (initially straight lines)
+graph.createEdge(node1, node3);
+graph.createEdge(node2, node3);
+graph.createEdge(node3, node4);
+graph.createEdge(node3, node5);
+graph.createEdge(node1, node5);
+graph.createEdge(node2, node4);
+
+// Apply edge router to create clean paths
+const layout = new EdgeRouter({
+    defaultEdgeRoutingStyle: EdgeRoutingStyle.ORTHOGONAL,
+    minimumEdgeToEdgeDistance: 10,
+    minimumNodeToEdgeDistance: 15
+});
+
+const layoutData = new EdgeRouterData();
+layoutData.obstacles.items = graph.nodes;
+
+await graphComponent.morphLayout(layout, layoutData);
+graphComponent.fitGraphBounds(new Insets(20));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

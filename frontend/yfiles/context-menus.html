@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Context Menus - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you add context menus?</div>
+    <div class="answer">
+        Context menus appear when users right-click on graph elements.
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable context menu
+inputMode.contextMenuItems = GraphItemTypes.NODE | GraphItemTypes.EDGE;
+
+// Add context menu listener
+inputMode.addPopulateItemContextMenuListener((sender, evt) => {
+    const item = evt.item;
+    
+    if (item instanceof INode) {
+        evt.menu.addMenuItem('Delete Node', () => {
+            graph.remove(item);
+        });
+        
+        evt.menu.addMenuItem('Add Label', () => {
+            graph.addLabel(item, 'New Label');
+        });
+        
+        evt.menu.addMenuItem('Change Color', () => {
+            graph.setStyle(item, new ShapeNodeStyle({
+                fill: 'red'
+            }));
+        });
+    } else if (item instanceof IEdge) {
+        evt.menu.addMenuItem('Delete Edge', () => {
+            graph.remove(item);
+        });
+    }
+    
+    evt.handled = true;
+});
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

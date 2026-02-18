@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>NodeStyle & EdgeStyle - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are NodeStyle and EdgeStyle?</div>
+    <div class="answer">
+        NodeStyle and EdgeStyle are the fundamental styling interfaces in yFiles that control the visual appearance of nodes and edges. They determine:
+        <ul>
+            <li>Shape and geometry</li>
+            <li>Colors (fill and stroke)</li>
+            <li>Size and dimensions</li>
+            <li>Visual effects (shadows, gradients)</li>
+            <li>Custom rendering logic</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you set default styles?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Set default node style
+graph.nodeDefaults.style = new ShapeNodeStyle({
+    fill: 'lightblue',
+    stroke: '2px darkblue',
+    shape: 'round-rectangle'
+});
+
+// Set default edge style
+graph.edgeDefaults.style = new PolylineEdgeStyle({
+    stroke: '2px gray',
+    targetArrow: IArrow.DEFAULT
+});
+
+// Set default label style
+graph.nodeDefaults.labels.style = new DefaultLabelStyle({
+    font: '14px Arial',
+    textFill: 'black'
+});</code></pre>
+    </div>
+
+    <div class="question">How do you apply styles to individual elements?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Create node with custom style
+const node = graph.createNode({
+    style: new ShapeNodeStyle({
+        fill: 'lightgreen',
+        stroke: '3px darkgreen',
+        shape: 'ellipse'
+    })
+});
+
+// Change style of existing node
+graph.setStyle(node, new ShapeNodeStyle({
+    fill: 'orange',
+    stroke: '2px red'
+}));
+
+// Create edge with custom style
+const edge = graph.createEdge({
+    source: node1,
+    target: node2,
+    style: new PolylineEdgeStyle({
+        stroke: '3px blue',
+        targetArrow: IArrow.TRIANGLE
+    })
+});</code></pre>
+    </div>
+
+    <div class="question">What are the built-in node styles?</div>
+    <div class="answer">
+        yFiles provides several built-in node styles:
+        <ul>
+            <li><strong>ShapeNodeStyle</strong>: Basic shapes (rectangle, ellipse, etc.)</li>
+            <li><strong>RectangleNodeStyle</strong>: Simple rectangles with rounded corners</li>
+            <li><strong>ImageNodeStyle</strong>: Nodes with images</li>
+            <li><strong>GroupNodeStyle</strong>: Special style for group nodes</li>
+            <li><strong>BevelNodeStyle</strong>: 3D beveled appearance</li>
+            <li><strong>ShinyPlateNodeStyle</strong>: Glossy, shiny appearance</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the built-in edge styles?</div>
+    <div class="answer">
+        Common edge styles include:
+        <ul>
+            <li><strong>PolylineEdgeStyle</strong>: Standard straight/bent edges</li>
+            <li><strong>ArcEdgeStyle</strong>: Curved edges</li>
+            <li><strong>BezierEdgeStyle</strong>: Smooth Bezier curves</li>
+            <li><strong>BridgeEdgeStyle</strong>: Edges with bridges at crossings</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you use conditional styling?</div>
+    <div class="answer">
+        <pre><code>// Apply different styles based on node data
+graph.nodes.forEach(node => {
+    if (node.tag?.type === 'important') {
+        graph.setStyle(node, new ShapeNodeStyle({
+            fill: 'red',
+            stroke: '3px darkred',
+            shape: 'diamond'
+        }));
+    } else if (node.tag?.type === 'process') {
+        graph.setStyle(node, new ShapeNodeStyle({
+            fill: 'lightblue',
+            stroke: '2px darkblue',
+            shape: 'round-rectangle'
+        }));
+    } else {
+        graph.setStyle(node, new ShapeNodeStyle({
+            fill: 'lightgray',
+            stroke: '1px gray',
+            shape: 'ellipse'
+        }));
+    }
+});
+
+// Conditional edge styling
+graph.edges.forEach(edge => {
+    const weight = edge.tag?.weight || 1;
+    graph.setStyle(edge, new PolylineEdgeStyle({
+        stroke: `${weight}px gray`,
+        targetArrow: weight > 3 ? IArrow.TRIANGLE : IArrow.DEFAULT
+    }));
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

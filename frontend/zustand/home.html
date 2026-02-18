@@ -10,524 +10,138 @@
         <div class="main-grid-item-1 grid-wide-column">
             <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
             <h2>Zustand</h2>
+            <p>Master Zustand - Simple, Fast State Management for React</p>
         </div>
 
         <div class="toc-container">
+            <h3>Quick Access</h3>
             <ul>
-                <li>Basics
+                <li><a href="./zustand-complete-guide.html"><strong>📘 Complete Zustand Guide</strong></a> - All topics in one comprehensive page</li>
+            </ul>
+            
+            <h3>Topics by Section</h3>
+            <ul>
+                <li>1. Getting Started
                     <ul>
-                        <li><a href="./intro.html">What is Zustand?</a></li>
-                        <li><a href="./state-manager.html">Global State Manager</a></li>
-                        <li><a href="./slices.html">State as multiple slices</a></li>
+                        <li><a href="./what-is-zustand.html">What is Zustand?</a></li>
+                        <li><a href="./why-zustand.html">Why Zustand?</a></li>
+                        <li><a href="./installation.html">Installation & Setup</a></li>
+                        <li><a href="./first-store.html">Creating Your First Store</a></li>
+                        <li><a href="./reading-state.html">Reading State</a></li>
+                        <li><a href="./updating-state.html">Updating State</a></li>
                     </ul>
                 </li>
-                <li>Middleware
+                <li>2. Core Concepts
                     <ul>
-                        <li>persist</li>
-                        <li>devtools</li>
-                        <li>subscribeWithSelector</li>
-                        Zustand supports “middlewares” for extra features:
-                        devtools → Redux DevTools integration
-
-persist → Saves state to localStorage
+                        <li><a href="./selectors.html">Selectors</a></li>
+                        <li><a href="./actions.html">Actions</a></li>
+                        <li><a href="./immutability.html">Immutability</a></li>
+                        <li><a href="./get-set-api.html">get() and set() API</a></li>
+                        <li><a href="./subscribe.html">Subscribe API</a></li>
+                        <li><a href="./shallow-comparison.html">Shallow Comparison</a></li>
+                    </ul>
+                </li>
+                <li>3. Async & Side Effects
+                    <ul>
+                        <li><a href="./async-actions.html">Async Actions</a></li>
+                        <li><a href="./fetching-data.html">Fetching Data</a></li>
+                        <li><a href="./error-handling.html">Error Handling</a></li>
+                        <li><a href="./loading-states.html">Loading States</a></li>
+                    </ul>
+                </li>
+                <li>4. Middleware
+                    <ul>
+                        <li><a href="./persist-middleware.html">persist - LocalStorage/SessionStorage</a></li>
+                        <li><a href="./devtools-middleware.html">devtools - Redux DevTools Integration</a></li>
+                        <li><a href="./immer-middleware.html">immer - Mutable Updates</a></li>
+                        <li><a href="./subscribe-with-selector.html">subscribeWithSelector</a></li>
+                        <li><a href="./custom-middleware.html">Custom Middleware</a></li>
+                        <li><a href="./middleware-chaining.html">Middleware Chaining</a></li>
+                    </ul>
+                </li>
+                <li>5. Advanced Patterns
+                    <ul>
+                        <li><a href="./slices-pattern.html">Slices Pattern</a></li>
+                        <li><a href="./multiple-stores.html">Multiple Stores</a></li>
+                        <li><a href="./derived-state.html">Derived/Computed State</a></li>
+                        <li><a href="./resetting-state.html">Resetting State</a></li>
+                        <li><a href="./hydration.html">State Hydration</a></li>
+                        <li><a href="./transient-updates.html">Transient Updates</a></li>
+                    </ul>
+                </li>
+                <li>6. Performance Optimization
+                    <ul>
+                        <li><a href="./preventing-rerenders.html">Preventing Unnecessary Re-renders</a></li>
+                        <li><a href="./shallow-equality.html">Shallow Equality</a></li>
+                        <li><a href="./memoized-selectors.html">Memoized Selectors</a></li>
+                        <li><a href="./subscribe-outside-react.html">Subscribe Outside React</a></li>
+                    </ul>
+                </li>
+                <li>7. TypeScript Integration
+                    <ul>
+                        <li><a href="./typescript-setup.html">TypeScript Setup</a></li>
+                        <li><a href="./typing-store.html">Typing Your Store</a></li>
+                        <li><a href="./typing-actions.html">Typing Actions</a></li>
+                        <li><a href="./typing-slices.html">Typing Slices</a></li>
+                        <li><a href="./typescript-best-practices.html">TypeScript Best Practices</a></li>
+                    </ul>
+                </li>
+                <li>8. Integration with Other Libraries
+                    <ul>
+                        <li><a href="./zustand-react-query.html">Zustand + React Query</a></li>
+                        <li><a href="./zustand-react-router.html">Zustand + React Router</a></li>
+                        <li><a href="./zustand-nextjs.html">Zustand + Next.js</a></li>
+                        <li><a href="./zustand-remix.html">Zustand + Remix</a></li>
+                    </ul>
+                </li>
+                <li>9. Testing
+                    <ul>
+                        <li><a href="./testing-stores.html">Testing Zustand Stores</a></li>
+                        <li><a href="./testing-with-jest.html">Testing with Jest</a></li>
+                        <li><a href="./testing-with-rtl.html">Testing with React Testing Library</a></li>
+                        <li><a href="./mocking-stores.html">Mocking Stores</a></li>
+                    </ul>
+                </li>
+                <li>10. Advanced Topics
+                    <ul>
+                        <li><a href="./cross-tab-sync.html">Cross-Tab Synchronization</a></li>
+                        <li><a href="./ssr-patterns.html">SSR Patterns</a></li>
+                        <li><a href="./code-organization.html">Code Organization</a></li>
+                        <li><a href="./migration-from-redux.html">Migrating from Redux</a></li>
+                        <li><a href="./comparison-with-others.html">Comparison with Other Libraries</a></li>
+                    </ul>
+                </li>
+                <li>11. Real-World Examples
+                    <ul>
+                        <li><a href="./example-counter.html">Simple Counter</a></li>
+                        <li><a href="./example-todo.html">Todo List</a></li>
+                        <li><a href="./example-auth.html">Authentication Store</a></li>
+                        <li><a href="./example-cart.html">Shopping Cart</a></li>
+                        <li><a href="./example-theme.html">Theme Toggler</a></li>
+                        <li><a href="./example-modal.html">Modal Manager</a></li>
+                        <li><a href="./example-notifications.html">Notification System</a></li>
+                        <li><a href="./example-filters.html">Filters & Sorting</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
 
-
-
-        This automatically re-renders the component when count changes — but not when other parts of the store update (Zustand uses shallow subscription).
-        Would you like me to show how to organize a Zustand store into multiple slices (for large apps)?
-                        
-
-Intermediate Level — Practical Usage
-
-Multiple Stores
-
-When and how to split your state across multiple stores
-
-Asynchronous State Updates
-
-Handling async/await or API calls inside actions
-
-Derived / Computed State
-
-Creating values based on other parts of the state
-
-Middleware
-
-Persisting State
-
-Saving data to localStorage or sessionStorage
-
-Zustand DevTools
-
-Integration with Redux DevTools for debugging
-
-Resetting or Hydrating State
-
-Useful for logout flows, SSR hydration, or clearing data
-
-🔵 Advanced Level — Architecture & Optimization
-
-Selectors and Shallow Comparison
-
-Using shallow to prevent unnecessary re-renders
-
-Subscribe API
-
-Subscribing outside React (e.g., vanilla JS or non-component logic)
-
-Using Zustand in Next.js or Remix
-
-SSR (server-side rendering) patterns with Zustand
-
-TypeScript Integration
-
-Strongly typing your store and actions
-
-Combining with Other Libraries
-
-Zustand + React Query
-
-Zustand + React Router
-
-Code Organization Patterns
-
-Folder structure for large Zustand stores
-
-Testing Zustand Stores
-
-Writing unit tests for state and actions
-
-🧠 Expert Level — Deep Dives
-
-Custom Middleware
-
-Creating your own middleware (e.g., analytics, logging)
-
-Cross-tab Synchronization
-
-Keeping multiple browser tabs in sync
-
-Selectors with Equality Functions
-
-Fine-tuning render performance
-
-Integration with UI frameworks
-
-Zustand + ShadCN/UI, Zustand + TanStack Table
-
-Migrating from Redux to Zustand
-
-How to refactor step by step
-
-🧩 Optional — Real-World Examples
-
-Theme toggler
-
-Cart management in an e-commerce app
-
-Auth store with persisted tokens
-
-Global modal or notification store
-
-Filter/sorting state in dashboards
-
-
-
-            <br/><br/><br/><br/>
-           
-Phase 1 — Foundations (Basics First)
-
-Goal: Understand what Zustand is and how to manage simple state.
-
-🧩 Topics
-
-What is Zustand and why use it?
-
-Installing Zustand (npm install zustand)
-
-Creating your first store
-
-Reading and updating state
-
-Selectors (reading only part of the state)
-
-🧠 Practice Project
-
-Mini App: Simple Counter
-
-Create a count state with increase, decrease, and reset actions.
-
-Use a selector so only the counter display re-renders.
-
-Resources
-
-Zustand Official Docs – Getting Started
-
-React Docs – State and Lifecycle
-
-🟡 Phase 2 — Core Features & Realistic Use
-
-Goal: Learn how to structure stores and handle async or complex logic.
-
-🧩 Topics
-
-Multiple stores (modular state)
-
-Async actions (e.g., fetching from an API)
-
-Derived/computed state
-
-Persisting data (persist middleware)
-
-Zustand DevTools (devtools middleware)
-
-🧠 Practice Project
-
-Mini App: Todo List / Notes App
-
-Store todos globally.
-
-Add persistence to localStorage.
-
-Include actions like add, toggle, remove.
-
-View state in DevTools.
-
-Resources
-
-Zustand Middleware Docs
-
-DevTools Integration Guide
-
-🔵 Phase 3 — TypeScript, Optimization & Patterns
-
-Goal: Write scalable, typed, and performant Zustand stores.
-
-🧩 Topics
-
-TypeScript integration (strongly type store & actions)
-
-Selectors with shallow comparison (import { shallow } from 'zustand/shallow')
-
-Organizing stores for large apps
-
-Resetting and hydrating state (for logout or SSR)
-
-🧠 Practice Project
-
-Mini App: User Dashboard
-
-Use a userStore for authentication.
-
-Add a settingsStore for theme and preferences.
-
-Implement a “logout” that resets all stores.
-
-Resources
-
-Zustand + TypeScript Docs
-
-Shallow Comparison Example
-
-🟣 Phase 4 — Advanced Patterns & Integration
-
-Goal: Master Zustand in real-world React apps (Next.js, React Query, etc.)
-
-🧩 Topics
-
-Zustand with Next.js SSR hydration
-
-Zustand with React Query (for async server state)
-
-Custom middleware (e.g., analytics, logging)
-
-Cross-tab synchronization
-
-Testing Zustand stores
-
-🧠 Practice Project
-
-Mini App: Full Stack Notes App
-
-Store auth token & user data in Zustand (persisted).
-
-Use React Query for fetching notes.
-
-Sync logout or theme changes across multiple tabs.
-
-Resources
-
-Next.js + Zustand Example (Official)
-
-Testing Zustand Stores Guide
-
-🧠 Phase 5 — Real-World Projects & Deep Dives
-
-Goal: Cement your skills through production-style projects.
-
-💡 Project Ideas
-
-E-Commerce Storefront
-
-Cart store, wishlist store, user auth, persisted state.
-
-Dashboard / Admin Panel
-
-Filters, modals, user preferences, data caching.
-
-Chat App
-
-Global message store, async updates, optimistic UI.
-
-📚 Continue Learning
-
-Explore Valtio, Jotai, and Redux Toolkit for comparison.
-
-Read Zustand source code — it’s small and easy to follow.
-
-
-What is Zustand? 
-    - It is a state management library for React Applications;
-    - There are many state management libraries available: Redux, Redux Toolkit, Context API, Zustand etc;
-    - It is built on top of the Context API and uses the concept of stores to manage state;
-    - A store is a container for a specific piece of state and any functions that modify that state;
-    - You can create as many stores as you need, and they can be used throughout your application;
-
-Why is it needed - State Management Library vs useState?
-    - When a component creates state using useState(), it is owned by that component; 
-    - If you want to share that state with child components, then you need to pass that to child components;
-    - If you want to share that state with grand children, then you need to pass it child first and child needs to pass it to grand children;
-    - If you want to share that state with sibiling or other components, then you need to find a way;
-    - With state management library, any component can store the state in the global store, which acts as a single source of truth and any other component can access it;
-
-Why Zustand?
-    - Simple 
-        -- State logic stays clean and readble;
-    - Central/Global State 
-        - State is centralized and shared between components;
-        - If a component updates the state, then other components which uses that state also gets re-rendered;
-    - Immutability  
-        - When updating the state using set(), always pass a new state object, rather than modifying the existing state directly;
-        - When you pass a new state object to set(), zustand merges it into the store; old state object in the store remains intact;
-        - Why is it important?
-            -- Zustand uses shallow comparation, to check if the part of state they subscribed to has changed;
-            -- If you update the old state directly, Zustand doesn't that anything changed and components might not re-render correctly;
-    - Scalability
-        -- You can split the state into multiple stores OR keep everyting in one place; 
-    - Async friendly
-        -- Actions inside the state can synchrounous or asynchronous, without any additional libraries;
-        -- For example, we can make an HTTP request to an endpoint from our action and update the state with the response;
-            import { create } from 'zustand'
-            import axios from 'axios'
-            const useCounter = create((set) => ({
-                counter: 0,
-                incrCounter: async () => {
-                    const { data } = await axios.get("/counter")
-                    set({ counter: data.counter })
-                },
-            }));
-    - TypeScript support
-
-
-
-
-
-
-
-
-If you have nested state (like an object), you must also create a new object instead of mutating:
-const useUserStore = create((set) => ({
-  user: { name: 'Alice', age: 25 },
-
-  updateName: (newName) =>
-    set((state) => ({
-      user: { ...state.user, name: newName }, // copy + override
-    })),
-}))
-    
-
-
-    - Small, fast, scalable, immutable, transient updates for often occurring state changes, memorized selectors, integration with immer;
-    - Create and update complex state structures, handle asynchronous actions, share state between components;
-    
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-npm install zustand
-
-
-
-
-Zustand unit testing - https://blog.peslostudios.com/blog/zustand-writing-tests-for-your-data-store/
-https://learnersbucket.com/tutorials/react/micro-state-management-with-zustand-in-react/
-https://tsh.io/blog/zustand-react/ - set vs get
-
-
-
-
-
-store function exposes few methods like getState(), setState(), and subscribe().
-getState() is used to get the state in the store and setState() is used to update the state in the store.
-The state objects are immutable, updating the state properties directly won’t update the state and thus will not trigger the re-render.
-const state1 = store.getState();
-state1.count = 2; // invalid, won't work;
-store.setState(state1);
-
-The store must be always updated with the new object, store.setState({count: 2}), it also accepts a callback function, which 
-has the prevState as the argument, which can be used to create the new state, known as functional update.
-store.setState((prev) => ({ count: prev.count + 1 }));
-
-State can have more than 1 property;
-However, it is not necessary to update all the properties every time, setState merges the old state with the new state, thus we can specify the only property which we want to update.
-
-
-The last piece of the puzzle is the store.subscribe() method, it registers a callback function which is triggered every time the state is updated in store.
-
-store.subscribe(() => {
-  console.log("state is updated");
-});
-
-store.setState({ message: 'Bye World!' });
-//"state is updated"
-
-
-
-Optimizing re-rendering.
-
-
-
-
-
-import {create} from "zustand";
-export const useCounterStore = create((set, get) => (
-   {
-       pokemon: [],
-       number: 123,
-       increaseCounterNumber: () => set((state) => ({number: state.number + 1})),
-       decreaseCounterNumber: () => set((state) => ({number: state.number - 1})),
-       logNumber: () => {
-           console.log(` Current number value equals ${get().number}`)
-       },
-       fetchPokemon: async () => {
-           await fetch('https://pokeapi.co/api/v2/pokemon')
-               .then(response => response.json())
-               .then(data => set({pokemon: data.results}))
-       }
-   }
-))
-
-
-You can easily use async/await inside the hook and simply call set() whenever the data is ready. Check out here:
-
-TypeScript, Middlewares, Firebase, Immer, Persistencia, Slices Pattern, JWTs, Autenticación, Interceptores y más
-Lots of time was spent to deal with common pitfalls, like the dreaded zombie child problem, React concurrency, and context loss between mixed renderers. It may be the one state manager in the React space that gets all of these right.
-
-
-
-Actions and Immer (state mutation patterns)
-
-Learn how to keep your store clean and predictable.
-Example:
-
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
-
-const useStore = create(immer((set) => ({
-  count: 0,
-  increment: () => set((state) => { state.count += 1 }),
-  decrement: () => set((state) => { state.count -= 1 }),
-})));
-
-
-👉 This teaches you about immutable updates, actions inside the store, and the immer middleware.
-
-💾 2. Persistence (saving store to localStorage / sessionStorage)
-
-Use the persist middleware to make your Zustand store survive page reloads.
-
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
-const useStore = create(
-  persist(
-    (set) => ({
-      field1: 0,
-      field2: 0,
-      increment1: () => set((s) => ({ field1: s.field1 + 1 })),
-    }),
-    { name: "my-app-storage" }
-  )
-);
-
-
-✅ Helps you understand middlewares and state hydration.
-
-⚙️ 3. Selectors and equality functions
-
-You’ve already seen simple selectors.
-Next, learn to use shallow comparison when selecting multiple values:
-
-import { shallow } from "zustand/shallow";
-
-const [a, b] = useStore((state) => [state.a, state.b], shallow);
-
-
-👉 Prevents unnecessary re-renders when you select multiple fields.
-
-🧠 4. Computed / derived state
-
-Sometimes you don’t need to store everything — just compute on the fly.
-
-const total = useStore((s) => s.field1 + s.field2);
-
-
-Or use libraries like zustand-middleware-computed for more complex derived logic.
-
-⚡ 5. Async actions (fetching data)
-
-Zustand doesn’t have “thunks,” but async actions are simple:
-
-const useUserStore = create((set) => ({
-  user: null,
-  fetchUser: async (id) => {
-    const res = await fetch(`/api/user/${id}`);
-    set({ user: await res.json() });
-  },
-}));
-
-
-This will teach you about side effects and async handling inside Zustand.
-
-🧩 6. Splitting stores (modular architecture)
-
-When your app grows, split related logic into separate stores:
-
-useUserStore
-
-useSettingsStore
-
-useUIStore
-You can even combine them when needed.
-
-🚀 7. Middleware chaining and devtools
-
-For debugging and advanced control:
-
-import { devtools } from "zustand/middleware";
-
-const useStore = create(
-  devtools((set) => ({ count: 0, inc: () => set((s) => ({ count: s.count + 1 })) }))
-);
-
-Immutable state and merging
-
-
+        <div class="main-grid-item main-grid-item-2">
+            <h3>Learning Path</h3>
+            <p>Recommended order for mastering Zustand:</p>
+            <ol>
+                <li><strong>Getting Started</strong> - Installation, first store, basic operations</li>
+                <li><strong>Core Concepts</strong> - Selectors, actions, immutability</li>
+                <li><strong>Async & Side Effects</strong> - Data fetching, error handling</li>
+                <li><strong>Middleware</strong> - persist, devtools, immer</li>
+                <li><strong>Advanced Patterns</strong> - Slices, multiple stores, derived state</li>
+                <li><strong>Performance</strong> - Optimization techniques</li>
+                <li><strong>TypeScript</strong> - Type safety</li>
+                <li><strong>Integration</strong> - React Query, Next.js</li>
+                <li><strong>Testing</strong> - Unit tests for stores</li>
+                <li><strong>Advanced Topics</strong> - SSR, cross-tab sync</li>
+                <li><strong>Real-World Examples</strong> - Practical applications</li>
+            </ol>
+        </div>
     </body>
 </html>

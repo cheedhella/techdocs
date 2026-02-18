@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HierarchicLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is HierarchicLayout?</div>
+    <div class="answer">
+        HierarchicLayout is one of the most important and commonly used layout algorithms in yFiles. It arranges nodes in horizontal or vertical layers, creating a clear hierarchical structure. It's ideal for:
+        <ul>
+            <li>Flowcharts and process diagrams</li>
+            <li>Organization charts</li>
+            <li>Decision trees</li>
+            <li>Workflow visualizations</li>
+            <li>Dependency graphs</li>
+            <li>Any directed graph with hierarchical structure</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply HierarchicLayout?</div>
+    <div class="answer">
+        Applying the layout is straightforward:
+        <pre><code>// Create layout algorithm
+const layout = new HierarchicLayout();
+
+// Apply to graph
+await graphComponent.morphLayout(layout);
+
+// Or without animation
+graphComponent.graph.applyLayout(layout);
+
+// With specific duration
+await graphComponent.morphLayout(layout, '1s');</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        HierarchicLayout offers extensive configuration:
+        <pre><code>const layout = new HierarchicLayout({
+    // Layout orientation
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    // or LEFT_TO_RIGHT, BOTTOM_TO_TOP, RIGHT_TO_LEFT
+    
+    // Spacing between layers
+    minimumLayerDistance: 60,
+    
+    // Spacing between nodes in same layer
+    nodeToNodeDistance: 30,
+    
+    // Edge routing style
+    edgeLayoutDescriptor: {
+        routingStyle: {
+            defaultEdgeRoutingStyle: EdgeRoutingStyle.ORTHOGONAL
+            // or POLYLINE, OCTILINEAR
+        }
+    },
+    
+    // Consider edge direction
+    considerEdgeDirection: true,
+    
+    // Integrated edge labeling
+    integratedEdgeLabeling: true
+});</code></pre>
+    </div>
+
+    <div class="question">How do you control layer assignment?</div>
+    <div class="answer">
+        You can influence which nodes go in which layers:
+        <pre><code>const layout = new HierarchicLayout();
+
+// Use layout data to specify layers
+const layoutData = new HierarchicLayoutData();
+
+// Assign specific nodes to specific layers
+layoutData.layerIndices.mapper = node => {
+    if (node.tag?.layer !== undefined) {
+        return node.tag.layer;
+    }
+    return null;  // Let algorithm decide
+};
+
+// Apply with data
+await graphComponent.morphLayout(layout, layoutData);
+
+// Example: Set layers on nodes
+node1.tag = { layer: 0 };  // Top layer
+node2.tag = { layer: 1 };  // Second layer
+node3.tag = { layer: 2 };  // Third layer</code></pre>
+    </div>
+
+    <div class="question">How do you handle edge routing in HierarchicLayout?</div>
+    <div class="answer">
+        Edge routing can be customized extensively:
+        <pre><code>const layout = new HierarchicLayout();
+
+// Configure edge routing
+layout.edgeLayoutDescriptor.routingStyle.defaultEdgeRoutingStyle = 
+    EdgeRoutingStyle.ORTHOGONAL;
+
+// Minimize edge crossings
+layout.edgeLayoutDescriptor.minimumFirstSegmentLength = 20;
+layout.edgeLayoutDescriptor.minimumLastSegmentLength = 20;
+
+// Port constraints
+const layoutData = new HierarchicLayoutData();
+layoutData.sourcePortConstraints.constant = 
+    PortConstraint.create(PortSide.SOUTH);
+layoutData.targetPortConstraints.constant = 
+    PortConstraint.create(PortSide.NORTH);
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">How do you handle groups and swimlanes?</div>
+    <div class="answer">
+        HierarchicLayout supports hierarchical grouping:
+        <pre><code>const layout = new HierarchicLayout({
+    // Enable recursive group layout
+    recursiveGroupLayering: true
+});
+
+const layoutData = new HierarchicLayoutData();
+
+// Define swimlanes
+layoutData.swimlaneDescriptor = node => {
+    return node.tag?.swimlane || null;
+};
+
+// Apply layout
+await graphComponent.morphLayout(layout, layoutData);
+
+// Example: Create swimlane structure
+const graph = graphComponent.graph;
+const group1 = graph.createGroupNode();
+graph.addLabel(group1, 'Department A');
+
+const group2 = graph.createGroupNode();
+graph.addLabel(group2, 'Department B');
+
+// Add nodes to groups
+graph.setParent(node1, group1);
+graph.setParent(node2, group1);
+graph.setParent(node3, group2);</code></pre>
+    </div>
+
+    <div class="question">How do you handle incremental layout?</div>
+    <div class="answer">
+        Incremental layout updates only changed parts:
+        <pre><code>const layout = new HierarchicLayout();
+
+// Configure for incremental mode
+layout.layoutMode = LayoutMode.INCREMENTAL;
+
+const layoutData = new HierarchicLayoutData();
+
+// Mark nodes as incremental hints
+layoutData.incrementalHints.mapper = node => {
+    if (node.tag?.isNew) {
+        return HierarchicLayoutIncrementalHints.NEW;
+    }
+    return HierarchicLayoutIncrementalHints.NONE;
+};
+
+// Apply layout
+await graphComponent.morphLayout(layout, layoutData);
+
+// Example: Add new node incrementally
+const newNode = graph.createNode();
+newNode.tag = { isNew: true };
+graph.createEdge(existingNode, newNode);
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">How do you handle edge labels?</div>
+    <div class="answer">
+        Edge labels can be integrated into the layout:
+        <pre><code>const layout = new HierarchicLayout({
+    // Enable integrated edge labeling
+    integratedEdgeLabeling: true
+});
+
+// Configure label placement
+layout.edgeLayoutDescriptor.integratedEdgeLabelingEnabled = true;
+
+const layoutData = new HierarchicLayoutData();
+
+// Specify preferred label placement
+layoutData.edgeLabelPreferredPlacement.constant = 
+    new PreferredPlacementDescriptor({
+        sideOfEdge: LabelPlacements.AT_SOURCE,
+        distanceToEdge: 5
+    });
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">Can you show a complete example?</div>
+    <div class="answer">
+        Here's a comprehensive example:
+        <pre><code>// Create graph
+const graph = graphComponent.graph;
+
+// Create nodes for a process flow
+const start = graph.createNode();
+graph.addLabel(start, 'Start');
+
+const process1 = graph.createNode();
+graph.addLabel(process1, 'Validate Input');
+
+const decision = graph.createNode();
+graph.addLabel(decision, 'Valid?');
+
+const process2 = graph.createNode();
+graph.addLabel(process2, 'Process Data');
+
+const process3 = graph.createNode();
+graph.addLabel(process3, 'Handle Error');
+
+const end = graph.createNode();
+graph.addLabel(end, 'End');
+
+// Create edges
+const e1 = graph.createEdge(start, process1);
+const e2 = graph.createEdge(process1, decision);
+const e3 = graph.createEdge(decision, process2);
+graph.addLabel(e3, 'Yes');
+const e4 = graph.createEdge(decision, process3);
+graph.addLabel(e4, 'No');
+const e5 = graph.createEdge(process2, end);
+const e6 = graph.createEdge(process3, end);
+
+// Configure layout
+const layout = new HierarchicLayout({
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    minimumLayerDistance: 80,
+    nodeToNodeDistance: 50,
+    integratedEdgeLabeling: true,
+    considerEdgeDirection: true
+});
+
+// Configure edge routing
+layout.edgeLayoutDescriptor.routingStyle.defaultEdgeRoutingStyle = 
+    EdgeRoutingStyle.ORTHOGONAL;
+
+// Create layout data
+const layoutData = new HierarchicLayoutData();
+
+// Set port constraints
+layoutData.sourcePortConstraints.constant = 
+    PortConstraint.create(PortSide.SOUTH);
+layoutData.targetPortConstraints.constant = 
+    PortConstraint.create(PortSide.NORTH);
+
+// Apply layout with animation
+await graphComponent.morphLayout(layout, layoutData);
+
+// Fit to view
+graphComponent.fitGraphBounds(new Insets(20));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

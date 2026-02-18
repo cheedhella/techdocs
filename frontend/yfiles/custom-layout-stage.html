@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Custom Layout Stage - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is a Custom Layout Stage?</div>
+    <div class="answer">
+        A Custom Layout Stage allows you to modify or extend the layout pipeline by adding custom processing steps before, after, or between existing layout algorithms.
+    </div>
+
+    <div class="question">How do you create a custom layout stage?</div>
+    <div class="answer">
+        <pre><code>// Custom layout stage that adds spacing
+class CustomSpacingStage extends LayoutStageBase {
+    applyLayout(graph) {
+        // Apply core layout first
+        this.applyLayoutCore(graph);
+        
+        // Then add custom spacing
+        graph.nodes.forEach(node => {
+            const layout = node.layout;
+            graph.setNodeLayout(node, new Rect(
+                layout.x * 1.5,  // Increase horizontal spacing
+                layout.y * 1.5,  // Increase vertical spacing
+                layout.width,
+                layout.height
+            ));
+        });
+    }
+}
+
+// Use custom stage with main layout
+const mainLayout = new HierarchicLayout();
+const customStage = new CustomSpacingStage();
+customStage.coreLayout = mainLayout;
+
+await graphComponent.morphLayout(customStage);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

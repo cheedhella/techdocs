@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Custom Styles - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Custom Styles?</div>
+    <div class="answer">
+        Custom Styles allow you to create completely customized visual representations for nodes, edges, and labels by implementing your own rendering logic using SVG or Canvas.
+    </div>
+
+    <div class="question">How do you create a custom node style?</div>
+    <div class="answer">
+        <pre><code>class CustomNodeStyle extends NodeStyleBase {
+    createVisual(context, node) {
+        const layout = node.layout;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        // Create custom SVG elements
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', layout.width);
+        rect.setAttribute('height', layout.height);
+        rect.setAttribute('fill', node.tag?.color || 'lightblue');
+        rect.setAttribute('stroke', 'darkblue');
+        rect.setAttribute('stroke-width', '2');
+        
+        // Add icon or custom graphics
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', layout.width / 2);
+        circle.setAttribute('cy', layout.height / 2);
+        circle.setAttribute('r', '10');
+        circle.setAttribute('fill', 'red');
+        
+        g.appendChild(rect);
+        g.appendChild(circle);
+        
+        // Position the group
+        g.setAttribute('transform', `translate(${layout.x} ${layout.y})`);
+        
+        return new SvgVisual(g);
+    }
+    
+    updateVisual(context, oldVisual, node) {
+        return this.createVisual(context, node);
+    }
+}
+
+// Use custom style
+graph.setStyle(node, new CustomNodeStyle());</code></pre>
+    </div>
+
+    <div class="question">How do you create a custom edge style?</div>
+    <div class="answer">
+        <pre><code>class CustomEdgeStyle extends EdgeStyleBase {
+    createVisual(context, edge) {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        // Get edge path
+        const sourcePort = edge.sourcePort.location;
+        const targetPort = edge.targetPort.location;
+        
+        // Create path
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const pathData = `M ${sourcePort.x} ${sourcePort.y} L ${targetPort.x} ${targetPort.y}`;
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', edge.tag?.color || 'gray');
+        path.setAttribute('stroke-width', edge.tag?.width || '2');
+        path.setAttribute('fill', 'none');
+        
+        g.appendChild(path);
+        
+        return new SvgVisual(g);
+    }
+    
+    updateVisual(context, oldVisual, edge) {
+        return this.createVisual(context, edge);
+    }
+}
+
+// Use custom edge style
+graph.setStyle(edge, new CustomEdgeStyle());</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical custom style example?</div>
+    <div class="answer">
+        <pre><code>// Custom node style with icon and badge
+class IconNodeStyle extends NodeStyleBase {
+    createVisual(context, node) {
+        const layout = node.layout;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        // Background
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', layout.width);
+        rect.setAttribute('height', layout.height);
+        rect.setAttribute('rx', '10');
+        rect.setAttribute('fill', '#4A90E2');
+        rect.setAttribute('stroke', '#2E5C8A');
+        rect.setAttribute('stroke-width', '2');
+        g.appendChild(rect);
+        
+        // Icon (simple circle as placeholder)
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        icon.setAttribute('cx', layout.width / 2);
+        icon.setAttribute('cy', layout.height / 2);
+        icon.setAttribute('r', '15');
+        icon.setAttribute('fill', 'white');
+        g.appendChild(icon);
+        
+        // Badge (if node has notification)
+        if (node.tag?.hasNotification) {
+            const badge = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            badge.setAttribute('cx', layout.width - 10);
+            badge.setAttribute('cy', 10);
+            badge.setAttribute('r', '8');
+            badge.setAttribute('fill', 'red');
+            g.appendChild(badge);
+        }
+        
+        // Position
+        g.setAttribute('transform', `translate(${layout.x} ${layout.y})`);
+        
+        return new SvgVisual(g);
+    }
+    
+    updateVisual(context, oldVisual, node) {
+        return this.createVisual(context, node);
+    }
+}
+
+// Apply to nodes
+graph.nodes.forEach(node => {
+    graph.setStyle(node, new IconNodeStyle());
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

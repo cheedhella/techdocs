@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CSS Styling - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">Can you use CSS with yFiles?</div>
+    <div class="answer">
+        Yes! yFiles for HTML supports CSS styling for SVG elements, allowing you to style graph elements using CSS classes and stylesheets.
+    </div>
+
+    <div class="question">How do you apply CSS classes to nodes?</div>
+    <div class="answer">
+        <pre><code>// Create a style that uses CSS classes
+class CssNodeStyle extends NodeStyleBase {
+    createVisual(context, node) {
+        const layout = node.layout;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', layout.width);
+        rect.setAttribute('height', layout.height);
+        
+        // Apply CSS class
+        rect.setAttribute('class', node.tag?.cssClass || 'default-node');
+        
+        g.appendChild(rect);
+        g.setAttribute('transform', `translate(${layout.x} ${layout.y})`);
+        
+        return new SvgVisual(g);
+    }
+    
+    updateVisual(context, oldVisual, node) {
+        return this.createVisual(context, node);
+    }
+}
+
+// CSS:
+/*
+.default-node {
+    fill: lightblue;
+    stroke: darkblue;
+    stroke-width: 2px;
+}
+
+.important-node {
+    fill: red;
+    stroke: darkred;
+    stroke-width: 3px;
+}
+
+.default-node:hover {
+    fill: yellow;
+}
+*/</code></pre>
+    </div>
+
+    <div class="question">Can you show a complete CSS styling example?</div>
+    <div class="answer">
+        <pre><code>// CSS Stylesheet
+/*
+.process-node {
+    fill: #4A90E2;
+    stroke: #2E5C8A;
+    stroke-width: 2px;
+    transition: all 0.3s;
+}
+
+.process-node:hover {
+    fill: #5BA3F5;
+    stroke-width: 3px;
+}
+
+.decision-node {
+    fill: #F5A623;
+    stroke: #D68910;
+    stroke-width: 2px;
+}
+
+.error-node {
+    fill: #D0021B;
+    stroke: #8B0000;
+    stroke-width: 2px;
+}
+
+.edge-default {
+    stroke: #999;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.edge-important {
+    stroke: #D0021B;
+    stroke-width: 3px;
+    fill: none;
+}
+*/
+
+// Apply CSS classes based on node type
+graph.nodes.forEach(node => {
+    let cssClass;
+    switch (node.tag?.type) {
+        case 'process':
+            cssClass = 'process-node';
+            break;
+        case 'decision':
+            cssClass = 'decision-node';
+            break;
+        case 'error':
+            cssClass = 'error-node';
+            break;
+        default:
+            cssClass = 'default-node';
+    }
+    node.tag = { ...node.tag, cssClass };
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

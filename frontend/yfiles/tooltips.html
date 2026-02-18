@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tooltips - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you add tooltips to graph elements?</div>
+    <div class="answer">
+        Tooltips provide additional information when users hover over graph elements.
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable tooltips
+inputMode.toolTipItems = GraphItemTypes.NODE | GraphItemTypes.EDGE;
+
+// Add tooltip listener
+inputMode.addQueryItemToolTipListener((sender, evt) => {
+    if (evt.item instanceof INode) {
+        const node = evt.item;
+        evt.toolTip = `Node: ${node.labels.first()?.text || 'Unnamed'}`;
+        evt.handled = true;
+    } else if (evt.item instanceof IEdge) {
+        const edge = evt.item;
+        evt.toolTip = `Edge from ${edge.sourceNode.labels.first()?.text} to ${edge.targetNode.labels.first()?.text}`;
+        evt.handled = true;
+    }
+});
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <div class="question">How do you create rich HTML tooltips?</div>
+    <div class="answer">
+        <pre><code>inputMode.addQueryItemToolTipListener((sender, evt) => {
+    if (evt.item instanceof INode) {
+        const node = evt.item;
+        const data = node.tag;
+        
+        // Create HTML tooltip
+        evt.toolTip = `
+            <div style="padding: 10px; background: white; border: 1px solid #ccc;">
+                <h3>${data?.name || 'Node'}</h3>
+                <p>Type: ${data?.type || 'Unknown'}</p>
+                <p>ID: ${data?.id || 'N/A'}</p>
+            </div>
+        `;
+        evt.handled = true;
+    }
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

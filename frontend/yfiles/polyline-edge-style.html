@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PolylineEdgeStyle - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is PolylineEdgeStyle?</div>
+    <div class="answer">
+        PolylineEdgeStyle is the standard edge style in yFiles that renders edges as polylines (sequences of straight line segments). It's the most versatile and commonly used edge style, supporting arrows, dashes, and various stroke options.
+    </div>
+
+    <div class="question">How do you configure PolylineEdgeStyle?</div>
+    <div class="answer">
+        <pre><code>// Basic edge style
+const style = new PolylineEdgeStyle({
+    stroke: '2px gray',
+    targetArrow: IArrow.DEFAULT
+});
+
+// With source and target arrows
+const bidirectionalStyle = new PolylineEdgeStyle({
+    stroke: '3px blue',
+    sourceArrow: IArrow.TRIANGLE,
+    targetArrow: IArrow.TRIANGLE
+});
+
+// Dashed edge
+const dashedStyle = new PolylineEdgeStyle({
+    stroke: '2px dashed red',
+    targetArrow: IArrow.DEFAULT
+});
+
+// Thick edge
+const thickStyle = new PolylineEdgeStyle({
+    stroke: '5px green',
+    targetArrow: IArrow.TRIANGLE
+});
+
+graph.setStyle(edge, style);</code></pre>
+    </div>
+
+    <div class="question">What arrow types are available?</div>
+    <div class="answer">
+        <pre><code>// Built-in arrow types:
+IArrow.NONE           // No arrow
+IArrow.DEFAULT        // Standard arrow
+IArrow.TRIANGLE       // Filled triangle
+IArrow.DIAMOND        // Diamond shape
+IArrow.CIRCLE         // Circle
+IArrow.SHORT          // Short arrow
+IArrow.SIMPLE         // Simple line arrow
+
+// Usage examples:
+new PolylineEdgeStyle({
+    stroke: '2px black',
+    targetArrow: IArrow.TRIANGLE
+});
+
+new PolylineEdgeStyle({
+    stroke: '2px black',
+    sourceArrow: IArrow.DIAMOND,
+    targetArrow: IArrow.CIRCLE
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show practical examples?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Standard directed edge
+const edge1 = graph.createEdge(node1, node2);
+graph.setStyle(edge1, new PolylineEdgeStyle({
+    stroke: '2px gray',
+    targetArrow: IArrow.DEFAULT
+}));
+
+// Bidirectional edge
+const edge2 = graph.createEdge(node2, node3);
+graph.setStyle(edge2, new PolylineEdgeStyle({
+    stroke: '2px blue',
+    sourceArrow: IArrow.TRIANGLE,
+    targetArrow: IArrow.TRIANGLE
+}));
+
+// Dashed dependency
+const edge3 = graph.createEdge(node3, node4);
+graph.setStyle(edge3, new PolylineEdgeStyle({
+    stroke: '2px dashed gray',
+    targetArrow: IArrow.SHORT
+}));
+
+// Weighted edge (thickness = weight)
+const edge4 = graph.createEdge(node4, node5);
+const weight = 5;
+graph.setStyle(edge4, new PolylineEdgeStyle({
+    stroke: `${weight}px green`,
+    targetArrow: IArrow.TRIANGLE
+}));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

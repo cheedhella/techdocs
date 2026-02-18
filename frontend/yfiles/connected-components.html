@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Connected Components - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Connected Components?</div>
+    <div class="answer">
+        Connected Components are groups of nodes that are connected to each other but isolated from other groups. Finding connected components helps identify clusters and separate subgraphs.
+    </div>
+
+    <div class="question">How do you find connected components?</div>
+    <div class="answer">
+        <pre><code>// Find connected components
+const componentAnalyzer = new ConnectedComponents();
+const result = componentAnalyzer.run(graph);
+
+console.log(`Found ${result.components} components`);
+
+// Group nodes by component
+const componentMap = new Map();
+graph.nodes.forEach(node => {
+    const componentId = result.nodeComponentIds.get(node);
+    if (!componentMap.has(componentId)) {
+        componentMap.set(componentId, []);
+    }
+    componentMap.get(componentId).push(node);
+});
+
+// Visualize components with different colors
+const colors = ['lightblue', 'lightgreen', 'lightyellow', 'lightcoral', 'lightpink'];
+componentMap.forEach((nodes, componentId) => {
+    const color = colors[componentId % colors.length];
+    nodes.forEach(node => {
+        graph.setStyle(node, new ShapeNodeStyle({
+            fill: color,
+            shape: 'round-rectangle'
+        }));
+    });
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

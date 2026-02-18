@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Angular & Vue Integration - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you integrate yFiles with Angular?</div>
+    <div class="answer">
+        <pre><code>// graph.component.ts
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { GraphComponent, GraphEditorInputMode, HierarchicLayout } from 'yfiles';
+
+@Component({
+    selector: 'app-graph',
+    template: '<div #graphDiv style="width: 100%; height: 600px;"></div>'
+})
+export class GraphComponentWrapper implements OnInit {
+    @ViewChild('graphDiv', { static: true }) graphDiv!: ElementRef;
+    private graphComponent!: GraphComponent;
+    
+    ngOnInit() {
+        this.graphComponent = new GraphComponent(this.graphDiv.nativeElement);
+        this.graphComponent.inputMode = new GraphEditorInputMode();
+        
+        const graph = this.graphComponent.graph;
+        
+        // Create sample graph
+        const node1 = graph.createNode();
+        const node2 = graph.createNode();
+        graph.addLabel(node1, 'Node 1');
+        graph.addLabel(node2, 'Node 2');
+        graph.createEdge(node1, node2);
+        
+        this.graphComponent.morphLayout(new HierarchicLayout());
+    }
+    
+    ngOnDestroy() {
+        this.graphComponent.cleanUp();
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">How do you integrate yFiles with Vue?</div>
+    <div class="answer">
+        <pre><code><!-- GraphVisualization.vue -->
+<template>
+    <div ref="graphDiv" style="width: 100%; height: 600px;"></div>
+</template>
+
+<script>
+import { ref, onMounted, onUnmounted } from 'vue';
+import { GraphComponent, GraphEditorInputMode, HierarchicLayout } from 'yfiles';
+
+export default {
+    name: 'GraphVisualization',
+    setup() {
+        const graphDiv = ref(null);
+        let graphComponent = null;
+        
+        onMounted(() => {
+            graphComponent = new GraphComponent(graphDiv.value);
+            graphComponent.inputMode = new GraphEditorInputMode();
+            
+            const graph = graphComponent.graph;
+            
+            // Create sample graph
+            const node1 = graph.createNode();
+            const node2 = graph.createNode();
+            graph.addLabel(node1, 'Node 1');
+            graph.addLabel(node2, 'Node 2');
+            graph.createEdge(node1, node2);
+            
+            graphComponent.morphLayout(new HierarchicLayout());
+        });
+        
+        onUnmounted(() => {
+            if (graphComponent) {
+                graphComponent.cleanUp();
+            }
+        });
+        
+        return { graphDiv };
+    }
+};
+</script></code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

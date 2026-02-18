@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TreeBuilder - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is TreeBuilder?</div>
+    <div class="answer">
+        TreeBuilder is specialized for creating hierarchical tree structures from nested data. It's ideal for organization charts, file systems, and other tree-like data.
+    </div>
+
+    <div class="question">How do you use TreeBuilder?</div>
+    <div class="answer">
+        <pre><code>// Hierarchical data
+const treeData = {
+    id: 1,
+    name: 'CEO',
+    children: [
+        {
+            id: 2,
+            name: 'CTO',
+            children: [
+                { id: 4, name: 'Dev Lead' },
+                { id: 5, name: 'QA Lead' }
+            ]
+        },
+        {
+            id: 3,
+            name: 'CFO',
+            children: [
+                { id: 6, name: 'Accountant' }
+            ]
+        }
+    ]
+};
+
+// Create TreeBuilder
+const treeBuilder = new TreeBuilder(graph);
+
+// Configure root and children
+const rootSource = treeBuilder.createRootNodesSource({
+    data: [treeData],
+    id: 'id'
+});
+
+rootSource.nodeCreator.createLabelBinding(data => data.name);
+
+// Define children relationship
+rootSource.addChildNodesSource(
+    data => data.children,
+    rootSource
+);
+
+// Build tree
+treeBuilder.buildGraph();
+
+// Apply tree layout
+await graphComponent.morphLayout(new TreeLayout());</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

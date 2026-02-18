@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ShapeNodeStyle - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is ShapeNodeStyle?</div>
+    <div class="answer">
+        ShapeNodeStyle is the most commonly used node style in yFiles, providing a variety of predefined shapes with customizable appearance. It supports shapes like rectangles, ellipses, diamonds, hexagons, and more.
+    </div>
+
+    <div class="question">What shapes are available?</div>
+    <div class="answer">
+        <pre><code>// Available shapes:
+- 'rectangle'
+- 'round-rectangle'
+- 'ellipse'
+- 'hexagon'
+- 'hexagon2'
+- 'octagon'
+- 'diamond'
+- 'triangle'
+- 'triangle2'
+- 'pill'
+- 'fat-arrow'
+- 'fat-arrow2'
+- 'star5'
+- 'star6'
+- 'star8'</code></pre>
+    </div>
+
+    <div class="question">How do you configure ShapeNodeStyle?</div>
+    <div class="answer">
+        <pre><code>// Basic configuration
+const style = new ShapeNodeStyle({
+    shape: 'round-rectangle',
+    fill: 'lightblue',
+    stroke: '2px darkblue'
+});
+
+// With gradient fill
+const gradientStyle = new ShapeNodeStyle({
+    shape: 'ellipse',
+    fill: new LinearGradient({
+        startPoint: [0, 0],
+        endPoint: [0, 1],
+        colorStops: [
+            { color: 'lightblue', offset: 0 },
+            { color: 'darkblue', offset: 1 }
+        ]
+    }),
+    stroke: '2px navy'
+});
+
+// With corner radius
+const roundedStyle = new ShapeNodeStyle({
+    shape: 'round-rectangle',
+    fill: 'lightgreen',
+    stroke: '2px darkgreen'
+});
+
+graph.setStyle(node, style);</code></pre>
+    </div>
+
+    <div class="question">Can you show examples of different shapes?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Rectangle
+const rect = graph.createNode(new Rect(0, 0, 100, 60));
+graph.setStyle(rect, new ShapeNodeStyle({
+    shape: 'rectangle',
+    fill: 'lightblue'
+}));
+
+// Ellipse
+const ellipse = graph.createNode(new Rect(150, 0, 100, 60));
+graph.setStyle(ellipse, new ShapeNodeStyle({
+    shape: 'ellipse',
+    fill: 'lightgreen'
+}));
+
+// Diamond
+const diamond = graph.createNode(new Rect(300, 0, 100, 60));
+graph.setStyle(diamond, new ShapeNodeStyle({
+    shape: 'diamond',
+    fill: 'lightyellow'
+}));
+
+// Hexagon
+const hexagon = graph.createNode(new Rect(450, 0, 100, 60));
+graph.setStyle(hexagon, new ShapeNodeStyle({
+    shape: 'hexagon',
+    fill: 'lightcoral'
+}));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CircularLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is CircularLayout?</div>
+    <div class="answer">
+        CircularLayout arranges nodes in circular or ring patterns. It's ideal for:
+        <ul>
+            <li>Cyclic processes</li>
+            <li>Ring topologies</li>
+            <li>Circular dependencies</li>
+            <li>Highlighting central nodes</li>
+            <li>Periodic or cyclical data</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply CircularLayout?</div>
+    <div class="answer">
+        <pre><code>// Basic circular layout
+const layout = new CircularLayout();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new CircularLayout({
+    layoutStyle: CircularLayoutStyle.SINGLE_CYCLE,
+    minimumNodeDistance: 50
+});
+
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What are the layout styles?</div>
+    <div class="answer">
+        <pre><code>const layout = new CircularLayout({
+    // Single circle
+    layoutStyle: CircularLayoutStyle.SINGLE_CYCLE,
+    
+    // Or multiple concentric circles
+    // layoutStyle: CircularLayoutStyle.BCC_COMPACT,
+    
+    // Minimum distance between nodes
+    minimumNodeDistance: 40,
+    
+    // Partition style
+    partitionStyle: PartitionStyle.CYCLE
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show an example?</div>
+    <div class="answer">
+        <pre><code>// Create a circular process
+const graph = graphComponent.graph;
+
+const steps = ['Plan', 'Design', 'Develop', 'Test', 'Deploy', 'Monitor'];
+const nodes = [];
+
+for (const step of steps) {
+    const node = graph.createNode();
+    graph.addLabel(node, step);
+    nodes.push(node);
+}
+
+// Create circular connections
+for (let i = 0; i < nodes.length; i++) {
+    const source = nodes[i];
+    const target = nodes[(i + 1) % nodes.length];
+    graph.createEdge(source, target);
+}
+
+// Apply circular layout
+const layout = new CircularLayout({
+    layoutStyle: CircularLayoutStyle.SINGLE_CYCLE,
+    minimumNodeDistance: 80
+});
+
+await graphComponent.morphLayout(layout);
+graphComponent.fitGraphBounds(new Insets(50));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

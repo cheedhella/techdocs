@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TreeLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is TreeLayout?</div>
+    <div class="answer">
+        TreeLayout arranges graphs in tree structures with a clear root-to-leaf hierarchy. It's perfect for:
+        <ul>
+            <li>Organization charts</li>
+            <li>File system hierarchies</li>
+            <li>Decision trees</li>
+            <li>Taxonomies</li>
+            <li>Any tree-structured data</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply TreeLayout?</div>
+    <div class="answer">
+        <pre><code>// Basic tree layout
+const layout = new TreeLayout();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new TreeLayout({
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    minimumNodeDistance: 40,
+    minimumLayerDistance: 60
+});
+
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        <pre><code>const layout = new TreeLayout({
+    // Orientation
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    // or LEFT_TO_RIGHT, BOTTOM_TO_TOP, RIGHT_TO_LEFT
+    
+    // Spacing
+    minimumNodeDistance: 30,
+    minimumLayerDistance: 50,
+    
+    // Node placer (how children are arranged)
+    defaultNodePlacer: new DefaultNodePlacer({
+        routingStyle: TreeLayoutEdgeRoutingStyle.ORTHOGONAL
+    }),
+    
+    // Consider node sizes
+    considerNodeSizes: true
+});</code></pre>
+    </div>
+
+    <div class="question">How do you specify the root node?</div>
+    <div class="answer">
+        <pre><code>const layout = new TreeLayout();
+const layoutData = new TreeLayoutData();
+
+// Specify root node
+layoutData.treeRoot.item = rootNode;
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">Can you show an example?</div>
+    <div class="answer">
+        <pre><code>// Create an organization chart
+const graph = graphComponent.graph;
+
+// Create CEO node
+const ceo = graph.createNode();
+graph.addLabel(ceo, 'CEO');
+
+// Create department heads
+const cto = graph.createNode();
+graph.addLabel(cto, 'CTO');
+const cfo = graph.createNode();
+graph.addLabel(cfo, 'CFO');
+const cmo = graph.createNode();
+graph.addLabel(cmo, 'CMO');
+
+// Create team members
+const dev1 = graph.createNode();
+graph.addLabel(dev1, 'Dev 1');
+const dev2 = graph.createNode();
+graph.addLabel(dev2, 'Dev 2');
+
+// Create hierarchy
+graph.createEdge(ceo, cto);
+graph.createEdge(ceo, cfo);
+graph.createEdge(ceo, cmo);
+graph.createEdge(cto, dev1);
+graph.createEdge(cto, dev2);
+
+// Apply tree layout
+const layout = new TreeLayout({
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    minimumNodeDistance: 50,
+    minimumLayerDistance: 80
+});
+
+const layoutData = new TreeLayoutData();
+layoutData.treeRoot.item = ceo;
+
+await graphComponent.morphLayout(layout, layoutData);
+graphComponent.fitGraphBounds(new Insets(20));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

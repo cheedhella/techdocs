@@ -2,32 +2,39 @@
 <html lang="en">
     <head>
         <title>React</title>
-        <link rel="stylesheet" href="../resources/css/styles.css" />
-        <link rel="stylesheet" href="../resources/css/highlight.min.css" />
-        <script src="../resources/js/highlight.min.js"></script>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
     </head>
     <body>
         <div class="main-grid-item main-grid-item-1 grid-wide-column">
-            <img src="../resources/imgs/gears.gif" alt="" srcset="" />
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
             <h2>React</h2>
+            <p>Master React - The Library for Building User Interfaces</p>
         </div>
 
         <div class="toc-container">
+            <h3>Quick Access</h3>
             <ul>
-                <li>Basics
+                <li><a href="./react-complete-guide.html"><strong>📘 Complete React Guide</strong></a> - All topics in one comprehensive page</li>
+            </ul>
+            
+            <h3>Topics by Section</h3>
+            <ul>
+                <li>1. React Fundamentals
                     <ul>
-                        <li><a href="./what.html">What is React?</a></li>
-                        <li><a href="./install.html">Create a React project</a></li>
-                        <li><a href="./basic-terms.html">Basic Terms</a></li>
+                        <li><a href="./what-is-react.html">What is React?</a></li>
+                        <li><a href="./setup-project.html">Setting up a React Project</a></li>
+                        <li><a href="./jsx.html">JSX (JavaScript XML)</a></li>
+                        <li><a href="./components.html">Components (Function vs Class)</a></li>
+                        <li><a href="./props.html">Props</a></li>
+                        <li><a href="./state.html">State</a></li>
+                        <li><a href="./rendering-lists.html">Rendering Lists</a></li>
+                        <li><a href="./conditional-rendering.html">Conditional Rendering</a></li>
+                        <li><a href="./event-handling.html">Event Handling</a></li>
                     </ul>
                 </li>
-                <li><a href="./components.html">Components</a>
-                    <ul>
-                        <li>What is a Component?</li>
-                        <li>Function vs Class;</li>                        
-                    </ul>
-                </li>
-                <li><a href="./hooks.html">Hooks</a>
+                <li>2. React Hooks
                     <ul>
                         <li><a href="./useState.html">useState</a></li>
                         <li><a href="./useEffect.html">useEffect</a></li>
@@ -39,258 +46,171 @@
                         <li><a href="./useLayoutEffect.html">useLayoutEffect</a></li>
                         <li><a href="./useImperativeHandle.html">useImperativeHandle</a></li>
                         <li><a href="./useDebugValue.html">useDebugValue</a></li>
-                        <li><a href="./useDeferredValue.html">useDeferredValue</a></li>
-                        <li><a href="./useTransition.html">useTransition</a></li>
+                        <li><a href="./useDeferredValue.html">useDeferredValue (React 18+)</a></li>
+                        <li><a href="./useTransition.html">useTransition (React 18+)</a></li>
                         <li><a href="./useSyncExternalStore.html">useSyncExternalStore</a></li>
-                        <li><a href="./customHooks.html">Custom Hooks</a></li>
+                        <li><a href="./custom-hooks.html">Custom Hooks</a></li>
                     </ul>
                 </li>
-                <li>JSX JavaScript XML
+                <li>3. Component Patterns
                     <ul>
-                        <li><a href="./jsx.html">What is JSX?</a></li>
+                        <li><a href="./lifting-state-up.html">Lifting State Up</a></li>
+                        <li><a href="./composition.html">Component Composition</a></li>
+                        <li><a href="./controlled-uncontrolled.html">Controlled vs Uncontrolled Components</a></li>
+                        <li><a href="./higher-order-components.html">Higher-Order Components (HOCs)</a></li>
+                        <li><a href="./render-props.html">Render Props Pattern</a></li>
+                        <li><a href="./compound-components.html">Compound Components</a></li>
+                        <li><a href="./forwarding-refs.html">Forwarding Refs</a></li>
+                        <li><a href="./polymorphic-components.html">Polymorphic Components</a></li>
                     </ul>
                 </li>
-                <li>Packages
+                <li>4. Forms & User Input
                     <ul>
-                        <li>react - Core library for building components;</li>
-                        <li>react-dom - Used to interact with DOM in browsers;</li>
-                        <li>react-scripts - If you have used CRA to create react project, CRA internally uses react-scripts to build/test/run the application, without having to install Webpack, Babel, ESlint, Jest manually; It is no longer recommeded way, instead use tools like Vite, next.js;</li>
-                        <li>react-router-dom - React Router, for routing/navigation in single-page apps;</li>
-                        <li>@reduxjs/toolkit - state management library;</li>
-                        <li>Zustand - state management library;</li>
-                        <li>React Query or TanStack Query - data fetching library(API calls, caching, syncing with backend);</li>
-                        <li>@mui/material - Material UI, pre-built components;</li>
-                        <li>Tailwind CSS - CSS framework;</li>
-                        <li>Axios - HTTP client for API calls;</li>
-                        <li>React Native - used to build cross-platform mobile applications for iOS and Android using a single JavaScript codebase;</li>
+                        <li><a href="./forms-basics.html">Forms Basics</a></li>
+                        <li><a href="./form-validation.html">Form Validation</a></li>
+                        <li><a href="./form-libraries.html">Form Libraries (Formik, React Hook Form)</a></li>
                     </ul>
                 </li>
-                <li>React Router
+                <li>5. Styling in React
                     <ul>
-                        <li><a href="./interfaces-1.html">React Router (navigation, dynamic routes, nested routes)</a></li>
-                        <li>Performance optimization (React.memo, useCallback, useMemo)</li>
-                        <li>Code splitting & lazy loading (React.lazy, Suspense)</li>
-                        <li>Higher-order components (HOCs)</li>
-                        <li>Render props pattern</li>
-                        <li>Portals (rendering outside the DOM hierarchy)</li>
-                        <li>Reconciliation & Virtual DOM</li>
-                        <li>Server-Side Rendering (SSR) with Next.js</li>
-                        <li>Static Site Generation (SSG) with Next.js</li>
-                        <li>Hydration and streaming</li>
+                        <li><a href="./css-modules.html">CSS Modules</a></li>
+                        <li><a href="./styled-components.html">Styled Components</a></li>
+                        <li><a href="./tailwind-css.html">Tailwind CSS</a></li>
+                        <li><a href="./emotion.html">Emotion</a></li>
+                        <li><a href="./inline-styles.html">Inline Styles</a></li>
                     </ul>
                 </li>
-                <li>State Management
+                <li>6. Routing
                     <ul>
-                        <li><a href="./type-aliases.html">Zustand</a></li>
-                        <li><a href="./type-assertion.html">React Query / TanStack Query,/a></li>
+                        <li><a href="./react-router-basics.html">React Router Basics</a></li>
+                        <li><a href="./dynamic-routes.html">Dynamic Routes</a></li>
+                        <li><a href="./nested-routes.html">Nested Routes</a></li>
+                        <li><a href="./route-parameters.html">Route Parameters</a></li>
+                        <li><a href="./navigation.html">Navigation & Links</a></li>
+                        <li><a href="./protected-routes.html">Protected Routes</a></li>
                     </ul>
                 </li>
-                <li>Testing (, , Cypress, )
+                <li>7. State Management
                     <ul>
-                        <li><a href="./promise.html">Jest</a></li>
-                        <li><a href="./type-assertion.html">React Testing Library</a></li>
-                        <li>Playwright</li>
-                        <li>Linting & formatting (ESLint, Prettier)</li>
-                        <li>Storybook (component documentation & UI testing)</li>
-                        <li>DevTools (React DevTools, Redux DevTools)</li>
+                        <li><a href="./context-api.html">Context API</a></li>
+                        <li><a href="./redux-toolkit.html">Redux Toolkit</a></li>
+                        <li><a href="./zustand.html">Zustand</a></li>
+                        <li><a href="./jotai.html">Jotai</a></li>
+                        <li><a href="./recoil.html">Recoil</a></li>
                     </ul>
                 </li>
-                <li>Latest Features (React 18+)
+                <li>8. Data Fetching
                     <ul>
-                        <li>Concurrent rendering</li>
-                        <li>Automatic batching</li>
-                        <li>useTransition (UI responsiveness)</li>
-                        <li>useDeferredValue</li>
-                        <li>Suspense for data fetching</li>
-                        <li>Server Components (React 18+, Next.js 13+)</li>
+                        <li><a href="./fetch-api.html">Fetch API</a></li>
+                        <li><a href="./axios.html">Axios</a></li>
+                        <li><a href="./react-query.html">React Query / TanStack Query</a></li>
+                        <li><a href="./swr.html">SWR</a></li>
+                        <li><a href="./error-handling.html">Error Handling</a></li>
                     </ul>
                 </li>
-                <li>Redux</li>
-                <li>Tailwind CSS</li>
-                <li>Firebase</li>
-                <li>Fake backend service</li>
-                <li>Authentication</li>
-                <li>Deployment & Best Practices
-
-                    
-                    https://unwiredlearning.notion.site/React-Resources-4fdd421a603747b18f6c8824326c8a2b
-                    https://github.com/ShubhamSarda/react-ul
-Environment variables
-
-Error handling & logging
-
-Accessibility (a11y) in React apps
-
-SEO considerations (especially with Next.js)
-
-Deployment (Vercel, Netlify, AWS, etc.)</li>
-                
-<li>
-
-    how event bubbling & capturing works in React (since it’s slightly different from vanilla JS)?
-    
-    Perfect 👌 Here’s a step-by-step React learning roadmap you can follow. I’ll break it into weeks, but you can adjust the pace depending on your free time and how fast you absorb concepts.
-
-🟢 Beginner Level (Weeks 1–3)
-Week 1: React Fundamentals
-
-What is React and why use it
-
-Setting up a project (Vite, CRA, or Next.js starter)
-
-JSX basics
-
-Functional components
-
-Props (passing data)
-
-Rendering lists (map)
-
-Conditional rendering
-
-Practice: Build a simple “Todo List” app.
-
-Week 2: State & Events
-
-useState hook
-
-Event handling (onClick, onChange, etc.)
-
-Controlled vs uncontrolled inputs
-
-Styling (CSS, CSS modules, Tailwind, or styled-components)
-
-Practice: Extend your Todo app with “add”, “delete”, and “toggle complete” features.
-
-Week 3: Component Communication
-
-Lifting state up
-
-Props drilling problem
-
-useEffect (side effects: fetching data, cleanup)
-
-useRef (storing mutable values, accessing DOM nodes)
-
-Practice: Build a small weather app that fetches data from an API.
-
-🟡 Intermediate Level (Weeks 4–6)
-Week 4: Routing & Context
-
-React Router (basic routes, nested routes, dynamic routes)
-
-Context API (avoid prop drilling)
-
-Practice: Build a small blog with multiple pages (Home, About, Blog Post).
-
-Week 5: Custom Hooks & Reusability
-
-Writing custom hooks
-
-Handling forms (validation, controlled inputs)
-
-Error boundaries
-
-Practice: Build a signup/login form with reusable input components.
-
-Week 6: Performance Optimization
-
-React.memo
-
-useCallback & useMemo
-
-Lazy loading (React.lazy, Suspense)
-
-Practice: Optimize your blog app with lazy loading and memoization.
-
-🔵 Advanced Level (Weeks 7–9)
-Week 7: State Management Libraries
-
-Redux Toolkit (slices, async thunks)
-
-Alternatives (Zustand, Jotai, Recoil)
-
-React Query (data fetching, caching, mutations)
-
-Practice: Refactor your weather app to use React Query or Redux Toolkit.
-
-Week 8: Testing & TypeScript
-
-Testing with React Testing Library & Jest
-
-E2E testing with Cypress or Playwright
-
-TypeScript with React (props, state, hooks typing)
-
-Practice: Write unit tests for your Todo app & convert it to TypeScript.
-
-Week 9: Next.js & Server Rendering
-
-Next.js basics (pages, routing, API routes)
-
-SSR (Server-Side Rendering)
-
-SSG (Static Site Generation)
-
-App Router (Next.js 13+ features)
-
-Practice: Build a small blog with Next.js & deploy it to Vercel.
-
-🔴 Expert Level (Weeks 10–12)
-Week 10: React 18+ Features
-
-Concurrent rendering
-
-useTransition & useDeferredValue
-
-Suspense for data fetching
-
-Server Components (Next.js 13+)
-
-Week 11: Ecosystem & Tooling
-
-Storybook (UI docs & component playground)
-
-ESLint & Prettier setup
-
-React DevTools & performance profiling
-
-Week 12: Deployment & Best Practices
-
-Accessibility (a11y) basics
-
-SEO for React & Next.js apps
-
-Environment variables
-
-Deployment (Vercel, Netlify, AWS Amplify)
-
-Final Project: Build a full-stack React app (e.g., ecommerce store, social media app, or dashboard) and deploy it.
-
-
-<li>Hooks</li>
-                        <li>Styling components (CSS, inline styles, CSS modules, Tailwind, styled-components)</li>
-                        <li>useEffect (side effects, cleanup, dependencies)</li>
-                        <li>Controlled vs uncontrolled components (forms)</li>
-                        <li>Lifting state up</li>
-                        <li>Context API (state management across components)</li>
-                        <li>useReducer</li>
-                        <li>useRef and DOM manipulation</li>
-                        <li>Custom hooks (reusable logic)</li>
-                        <li>Error boundaries</li>
-                        <li>Dynamic components</li>
-                        <li>Forwarding refs</li>
-                        <li>Polymorphic components</li>
-                        <li>data fetching</li>
-                        <li><a href="./create-project.html"></a></li>
-                        <li>Props</li>
-                        <li>State</li>
-                        <li>Rendering lists</li>
-                        <li>Conditional Rendering</li>
-                        <li>Event Handling</li>
-                        <li></li>
-</li>
+                <li>9. Performance Optimization
+                    <ul>
+                        <li><a href="./react-memo.html">React.memo</a></li>
+                        <li><a href="./usememo-optimization.html">useMemo for Optimization</a></li>
+                        <li><a href="./usecallback-optimization.html">useCallback for Optimization</a></li>
+                        <li><a href="./code-splitting.html">Code Splitting</a></li>
+                        <li><a href="./lazy-loading.html">Lazy Loading (React.lazy, Suspense)</a></li>
+                        <li><a href="./virtualization.html">Virtualization (React Window)</a></li>
+                        <li><a href="./profiling.html">Performance Profiling</a></li>
+                    </ul>
+                </li>
+                <li>10. Advanced Concepts
+                    <ul>
+                        <li><a href="./portals.html">Portals</a></li>
+                        <li><a href="./error-boundaries.html">Error Boundaries</a></li>
+                        <li><a href="./reconciliation.html">Reconciliation & Virtual DOM</a></li>
+                        <li><a href="./refs-dom.html">Refs & DOM Manipulation</a></li>
+                        <li><a href="./fragments.html">Fragments</a></li>
+                        <li><a href="./strict-mode.html">Strict Mode</a></li>
+                    </ul>
+                </li>
+                <li>11. React 18+ Features
+                    <ul>
+                        <li><a href="./concurrent-rendering.html">Concurrent Rendering</a></li>
+                        <li><a href="./automatic-batching.html">Automatic Batching</a></li>
+                        <li><a href="./transitions.html">Transitions (useTransition)</a></li>
+                        <li><a href="./deferred-values.html">Deferred Values (useDeferredValue)</a></li>
+                        <li><a href="./suspense-data-fetching.html">Suspense for Data Fetching</a></li>
+                        <li><a href="./streaming-ssr.html">Streaming SSR</a></li>
+                    </ul>
+                </li>
+                <li>12. Next.js & SSR
+                    <ul>
+                        <li><a href="./nextjs-basics.html">Next.js Basics</a></li>
+                        <li><a href="./pages-routing.html">Pages & Routing</a></li>
+                        <li><a href="./ssr.html">Server-Side Rendering (SSR)</a></li>
+                        <li><a href="./ssg.html">Static Site Generation (SSG)</a></li>
+                        <li><a href="./isr.html">Incremental Static Regeneration (ISR)</a></li>
+                        <li><a href="./api-routes.html">API Routes</a></li>
+                        <li><a href="./app-router.html">App Router (Next.js 13+)</a></li>
+                        <li><a href="./server-components.html">Server Components</a></li>
+                    </ul>
+                </li>
+                <li>13. Testing
+                    <ul>
+                        <li><a href="./jest.html">Jest</a></li>
+                        <li><a href="./react-testing-library.html">React Testing Library</a></li>
+                        <li><a href="./cypress.html">Cypress (E2E)</a></li>
+                        <li><a href="./playwright.html">Playwright (E2E)</a></li>
+                        <li><a href="./testing-hooks.html">Testing Hooks</a></li>
+                        <li><a href="./testing-async.html">Testing Async Code</a></li>
+                    </ul>
+                </li>
+                <li>14. TypeScript with React
+                    <ul>
+                        <li><a href="./typescript-setup.html">TypeScript Setup</a></li>
+                        <li><a href="./typing-props.html">Typing Props</a></li>
+                        <li><a href="./typing-state.html">Typing State</a></li>
+                        <li><a href="./typing-hooks.html">Typing Hooks</a></li>
+                        <li><a href="./typing-events.html">Typing Events</a></li>
+                        <li><a href="./generic-components.html">Generic Components</a></li>
+                    </ul>
+                </li>
+                <li>15. Tooling & Ecosystem
+                    <ul>
+                        <li><a href="./vite.html">Vite</a></li>
+                        <li><a href="./eslint-prettier.html">ESLint & Prettier</a></li>
+                        <li><a href="./storybook.html">Storybook</a></li>
+                        <li><a href="./react-devtools.html">React DevTools</a></li>
+                        <li><a href="./environment-variables.html">Environment Variables</a></li>
+                    </ul>
+                </li>
+                <li>16. Deployment & Best Practices
+                    <ul>
+                        <li><a href="./accessibility.html">Accessibility (a11y)</a></li>
+                        <li><a href="./seo.html">SEO Considerations</a></li>
+                        <li><a href="./security.html">Security Best Practices</a></li>
+                        <li><a href="./deployment.html">Deployment (Vercel, Netlify, AWS)</a></li>
+                        <li><a href="./best-practices.html">React Best Practices</a></li>
+                    </ul>
+                </li>
             </ul>
+        </div>
+
+        <div class="main-grid-item main-grid-item-2">
+            <h3>Learning Path</h3>
+            <p>Recommended order for mastering React:</p>
+            <ol>
+                <li><strong>Fundamentals</strong> - Components, JSX, Props, State</li>
+                <li><strong>Hooks</strong> - useState, useEffect, useContext</li>
+                <li><strong>Component Patterns</strong> - Composition, HOCs</li>
+                <li><strong>Forms & Styling</strong> - User input, CSS solutions</li>
+                <li><strong>Routing</strong> - React Router</li>
+                <li><strong>State Management</strong> - Context API, Redux, Zustand</li>
+                <li><strong>Data Fetching</strong> - React Query, Axios</li>
+                <li><strong>Performance</strong> - Optimization techniques</li>
+                <li><strong>Advanced Concepts</strong> - Portals, Error Boundaries</li>
+                <li><strong>React 18+</strong> - Concurrent features</li>
+                <li><strong>Next.js</strong> - SSR, SSG, Server Components</li>
+                <li><strong>Testing</strong> - Jest, React Testing Library</li>
+                <li><strong>TypeScript</strong> - Type safety</li>
+                <li><strong>Best Practices</strong> - Accessibility, SEO, Deployment</li>
+            </ol>
         </div>
     </body>
 </html>

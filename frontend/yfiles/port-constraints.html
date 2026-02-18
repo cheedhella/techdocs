@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Port Constraints - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Port Constraints?</div>
+    <div class="answer">
+        Port Constraints control which edges can connect to which ports and from which directions, enabling precise control over connection topology.
+    </div>
+
+    <div class="question">How do you use port constraints?</div>
+    <div class="answer">
+        <pre><code>// Create ports with constraints
+const topPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_TOP_ANCHORED
+);
+topPort.tag = { type: 'input' };
+
+const bottomPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_BOTTOM_ANCHORED
+);
+bottomPort.tag = { type: 'output' };
+
+// Enforce constraints in layout
+const layout = new HierarchicLayout();
+const layoutData = new HierarchicLayoutData();
+
+layoutData.sourcePortConstraints.mapper = edge => {
+    return PortConstraint.create(PortSide.SOUTH);
+};
+
+layoutData.targetPortConstraints.mapper = edge => {
+    return PortConstraint.create(PortSide.NORTH);
+};
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

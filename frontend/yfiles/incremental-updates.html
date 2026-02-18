@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Incremental Updates - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Incremental Updates?</div>
+    <div class="answer">
+        Incremental updates allow you to modify parts of the graph and re-layout only the affected areas, preserving the overall structure and improving performance.
+    </div>
+
+    <div class="question">How do you perform incremental updates?</div>
+    <div class="answer">
+        <pre><code>// Configure incremental layout
+const layout = new HierarchicLayout({
+    layoutMode: LayoutMode.INCREMENTAL
+});
+
+const layoutData = new HierarchicLayoutData();
+
+// Mark new nodes
+const newNodes = [];
+newNodes.forEach(node => {
+    node.tag = { ...node.tag, isNew: true };
+});
+
+layoutData.incrementalHints.mapper = node => {
+    if (node.tag?.isNew) {
+        return HierarchicLayoutIncrementalHints.NEW;
+    }
+    return HierarchicLayoutIncrementalHints.NONE;
+};
+
+// Apply incremental layout
+await graphComponent.morphLayout(layout, layoutData);
+
+// Clear new flags
+newNodes.forEach(node => {
+    node.tag.isNew = false;
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

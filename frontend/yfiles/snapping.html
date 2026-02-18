@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Snapping - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Snapping?</div>
+    <div class="answer">
+        Snapping provides alignment assistance when moving or resizing nodes, helping users create neat, aligned layouts by automatically snapping to grid lines or other nodes.
+    </div>
+
+    <div class="question">How do you enable snapping?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable snapping
+inputMode.snapContext = new GraphSnapContext({
+    enabled: true,
+    snapDistance: 10,
+    snapToGridEnabled: true,
+    gridSnapType: GridSnapTypes.ALL
+});
+
+// Configure grid snapping
+inputMode.snapContext.gridSpacing = 20;
+
+// Enable node-to-node snapping
+inputMode.snapContext.nodeToNodeDistance = 20;
+inputMode.snapContext.nodeToEdgeDistance = 15;
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

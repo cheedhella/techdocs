@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Graph Model - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the Graph Model in yFiles?</div>
+    <div class="answer">
+        The Graph Model is the fundamental data structure in yFiles that represents graphs through four main components:
+        <ul>
+            <li><strong>Nodes</strong>: The vertices or points in the graph</li>
+            <li><strong>Edges</strong>: The connections between nodes</li>
+            <li><strong>Labels</strong>: Text annotations attached to nodes or edges</li>
+            <li><strong>Ports</strong>: Specific connection points on nodes where edges attach</li>
+        </ul>
+        This model provides the foundation for all graph visualization and manipulation in yFiles.
+    </div>
+
+    <div class="question">Why is understanding the Graph Model important?</div>
+    <div class="answer">
+        The Graph Model is crucial because:
+        <ul>
+            <li>It's the core abstraction for all graph operations</li>
+            <li>Every feature in yFiles builds upon this model</li>
+            <li>Understanding it enables you to create, modify, and query graphs effectively</li>
+            <li>It provides a consistent API across different yFiles platforms</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the key properties of nodes in the Graph Model?</div>
+    <div class="answer">
+        Nodes in yFiles have several important properties:
+        <ul>
+            <li><strong>Layout</strong>: Position (x, y) and size (width, height)</li>
+            <li><strong>Style</strong>: Visual appearance (shape, color, etc.)</li>
+            <li><strong>Labels</strong>: Associated text annotations</li>
+            <li><strong>Ports</strong>: Connection points for edges</li>
+            <li><strong>Tag</strong>: Custom data object for business logic</li>
+            <li><strong>Parent</strong>: Optional parent node for grouping</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the key properties of edges in the Graph Model?</div>
+    <div class="answer">
+        Edges connect nodes and have these properties:
+        <ul>
+            <li><strong>Source Node</strong>: The node where the edge starts</li>
+            <li><strong>Target Node</strong>: The node where the edge ends</li>
+            <li><strong>Source Port</strong>: Specific connection point on source node</li>
+            <li><strong>Target Port</strong>: Specific connection point on target node</li>
+            <li><strong>Style</strong>: Visual appearance (line type, arrows, etc.)</li>
+            <li><strong>Bends</strong>: Points that define the edge path</li>
+            <li><strong>Labels</strong>: Text annotations on the edge</li>
+            <li><strong>Tag</strong>: Custom data object</li>
+        </ul>
+    </div>
+
+    <div class="question">How do labels work in the Graph Model?</div>
+    <div class="answer">
+        Labels are text elements that can be attached to both nodes and edges:
+        <ul>
+            <li>Each node or edge can have multiple labels</li>
+            <li>Labels have their own position, size, and style</li>
+            <li>Label placement is controlled by <strong>Label Models</strong></li>
+            <li>Labels can be interactive (editable, selectable)</li>
+            <li>They improve readability and provide context</li>
+        </ul>
+    </div>
+
+    <div class="question">What role do ports play in the Graph Model?</div>
+    <div class="answer">
+        Ports are connection points on nodes that provide precise control over edge routing:
+        <ul>
+            <li>They define exactly where edges connect to nodes</li>
+            <li>Multiple edges can share the same port</li>
+            <li>Ports can be positioned anywhere on or around a node</li>
+            <li>They enable cleaner, more organized graph layouts</li>
+            <li>Port constraints can restrict which edges can connect</li>
+        </ul>
+    </div>
+
+    <div class="question">How is the Graph Model accessed and modified?</div>
+    <div class="answer">
+        The Graph Model is accessed through the <strong>IGraph</strong> interface:
+        <ul>
+            <li>Create nodes: <code>graph.createNode()</code></li>
+            <li>Create edges: <code>graph.createEdge(source, target)</code></li>
+            <li>Add labels: <code>graph.addLabel(node, "text")</code></li>
+            <li>Remove elements: <code>graph.remove(node)</code></li>
+            <li>Query elements: <code>graph.nodes</code>, <code>graph.edges</code></li>
+            <li>Modify layout: <code>graph.setNodeLayout(node, rect)</code></li>
+        </ul>
+    </div>
+
+    <div class="question">Can you provide a simple example of creating a graph?</div>
+    <div class="answer">
+        Here's a basic example of creating a simple graph:
+        <pre><code>// Get the graph from the GraphComponent
+const graph = graphComponent.graph;
+
+// Create two nodes
+const node1 = graph.createNode(new Rect(0, 0, 100, 60));
+const node2 = graph.createNode(new Rect(200, 0, 100, 60));
+
+// Add labels to the nodes
+graph.addLabel(node1, "Start");
+graph.addLabel(node2, "End");
+
+// Create an edge connecting the nodes
+const edge = graph.createEdge(node1, node2);
+
+// Add a label to the edge
+graph.addLabel(edge, "connects to");
+
+// Apply a layout
+graphComponent.fitGraphBounds();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cycle Detection - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Cycle Detection?</div>
+    <div class="answer">
+        Cycle Detection identifies circular paths in a graph where you can start at a node and return to it by following edges. This is important for validating dependencies and detecting circular references.
+    </div>
+
+    <div class="question">How do you detect cycles?</div>
+    <div class="answer">
+        <pre><code>// Detect cycles in directed graph
+const cycleDetector = new CycleEdges();
+const result = cycleDetector.run(graph);
+
+if (result.edges.size > 0) {
+    console.log(`Found ${result.edges.size} cycle edges`);
+    
+    // Highlight cycle edges
+    result.edges.forEach(edge => {
+        graph.setStyle(edge, new PolylineEdgeStyle({
+            stroke: '3px red dashed',
+            targetArrow: IArrow.TRIANGLE
+        }));
+    });
+} else {
+    console.log('Graph is acyclic (no cycles found)');
+}
+
+// Check if graph is acyclic
+const isAcyclic = result.edges.size === 0;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

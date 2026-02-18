@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HandleProvider - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is HandleProvider?</div>
+    <div class="answer">
+        HandleProvider allows you to customize the resize handles that appear when nodes are selected, enabling custom resize behavior and constraints.
+    </div>
+
+    <div class="question">How do you customize handles?</div>
+    <div class="answer">
+        <pre><code>// Custom handle provider
+class CustomHandleProvider extends BaseClass(IHandleProvider) {
+    getHandles(context) {
+        const handles = new List();
+        const node = context.item;
+        const layout = node.layout;
+        
+        // Add custom handles at specific positions
+        handles.add(new CustomHandle(node, HandlePositions.NORTH_EAST));
+        handles.add(new CustomHandle(node, HandlePositions.SOUTH_WEST));
+        
+        return handles;
+    }
+}
+
+// Register custom handle provider
+const decorator = graph.decorator.nodeDecorator;
+decorator.handleProviderDecorator.setFactory(
+    node => new CustomHandleProvider()
+);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

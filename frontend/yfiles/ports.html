@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ports - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Ports in yFiles?</div>
+    <div class="answer">
+        Ports are specific connection points on nodes where edges can attach. They provide precise control over where edges connect to nodes, enabling cleaner and more organized graph layouts. Ports are essential for:
+        <ul>
+            <li>Controlling exact edge connection locations</li>
+            <li>Creating multiple connections at specific points</li>
+            <li>Implementing connection constraints</li>
+            <li>Improving visual clarity of complex graphs</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you create ports?</div>
+    <div class="answer">
+        Ports can be created in several ways:
+        <pre><code>const graph = graphComponent.graph;
+
+// Add port at default location (center)
+const port1 = graph.addPort(node);
+
+// Add port at specific location
+const port2 = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_TOP_ANCHORED
+);
+
+// Add port with custom location parameter
+const port3 = graph.addPort(
+    node,
+    new FreeNodePortLocationModel().createParameter(
+        new Point(0.25, 0)  // 25% from left, at top
+    )
+);
+
+// Create edge using specific ports
+const edge = graph.createEdge(port1, port2);</code></pre>
+    </div>
+
+    <div class="question">What are Port Location Models?</div>
+    <div class="answer">
+        Port Location Models define where ports are positioned on nodes:
+        <ul>
+            <li><strong>FreeNodePortLocationModel</strong>: Position ports anywhere relative to node</li>
+            <li><strong>NodeScaledPortLocationModel</strong>: Position as ratio of node size</li>
+            <li><strong>FixedPortLocationModel</strong>: Absolute coordinates</li>
+            <li><strong>Predefined locations</strong>: NODE_TOP_ANCHORED, NODE_BOTTOM_ANCHORED, etc.</li>
+        </ul>
+        <pre><code>// Using predefined locations
+const topPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_TOP_ANCHORED
+);
+
+// Using ratio-based positioning
+const scaledPort = graph.addPort(
+    node,
+    NodeScaledPortLocationModel.NODE_CENTER_ANCHORED
+);</code></pre>
+    </div>
+
+    <div class="question">How do you work with multiple ports on a node?</div>
+    <div class="answer">
+        Nodes can have multiple ports for organizing connections:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create ports at cardinal directions
+const topPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_TOP_ANCHORED
+);
+const rightPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_RIGHT_ANCHORED
+);
+const bottomPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_BOTTOM_ANCHORED
+);
+const leftPort = graph.addPort(
+    node,
+    FreeNodePortLocationModel.NODE_LEFT_ANCHORED
+);
+
+// Get all ports of a node
+const ports = node.ports.toArray();
+console.log(`Node has ${ports.length} ports`);
+
+// Iterate through ports
+for (const port of node.ports) {
+    console.log(`Port at: ${port.location}`);
+}</code></pre>
+    </div>
+
+    <div class="question">What are Port Constraints?</div>
+    <div class="answer">
+        Port constraints control which edges can connect to which ports:
+        <ul>
+            <li>Restrict connections based on direction (input/output)</li>
+            <li>Limit number of edges per port</li>
+            <li>Define connection rules for specific port types</li>
+            <li>Implement custom validation logic</li>
+        </ul>
+        <pre><code>// Example: Creating input and output ports
+const inputPort = graph.addPort(node);
+inputPort.tag = { type: 'input' };
+
+const outputPort = graph.addPort(node);
+outputPort.tag = { type: 'output' };
+
+// Custom validation in port candidate provider
+const decorator = graph.decorator.nodeDecorator;
+decorator.portCandidateProviderDecorator.setFactory(
+    node => new CustomPortCandidateProvider(node)
+);</code></pre>
+    </div>
+
+    <div class="question">How do you style ports?</div>
+    <div class="answer">
+        Ports can have custom visual styles:
+        <pre><code>// Set port style
+graph.setStyle(
+    port,
+    new NodeStylePortStyleAdapter({
+        nodeStyle: new ShapeNodeStyle({
+            shape: 'ellipse',
+            fill: 'blue',
+            stroke: 'darkblue'
+        }),
+        renderSize: new Size(8, 8)
+    })
+);
+
+// Different styles for different port types
+if (port.tag?.type === 'input') {
+    graph.setStyle(port, inputPortStyle);
+} else if (port.tag?.type === 'output') {
+    graph.setStyle(port, outputPortStyle);
+}</code></pre>
+    </div>
+
+    <div class="question">How do you query port information?</div>
+    <div class="answer">
+        You can query various port properties:
+        <pre><code>const graph = graphComponent.graph;
+
+// Get port location
+const location = port.location;
+console.log(`Port at: (${location.x}, ${location.y})`);
+
+// Get port owner (node)
+const owner = port.owner;
+
+// Get edges connected to port
+const degree = graph.degree(port);
+console.log(`Port has ${degree} connected edges`);
+
+// Get all ports in graph
+const allPorts = graph.ports.toArray();
+
+// Find ports by criteria
+const inputPorts = graph.ports
+    .filter(p => p.tag?.type === 'input')
+    .toArray();</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example using ports?</div>
+    <div class="answer">
+        Here's an example creating a circuit-like diagram with ports:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create nodes
+const andGate = graph.createNode(new Rect(0, 0, 80, 60));
+const orGate = graph.createNode(new Rect(200, 0, 80, 60));
+const output = graph.createNode(new Rect(400, 0, 80, 60));
+
+// Add labels
+graph.addLabel(andGate, 'AND');
+graph.addLabel(orGate, 'OR');
+graph.addLabel(output, 'OUT');
+
+// Create input ports on left side
+const and_in1 = graph.addPort(
+    andGate,
+    new FreeNodePortLocationModel().createParameter(
+        new Point(0, 0.33)
+    )
+);
+const and_in2 = graph.addPort(
+    andGate,
+    new FreeNodePortLocationModel().createParameter(
+        new Point(0, 0.67)
+    )
+);
+
+// Create output port on right side
+const and_out = graph.addPort(
+    andGate,
+    FreeNodePortLocationModel.NODE_RIGHT_ANCHORED
+);
+
+// Similar for OR gate
+const or_in1 = graph.addPort(
+    orGate,
+    new FreeNodePortLocationModel().createParameter(
+        new Point(0, 0.33)
+    )
+);
+const or_in2 = graph.addPort(
+    orGate,
+    new FreeNodePortLocationModel().createParameter(
+        new Point(0, 0.67)
+    )
+);
+const or_out = graph.addPort(
+    orGate,
+    FreeNodePortLocationModel.NODE_RIGHT_ANCHORED
+);
+
+// Output node input
+const out_in = graph.addPort(
+    output,
+    FreeNodePortLocationModel.NODE_LEFT_ANCHORED
+);
+
+// Connect using ports
+graph.createEdge(and_out, or_in1);
+graph.createEdge(or_out, out_in);
+
+// Apply layout
+graphComponent.fitGraphBounds();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

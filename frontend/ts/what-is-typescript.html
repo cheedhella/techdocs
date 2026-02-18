@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>What is TypeScript? - TypeScript</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is TypeScript?</div>
+    <div class="answer">
+        TypeScript is a strongly typed programming language that builds on JavaScript. It adds optional static type checking, enabling developers to catch errors at compile-time rather than runtime. TypeScript code compiles to plain JavaScript, which can run anywhere JavaScript runs.
+    </div>
+
+    <div class="question">Why use TypeScript?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Type Safety</strong>: Catch errors before runtime</li>
+            <li><strong>Better IDE Support</strong>: Enhanced autocomplete, refactoring, and navigation</li>
+            <li><strong>Self-Documenting Code</strong>: Types serve as inline documentation</li>
+            <li><strong>Easier Refactoring</strong>: Compiler helps identify breaking changes</li>
+            <li><strong>Modern JavaScript Features</strong>: Use latest ES features with backward compatibility</li>
+            <li><strong>Better for Large Codebases</strong>: Scales well with team size and project complexity</li>
+        </ul>
+    </div>
+
+    <div class="question">How does TypeScript relate to JavaScript?</div>
+    <div class="answer">
+        TypeScript is a superset of JavaScript, meaning:
+        <ul>
+            <li>All valid JavaScript code is valid TypeScript code</li>
+            <li>TypeScript adds optional type annotations and other features</li>
+            <li>TypeScript compiles down to JavaScript</li>
+            <li>You can gradually adopt TypeScript in existing JavaScript projects</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the key features of TypeScript?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Static Typing</strong>: Optional type annotations</li>
+            <li><strong>Type Inference</strong>: Automatic type detection</li>
+            <li><strong>Interfaces</strong>: Define contracts for object shapes</li>
+            <li><strong>Generics</strong>: Write reusable, type-safe code</li>
+            <li><strong>Enums</strong>: Define named constants</li>
+            <li><strong>Advanced Types</strong>: Union, intersection, conditional types</li>
+            <li><strong>Decorators</strong>: Metaprogramming features</li>
+            <li><strong>Modules</strong>: Organize code into reusable units</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple TypeScript example?</div>
+    <div class="answer">
+        <pre><code>// JavaScript
+function greet(name) {
+    return "Hello, " + name;
+}
+
+greet(42); // No error, but wrong!
+
+// TypeScript
+function greet(name: string): string {
+    return "Hello, " + name;
+}
+
+greet(42); // Error: Argument of type 'number' is not assignable to parameter of type 'string'
+greet("World"); // ✓ Correct</code></pre>
+    </div>
+
+    <div class="question">When should you use TypeScript?</div>
+    <div class="answer">
+        TypeScript is especially beneficial for:
+        <ul>
+            <li>Large applications with multiple developers</li>
+            <li>Projects that need to be maintained long-term</li>
+            <li>Libraries and frameworks that others will use</li>
+            <li>Applications where reliability is critical</li>
+            <li>Teams that want better tooling and IDE support</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the trade-offs?</div>
+    <div class="answer">
+        <strong>Pros:</strong>
+        <ul>
+            <li>Catch errors early</li>
+            <li>Better code quality and maintainability</li>
+            <li>Excellent IDE support</li>
+            <li>Easier refactoring</li>
+        </ul>
+        <strong>Cons:</strong>
+        <ul>
+            <li>Requires compilation step</li>
+            <li>Learning curve for type system</li>
+            <li>More verbose code</li>
+            <li>Initial setup overhead</li>
+        </ul>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to TypeScript Home</a>
+</body>
+</html>

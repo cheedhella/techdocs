@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Converters - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Converters?</div>
+    <div class="answer">
+        Converters transform data values into visual properties, allowing you to map business data to graph appearance dynamically.
+    </div>
+
+    <div class="question">How do you use converters?</div>
+    <div class="answer">
+        <pre><code>// Example: Convert priority to color
+function priorityToColor(priority) {
+    switch (priority) {
+        case 'high': return 'red';
+        case 'medium': return 'yellow';
+        case 'low': return 'green';
+        default: return 'gray';
+    }
+}
+
+// Example: Convert value to size
+function valueToSize(value) {
+    const baseSize = 60;
+    const scale = value / 100;
+    return new Size(
+        baseSize * scale,
+        baseSize * scale * 0.6
+    );
+}
+
+// Apply converters
+graph.nodes.forEach(node => {
+    const data = node.tag;
+    
+    // Use color converter
+    graph.setStyle(node, new ShapeNodeStyle({
+        fill: priorityToColor(data.priority)
+    }));
+    
+    // Use size converter
+    const size = valueToSize(data.value);
+    graph.setNodeLayout(node, new Rect(
+        node.layout.x,
+        node.layout.y,
+        size.width,
+        size.height
+    ));
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

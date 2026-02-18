@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Folding - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Folding?</div>
+    <div class="answer">
+        Folding allows users to expand and collapse group nodes, hiding or showing their contents. This is essential for managing large, hierarchical graphs.
+    </div>
+
+    <div class="question">How do you enable folding?</div>
+    <div class="answer">
+        <pre><code>// Enable folding on the graph
+const foldingManager = new FoldingManager();
+const foldingView = foldingManager.createFoldingView();
+const graph = foldingView.graph;
+
+// Use the folding graph with GraphComponent
+graphComponent.graph = graph;
+
+// Collapse a group
+foldingView.collapse(groupNode);
+
+// Expand a group
+foldingView.expand(groupNode);
+
+// Check if collapsed
+if (foldingView.isCollapsed(groupNode)) {
+    console.log('Group is collapsed');
+}</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

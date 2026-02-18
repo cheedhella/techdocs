@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>UndoEngine - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the UndoEngine?</div>
+    <div class="answer">
+        The UndoEngine provides undo/redo functionality for graph modifications, allowing users to revert and replay changes.
+    </div>
+
+    <div class="question">How do you enable undo/redo?</div>
+    <div class="answer">
+        <pre><code>const graph = graphComponent.graph;
+
+// Enable undo engine
+graph.undoEngineEnabled = true;
+
+// Perform operations (automatically tracked)
+const node = graph.createNode();
+graph.addLabel(node, 'Test');
+
+// Undo
+graph.undoEngine.undo();
+
+// Redo
+graph.undoEngine.redo();
+
+// Check if undo/redo available
+console.log('Can undo:', graph.undoEngine.canUndo());
+console.log('Can redo:', graph.undoEngine.canRedo());</code></pre>
+    </div>
+
+    <div class="question">How do you add keyboard shortcuts for undo/redo?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Ctrl+Z for undo
+inputMode.keyboardInputMode.addCommandBinding(
+    ICommand.UNDO,
+    () => {
+        if (graph.undoEngine.canUndo()) {
+            graph.undoEngine.undo();
+        }
+        return true;
+    }
+);
+
+// Ctrl+Y for redo
+inputMode.keyboardInputMode.addCommandBinding(
+    ICommand.REDO,
+    () => {
+        if (graph.undoEngine.canRedo()) {
+            graph.undoEngine.redo();
+        }
+        return true;
+    }
+);
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

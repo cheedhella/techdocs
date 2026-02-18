@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>EdgeReconnectionPortCandidateProvider - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is EdgeReconnectionPortCandidateProvider?</div>
+    <div class="answer">
+        This provider controls which ports are valid targets when reconnecting edges, allowing you to implement custom connection rules and constraints.
+    </div>
+
+    <div class="question">How do you customize edge reconnection?</div>
+    <div class="answer">
+        <pre><code>// Custom port candidate provider
+class CustomPortCandidateProvider extends BaseClass(IEdgeReconnectionPortCandidateProvider) {
+    getSourcePortCandidates(context, target) {
+        const candidates = new List();
+        const node = context.item.sourceNode;
+        
+        // Only allow reconnection from output ports
+        node.ports.forEach(port => {
+            if (port.tag?.type === 'output') {
+                candidates.add(new DefaultPortCandidate(port));
+            }
+        });
+        
+        return candidates;
+    }
+    
+    getTargetPortCandidates(context, source) {
+        const candidates = new List();
+        const node = context.item.targetNode;
+        
+        // Only allow reconnection to input ports
+        node.ports.forEach(port => {
+            if (port.tag?.type === 'input') {
+                candidates.add(new DefaultPortCandidate(port));
+            }
+        });
+        
+        return candidates;
+    }
+}
+
+// Register provider
+const decorator = graph.decorator.edgeDecorator;
+decorator.edgeReconnectionPortCandidateProviderDecorator.setFactory(
+    edge => new CustomPortCandidateProvider()
+);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

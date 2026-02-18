@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Subgraphs - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Subgraphs?</div>
+    <div class="answer">
+        Subgraphs are partial views of a graph, allowing you to work with specific subsets of nodes and edges. They're useful for focusing on relevant parts of large graphs.
+    </div>
+
+    <div class="question">How do you create subgraphs?</div>
+    <div class="answer">
+        <pre><code>// Get subset of nodes
+const selectedNodes = graphComponent.selection.selectedNodes.toArray();
+
+// Create subgraph with selected nodes and their edges
+const subgraphNodes = new Set(selectedNodes);
+const subgraphEdges = graph.edges
+    .filter(e => 
+        subgraphNodes.has(e.sourceNode) && 
+        subgraphNodes.has(e.targetNode)
+    )
+    .toArray();
+
+// Apply layout to subgraph only
+const layoutData = new HierarchicLayoutData();
+layoutData.affectedNodes.items = selectedNodes;
+await graphComponent.morphLayout(
+    new HierarchicLayout(),
+    layoutData
+);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

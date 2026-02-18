@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tag Property - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the Tag Property?</div>
+    <div class="answer">
+        The tag property is a flexible way to attach custom data to any graph element (nodes, edges, labels, ports). It can store any JavaScript object.
+    </div>
+
+    <div class="question">How do you use tags?</div>
+    <div class="answer">
+        <pre><code>// Attach data to node
+const node = graph.createNode();
+node.tag = {
+    id: 'node-1',
+    type: 'process',
+    data: {
+        name: 'Process Step',
+        duration: 120,
+        assignee: 'John'
+    },
+    metadata: {
+        created: new Date(),
+        modified: new Date()
+    }
+};
+
+// Attach data to edge
+const edge = graph.createEdge(node1, node2);
+edge.tag = {
+    weight: 5,
+    type: 'dependency',
+    label: 'depends on'
+};
+
+// Access tag data
+console.log(node.tag.data.name);
+console.log(edge.tag.weight);</code></pre>
+    </div>
+
+    <div class="question">Can you show practical tag usage?</div>
+    <div class="answer">
+        <pre><code>// Filter nodes by tag
+const processNodes = graph.nodes
+    .filter(n => n.tag?.type === 'process')
+    .toArray();
+
+// Update nodes based on tag
+graph.nodes.forEach(node => {
+    if (node.tag?.data?.duration > 100) {
+        // Highlight long-running processes
+        graph.setStyle(node, new ShapeNodeStyle({
+            fill: 'red'
+        }));
+    }
+});
+
+// Sort edges by weight
+const sortedEdges = graph.edges
+    .toArray()
+    .sort((a, b) => (b.tag?.weight || 0) - (a.tag?.weight || 0));
+
+// Find nodes by criteria
+function findNodeById(id) {
+    return graph.nodes.find(n => n.tag?.id === id);
+}
+
+// Update tag data
+const node = findNodeById('node-1');
+if (node) {
+    node.tag.data.modified = new Date();
+    node.tag.data.assignee = 'Jane';
+}</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

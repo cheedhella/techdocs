@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Move, Resize & Create Modes - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Move, Resize, and Create modes?</div>
+    <div class="answer">
+        These are sub-modes within GraphEditorInputMode that control how users can manipulate graph elements through dragging, resizing, and creating new elements.
+    </div>
+
+    <div class="question">How do you configure move behavior?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable/disable moving
+inputMode.moveInputMode.enabled = true;
+
+// Listen to move events
+inputMode.moveInputMode.addDragStartedListener((sender, evt) => {
+    console.log('Started moving');
+});
+
+inputMode.moveInputMode.addDragFinishedListener((sender, evt) => {
+    console.log('Finished moving');
+});
+
+// Prevent moving certain nodes
+inputMode.moveInputMode.addDragStartingListener((sender, evt) => {
+    if (evt.item.tag?.locked) {
+        evt.cancel = true;
+    }
+});</code></pre>
+    </div>
+
+    <div class="question">How do you configure resize behavior?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Show resize handles
+inputMode.showHandleItems = GraphItemTypes.NODE;
+
+// Configure minimum/maximum sizes
+inputMode.handleInputMode.addDragFinishedListener((sender, evt) => {
+    const node = evt.item.owner;
+    const layout = node.layout;
+    
+    // Enforce minimum size
+    if (layout.width < 50 || layout.height < 30) {
+        graph.setNodeLayout(node, new Rect(
+            layout.x, layout.y,
+            Math.max(layout.width, 50),
+            Math.max(layout.height, 30)
+        ));
+    }
+});</code></pre>
+    </div>
+
+    <div class="question">How do you configure node creation?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable node creation
+inputMode.allowCreateNode = true;
+
+// Customize created nodes
+inputMode.nodeCreator = (context, graph, location) => {
+    const node = graph.createNode(
+        new Rect(location.x - 50, location.y - 30, 100, 60)
+    );
+    graph.addLabel(node, 'New Node');
+    node.tag = { createdAt: new Date() };
+    return node;
+};
+
+// Listen to creation
+inputMode.createNodeInputMode.addNodeCreatedListener((sender, evt) => {
+    console.log('Node created:', evt.item);
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

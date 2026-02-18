@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Decorator API - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the Decorator API?</div>
+    <div class="answer">
+        The Decorator API allows you to extend and customize graph element behavior without modifying the core graph structure. It's used for adding custom visuals, handles, and interaction logic.
+    </div>
+
+    <div class="question">How do you use decorators?</div>
+    <div class="answer">
+        <pre><code>// Access decorator
+const decorator = graph.decorator.nodeDecorator;
+
+// Add custom highlight
+decorator.highlightDecorator.setImplementation(
+    new NodeStyleDecorationInstaller({
+        nodeStyle: new ShapeNodeStyle({
+            stroke: '3px yellow',
+            fill: 'transparent'
+        })
+    })
+);
+
+// Add custom selection indicator
+decorator.selectionDecorator.setImplementation(
+    new NodeStyleDecorationInstaller({
+        nodeStyle: new ShapeNodeStyle({
+            stroke: '3px blue',
+            fill: 'rgba(0, 0, 255, 0.1)'
+        })
+    })
+);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

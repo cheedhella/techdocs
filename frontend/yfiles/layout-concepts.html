@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Layout Concepts - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Layout Data?</div>
+    <div class="answer">
+        Layout Data provides additional information to layout algorithms, allowing you to customize how specific elements are laid out:
+        <pre><code>// Create layout and data
+const layout = new HierarchicLayout();
+const layoutData = new HierarchicLayoutData();
+
+// Configure specific elements
+layoutData.layerIndices.mapper = node => {
+    return node.tag?.layer || null;
+};
+
+layoutData.edgeThickness.mapper = edge => {
+    return edge.tag?.weight || 1;
+};
+
+// Apply with data
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">What are Layout Stages?</div>
+    <div class="answer">
+        Layout Stages allow you to combine multiple layout algorithms in a pipeline:
+        <pre><code>// Create main layout
+const layout = new HierarchicLayout();
+
+// Add label placement stage
+layout.labelingEnabled = true;
+layout.labeling = new GenericLabeling();
+
+// Add edge routing stage
+const edgeRouter = new EdgeRouter();
+layout.appendStage(edgeRouter);
+
+// The stages execute in order:
+// 1. Main hierarchic layout
+// 2. Label placement
+// 3. Edge routing
+
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What is Incremental Layout?</div>
+    <div class="answer">
+        Incremental Layout updates only the changed parts of a graph, preserving the overall structure:
+        <pre><code>// Configure for incremental mode
+const layout = new HierarchicLayout({
+    layoutMode: LayoutMode.INCREMENTAL
+});
+
+const layoutData = new HierarchicLayoutData();
+
+// Mark new nodes
+layoutData.incrementalHints.mapper = node => {
+    if (node.tag?.isNew) {
+        return HierarchicLayoutIncrementalHints.NEW;
+    }
+    return HierarchicLayoutIncrementalHints.NONE;
+};
+
+// Add new node
+const newNode = graph.createNode();
+newNode.tag = { isNew: true };
+graph.createEdge(existingNode, newNode);
+
+// Layout only updates around the new node
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">What is Layout Configuration?</div>
+    <div class="answer">
+        Layout Configuration involves setting parameters to control the algorithm's behavior:
+        <pre><code>// Detailed configuration example
+const layout = new HierarchicLayout({
+    // Orientation
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    
+    // Spacing
+    minimumLayerDistance: 60,
+    nodeToNodeDistance: 30,
+    
+    // Edge routing
+    edgeLayoutDescriptor: {
+        routingStyle: {
+            defaultEdgeRoutingStyle: EdgeRoutingStyle.ORTHOGONAL
+        },
+        minimumFirstSegmentLength: 20,
+        minimumLastSegmentLength: 20
+    },
+    
+    // Optimization
+    considerEdgeDirection: true,
+    integratedEdgeLabeling: true,
+    
+    // Grouping
+    recursiveGroupLayering: true
+});
+
+// Apply configuration
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What are Custom Layout Constraints?</div>
+    <div class="answer">
+        You can add custom constraints to control layout behavior:
+        <pre><code>const layout = new HierarchicLayout();
+const layoutData = new HierarchicLayoutData();
+
+// Port constraints (which side edges connect)
+layoutData.sourcePortConstraints.mapper = edge => {
+    return PortConstraint.create(PortSide.SOUTH);
+};
+layoutData.targetPortConstraints.mapper = edge => {
+    return PortConstraint.create(PortSide.NORTH);
+};
+
+// Node types (affects grouping)
+layoutData.nodeTypes.mapper = node => {
+    return node.tag?.type || 'default';
+};
+
+// Edge directedness
+layoutData.edgeDirectedness.mapper = edge => {
+    return edge.tag?.directed ? 1 : 0;
+};
+
+// Minimum edge length
+layoutData.minimumEdgeLength.mapper = edge => {
+    return edge.tag?.minLength || 0;
+};
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">How do you combine multiple layouts?</div>
+    <div class="answer">
+        You can apply different layouts to different parts of the graph:
+        <pre><code>// Apply hierarchic layout to main graph
+const hierarchicLayout = new HierarchicLayout();
+await graphComponent.morphLayout(hierarchicLayout);
+
+// Then apply organic layout to a specific subgraph
+const organicLayout = new OrganicLayout({
+    scope: OrganicLayoutScope.MAINLY_SUBSET
+});
+
+const layoutData = new OrganicLayoutData();
+layoutData.affectedNodes.items = selectedNodes;
+
+await graphComponent.morphLayout(organicLayout, layoutData);
+
+// Or use PartialLayout for mixed layouts
+const partialLayout = new PartialLayout({
+    coreLayout: new HierarchicLayout()
+});
+
+await graphComponent.morphLayout(partialLayout);</code></pre>
+    </div>
+
+    <div class="question">How do you animate layout changes?</div>
+    <div class="answer">
+        yFiles provides smooth animations for layout transitions:
+        <pre><code>// Animated layout with default duration
+await graphComponent.morphLayout(layout);
+
+// Custom duration
+await graphComponent.morphLayout(layout, '2s');
+
+// With easing function
+await graphComponent.morphLayout({
+    layout: layout,
+    morphDuration: '1.5s',
+    easedAnimation: true
+});
+
+// Without animation (instant)
+graphComponent.graph.applyLayout(layout);
+
+// Custom animation control
+const layoutExecutor = new LayoutExecutor({
+    graphComponent: graphComponent,
+    layout: layout,
+    duration: '1s',
+    animateViewport: true,
+    easedAnimation: true
+});
+
+await layoutExecutor.start();</code></pre>
+    </div>
+
+    <div class="question">Can you show a comprehensive layout example?</div>
+    <div class="answer">
+        Here's a complete example combining multiple concepts:
+        <pre><code>// Create graph
+const graph = graphComponent.graph;
+
+// Create nodes with metadata
+const nodes = [];
+for (let i = 0; i < 10; i++) {
+    const node = graph.createNode();
+    node.tag = {
+        layer: Math.floor(i / 3),
+        type: i % 2 === 0 ? 'process' : 'decision',
+        isNew: i > 7
+    };
+    graph.addLabel(node, `Node ${i + 1}`);
+    nodes.push(node);
+}
+
+// Create edges
+for (let i = 0; i < 9; i++) {
+    const edge = graph.createEdge(nodes[i], nodes[i + 1]);
+    edge.tag = { weight: Math.random() * 5 + 1 };
+}
+
+// Configure layout
+const layout = new HierarchicLayout({
+    layoutOrientation: LayoutOrientation.TOP_TO_BOTTOM,
+    minimumLayerDistance: 80,
+    nodeToNodeDistance: 50,
+    integratedEdgeLabeling: true,
+    layoutMode: LayoutMode.INCREMENTAL
+});
+
+// Configure layout data
+const layoutData = new HierarchicLayoutData();
+
+// Use node metadata
+layoutData.layerIndices.mapper = node => node.tag.layer;
+layoutData.incrementalHints.mapper = node => {
+    return node.tag.isNew 
+        ? HierarchicLayoutIncrementalHints.NEW 
+        : HierarchicLayoutIncrementalHints.NONE;
+};
+
+// Port constraints
+layoutData.sourcePortConstraints.constant = 
+    PortConstraint.create(PortSide.SOUTH);
+layoutData.targetPortConstraints.constant = 
+    PortConstraint.create(PortSide.NORTH);
+
+// Apply with animation
+await graphComponent.morphLayout(layout, layoutData, '1.5s');
+
+// Fit to view
+graphComponent.fitGraphBounds(new Insets(30));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

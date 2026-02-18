@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Animation - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Animation in yFiles?</div>
+    <div class="answer">
+        Animation provides smooth visual transitions when graph elements change position, size, or appearance. It improves user experience by making changes easier to follow.
+    </div>
+
+    <div class="question">How do you animate layout changes?</div>
+    <div class="answer">
+        <pre><code>// Animated layout with default duration (1 second)
+await graphComponent.morphLayout(new HierarchicLayout());
+
+// Custom duration
+await graphComponent.morphLayout(new HierarchicLayout(), '2s');
+
+// With easing
+await graphComponent.morphLayout({
+    layout: new HierarchicLayout(),
+    morphDuration: '1.5s',
+    easedAnimation: true
+});
+
+// Animate viewport changes
+graphComponent.zoomToAnimated(new Rect(0, 0, 500, 500));
+graphComponent.fitGraphBounds(new Insets(20), true);</code></pre>
+    </div>
+
+    <div class="question">How do you create custom animations?</div>
+    <div class="answer">
+        <pre><code>// Custom animation using IAnimation
+const animator = new Animator(graphComponent);
+
+// Animate node movement
+const animation = IAnimation.createNodeAnimation(
+    graph,
+    node,
+    node.layout.toRect(),
+    new Rect(200, 200, 100, 60),
+    '1s'
+);
+
+animator.animate(animation);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

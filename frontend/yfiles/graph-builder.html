@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphBuilder - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is GraphBuilder?</div>
+    <div class="answer">
+        GraphBuilder is a powerful utility that creates graphs from business data. It automatically builds nodes and edges from your data arrays/objects, handling data binding and updates efficiently.
+    </div>
+
+    <div class="question">How do you use GraphBuilder?</div>
+    <div class="answer">
+        <pre><code>// Sample data
+const nodesData = [
+    { id: 1, name: 'Alice', role: 'Manager' },
+    { id: 2, name: 'Bob', role: 'Developer' },
+    { id: 3, name: 'Carol', role: 'Designer' }
+];
+
+const edgesData = [
+    { from: 1, to: 2, relationship: 'manages' },
+    { from: 1, to: 3, relationship: 'manages' }
+];
+
+// Create GraphBuilder
+const graphBuilder = new GraphBuilder(graph);
+
+// Configure nodes source
+const nodesSource = graphBuilder.createNodesSource({
+    data: nodesData,
+    id: 'id'
+});
+
+// Configure edges source
+const edgesSource = graphBuilder.createEdgesSource({
+    data: edgesData,
+    sourceId: 'from',
+    targetId: 'to'
+});
+
+// Build the graph
+graphBuilder.buildGraph();
+
+// Apply layout
+await graphComponent.morphLayout(new HierarchicLayout());</code></pre>
+    </div>
+
+    <div class="question">How do you customize node and edge creation?</div>
+    <div class="answer">
+        <pre><code>const graphBuilder = new GraphBuilder(graph);
+
+const nodesSource = graphBuilder.createNodesSource({
+    data: nodesData,
+    id: 'id'
+});
+
+// Customize node creation
+nodesSource.nodeCreator.createLabelBinding(data => data.name);
+nodesSource.nodeCreator.styleProvider = data => {
+    return new ShapeNodeStyle({
+        fill: data.role === 'Manager' ? 'lightblue' : 'lightgreen',
+        shape: 'round-rectangle'
+    });
+};
+nodesSource.nodeCreator.tagProvider = data => data;
+
+// Customize edge creation
+const edgesSource = graphBuilder.createEdgesSource({
+    data: edgesData,
+    sourceId: 'from',
+    targetId: 'to'
+});
+
+edgesSource.edgeCreator.createLabelBinding(data => data.relationship);
+edgesSource.edgeCreator.tagProvider = data => data;
+
+graphBuilder.buildGraph();</code></pre>
+    </div>
+
+    <div class="question">How do you update the graph when data changes?</div>
+    <div class="answer">
+        <pre><code>// Initial build
+graphBuilder.buildGraph();
+
+// Later, when data changes
+nodesData.push({ id: 4, name: 'David', role: 'Developer' });
+edgesData.push({ from: 2, to: 4, relationship: 'mentors' });
+
+// Update the graph
+graphBuilder.updateGraph();
+
+// Apply layout to new elements
+await graphComponent.morphLayout(new HierarchicLayout());</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

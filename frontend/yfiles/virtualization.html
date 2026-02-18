@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Virtualization - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Virtualization?</div>
+    <div class="answer">
+        Virtualization is a technique where only visible elements in the viewport are rendered, dramatically improving performance for large graphs. Elements outside the viewport are not rendered until they come into view.
+    </div>
+
+    <div class="question">How does yFiles handle virtualization?</div>
+    <div class="answer">
+        yFiles automatically virtualizes rendering by default. The GraphComponent only renders elements that are visible or near the viewport. You can optimize further by:
+        <pre><code>// Disable rendering during bulk updates
+graphComponent.updateContentRect();
+
+// Batch multiple changes
+graph.beginEdit();
+try {
+    // Make multiple changes
+    for (let i = 0; i < 1000; i++) {
+        const node = graph.createNode();
+        graph.addLabel(node, `Node ${i}`);
+    }
+} finally {
+    graph.endEdit();
+}
+
+// Invalidate and redraw
+graphComponent.invalidate();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

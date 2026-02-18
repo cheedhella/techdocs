@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Decorators - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Decorators?</div>
+    <div class="answer">
+        Decorators in yFiles allow you to add visual enhancements like highlights, selection indicators, and focus visuals to graph elements without modifying their core styles.
+    </div>
+
+    <div class="question">How do you use the Highlight Decorator?</div>
+    <div class="answer">
+        <pre><code>// Get highlight manager
+const highlightManager = graphComponent.highlightIndicatorManager;
+
+// Add highlight to node
+highlightManager.addHighlight(node);
+
+// Remove highlight
+highlightManager.removeHighlight(node);
+
+// Clear all highlights
+highlightManager.clearHighlights();
+
+// Custom highlight style
+highlightManager.nodeStyle = new ShapeNodeStyle({
+    stroke: '3px yellow',
+    fill: 'transparent'
+});</code></pre>
+    </div>
+
+    <div class="question">How do you customize selection indicators?</div>
+    <div class="answer">
+        <pre><code>// Customize selection appearance
+const selectionManager = graphComponent.selectionIndicatorManager;
+
+// Custom node selection style
+selectionManager.nodeStyle = new ShapeNodeStyle({
+    stroke: '3px blue',
+    fill: 'rgba(0, 0, 255, 0.1)'
+});
+
+// Custom edge selection style
+selectionManager.edgeStyle = new PolylineEdgeStyle({
+    stroke: '4px blue'
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example?</div>
+    <div class="answer">
+        <pre><code>// Highlight neighbors when node is selected
+graphComponent.selection.addItemSelectionChangedListener((sender, evt) => {
+    const item = evt.item;
+    const highlightManager = graphComponent.highlightIndicatorManager;
+    
+    if (item instanceof INode && evt.itemSelected) {
+        // Highlight the selected node's neighbors
+        const graph = graphComponent.graph;
+        graph.neighbors(item).forEach(neighbor => {
+            highlightManager.addHighlight(neighbor);
+        });
+        
+        // Highlight connected edges
+        graph.edgesAt(item).forEach(edge => {
+            highlightManager.addHighlight(edge);
+        });
+    } else if (!evt.itemSelected) {
+        // Clear highlights when deselected
+        highlightManager.clearHighlights();
+    }
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

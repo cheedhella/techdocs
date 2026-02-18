@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>TypeScript Usage - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you use yFiles with TypeScript?</div>
+    <div class="answer">
+        yFiles includes full TypeScript definitions, providing excellent IDE support and type safety.
+        <pre><code>// app.ts
+import {
+    GraphComponent,
+    GraphEditorInputMode,
+    IGraph,
+    INode,
+    IEdge,
+    ShapeNodeStyle,
+    PolylineEdgeStyle,
+    HierarchicLayout,
+    Rect
+} from 'yfiles';
+
+// Initialize with types
+const graphComponent: GraphComponent = new GraphComponent('#graphComponent');
+const inputMode: GraphEditorInputMode = new GraphEditorInputMode();
+graphComponent.inputMode = inputMode;
+
+// Typed graph
+const graph: IGraph = graphComponent.graph;
+
+// Create typed nodes
+const node1: INode = graph.createNode(new Rect(0, 0, 100, 60));
+const node2: INode = graph.createNode(new Rect(200, 0, 100, 60));
+
+// Create typed edge
+const edge: IEdge = graph.createEdge(node1, node2);
+
+// Type-safe styling
+graph.setStyle(node1, new ShapeNodeStyle({
+    fill: 'lightblue',
+    stroke: '2px darkblue',
+    shape: 'round-rectangle'
+}));
+
+// Apply layout with types
+const layout: HierarchicLayout = new HierarchicLayout();
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">How do you define custom types?</div>
+    <div class="answer">
+        <pre><code>// types.ts
+interface NodeData {
+    id: string;
+    name: string;
+    type: 'process' | 'decision' | 'terminal';
+    metadata?: Record<string, any>;
+}
+
+interface EdgeData {
+    weight: number;
+    label: string;
+    type: 'dependency' | 'flow';
+}
+
+// Use custom types with tags
+const node: INode = graph.createNode();
+node.tag = {
+    id: 'node-1',
+    name: 'Process Step',
+    type: 'process'
+} as NodeData;
+
+const edge: IEdge = graph.createEdge(node1, node2);
+edge.tag = {
+    weight: 5,
+    label: 'connects to',
+    type: 'dependency'
+} as EdgeData;
+
+// Type-safe access
+const nodeData = node.tag as NodeData;
+console.log(nodeData.name);
+
+const edgeData = edge.tag as EdgeData;
+console.log(edgeData.weight);</code></pre>
+    </div>
+
+    <div class="question">How do you configure tsconfig.json?</div>
+    <div class="answer">
+        <pre><code>{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ES2015",
+    "lib": ["ES2015", "DOM"],
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

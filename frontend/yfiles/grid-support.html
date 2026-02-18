@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Grid Support - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Grid Support?</div>
+    <div class="answer">
+        Grid Support displays a visual grid in the background and enables snapping to grid lines, helping create structured, aligned diagrams.
+    </div>
+
+    <div class="question">How do you add a grid?</div>
+    <div class="answer">
+        <pre><code>// Create and configure grid
+const grid = new GridVisualCreator({
+    horizontalSpacing: 50,
+    verticalSpacing: 50,
+    stroke: '1px lightgray'
+});
+
+// Add grid to GraphComponent
+graphComponent.backgroundGroup.addChild(
+    grid.createVisual(graphComponent.createRenderContext())
+);
+
+// Enable grid snapping
+const inputMode = new GraphEditorInputMode();
+inputMode.snapContext = new GraphSnapContext({
+    enabled: true,
+    snapToGridEnabled: true,
+    gridSpacing: 50
+});
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

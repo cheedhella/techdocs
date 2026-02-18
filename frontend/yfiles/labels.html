@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Labels - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Labels in yFiles?</div>
+    <div class="answer">
+        Labels are text annotations that can be attached to nodes, edges, and ports. They provide context, identification, and additional information in graph visualizations. Labels are essential for:
+        <ul>
+            <li>Displaying node names and identifiers</li>
+            <li>Showing edge weights or relationships</li>
+            <li>Providing descriptive information</li>
+            <li>Improving graph readability</li>
+            <li>User interaction (editable text)</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you create labels?</div>
+    <div class="answer">
+        Labels can be added to nodes, edges, and ports:
+        <pre><code>const graph = graphComponent.graph;
+
+// Add simple label to node
+const label1 = graph.addLabel(node, "Node Label");
+
+// Add label to edge
+const label2 = graph.addLabel(edge, "Edge Label");
+
+// Add label to port
+const label3 = graph.addLabel(port, "Port Label");
+
+// Add label with specific placement
+const label4 = graph.addLabel(
+    node,
+    "Custom Position",
+    InteriorLabelModel.CENTER
+);
+
+// Add multiple labels to same element
+graph.addLabel(node, "Title");
+graph.addLabel(node, "Subtitle", 
+    InteriorLabelModel.SOUTH
+);</code></pre>
+    </div>
+
+    <div class="question">What are Label Models?</div>
+    <div class="answer">
+        Label Models control where labels are positioned relative to their owner:
+        <ul>
+            <li><strong>InteriorLabelModel</strong>: Inside nodes (CENTER, NORTH, SOUTH, etc.)</li>
+            <li><strong>ExteriorLabelModel</strong>: Outside nodes</li>
+            <li><strong>EdgePathLabelModel</strong>: Along edge paths</li>
+            <li><strong>EdgeSegmentLabelModel</strong>: On edge segments</li>
+            <li><strong>FreeNodeLabelModel</strong>: Anywhere relative to node</li>
+            <li><strong>FreeLabelModel</strong>: Absolute positioning</li>
+        </ul>
+        <pre><code>// Interior label (inside node)
+graph.addLabel(
+    node,
+    "Center",
+    InteriorLabelModel.CENTER
+);
+
+// Exterior label (outside node)
+graph.addLabel(
+    node,
+    "Above",
+    ExteriorLabelModel.NORTH
+);
+
+// Edge label at center
+graph.addLabel(
+    edge,
+    "Relationship",
+    new EdgePathLabelModel().createDefaultParameter()
+);</code></pre>
+    </div>
+
+    <div class="question">How do you style labels?</div>
+    <div class="answer">
+        Labels can be customized with various styles:
+        <pre><code>// Create custom label style
+const labelStyle = new DefaultLabelStyle({
+    font: '14px Arial',
+    textFill: 'darkblue',
+    backgroundFill: 'lightblue',
+    backgroundStroke: 'blue',
+    insets: [3, 5, 3, 5]
+});
+
+// Apply style when adding label
+const label = graph.addLabel(node, "Styled Label");
+graph.setStyle(label, labelStyle);
+
+// Or set style on existing label
+graph.setStyle(existingLabel, labelStyle);
+
+// Different styles for different label types
+const titleStyle = new DefaultLabelStyle({
+    font: 'bold 16px Arial',
+    textFill: 'black'
+});
+
+const subtitleStyle = new DefaultLabelStyle({
+    font: '12px Arial',
+    textFill: 'gray'
+});</code></pre>
+    </div>
+
+    <div class="question">How do you make labels editable?</div>
+    <div class="answer">
+        Labels can be made interactive and editable:
+        <pre><code>// Enable label editing in GraphEditorInputMode
+const graphEditorInputMode = new GraphEditorInputMode({
+    allowEditLabel: true,
+    allowAddLabel: true
+});
+
+graphComponent.inputMode = graphEditorInputMode;
+
+// Programmatically edit label
+graphComponent.inputMode.editLabel(label);
+
+// Listen for label text changes
+graph.addLabelTextChangedListener((sender, evt) => {
+    const label = evt.item;
+    const newText = label.text;
+    console.log(`Label changed to: ${newText}`);
+});
+
+// Validate label text
+graphEditorInputMode.addValidateLabelTextListener(
+    (sender, evt) => {
+        if (evt.newText.length === 0) {
+            evt.cancel = true;
+        }
+    }
+);</code></pre>
+    </div>
+
+    <div class="question">How do you position labels precisely?</div>
+    <div class="answer">
+        Use label models and parameters for precise positioning:
+        <pre><code>// Position label at specific location on node
+const freeLabelModel = new FreeNodeLabelModel();
+const parameter = freeLabelModel.createParameter(
+    new Point(0.25, 0),  // 25% from left, at top
+    new Point(0, -10),   // Offset 10 pixels up
+    new Point(0.5, 1),   // Anchor at bottom center
+    new Point(0.5, 0),   // Label anchor at top center
+    0                     // No rotation
+);
+
+graph.addLabel(node, "Custom Position", parameter);
+
+// Position edge label at specific ratio along edge
+const edgeModel = new EdgePathLabelModel({
+    distance: 10,  // Distance from edge
+    autoRotation: true
+});
+const edgeParameter = edgeModel.createRatioParameter(
+    0.75  // 75% along the edge
+);
+
+graph.addLabel(edge, "75%", edgeParameter);</code></pre>
+    </div>
+
+    <div class="question">How do you work with multi-line labels?</div>
+    <div class="answer">
+        Labels can contain multiple lines of text:
+        <pre><code>// Create multi-line label
+const multiLineText = "Line 1\nLine 2\nLine 3";
+graph.addLabel(node, multiLineText);
+
+// Style for multi-line labels
+const multiLineStyle = new DefaultLabelStyle({
+    font: '12px Arial',
+    textAlignment: 'center',
+    verticalTextAlignment: 'center',
+    wrapping: 'word-wrap',
+    maximumSize: new Size(100, Number.POSITIVE_INFINITY)
+});
+
+graph.setStyle(label, multiLineStyle);
+
+// Auto-wrap long text
+const longText = "This is a very long label text that will wrap";
+const wrappingStyle = new DefaultLabelStyle({
+    wrapping: 'word-wrap',
+    maximumSize: new Size(80, 100)
+});
+
+const wrappedLabel = graph.addLabel(node, longText);
+graph.setStyle(wrappedLabel, wrappingStyle);</code></pre>
+    </div>
+
+    <div class="question">How do you query and modify labels?</div>
+    <div class="answer">
+        Labels can be queried and modified programmatically:
+        <pre><code>const graph = graphComponent.graph;
+
+// Get all labels of a node
+const nodeLabels = node.labels.toArray();
+
+// Get all labels of an edge
+const edgeLabels = edge.labels.toArray();
+
+// Change label text
+graph.setLabelText(label, "New Text");
+
+// Change label position
+graph.setLabelLayoutParameter(
+    label,
+    InteriorLabelModel.NORTH
+);
+
+// Remove label
+graph.remove(label);
+
+// Find labels by text
+const matchingLabels = graph.labels
+    .filter(l => l.text.includes("search term"))
+    .toArray();
+
+// Get label owner
+const owner = label.owner;  // Node, Edge, or Port
+console.log(`Label belongs to: ${owner}`);</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example with labels?</div>
+    <div class="answer">
+        Here's a comprehensive example:
+        <pre><code>const graph = graphComponent.graph;
+
+// Create nodes with multiple labels
+const person = graph.createNode(new Rect(0, 0, 120, 80));
+
+// Main label (name)
+const nameLabel = graph.addLabel(
+    person,
+    "John Doe",
+    InteriorLabelModel.NORTH
+);
+graph.setStyle(nameLabel, new DefaultLabelStyle({
+    font: 'bold 14px Arial',
+    textFill: 'darkblue'
+}));
+
+// Secondary label (role)
+const roleLabel = graph.addLabel(
+    person,
+    "Software Engineer",
+    InteriorLabelModel.CENTER
+);
+graph.setStyle(roleLabel, new DefaultLabelStyle({
+    font: '12px Arial',
+    textFill: 'gray'
+}));
+
+// Tertiary label (ID)
+const idLabel = graph.addLabel(
+    person,
+    "ID: 12345",
+    InteriorLabelModel.SOUTH
+);
+graph.setStyle(idLabel, new DefaultLabelStyle({
+    font: '10px monospace',
+    textFill: 'darkgray'
+}));
+
+// Create another node
+const project = graph.createNode(new Rect(200, 0, 120, 80));
+graph.addLabel(project, "Project Alpha");
+
+// Create edge with label
+const edge = graph.createEdge(person, project);
+const edgeLabel = graph.addLabel(
+    edge,
+    "works on",
+    new EdgePathLabelModel({
+        distance: 10,
+        autoRotation: true
+    }).createDefaultParameter()
+);
+
+// Style edge label
+graph.setStyle(edgeLabel, new DefaultLabelStyle({
+    font: '11px Arial',
+    textFill: 'green',
+    backgroundFill: 'lightgreen',
+    insets: [2, 4, 2, 4]
+}));
+
+// Apply layout
+graphComponent.fitGraphBounds();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

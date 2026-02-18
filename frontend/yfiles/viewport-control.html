@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Viewport Control - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Viewport Control?</div>
+    <div class="answer">
+        Viewport Control manages the visible area of the graph, including zoom level, pan position, and what portion of the graph is currently displayed.
+    </div>
+
+    <div class="question">How do you control the viewport?</div>
+    <div class="answer">
+        <pre><code>// Set zoom level
+graphComponent.zoom = 1.5;
+
+// Zoom in/out
+graphComponent.zoomIn();
+graphComponent.zoomOut();
+
+// Zoom to specific level with animation
+graphComponent.zoomTo(2.0);
+graphComponent.zoomToAnimated(2.0);
+
+// Fit graph to view
+graphComponent.fitGraphBounds();
+graphComponent.fitGraphBounds(new Insets(20));
+
+// Fit with animation
+graphComponent.fitGraphBounds(new Insets(20), true);
+
+// Center on specific point
+graphComponent.viewPoint = new Point(100, 100);
+
+// Zoom to specific rectangle
+graphComponent.zoomToAnimated(new Rect(0, 0, 500, 500));
+
+// Set zoom limits
+graphComponent.minimumZoom = 0.1;
+graphComponent.maximumZoom = 10;
+
+// Get current viewport
+const viewport = graphComponent.viewport;
+console.log(`Viewport: ${viewport.width} x ${viewport.height}`);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

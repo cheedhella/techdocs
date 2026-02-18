@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Filtering - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Filtering?</div>
+    <div class="answer">
+        Filtering allows you to show or hide graph elements based on criteria, without actually removing them from the graph. This is useful for focusing on specific aspects of the data.
+    </div>
+
+    <div class="question">How do you implement filtering?</div>
+    <div class="answer">
+        <pre><code>// Create filtered graph
+const filteredGraph = new FilteredGraphWrapper(
+    graph,
+    nodePredicate,
+    edgePredicate
+);
+
+// Node filter function
+function nodePredicate(node) {
+    // Show only nodes of specific type
+    return node.tag?.type === 'important';
+}
+
+// Edge filter function
+function edgePredicate(edge) {
+    // Show only edges with weight > 3
+    return edge.tag?.weight > 3;
+}
+
+// Use filtered graph
+graphComponent.graph = filteredGraph;
+
+// Update filter
+filteredGraph.nodePredicateChanged();
+filteredGraph.edgePredicateChanged();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

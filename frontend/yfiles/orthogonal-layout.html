@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OrthogonalLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is OrthogonalLayout?</div>
+    <div class="answer">
+        OrthogonalLayout creates diagrams where all edges are routed with right angles (horizontal and vertical segments only). It's perfect for:
+        <ul>
+            <li>Technical diagrams</li>
+            <li>Circuit diagrams</li>
+            <li>Database schemas</li>
+            <li>UML diagrams</li>
+            <li>Any graph requiring clean, box-like appearance</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply OrthogonalLayout?</div>
+    <div class="answer">
+        <pre><code>// Basic usage
+const layout = new OrthogonalLayout();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new OrthogonalLayout({
+    gridSpacing: 20,
+    layoutStyle: OrthogonalLayoutStyle.NORMAL
+});
+
+await graphComponent.morphLayout(layout);</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        <pre><code>const layout = new OrthogonalLayout({
+    // Grid spacing for alignment
+    gridSpacing: 20,
+    
+    // Layout style
+    layoutStyle: OrthogonalLayoutStyle.NORMAL,
+    // or UNIFORM, BOX, MIXED
+    
+    // Spacing between elements
+    minimumNodeToEdgeDistance: 10,
+    minimumNodeToNodeDistance: 20,
+    
+    // Chain recognition
+    chainRecognition: true,
+    
+    // Cycle handling
+    cycleStyle: CycleLayoutStyle.CIRCULAR
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show an example?</div>
+    <div class="answer">
+        <pre><code>// Create a technical diagram
+const graph = graphComponent.graph;
+
+// Create nodes in a grid-like structure
+const nodes = [];
+for (let i = 0; i < 6; i++) {
+    const node = graph.createNode();
+    graph.addLabel(node, `Component ${i + 1}`);
+    nodes.push(node);
+}
+
+// Create orthogonal connections
+graph.createEdge(nodes[0], nodes[1]);
+graph.createEdge(nodes[1], nodes[2]);
+graph.createEdge(nodes[0], nodes[3]);
+graph.createEdge(nodes[3], nodes[4]);
+graph.createEdge(nodes[2], nodes[5]);
+graph.createEdge(nodes[4], nodes[5]);
+
+// Apply orthogonal layout
+const layout = new OrthogonalLayout({
+    gridSpacing: 30,
+    layoutStyle: OrthogonalLayoutStyle.NORMAL
+});
+
+await graphComponent.morphLayout(layout);
+graphComponent.fitGraphBounds();</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Centrality - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Centrality?</div>
+    <div class="answer">
+        Centrality algorithms identify the most important nodes in a graph based on various metrics like degree, betweenness, or closeness centrality.
+    </div>
+
+    <div class="question">How do you calculate centrality?</div>
+    <div class="answer">
+        <pre><code>// Calculate degree centrality (number of connections)
+const centralityResult = new Map();
+
+graph.nodes.forEach(node => {
+    const degree = graph.degree(node);
+    centralityResult.set(node, degree);
+});
+
+// Find most central nodes
+const sortedNodes = Array.from(centralityResult.entries())
+    .sort((a, b) => b[1] - a[1]);
+
+console.log('Most central nodes:');
+sortedNodes.slice(0, 5).forEach(([node, degree]) => {
+    console.log(`${node.labels.first()?.text}: ${degree} connections`);
+});
+
+// Visualize centrality with node size
+const maxDegree = sortedNodes[0][1];
+graph.nodes.forEach(node => {
+    const degree = centralityResult.get(node);
+    const scale = degree / maxDegree;
+    const size = 40 + (scale * 60);
+    
+    graph.setNodeLayout(node, new Rect(
+        node.layout.x,
+        node.layout.y,
+        size,
+        size * 0.6
+    ));
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Level of Detail (LOD) - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Level of Detail (LOD)?</div>
+    <div class="answer">
+        Level of Detail is a performance optimization technique that adjusts the visual complexity of graph elements based on the current zoom level. At lower zoom levels (zoomed out), less detail is rendered to improve performance.
+    </div>
+
+    <div class="question">How do you implement LOD?</div>
+    <div class="answer">
+        <pre><code>// Custom node style with LOD
+class LODNodeStyle extends NodeStyleBase {
+    createVisual(context, node) {
+        const zoom = context.zoom;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const layout = node.layout;
+        
+        // Always render basic shape
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', layout.width);
+        rect.setAttribute('height', layout.height);
+        rect.setAttribute('fill', 'lightblue');
+        g.appendChild(rect);
+        
+        // Add details only at higher zoom levels
+        if (zoom > 0.5) {
+            // Add icon
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', layout.width / 2);
+            circle.setAttribute('cy', layout.height / 2);
+            circle.setAttribute('r', '10');
+            circle.setAttribute('fill', 'white');
+            g.appendChild(circle);
+        }
+        
+        if (zoom > 1.0) {
+            // Add text only when zoomed in
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', layout.width / 2);
+            text.setAttribute('y', layout.height / 2);
+            text.textContent = node.tag?.name || '';
+            g.appendChild(text);
+        }
+        
+        g.setAttribute('transform', `translate(${layout.x} ${layout.y})`);
+        return new SvgVisual(g);
+    }
+    
+    updateVisual(context, oldVisual, node) {
+        return this.createVisual(context, node);
+    }
+}
+
+// Apply LOD style
+graph.nodes.forEach(node => {
+    graph.setStyle(node, new LODNodeStyle());
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

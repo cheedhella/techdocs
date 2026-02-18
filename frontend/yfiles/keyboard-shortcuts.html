@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Keyboard Shortcuts - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">How do you add keyboard shortcuts?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Add Delete key
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.DELETE,
+    ModifierKeys.NONE,
+    () => {
+        const selection = graphComponent.selection;
+        selection.selectedNodes.forEach(n => graph.remove(n));
+        selection.selectedEdges.forEach(e => graph.remove(e));
+        return true;
+    }
+);
+
+// Add Ctrl+D to duplicate
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.D,
+    ModifierKeys.CONTROL,
+    () => {
+        const selection = graphComponent.selection;
+        selection.selectedNodes.forEach(node => {
+            const newNode = graph.createNode(
+                new Rect(
+                    node.layout.x + 50,
+                    node.layout.y + 50,
+                    node.layout.width,
+                    node.layout.height
+                )
+            );
+            graph.addLabel(newNode, node.labels.first()?.text || '');
+        });
+        return true;
+    }
+);
+
+// Add Ctrl+S to save
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.S,
+    ModifierKeys.CONTROL,
+    () => {
+        saveGraph();
+        return true;
+    }
+);
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

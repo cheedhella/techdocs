@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OrganicLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is OrganicLayout?</div>
+    <div class="answer">
+        OrganicLayout is a force-directed layout algorithm that creates natural-looking, organic arrangements of graphs. It's ideal for:
+        <ul>
+            <li>Social networks</li>
+            <li>Network topology diagrams</li>
+            <li>Relationship graphs</li>
+            <li>Biological networks</li>
+            <li>Any graph without strict hierarchical structure</li>
+        </ul>
+        The algorithm treats nodes as physical objects with repulsive forces and edges as springs, creating balanced, aesthetically pleasing layouts.
+    </div>
+
+    <div class="question">How do you apply OrganicLayout?</div>
+    <div class="answer">
+        <pre><code>// Create and apply layout
+const layout = new OrganicLayout();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new OrganicLayout({
+    minimumNodeDistance: 50,
+    preferredEdgeLength: 100,
+    deterministic: true
+});
+
+await graphComponent.morphLayout(layout, '1s');</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        <pre><code>const layout = new OrganicLayout({
+    // Minimum distance between nodes
+    minimumNodeDistance: 40,
+    
+    // Preferred edge length
+    preferredEdgeLength: 80,
+    
+    // Scope: entire graph or selection
+    scope: OrganicLayoutScope.ALL,
+    
+    // Quality vs speed tradeoff
+    qualityTimeRatio: 0.6,  // 0 = fast, 1 = high quality
+    
+    // Deterministic results
+    deterministic: true,
+    
+    // Compact layout
+    compactnessFactor: 0.5,  // 0 = loose, 1 = compact
+    
+    // Consider node sizes
+    considerNodeSizes: true,
+    
+    // Avoid node overlaps
+    nodeOverlapsAllowed: false
+});</code></pre>
+    </div>
+
+    <div class="question">How do you handle groups in OrganicLayout?</div>
+    <div class="answer">
+        <pre><code>const layout = new OrganicLayout({
+    // Enable group layout
+    groupNodeCompactness: 0.8
+});
+
+const layoutData = new OrganicLayoutData();
+
+// Define group behavior
+layoutData.groupNodeModes.mapper = node => {
+    if (graph.isGroupNode(node)) {
+        return GroupNodeMode.FIX_BOUNDS;
+    }
+    return null;
+};
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example?</div>
+    <div class="answer">
+        <pre><code>// Create a social network graph
+const graph = graphComponent.graph;
+
+// Create people nodes
+const people = [];
+for (let i = 0; i < 10; i++) {
+    const node = graph.createNode();
+    graph.addLabel(node, `Person ${i + 1}`);
+    people.push(node);
+}
+
+// Create random connections
+for (let i = 0; i < 15; i++) {
+    const source = people[Math.floor(Math.random() * people.length)];
+    const target = people[Math.floor(Math.random() * people.length)];
+    if (source !== target) {
+        graph.createEdge(source, target);
+    }
+}
+
+// Apply organic layout
+const layout = new OrganicLayout({
+    minimumNodeDistance: 60,
+    preferredEdgeLength: 100,
+    qualityTimeRatio: 0.8,
+    deterministic: true
+});
+
+await graphComponent.morphLayout(layout);
+graphComponent.fitGraphBounds(new Insets(20));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Custom Rendering - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Custom Rendering?</div>
+    <div class="answer">
+        Custom Rendering allows you to create completely customized visual representations using SVG or Canvas, giving you full control over how graph elements appear.
+    </div>
+
+    <div class="question">How do you implement custom rendering?</div>
+    <div class="answer">
+        <pre><code>// Custom node style with SVG rendering
+class CustomNodeStyle extends NodeStyleBase {
+    createVisual(context, node) {
+        const layout = node.layout;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        
+        // Create custom shape
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const pathData = this.createCustomShape(layout.width, layout.height);
+        path.setAttribute('d', pathData);
+        path.setAttribute('fill', node.tag?.color || 'lightblue');
+        path.setAttribute('stroke', 'darkblue');
+        path.setAttribute('stroke-width', '2');
+        
+        g.appendChild(path);
+        g.setAttribute('transform', `translate(${layout.x} ${layout.y})`);
+        
+        return new SvgVisual(g);
+    }
+    
+    createCustomShape(width, height) {
+        // Create custom path (e.g., arrow shape)
+        return `M 0,${height/2} L ${width*0.7},0 L ${width*0.7},${height*0.3} L ${width},${height*0.3} L ${width},${height*0.7} L ${width*0.7},${height*0.7} L ${width*0.7},${height} Z`;
+    }
+    
+    updateVisual(context, oldVisual, node) {
+        return this.createVisual(context, node);
+    }
+}
+
+// Apply custom style
+graph.nodes.forEach(node => {
+    graph.setStyle(node, new CustomNodeStyle());
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IGraph API - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is the IGraph API?</div>
+    <div class="answer">
+        IGraph is the main interface in yFiles for creating, modifying, and querying graph structures. It serves as the core programming entry point for all graph operations and provides a comprehensive set of methods to work with nodes, edges, labels, and ports.
+    </div>
+
+    <div class="question">How do you access the IGraph instance?</div>
+    <div class="answer">
+        The IGraph instance is typically accessed through the GraphComponent:
+        <pre><code>// From a GraphComponent
+const graph = graphComponent.graph;
+
+// Or create a standalone graph
+const graph = new DefaultGraph();</code></pre>
+    </div>
+
+    <div class="question">What are the main node operations in IGraph?</div>
+    <div class="answer">
+        IGraph provides these essential node operations:
+        <ul>
+            <li><code>createNode(layout?)</code> - Create a new node</li>
+            <li><code>createNodeAt(location)</code> - Create node at specific position</li>
+            <li><code>remove(node)</code> - Delete a node</li>
+            <li><code>setNodeLayout(node, layout)</code> - Change node position/size</li>
+            <li><code>setStyle(node, style)</code> - Change node appearance</li>
+            <li><code>nodes</code> - Get all nodes (IEnumerable)</li>
+            <li><code>contains(node)</code> - Check if node exists</li>
+        </ul>
+    </div>
+
+    <div class="question">What are the main edge operations in IGraph?</div>
+    <div class="answer">
+        IGraph provides these edge operations:
+        <ul>
+            <li><code>createEdge(source, target)</code> - Create edge between nodes</li>
+            <li><code>createEdge(sourcePort, targetPort)</code> - Create edge using ports</li>
+            <li><code>remove(edge)</code> - Delete an edge</li>
+            <li><code>setStyle(edge, style)</code> - Change edge appearance</li>
+            <li><code>edges</code> - Get all edges</li>
+            <li><code>edgesAt(node)</code> - Get edges connected to a node</li>
+            <li><code>inDegree(node)</code> - Count incoming edges</li>
+            <li><code>outDegree(node)</code> - Count outgoing edges</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you work with labels using IGraph?</div>
+    <div class="answer">
+        Label operations in IGraph:
+        <ul>
+            <li><code>addLabel(owner, text)</code> - Add label to node/edge</li>
+            <li><code>addLabel(owner, text, parameter)</code> - Add with specific placement</li>
+            <li><code>remove(label)</code> - Delete a label</li>
+            <li><code>setLabelText(label, text)</code> - Change label text</li>
+            <li><code>setStyle(label, style)</code> - Change label appearance</li>
+            <li><code>setLabelLayoutParameter(label, parameter)</code> - Reposition label</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you work with ports in IGraph?</div>
+    <div class="answer">
+        Port operations in IGraph:
+        <ul>
+            <li><code>addPort(node)</code> - Add port to node</li>
+            <li><code>addPort(node, locationParameter)</code> - Add port at specific location</li>
+            <li><code>remove(port)</code> - Delete a port</li>
+            <li><code>setPortLocationParameter(port, parameter)</code> - Move port</li>
+            <li><code>ports</code> - Get all ports</li>
+            <li><code>degree(port)</code> - Count edges at port</li>
+        </ul>
+    </div>
+
+    <div class="question">What are grouping operations in IGraph?</div>
+    <div class="answer">
+        IGraph supports hierarchical grouping:
+        <ul>
+            <li><code>groupNodes(parent, children)</code> - Create group hierarchy</li>
+            <li><code>setParent(node, parent)</code> - Move node into group</li>
+            <li><code>getParent(node)</code> - Get parent group</li>
+            <li><code>getChildren(node)</code> - Get child nodes</li>
+            <li><code>isGroupNode(node)</code> - Check if node is a group</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you query graph structure with IGraph?</div>
+    <div class="answer">
+        IGraph provides powerful query methods:
+        <pre><code>// Get all nodes
+for (const node of graph.nodes) {
+    console.log(node);
+}
+
+// Get neighbors
+const neighbors = graph.neighbors(node);
+
+// Get predecessors (nodes with edges to this node)
+const predecessors = graph.predecessors(node);
+
+// Get successors (nodes this node has edges to)
+const successors = graph.successors(node);
+
+// Check connectivity
+const isConnected = graph.contains(
+    graph.getEdge(source, target)
+);
+
+// Get degree
+const inDegree = graph.inDegree(node);
+const outDegree = graph.outDegree(node);</code></pre>
+    </div>
+
+    <div class="question">What are IGraph decorators and how are they used?</div>
+    <div class="answer">
+        Decorators allow you to attach additional data or behavior to graph elements:
+        <pre><code>// Create a decorator for node data
+const nodeDataDecorator = graph.decorator.nodeDecorator;
+
+// Set custom data
+nodeDataDecorator.dataProviderDecorator.setImplementation(
+    node => ({ customData: "value" })
+);
+
+// Access the data later
+const data = nodeDataDecorator.dataProviderDecorator
+    .getImplementation(node);</code></pre>
+    </div>
+
+    <div class="question">Can you show a complete example using IGraph API?</div>
+    <div class="answer">
+        Here's a comprehensive example:
+        <pre><code>// Get the graph
+const graph = graphComponent.graph;
+
+// Create nodes with custom layout
+const node1 = graph.createNode(
+    new Rect(0, 0, 100, 60)
+);
+const node2 = graph.createNode(
+    new Rect(200, 100, 100, 60)
+);
+const node3 = graph.createNode(
+    new Rect(400, 0, 100, 60)
+);
+
+// Add labels
+graph.addLabel(node1, "Input");
+graph.addLabel(node2, "Process");
+graph.addLabel(node3, "Output");
+
+// Create edges
+const edge1 = graph.createEdge(node1, node2);
+const edge2 = graph.createEdge(node2, node3);
+
+// Add edge labels
+graph.addLabel(edge1, "Step 1");
+graph.addLabel(edge2, "Step 2");
+
+// Query the graph
+console.log(`Nodes: ${graph.nodes.size}`);
+console.log(`Edges: ${graph.edges.size}`);
+console.log(`Node2 in-degree: ${graph.inDegree(node2)}`);
+console.log(`Node2 out-degree: ${graph.outDegree(node2)}`);
+
+// Modify the graph
+graph.setNodeLayout(
+    node2, 
+    new Rect(200, 50, 120, 80)
+);
+
+// Remove an element
+graph.remove(edge1);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

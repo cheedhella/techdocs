@@ -1,0 +1,2667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Zustand Complete Guide</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <h1>Zustand Complete Guide</h1>
+    <p>Comprehensive guide covering all Zustand concepts from basics to advanced patterns.</p>
+
+    <div class="toc-container">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#getting-started">1. Getting Started</a></li>
+            <li><a href="#core-concepts">2. Core Concepts</a></li>
+            <li><a href="#async">3. Async & Side Effects</a></li>
+            <li><a href="#middleware">4. Middleware</a></li>
+            <li><a href="#advanced-patterns">5. Advanced Patterns</a></li>
+            <li><a href="#performance">6. Performance Optimization</a></li>
+            <li><a href="#typescript">7. TypeScript Integration</a></li>
+            <li><a href="#integration">8. Integration with Other Libraries</a></li>
+            <li><a href="#testing">9. Testing</a></li>
+            <li><a href="#advanced-topics">10. Advanced Topics</a></li>
+            <li><a href="#examples">11. Real-World Examples</a></li>
+        </ul>
+    </div>
+
+    <h2 id="getting-started">1. Getting Started</h2>
+    
+    <div class="question">What is Zustand?</div>
+    <div class="answer">
+        Zustand is a small, fast, and scalable state management solution for React. It uses a simplified flux principles with a hooks-based API.
+        <ul>
+            <li><strong>Simple</strong>: Minimal boilerplate, easy to learn</li>
+            <li><strong>Fast</strong>: Optimized for performance</li>
+            <li><strong>Scalable</strong>: Works for small and large apps</li>
+            <li><strong>No Context Provider</strong>: No wrapper needed</li>
+            <li><strong>TypeScript First</strong>: Excellent TypeScript support</li>
+        </ul>
+    </div>
+
+    <div class="question">Why Zustand?</div>
+    <div class="answer">
+        <strong>Advantages over useState:</strong>
+        <ul>
+            <li>No prop drilling - access state from any component</li>
+            <li>Centralized state management</li>
+            <li>Better for complex state logic</li>
+        </ul>
+        
+        <strong>Advantages over Redux:</strong>
+        <ul>
+            <li>Much less boilerplate</li>
+            <li>No actions, reducers, or dispatch needed</li>
+            <li>Simpler API</li>
+            <li>Smaller bundle size (~1KB)</li>
+        </ul>
+        
+        <strong>Advantages over Context API:</strong>
+        <ul>
+            <li>Better performance (no unnecessary re-renders)</li>
+            <li>No provider hell</li>
+            <li>Can use outside React components</li>
+        </ul>
+    </div>
+
+    <div class="question">Installation & Setup</div>
+    <div class="answer">
+        <pre><code>// Install Zustand
+npm install zustand
+
+// Or with yarn
+yarn add zustand
+
+// Or with pnpm
+pnpm add zustand</code></pre>
+    </div>
+
+    <div class="question">Creating Your First Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+
+// Create a store
+const useStore = create((set) => ({
+  // State
+  count: 0,
+  
+  // Actions
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  reset: () => set({ count: 0 })
+}));
+
+// Use in component
+function Counter() {
+  const count = useStore((state) => state.count);
+  const increment = useStore((state) => state.increment);
+  const decrement = useStore((state) => state.decrement);
+  const reset = useStore((state) => state.reset);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+      <button onClick={reset}>Reset</button>
+    </div>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Reading State</div>
+    <div class="answer">
+        <pre><code>// Select entire state (causes re-render on any change)
+const state = useStore();
+
+// Select specific property (only re-renders when count changes)
+const count = useStore((state) => state.count);
+
+// Select multiple properties
+const { count, increment } = useStore((state) => ({
+  count: state.count,
+  increment: state.increment
+}));
+
+// Use with shallow comparison (explained later)
+import { shallow } from 'zustand/shallow';
+
+const { count, increment } = useStore(
+  (state) => ({ count: state.count, increment: state.increment }),
+  shallow
+);</code></pre>
+    </div>
+
+    <div class="question">Updating State</div>
+    <div class="answer">
+        <pre><code>const useStore = create((set) => ({
+  count: 0,
+  user: { name: 'John', age: 30 },
+  
+  // Simple update
+  setCount: (count) => set({ count }),
+  
+  // Update based on previous state
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  
+  // Update nested state (immutably)
+  updateName: (name) => set((state) => ({
+    user: { ...state.user, name }
+  })),
+  
+  // Update multiple properties
+  updateUser: (name, age) => set((state) => ({
+    user: { ...state.user, name, age }
+  })),
+  
+  // Replace entire state
+  reset: () => set({ count: 0, user: { name: '', age: 0 } })
+}));</code></pre>
+    </div>
+
+    <h2 id="core-concepts">2. Core Concepts</h2>
+
+    <div class="question">Selectors</div>
+    <div class="answer">
+        Selectors extract specific parts of state and prevent unnecessary re-renders:
+        <pre><code>const useStore = create((set) => ({
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30
+}));
+
+// Component only re-renders when firstName changes
+function FirstName() {
+  const firstName = useStore((state) => state.firstName);
+  return <div>{firstName}</div>;
+}
+
+// Computed selector
+function FullName() {
+  const fullName = useStore((state) => 
+    `${state.firstName} ${state.lastName}`
+  );
+  return <div>{fullName}</div>;
+}
+
+// Multiple selectors
+function UserInfo() {
+  const firstName = useStore((state) => state.firstName);
+  const age = useStore((state) => state.age);
+  return <div>{firstName} - {age}</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Actions</div>
+    <div class="answer">
+        Actions are functions that update state:
+        <pre><code>const useStore = create((set, get) => ({
+  count: 0,
+  
+  // Simple action
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  
+  // Action using get() to read current state
+  incrementBy: (amount) => {
+    const currentCount = get().count;
+    set({ count: currentCount + amount });
+  },
+  
+  // Action calling another action
+  incrementTwice: () => {
+    get().increment();
+    get().increment();
+  },
+  
+  // Action with logic
+  incrementIfLessThan10: () => {
+    const count = get().count;
+    if (count < 10) {
+      set({ count: count + 1 });
+    }
+  }
+}));</code></pre>
+    </div>
+
+    <div class="question">Immutability</div>
+    <div class="answer">
+        Always create new objects when updating state:
+        <pre><code>const useStore = create((set) => ({
+  user: { name: 'John', age: 30, address: { city: 'NYC' } },
+  
+  // ❌ WRONG - Mutating state directly
+  updateNameWrong: (name) => set((state) => {
+    state.user.name = name;  // Don't do this!
+    return state;
+  }),
+  
+  // ✅ CORRECT - Creating new object
+  updateName: (name) => set((state) => ({
+    user: { ...state.user, name }
+  })),
+  
+  // ✅ CORRECT - Nested object update
+  updateCity: (city) => set((state) => ({
+    user: {
+      ...state.user,
+      address: { ...state.user.address, city }
+    }
+  })),
+  
+  // ✅ CORRECT - Array update
+  todos: [],
+  addTodo: (todo) => set((state) => ({
+    todos: [...state.todos, todo]
+  })),
+  removeTodo: (id) => set((state) => ({
+    todos: state.todos.filter(t => t.id !== id)
+  }))
+}));</code></pre>
+    </div>
+
+    <div class="question">get() and set() API</div>
+    <div class="answer">
+        <pre><code>const useStore = create((set, get) => ({
+  count: 0,
+  multiplier: 2,
+  
+  // set() - Update state
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  
+  // get() - Read current state
+  getCount: () => get().count,
+  
+  // Using both
+  multiplyCount: () => {
+    const current = get().count;
+    const multiplier = get().multiplier;
+    set({ count: current * multiplier });
+  },
+  
+  // Partial updates (Zustand merges automatically)
+  updateMultiplier: (multiplier) => set({ multiplier })
+}));
+
+// Outside component access
+const currentCount = useStore.getState().count;
+useStore.setState({ count: 10 });</code></pre>
+    </div>
+
+    <div class="question">Subscribe API</div>
+    <div class="answer">
+        Subscribe to state changes outside React:
+        <pre><code>const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 }))
+}));
+
+// Subscribe to all changes
+const unsubscribe = useStore.subscribe((state) => {
+  console.log('State changed:', state);
+});
+
+// Subscribe to specific property
+const unsubscribe = useStore.subscribe(
+  (state) => state.count,
+  (count) => {
+    console.log('Count changed:', count);
+  }
+);
+
+// Cleanup
+unsubscribe();
+
+// Example: Sync with localStorage
+useStore.subscribe((state) => {
+  localStorage.setItem('app-state', JSON.stringify(state));
+});</code></pre>
+    </div>
+
+    <div class="question">Shallow Comparison</div>
+    <div class="answer">
+        Prevent re-renders when selecting multiple values:
+        <pre><code>import { shallow } from 'zustand/shallow';
+
+const useStore = create((set) => ({
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 30,
+  updateFirstName: (name) => set({ firstName: name })
+}));
+
+// ❌ Without shallow - re-renders on any state change
+function User() {
+  const { firstName, lastName } = useStore((state) => ({
+    firstName: state.firstName,
+    lastName: state.lastName
+  }));
+  return <div>{firstName} {lastName}</div>;
+}
+
+// ✅ With shallow - only re-renders when firstName or lastName change
+function User() {
+  const { firstName, lastName } = useStore(
+    (state) => ({
+      firstName: state.firstName,
+      lastName: state.lastName
+    }),
+    shallow
+  );
+  return <div>{firstName} {lastName}</div>;
+}</code></pre>
+    </div>
+
+    <h2 id="async">3. Async & Side Effects</h2>
+
+    <div class="question">Async Actions</div>
+    <div class="answer">
+        Zustand handles async actions naturally:
+        <pre><code>const useStore = create((set, get) => ({
+  user: null,
+  loading: false,
+  error: null,
+  
+  // Async action
+  fetchUser: async (id) => {
+    set({ loading: true, error: null });
+    
+    try {
+      const response = await fetch(`/api/users/${id}`);
+      const user = await response.json();
+      set({ user, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  
+  // Async action with cleanup
+  fetchUserWithAbort: async (id) => {
+    const controller = new AbortController();
+    set({ loading: true, error: null });
+    
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        signal: controller.signal
+      });
+      const user = await response.json();
+      set({ user, loading: false });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        set({ error: error.message, loading: false });
+      }
+    }
+    
+    return () => controller.abort();
+  }
+}));</code></pre>
+    </div>
+
+    <div class="question">Fetching Data</div>
+    <div class="answer">
+        <pre><code>const useUserStore = create((set) => ({
+  users: [],
+  loading: false,
+  error: null,
+  
+  fetchUsers: async () => {
+    set({ loading: true });
+    try {
+      const response = await fetch('/api/users');
+      const users = await response.json();
+      set({ users, loading: false, error: null });
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  
+  createUser: async (userData) => {
+    set({ loading: true });
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      const newUser = await response.json();
+      set((state) => ({
+        users: [...state.users, newUser],
+        loading: false
+      }));
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  
+  deleteUser: async (id) => {
+    try {
+      await fetch(`/api/users/${id}`, { method: 'DELETE' });
+      set((state) => ({
+        users: state.users.filter(u => u.id !== id)
+      }));
+    } catch (error) {
+      set({ error: error.message });
+    }
+  }
+}));
+
+// Usage in component
+function UserList() {
+  const { users, loading, error, fetchUsers } = useUserStore();
+  
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}</code></pre>
+    </div>
+
+    <h2 id="middleware">4. Middleware</h2>
+
+    <div class="question">persist - LocalStorage/SessionStorage</div>
+    <div class="answer">
+        Save state to browser storage:
+        <pre><code>import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+
+// Basic persist
+const useStore = create(
+  persist(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'counter-storage' // localStorage key
+    }
+  )
+);
+
+// With custom storage
+const useStore = create(
+  persist(
+    (set) => ({
+      user: null,
+      setUser: (user) => set({ user })
+    }),
+    {
+      name: 'user-storage',
+      storage: createJSONStorage(() => sessionStorage)
+    }
+  )
+);
+
+// Partial persist (only save specific fields)
+const useStore = create(
+  persist(
+    (set) => ({
+      count: 0,
+      tempData: null,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'app-storage',
+      partialize: (state) => ({ count: state.count }) // Only persist count
+    }
+  )
+);
+
+// Hydration
+function App() {
+  const hasHydrated = useStore((state) => state._hasHydrated);
+  
+  if (!hasHydrated) {
+    return <div>Loading...</div>;
+  }
+  
+  return <div>App content</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">devtools - Redux DevTools Integration</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+
+const useStore = create(
+  devtools(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }), false, 'increment'),
+      decrement: () => set((state) => ({ count: state.count - 1 }), false, 'decrement')
+    }),
+    {
+      name: 'CounterStore', // Name in DevTools
+      enabled: process.env.NODE_ENV === 'development'
+    }
+  )
+);
+
+// With actions names
+const useStore = create(
+  devtools((set) => ({
+    count: 0,
+    increment: () => set(
+      (state) => ({ count: state.count + 1 }),
+      false,
+      'counter/increment'
+    )
+  }))
+);</code></pre>
+    </div>
+
+    <div class="question">immer - Mutable Updates</div>
+    <div class="answer">
+        Write "mutable" code that produces immutable updates:
+        <pre><code>import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
+
+const useStore = create(
+  immer((set) => ({
+    user: {
+      name: 'John',
+      address: {
+        city: 'NYC',
+        zip: '10001'
+      }
+    },
+    
+    // With immer, you can "mutate" state
+    updateCity: (city) => set((state) => {
+      state.user.address.city = city;
+    }),
+    
+    // Array operations
+    todos: [],
+    addTodo: (todo) => set((state) => {
+      state.todos.push(todo);
+    }),
+    removeTodo: (id) => set((state) => {
+      const index = state.todos.findIndex(t => t.id === id);
+      if (index !== -1) state.todos.splice(index, 1);
+    })
+  }))
+);
+
+// Without immer (manual immutability)
+const useStore = create((set) => ({
+  user: { name: 'John', address: { city: 'NYC' } },
+  updateCity: (city) => set((state) => ({
+    user: {
+      ...state.user,
+      address: { ...state.user.address, city }
+    }
+  }))
+}));</code></pre>
+    </div>
+
+    <div class="question">Middleware Chaining</div>
+    <div class="answer">
+        Combine multiple middleware:
+        <pre><code>import { create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
+const useStore = create(
+  devtools(
+    persist(
+      immer((set) => ({
+        count: 0,
+        increment: () => set((state) => {
+          state.count += 1;
+        })
+      })),
+      { name: 'counter-storage' }
+    ),
+    { name: 'CounterStore' }
+  )
+);
+
+// Order matters:
+// 1. immer (innermost) - handles state updates
+// 2. persist - saves to storage
+// 3. devtools (outermost) - logs to DevTools</code></pre>
+    </div>
+
+    <h2 id="advanced-patterns">5. Advanced Patterns</h2>
+
+    <div class="question">Slices Pattern</div>
+    <div class="answer">
+        Split large stores into smaller slices:
+        <pre><code>// userSlice.js
+export const createUserSlice = (set, get) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+  clearUser: () => set({ user: null })
+});
+
+// settingsSlice.js
+export const createSettingsSlice = (set, get) => ({
+  theme: 'light',
+  toggleTheme: () => set((state) => ({
+    theme: state.theme === 'light' ? 'dark' : 'light'
+  }))
+});
+
+// cartSlice.js
+export const createCartSlice = (set, get) => ({
+  items: [],
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  })),
+  removeItem: (id) => set((state) => ({
+    items: state.items.filter(i => i.id !== id)
+  })),
+  total: () => {
+    const items = get().items;
+    return items.reduce((sum, item) => sum + item.price, 0);
+  }
+});
+
+// store.js - Combine slices
+import { create } from 'zustand';
+import { createUserSlice } from './userSlice';
+import { createSettingsSlice } from './settingsSlice';
+import { createCartSlice } from './cartSlice';
+
+export const useStore = create((...a) => ({
+  ...createUserSlice(...a),
+  ...createSettingsSlice(...a),
+  ...createCartSlice(...a)
+}));</code></pre>
+    </div>
+
+    <div class="question">Multiple Stores</div>
+    <div class="answer">
+        <pre><code>// userStore.js
+export const useUserStore = create((set) => ({
+  user: null,
+  login: (user) => set({ user }),
+  logout: () => set({ user: null })
+}));
+
+// settingsStore.js
+export const useSettingsStore = create((set) => ({
+  theme: 'light',
+  language: 'en',
+  setTheme: (theme) => set({ theme }),
+  setLanguage: (language) => set({ language })
+}));
+
+// cartStore.js
+export const useCartStore = create((set) => ({
+  items: [],
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  }))
+}));
+
+// Usage
+function App() {
+  const user = useUserStore((state) => state.user);
+  const theme = useSettingsStore((state) => state.theme);
+  const items = useCartStore((state) => state.items);
+  
+  return <div>...</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Derived/Computed State</div>
+    <div class="answer">
+        <pre><code>const useStore = create((set, get) => ({
+  items: [],
+  filter: 'all',
+  
+  // Actions
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  })),
+  setFilter: (filter) => set({ filter }),
+  
+  // Computed values (not stored, calculated on demand)
+  getFilteredItems: () => {
+    const { items, filter } = get();
+    if (filter === 'completed') {
+      return items.filter(item => item.completed);
+    }
+    if (filter === 'active') {
+      return items.filter(item => !item.completed);
+    }
+    return items;
+  },
+  
+  getItemCount: () => get().items.length,
+  
+  getCompletedCount: () => 
+    get().items.filter(item => item.completed).length
+}));
+
+// Usage
+function TodoList() {
+  // Computed in selector
+  const filteredItems = useStore((state) => {
+    const items = state.items;
+    const filter = state.filter;
+    
+    if (filter === 'completed') {
+      return items.filter(item => item.completed);
+    }
+    return items;
+  });
+  
+  // Or use getter
+  const filteredItems = useStore((state) => state.getFilteredItems());
+  
+  return <div>{filteredItems.length} items</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Resetting State</div>
+    <div class="answer">
+        <pre><code>const initialState = {
+  user: null,
+  count: 0,
+  items: []
+};
+
+const useStore = create((set) => ({
+  ...initialState,
+  
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  
+  // Reset to initial state
+  reset: () => set(initialState),
+  
+  // Reset specific fields
+  resetCount: () => set({ count: initialState.count }),
+  
+  // Reset all except specific fields
+  resetExceptUser: () => set((state) => ({
+    ...initialState,
+    user: state.user
+  }))
+}));
+
+// Reset on logout
+function LogoutButton() {
+  const reset = useStore((state) => state.reset);
+  
+  const handleLogout = () => {
+    reset();
+    // Additional logout logic
+  };
+  
+  return <button onClick={handleLogout}>Logout</button>;
+}</code></pre>
+    </div>
+
+    <h2 id="performance">6. Performance Optimization</h2>
+
+    <div class="question">Preventing Unnecessary Re-renders</div>
+    <div class="answer">
+        <pre><code>// ❌ BAD - Re-renders on any state change
+function Component() {
+  const state = useStore();
+  return <div>{state.count}</div>;
+}
+
+// ✅ GOOD - Only re-renders when count changes
+function Component() {
+  const count = useStore((state) => state.count);
+  return <div>{count}</div>;
+}
+
+// ❌ BAD - Creates new object every time, always re-renders
+function Component() {
+  const data = useStore((state) => ({
+    count: state.count,
+    name: state.name
+  }));
+  return <div>{data.count}</div>;
+}
+
+// ✅ GOOD - Use shallow comparison
+import { shallow } from 'zustand/shallow';
+
+function Component() {
+  const { count, name } = useStore(
+    (state) => ({ count: state.count, name: state.name }),
+    shallow
+  );
+  return <div>{count}</div>;
+}
+
+// ✅ GOOD - Select actions separately (they don't change)
+function Component() {
+  const count = useStore((state) => state.count);
+  const increment = useStore((state) => state.increment);
+  
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={increment}>+</button>
+    </div>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Subscribe Outside React</div>
+    <div class="answer">
+        <pre><code>// Vanilla JS subscription
+const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 }))
+}));
+
+// Subscribe to changes
+const unsubscribe = useStore.subscribe((state, prevState) => {
+  console.log('Count changed from', prevState.count, 'to', state.count);
+});
+
+// Get state without React
+const currentCount = useStore.getState().count;
+
+// Update state without React
+useStore.setState({ count: 10 });
+
+// Example: Analytics tracking
+useStore.subscribe((state) => {
+  analytics.track('state_changed', {
+    count: state.count
+  });
+});</code></pre>
+    </div>
+
+    <h2 id="typescript">7. TypeScript Integration</h2>
+
+    <div class="question">Typing Your Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+
+// Define state interface
+interface CounterState {
+  count: number;
+  increment: () => void;
+  decrement: () => void;
+  reset: () => void;
+}
+
+// Create typed store
+const useStore = create<CounterState>((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  reset: () => set({ count: 0 })
+}));
+
+// Complex example
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface UserState {
+  users: User[];
+  loading: boolean;
+  error: string | null;
+  fetchUsers: () => Promise<void>;
+  addUser: (user: User) => void;
+  removeUser: (id: number) => void;
+}
+
+const useUserStore = create<UserState>((set) => ({
+  users: [],
+  loading: false,
+  error: null,
+  
+  fetchUsers: async () => {
+    set({ loading: true });
+    try {
+      const response = await fetch('/api/users');
+      const users: User[] = await response.json();
+      set({ users, loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  
+  addUser: (user) => set((state) => ({
+    users: [...state.users, user]
+  })),
+  
+  removeUser: (id) => set((state) => ({
+    users: state.users.filter(u => u.id !== id)
+  }))
+}));</code></pre>
+    </div>
+
+    <div class="question">Typing with Middleware</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist, devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
+interface State {
+  count: number;
+  increment: () => void;
+}
+
+// With persist
+const useStore = create<State>()(
+  persist(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    { name: 'counter-storage' }
+  )
+);
+
+// With multiple middleware
+const useStore = create<State>()(
+  devtools(
+    persist(
+      immer((set) => ({
+        count: 0,
+        increment: () => set((state) => {
+          state.count += 1;
+        })
+      })),
+      { name: 'counter-storage' }
+    ),
+    { name: 'CounterStore' }
+  )
+);</code></pre>
+    </div>
+
+    <h2 id="integration">8. Integration with Other Libraries</h2>
+
+    <div class="question">Zustand + React Query</div>
+    <div class="answer">
+        <pre><code>// Use Zustand for UI state, React Query for server state
+import { create } from 'zustand';
+import { useQuery } from '@tanstack/react-query';
+
+// Zustand for UI state
+const useUIStore = create((set) => ({
+  sidebarOpen: false,
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  theme: 'light',
+  setTheme: (theme) => set({ theme })
+}));
+
+// React Query for server state
+function Users() {
+  const { data: users, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetch('/api/users').then(res => res.json())
+  });
+  
+  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
+  
+  return <div>...</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Zustand + Next.js</div>
+    <div class="answer">
+        <pre><code>// store.js
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+export const useStore = create(
+  persist(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'app-storage',
+      // SSR-safe storage
+      storage: typeof window !== 'undefined' 
+        ? createJSONStorage(() => localStorage)
+        : undefined
+    }
+  )
+);
+
+// pages/_app.js
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+// pages/index.js
+function Home() {
+  const count = useStore((state) => state.count);
+  const increment = useStore((state) => state.increment);
+  
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}</code></pre>
+    </div>
+
+    <h2 id="testing">9. Testing</h2>
+
+    <div class="question">Testing Zustand Stores</div>
+    <div class="answer">
+        <pre><code>// store.js
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  reset: () => set({ count: 0 })
+}));
+
+// store.test.js
+import { act, renderHook } from '@testing-library/react';
+import { useStore } from './store';
+
+describe('Counter Store', () => {
+  beforeEach(() => {
+    useStore.setState({ count: 0 });
+  });
+  
+  it('should increment count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    expect(result.current.count).toBe(0);
+    
+    act(() => {
+      result.current.increment();
+    });
+    
+    expect(result.current.count).toBe(1);
+  });
+  
+  it('should decrement count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    act(() => {
+      result.current.increment();
+      result.current.decrement();
+    });
+    
+    expect(result.current.count).toBe(0);
+  });
+  
+  it('should reset count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    act(() => {
+      result.current.increment();
+      result.current.increment();
+      result.current.reset();
+    });
+    
+    expect(result.current.count).toBe(0);
+  });
+});</code></pre>
+    </div>
+
+    <h2 id="examples">11. Real-World Examples</h2>
+
+    <div class="question">Authentication Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface AuthState {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  checkAuth: () => Promise<void>;
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      
+      login: async (email, password) => {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const { user, token } = await response.json();
+        
+        set({
+          user,
+          token,
+          isAuthenticated: true
+        });
+      },
+      
+      logout: () => {
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false
+        });
+      },
+      
+      checkAuth: async () => {
+        try {
+          const response = await fetch('/api/me');
+          const user = await response.json();
+          set({ user, isAuthenticated: true });
+        } catch {
+          set({ user: null, isAuthenticated: false });
+        }
+      }
+    }),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({ token: state.token })
+    }
+  )
+);</code></pre>
+    </div>
+
+    <div class="question">Shopping Cart Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+interface CartState {
+  items: CartItem[];
+  addItem: (item: Omit<CartItem, 'quantity'>) => void;
+  removeItem: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
+  clearCart: () => void;
+  getTotal: () => number;
+  getItemCount: () => number;
+}
+
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      
+      addItem: (item) => set((state) => {
+        const existingItem = state.items.find(i => i.id === item.id);
+        
+        if (existingItem) {
+          return {
+            items: state.items.map(i =>
+              i.id === item.id
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            )
+          };
+        }
+        
+        return {
+          items: [...state.items, { ...item, quantity: 1 }]
+        };
+      }),
+      
+      removeItem: (id) => set((state) => ({
+        items: state.items.filter(i => i.id !== id)
+      })),
+      
+      updateQuantity: (id, quantity) => set((state) => ({
+        items: state.items.map(i =>
+          i.id === id ? { ...i, quantity } : i
+        )
+      })),
+      
+      clearCart: () => set({ items: [] }),
+      
+      getTotal: () => {
+        const items = get().items;
+        return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      },
+      
+      getItemCount: () => {
+        const items = get().items;
+        return items.reduce((sum, item) => sum + item.quantity, 0);
+      }
+    }),
+    {
+      name: 'cart-storage'
+    }
+  )
+);</code></pre>
+    </div>
+
+    <div class="question">Theme Toggler Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+type Theme = 'light' | 'dark' | 'system';
+
+interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+}
+
+export const useThemeStore = create<ThemeState>()(
+  persist(
+    (set) => ({
+      theme: 'system',
+      
+      setTheme: (theme) => {
+        set({ theme });
+        
+        // Apply theme to document
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (theme === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          // System preference
+          const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', isDark);
+        }
+      },
+      
+      toggleTheme: () => set((state) => {
+        const newTheme = state.theme === 'light' ? 'dark' : 'light';
+        return { theme: newTheme };
+      })
+    }),
+    {
+      name: 'theme-storage'
+    }
+  )
+);
+
+// Usage
+function ThemeToggle() {
+  const { theme, toggleTheme } = useThemeStore();
+  
+  return (
+    <button onClick={toggleTheme}>
+      {theme === 'light' ? '🌙' : '☀️'}
+    </button>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Modal Manager Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+
+interface Modal {
+  id: string;
+  component: React.ComponentType<any>;
+  props?: any;
+}
+
+interface ModalState {
+  modals: Modal[];
+  openModal: (modal: Modal) => void;
+  closeModal: (id: string) => void;
+  closeAll: () => void;
+}
+
+export const useModalStore = create<ModalState>((set) => ({
+  modals: [],
+  
+  openModal: (modal) => set((state) => ({
+    modals: [...state.modals, modal]
+  })),
+  
+  closeModal: (id) => set((state) => ({
+    modals: state.modals.filter(m => m.id !== id)
+  })),
+  
+  closeAll: () => set({ modals: [] })
+}));
+
+// ModalContainer component
+function ModalContainer() {
+  const modals = useModalStore((state) => state.modals);
+  
+  return (
+    <>
+      {modals.map((modal) => {
+        const Component = modal.component;
+        return <Component key={modal.id} {...modal.props} />;
+      })}
+    </>
+  );
+}
+
+// Usage
+function App() {
+  const openModal = useModalStore((state) => state.openModal);
+  
+  const handleOpenConfirm = () => {
+    openModal({
+      id: 'confirm-delete',
+      component: ConfirmDialog,
+      props: {
+        title: 'Delete Item?',
+        onConfirm: () => console.log('Deleted')
+      }
+    });
+  };
+  
+  return (
+    <div>
+      <button onClick={handleOpenConfirm}>Delete</button>
+      <ModalContainer />
+    </div>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Notification System Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+
+type NotificationType = 'success' | 'error' | 'warning' | 'info';
+
+interface Notification {
+  id: string;
+  type: NotificationType;
+  message: string;
+  duration?: number;
+}
+
+interface NotificationState {
+  notifications: Notification[];
+  addNotification: (notification: Omit<Notification, 'id'>) => void;
+  removeNotification: (id: string) => void;
+  clearAll: () => void;
+}
+
+export const useNotificationStore = create<NotificationState>((set, get) => ({
+  notifications: [],
+  
+  addNotification: (notification) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const newNotification = { ...notification, id };
+    
+    set((state) => ({
+      notifications: [...state.notifications, newNotification]
+    }));
+    
+    // Auto-remove after duration
+    const duration = notification.duration || 3000;
+    setTimeout(() => {
+      get().removeNotification(id);
+    }, duration);
+  },
+  
+  removeNotification: (id) => set((state) => ({
+    notifications: state.notifications.filter(n => n.id !== id)
+  })),
+  
+  clearAll: () => set({ notifications: [] })
+}));
+
+// Usage
+function App() {
+  const addNotification = useNotificationStore((state) => state.addNotification);
+  
+  const handleSuccess = () => {
+    addNotification({
+      type: 'success',
+      message: 'Operation completed successfully!',
+      duration: 3000
+    });
+  };
+  
+  return <button onClick={handleSuccess}>Show Success</button>;
+}
+
+// NotificationList component
+function NotificationList() {
+  const notifications = useNotificationStore((state) => state.notifications);
+  const removeNotification = useNotificationStore((state) => state.removeNotification);
+  
+  return (
+    <div className="notification-container">
+      {notifications.map((notification) => (
+        <div key={notification.id} className={`notification ${notification.type}`}>
+          {notification.message}
+          <button onClick={() => removeNotification(notification.id)}>×</button>
+        </div>
+      ))}
+    </div>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Filters & Sorting Store</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  inStock: boolean;
+}
+
+type SortField = 'name' | 'price';
+type SortOrder = 'asc' | 'desc';
+
+interface FilterState {
+  products: Product[];
+  searchQuery: string;
+  selectedCategories: string[];
+  priceRange: [number, number];
+  showInStockOnly: boolean;
+  sortField: SortField;
+  sortOrder: SortOrder;
+  
+  setSearchQuery: (query: string) => void;
+  toggleCategory: (category: string) => void;
+  setPriceRange: (range: [number, number]) => void;
+  setShowInStockOnly: (show: boolean) => void;
+  setSorting: (field: SortField, order: SortOrder) => void;
+  getFilteredProducts: () => Product[];
+  resetFilters: () => void;
+}
+
+export const useFilterStore = create<FilterState>((set, get) => ({
+  products: [],
+  searchQuery: '',
+  selectedCategories: [],
+  priceRange: [0, 1000],
+  showInStockOnly: false,
+  sortField: 'name',
+  sortOrder: 'asc',
+  
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  
+  toggleCategory: (category) => set((state) => {
+    const categories = state.selectedCategories;
+    if (categories.includes(category)) {
+      return { selectedCategories: categories.filter(c => c !== category) };
+    }
+    return { selectedCategories: [...categories, category] };
+  }),
+  
+  setPriceRange: (range) => set({ priceRange: range }),
+  
+  setShowInStockOnly: (show) => set({ showInStockOnly: show }),
+  
+  setSorting: (field, order) => set({ sortField: field, sortOrder: order }),
+  
+  getFilteredProducts: () => {
+    const state = get();
+    let filtered = state.products;
+    
+    // Search filter
+    if (state.searchQuery) {
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(state.searchQuery.toLowerCase())
+      );
+    }
+    
+    // Category filter
+    if (state.selectedCategories.length > 0) {
+      filtered = filtered.filter(p =>
+        state.selectedCategories.includes(p.category)
+      );
+    }
+    
+    // Price range filter
+    filtered = filtered.filter(p =>
+      p.price >= state.priceRange[0] && p.price <= state.priceRange[1]
+    );
+    
+    // Stock filter
+    if (state.showInStockOnly) {
+      filtered = filtered.filter(p => p.inStock);
+    }
+    
+    // Sorting
+    filtered.sort((a, b) => {
+      const field = state.sortField;
+      const order = state.sortOrder === 'asc' ? 1 : -1;
+      return a[field] > b[field] ? order : -order;
+    });
+    
+    return filtered;
+  },
+  
+  resetFilters: () => set({
+    searchQuery: '',
+    selectedCategories: [],
+    priceRange: [0, 1000],
+    showInStockOnly: false,
+    sortField: 'name',
+    sortOrder: 'asc'
+  })
+}));</code></pre>
+    </div>
+
+    <h2 id="advanced-topics">10. Advanced Topics</h2>
+
+    <div class="question">Cross-Tab Synchronization</div>
+    <div class="answer">
+        Keep state synchronized across multiple browser tabs:
+        <pre><code>import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+
+// Custom storage with cross-tab sync
+const storage = {
+  getItem: (name) => {
+    const value = localStorage.getItem(name);
+    return value ? JSON.parse(value) : null;
+  },
+  setItem: (name, value) => {
+    localStorage.setItem(name, JSON.stringify(value));
+    
+    // Dispatch custom event for cross-tab sync
+    window.dispatchEvent(new CustomEvent('zustand-sync', {
+      detail: { name, value }
+    }));
+  },
+  removeItem: (name) => {
+    localStorage.removeItem(name);
+  }
+};
+
+const useStore = create(
+  persist(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'counter-storage',
+      storage: createJSONStorage(() => storage)
+    }
+  )
+);
+
+// Listen for changes from other tabs
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'counter-storage' && e.newValue) {
+      const newState = JSON.parse(e.newValue);
+      useStore.setState(newState.state);
+    }
+  });
+}</code></pre>
+    </div>
+
+    <div class="question">SSR Patterns (Next.js, Remix)</div>
+    <div class="answer">
+        <pre><code>// store.js
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 }))
+}));
+
+// Initialize store on server
+export const initializeStore = (preloadedState) => {
+  return create((set) => ({
+    ...preloadedState,
+    increment: () => set((state) => ({ count: state.count + 1 }))
+  }));
+};
+
+// pages/index.js (Next.js)
+export async function getServerSideProps() {
+  // Fetch initial data
+  const data = await fetchData();
+  
+  return {
+    props: {
+      initialState: { count: data.count }
+    }
+  };
+}
+
+function Home({ initialState }) {
+  // Hydrate store with server data
+  useEffect(() => {
+    useStore.setState(initialState);
+  }, []);
+  
+  const count = useStore((state) => state.count);
+  
+  return <div>Count: {count}</div>;
+}
+
+// Alternative: Create store per request
+import { createStore } from 'zustand/vanilla';
+
+export function createAppStore(initialState) {
+  return createStore((set) => ({
+    ...initialState,
+    increment: () => set((state) => ({ count: state.count + 1 }))
+  }));
+}</code></pre>
+    </div>
+
+    <div class="question">Code Organization</div>
+    <div class="answer">
+        <pre><code>// Recommended folder structure for large apps
+
+src/
+  stores/
+    slices/
+      userSlice.ts
+      cartSlice.ts
+      settingsSlice.ts
+    index.ts
+  components/
+  hooks/
+  
+// slices/userSlice.ts
+export interface UserSlice {
+  user: User | null;
+  login: (credentials: Credentials) => Promise<void>;
+  logout: () => void;
+}
+
+export const createUserSlice = (set, get) => ({
+  user: null,
+  login: async (credentials) => {
+    const user = await api.login(credentials);
+    set({ user });
+  },
+  logout: () => set({ user: null })
+});
+
+// slices/cartSlice.ts
+export interface CartSlice {
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: number) => void;
+}
+
+export const createCartSlice = (set, get) => ({
+  items: [],
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  })),
+  removeItem: (id) => set((state) => ({
+    items: state.items.filter(i => i.id !== id)
+  }))
+});
+
+// stores/index.ts
+import { create } from 'zustand';
+import { createUserSlice, UserSlice } from './slices/userSlice';
+import { createCartSlice, CartSlice } from './slices/cartSlice';
+
+type StoreState = UserSlice & CartSlice;
+
+export const useStore = create<StoreState>()((...a) => ({
+  ...createUserSlice(...a),
+  ...createCartSlice(...a)
+}));</code></pre>
+    </div>
+
+    <div class="question">Migrating from Redux</div>
+    <div class="answer">
+        <pre><code>// Redux store
+const initialState = {
+  count: 0
+};
+
+const counterReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { ...state, count: state.count + 1 };
+    case 'DECREMENT':
+      return { ...state, count: state.count - 1 };
+    default:
+      return state;
+  }
+};
+
+const store = createStore(counterReducer);
+
+// Dispatch actions
+store.dispatch({ type: 'INCREMENT' });
+
+// ↓↓↓ Zustand equivalent ↓↓↓
+
+const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 }))
+}));
+
+// Call actions directly
+const increment = useStore.getState().increment;
+increment();
+
+// Migration strategy:
+// 1. Create Zustand store with same state shape
+// 2. Convert action creators to store methods
+// 3. Replace useSelector with Zustand selectors
+// 4. Replace useDispatch with direct action calls
+// 5. Remove Redux boilerplate (actions, reducers, types)</code></pre>
+    </div>
+
+    <div class="question">Comparison with Other Libraries</div>
+    <div class="answer">
+        <strong>Zustand vs Redux:</strong>
+        <ul>
+            <li>Zustand: ~1KB, Redux: ~3KB + React-Redux ~5KB</li>
+            <li>Zustand: No boilerplate, Redux: Actions, reducers, types</li>
+            <li>Zustand: Direct mutations with immer, Redux: Requires Redux Toolkit</li>
+        </ul>
+        
+        <strong>Zustand vs Context API:</strong>
+        <ul>
+            <li>Zustand: No provider needed, Context: Requires Provider wrapper</li>
+            <li>Zustand: Better performance, Context: Can cause unnecessary re-renders</li>
+            <li>Zustand: Can use outside React, Context: React-only</li>
+        </ul>
+        
+        <strong>Zustand vs Jotai:</strong>
+        <ul>
+            <li>Zustand: Store-based, Jotai: Atom-based</li>
+            <li>Zustand: Simpler for global state, Jotai: Better for derived state</li>
+            <li>Zustand: Easier to debug, Jotai: More composable</li>
+        </ul>
+        
+        <strong>Zustand vs Valtio:</strong>
+        <ul>
+            <li>Zustand: Immutable updates, Valtio: Mutable proxy-based</li>
+            <li>Zustand: Explicit selectors, Valtio: Automatic tracking</li>
+            <li>Zustand: More control, Valtio: More magic</li>
+        </ul>
+    </div>
+
+    <h2>Additional Concepts</h2>
+
+    <div class="question">Custom Middleware</div>
+    <div class="answer">
+        <pre><code>// Logger middleware
+const logger = (config) => (set, get, api) =>
+  config(
+    (...args) => {
+      console.log('Before:', get());
+      set(...args);
+      console.log('After:', get());
+    },
+    get,
+    api
+  );
+
+// Usage
+const useStore = create(
+  logger((set) => ({
+    count: 0,
+    increment: () => set((state) => ({ count: state.count + 1 }))
+  }))
+);
+
+// Analytics middleware
+const analytics = (config) => (set, get, api) =>
+  config(
+    (...args) => {
+      set(...args);
+      
+      // Track state changes
+      const state = get();
+      window.analytics?.track('state_changed', state);
+    },
+    get,
+    api
+  );
+
+// Timestamp middleware
+const timestamp = (config) => (set, get, api) =>
+  config(
+    (...args) => {
+      set(...args);
+      set({ lastUpdated: Date.now() });
+    },
+    get,
+    api
+  );</code></pre>
+    </div>
+
+    <div class="question">Transient Updates (No Re-render)</div>
+    <div class="answer">
+        For frequently changing values that don't need to trigger re-renders:
+        <pre><code>const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 }))
+}));
+
+// Subscribe without causing re-render
+function Component() {
+  useEffect(() => {
+    const unsubscribe = useStore.subscribe(
+      (state) => state.count,
+      (count) => {
+        // Update DOM directly without re-render
+        document.getElementById('count').textContent = count;
+      }
+    );
+    
+    return unsubscribe;
+  }, []);
+  
+  return <div id="count">0</div>;
+}
+
+// Or use subscribeWithSelector middleware
+import { subscribeWithSelector } from 'zustand/middleware';
+
+const useStore = create(
+  subscribeWithSelector((set) => ({
+    x: 0,
+    y: 0,
+    setPosition: (x, y) => set({ x, y })
+  }))
+);
+
+// Track mouse position without re-rendering
+useEffect(() => {
+  const unsubscribe = useStore.subscribe(
+    (state) => ({ x: state.x, y: state.y }),
+    ({ x, y }) => {
+      console.log('Position:', x, y);
+    }
+  );
+  
+  return unsubscribe;
+}, []);</code></pre>
+    </div>
+
+    <div class="question">Memoized Selectors</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { createSelector } from 'reselect';
+
+const useStore = create((set) => ({
+  items: [],
+  filter: 'all',
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  }))
+}));
+
+// Create memoized selector
+const selectFilteredItems = createSelector(
+  (state) => state.items,
+  (state) => state.filter,
+  (items, filter) => {
+    console.log('Computing filtered items...');
+    if (filter === 'completed') {
+      return items.filter(item => item.completed);
+    }
+    if (filter === 'active') {
+      return items.filter(item => !item.completed);
+    }
+    return items;
+  }
+);
+
+// Usage
+function TodoList() {
+  const filteredItems = useStore(selectFilteredItems);
+  return <div>{filteredItems.length} items</div>;
+}
+
+// Manual memoization with useMemo
+function TodoList() {
+  const items = useStore((state) => state.items);
+  const filter = useStore((state) => state.filter);
+  
+  const filteredItems = useMemo(() => {
+    if (filter === 'completed') {
+      return items.filter(item => item.completed);
+    }
+    return items;
+  }, [items, filter]);
+  
+  return <div>{filteredItems.length} items</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Todo List Example</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist, devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+  createdAt: number;
+}
+
+interface TodoState {
+  todos: Todo[];
+  filter: 'all' | 'active' | 'completed';
+  
+  addTodo: (text: string) => void;
+  toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
+  editTodo: (id: string, text: string) => void;
+  clearCompleted: () => void;
+  setFilter: (filter: 'all' | 'active' | 'completed') => void;
+  getFilteredTodos: () => Todo[];
+}
+
+export const useTodoStore = create<TodoState>()(
+  devtools(
+    persist(
+      immer((set, get) => ({
+        todos: [],
+        filter: 'all',
+        
+        addTodo: (text) => set((state) => {
+          state.todos.push({
+            id: Date.now().toString(),
+            text,
+            completed: false,
+            createdAt: Date.now()
+          });
+        }),
+        
+        toggleTodo: (id) => set((state) => {
+          const todo = state.todos.find(t => t.id === id);
+          if (todo) {
+            todo.completed = !todo.completed;
+          }
+        }),
+        
+        deleteTodo: (id) => set((state) => {
+          const index = state.todos.findIndex(t => t.id === id);
+          if (index !== -1) {
+            state.todos.splice(index, 1);
+          }
+        }),
+        
+        editTodo: (id, text) => set((state) => {
+          const todo = state.todos.find(t => t.id === id);
+          if (todo) {
+            todo.text = text;
+          }
+        }),
+        
+        clearCompleted: () => set((state) => {
+          state.todos = state.todos.filter(t => !t.completed);
+        }),
+        
+        setFilter: (filter) => set({ filter }),
+        
+        getFilteredTodos: () => {
+          const { todos, filter } = get();
+          if (filter === 'active') {
+            return todos.filter(t => !t.completed);
+          }
+          if (filter === 'completed') {
+            return todos.filter(t => t.completed);
+          }
+          return todos;
+        }
+      })),
+      { name: 'todo-storage' }
+    ),
+    { name: 'TodoStore' }
+  )
+);
+
+// TodoList component
+function TodoList() {
+  const todos = useTodoStore((state) => state.getFilteredTodos());
+  const toggleTodo = useTodoStore((state) => state.toggleTodo);
+  const deleteTodo = useTodoStore((state) => state.deleteTodo);
+  
+  return (
+    <ul>
+      {todos.map(todo => (
+        <li key={todo.id}>
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => toggleTodo(todo.id)}
+          />
+          <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+            {todo.text}
+          </span>
+          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// AddTodo component
+function AddTodo() {
+  const [text, setText] = useState('');
+  const addTodo = useTodoStore((state) => state.addTodo);
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (text.trim()) {
+      addTodo(text);
+      setText('');
+    }
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="What needs to be done?"
+      />
+      <button type="submit">Add</button>
+    </form>
+  );
+}</code></pre>
+    </div>
+
+    <div class="question">Best Practices</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Keep stores focused</strong>: One store per domain (user, cart, settings)</li>
+            <li><strong>Use selectors</strong>: Always select only what you need</li>
+            <li><strong>Avoid storing derived state</strong>: Compute on the fly or use getters</li>
+            <li><strong>Use TypeScript</strong>: Type safety prevents bugs</li>
+            <li><strong>Persist carefully</strong>: Don't persist sensitive data or temporary state</li>
+            <li><strong>Use middleware wisely</strong>: Only add what you need</li>
+            <li><strong>Test your stores</strong>: Stores are easy to unit test</li>
+            <li><strong>Keep actions simple</strong>: Complex logic should be in services</li>
+            <li><strong>Use shallow comparison</strong>: When selecting multiple values</li>
+            <li><strong>Don't abuse get()</strong>: Prefer using state in set() callback</li>
+        </ul>
+    </div>
+
+    <div class="question">Common Pitfalls</div>
+    <div class="answer">
+        <pre><code>// ❌ PITFALL 1: Mutating state directly
+const useStore = create((set) => ({
+  user: { name: 'John' },
+  updateName: (name) => set((state) => {
+    state.user.name = name;  // DON'T DO THIS
+    return state;
+  })
+}));
+
+// ✅ FIX: Create new object or use immer
+const useStore = create((set) => ({
+  user: { name: 'John' },
+  updateName: (name) => set((state) => ({
+    user: { ...state.user, name }
+  }))
+}));
+
+// ❌ PITFALL 2: Selecting entire state
+function Component() {
+  const state = useStore();  // Re-renders on ANY change
+  return <div>{state.count}</div>;
+}
+
+// ✅ FIX: Select specific property
+function Component() {
+  const count = useStore((state) => state.count);
+  return <div>{count}</div>;
+}
+
+// ❌ PITFALL 3: Creating new objects in selector
+function Component() {
+  const data = useStore((state) => ({
+    count: state.count,
+    name: state.name
+  }));  // New object every time = always re-renders
+  return <div>{data.count}</div>;
+}
+
+// ✅ FIX: Use shallow comparison
+import { shallow } from 'zustand/shallow';
+
+function Component() {
+  const { count, name } = useStore(
+    (state) => ({ count: state.count, name: state.name }),
+    shallow
+  );
+  return <div>{count}</div>;
+}
+
+// ❌ PITFALL 4: Storing derived state
+const useStore = create((set) => ({
+  items: [],
+  itemCount: 0,  // Derived from items.length
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item],
+    itemCount: state.items.length + 1  // Can get out of sync
+  }))
+}));
+
+// ✅ FIX: Compute on the fly
+const useStore = create((set, get) => ({
+  items: [],
+  addItem: (item) => set((state) => ({
+    items: [...state.items, item]
+  })),
+  getItemCount: () => get().items.length
+}));
+
+// Or in component
+function Component() {
+  const itemCount = useStore((state) => state.items.length);
+  return <div>{itemCount}</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Error Handling Patterns</div>
+    <div class="answer">
+        <pre><code>const useStore = create((set) => ({
+  data: null,
+  loading: false,
+  error: null,
+  
+  // Pattern 1: Try-catch with error state
+  fetchData: async () => {
+    set({ loading: true, error: null });
+    try {
+      const response = await fetch('/api/data');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      set({ data, loading: false });
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Unknown error',
+        loading: false
+      });
+    }
+  },
+  
+  // Pattern 2: Return error instead of storing
+  fetchDataWithReturn: async () => {
+    set({ loading: true });
+    try {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      set({ data, loading: false });
+      return { success: true, data };
+    } catch (error) {
+      set({ loading: false });
+      return { success: false, error: error.message };
+    }
+  },
+  
+  // Pattern 3: Error boundary integration
+  fetchDataWithThrow: async () => {
+    set({ loading: true });
+    try {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      set({ data, loading: false });
+    } catch (error) {
+      set({ loading: false });
+      throw error;  // Let error boundary handle it
+    }
+  }
+}));
+
+// Usage with error display
+function DataComponent() {
+  const { data, loading, error, fetchData } = useStore();
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+  if (!data) return null;
+  
+  return <div>{JSON.stringify(data)}</div>;
+}</code></pre>
+    </div>
+
+    <div class="question">Loading States Pattern</div>
+    <div class="answer">
+        <pre><code>type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+
+interface DataState {
+  data: any;
+  loadingState: LoadingState;
+  error: string | null;
+  fetchData: () => Promise<void>;
+}
+
+const useStore = create<DataState>((set) => ({
+  data: null,
+  loadingState: 'idle',
+  error: null,
+  
+  fetchData: async () => {
+    set({ loadingState: 'loading', error: null });
+    
+    try {
+      const response = await fetch('/api/data');
+      const data = await response.json();
+      set({ data, loadingState: 'success' });
+    } catch (error) {
+      set({
+        error: error.message,
+        loadingState: 'error'
+      });
+    }
+  }
+}));
+
+// Usage
+function DataComponent() {
+  const { data, loadingState, error, fetchData } = useStore();
+  
+  useEffect(() => {
+    if (loadingState === 'idle') {
+      fetchData();
+    }
+  }, [loadingState, fetchData]);
+  
+  switch (loadingState) {
+    case 'idle':
+    case 'loading':
+      return <div>Loading...</div>;
+    case 'error':
+      return <div>Error: {error}</div>;
+    case 'success':
+      return <div>{JSON.stringify(data)}</div>;
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">subscribeWithSelector Middleware</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
+
+const useStore = create(
+  subscribeWithSelector((set) => ({
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 30,
+    updateFirstName: (name) => set({ firstName: name }),
+    updateAge: (age) => set({ age })
+  }))
+);
+
+// Subscribe to specific field
+const unsubscribe = useStore.subscribe(
+  (state) => state.firstName,
+  (firstName, prevFirstName) => {
+    console.log('First name changed:', prevFirstName, '->', firstName);
+  }
+);
+
+// Subscribe to multiple fields
+const unsubscribe = useStore.subscribe(
+  (state) => ({ firstName: state.firstName, lastName: state.lastName }),
+  ({ firstName, lastName }) => {
+    console.log('Name changed:', firstName, lastName);
+  },
+  { equalityFn: shallow }
+);
+
+// Subscribe with options
+const unsubscribe = useStore.subscribe(
+  (state) => state.age,
+  (age) => {
+    console.log('Age changed:', age);
+  },
+  {
+    fireImmediately: true  // Call immediately with current value
+  }
+);</code></pre>
+    </div>
+
+    <div class="question">State Hydration</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+const useStore = create(
+  persist(
+    (set) => ({
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'app-storage',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.log('Hydration error:', error);
+        } else {
+          console.log('Hydration complete:', state);
+        }
+      }
+    }
+  )
+);
+
+// Check if hydrated
+function App() {
+  const [hydrated, setHydrated] = useState(false);
+  
+  useEffect(() => {
+    // Wait for hydration
+    const unsubscribe = useStore.persist.onFinishHydration(() => {
+      setHydrated(true);
+    });
+    
+    return unsubscribe;
+  }, []);
+  
+  if (!hydrated) {
+    return <div>Loading...</div>;
+  }
+  
+  return <div>App content</div>;
+}
+
+// Or use hasHydrated flag
+const useStore = create(
+  persist(
+    (set) => ({
+      _hasHydrated: false,
+      count: 0,
+      increment: () => set((state) => ({ count: state.count + 1 }))
+    }),
+    {
+      name: 'app-storage',
+      onRehydrateStorage: () => () => {
+        useStore.setState({ _hasHydrated: true });
+      }
+    }
+  )
+);</code></pre>
+    </div>
+
+    <div class="question">Zustand with React Router</div>
+    <div class="answer">
+        <pre><code>import { create } from 'zustand';
+import { useNavigate, useLocation } from 'react-router-dom';
+
+// Store navigation state
+const useNavStore = create((set) => ({
+  previousPath: null,
+  setPreviousPath: (path) => set({ previousPath: path })
+}));
+
+// Track navigation history
+function NavigationTracker() {
+  const location = useLocation();
+  const setPreviousPath = useNavStore((state) => state.setPreviousPath);
+  
+  useEffect(() => {
+    setPreviousPath(location.pathname);
+  }, [location.pathname]);
+  
+  return null;
+}
+
+// Go back to previous page
+function BackButton() {
+  const navigate = useNavigate();
+  const previousPath = useNavStore((state) => state.previousPath);
+  
+  const handleBack = () => {
+    if (previousPath) {
+      navigate(previousPath);
+    } else {
+      navigate('/');
+    }
+  };
+  
+  return <button onClick={handleBack}>Back</button>;
+}
+
+// Store for breadcrumbs
+const useBreadcrumbStore = create((set) => ({
+  breadcrumbs: [],
+  addBreadcrumb: (crumb) => set((state) => ({
+    breadcrumbs: [...state.breadcrumbs, crumb]
+  })),
+  clearBreadcrumbs: () => set({ breadcrumbs: [] })
+}));</code></pre>
+    </div>
+
+    <div class="question">Testing with Jest</div>
+    <div class="answer">
+        <pre><code>// store.ts
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+  reset: () => set({ count: 0 })
+}));
+
+// store.test.ts
+import { renderHook, act } from '@testing-library/react';
+import { useStore } from './store';
+
+describe('useStore', () => {
+  beforeEach(() => {
+    // Reset store before each test
+    useStore.setState({ count: 0 });
+  });
+  
+  it('should have initial count of 0', () => {
+    const { result } = renderHook(() => useStore());
+    expect(result.current.count).toBe(0);
+  });
+  
+  it('should increment count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    act(() => {
+      result.current.increment();
+    });
+    
+    expect(result.current.count).toBe(1);
+  });
+  
+  it('should decrement count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    act(() => {
+      result.current.increment();
+      result.current.decrement();
+    });
+    
+    expect(result.current.count).toBe(0);
+  });
+  
+  it('should reset count', () => {
+    const { result } = renderHook(() => useStore());
+    
+    act(() => {
+      result.current.increment();
+      result.current.increment();
+      result.current.reset();
+    });
+    
+    expect(result.current.count).toBe(0);
+  });
+});</code></pre>
+    </div>
+
+    <div class="question">Testing with React Testing Library</div>
+    <div class="answer">
+        <pre><code>// Counter.tsx
+import { useStore } from './store';
+
+export function Counter() {
+  const count = useStore((state) => state.count);
+  const increment = useStore((state) => state.increment);
+  const decrement = useStore((state) => state.decrement);
+  
+  return (
+    <div>
+      <p data-testid="count">Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+
+// Counter.test.tsx
+import { render, screen, fireEvent } from '@testing-library/react';
+import { Counter } from './Counter';
+import { useStore } from './store';
+
+describe('Counter', () => {
+  beforeEach(() => {
+    useStore.setState({ count: 0 });
+  });
+  
+  it('should display initial count', () => {
+    render(<Counter />);
+    expect(screen.getByTestId('count')).toHaveTextContent('Count: 0');
+  });
+  
+  it('should increment when button clicked', () => {
+    render(<Counter />);
+    
+    fireEvent.click(screen.getByText('Increment'));
+    
+    expect(screen.getByTestId('count')).toHaveTextContent('Count: 1');
+  });
+  
+  it('should decrement when button clicked', () => {
+    render(<Counter />);
+    
+    fireEvent.click(screen.getByText('Increment'));
+    fireEvent.click(screen.getByText('Decrement'));
+    
+    expect(screen.getByTestId('count')).toHaveTextContent('Count: 0');
+  });
+});</code></pre>
+    </div>
+
+    <div class="question">Mocking Stores in Tests</div>
+    <div class="answer">
+        <pre><code>// store.ts
+import { create } from 'zustand';
+
+export const useStore = create((set) => ({
+  user: null,
+  setUser: (user) => set({ user })
+}));
+
+// Component.tsx
+import { useStore } from './store';
+
+export function UserProfile() {
+  const user = useStore((state) => state.user);
+  
+  if (!user) return <div>Not logged in</div>;
+  
+  return <div>Welcome, {user.name}</div>;
+}
+
+// Component.test.tsx
+import { render, screen } from '@testing-library/react';
+import { UserProfile } from './Component';
+import { useStore } from './store';
+
+// Mock the store
+jest.mock('./store');
+
+describe('UserProfile', () => {
+  it('should show not logged in when no user', () => {
+    useStore.mockReturnValue({
+      user: null
+    });
+    
+    render(<UserProfile />);
+    expect(screen.getByText('Not logged in')).toBeInTheDocument();
+  });
+  
+  it('should show user name when logged in', () => {
+    useStore.mockReturnValue({
+      user: { name: 'John Doe' }
+    });
+    
+    render(<UserProfile />);
+    expect(screen.getByText('Welcome, John Doe')).toBeInTheDocument();
+  });
+});
+
+// Alternative: Create test store
+const createTestStore = (initialState) => {
+  return create((set) => ({
+    ...initialState,
+    setUser: (user) => set({ user })
+  }));
+};</code></pre>
+    </div>
+
+    <div class="question">Resources & Further Learning</div>
+    <div class="answer">
+        <strong>Official Resources:</strong>
+        <ul>
+            <li>Zustand GitHub: https://github.com/pmndrs/zustand</li>
+            <li>Official Documentation: https://docs.pmnd.rs/zustand</li>
+            <li>Examples: https://github.com/pmndrs/zustand/tree/main/examples</li>
+        </ul>
+        
+        <strong>Community Resources:</strong>
+        <ul>
+            <li>Zustand Discord Community</li>
+            <li>Stack Overflow - zustand tag</li>
+            <li>Dev.to articles on Zustand</li>
+        </ul>
+        
+        <strong>Related Libraries:</strong>
+        <ul>
+            <li>Jotai - Atomic state management</li>
+            <li>Valtio - Proxy-based state</li>
+            <li>Redux Toolkit - Redux simplified</li>
+        </ul>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to Zustand Home</a>
+</body>
+</html>

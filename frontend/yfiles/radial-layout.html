@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>RadialLayout - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is RadialLayout?</div>
+    <div class="answer">
+        RadialLayout arranges nodes in concentric circles around a central node. It's ideal for:
+        <ul>
+            <li>Centralized network topologies</li>
+            <li>Hub-and-spoke diagrams</li>
+            <li>Highlighting central importance</li>
+            <li>Radial hierarchies</li>
+            <li>Star topologies</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you apply RadialLayout?</div>
+    <div class="answer">
+        <pre><code>// Basic radial layout
+const layout = new RadialLayout();
+await graphComponent.morphLayout(layout);
+
+// With configuration
+const layout = new RadialLayout({
+    minimumNodeToNodeDistance: 40,
+    minimumLayerDistance: 80
+});
+
+const layoutData = new RadialLayoutData();
+layoutData.centerNodes.item = centerNode;
+
+await graphComponent.morphLayout(layout, layoutData);</code></pre>
+    </div>
+
+    <div class="question">What are the key configuration options?</div>
+    <div class="answer">
+        <pre><code>const layout = new RadialLayout({
+    // Distance between concentric circles
+    minimumLayerDistance: 80,
+    
+    // Distance between nodes on same circle
+    minimumNodeToNodeDistance: 30,
+    
+    // Consider node sizes
+    considerNodeSizes: true,
+    
+    // Sector arrangement
+    minimumBendAngle: 10
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show an example?</div>
+    <div class="answer">
+        <pre><code>// Create a hub-and-spoke network
+const graph = graphComponent.graph;
+
+// Create central hub
+const hub = graph.createNode();
+graph.addLabel(hub, 'Hub');
+
+// Create spokes
+const spokes = [];
+for (let i = 0; i < 8; i++) {
+    const node = graph.createNode();
+    graph.addLabel(node, `Node ${i + 1}`);
+    graph.createEdge(hub, node);
+    spokes.push(node);
+}
+
+// Create some connections between spokes
+graph.createEdge(spokes[0], spokes[1]);
+graph.createEdge(spokes[2], spokes[3]);
+graph.createEdge(spokes[4], spokes[5]);
+
+// Apply radial layout
+const layout = new RadialLayout({
+    minimumLayerDistance: 100,
+    minimumNodeToNodeDistance: 50
+});
+
+const layoutData = new RadialLayoutData();
+layoutData.centerNodes.item = hub;
+
+await graphComponent.morphLayout(layout, layoutData);
+graphComponent.fitGraphBounds(new Insets(30));</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

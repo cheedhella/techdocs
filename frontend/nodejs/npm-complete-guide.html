@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>npm Complete Guide</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <h1>npm Complete Guide</h1>
+    <p>Comprehensive guide covering all npm essentials from basics to advanced patterns.</p>
+
+    <div class="toc-container">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#getting-started">1. Getting Started</a></li>
+            <li><a href="#installing-packages">2. Installing Packages</a></li>
+            <li><a href="#managing-packages">3. Managing Packages</a></li>
+            <li><a href="#scripts">4. Scripts</a></li>
+            <li><a href="#publishing">5. Publishing Packages</a></li>
+            <li><a href="#configuration">6. Configuration</a></li>
+            <li><a href="#workspaces">7. Workspaces & Monorepos</a></li>
+            <li><a href="#advanced">8. Advanced Topics</a></li>
+            <li><a href="#security">9. Security & Best Practices</a></li>
+            <li><a href="#troubleshooting">10. Troubleshooting</a></li>
+        </ul>
+    </div>
+
+    <h2 id="getting-started">1. Getting Started</h2>
+    
+    <div class="question">What is npm?</div>
+    <div class="answer">
+        npm (Node Package Manager) is the default package manager for Node.js. It consists of:
+        <ul>
+            <li><strong>CLI Tool</strong>: Command-line interface for managing packages</li>
+            <li><strong>Registry</strong>: Online database of public and private packages (npmjs.com)</li>
+            <li><strong>Website</strong>: Browse and search packages</li>
+        </ul>
+        
+        <strong>Key Features:</strong>
+        <ul>
+            <li>Install and manage dependencies</li>
+            <li>Run scripts and automate tasks</li>
+            <li>Publish and share packages</li>
+            <li>Manage project versions</li>
+            <li>Security auditing</li>
+        </ul>
+    </div>
+
+    <div class="question">npm vs yarn vs pnpm</div>
+    <div class="answer">
+        <table border="1" cellpadding="10">
+            <tr>
+                <th>Feature</th>
+                <th>npm</th>
+                <th>yarn</th>
+                <th>pnpm</th>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                <td>Good</td>
+                <td>Fast</td>
+                <td>Fastest</td>
+            </tr>
+            <tr>
+                <td>Disk Space</td>
+                <td>High</td>
+                <td>High</td>
+                <td>Low (symlinks)</td>
+            </tr>
+            <tr>
+                <td>Lockfile</td>
+                <td>package-lock.json</td>
+                <td>yarn.lock</td>
+                <td>pnpm-lock.yaml</td>
+            </tr>
+            <tr>
+                <td>Workspaces</td>
+                <td>Yes (v7+)</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Default with Node</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+        </table>
+        
+        <strong>When to use npm:</strong>
+        <ul>
+            <li>Default choice, comes with Node.js</li>
+            <li>Good for most projects</li>
+            <li>Best compatibility</li>
+        </ul>
+        
+        <strong>When to use yarn:</strong>
+        <ul>
+            <li>Need faster installs</li>
+            <li>Better offline support</li>
+            <li>Prefer yarn.lock format</li>
+        </ul>
+        
+        <strong>When to use pnpm:</strong>
+        <ul>
+            <li>Monorepos with many packages</li>
+            <li>Limited disk space</li>
+            <li>Strictest dependency resolution</li>
+        </ul>
+    </div>
+
+    <div class="question">Installation & Setup</div>
+    <div class="answer">
+        <pre><code># npm comes with Node.js
+# Download Node.js from https://nodejs.org/
+
+# Check if npm is installed
+npm --version
+# or
+npm -v
+
+# Check Node.js version
+node --version
+
+# Update npm to latest version
+npm install -g npm@latest
+
+# Check npm configuration
+npm config list
+
+# Get help
+npm help
+npm help install
+npm help scripts</code></pre>
+    </div>
+
+    <div class="question">npm init - Creating package.json</div>
+    <div class="answer">
+        <pre><code># Interactive setup
+npm init
+
+# Skip questions (use defaults)
+npm init -y
+# or
+npm init --yes
+
+# Custom defaults
+npm config set init-author-name "Your Name"
+npm config set init-author-email "you@example.com"
+npm config set init-license "MIT"
+
+# Example package.json created
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}</code></pre>
+    </div>
+
+    <div class="question">Understanding package.json</div>
+    <div class="answer">
+        <pre><code>{
+  // Package metadata
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "My awesome app",
+  "author": "Your Name <you@example.com>",
+  "license": "MIT",
+  "keywords": ["react", "app"],
+  
+  // Entry points
+  "main": "dist/index.js",           // CommonJS entry
+  "module": "dist/index.esm.js",     // ES Module entry
+  "types": "dist/index.d.ts",        // TypeScript definitions
+  "exports": {                        // Modern exports
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
+  
+  // Scripts
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  
+  // Dependencies
+  "dependencies": {
+    "react": "^18.2.0",              // Production dependencies
+    "express": "~4.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",          // Development only
+    "jest": "^29.0.0",
+    "@types/react": "^18.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"              // Required by consumer
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.3.0"             // Optional, won't fail if missing
+  },
+  
+  // Engine requirements
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  
+  // Repository
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/repo.git"
+  },
+  
+  // Browser compatibility
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}</code></pre>
+    </div>
+
+    <h2 id="installing-packages">2. Installing Packages</h2>
+
+    <div class="question">npm install Basics</div>
+    <div class="answer">
+        <pre><code># Install all dependencies from package.json
+npm install
+# or shorthand
+npm i
+
+# Install specific package
+npm install package-name
+
+# Install multiple packages
+npm install package1 package2 package3
+
+# Install specific version
+npm install package-name@1.2.3
+
+# Install latest version
+npm install package-name@latest
+
+# Install from GitHub
+npm install user/repo
+npm install user/repo#branch
+npm install github:user/repo
+
+# Install from URL
+npm install https://github.com/user/repo/tarball/master
+
+# Install from local folder
+npm install ../local-package
+npm install /absolute/path/to/package
+
+# Install and save to dependencies
+npm install package-name --save
+# or (default behavior)
+npm install package-name
+
+# Install and save to devDependencies
+npm install package-name --save-dev
+# or shorthand
+npm install -D package-name
+
+# Install globally
+npm install -g package-name
+
+# Install without saving to package.json
+npm install package-name --no-save</code></pre>
+    </div>
+
+    <div class="question">dependencies vs devDependencies</div>
+    <div class="answer">
+        <strong>dependencies:</strong>
+        <ul>
+            <li>Required for the app to run in production</li>
+            <li>Installed in production builds</li>
+            <li>Examples: react, express, lodash</li>
+        </ul>
+        
+        <strong>devDependencies:</strong>
+        <ul>
+            <li>Only needed during development</li>
+            <li>Not installed in production (npm install --production)</li>
+            <li>Examples: typescript, jest, eslint, webpack</li>
+        </ul>
+        
+        <pre><code># Install as dependency (production)
+npm install react express axios
+
+# Install as devDependency (development only)
+npm install -D typescript jest eslint prettier nodemon
+
+# Install production dependencies only
+npm install --production
+# or
+npm install --omit=dev
+
+# Example package.json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/react": "^18.0.0",
+    "eslint": "^8.0.0"
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Global Packages (-g)</div>
+    <div class="answer">
+        <pre><code># Install globally
+npm install -g package-name
+
+# Common global packages
+npm install -g typescript
+npm install -g nodemon
+npm install -g create-react-app
+npm install -g yarn
+npm install -g pnpm
+npm install -g npm-check-updates
+
+# List global packages
+npm list -g --depth=0
+
+# Update global package
+npm update -g package-name
+
+# Uninstall global package
+npm uninstall -g package-name
+
+# Find global install location
+npm root -g
+# Usually: /usr/local/lib/node_modules (Mac/Linux)
+# or: C:\Users\YourName\AppData\Roaming\npm\node_modules (Windows)
+
+# Update npm itself
+npm install -g npm@latest</code></pre>
+        
+        <strong>When to install globally:</strong>
+        <ul>
+            <li>CLI tools you use across projects (typescript, nodemon)</li>
+            <li>Project generators (create-react-app, vite)</li>
+            <li>Package managers (yarn, pnpm)</li>
+        </ul>
+        
+        <strong>When NOT to install globally:</strong>
+        <ul>
+            <li>Project dependencies (install locally)</li>
+            <li>Different versions needed per project</li>
+            <li>Team collaboration (use local + npx)</li>
+        </ul>
+    </div>
+
+    <div class="question">Version Specifiers (^, ~, exact)</div>
+    <div class="answer">
+        <pre><code># Exact version
+"package": "1.2.3"
+# Only installs 1.2.3
+
+# Caret (^) - Compatible updates
+"package": "^1.2.3"
+# Allows: 1.2.3, 1.2.4, 1.3.0, 1.9.9
+# Does NOT allow: 2.0.0
+# Rule: Updates that don't change leftmost non-zero digit
+
+# Tilde (~) - Patch updates only
+"package": "~1.2.3"
+# Allows: 1.2.3, 1.2.4, 1.2.9
+# Does NOT allow: 1.3.0, 2.0.0
+# Rule: Only patch version updates
+
+# Wildcards
+"package": "*"        # Any version (not recommended)
+"package": "1.x"      # Any 1.x.x version
+"package": "1.2.x"    # Any 1.2.x version
+
+# Ranges
+"package": ">=1.2.3"         # Greater than or equal
+"package": ">=1.2.3 <2.0.0"  # Range
+"package": "1.2.3 - 1.5.0"   # Between versions
+
+# Latest
+"package": "latest"   # Always latest (not recommended)
+
+# Examples with semantic versioning
+"react": "^18.2.0"
+# 18.2.0 ✅  18.2.5 ✅  18.3.0 ✅  19.0.0 ❌
+
+"react": "~18.2.0"
+# 18.2.0 ✅  18.2.5 ✅  18.3.0 ❌  19.0.0 ❌
+
+"react": "18.2.0"
+# 18.2.0 ✅  18.2.5 ❌  18.3.0 ❌  19.0.0 ❌</code></pre>
+        
+        <strong>Best Practices:</strong>
+        <ul>
+            <li>Use <code>^</code> for most dependencies (safe updates)</li>
+            <li>Use exact versions for critical packages</li>
+            <li>Use <code>~</code> when you only want bug fixes</li>
+            <li>Avoid <code>*</code> and <code>latest</code> in production</li>
+        </ul>
+    </div>
+
+    <div class="question">npm ci - Clean Install</div>
+    <div class="answer">
+        <pre><code># Clean install (CI/CD environments)
+npm ci
+
+# Differences from npm install:
+# 1. Requires package-lock.json
+# 2. Deletes node_modules before install
+# 3. Never modifies package-lock.json
+# 4. Faster and more reliable
+# 5. Fails if package.json and package-lock.json are out of sync</code></pre>
+        
+        <strong>When to use npm ci:</strong>
+        <ul>
+            <li>CI/CD pipelines (GitHub Actions, Jenkins)</li>
+            <li>Production deployments</li>
+            <li>Docker builds</li>
+            <li>When you want exact versions from lockfile</li>
+        </ul>
+        
+        <strong>When to use npm install:</strong>
+        <ul>
+            <li>Local development</li>
+            <li>Adding new packages</li>
+            <li>Updating dependencies</li>
+        </ul>
+        
+        <pre><code># Example CI workflow
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci          # Use ci, not install
+      - run: npm test</code></pre>
+    </div>
+
+    <div class="question">package-lock.json</div>
+    <div class="answer">
+        <strong>What is package-lock.json?</strong>
+        <ul>
+            <li>Automatically generated when npm modifies node_modules or package.json</li>
+            <li>Records exact versions of all installed packages and their dependencies</li>
+            <li>Ensures consistent installs across machines</li>
+            <li>Should be committed to version control</li>
+        </ul>
+        
+        <pre><code># Example package-lock.json structure
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "my-app",
+      "version": "1.0.0",
+      "dependencies": {
+        "react": "^18.2.0"
+      }
+    },
+    "node_modules/react": {
+      "version": "18.2.0",
+      "resolved": "https://registry.npmjs.org/react/-/react-18.2.0.tgz",
+      "integrity": "sha512-...",
+      "dependencies": {
+        "loose-envify": "^1.1.0"
+      }
+    }
+  }
+}</code></pre>
+        
+        <strong>Best Practices:</strong>
+        <ul>
+            <li>✅ Always commit package-lock.json</li>
+            <li>✅ Use npm ci in CI/CD</li>
+            <li>✅ Don't manually edit it</li>
+            <li>❌ Don't add to .gitignore</li>
+        </ul>
+    </div>
+
+    <h2 id="managing-packages">3. Managing Packages</h2>
+
+    <div class="question">npm update</div>
+    <div class="answer">
+        <pre><code># Update all packages (respecting version ranges)
+npm update
+
+# Update specific package
+npm update package-name
+
+# Update to latest (ignoring version range)
+npm install package-name@latest
+
+# Check what would be updated
+npm outdated
+
+# Update all to latest (use with caution)
+npx npm-check-updates -u
+npm install
+
+# Example:
+# package.json has: "react": "^18.2.0"
+# Current installed: 18.2.0
+# Latest 18.x: 18.2.5
+
+npm update react
+# Installs 18.2.5 (within ^18.2.0 range)
+
+npm install react@latest
+# Installs latest version (could be 19.x)</code></pre>
+    </div>
+
+    <div class="question">npm uninstall</div>
+    <div class="answer">
+        <pre><code># Uninstall package
+npm uninstall package-name
+# or
+npm remove package-name
+# or
+npm rm package-name
+
+# Uninstall and remove from package.json
+npm uninstall package-name --save
+# (default behavior)
+
+# Uninstall devDependency
+npm uninstall -D package-name
+
+# Uninstall global package
+npm uninstall -g package-name
+
+# Uninstall multiple packages
+npm uninstall package1 package2 package3
+
+# Example
+npm uninstall lodash
+npm uninstall -D jest eslint
+npm uninstall -g typescript</code></pre>
+    </div>
+
+    <div class="question">npm list - View Installed Packages</div>
+    <div class="answer">
+        <pre><code># List all installed packages
+npm list
+# or
+npm ls
+
+# List only top-level packages
+npm list --depth=0
+
+# List specific package
+npm list package-name
+
+# List global packages
+npm list -g --depth=0
+
+# List in JSON format
+npm list --json
+
+# List production dependencies only
+npm list --prod
+
+# List dev dependencies only
+npm list --dev
+
+# Example output
+my-app@1.0.0
+├── react@18.2.0
+├── react-dom@18.2.0
+└── express@4.18.2
+    ├── body-parser@1.20.1
+    └── cookie@0.5.0</code></pre>
+    </div>
+
+    <div class="question">npm outdated</div>
+    <div class="answer">
+        <pre><code># Check for outdated packages
+npm outdated
+
+# Example output
+Package    Current  Wanted  Latest  Location
+react      18.2.0   18.2.5  19.0.0  my-app
+lodash     4.17.20  4.17.21 4.17.21 my-app
+
+# Columns explained:
+# Current: Currently installed version
+# Wanted: Max version satisfying semver range in package.json
+# Latest: Latest version available on registry
+# Location: Where the package is installed
+
+# Update to "Wanted" version
+npm update
+
+# Update to "Latest" version
+npm install package-name@latest</code></pre>
+    </div>
+
+    <div class="question">npm audit - Security Vulnerabilities</div>
+    <div class="answer">
+        <pre><code># Check for security vulnerabilities
+npm audit
+
+# Example output
+found 3 vulnerabilities (1 low, 2 high)
+  run `npm audit fix` to fix them
+
+# Automatically fix vulnerabilities
+npm audit fix
+
+# Fix including breaking changes
+npm audit fix --force
+
+# View detailed report
+npm audit --json
+
+# View audit report in browser
+npm audit --audit-level=moderate
+
+# Ignore specific vulnerabilities (not recommended)
+# Create .npmrc file
+audit-level=moderate
+
+# Example audit output
+┌───────────────┬──────────────────────────────────────────────┐
+│ High          │ Prototype Pollution                          │
+├───────────────┼──────────────────────────────────────────────┤
+│ Package       │ lodash                                       │
+├───────────────┼──────────────────────────────────────────────┤
+│ Patched in    │ >=4.17.21                                    │
+├───────────────┼──────────────────────────────────────────────┤
+│ Path          │ my-app > lodash                              │
+└───────────────┴──────────────────────────────────────────────┘</code></pre>
+    </div>
+
+    <div class="question">npm dedupe</div>
+    <div class="answer">
+        <pre><code># Remove duplicate packages
+npm dedupe
+# or
+npm ddp
+
+# What it does:
+# Before:
+node_modules/
+  package-a/
+    node_modules/
+      lodash@4.17.20
+  package-b/
+    node_modules/
+      lodash@4.17.20
+
+# After:
+node_modules/
+  lodash@4.17.20
+  package-a/
+  package-b/
+
+# Benefits:
+# - Reduces disk space
+# - Faster installs
+# - Smaller bundle size</code></pre>
+    </div>
+
+    <h2 id="scripts">4. Scripts</h2>
+
+    <div class="question">npm Scripts Basics</div>
+    <div class="answer">
+        <pre><code>// package.json
+{
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "webpack --mode production",
+    "test": "jest",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "clean": "rm -rf dist"
+  }
+}
+
+# Run scripts
+npm run start
+npm run dev
+npm run build
+
+# Special scripts (don't need "run")
+npm start    # Runs "start" script
+npm test     # Runs "test" script
+npm stop     # Runs "stop" script
+npm restart  # Runs "restart" script
+
+# List all available scripts
+npm run
+
+# Run script with arguments
+npm run build -- --watch
+npm run test -- --coverage
+
+# Run multiple scripts sequentially
+npm run lint && npm run test && npm run build
+
+# Run multiple scripts in parallel (Unix)
+npm run dev & npm run api
+
+# Cross-platform parallel (use npm-run-all)
+npm install -D npm-run-all
+npm-run-all --parallel dev api</code></pre>
+    </div>
+
+    <div class="question">Pre & Post Scripts</div>
+    <div class="answer">
+        <pre><code>// package.json
+{
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "webpack",
+    "postbuild": "npm run test",
+    
+    "pretest": "npm run lint",
+    "test": "jest",
+    "posttest": "echo 'Tests complete!'",
+    
+    "preinstall": "echo 'Installing...'",
+    "postinstall": "echo 'Install complete!'"
+  }
+}
+
+# When you run: npm run build
+# Executes in order:
+# 1. prebuild (clean)
+# 2. build (webpack)
+# 3. postbuild (test)
+
+# Lifecycle scripts
+preinstall  → install  → postinstall
+prepack     → pack     → postpack
+prepublish  → publish  → postpublish
+
+# Example: Build before publish
+{
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build && npm test"
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Passing Arguments to Scripts</div>
+    <div class="answer">
+        <pre><code>// package.json
+{
+  "scripts": {
+    "test": "jest",
+    "build": "webpack",
+    "dev": "vite"
+  }
+}
+
+# Pass arguments with --
+npm run test -- --watch
+npm run test -- --coverage
+npm run build -- --mode production
+npm run dev -- --port 3000
+
+# Multiple arguments
+npm run test -- --watch --coverage --verbose
+
+# Example with custom script
+{
+  "scripts": {
+    "deploy": "node deploy.js"
+  }
+}
+
+npm run deploy -- --env production --region us-east-1
+
+# Access in script (deploy.js)
+const args = process.argv.slice(2);
+console.log(args); // ['--env', 'production', '--region', 'us-east-1']</code></pre>
+    </div>
+
+    <div class="question">Environment Variables in Scripts</div>
+    <div class="answer">
+        <pre><code>// package.json
+{
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "test": "NODE_ENV=test jest"
+  }
+}
+
+# Access in Node.js
+console.log(process.env.NODE_ENV); // 'production'
+
+# Cross-platform environment variables (use cross-env)
+npm install -D cross-env
+
+{
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
+  }
+}
+
+# Multiple environment variables
+{
+  "scripts": {
+    "start": "cross-env NODE_ENV=production PORT=3000 node server.js"
+  }
+}
+
+# Using .env files (with dotenv)
+npm install dotenv
+
+// server.js
+require('dotenv').config();
+console.log(process.env.DATABASE_URL);
+
+// .env
+DATABASE_URL=postgresql://localhost:5432/mydb
+API_KEY=abc123</code></pre>
+    </div>
+
+    <div class="question">Cross-Platform Scripts</div>
+    <div class="answer">
+        <pre><code># Problem: Different commands on Windows vs Unix
+{
+  "scripts": {
+    "clean": "rm -rf dist"  // ❌ Fails on Windows
+  }
+}
+
+# Solution 1: Use cross-platform packages
+npm install -D rimraf
+
+{
+  "scripts": {
+    "clean": "rimraf dist"  // ✅ Works everywhere
+  }
+}
+
+# Solution 2: Use cross-env for environment variables
+npm install -D cross-env
+
+{
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node server.js"
+  }
+}
+
+# Useful cross-platform packages
+npm install -D rimraf      # rm -rf
+npm install -D mkdirp      # mkdir -p
+npm install -D cross-env   # Environment variables
+npm install -D copyfiles   # cp
+npm install -D npm-run-all # Run multiple scripts
+
+# Example cross-platform scripts
+{
+  "scripts": {
+    "clean": "rimraf dist",
+    "mkdir": "mkdirp dist/assets",
+    "copy": "copyfiles -u 1 src/**/*.css dist",
+    "build": "npm-run-all clean mkdir build:*",
+    "build:js": "webpack",
+    "build:css": "postcss src/styles.css -o dist/styles.css"
+  }
+}</code></pre>
+    </div>
+
+    <h2 id="publishing">5. Publishing Packages</h2>
+
+    <div class="question">npm publish</div>
+    <div class="answer">
+        <pre><code># Login to npm
+npm login
+
+# Check who you're logged in as
+npm whoami
+
+# Publish package
+npm publish
+
+# Publish scoped package as public
+npm publish --access public
+
+# Publish with tag
+npm publish --tag beta
+
+# Dry run (see what would be published)
+npm publish --dry-run
+
+# Steps to publish:
+# 1. Create account on npmjs.com
+# 2. Login: npm login
+# 3. Update version: npm version patch/minor/major
+# 4. Publish: npm publish
+
+# Example workflow
+npm version patch        # 1.0.0 → 1.0.1
+npm publish
+
+# View your published package
+npm view your-package-name</code></pre>
+    </div>
+
+    <div class="question">npm version - Semantic Versioning</div>
+    <div class="answer">
+        <pre><code># Semantic Versioning: MAJOR.MINOR.PATCH
+# Example: 1.2.3
+# MAJOR: Breaking changes (1.x.x → 2.0.0)
+# MINOR: New features, backwards compatible (1.2.x → 1.3.0)
+# PATCH: Bug fixes (1.2.3 → 1.2.4)
+
+# Bump patch version (1.0.0 → 1.0.1)
+npm version patch
+
+# Bump minor version (1.0.0 → 1.1.0)
+npm version minor
+
+# Bump major version (1.0.0 → 2.0.0)
+npm version major
+
+# Prerelease versions
+npm version prepatch    # 1.0.0 → 1.0.1-0
+npm version preminor    # 1.0.0 → 1.1.0-0
+npm version premajor    # 1.0.0 → 2.0.0-0
+npm version prerelease  # 1.0.0-0 → 1.0.0-1
+
+# Set specific version
+npm version 2.0.0
+
+# What npm version does:
+# 1. Updates version in package.json
+# 2. Creates git commit
+# 3. Creates git tag (v1.0.1)
+
+# Disable git tag creation
+npm version patch --no-git-tag-version
+
+# Custom commit message
+npm version patch -m "Release v%s"</code></pre>
+    </div>
+
+    <div class="question">.npmignore</div>
+    <div class="answer">
+        <pre><code># .npmignore - Files to exclude from published package
+
+# Development files
+src/
+tests/
+*.test.js
+*.spec.js
+
+# Build tools
+.babelrc
+.eslintrc
+.prettierrc
+tsconfig.json
+webpack.config.js
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+
+# If .npmignore doesn't exist, npm uses .gitignore
+# If .npmignore exists, .gitignore is ignored
+
+# Always included (can't ignore):
+# - package.json
+# - README.md
+# - LICENSE
+# - Main file specified in package.json
+
+# Always excluded (automatic):
+# - node_modules/
+# - .git/
+# - .DS_Store</code></pre>
+    </div>
+
+    <div class="question">Scoped Packages (@org/package)</div>
+    <div class="answer">
+        <pre><code># Scoped packages use @scope/package-name format
+# Example: @babel/core, @types/react
+
+# Install scoped package
+npm install @babel/core
+npm install @types/react
+
+# Publish scoped package
+# 1. Create package with scope in name
+{
+  "name": "@myorg/my-package",
+  "version": "1.0.0"
+}
+
+# 2. Publish (private by default)
+npm publish --access public
+
+# Install your scoped package
+npm install @myorg/my-package
+
+# Use in code
+import { something } from '@myorg/my-package';
+
+# Benefits:
+# - Namespace collision prevention
+# - Organization branding
+# - Private packages (with paid npm account)
+
+# Create organization on npmjs.com
+# Then publish packages under that org</code></pre>
+    </div>
+
+    <div class="question">npm link - Local Development</div>
+    <div class="answer">
+        <pre><code># Scenario: Testing a package locally before publishing
+
+# Step 1: In your package directory
+cd /path/to/my-package
+npm link
+
+# This creates a global symlink
+
+# Step 2: In your app directory
+cd /path/to/my-app
+npm link my-package
+
+# Now my-app uses local version of my-package
+# Changes in my-package are immediately reflected
+
+# Unlink
+cd /path/to/my-app
+npm unlink my-package
+
+cd /path/to/my-package
+npm unlink
+
+# Example workflow
+# Terminal 1: Package development
+cd ~/projects/my-ui-library
+npm link
+npm run build --watch
+
+# Terminal 2: App using the package
+cd ~/projects/my-app
+npm link my-ui-library
+npm run dev
+
+# Changes in my-ui-library are immediately available in my-app</code></pre>
+    </div>
+
+    <h2 id="configuration">6. Configuration</h2>
+
+    <div class="question">.npmrc Configuration</div>
+    <div class="answer">
+        <pre><code># .npmrc file locations:
+# 1. Per-project: /path/to/project/.npmrc
+# 2. Per-user: ~/.npmrc
+# 3. Global: /usr/local/etc/npmrc
+# 4. Built-in: /path/to/npm/npmrc
+
+# Example .npmrc
+# Registry
+registry=https://registry.npmjs.org/
+
+# Save exact versions (no ^ or ~)
+save-exact=true
+
+# Always use package-lock.json
+package-lock=true
+
+# Logging level
+loglevel=error
+
+# Cache location
+cache=/path/to/cache
+
+# Prefix for global installs
+prefix=/usr/local
+
+# Engine strictness
+engine-strict=true
+
+# Private registry authentication
+//registry.company.com/:_authToken=${NPM_TOKEN}
+
+# Scoped registry
+@myorg:registry=https://registry.company.com/</code></pre>
+    </div>
+
+    <div class="question">npm config</div>
+    <div class="answer">
+        <pre><code># View all config
+npm config list
+
+# View specific config
+npm config get registry
+npm config get prefix
+
+# Set config
+npm config set registry https://registry.npmjs.org/
+npm config set save-exact true
+
+# Delete config
+npm config delete registry
+
+# Edit config file
+npm config edit
+
+# Common configurations
+npm config set init-author-name "Your Name"
+npm config set init-author-email "you@example.com"
+npm config set init-license "MIT"
+
+# Set default save behavior
+npm config set save-exact true  # No ^ or ~
+
+# Set registry
+npm config set registry https://registry.npmjs.org/
+
+# Set proxy
+npm config set proxy http://proxy.company.com:8080
+npm config set https-proxy http://proxy.company.com:8080</code></pre>
+    </div>
+
+    <div class="question">Registry Configuration</div>
+    <div class="answer">
+        <pre><code># Default registry
+npm config set registry https://registry.npmjs.org/
+
+# Use private registry
+npm config set registry https://registry.company.com/
+
+# Scoped registry (different registry for @scope)
+npm config set @myorg:registry https://registry.company.com/
+
+# Authentication
+npm login --registry=https://registry.company.com/
+
+# Or set auth token
+npm config set //registry.company.com/:_authToken YOUR_TOKEN
+
+# Example .npmrc for private registry
+registry=https://registry.company.com/
+//registry.company.com/:_authToken=${NPM_TOKEN}
+@myorg:registry=https://registry.company.com/
+
+# Use npm registry for specific install
+npm install package-name --registry=https://registry.npmjs.org/
+
+# Verify registry
+npm config get registry</code></pre>
+    </div>
+
+    <h2 id="workspaces">7. Workspaces & Monorepos</h2>
+
+    <div class="question">npm Workspaces</div>
+    <div class="answer">
+        <pre><code># Monorepo structure
+my-monorepo/
+  package.json
+  packages/
+    app/
+      package.json
+    shared/
+      package.json
+    ui/
+      package.json
+
+# Root package.json
+{
+  "name": "my-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
+
+# Install all workspace dependencies
+npm install
+
+# Install dependency in specific workspace
+npm install react --workspace=packages/app
+# or
+npm install react -w packages/app
+
+# Run script in specific workspace
+npm run build --workspace=packages/app
+
+# Run script in all workspaces
+npm run build --workspaces
+
+# Add dependency to workspace
+cd packages/app
+npm install lodash
+
+# Link workspace packages
+// packages/app/package.json
+{
+  "dependencies": {
+    "@myorg/shared": "*"  // Links to local workspace
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Monorepo Setup</div>
+    <div class="answer">
+        <pre><code># Create monorepo
+mkdir my-monorepo
+cd my-monorepo
+npm init -y
+
+# Update package.json
+{
+  "name": "my-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "dev": "npm run dev --workspace=packages/app"
+  }
+}
+
+# Create workspace packages
+mkdir -p packages/app packages/shared packages/ui
+
+# packages/app/package.json
+{
+  "name": "@myorg/app",
+  "version": "1.0.0",
+  "dependencies": {
+    "@myorg/shared": "*",
+    "@myorg/ui": "*",
+    "react": "^18.2.0"
+  }
+}
+
+# packages/shared/package.json
+{
+  "name": "@myorg/shared",
+  "version": "1.0.0",
+  "main": "dist/index.js"
+}
+
+# Install all dependencies
+npm install
+
+# Dependencies are hoisted to root node_modules
+# Workspace packages are symlinked</code></pre>
+    </div>
+
+    <div class="question">Workspace Commands</div>
+    <div class="answer">
+        <pre><code># Run command in specific workspace
+npm run build -w packages/app
+npm run test --workspace=packages/shared
+
+# Run command in all workspaces
+npm run build --workspaces
+# or
+npm run build -ws
+
+# Run command in all workspaces (ignore missing scripts)
+npm run build --workspaces --if-present
+
+# Install dependency in workspace
+npm install lodash -w packages/app
+
+# Install dependency in all workspaces
+npm install lodash --workspaces
+
+# List all workspaces
+npm ls --workspaces
+
+# Run npm command in workspace
+npm version patch -w packages/app
+
+# Example: Build all packages
+{
+  "scripts": {
+    "build:all": "npm run build --workspaces --if-present",
+    "test:all": "npm run test --workspaces --if-present",
+    "clean:all": "npm run clean --workspaces --if-present"
+  }
+}</code></pre>
+    </div>
+
+    <h2 id="advanced">8. Advanced Topics</h2>
+
+    <div class="question">peerDependencies</div>
+    <div class="answer">
+        <pre><code># peerDependencies: Required by your package, but installed by consumer
+
+# Example: React component library
+{
+  "name": "my-react-components",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",      // For development
+    "react-dom": "^18.2.0"
+  }
+}
+
+# Why use peerDependencies?
+# - Avoid duplicate React instances
+# - Let consumer control React version
+# - Reduce bundle size
+
+# Consumer's package.json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "my-react-components": "^1.0.0"
+  }
+}
+
+# npm 7+ automatically installs peerDependencies
+# npm 3-6 only warns about missing peers
+
+# Check peer dependency warnings
+npm install
+
+# Example warning:
+npm WARN my-react-components@1.0.0 requires a peer of react@>=16.8.0
+but none is installed. You must install peer dependencies yourself.</code></pre>
+    </div>
+
+    <div class="question">optionalDependencies</div>
+    <div class="answer">
+        <pre><code># optionalDependencies: Nice to have, but not required
+
+{
+  "name": "my-package",
+  "optionalDependencies": {
+    "fsevents": "^2.3.0"  // Mac-only file watching
+  }
+}
+
+# If installation fails, npm continues without error
+# Your code should handle missing optional dependencies
+
+// Example: Graceful fallback
+let fsevents;
+try {
+  fsevents = require('fsevents');
+} catch (err) {
+  console.log('fsevents not available, using fallback');
+  fsevents = null;
+}
+
+# Use cases:
+# - Platform-specific packages
+# - Performance optimizations
+# - Optional features
+
+# Install without optional dependencies
+npm install --no-optional</code></pre>
+    </div>
+
+    <div class="question">npm cache</div>
+    <div class="answer">
+        <pre><code># View cache location
+npm config get cache
+# Default: ~/.npm (Unix) or %AppData%/npm-cache (Windows)
+
+# Verify cache integrity
+npm cache verify
+
+# Clean cache (rarely needed)
+npm cache clean --force
+
+# View cache contents
+npm cache ls
+
+# Cache benefits:
+# - Faster installs (packages cached locally)
+# - Offline installs (if package in cache)
+# - Reduced bandwidth
+
+# When to clean cache:
+# - Corrupted cache
+# - Disk space issues
+# - Troubleshooting install problems
+
+# npm automatically manages cache
+# Manual cleaning rarely necessary</code></pre>
+    </div>
+
+    <div class="question">npm prune</div>
+    <div class="answer">
+        <pre><code># Remove packages not in package.json
+npm prune
+
+# Remove devDependencies (for production)
+npm prune --production
+
+# Example scenario:
+# 1. You manually delete a package from package.json
+# 2. Package still in node_modules
+# 3. Run npm prune to remove it
+
+# Before prune
+node_modules/
+  react/
+  lodash/        # Not in package.json anymore
+  express/
+
+# After prune
+node_modules/
+  react/
+  express/
+
+# Prune specific package
+npm uninstall package-name  # Better than prune for specific packages</code></pre>
+    </div>
+
+    <div class="question">npm pack</div>
+    <div class="answer">
+        <pre><code># Create tarball of your package
+npm pack
+
+# Creates: my-package-1.0.0.tgz
+
+# Test what will be published
+npm pack --dry-run
+
+# View contents of tarball
+tar -tzf my-package-1.0.0.tgz
+
+# Install from tarball
+npm install ./my-package-1.0.0.tgz
+
+# Use case: Test package before publishing
+npm pack
+npm install -g ./my-package-1.0.0.tgz
+# Test the package
+npm uninstall -g my-package
+
+# Share package without publishing
+npm pack
+# Send my-package-1.0.0.tgz to colleague
+# They run: npm install ./my-package-1.0.0.tgz</code></pre>
+    </div>
+
+    <div class="question">npm diff</div>
+    <div class="answer">
+        <pre><code># Compare package versions
+npm diff --diff=package-name@1.0.0 --diff=package-name@2.0.0
+
+# Compare current with latest
+npm diff package-name
+
+# Compare installed with registry
+npm diff
+
+# Example: See what changed between versions
+npm diff react@17.0.0 react@18.0.0
+
+# View changes before updating
+npm outdated
+npm diff react  # See what will change
+npm update react</code></pre>
+    </div>
+
+    <h2 id="security">9. Security & Best Practices</h2>
+
+    <div class="question">Security Best Practices</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Regular audits</strong>: Run <code>npm audit</code> regularly</li>
+            <li><strong>Keep dependencies updated</strong>: Use <code>npm update</code></li>
+            <li><strong>Use package-lock.json</strong>: Commit to version control</li>
+            <li><strong>Review dependencies</strong>: Check before installing</li>
+            <li><strong>Use npm ci in CI/CD</strong>: Reproducible builds</li>
+            <li><strong>Enable 2FA</strong>: Protect your npm account</li>
+            <li><strong>Use .npmrc for tokens</strong>: Never commit tokens</li>
+            <li><strong>Minimize dependencies</strong>: Fewer packages = less risk</li>
+            <li><strong>Check package reputation</strong>: Downloads, maintainers, last update</li>
+            <li><strong>Use exact versions for critical packages</strong>: Avoid surprises</li>
+        </ul>
+        
+        <pre><code># Security checklist
+npm audit                    # Check vulnerabilities
+npm outdated                 # Check for updates
+npm list                     # Review installed packages
+npm ls --depth=0            # Top-level packages only
+
+# .gitignore (never commit these)
+node_modules/
+.env
+.npmrc  # If it contains tokens
+
+# Environment variables for tokens
+NPM_TOKEN=your-token-here
+npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}</code></pre>
+    </div>
+
+    <div class="question">npm audit fix</div>
+    <div class="answer">
+        <pre><code># Run security audit
+npm audit
+
+# Automatically fix vulnerabilities
+npm audit fix
+
+# Fix including breaking changes
+npm audit fix --force
+
+# Audit report levels
+npm audit --audit-level=moderate  # Only show moderate and above
+npm audit --audit-level=high      # Only show high and critical
+
+# Production only
+npm audit --production
+
+# JSON output
+npm audit --json
+
+# Example workflow
+npm audit
+# Review vulnerabilities
+npm audit fix
+# Review changes
+npm test
+# If tests pass, commit
+
+# If audit fix doesn't work
+npm audit fix --force  # May introduce breaking changes
+# or
+npm update package-name@latest  # Manual update
+# or
+# Wait for package maintainer to fix</code></pre>
+    </div>
+
+    <div class="question">Lockfile Maintenance</div>
+    <div class="answer">
+        <pre><code># Keep package-lock.json in sync
+npm install  # Updates lockfile when needed
+
+# Regenerate lockfile
+rm package-lock.json
+npm install
+
+# Update lockfile without installing
+npm install --package-lock-only
+
+# Verify lockfile matches package.json
+npm ci  # Fails if out of sync
+
+# Best practices:
+# 1. Always commit package-lock.json
+# 2. Don't manually edit it
+# 3. Use npm ci in CI/CD
+# 4. Resolve conflicts carefully
+
+# Resolving lockfile conflicts
+# 1. Keep your changes in package.json
+# 2. Delete package-lock.json
+# 3. Run npm install
+# 4. Commit new lockfile
+
+# Or use npm to resolve
+npm install --package-lock-only</code></pre>
+    </div>
+
+    <div class="question">Two-Factor Authentication</div>
+    <div class="answer">
+        <pre><code># Enable 2FA for npm account
+npm profile enable-2fa auth-and-writes
+
+# 2FA modes:
+# auth-only: Only for login
+# auth-and-writes: For login and publish
+
+# Publish with 2FA
+npm publish
+# Enter OTP: 123456
+
+# Publish with OTP in command
+npm publish --otp=123456
+
+# Disable 2FA
+npm profile disable-2fa
+
+# View profile
+npm profile get
+
+# Update profile
+npm profile set password
+npm profile set email new@example.com</code></pre>
+    </div>
+
+    <h2 id="troubleshooting">10. Troubleshooting</h2>
+
+    <div class="question">Common Errors</div>
+    <div class="answer">
+        <pre><code># Error: EACCES (Permission denied)
+# Solution 1: Fix npm permissions
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
+
+# Solution 2: Use nvm (recommended)
+# Install nvm, then install Node.js through it
+
+# Error: ENOENT (File not found)
+# Solution: Delete node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+
+# Error: Peer dependency conflict
+# Solution 1: Install the required peer dependency
+npm install react@18.2.0
+
+# Solution 2: Use --legacy-peer-deps
+npm install --legacy-peer-deps
+
+# Solution 3: Use --force (not recommended)
+npm install --force
+
+# Error: Cannot find module
+# Solution: Reinstall dependencies
+npm install
+
+# Error: Package not found
+# Solution: Check package name spelling
+npm search package-name
+
+# Error: Network timeout
+# Solution: Increase timeout
+npm install --timeout=60000
+
+# Error: Integrity check failed
+# Solution: Clear cache
+npm cache clean --force
+npm install</code></pre>
+    </div>
+
+    <div class="question">node_modules Issues</div>
+    <div class="answer">
+        <pre><code># Problem: node_modules is huge
+# Solution 1: Use pnpm (symlinks)
+npm install -g pnpm
+pnpm install
+
+# Solution 2: Clean unused packages
+npm prune
+
+# Solution 3: Dedupe
+npm dedupe
+
+# Problem: Corrupted node_modules
+# Solution: Fresh install
+rm -rf node_modules package-lock.json
+npm install
+
+# Problem: Different versions on different machines
+# Solution: Use npm ci (respects lockfile exactly)
+npm ci
+
+# Problem: node_modules in git
+# Solution: Add to .gitignore
+echo "node_modules/" >> .gitignore
+
+# Problem: Slow installs
+# Solution 1: Use npm ci (faster)
+npm ci
+
+# Solution 2: Use offline mode (if packages cached)
+npm install --offline
+
+# Solution 3: Parallel installs
+npm install --prefer-offline</code></pre>
+    </div>
+
+    <div class="question">Version Conflicts</div>
+    <div class="answer">
+        <pre><code># Problem: Multiple versions of same package
+npm ls package-name
+
+# Example output
+my-app@1.0.0
+├─┬ package-a@1.0.0
+│ └── lodash@4.17.20
+└─┬ package-b@1.0.0
+  └── lodash@4.17.21
+
+# Solution 1: Update to compatible versions
+npm update
+
+# Solution 2: Use resolutions (requires npm 8.3+)
+{
+  "overrides": {
+    "lodash": "4.17.21"
+  }
+}
+
+# Solution 3: Dedupe
+npm dedupe
+
+# Problem: Peer dependency version mismatch
+# package-a requires react@^17.0.0
+# You have react@18.2.0
+
+# Solution 1: Update package-a
+npm update package-a
+
+# Solution 2: Use legacy peer deps
+npm install --legacy-peer-deps
+
+# Solution 3: Override (use with caution)
+{
+  "overrides": {
+    "package-a": {
+      "react": "$react"
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Clearing Cache</div>
+    <div class="answer">
+        <pre><code># Verify cache (recommended first step)
+npm cache verify
+
+# Clean cache (when verify doesn't help)
+npm cache clean --force
+
+# Full reset (nuclear option)
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# When to clear cache:
+# - Install errors persist
+# - Corrupted packages
+# - Disk space issues
+
+# Cache location
+npm config get cache
+# Default: ~/.npm
+
+# Disable cache (not recommended)
+npm install --cache-min 0
+
+# View cache size
+du -sh ~/.npm</code></pre>
+    </div>
+
+    <h2>Additional Concepts</h2>
+
+    <div class="question">npx - Package Runner</div>
+    <div class="answer">
+        <pre><code># npx: Execute packages without installing globally
+
+# Run package without installing
+npx create-react-app my-app
+npx cowsay "Hello"
+
+# Run local package binary
+npx jest
+npx eslint .
+
+# Run specific version
+npx create-react-app@latest my-app
+
+# Run from GitHub
+npx github:user/repo
+
+# Benefits:
+# - No global installs needed
+# - Always use latest version
+# - Try packages before installing
+
+# Example: One-time use tools
+npx create-next-app my-app
+npx degit user/template my-project
+npx serve build/
+
+# Run local vs global
+npx package-name  # Prefers local, falls back to download
+npm exec package-name  # Same as npx</code></pre>
+    </div>
+
+    <div class="question">npm Aliases</div>
+    <div class="answer">
+        <pre><code># Common npm command aliases
+
+npm i          # npm install
+npm i -D       # npm install --save-dev
+npm i -g       # npm install --global
+npm un         # npm uninstall
+npm up         # npm update
+npm ls         # npm list
+npm t          # npm test
+npm start      # npm run start
+npm test       # npm run test
+npm restart    # npm run restart
+npm stop       # npm run stop
+
+# Create custom aliases (in .bashrc or .zshrc)
+alias ni="npm install"
+alias nid="npm install -D"
+alias nig="npm install -g"
+alias nr="npm run"
+alias nrs="npm run start"
+alias nrb="npm run build"
+alias nrt="npm run test"</code></pre>
+    </div>
+
+    <div class="question">Package Scripts Best Practices</div>
+    <div class="answer">
+        <pre><code>{
+  "scripts": {
+    // Standard scripts (no "run" needed)
+    "start": "node server.js",
+    "test": "jest",
+    
+    // Development
+    "dev": "nodemon server.js",
+    "dev:watch": "nodemon --watch src server.js",
+    
+    // Building
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "prebuild": "npm run clean",
+    "postbuild": "npm run copy-assets",
+    
+    // Testing
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    
+    // Linting & Formatting
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    
+    // Utilities
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    
+    // Composite scripts
+    "validate": "npm run lint && npm run typecheck && npm run test",
+    "prepare": "npm run build",  // Runs before publish
+    
+    // Parallel execution (with npm-run-all)
+    "dev:all": "npm-run-all --parallel dev:*",
+    "dev:client": "vite",
+    "dev:server": "nodemon server.js"
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Private Packages</div>
+    <div class="answer">
+        <pre><code># Mark package as private (prevents accidental publish)
+{
+  "name": "my-private-app",
+  "private": true
+}
+
+# Publish private scoped package (requires paid npm account)
+{
+  "name": "@myorg/private-package",
+  "version": "1.0.0"
+}
+
+npm publish  # Private by default for scoped packages
+
+# Publish scoped package as public
+npm publish --access public
+
+# Install private package (requires authentication)
+npm login --registry=https://registry.npmjs.org/
+npm install @myorg/private-package
+
+# Use auth token in CI/CD
+# .npmrc
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+
+# GitHub Actions example
+- name: Install dependencies
+  run: npm ci
+  env:
+    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}</code></pre>
+    </div>
+
+    <div class="question">Common npm Workflows</div>
+    <div class="answer">
+        <pre><code># New project setup
+mkdir my-project
+cd my-project
+npm init -y
+npm install react react-dom
+npm install -D typescript @types/react webpack
+
+# Clone and setup existing project
+git clone https://github.com/user/repo.git
+cd repo
+npm install
+npm run dev
+
+# Update dependencies
+npm outdated           # Check what's outdated
+npm update            # Update to "Wanted" versions
+npm install pkg@latest # Update to latest
+
+# Publish workflow
+npm run test          # Run tests
+npm run build         # Build package
+npm version patch     # Bump version
+npm publish           # Publish to registry
+
+# Clean reinstall
+rm -rf node_modules package-lock.json
+npm install
+
+# Production deployment
+npm ci                # Clean install
+npm run build         # Build
+npm prune --production # Remove dev dependencies
+node server.js        # Start app
+
+# Monorepo workflow
+npm install                        # Install all workspaces
+npm run build --workspaces        # Build all
+npm run test -w packages/app      # Test specific workspace</code></pre>
+    </div>
+
+    <div class="question">Useful npm Packages</div>
+    <div class="answer">
+        <strong>Development Tools:</strong>
+        <ul>
+            <li><code>nodemon</code> - Auto-restart on file changes</li>
+            <li><code>concurrently</code> - Run multiple commands</li>
+            <li><code>npm-run-all</code> - Run scripts in parallel/series</li>
+            <li><code>cross-env</code> - Cross-platform environment variables</li>
+            <li><code>rimraf</code> - Cross-platform rm -rf</li>
+            <li><code>dotenv</code> - Load environment variables</li>
+        </ul>
+        
+        <strong>Package Management:</strong>
+        <ul>
+            <li><code>npm-check-updates</code> - Update package.json to latest</li>
+            <li><code>depcheck</code> - Find unused dependencies</li>
+            <li><code>license-checker</code> - Check dependency licenses</li>
+        </ul>
+        
+        <pre><code># Install useful dev tools
+npm install -D nodemon concurrently npm-run-all cross-env rimraf
+
+# Example usage
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "vite",
+    "dev:server": "nodemon server.js",
+    "clean": "rimraf dist",
+    "start": "cross-env NODE_ENV=production node server.js"
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">npm Commands Cheat Sheet</div>
+    <div class="answer">
+        <pre><code># Installation
+npm install                  # Install all dependencies
+npm install package          # Install package
+npm install -D package       # Install as devDependency
+npm install -g package       # Install globally
+npm ci                       # Clean install (CI/CD)
+
+# Management
+npm update                   # Update packages
+npm uninstall package        # Remove package
+npm outdated                 # Check outdated packages
+npm list                     # List installed packages
+npm audit                    # Security audit
+npm audit fix                # Fix vulnerabilities
+
+# Scripts
+npm run script-name          # Run custom script
+npm start                    # Run start script
+npm test                     # Run test script
+
+# Publishing
+npm login                    # Login to npm
+npm publish                  # Publish package
+npm version patch/minor/major # Bump version
+
+# Configuration
+npm config list              # View config
+npm config set key value     # Set config
+npm config get key           # Get config value
+
+# Cache
+npm cache verify             # Verify cache
+npm cache clean --force      # Clean cache
+
+# Workspaces
+npm install -w workspace     # Install in workspace
+npm run build --workspaces   # Run in all workspaces
+
+# Info
+npm view package             # View package info
+npm search keyword           # Search packages
+npm doctor                   # Check environment
+npm help command             # Get help
+
+# Utilities
+npx package                  # Execute package
+npm pack                     # Create tarball
+npm link                     # Link local package
+npm prune                    # Remove unused packages</code></pre>
+    </div>
+
+    <div class="question">npm vs npx</div>
+    <div class="answer">
+        <strong>npm:</strong>
+        <ul>
+            <li>Package manager</li>
+            <li>Installs packages</li>
+            <li>Manages dependencies</li>
+        </ul>
+        
+        <strong>npx:</strong>
+        <ul>
+            <li>Package runner</li>
+            <li>Executes packages without installing</li>
+            <li>Always uses latest version (unless specified)</li>
+        </ul>
+        
+        <pre><code># npm: Install then run
+npm install -g create-react-app
+create-react-app my-app
+
+# npx: Run directly (no install)
+npx create-react-app my-app
+
+# npx advantages:
+# - No global pollution
+# - Always latest version
+# - Try before you install
+
+# Examples
+npx cowsay "Hello"           # Fun package
+npx serve build/             # Serve static files
+npx json-server db.json      # Mock API
+npx create-next-app my-app   # Create Next.js app
+npx tsc --init               # Initialize TypeScript
+
+# Run specific version
+npx create-react-app@4.0.0 my-app
+
+# Run local binary
+npx jest
+npx eslint .</code></pre>
+    </div>
+
+    <div class="question">Debugging npm Issues</div>
+    <div class="answer">
+        <pre><code># Enable verbose logging
+npm install --verbose
+npm install --loglevel verbose
+
+# Debug mode
+npm install --loglevel silly
+
+# Check npm environment
+npm doctor
+
+# Example output:
+Check                               Value
+npm ping                            ok
+npm -v                              v9.5.0
+node -v                             v18.14.0
+npm config get registry             https://registry.npmjs.org/
+which git                           /usr/bin/git
+
+# Verify installation
+npm list
+npm list --depth=0
+
+# Check for issues
+npm audit
+npm outdated
+
+# Network issues
+npm config get registry
+npm config get proxy
+npm config get https-proxy
+
+# Permission issues
+npm config get prefix
+npm config get cache
+
+# Complete reset
+rm -rf node_modules package-lock.json
+npm cache clean --force
+npm install
+
+# Check package integrity
+npm install --prefer-online  # Skip cache, download fresh</code></pre>
+    </div>
+
+    <div class="question">Performance Tips</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use npm ci in CI/CD</strong>: Faster and more reliable</li>
+            <li><strong>Leverage cache</strong>: npm caches packages automatically</li>
+            <li><strong>Use --prefer-offline</strong>: Use cached packages when possible</li>
+            <li><strong>Dedupe regularly</strong>: Remove duplicate dependencies</li>
+            <li><strong>Prune unused packages</strong>: Clean node_modules</li>
+            <li><strong>Consider pnpm</strong>: Faster installs, less disk space</li>
+            <li><strong>Use workspaces</strong>: Share dependencies in monorepos</li>
+            <li><strong>Minimize dependencies</strong>: Fewer packages = faster installs</li>
+        </ul>
+        
+        <pre><code># Fast install in CI
+npm ci --prefer-offline
+
+# Parallel installs (default in npm 7+)
+npm install
+
+# Check install time
+time npm install
+
+# Use package-lock.json
+npm ci  # Much faster than npm install
+
+# Benchmark
+npm install  # ~30 seconds
+npm ci       # ~15 seconds (with cache)</code></pre>
+    </div>
+
+    <div class="question">npm Scripts Advanced Patterns</div>
+    <div class="answer">
+        <pre><code>{
+  "scripts": {
+    // Sequential execution
+    "build": "npm run clean && npm run compile && npm run bundle",
+    
+    // Parallel execution (Unix)
+    "dev": "npm run dev:client & npm run dev:server",
+    
+    // Parallel with npm-run-all
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:client": "vite",
+    "dev:server": "nodemon server.js",
+    
+    // Conditional execution
+    "test": "npm run lint && npm run test:unit || echo 'Tests failed'",
+    
+    // Pass arguments
+    "test:file": "jest",  // npm run test:file -- path/to/test.js
+    
+    // Use environment variables
+    "start:prod": "cross-env NODE_ENV=production node server.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
+    
+    // Lifecycle hooks
+    "pretest": "npm run lint",
+    "test": "jest",
+    "posttest": "npm run coverage",
+    
+    // Complex workflows
+    "deploy": "npm run build && npm run test && npm run publish:prod",
+    
+    // Watch mode
+    "watch": "npm-run-all --parallel watch:*",
+    "watch:js": "webpack --watch",
+    "watch:css": "postcss src/**/*.css --watch",
+    
+    // Cleanup
+    "clean": "npm-run-all clean:*",
+    "clean:dist": "rimraf dist",
+    "clean:coverage": "rimraf coverage",
+    "clean:cache": "rimraf .cache"
+  }
+}</code></pre>
+    </div>
+
+    <div class="question">Useful npm Commands Reference</div>
+    <div class="answer">
+        <pre><code># Information
+npm view package-name        # View package details
+npm view package versions    # View all versions
+npm view package version     # View latest version
+npm search keyword           # Search packages
+npm repo package-name        # Open repo in browser
+npm docs package-name        # Open docs in browser
+npm bugs package-name        # Open issues in browser
+
+# Advanced install options
+npm install --legacy-peer-deps    # Ignore peer dependency conflicts
+npm install --force               # Force install
+npm install --no-save            # Don't update package.json
+npm install --no-optional        # Skip optional dependencies
+npm install --prefer-offline     # Use cache when possible
+npm install --prefer-online      # Download fresh packages
+
+# Package info
+npm info package-name            # Detailed package info
+npm show package-name            # Same as info
+npm view package-name repository # View specific field
+
+# Ownership
+npm owner ls package-name        # List owners
+npm owner add user package       # Add owner
+npm owner rm user package        # Remove owner
+
+# Deprecation
+npm deprecate package@version "message"
+
+# Unpublish (within 72 hours)
+npm unpublish package-name@version
+
+# Star packages (bookmark)
+npm star package-name
+npm unstar package-name
+npm stars                        # List your stars</code></pre>
+    </div>
+
+    <div class="question">Environment-Specific Installs</div>
+    <div class="answer">
+        <pre><code># Production install (no devDependencies)
+npm install --production
+# or
+npm install --omit=dev
+
+# Development install (all dependencies)
+npm install
+
+# Install only devDependencies
+npm install --only=dev
+
+# Example Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm ci --production
+
+COPY . .
+
+CMD ["node", "server.js"]
+
+# Example CI/CD
+# Development
+npm install          # All dependencies
+npm run test
+npm run build
+
+# Production
+npm ci --production  # Only production dependencies
+node server.js</code></pre>
+    </div>
+
+    <div class="question">Troubleshooting Checklist</div>
+    <div class="answer">
+        <pre><code># Step-by-step troubleshooting
+
+# 1. Check versions
+node --version
+npm --version
+
+# 2. Check environment
+npm doctor
+
+# 3. Clear cache
+npm cache verify
+npm cache clean --force
+
+# 4. Fresh install
+rm -rf node_modules package-lock.json
+npm install
+
+# 5. Check for errors
+npm audit
+npm outdated
+
+# 6. Verify package.json
+npm install --package-lock-only
+
+# 7. Check registry
+npm config get registry
+npm ping
+
+# 8. Check permissions
+npm config get prefix
+ls -la ~/.npm
+
+# 9. Try with verbose logging
+npm install --verbose
+
+# 10. Last resort: Reinstall npm
+npm install -g npm@latest</code></pre>
+    </div>
+
+    <div class="question">npm Best Practices Summary</div>
+    <div class="answer">
+        <ul>
+            <li>✅ Always commit package-lock.json</li>
+            <li>✅ Use npm ci in CI/CD pipelines</li>
+            <li>✅ Run npm audit regularly</li>
+            <li>✅ Keep dependencies updated</li>
+            <li>✅ Use semantic versioning properly</li>
+            <li>✅ Minimize number of dependencies</li>
+            <li>✅ Use devDependencies correctly</li>
+            <li>✅ Enable 2FA on npm account</li>
+            <li>✅ Use npx for one-time commands</li>
+            <li>✅ Document scripts in README</li>
+            <li>❌ Don't commit node_modules</li>
+            <li>❌ Don't commit .env files</li>
+            <li>❌ Don't use sudo with npm</li>
+            <li>❌ Don't manually edit package-lock.json</li>
+            <li>❌ Don't use --force unless necessary</li>
+        </ul>
+    </div>
+
+    <br/><br/>
+    <a href="./npm-home.html">← Back to npm Home</a>
+</body>
+</html>

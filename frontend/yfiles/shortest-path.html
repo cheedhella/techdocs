@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Shortest Path - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Shortest Path?</div>
+    <div class="answer">
+        Shortest Path algorithms find the shortest route between two nodes in a graph. yFiles provides implementations for finding paths based on edge count or weighted edges.
+    </div>
+
+    <div class="question">How do you find the shortest path?</div>
+    <div class="answer">
+        <pre><code>// Find shortest path between two nodes
+const pathFinder = new ShortestPath({
+    source: sourceNode,
+    sink: targetNode,
+    directed: true,
+    costs: edge => edge.tag?.weight || 1
+});
+
+const result = pathFinder.run(graph);
+
+if (result.edges) {
+    // Highlight the path
+    const highlightManager = graphComponent.highlightIndicatorManager;
+    
+    result.edges.forEach(edge => {
+        highlightManager.addHighlight(edge);
+    });
+    
+    result.nodes.forEach(node => {
+        highlightManager.addHighlight(node);
+    });
+    
+    console.log(`Path length: ${result.edges.size}`);
+    console.log(`Total cost: ${result.distance}`);
+}</code></pre>
+    </div>
+
+    <div class="question">Can you show a practical example?</div>
+    <div class="answer">
+        <pre><code>// Create a weighted graph
+const nodes = [];
+for (let i = 0; i < 5; i++) {
+    const node = graph.createNode();
+    graph.addLabel(node, `Node ${i}`);
+    nodes.push(node);
+}
+
+// Create weighted edges
+graph.createEdge(nodes[0], nodes[1]).tag = { weight: 2 };
+graph.createEdge(nodes[0], nodes[2]).tag = { weight: 5 };
+graph.createEdge(nodes[1], nodes[2]).tag = { weight: 1 };
+graph.createEdge(nodes[1], nodes[3]).tag = { weight: 4 };
+graph.createEdge(nodes[2], nodes[3]).tag = { weight: 2 };
+graph.createEdge(nodes[3], nodes[4]).tag = { weight: 1 };
+
+// Find shortest path from node 0 to node 4
+const pathFinder = new ShortestPath({
+    source: nodes[0],
+    sink: nodes[4],
+    directed: true,
+    costs: edge => edge.tag?.weight || 1
+});
+
+const result = pathFinder.run(graph);
+
+// Visualize the path
+result.edges.forEach(edge => {
+    graph.setStyle(edge, new PolylineEdgeStyle({
+        stroke: '4px red',
+        targetArrow: IArrow.TRIANGLE
+    }));
+});</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

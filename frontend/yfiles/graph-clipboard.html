@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphClipboard - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is GraphClipboard?</div>
+    <div class="answer">
+        GraphClipboard provides copy, cut, and paste functionality for graph elements, allowing users to duplicate and move parts of the graph.
+    </div>
+
+    <div class="question">How do you use clipboard operations?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Enable clipboard operations
+inputMode.allowClipboardOperations = true;
+
+// Copy selected elements
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.C,
+    ModifierKeys.CONTROL,
+    () => {
+        inputMode.copy();
+        return true;
+    }
+);
+
+// Cut selected elements
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.X,
+    ModifierKeys.CONTROL,
+    () => {
+        inputMode.cut();
+        return true;
+    }
+);
+
+// Paste
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.V,
+    ModifierKeys.CONTROL,
+    () => {
+        inputMode.paste();
+        return true;
+    }
+);
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

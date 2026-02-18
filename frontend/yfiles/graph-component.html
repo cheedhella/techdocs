@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphComponent - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is GraphComponent?</div>
+    <div class="answer">
+        GraphComponent is the main UI component in yFiles that displays and manages graph visualizations. It's the central element that:
+        <ul>
+            <li>Renders the graph visually in the browser/application</li>
+            <li>Handles user interactions (mouse, keyboard, touch)</li>
+            <li>Manages viewport and zoom operations</li>
+            <li>Provides access to the graph data model</li>
+            <li>Coordinates input modes and editing behavior</li>
+            <li>Manages selection and highlighting</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you create and initialize a GraphComponent?</div>
+    <div class="answer">
+        Creating a GraphComponent is straightforward:
+        <pre><code>// HTML: Create a div container
+// &lt;div id="graphComponent"&gt;&lt;/div&gt;
+
+// JavaScript: Initialize GraphComponent
+const graphComponent = new GraphComponent('#graphComponent');
+
+// Or with an element reference
+const div = document.getElementById('graphComponent');
+const graphComponent = new GraphComponent(div);
+
+// Access the graph
+const graph = graphComponent.graph;
+
+// Set initial viewport
+graphComponent.fitGraphBounds();
+
+// Enable default interaction
+graphComponent.inputMode = new GraphEditorInputMode();</code></pre>
+    </div>
+
+    <div class="question">What are the key properties of GraphComponent?</div>
+    <div class="answer">
+        GraphComponent has several important properties:
+        <ul>
+            <li><strong>graph</strong>: The IGraph instance containing the data</li>
+            <li><strong>inputMode</strong>: Controls user interaction behavior</li>
+            <li><strong>selection</strong>: Manages selected elements</li>
+            <li><strong>viewport</strong>: The visible area of the graph</li>
+            <li><strong>zoom</strong>: Current zoom level</li>
+            <li><strong>contentRect</strong>: Bounding box of all graph elements</li>
+            <li><strong>highlightIndicatorManager</strong>: Manages highlights</li>
+        </ul>
+        <pre><code>// Access properties
+console.log(`Zoom: ${graphComponent.zoom}`);
+console.log(`Viewport: ${graphComponent.viewport}`);
+console.log(`Selected items: ${graphComponent.selection.size}`);</code></pre>
+    </div>
+
+    <div class="question">How do you control the viewport and zoom?</div>
+    <div class="answer">
+        GraphComponent provides various methods for viewport control:
+        <pre><code>// Set zoom level
+graphComponent.zoom = 1.5;
+
+// Zoom to specific level with animation
+graphComponent.zoomTo(2.0);
+
+// Fit entire graph in view
+graphComponent.fitGraphBounds();
+
+// Fit with margins
+graphComponent.fitGraphBounds(new Insets(20));
+
+// Zoom to specific rectangle
+graphComponent.zoomToAnimated(
+    new Rect(0, 0, 500, 500)
+);
+
+// Center on specific point
+graphComponent.viewPoint = new Point(100, 100);
+
+// Zoom in/out
+graphComponent.zoomIn();
+graphComponent.zoomOut();
+
+// Set zoom limits
+graphComponent.minimumZoom = 0.1;
+graphComponent.maximumZoom = 10;</code></pre>
+    </div>
+
+    <div class="question">How do you handle selection in GraphComponent?</div>
+    <div class="answer">
+        The selection model manages selected graph elements:
+        <pre><code>// Get selection
+const selection = graphComponent.selection;
+
+// Select elements
+selection.setSelected(node, true);
+selection.setSelected(edge, true);
+
+// Clear selection
+selection.clear();
+
+// Get selected nodes
+const selectedNodes = selection.selectedNodes.toArray();
+
+// Get selected edges
+const selectedEdges = selection.selectedEdges.toArray();
+
+// Check if element is selected
+if (selection.isSelected(node)) {
+    console.log('Node is selected');
+}
+
+// Listen for selection changes
+graphComponent.selection.addItemSelectionChangedListener(
+    (sender, evt) => {
+        const item = evt.item;
+        const isSelected = evt.itemSelected;
+        console.log(`Item ${isSelected ? 'selected' : 'deselected'}`);
+    }
+);</code></pre>
+    </div>
+
+    <div class="question">How do you customize the visual appearance?</div>
+    <div class="answer">
+        GraphComponent appearance can be customized:
+        <pre><code>// Set background color
+graphComponent.backgroundStyle = 'lightgray';
+
+// Or use CSS
+graphComponent.div.style.backgroundColor = '#f0f0f0';
+
+// Customize grid
+graphComponent.grid = new GridVisualCreator({
+    horizontalSpacing: 50,
+    verticalSpacing: 50,
+    stroke: '1px lightgray'
+});
+
+// Add custom background
+graphComponent.backgroundGroup.addChild(
+    new SvgVisual(customSvgElement)
+);
+
+// Customize selection visualization
+graphComponent.selectionIndicatorManager = 
+    new GraphSelectionIndicatorManager({
+        nodeStyle: new ShapeNodeStyle({
+            stroke: '3px blue',
+            fill: 'transparent'
+        })
+    });</code></pre>
+    </div>
+
+    <div class="question">How do you export or save the graph visualization?</div>
+    <div class="answer">
+        GraphComponent supports various export options:
+        <pre><code>// Export to SVG
+const svgExport = new SvgExport(
+    graphComponent.contentRect
+);
+const svgElement = await svgExport.exportSvgAsync(
+    graphComponent
+);
+
+// Convert to string
+const svgString = SvgExport.exportSvgString(svgElement);
+
+// Export to PNG (requires PixelImageExporter)
+const pngExport = new PixelImageExporter(
+    graphComponent.contentRect
+);
+const pngDataUrl = await pngExport.exportToPngAsync(
+    graphComponent
+);
+
+// Download as file
+const link = document.createElement('a');
+link.download = 'graph.png';
+link.href = pngDataUrl;
+link.click();
+
+// Print
+const printExport = new PrintingSupport();
+printExport.print(graphComponent);</code></pre>
+    </div>
+
+    <div class="question">How do you handle events in GraphComponent?</div>
+    <div class="answer">
+        GraphComponent provides various event listeners:
+        <pre><code>// Mouse events
+graphComponent.addMouseClickListener((sender, evt) => {
+    const location = evt.location;
+    console.log(`Clicked at: (${location.x}, ${location.y})`);
+});
+
+// Item hover
+graphComponent.addMouseHoverListener((sender, evt) => {
+    const item = evt.item;
+    if (item) {
+        console.log('Hovering over:', item);
+    }
+});
+
+// Viewport changes
+graphComponent.addViewportChangedListener((sender, evt) => {
+    console.log('Viewport changed:', evt.newViewport);
+});
+
+// Zoom changes
+graphComponent.addZoomChangedListener((sender, evt) => {
+    console.log('Zoom:', evt.newZoom);
+});
+
+// Graph changes
+graph.addNodeCreatedListener((sender, evt) => {
+    console.log('Node created:', evt.item);
+});
+
+graph.addEdgeCreatedListener((sender, evt) => {
+    console.log('Edge created:', evt.item);
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show a complete GraphComponent setup example?</div>
+    <div class="answer">
+        Here's a comprehensive initialization example:
+        <pre><code>// HTML
+// &lt;div id="graphComponent" style="width: 100%; height: 600px;"&gt;&lt;/div&gt;
+
+// Initialize GraphComponent
+const graphComponent = new GraphComponent('#graphComponent');
+
+// Configure appearance
+graphComponent.backgroundStyle = '#f9f9f9';
+graphComponent.minimumZoom = 0.1;
+graphComponent.maximumZoom = 5;
+
+// Set up input mode
+const inputMode = new GraphEditorInputMode({
+    allowCreateNode: true,
+    allowCreateEdge: true,
+    allowEditLabel: true,
+    selectableItems: GraphItemTypes.ALL
+});
+
+graphComponent.inputMode = inputMode;
+
+// Get graph
+const graph = graphComponent.graph;
+
+// Set default styles
+graph.nodeDefaults.style = new ShapeNodeStyle({
+    fill: 'lightblue',
+    stroke: 'darkblue',
+    shape: 'round-rectangle'
+});
+
+graph.edgeDefaults.style = new PolylineEdgeStyle({
+    stroke: '2px gray',
+    targetArrow: IArrow.DEFAULT
+});
+
+// Create sample graph
+const node1 = graph.createNode(new Rect(0, 0, 100, 60));
+const node2 = graph.createNode(new Rect(200, 0, 100, 60));
+graph.addLabel(node1, 'Node 1');
+graph.addLabel(node2, 'Node 2');
+graph.createEdge(node1, node2);
+
+// Fit to view
+graphComponent.fitGraphBounds(new Insets(20));
+
+// Add event listeners
+graphComponent.selection.addItemSelectionChangedListener(
+    (sender, evt) => {
+        console.log('Selection changed');
+    }
+);
+
+// Enable undo/redo
+graph.undoEngineEnabled = true;
+inputMode.keyboardInputMode.addCommandBinding(
+    ICommand.UNDO,
+    () => graph.undoEngine.undo()
+);
+inputMode.keyboardInputMode.addCommandBinding(
+    ICommand.REDO,
+    () => graph.undoEngine.redo()
+);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GraphEditorInputMode - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is GraphEditorInputMode?</div>
+    <div class="answer">
+        GraphEditorInputMode is the primary input mode in yFiles that enables comprehensive graph editing capabilities. It provides:
+        <ul>
+            <li>Interactive node and edge creation</li>
+            <li>Moving, resizing, and rotating elements</li>
+            <li>Label editing</li>
+            <li>Selection and multi-selection</li>
+            <li>Clipboard operations (cut, copy, paste)</li>
+            <li>Undo/redo support</li>
+            <li>Keyboard shortcuts</li>
+            <li>Context menus and tooltips</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you set up GraphEditorInputMode?</div>
+    <div class="answer">
+        Setting up GraphEditorInputMode is straightforward:
+        <pre><code>// Create and configure input mode
+const inputMode = new GraphEditorInputMode({
+    // Enable/disable features
+    allowCreateNode: true,
+    allowCreateEdge: true,
+    allowEditLabel: true,
+    allowAddLabel: true,
+    allowDelete: true,
+    allowClipboardOperations: true,
+    allowUndoOperations: true,
+    
+    // Selection settings
+    selectableItems: GraphItemTypes.ALL,
+    marqueeSelectableItems: GraphItemTypes.ALL,
+    
+    // Editing settings
+    allowGroupingOperations: true,
+    showHandleItems: GraphItemTypes.ALL
+});
+
+// Assign to GraphComponent
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <div class="question">How do you customize node creation behavior?</div>
+    <div class="answer">
+        Node creation can be customized in multiple ways:
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Customize node creation
+inputMode.nodeCreator = (context, graph, location) => {
+    // Create custom node
+    const node = graph.createNode(
+        new Rect(location.x - 50, location.y - 30, 100, 60)
+    );
+    
+    // Add default label
+    graph.addLabel(node, 'New Node');
+    
+    // Set custom data
+    node.tag = {
+        id: generateId(),
+        createdAt: new Date()
+    };
+    
+    return node;
+};
+
+// Or use CreateNodeInputMode settings
+inputMode.createNodeInputMode.enabled = true;
+inputMode.createNodeInputMode.addNodeCreatedListener(
+    (sender, evt) => {
+        const node = evt.item;
+        console.log('Node created:', node);
+    }
+);</code></pre>
+    </div>
+
+    <div class="question">How do you customize edge creation behavior?</div>
+    <div class="answer">
+        Edge creation can be controlled and customized:
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Customize edge creation
+inputMode.createEdgeInputMode.addEdgeCreatedListener(
+    (sender, evt) => {
+        const edge = evt.item;
+        const graph = graphComponent.graph;
+        
+        // Add default label
+        graph.addLabel(edge, 'connects');
+        
+        // Set custom data
+        edge.tag = {
+            weight: 1,
+            type: 'default'
+        };
+    }
+);
+
+// Validate edge creation
+inputMode.createEdgeInputMode.addEdgeCreationStartedListener(
+    (sender, evt) => {
+        const sourceNode = evt.sourceNode;
+        // Custom validation logic
+        if (sourceNode.tag?.type === 'terminal') {
+            evt.cancel = true;
+        }
+    }
+);
+
+// Show preview during creation
+inputMode.createEdgeInputMode.dummyEdgeGraph.setStyle(
+    inputMode.createEdgeInputMode.dummyEdge,
+    new PolylineEdgeStyle({
+        stroke: '2px dashed blue'
+    })
+);</code></pre>
+    </div>
+
+    <div class="question">How do you enable and customize label editing?</div>
+    <div class="answer">
+        Label editing is highly customizable:
+        <pre><code>const inputMode = new GraphEditorInputMode({
+    allowEditLabel: true,
+    allowAddLabel: true
+});
+
+// Double-click to edit labels
+inputMode.addItemDoubleClickedListener((sender, evt) => {
+    if (evt.item instanceof INode || evt.item instanceof IEdge) {
+        inputMode.editLabel(evt.item.labels.first());
+        evt.handled = true;
+    }
+});
+
+// Validate label text
+inputMode.addValidateLabelTextListener((sender, evt) => {
+    const newText = evt.newText;
+    
+    // Prevent empty labels
+    if (newText.trim().length === 0) {
+        evt.cancel = true;
+        alert('Label cannot be empty');
+    }
+    
+    // Limit length
+    if (newText.length > 50) {
+        evt.cancel = true;
+        alert('Label too long');
+    }
+});
+
+// Listen for label changes
+inputMode.addLabelTextChangedListener((sender, evt) => {
+    const label = evt.item;
+    console.log('Label changed to:', label.text);
+});</code></pre>
+    </div>
+
+    <div class="question">How do you configure selection behavior?</div>
+    <div class="answer">
+        Selection can be fine-tuned:
+        <pre><code>const inputMode = new GraphEditorInputMode({
+    // What can be selected
+    selectableItems: GraphItemTypes.NODE | GraphItemTypes.EDGE,
+    
+    // What can be marquee selected
+    marqueeSelectableItems: GraphItemTypes.NODE,
+    
+    // Multi-selection with Ctrl/Cmd
+    multiSelectionRecognizer: EventRecognizers.CONTROL_PRESSED
+});
+
+// Custom selection behavior
+inputMode.addItemSelectedListener((sender, evt) => {
+    const item = evt.item;
+    console.log('Selected:', item);
+    
+    // Auto-select connected edges when node is selected
+    if (item instanceof INode) {
+        const graph = graphComponent.graph;
+        graph.edgesAt(item).forEach(edge => {
+            graphComponent.selection.setSelected(edge, true);
+        });
+    }
+});
+
+// Prevent selection of certain items
+inputMode.addItemSelectingListener((sender, evt) => {
+    const item = evt.item;
+    if (item.tag?.locked) {
+        evt.cancel = true;
+    }
+});</code></pre>
+    </div>
+
+    <div class="question">How do you add keyboard shortcuts?</div>
+    <div class="answer">
+        Keyboard shortcuts can be easily added:
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Add custom keyboard commands
+inputMode.keyboardInputMode.addCommandBinding(
+    ICommand.DELETE,
+    () => {
+        const selection = graphComponent.selection;
+        graphComponent.graph.remove(selection.selectedNodes.first());
+        return true;
+    },
+    () => graphComponent.selection.size > 0
+);
+
+// Add key binding with specific key
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.S,
+    ModifierKeys.CONTROL,
+    () => {
+        saveGraph();
+        return true;
+    }
+);
+
+// Ctrl+D to duplicate selected nodes
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.D,
+    ModifierKeys.CONTROL,
+    () => {
+        duplicateSelection();
+        return true;
+    }
+);
+
+// Delete key
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.DELETE,
+    ModifierKeys.NONE,
+    () => {
+        deleteSelection();
+        return true;
+    }
+);</code></pre>
+    </div>
+
+    <div class="question">How do you handle move and resize operations?</div>
+    <div class="answer">
+        Move and resize behavior can be customized:
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Constrain node movement
+inputMode.moveInputMode.addDragStartedListener((sender, evt) => {
+    console.log('Started moving');
+});
+
+inputMode.moveInputMode.addDraggedListener((sender, evt) => {
+    // Snap to grid
+    const delta = evt.delta;
+    const snappedDelta = snapToGrid(delta);
+    evt.delta = snappedDelta;
+});
+
+inputMode.moveInputMode.addDragFinishedListener((sender, evt) => {
+    console.log('Finished moving');
+});
+
+// Prevent moving certain nodes
+inputMode.moveInputMode.addDragStartingListener((sender, evt) => {
+    const item = evt.item;
+    if (item.tag?.locked) {
+        evt.cancel = true;
+    }
+});
+
+// Customize resize behavior
+inputMode.handleInputMode.addDragFinishedListener((sender, evt) => {
+    const node = evt.item.owner;
+    console.log('Resized node:', node);
+});</code></pre>
+    </div>
+
+    <div class="question">Can you show a complete GraphEditorInputMode configuration?</div>
+    <div class="answer">
+        Here's a comprehensive example:
+        <pre><code>// Create fully configured input mode
+const inputMode = new GraphEditorInputMode({
+    // Creation
+    allowCreateNode: true,
+    allowCreateEdge: true,
+    allowAddLabel: true,
+    
+    // Editing
+    allowEditLabel: true,
+    allowDelete: true,
+    
+    // Selection
+    selectableItems: GraphItemTypes.ALL,
+    marqueeSelectableItems: GraphItemTypes.NODE | GraphItemTypes.EDGE,
+    
+    // Clipboard
+    allowClipboardOperations: true,
+    
+    // Grouping
+    allowGroupingOperations: true,
+    
+    // Undo/Redo
+    allowUndoOperations: true
+});
+
+// Customize node creation
+inputMode.nodeCreator = (context, graph, location) => {
+    const node = graph.createNode(
+        new Rect(location.x - 50, location.y - 30, 100, 60)
+    );
+    graph.addLabel(node, `Node ${graph.nodes.size}`);
+    return node;
+};
+
+// Add keyboard shortcuts
+inputMode.keyboardInputMode.addKeyBinding(
+    Key.DELETE,
+    ModifierKeys.NONE,
+    () => {
+        const selection = graphComponent.selection;
+        selection.selectedNodes.forEach(n => graph.remove(n));
+        selection.selectedEdges.forEach(e => graph.remove(e));
+        return true;
+    }
+);
+
+// Add tooltips
+inputMode.addQueryItemToolTipListener((sender, evt) => {
+    if (evt.item instanceof INode) {
+        evt.toolTip = `Node: ${evt.item.labels.first()?.text || 'Unnamed'}`;
+        evt.handled = true;
+    }
+});
+
+// Context menu
+inputMode.addPopulateItemContextMenuListener((sender, evt) => {
+    const item = evt.item;
+    if (item instanceof INode) {
+        evt.menu.addMenuItem('Delete Node', () => {
+            graph.remove(item);
+        });
+        evt.menu.addMenuItem('Add Label', () => {
+            graph.addLabel(item, 'New Label');
+        });
+    }
+});
+
+// Assign to component
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

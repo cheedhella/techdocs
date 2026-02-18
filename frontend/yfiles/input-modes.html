@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Input Modes - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Input Modes?</div>
+    <div class="answer">
+        Input Modes control how users interact with the graph visualization. They define what happens when users click, drag, hover, or use keyboard shortcuts. yFiles provides several built-in input modes and allows custom implementations.
+    </div>
+
+    <div class="question">What are the main input modes?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>GraphEditorInputMode</strong>: Full editing capabilities</li>
+            <li><strong>GraphViewerInputMode</strong>: View-only, no editing</li>
+            <li><strong>MoveInputMode</strong>: Move nodes and edges</li>
+            <li><strong>CreateEdgeInputMode</strong>: Create edges</li>
+            <li><strong>NavigationInputMode</strong>: Pan and zoom only</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you set up different input modes?</div>
+    <div class="answer">
+        <pre><code>// Full editing mode
+const editorMode = new GraphEditorInputMode({
+    allowCreateNode: true,
+    allowCreateEdge: true,
+    allowEditLabel: true
+});
+graphComponent.inputMode = editorMode;
+
+// View-only mode
+const viewerMode = new GraphViewerInputMode({
+    selectableItems: GraphItemTypes.NONE,
+    clickableItems: GraphItemTypes.NODE | GraphItemTypes.EDGE
+});
+graphComponent.inputMode = viewerMode;
+
+// Navigation only (pan and zoom)
+const navMode = new NavigationInputMode();
+graphComponent.inputMode = navMode;</code></pre>
+    </div>
+
+    <div class="question">How do you customize input mode behavior?</div>
+    <div class="answer">
+        <pre><code>const inputMode = new GraphEditorInputMode();
+
+// Disable specific features
+inputMode.allowCreateNode = false;
+inputMode.allowDelete = false;
+
+// Configure selection
+inputMode.selectableItems = GraphItemTypes.NODE | GraphItemTypes.EDGE;
+inputMode.marqueeSelectableItems = GraphItemTypes.NODE;
+
+// Configure click behavior
+inputMode.clickableItems = GraphItemTypes.ALL;
+inputMode.addItemClickedListener((sender, evt) => {
+    console.log('Clicked:', evt.item);
+});
+
+// Configure double-click
+inputMode.addItemDoubleClickedListener((sender, evt) => {
+    if (evt.item instanceof INode) {
+        console.log('Double-clicked node');
+    }
+});
+
+graphComponent.inputMode = inputMode;</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>

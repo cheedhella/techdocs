@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Minimum Spanning Tree - yFiles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is a Minimum Spanning Tree?</div>
+    <div class="answer">
+        A Minimum Spanning Tree (MST) is a subset of edges that connects all nodes with the minimum total edge weight, without forming cycles. It's useful for network design and optimization problems.
+    </div>
+
+    <div class="question">How do you find the MST?</div>
+    <div class="answer">
+        <pre><code>// Find minimum spanning tree
+const mstAlgorithm = new SpanningTree({
+    costs: edge => edge.tag?.weight || 1
+});
+
+const result = mstAlgorithm.run(graph);
+
+console.log(`MST has ${result.edges.size} edges`);
+
+// Highlight MST edges
+const highlightManager = graphComponent.highlightIndicatorManager;
+result.edges.forEach(edge => {
+    highlightManager.addHighlight(edge);
+    graph.setStyle(edge, new PolylineEdgeStyle({
+        stroke: '4px green',
+        targetArrow: IArrow.NONE
+    }));
+});
+
+// Calculate total MST cost
+let totalCost = 0;
+result.edges.forEach(edge => {
+    totalCost += edge.tag?.weight || 1;
+});
+console.log(`Total MST cost: ${totalCost}`);</code></pre>
+    </div>
+
+    <br/><br/>
+    <a href="./home.html">← Back to yFiles Home</a>
+</body>
+</html>
