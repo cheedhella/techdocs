@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Types</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is a Type?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>GraphQL has a strong type system; Every field in a schema must declare its type;</li>
+            <li>It majorly supports 6 types: 
+              <ul>
+                <li>Scalar Types</li>
+                <li>Object Types</li>
+                <li>Enum Types</li>
+                <li>Interface Types</li>
+                <li>Union Types</li>
+                <li>Input Object Types</li>
+              </ul>
+            </li>
+            <li>It also a has couple of Type Modifiers:
+              <ul>
+                <li>Non-Null</li>
+                <li>List</li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What are Scalar Types?</strong></div>
+    <div class="answer">
+        <pre>
+# It represents primities;
+| Type      | Description                           | Example    |
+| --------- | ------------------------------------- | ---------- |
+| `Int`     | 32-bit signed integer                 | 42         |
+| `Float`   | Double precision number               | 3.14       |
+| `String`  | UTF-8 text                            | "Hello"    |
+| `Boolean` | true / false                          | true       |
+| `ID`      | Unique identifier (string serialized) | "user_123" |
+
+
+What is Custom Scalar?
+    - It is a user-defined primitive type;
+    - For eg, sometimes we need more specific datatypes like: DateTime, Email, URL, JSON, PhoneNumber;
+    - This is where custom scalars can help;
+
+    - In other words, A strongly-typed, validated primitive value defined by you instead of using generic String.
+
+    - GraphQL allows you to define your own scalar types in the schema — and implement validation/serialization logic in your server;
+    - Eg:
+    # Wihtout custom scalar -> weakly typed 
+    type User {
+      email: String
+      createdAt: String
+    }
+
+    # With custom scalar
+    # Clients know exactly what type to expect and Server enforces validation - Stronger contracts;
+    scalar Email
+    scalar DateTime
+    type User {
+      email: Email!
+      createdAt: DateTime!
+    }
+
+    # Implementating Custom Scalar in Apollo Server?
+    # A custom scalar must define three behaviors:
+    #     serialize → How server sends data to client
+    #     parseValue → How client input is validated
+    #     parseLiteral → How hard-coded query values are parsed
+    
+    #  
+      const { GraphQLScalarType, Kind } = require('graphql');
+      const DateTime = new GraphQLScalarType({
+        name: 'DateTime',
+
+        serialize(value) {
+          if (!(value instanceof Date)) {
+            throw new Error("Expected Date object");
+          }
+          return value.toISOString();
+        },
+
+        parseValue(value) {
+          const date = new Date(value);
+          if (isNaN(date.getTime())) {
+            throw new Error("Invalid DateTime");
+          }
+          return date;
+        },
+
+        parseLiteral(ast) {
+          if (ast.kind !== Kind.STRING) {
+            throw new Error("DateTime must be a string");
+          }
+          return this.parseValue(ast.value);
+        }
+      });
+
+
+
+
+
+
+
+
+
+
+
+        </pre>
+    </div>
+    
+    <div class="question"><strong>2. </strong></div>
+    <div class="answer">
+        <pre>
+# It is user represents primities;
+| Type      | Description                           | Example    |
+| --------- | ------------------------------------- | ---------- |
+| `Int`     | 32-bit signed integer                 | 42         |
+| `Float`   | Double precision number               | 3.14       |
+| `String`  | UTF-8 text                            | "Hello"    |
+| `Boolean` | true / false                          | true       |
+| `ID`      | Unique identifier (string serialized) | "user_123" |
+        </pre>
+    </div>
+
+    <div class="question"><strong>3. Example</strong></div>
+    <div class="answer">
+        <pre>
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# Every schema has at least a Query type.
+type Query {
+  users: [User!]!
+  user(id: ID!): User
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+# type defines object type;
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  posts: [Post!]!
+}
+
+# Field can refer other types → this enables relationships
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+
+
+
+
+
+
+
+
+
+
+# Enum 
+enum Role {
+  ADMIN
+  USER
+  GUEST
+}
+
+
+
+type Subscription {
+  userCreated: User!
+}
+</pre>
+    </div>
+
+    <div class="question"><strong>4. Scalar Datatypes</strong></div>
+    <div class="answer">
+        <pre>
+| Scalar    | Description       |
+| --------- | ----------------- |
+| `Int`     | 32-bit integer    |
+| `Float`   | Decimal number    |
+| `String`  | UTF-8 text        |
+| `Boolean` | true/false        |
+| `ID`      | Unique identifier |
+        </pre>
+    </div>
+
+    <div class="question"><strong>5. List Type and Type modifiers</strong></div>
+    <div class="answer">
+        <pre>
+| Type         | Meaning                           |
+| ------------ | --------------------------------- |
+| `String`     | Nullable string                   |
+| `String!`    | Required string                   |
+| `[String]`   | List of nullable strings          |    // List can be null, element can be null;
+| `[String!]`  | List of required strings          |    // List can be null, no null element;
+| `[String!]!` | Required list of required strings |    // List can't be null, no null element;
+        </pre>
+    </div>
+
+    <div class="question"><strong>6. Enums</strong></div>
+    <div class="answer">
+        <pre>
+# Enum -> Restricted set of values;
+enum Role {
+  ADMIN
+  USER
+  GUEST
+}
+type User {
+  role: Role!
+}
+        </pre>
+    </div>
+
+    <div class="question"><strong>7. Interfaces</strong></div>
+    <div class="answer">
+        <pre>
+# Interface -> Define shared fields across multiple types;
+interface Node {
+  id: ID!
+}
+
+type User implements Node {
+  id: ID!
+  name: String!
+}
+
+type Post implements Node {
+  id: ID!
+  title: String!
+}
+        </pre>
+    </div>
+
+    <div class="question"><strong>8. Union</strong></div>
+    <div class="answer">
+        <pre>
+# Union -> When a field can return multiple object types;
+union SearchResult = User | Post
+
+Example:
+{
+  search(text: "GraphQL") {
+    ... on User {
+      name
+    }
+    ... on Post {
+      title
+    }
+  }
+}
+        </pre>
+    </div>
+
+    <div class="question"><strong>8. Input Types</strong></div>
+    <div class="answer">
+        <pre>
+# Input Types -> Used for arguments in mutations;
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User!
+}
+
+Why not reuse User?
+    Because input types:
+        Cannot have resolvers
+        Cannot reference interfaces/unions
+        Are strictly for input
+        </pre>
+    </div>
+
+    <div class="question"><strong>9. Arguments in Fields</strong></div>
+    <div class="answer">
+        <pre>
+# Fields can accept arguments;
+type Query {
+  posts(limit: Int, offset: Int): [Post!]!
+}
+
+# Arguments can also have default values:
+posts(limit: Int = 10): [Post!]!
+        </pre>
+    </div>
+
+    <div class="question"><strong>10. Directives</strong></div>
+    <div class="answer">
+        <pre>
+# Directives -> Special instructions prefixed with @
+# Built-in directives:
+#       @include(if: Boolean)
+#       @skip(if: Boolean)
+#       @deprecated(reason: String)
+
+Eg:
+type User {
+  oldField: String @deprecated(reason: "Use newField instead")
+}
+
+# You can also define custom directives.
+
+        </pre>
+    </div>
+
+
+    <div class="question"><strong>10. Introspection</strong></div>
+    <div class="answer">
+        <pre>
+GraphQL schemas are self-documenting;
+Clients can query the schema:
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}
+
+This powers tools like: GraphQL Playground, Apollo Studio;
+        </pre>
+    </div>
+
+    <div class="question"><strong>10. Schema Stitching & Federation</strong></div>
+    <div class="answer">
+        <pre>
+Large systems can split schemas:
+    Schema Stitching → Combine multiple schemas
+    Federation → Microservices share a unified graph
+        </pre>
+    </div>
+
+    
+    <div class="question"><strong>10. Resolver</strong></div>
+    <div class="answer">
+        <pre>
+# Schema -> It defines only structure of the data;
+# Resolver -> It defines how to fetch the data;
+Eg:
+const resolvers = {
+  Query: {
+    user: (_, { id }) => db.users.find(id)
+  }
+}
+
+        </pre>
+    </div>
+
+    <div class="question"><strong>13. Tip when designing a production-ready schema</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Non-null where required</li>
+            <li>Using generic JSON scalars everywhere</li>
+            <li>Timestamps included</li>
+            <li>Relationships defined</li>
+            <li>Pagination built-in</li>
+            <li>Strong typing - Prevent runtime errors</li>
+            <li> Never return raw types directly in mutations;</li>
+            <li>Avoid exposing internal fields </li>
+            <li>Never expose passwords</li>
+            <li>Avoid overexposing nested relationships</li>
+            <li>Use role-based access in resolvers</li>
+            <li>Deprecation Strategy</li>
+        </ul>
+    </div>
+    
+Performance Considerations
+    Design for:
+        ✔ DataLoader batching
+            Avoid N+1 problems.
+        ✔ Query depth limiting
+            Prevent malicious deep queries.
+        ✔ Complexity analysis
+            Score queries based on cost.
+        ✔ Caching strategy
+            Response caching
+            Resolver-level caching
+            CDN caching
+
+Federation (Microservices Ready)
+    For large systems, split by domain:
+        User service
+        Post service
+        Comment service
+    Federation allows services to extend types:
+        extend type User @key(fields: "id") {
+        id: ID! @external
+        posts: [Post!]!
+        }
+    Used heavily in distributed GraphQL architectures.
+
+Dive deep into Federation architecture
+
+Types
+
+Fields
+
+Relationships
+
+Available queries & mutations
+Explain federation deeply
+Show how to design a production-ready schema
+
+Custom Scalars
+scalar DateTime
+scalar Email
+</body>
+</html>

@@ -14,11 +14,41 @@
 
 
 # -------------------------------------------------- opensearch.yml --------------------------------------------------
+cluster.name: my-opensearch-cluster
+node.name: node-1
+network.host: 0.0.0.0       
+http.port: 9200
+discovery.seed_hosts: ["node-1", "node-2"]
+cluster.initial_master_nodes: ["node-1"]
+
+
 1️⃣ Cluster & Node Identity
-    cluster.name: prod-opensearch       # Logical name of the cluster; Nodes with different names will NOT join;
+    cluster.name: prod-opensearch       # Name of the cluster; All nodes in a cluster must have same name, otherwise they will not join the cluster;
     node.name: opensearch-node-1        # Unique ID of this node inside the cluster; match it with hostname;
 
 2️⃣ Node Roles (VERY important for scaling)
+    master 
+        - They manage cluster state(track nodes, shards, indices);
+        - They handle elections;
+        - They decide shard allocaton;
+        - They don't index data; 
+        - They don't serve search requests(unless misconfigured);
+    data 
+        - They store shards;
+        - They handle indexing;
+        - They serve search requests;
+    ingest 
+        - They parse, enrich, transform documents;
+    coordinating 
+        - They take client requests and fanout queries to data nodes;
+        - They don't store data; They don't act as master;
+        - node.roles: [] -> Empty role list = coordinating-only
+
+    Master = decisions
+    Data = storage + search
+    Ingest = transformation
+    Coordinating = request routing & result merging
+
     node.roles: [ master, data, ingest ]
     | Role                    | Purpose                         |
     | ----------------------- | ------------------------------- |
@@ -46,8 +76,8 @@
     # Keeps data/logs outside install directory; Safer upgrades;
 
 4️⃣ Network Settings
-    network.host: 0.0.0.0
-    http.port: 9200
+    network.host: 0.0.0.0           # Who can reach it? 0.0.0.0 binds it to all systems(anyone can use it) -> Anyone who can reach this machine can talk to OpenSearch;
+    http.port: 9200                 # Port for Rest API(indexing documents, search queries, cluster APIs, health checks etc), kibana/dashboards etc;
     transport.port: 9300
 
     network.host → bind address
@@ -55,7 +85,47 @@
     transport.port → node-to-node traffic
 
 5️⃣ Discovery & Cluster Formation
-    discovery.type: single-node         # Disables quorum checks — required for 1-node prod
+    Discover is a process by which nodes:
+        - Find each other
+        - Elect a master
+        - Form a single logical cluster
+        - Maintain membership over time
+        - Without discovery, every node would think it’s alone
+
+    discovery.type: single-node         # Disables quorum checks — required for 1-node prod; 
+        - Disables cluster discovery
+        - Skips master election
+        - Forces the node to be master + data
+        - Cluster size = 1 forever
+        - Suited for only dev(local) environments;
+    
+    discovery.type: multi-node
+        - default;
+    
+    discovery.seed_hosts -> 
+        - Not required for single-node clusters
+        - When a node starts,
+            - It looks at discovery.seed_hosts
+            - Tries to connect to those addresses
+            - Discovers the rest of the cluster from them
+            - Joins (or helps form) the cluster
+            - After joining, nodes no longer need this list — it’s only for startup discovery. 
+        Eg: discovery.seed_hosts: ["node1:9300", "node2:9300"] // Uses the transport port (default 9300), not HTTP 9200.
+
+    cluster.initial_master_nodes 
+        - Who is allowed to elect the first master;
+        - cluster.initial_master_nodes is ONLY needed for first cluster bootstrap;
+        - Only master-eligible nodes can be elected
+        - Requires quorum (>50%)
+        - With 3 masters → 2 must agree
+        - Always run 3 dedicated master nodes
+        
+    node.roles
+        - Only nodes with master can participate in elections.
+    
+    transport.port
+        = Internal node-to-node communication.
+        - defaults to 9300;
 
     Multi-node - Used only once during cluster bootstrap;
         discovery.seed_hosts:
@@ -68,6 +138,65 @@
         - opensearch-master-2
         - opensearch-master-3
 
+    
+        
+    
+    Note:
+        - Forgetting DNS must resolve from all nodes;
+        - Firewalls blocking port 9300;
+        - Debugging:
+            GET _cluster/health
+            GET _cluster/state/master_node
+            GET _cat/nodes?v
+            GET _cat/shards
+
+        - 🚫 Things that are NOT dynamic
+            | Setting          | Requires restart |
+            | ---------------- | ---------------- |
+            | `node.roles`     | ✅                |
+            | `network.host`   | ✅                |
+            | `discovery.type` | ✅                |
+            | JVM heap size    | ✅                |
+            | Data path        | ✅                |
+
+
+    can we dynamically add / remove nodes from cluster?
+        - Adding node
+            - Start a node with:
+                cluster.name: prod-search
+                discovery.seed_hosts:
+                - master1
+                - master2
+                - master3
+            - Join process
+                Node contacts a seed host
+                Master validates cluster name & UUID
+                Node joins the cluster
+                Master assigns shards (if data node)
+                No restart needed for existing nodes.
+        - Delting node 
+            - call API
+                PUT _cluster/settings
+                {
+                    "transient": {
+                        "cluster.routing.allocation.exclude._name": "data-node-3"
+                    }
+                }
+            - Then:
+                Wait for shards to relocate
+                Confirm no shards remain
+                Stop the node
+                This avoids data loss and red clusters.
+
+        - Master nodes
+            - Can be added dynamically
+            - Never remove quorum; Rule: quorum = (N / 2) + 1; 
+            - With 3 masters → never stop 2 at once
+        - 💾 Data nodes
+            - Fully dynamic
+            - Shards rebalance automatically
+            - More nodes = smaller shard load
+        - 
 6️⃣ Memory & Bootstrap Checks
     bootstrap.memory_lock: true     # Prevents JVM memory from being swapped
 
@@ -132,6 +261,65 @@ What happens when disk is (almost) full in OpenSearch
 
 
         </pre>
+
+        <pre>
+# -------------------------------------------------- jvm.options --------------------------------------------------
+As OpenSearch is a Java application, its performance almost entirely dependent on how the JVM manages memory and garbage collection;
+Heap Size Settings (-Xms and -Xmx) -> Controls memory usage;
+    -Xms: Initial heap size;
+    -Xmx: Maximum heap size;
+
+Best Practices:
+    1. Always keep both of them same; This prevents the JVM from constantly resizing the heap, which causes performance-heavy pauses; // Xms = Xmx (avoid resizing)
+    2. 50% Rule: Set your heap to no more than 50% of your total system RAM. OpenSearch needs the other 50% for the OS "File System Cache" to speed up disk I/O; // Heap <= 50% of RAM
+    3. 32GB Ceiling: Never set the heap higher than roughly 31GB-32GB. Going beyond this threshold breaks "Compressed Ordinary Object Pointers" (Compressed OOPs), which actually makes the JVM less efficient and waste space; // Never exceed 32 GB heap
+
+Garbage Collection Related Settings:
+    Garbage collection is the process of cleaning up memory. Modern OpenSearch versions use different collectors depending on the hardware:
+    G1GC (-XX:+UseG1GC): Recommended for modern clusters, especially those with larger heaps. It breaks the heap into regions to reduce "Stop the World" pauses.
+    CMS (-XX:+UseConcMarkSweepGC): Often the default in older versions or on specific instance types. It is generally being phased out in favor of G1GC.
+
+Error Handling and Logging
+    These settings determine what happens when the JVM runs out of memory or crashes.
+    -XX:+HeapDumpOnOutOfMemoryError: Automatically creates a "snapshot" (dump) of the memory if the process crashes. This is vital for troubleshooting.
+    -XX:HeapDumpPath: Defines where that dump file is saved.
+    -Xlog:gc: Configures where the garbage collection logs are stored, which helps you diagnose if your cluster is "stuttering" due to memory cleanup.
+
+        </pre>
+
+    <pre>
+Index-level configuration
+        {
+  "settings": {
+    "number_of_shards": 5,
+    "number_of_replicas": 1
+    "refresh_interval": "30s"       # performance tuning 
+  }
+}
+
+Guidelines:
+
+Shards → parallelism & scale
+
+Replicas → availability & read speed
+
+Too many shards = slow cluster
+
+Refresh interval (performance tuning)
+    </pre>
+
+    <pre>
+        Cluster settings (dynamic vs persistent)
+        PUT _cluster/settings
+{
+  "persistent": {
+    "cluster.routing.allocation.enable": "all"
+  }
+}
+
+
+Would you like me to help you determine the ideal shard count based on your expected data volume?
+    </pre>
     </div>
     
 </body>

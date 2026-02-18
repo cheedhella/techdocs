@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>GraphQL</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is GraphQL?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>GraphQL is a query language that allows you to retrieve exactly data(no more, no less) that you want;</li>
+            <li>You can use it to get the data, modify data and delete data;</li>
+            <li>You can query not only databases, but also REST APIs, websockets, and other GraphQL APIs!</li>
+            <br>
+            <li>It is also called as a declarative data-fetching language;</li>
+            <li>It means that developers will state the data that they want and it doesn’t matter to them how it is done;</li>
+            <li>That is to say that GraphQL doesn’t care which language you set up the GraphQL server in;</li>
+            <li>GraphQL server libraries: C#/.NET (graphql-dotnet), Java (graphql-java), PHP (graphql-php), Python (graphene), JavaScript (apollo-server);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. REST vs GraphQL</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Self documented;</li>
+            <li>No overfetching(returning too much data), underfetching(require multiple requests to gather related data);</li>
+            <li>No need to manage API endpoints; GraphQL only requires a single API endpoint(/graphql) for all your queries (GET requests) and mutations(POST, PUT, and DELETE requests). This single endpoint acts as a portal and can orchestrate several data sources;</li>
+            <li>Strongly typed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. When not to use GraphQL?</strong></div>
+    <div class="answer">
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. How it works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Client sends a query describing the data it wants;</li>
+            <li>
+                <pre>
+                    {
+                        user(id: "1") {
+                            name
+                            email
+                        }
+                    }
+                </pre>
+            </li>
+            <li>server responds with JSON matching the requested structure;</li>
+            <li><pre>
+                {
+                    "data": {
+                        "user": {
+                        "name": "Alice",
+                        "email": "alice@example.com"
+                        }
+                    }
+                }
+            </pre></li>
+            <li>All requests typically go to one endpoint;</li>
+        </ul>
+    </div>
+    
+
+    When a client sends a request, GraphQL:
+        Parses the query into an AST (Abstract Syntax Tree)
+        Extracts variables (if any)
+        Validates against schema
+        Executes resolvers
+
+
+introspection 
+query → Read
+
+mutation → Create/Update/Delete
+
+subscription → GraphQL supports real-time updates via subscriptions.
+
+</body>
+</html>

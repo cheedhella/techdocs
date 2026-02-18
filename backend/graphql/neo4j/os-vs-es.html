@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Opensearch vs Elasticsearch</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. Opensearch vs Elasticsearch?</strong></div>
+    <div class="answer">
+        <pre>
+Why there are 2?
+    - Elasticsearch was originally Apache 2.0.
+    - In 2021, Elastic changed the license (SSPL / Elastic License).
+    - AWS forked the last open version (7.10) → OpenSearch was born.
+    - Since then, they’ve evolved separately.
+
+| Category              | OpenSearch              | Elasticsearch                 |
+| --------------------- | ----------------------- | ----------------------------- |
+| **License**           | Apache 2.0 (fully open) | Elastic License / SSPL        |
+| **Owner**             | AWS + open community    | Elastic (company)             |
+| **Cost**              | Free & open             | Free tier + paid features     |
+| **Cloud lock-in**     | None                    | Stronger Elastic ecosystem    |
+| **Kibana equivalent** | OpenSearch Dashboards   | Kibana                        |
+| **Security features** | Free (Auth, RBAC, TLS)  | Mostly paid                   |
+| **ML / AI features**  | Basic & growing         | Much more mature              |
+| **Performance**       | Very comparable         | Slight edge in some workloads |
+| **Enterprise polish** | Good                    | Excellent                     |
+
+Opensearch includes: Authentication, Authorization, RBAC, TLS(all free); Elasticsearch provides advanced security(but paid);
+Opensearch dashboard are nearly equivalent to Kibana; But, kibana more polished and has better integrations;
+
+        </pre>
+    </div>
+    
+</body>
+</html>

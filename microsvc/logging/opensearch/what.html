@@ -45,14 +45,35 @@
          </li>
          <li><b>Shard</b>
             <ul>
-               <li>A subdivision of an index that allows horizontal scaling;</li>
+               <li>Usually, index holds billions of documents, taking up terabytes of space;</li>
+               <li>A single server might not have enough disk space or CPU power to handle that much data alone;</li>
+               <li>To solve this, OpenSearch breaks the index into smaller pieces called Shards;</li>
+               <li>It serves 2 purposes: Horizontal scaling and Parallelism;</li>
+               <li>Horizontal scaling -> By splitting an index into 5 shards, you can spread those shards across 5 different servers;</li>
+               <li>Parallelism -> If you search an index with 4 shards, OpenSearch queries all 4 shards simultaneously, making the search much faster;</li>
             </ul>
          </li>
-         <li><b>Replica</b>
+         <li><b>Primary Shard</b>
             <ul>
-               <li>A copy of a shard for fault tolerance and load balancing;</li>
+               <li>It is the original source, where data is written first;</li>
             </ul>
          </li>
+         <li><b>Replica Shard</b>
+            <ul>
+               <li>It is an exact copy of the primary shard;</li>
+               <li>It serves 2 purposes: High availability and Performance;</li>
+               <li>High availability -> If a hardware node fails and you lose a Primary Shard, OpenSearch promotes a Replica Shard to "Primary" status instantly. Your data stays online;</li>
+               <li>Load balancing & Search Performance: Replicas can handle search requests just like Primaries. If you have a high-traffic app, adding more replicas allows you to handle more simultaneous users;</li>
+               <li>Never together rule: OpenSearch is smart that it will never place a Replica shard on the same physical node as its Primary shard. Doing so would defeat the purpose of a backup;</li>
+               <li>When you configure an index, you define the number of primaries and the number of replicas per primary;</li>
+               <li>Total Shard Count: Primaries * (1 + Replicas); Eg: You set 5 Primary Shards and 1 Replica, Total Shards in Cluster: 10; Note: Too many shards = slow cluster;</li>
+            </ul>
+         </li>
+
+      
+
+
+         
       </ul>
    </div>
 
