@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Microservices Design Principles</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Microservices Design Principles</h2>
+            <p>Comprehensive guide to microservices architecture patterns and best practices</p>
+        </div>
+
+        <div class="toc-container">
+            <h3>Pattern Categories</h3>
+            <ul>
+                <li>1️⃣ Decomposition Patterns (How to break the system)
+                    <ul>
+                        <li><a href="./decomposition/business-capability.html">Decompose by Business Capability</a></li>
+                        <li><a href="./decomposition/subdomain.html">Decompose by Subdomain (based on Domain-Driven Design)</a></li>
+                        <li><a href="./decomposition/strangler-fig.html">Strangler Fig Pattern (incrementally replace monolith)</a></li>
+                        <li><a href="./decomposition/bounded-context.html">Bounded Context Pattern</a></li>
+                        <li><a href="./decomposition/self-contained-service.html">Self-Contained Service Pattern</a></li>
+                        <li><a href="./decomposition/service-per-team.html">Service per Team Pattern</a></li>
+                    </ul>
+                </li>
+                <li>2️⃣ Communication Patterns (Service-to-service communication)
+                    <ul>
+                        <li><a href="./communication/api-gateway.html">API Gateway Pattern</a></li>
+                        <li><a href="./communication/bff.html">Backend for Frontend (BFF)</a></li>
+                        <li><a href="./communication/service-registry.html">Service Registry & Discovery</a></li>
+                        <li><a href="./communication/client-side-discovery.html">Client-Side Discovery</a></li>
+                        <li><a href="./communication/server-side-discovery.html">Server-Side Discovery</a></li>
+                        <li><a href="./communication/service-mesh.html">Service Mesh</a></li>
+                        <li><a href="./communication/rpc.html">Remote Procedure Invocation (RPI/RPC)</a></li>
+                        <li><a href="./communication/rest.html">REST Communication</a></li>
+                        <li><a href="./communication/grpc.html">gRPC Communication</a></li>
+                        <li><a href="./communication/graphql.html">GraphQL Communication</a></li>
+                        <li><a href="./communication/websocket.html">WebSocket Communication</a></li>
+                        <li><a href="./communication/message-broker.html">Message Broker Pattern</a></li>
+                        <li><a href="./communication/event-driven.html">Event-Driven Architecture</a></li>
+                        <li><a href="./communication/pub-sub.html">Publish–Subscribe Pattern</a></li>
+                        <li><a href="./communication/request-response.html">Request–Response Pattern</a></li>
+                        <li><a href="./communication/async-messaging.html">Asynchronous Messaging Pattern</a></li>
+                        <li><a href="./communication/transactional-outbox.html">Transactional Outbox Pattern</a></li>
+                        <li><a href="./communication/inbox-pattern.html">Inbox Pattern</a></li>
+                    </ul>
+                </li>
+                <li>3️⃣ Data Management Patterns
+                    <ul>
+                        <li><a href="./data/database-per-service.html">Database per Service</a></li>
+                        <li><a href="./data/shared-database.html">Shared Database (Anti-pattern)</a></li>
+                        <li><a href="./data/saga-pattern.html">Saga Pattern</a></li>
+                        <li><a href="./data/choreography-saga.html">Choreography-based Saga</a></li>
+                        <li><a href="./data/orchestration-saga.html">Orchestration-based Saga</a></li>
+                        <li><a href="./data/cqrs.html">CQRS (Command Query Responsibility Segregation)</a></li>
+                        <li><a href="./data/event-sourcing.html">Event Sourcing</a></li>
+                        <li><a href="./data/api-composition.html">API Composition</a></li>
+                        <li><a href="./data/transaction-log-tailing.html">Transaction Log Tailing</a></li>
+                        <li><a href="./data/eventual-consistency.html">Eventual Consistency</a></li>
+                        <li><a href="./data/materialized-view.html">Materialized View Pattern</a></li>
+                        <li><a href="./data/change-data-capture.html">Change Data Capture (CDC)</a></li>
+                        <li><a href="./data/polyglot-persistence.html">Polyglot Persistence</a></li>
+                        <li><a href="./data/data-lake.html">Data Lake Pattern</a></li>
+                        <li><a href="./data/cache-aside.html">Cache-Aside Pattern</a></li>
+                        <li><a href="./data/write-through-cache.html">Write-Through Cache</a></li>
+                        <li><a href="./data/write-behind-cache.html">Write-Behind Cache</a></li>
+                    </ul>
+                </li>
+                <li>4️⃣ Resilience & Fault Tolerance Patterns
+                    <ul>
+                        <li><a href="./resilience/circuit-breaker.html">Circuit Breaker</a></li>
+                        <li><a href="./resilience/retry.html">Retry Pattern</a></li>
+                        <li><a href="./resilience/timeout.html">Timeout Pattern</a></li>
+                        <li><a href="./resilience/bulkhead.html">Bulkhead Pattern</a></li>
+                        <li><a href="./resilience/fallback.html">Fallback Pattern</a></li>
+                        <li><a href="./resilience/rate-limiting.html">Rate Limiting</a></li>
+                        <li><a href="./resilience/throttling.html">Throttling Pattern</a></li>
+                        <li><a href="./resilience/idempotency.html">Idempotency Pattern</a></li>
+                        <li><a href="./resilience/dead-letter-queue.html">Dead Letter Queue (DLQ)</a></li>
+                        <li><a href="./resilience/health-check.html">Health Check Pattern</a></li>
+                        <li><a href="./resilience/graceful-degradation.html">Graceful Degradation</a></li>
+                        <li><a href="./resilience/backpressure.html">Backpressure Pattern</a></li>
+                        <li><a href="./resilience/load-shedding.html">Load Shedding</a></li>
+                        <li><a href="./resilience/adaptive-concurrency.html">Adaptive Concurrency Limits</a></li>
+                    </ul>
+                </li>
+                <li>5️⃣ Deployment Patterns
+                    <ul>
+                        <li><a href="./deployment/containerization.html">Containerization Pattern</a></li>
+                        <li><a href="./deployment/sidecar.html">Sidecar Pattern</a></li>
+                        <li><a href="./deployment/ambassador.html">Ambassador Container Pattern</a></li>
+                        <li><a href="./deployment/adapter.html">Adapter Container Pattern</a></li>
+                        <li><a href="./deployment/init-container.html">Init Container Pattern</a></li>
+                        <li><a href="./deployment/blue-green.html">Blue-Green Deployment</a></li>
+                        <li><a href="./deployment/canary.html">Canary Deployment</a></li>
+                        <li><a href="./deployment/rolling.html">Rolling Deployment</a></li>
+                        <li><a href="./deployment/ab-testing.html">A/B Testing Deployment</a></li>
+                        <li><a href="./deployment/feature-toggles.html">Feature Toggles / Feature Flags</a></li>
+                        <li><a href="./deployment/immutable-server.html">Immutable Server Pattern</a></li>
+                        <li><a href="./deployment/iac.html">Infrastructure as Code (IaC)</a></li>
+                        <li><a href="./deployment/gitops.html">GitOps Pattern</a></li>
+                    </ul>
+                </li>
+                <li>6️⃣ Observability Patterns
+                    <ul>
+                        <li><a href="./observability/centralized-logging.html">Centralized Logging</a></li>
+                        <li><a href="./observability/structured-logging.html">Structured Logging</a></li>
+                        <li><a href="./observability/distributed-tracing.html">Distributed Tracing</a></li>
+                        <li><a href="./observability/correlation-id.html">Correlation ID Pattern</a></li>
+                        <li><a href="./observability/metrics-aggregation.html">Metrics Aggregation</a></li>
+                        <li><a href="./observability/health-endpoint.html">Health Endpoint Monitoring</a></li>
+                        <li><a href="./observability/log-aggregation.html">Log Aggregation Pattern</a></li>
+                        <li><a href="./observability/application-metrics.html">Application Metrics Pattern</a></li>
+                        <li><a href="./observability/audit-logging.html">Audit Logging</a></li>
+                        <li><a href="./observability/exception-tracking.html">Exception Tracking</a></li>
+                        <li><a href="./observability/opentelemetry.html">OpenTelemetry Integration</a></li>
+                    </ul>
+                </li>
+                <li>7️⃣ Security Patterns
+                    <ul>
+                        <li><a href="./security/api-gateway-auth.html">API Gateway Authentication</a></li>
+                        <li><a href="./security/oauth-oidc.html">OAuth2 / OpenID Connect</a></li>
+                        <li><a href="./security/jwt.html">JWT Token-based Authentication</a></li>
+                        <li><a href="./security/zero-trust.html">Zero Trust Security Model</a></li>
+                        <li><a href="./security/mtls.html">Service-to-Service Authentication (mTLS)</a></li>
+                        <li><a href="./security/secrets-management.html">Secrets Management Pattern</a></li>
+                        <li><a href="./security/api-key-management.html">API Key Management</a></li>
+                        <li><a href="./security/token-validation.html">Token Validation Pattern</a></li>
+                        <li><a href="./security/access-token.html">Access Token Pattern</a></li>
+                        <li><a href="./security/service-identity.html">Service Identity & SPIFFE</a></li>
+                        <li><a href="./security/encryption-at-rest.html">Encryption at Rest</a></li>
+                        <li><a href="./security/encryption-in-transit.html">Encryption in Transit</a></li>
+                        <li><a href="./security/security-scanning.html">Security Scanning & Vulnerability Management</a></li>
+                    </ul>
+                </li>
+                <li>8️⃣ Cross-Cutting & Supporting Patterns
+                    <ul>
+                        <li><a href="./cross-cutting/externalized-config.html">Externalized Configuration</a></li>
+                        <li><a href="./cross-cutting/config-server.html">Centralized Configuration Server</a></li>
+                        <li><a href="./cross-cutting/aggregator.html">Aggregator Pattern</a></li>
+                        <li><a href="./cross-cutting/anti-corruption-layer.html">Anti-Corruption Layer</a></li>
+                        <li><a href="./cross-cutting/adapter.html">Adapter Pattern</a></li>
+                        <li><a href="./cross-cutting/proxy.html">Proxy Pattern</a></li>
+                        <li><a href="./cross-cutting/ambassador.html">Ambassador Pattern</a></li>
+                        <li><a href="./cross-cutting/gateway-offloading.html">Gateway Offloading Pattern</a></li>
+                    </ul>
+                </li>
+                <li>9️⃣ Testing Patterns
+                    <ul>
+                        <li><a href="./testing/contract-testing.html">Consumer-Driven Contract Testing</a></li>
+                        <li><a href="./testing/service-virtualization.html">Service Virtualization</a></li>
+                        <li><a href="./testing/e2e-testing.html">End-to-End Testing in Microservices</a></li>
+                        <li><a href="./testing/chaos-engineering.html">Chaos Engineering Pattern</a></li>
+                    </ul>
+                </li>
+                <li>🔟 UI Integration Patterns
+                    <ul>
+                        <li><a href="./ui/server-side-composition.html">Server-Side UI Composition</a></li>
+                        <li><a href="./ui/client-side-composition.html">Client-Side UI Composition</a></li>
+                        <li><a href="./ui/micro-frontends.html">Micro Frontends</a></li>
+                        <li><a href="./ui/edge-side-includes.html">Edge Side Includes (ESI)</a></li>
+                        <li><a href="./ui/module-federation.html">Module Federation</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣1️⃣ Performance & Scalability Patterns
+                    <ul>
+                        <li><a href="./performance/horizontal-scaling.html">Horizontal Scaling</a></li>
+                        <li><a href="./performance/vertical-scaling.html">Vertical Scaling</a></li>
+                        <li><a href="./performance/auto-scaling.html">Auto-Scaling Pattern</a></li>
+                        <li><a href="./performance/load-balancing.html">Load Balancing Strategies</a></li>
+                        <li><a href="./performance/caching-strategies.html">Caching Strategies</a></li>
+                        <li><a href="./performance/cdn-pattern.html">CDN Pattern</a></li>
+                        <li><a href="./performance/database-sharding.html">Database Sharding</a></li>
+                        <li><a href="./performance/read-replica.html">Read Replica Pattern</a></li>
+                        <li><a href="./performance/connection-pooling.html">Connection Pooling</a></li>
+                        <li><a href="./performance/async-processing.html">Asynchronous Processing</a></li>
+                        <li><a href="./performance/batch-processing.html">Batch Processing Pattern</a></li>
+                        <li><a href="./performance/throttling-debouncing.html">Throttling & Debouncing</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣2️⃣ Cloud-Native Patterns
+                    <ul>
+                        <li><a href="./cloud-native/twelve-factor-app.html">Twelve-Factor App</a></li>
+                        <li><a href="./cloud-native/serverless.html">Serverless Pattern</a></li>
+                        <li><a href="./cloud-native/function-as-service.html">Function as a Service (FaaS)</a></li>
+                        <li><a href="./cloud-native/backend-as-service.html">Backend as a Service (BaaS)</a></li>
+                        <li><a href="./cloud-native/cloud-agnostic.html">Cloud-Agnostic Design</a></li>
+                        <li><a href="./cloud-native/multi-cloud.html">Multi-Cloud Strategy</a></li>
+                        <li><a href="./cloud-native/hybrid-cloud.html">Hybrid Cloud Pattern</a></li>
+                        <li><a href="./cloud-native/edge-computing.html">Edge Computing Pattern</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣3️⃣ Cost Optimization Patterns
+                    <ul>
+                        <li><a href="./cost/right-sizing.html">Right-Sizing Services</a></li>
+                        <li><a href="./cost/spot-instances.html">Spot/Preemptible Instances</a></li>
+                        <li><a href="./cost/resource-pooling.html">Resource Pooling</a></li>
+                        <li><a href="./cost/scheduled-scaling.html">Scheduled Scaling</a></li>
+                        <li><a href="./cost/cold-start-optimization.html">Cold Start Optimization</a></li>
+                        <li><a href="./cost/tiered-storage.html">Tiered Storage Pattern</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣4️⃣ Migration & Modernization Patterns
+                    <ul>
+                        <li><a href="./migration/monolith-to-microservices.html">Monolith to Microservices Migration</a></li>
+                        <li><a href="./migration/strangler-application.html">Strangler Application Pattern</a></li>
+                        <li><a href="./migration/branch-by-abstraction.html">Branch by Abstraction</a></li>
+                        <li><a href="./migration/parallel-run.html">Parallel Run Pattern</a></li>
+                        <li><a href="./migration/feature-parity.html">Feature Parity Validation</a></li>
+                        <li><a href="./migration/data-migration.html">Data Migration Strategies</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣5️⃣ Integration Patterns
+                    <ul>
+                        <li><a href="./integration/api-composition.html">API Composition Pattern</a></li>
+                        <li><a href="./integration/backend-for-frontend.html">Backend for Frontend (BFF)</a></li>
+                        <li><a href="./integration/gateway-aggregation.html">Gateway Aggregation</a></li>
+                        <li><a href="./integration/gateway-routing.html">Gateway Routing</a></li>
+                        <li><a href="./integration/gateway-offloading.html">Gateway Offloading</a></li>
+                        <li><a href="./integration/chained-microservice.html">Chained Microservice Pattern</a></li>
+                        <li><a href="./integration/branch-pattern.html">Branch Pattern</a></li>
+                        <li><a href="./integration/orchestration.html">Orchestration Pattern</a></li>
+                        <li><a href="./integration/choreography.html">Choreography Pattern</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣6️⃣ Anti-Patterns (What to Avoid)
+                    <ul>
+                        <li><a href="./anti-patterns/distributed-monolith.html">Distributed Monolith</a></li>
+                        <li><a href="./anti-patterns/shared-database.html">Shared Database</a></li>
+                        <li><a href="./anti-patterns/chatty-services.html">Chatty Services</a></li>
+                        <li><a href="./anti-patterns/god-service.html">God Service / Mega Service</a></li>
+                        <li><a href="./anti-patterns/tight-coupling.html">Tight Coupling</a></li>
+                        <li><a href="./anti-patterns/synchronous-dependencies.html">Too Many Synchronous Dependencies</a></li>
+                        <li><a href="./anti-patterns/data-duplication.html">Uncontrolled Data Duplication</a></li>
+                        <li><a href="./anti-patterns/service-explosion.html">Service Explosion (Too Many Services)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="toc-container">
+            <h3>Advanced Topics</h3>
+            <ul>
+                <li>1️⃣7️⃣ Domain-Driven Design (DDD) Patterns
+                    <ul>
+                        <li><a href="./ddd/bounded-context.html">Bounded Context</a></li>
+                        <li><a href="./ddd/ubiquitous-language.html">Ubiquitous Language</a></li>
+                        <li><a href="./ddd/aggregate.html">Aggregate Pattern</a></li>
+                        <li><a href="./ddd/entity.html">Entity</a></li>
+                        <li><a href="./ddd/value-object.html">Value Object</a></li>
+                        <li><a href="./ddd/repository.html">Repository Pattern</a></li>
+                        <li><a href="./ddd/domain-event.html">Domain Events</a></li>
+                        <li><a href="./ddd/domain-service.html">Domain Service</a></li>
+                        <li><a href="./ddd/application-service.html">Application Service</a></li>
+                        <li><a href="./ddd/context-mapping.html">Context Mapping</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣8️⃣ Event-Driven Architecture Patterns
+                    <ul>
+                        <li><a href="./event-driven/event-notification.html">Event Notification</a></li>
+                        <li><a href="./event-driven/event-carried-state.html">Event-Carried State Transfer</a></li>
+                        <li><a href="./event-driven/event-sourcing.html">Event Sourcing</a></li>
+                        <li><a href="./event-driven/event-collaboration.html">Event Collaboration</a></li>
+                        <li><a href="./event-driven/event-streaming.html">Event Streaming</a></li>
+                        <li><a href="./event-driven/event-store.html">Event Store Pattern</a></li>
+                        <li><a href="./event-driven/event-replay.html">Event Replay</a></li>
+                        <li><a href="./event-driven/event-versioning.html">Event Versioning</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣9️⃣ API Design Patterns
+                    <ul>
+                        <li><a href="./api-design/versioning.html">API Versioning Strategies</a></li>
+                        <li><a href="./api-design/pagination.html">Pagination Patterns</a></li>
+                        <li><a href="./api-design/filtering-sorting.html">Filtering & Sorting</a></li>
+                        <li><a href="./api-design/hateoas.html">HATEOAS (Hypermedia)</a></li>
+                        <li><a href="./api-design/graphql-federation.html">GraphQL Federation</a></li>
+                        <li><a href="./api-design/api-contracts.html">API Contracts & OpenAPI</a></li>
+                        <li><a href="./api-design/backward-compatibility.html">Backward Compatibility</a></li>
+                        <li><a href="./api-design/deprecation-strategy.html">API Deprecation Strategy</a></li>
+                    </ul>
+                </li>
+                <li>2️⃣0️⃣ Workflow & Orchestration Patterns
+                    <ul>
+                        <li><a href="./workflow/workflow-orchestration.html">Workflow Orchestration</a></li>
+                        <li><a href="./workflow/state-machine.html">State Machine Pattern</a></li>
+                        <li><a href="./workflow/long-running-process.html">Long-Running Process Pattern</a></li>
+                        <li><a href="./workflow/compensation.html">Compensation Pattern</a></li>
+                        <li><a href="./workflow/process-manager.html">Process Manager Pattern</a></li>
+                        <li><a href="./workflow/temporal-workflow.html">Temporal Workflows</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-grid-item main-grid-item-2">
+            <h3>Learning Path</h3>
+            <p>Recommended order for mastering microservices patterns:</p>
+            <ol>
+                <li>Start with <strong>Decomposition Patterns</strong> - Learn how to break down monoliths</li>
+                <li>Understand <strong>Communication Patterns</strong> - How services talk to each other</li>
+                <li>Master <strong>Data Management</strong> - Handle distributed data challenges</li>
+                <li>Learn <strong>Resilience Patterns</strong> - Build fault-tolerant systems</li>
+                <li>Implement <strong>Observability</strong> - Monitor and debug distributed systems</li>
+                <li>Apply <strong>Security Patterns</strong> - Secure your microservices</li>
+                <li>Explore <strong>Deployment Patterns</strong> - Deploy and scale effectively</li>
+                <li>Study <strong>Testing Patterns</strong> - Ensure quality in distributed systems</li>
+                <li>Deep dive into <strong>DDD & Event-Driven</strong> - Advanced architectural concepts</li>
+                <li>Optimize with <strong>Performance & Cost</strong> patterns</li>
+            </ol>
+
+            <h3>Key Resources</h3>
+            <ul>
+                <li><a href="./best-practices.html">Microservices Best Practices</a></li>
+                <li><a href="./when-to-use.html">When to Use Microservices</a></li>
+                <li><a href="./when-not-to-use.html">When NOT to Use Microservices</a></li>
+                <li><a href="./common-pitfalls.html">Common Pitfalls & How to Avoid Them</a></li>
+                <li><a href="./case-studies.html">Real-World Case Studies</a></li>
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>API Gateway</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>API Gateway</h2>
+    </div>
+
+    <div class="question"><strong>1. What is API Gateway?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It sits in front of a set of microservices and acts as a entry point for every request from the clients(web, mobile app etc);</li>
+            <li>It is more than just a traffic router; It encapsulates several cross-cutting concerns(listed below) that would otherwise have to be implemented in each microservice;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why API Gateway?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Centralized Routing
+                <ul>
+                    <li>Clients interact with API gateway using a unified interface (/api/**), while the gateway routes requests to appropriate internal service endpoints (http://order-service/internal/v1/...), based on HTTP method, URL path OR Header;</li>
+                </ul>
+            </li>
+            <li>Authentication and Authorization
+                <ul>
+                    <li>Instead of implementing security checks in each service, gateway handles token validation(OAuth2, JWT etc) and enforces role-based access control policies before forwarding the request;</li>
+                </ul>
+            </li>
+            <li>Rate Limiting and Throttling
+                <ul>
+                    <li>Protects backend services by enforcing request quotas per user, IP, or API key — often using token bucket or sliding window algorithms;</li>
+                </ul>
+            </li>
+            <li>Request Aggregation
+                <ul>
+                    <li>For composite views like dashboards, the gateway can call multiple services in parallel and merge the responses, reducing the number of round trips from the client;</li>
+                </ul>
+            </li>
+            <li>Request/Response Transformation
+                <ul>
+                    <li>Modifies headers or API payloads to support backward compatibility or API versioning;</li>
+                </ul>
+            </li>
+            <li>API Versioning
+                <ul>
+                    <li>Routes traffic based on API versions to support backward compatibility and gradual migrations;</li>
+                </ul>
+            </li>
+            <li>Protocol Bridging/Translation
+                <ul>
+                    <li>Converts between protocols (e.g., HTTP to gRPC or WebSocket);</li>
+                </ul>
+            </li>
+            <li>Load Balancing & Failover
+                <ul>
+                    <li>Distributes requests across service instances and can automatically retry or redirect traffic in case of failure;</li>
+                </ul>
+            </li>
+            <li>Circuit Breaking & Retry
+                <ul>
+                    <li>Detects downstream service failures and applies fallback logic or retries based on configured policies;</li>
+                </ul>
+            </li>
+            <li>Caching
+                <ul>
+                    <li>Stores responses temporarily to serve repeated requests faster and reduce backend load;</li>
+                </ul>
+            </li>
+            <li>Documentation
+                <ul>
+                    <li>Gateway can enforce standards like OpenAPI/Swagger, ensuring documentation stays updated;</li>
+                </ul>
+            </li>
+            <li>Source Control Integration
+                <ul>
+                    <li>Sync API configurations with Git to track changes and enable CI/CD pipelines;</li>
+                </ul>
+            </li>
+            
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Popular API Gateways</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kong</li>
+            <li>Nginx</li>
+            <li>Spring Cloud Gateway</li>
+            <li>Traefik</li>
+            <li>Zuul (by Netflix)</li>
+            <li>Apigee (by Google Cloud)</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Which one to choose?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Managed API Gateway(AWS/Azure): if you are cloud-native and want minimal operational overhead;</li>
+            <li>Kong/Nginx: If you are on k8s and want control but not full custom;</li>
+            <li>Service Mesh: If you need internal traffic control + mTLS; Service mesh is not an API gateway, it is for inter-service traffic;</li>
+            <li>Instead of one large gateway, create separate gateways per client:
+
+Mobile BFF
+
+Web BFF
+
+Admin BFF</li>
+
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Challenges</strong></div>
+    <div class="answer">
+        <ul>
+            <li>While API gateways solve many challenges, misconfiguration can backfire;</li>
+            <li><b>Additional overhead</b> - It introduces additional hop in request path;</li>
+            <li><b>Single point of failure</b> - If it goes down, all services become inaccessible; Deploy it in a high availability (HA) setup with load balancing and health checks;</li>
+            <li><b>Complex Configuration</b> - Managing route rules, filters, plugins, and policies for dozens of services can quickly become difficult — especially as the number of microservices grows;</li>
+            <li><b>Security Risks</b> - Improper configuration of auth, rate limits, or CORS policies in the gateway can open up security vulnerabilities across all downstream services;</li>
+            <li><b>Operational Overhead</b> - Gateways require careful monitoring to ensure it won't be a bottleneck;  Integrate with observability stacks (Prometheus, Grafana, ELK, etc.) and track metrics like latency, error rates, and throughput;</li>
+        </ul>
+    </div>
+
+    <pre>
+| Feature                 | Kong              | Spring Cloud Gateway    |
+| ----------------------- | ----------------- | ----------------------- |
+| Reverse Proxy           | ✅                 | ✅                       |
+| JWT Validation          | ✅ Built-in plugin | ✅ via Spring Security   |
+| OAuth2 / OIDC           | ✅ Plugin          | ✅ via Spring Security   |
+| Rate Limiting           | ✅ Built-in        | ⚠ Requires Redis filter |
+| API Key Management      | ✅                 | Custom                  |
+| Plugin Ecosystem        | Large             | Limited (filters)       |
+| Admin API               | ✅                 | ❌                       |
+| Dynamic Reconfiguration | ✅                 | Limited                 |
+| Developer Portal        | Enterprise        | ❌                       |
+| Language Flexibility    | Any backend       | Java-only logic         |
+
+    </pre>
+</body>
+
+</html>
