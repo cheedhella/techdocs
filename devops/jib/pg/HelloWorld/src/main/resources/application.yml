@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: spring-boot-jib-demo
+  
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.example.demo: DEBUG
