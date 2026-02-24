@@ -1,29 +1,86 @@
 # A simple Spring Boot REST API demonstrating containerization with Google Jib.
 
-# Navigate to project
+### 1. Navigate to project
 cd /Users/mcheedhe/Data/techdocs/devops/jib/pg
+
+### 2. Build and Run Locally
+mvn clean package
+mvn spring-boot:run
+
+### 3. Test the Application
+curl http://10.253.229.200:8080/api/hello
+curl http://10.253.229.200:8080/api/hello/World
+curl http://10.253.229.200:8080/api/health
+
+### 4.1 Build Docker Image to local docker daemon
+mvn compile jib:dockerBuild
+
+# docker images
+REPOSITORY             TAG            IMAGE ID       CREATED             SIZE
+cheedhella/jib-demo    1.0-SNAPSHOT   f9180e289309   5 seconds ago       286MB
+cheedhella/jib-demo    latest         f9180e289309   5 seconds ago       286MB
+
+### 4.2 Build and push to registry
+# Option 1: Set environment variables in shell;
+export DOCKER_USERNAME=cheedhella
+export DOCKER_PASSWORD=<your-access-token>
+mvn compile jib:build
+
+# Options 2: pass directly from command line;
+mvn compile jib:build -Djib.to.auth.username=cheedhella -Djib.to.auth.password=<access-token>
+Note: You can also pass image name from CLI:  -Dimage=docker.io/cheedhella/jib-demo
+
+# Option 3: Login before running
+docker login -u cheedhella
+Access Token: <access-token>
+
+
+
+
+
+
+
+
+
+Docker Image Name 
+    Syntax: [registry]/[namespace]/[repository]:[tag]
+    Eg: docker.io/cheedhella/jib-demo:tagname
+
+    Registry
+        If you omit it, docker automatically assumes docker.io; // docker.io
+
+    Namespace 
+        Your docker hub account; // cheedhella 
+
+    Repository 
+        It specifies Image Name; // jib-demo
+
+    tagname
+        It specifies the version; // latest
+
+    When you run: docker pull docker.io/cheedhella/jib-pg:tagname
+        Docker will:
+          Connect to Docker Hub
+          Look under user cheedhella
+          Find repository jib-pg
+          Pull the image with tag tagname
+
+    What happens, if Repository Does NOT Exist on Docker Hub?
+        Docker will try to:
+          Authenticate you
+          Check if you own cheedhella
+          Create the repository automatically (if allowed)
+
+
+
 
 # Option 1: Interactive script
 ./quick-start.sh
 
-### 1. Build and Run Locally
-```bash
-cd /Users/mcheedhe/Data/techdocs/devops/jib/pg
-mvn clean package
-mvn spring-boot:run
-```
 
-### 2. Test the Application
-```bash
-curl http://localhost:8080/api/hello
-curl http://localhost:8080/api/hello/World
-curl http://localhost:8080/api/health
-```
-
-### 3. Build Docker Image with Jib
+### 3.
 ```bash
 # Build to local Docker daemon
-mvn compile jib:dockerBuild
 
 # Run the container
 docker run -p 8080:8080 spring-boot-jib-demo:1.0-SNAPSHOT
@@ -54,12 +111,6 @@ curl http://localhost:8080/api/hello/John
 curl http://localhost:8080/api/health
 curl http://localhost:8080/actuator/health
 
-
-# Option 1: Build to local Docker
-mvn compile jib:dockerBuild
-
-# Option 2: Build and push to registry
-mvn compile jib:build -Dimage=docker.io/USERNAME/spring-boot-jib-demo
 
 # Option 3: Build as tarball
 mvn compile jib:buildTar

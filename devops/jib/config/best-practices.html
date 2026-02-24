@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Best Practices</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>10. Best Practices &amp; Recommendations</h2>
+    </div>
+
+    <div class="question"><strong>Security Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use Distroless Images:</strong> Minimal attack surface, no shell or package managers</li>
+            <li><strong>Run as Non-Root:</strong> Always set <code>&lt;user&gt;nonroot:nonroot&lt;/user&gt;</code></li>
+            <li><strong>Never Hardcode Credentials:</strong> Use environment variables or credential helpers</li>
+            <li><strong>Scan for Vulnerabilities:</strong> Integrate Trivy, Grype, or Snyk in CI/CD</li>
+            <li><strong>Use Specific Tags:</strong> Avoid <code>latest</code> tag in production</li>
+            <li><strong>Sign Images:</strong> Use Cosign or Notary for image signing</li>
+        </ul>
+
+        <h4>Production Configuration (Maximum Security)</h4>
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;from&gt;
+        &lt;image&gt;gcr.io/distroless/java17-debian12:nonroot&lt;/image&gt;
+    &lt;/from&gt;
+    &lt;to&gt;
+        &lt;image&gt;prod-registry.io/${project.artifactId}&lt;/image&gt;
+        &lt;tags&gt;
+            &lt;tag&gt;${project.version}&lt;/tag&gt;
+            &lt;tag&gt;${git.commit.id.abbrev}&lt;/tag&gt;
+        &lt;/tags&gt;
+        &lt;auth&gt;
+            &lt;username&gt;${env.REGISTRY_USER}&lt;/username&gt;
+            &lt;password&gt;${env.REGISTRY_PASSWORD}&lt;/password&gt;
+        &lt;/auth&gt;
+    &lt;/to&gt;
+    &lt;container&gt;
+        &lt;jvmFlags&gt;
+            &lt;jvmFlag&gt;-Xms512m&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-Xmx1024m&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:MaxRAMPercentage=75.0&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:+ExitOnOutOfMemoryError&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-Djava.security.egd=file:/dev/./urandom&lt;/jvmFlag&gt;
+        &lt;/jvmFlags&gt;
+        &lt;user&gt;nonroot:nonroot&lt;/user&gt;
+        &lt;format&gt;OCI&lt;/format&gt;
+        &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+    &lt;/container&gt;
+    &lt;allowInsecureRegistries&gt;false&lt;/allowInsecureRegistries&gt;
+&lt;/configuration&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>Performance Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use Appropriate Base Image:</strong> JRE for runtime, not JDK</li>
+            <li><strong>Optimize JVM Flags:</strong> Set memory limits matching container resources</li>
+            <li><strong>Enable Container Support:</strong> <code>-XX:+UseContainerSupport</code></li>
+            <li><strong>Use Percentage-Based Memory:</strong> <code>-XX:MaxRAMPercentage=75.0</code></li>
+            <li><strong>Leverage Caching:</strong> Don't disable Jib's caching mechanism</li>
+            <li><strong>Minimize Extra Files:</strong> Only include necessary files</li>
+        </ul>
+
+        <h4>Kubernetes-Optimized Configuration</h4>
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;container&gt;
+        &lt;jvmFlags&gt;
+            &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:MaxRAMPercentage=75.0&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:InitialRAMPercentage=50.0&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:+ExitOnOutOfMemoryError&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:+HeapDumpOnOutOfMemoryError&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:HeapDumpPath=/tmp/heapdump.hprof&lt;/jvmFlag&gt;
+        &lt;/jvmFlags&gt;
+        &lt;labels&gt;
+            &lt;app.kubernetes.io/name&gt;${project.artifactId}&lt;/app.kubernetes.io/name&gt;
+            &lt;app.kubernetes.io/version&gt;${project.version}&lt;/app.kubernetes.io/version&gt;
+            &lt;app.kubernetes.io/component&gt;backend&lt;/app.kubernetes.io/component&gt;
+        &lt;/labels&gt;
+    &lt;/container&gt;
+&lt;/configuration&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>Reproducibility Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Pin Base Image Versions:</strong> Use digest instead of tags</li>
+            <li><strong>Set Creation Time:</strong> Use <code>EPOCH_PLUS_SECOND</code> for reproducible builds</li>
+            <li><strong>Lock Dependencies:</strong> Use dependency lock files</li>
+            <li><strong>Document Configuration:</strong> Comment your pom.xml settings</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>CI/CD Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use Multi-Stage Tagging:</strong> Tag with version, commit SHA, and build number</li>
+            <li><strong>Store Image Digests:</strong> Use outputPaths for deployment tracking</li>
+            <li><strong>Implement Image Scanning:</strong> Scan before pushing to production</li>
+            <li><strong>Use Credential Helpers:</strong> Avoid storing passwords in CI/CD</li>
+            <li><strong>Cache Between Builds:</strong> Configure CI to cache Jib layers</li>
+        </ul>
+
+        <h4>GitHub Actions CI/CD Integration</h4>
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;to&gt;
+        &lt;image&gt;ghcr.io/${env.GITHUB_REPOSITORY}/${project.artifactId}&lt;/image&gt;
+        &lt;tags&gt;
+            &lt;tag&gt;${env.GITHUB_SHA}&lt;/tag&gt;
+            &lt;tag&gt;${env.GITHUB_REF_NAME}&lt;/tag&gt;
+        &lt;/tags&gt;
+        &lt;auth&gt;
+            &lt;username&gt;${env.GITHUB_ACTOR}&lt;/username&gt;
+            &lt;password&gt;${env.GITHUB_TOKEN}&lt;/password&gt;
+        &lt;/auth&gt;
+    &lt;/to&gt;
+    &lt;container&gt;
+        &lt;labels&gt;
+            &lt;org.opencontainers.image.source&gt;${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}&lt;/org.opencontainers.image.source&gt;
+            &lt;org.opencontainers.image.revision&gt;${env.GITHUB_SHA}&lt;/org.opencontainers.image.revision&gt;
+        &lt;/labels&gt;
+    &lt;/container&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <h4>Troubleshooting Common Issues</h4>
+        <ul>
+            <li><strong>Authentication Failed:</strong>
+                <ul>
+                    <li>Verify credentials in environment variables</li>
+                    <li>Use credential helpers: <code>&lt;credHelper&gt;ecr-login&lt;/credHelper&gt;</code></li>
+                    <li>Check registry URL format</li>
+                </ul>
+            </li>
+            <li><strong>Base Image Pull Failed:</strong>
+                <ul>
+                    <li>Verify base image exists and is accessible</li>
+                    <li>Check network connectivity and proxy settings</li>
+                    <li>Add authentication if using private base image</li>
+                </ul>
+            </li>
+            <li><strong>Main Class Not Found:</strong>
+                <ul>
+                    <li>Explicitly set <code>&lt;mainClass&gt;</code> in configuration</li>
+                    <li>Verify the class has a main method</li>
+                    <li>Check package name is correct</li>
+                </ul>
+            </li>
+            <li><strong>Out of Memory During Build:</strong>
+                <ul>
+                    <li>Increase Maven memory: <code>MAVEN_OPTS="-Xmx2g"</code></li>
+                    <li>Use <code>useOnlyProjectCache</code> to reduce memory usage</li>
+                </ul>
+            </li>
+        </ul>
+        <p>Enable verbose logging for debugging: <code>mvn jib:build -X</code></p>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

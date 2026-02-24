@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Container Configuration</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>4. Container Configuration</h2>
+    </div>
+
+    <div class="question"><strong>Configuring Runtime Container Settings</strong></div>
+    <div class="answer">
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;container&gt;
+        &lt;!-- JVM Flags --&gt;
+        &lt;jvmFlags&gt;
+            &lt;jvmFlag&gt;-Xms512m&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-Xmx1024m&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:+UseG1GC&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-XX:MaxGCPauseMillis=100&lt;/jvmFlag&gt;
+            &lt;jvmFlag&gt;-Djava.security.egd=file:/dev/./urandom&lt;/jvmFlag&gt;
+        &lt;/jvmFlags&gt;
+        
+        &lt;!-- Main class (auto-detected if not specified) --&gt;
+        &lt;mainClass&gt;com.example.Application&lt;/mainClass&gt;
+        
+        &lt;!-- Application arguments --&gt;
+        &lt;args&gt;
+            &lt;arg&gt;--spring.profiles.active=prod&lt;/arg&gt;
+            &lt;arg&gt;--server.port=8080&lt;/arg&gt;
+        &lt;/args&gt;
+        
+        &lt;!-- Exposed ports --&gt;
+        &lt;ports&gt;
+            &lt;port&gt;8080&lt;/port&gt;
+            &lt;port&gt;8081&lt;/port&gt;
+        &lt;/ports&gt;
+        
+        &lt;!-- Environment variables --&gt;
+        &lt;environment&gt;
+            &lt;SPRING_PROFILES_ACTIVE&gt;production&lt;/SPRING_PROFILES_ACTIVE&gt;
+            &lt;JAVA_TOOL_OPTIONS&gt;-XX:+UseContainerSupport&lt;/JAVA_TOOL_OPTIONS&gt;
+            &lt;TZ&gt;UTC&lt;/TZ&gt;
+        &lt;/environment&gt;
+        
+        &lt;!-- Labels (metadata) --&gt;
+        &lt;labels&gt;
+            &lt;maintainer&gt;team@example.com&lt;/maintainer&gt;
+            &lt;version&gt;${project.version}&lt;/version&gt;
+            &lt;description&gt;My Spring Boot Application&lt;/description&gt;
+            &lt;org.opencontainers.image.source&gt;https://github.com/user/repo&lt;/org.opencontainers.image.source&gt;
+        &lt;/labels&gt;
+        
+        &lt;!-- Working directory --&gt;
+        &lt;workingDirectory&gt;/app&lt;/workingDirectory&gt;
+        
+        &lt;!-- User (run as non-root) --&gt;
+        &lt;user&gt;1000:1000&lt;/user&gt;
+        
+        &lt;!-- Image format --&gt;
+        &lt;format&gt;OCI&lt;/format&gt; &lt;!-- or Docker --&gt;
+        
+        &lt;!-- Creation time (for reproducibility) --&gt;
+        &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+        &lt;!-- or EPOCH_PLUS_SECOND for reproducible builds --&gt;
+        
+        &lt;!-- Volumes --&gt;
+        &lt;volumes&gt;
+            &lt;volume&gt;/tmp&lt;/volume&gt;
+            &lt;volume&gt;/app/logs&lt;/volume&gt;
+        &lt;/volumes&gt;
+        
+        &lt;!-- Entrypoint (overrides default) --&gt;
+        &lt;entrypoint&gt;
+            &lt;shell&gt;bash&lt;/shell&gt;
+            &lt;option&gt;-c&lt;/option&gt;
+            &lt;arg&gt;/app/startup.sh&lt;/arg&gt;
+        &lt;/entrypoint&gt;
+        
+        &lt;!-- App root directory in container --&gt;
+        &lt;appRoot&gt;/app&lt;/appRoot&gt;
+    &lt;/container&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <p><strong>Key Configuration Options Explained:</strong></p>
+        <ul>
+            <li><strong>jvmFlags:</strong> JVM memory settings, garbage collection, system properties</li>
+            <li><strong>mainClass:</strong> Entry point class (auto-detected from manifest if not specified)</li>
+            <li><strong>args:</strong> Command-line arguments passed to the application</li>
+            <li><strong>ports:</strong> Exposed ports (metadata only, doesn't publish ports)</li>
+            <li><strong>environment:</strong> Environment variables available at runtime</li>
+            <li><strong>labels:</strong> OCI image labels for metadata and documentation</li>
+            <li><strong>user:</strong> User ID and group ID to run as (security best practice)</li>
+            <li><strong>format:</strong> OCI (recommended) or Docker format</li>
+            <li><strong>creationTime:</strong> Image creation timestamp (affects reproducibility)</li>
+            <li><strong>volumes:</strong> Mount points for persistent data</li>
+            <li><strong>appRoot:</strong> Where application files are placed in the container</li>
+        </ul>
+
+        <h4>Container Entrypoint Modes</h4>
+        <pre><code class="language-xml">&lt;container&gt;
+    &lt;!-- Default: Java mode (recommended) --&gt;
+    &lt;entrypoint&gt;INHERIT&lt;/entrypoint&gt;
+    
+    &lt;!-- Custom shell entrypoint --&gt;
+    &lt;entrypoint&gt;
+        &lt;shell&gt;sh&lt;/shell&gt;
+        &lt;option&gt;-c&lt;/option&gt;
+        &lt;arg&gt;java $JAVA_OPTS -jar /app/app.jar&lt;/arg&gt;
+    &lt;/entrypoint&gt;
+    
+    &lt;!-- Exec form (no shell) --&gt;
+    &lt;entrypoint&gt;
+        &lt;exec&gt;
+            &lt;arg&gt;java&lt;/arg&gt;
+            &lt;arg&gt;-jar&lt;/arg&gt;
+            &lt;arg&gt;/app/app.jar&lt;/arg&gt;
+        &lt;/exec&gt;
+    &lt;/entrypoint&gt;
+&lt;/container&gt;</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

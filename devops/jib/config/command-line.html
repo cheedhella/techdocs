@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Command-Line Overrides</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>9. Command-Line Overrides</h2>
+    </div>
+
+    <div class="question"><strong>Overriding pom.xml Configuration from the Command Line</strong></div>
+    <div class="answer">
+        <pre><code class="language-bash"># Override target image
+mvn jib:build -Dimage=myregistry.io/myapp:v2.0
+
+# Set JVM flags
+mvn jib:build -Djib.container.jvmFlags=-Xmx1g,-Xms512m
+
+# Set environment variables
+mvn jib:build -Djib.container.environment=ENV=prod,DEBUG=false
+
+# Set ports
+mvn jib:build -Djib.container.ports=8080,9090
+
+# Override base image
+mvn jib:build -Djib.from.image=eclipse-temurin:21-jre
+
+# Set main class
+mvn jib:build -Djib.container.mainClass=com.example.Main
+
+# Set creation time
+mvn jib:build -Djib.container.creationTime=USE_CURRENT_TIMESTAMP
+
+# Skip Jib execution
+mvn package -Djib.skip=true
+
+# Use specific credentials
+mvn jib:build \
+  -Djib.to.auth.username=$USERNAME \
+  -Djib.to.auth.password=$PASSWORD
+
+# Build to Docker daemon
+mvn jib:dockerBuild -Dimage=myapp:local
+
+# Build as tarball
+mvn jib:buildTar -Djib.outputPaths.tar=target/myapp.tar
+
+# Build offline (use cached layers only)
+mvn jib:build -Djib.offline=true
+
+# Build with verbose output
+mvn jib:build -X</code></pre>
+
+        <p><strong>Common Command-Line Properties:</strong></p>
+        <ul>
+            <li><code>-Dimage</code> - Target image name</li>
+            <li><code>-Djib.from.image</code> - Base image</li>
+            <li><code>-Djib.to.tags</code> - Image tags (comma-separated)</li>
+            <li><code>-Djib.container.jvmFlags</code> - JVM flags (comma-separated)</li>
+            <li><code>-Djib.container.environment</code> - Environment variables</li>
+            <li><code>-Djib.container.ports</code> - Exposed ports</li>
+            <li><code>-Djib.container.user</code> - Container user</li>
+            <li><code>-Djib.skip</code> - Skip Jib execution</li>
+            <li><code>-Djib.allowInsecureRegistries</code> - Allow HTTP registries</li>
+        </ul>
+
+        <h4>Quick Reference Commands</h4>
+        <pre><code class="language-bash"># Build and push to registry
+mvn compile jib:build
+
+# Build to local Docker daemon
+mvn compile jib:dockerBuild
+
+# Build as tarball
+mvn compile jib:buildTar
+
+# Override image name
+mvn jib:build -Dimage=myregistry.io/myapp:v1.0
+
+# Use specific profile
+mvn jib:build -Pprod
+
+# Skip tests and build
+mvn clean package jib:build -DskipTests
+
+# Build with custom JVM flags
+mvn jib:build -Djib.container.jvmFlags=-Xmx2g,-Xms1g
+
+# Build with debug enabled
+mvn jib:dockerBuild \
+  -Djib.container.jvmFlags=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 \
+  -Djib.container.ports=8080,5005</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

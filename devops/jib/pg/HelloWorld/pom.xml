@@ -20,7 +20,10 @@
     
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <jib.version>3.4.0</jib.version>
+        <start-class>com.example.demo.DemoApplication</start-class>
     </properties>
     
     <dependencies>
@@ -43,9 +46,24 @@
     
     <build>
         <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.demo.DemoApplication</mainClass>
+                </configuration>
             </plugin>
             
             <!-- Jib Maven Plugin -->
@@ -55,14 +73,18 @@
                 <version>${jib.version}</version>
                 <configuration>
                     <from>
-                        <image>eclipse-temurin:17-jre</image>
+                        <image>eclipse-temurin:17-jre@sha256:ff692acf872589e72ca71b416b3e949ec19f35ebe8abb5365d2f31bce298e762</image>
                     </from>
                     <to>
-                        <image>docker.io/library/spring-boot-jib-demo</image>
+                        <image>docker.io/cheedhella/jib-demo</image>
                         <tags>
                             <tag>latest</tag>
                             <tag>${project.version}</tag>
                         </tags>
+                        <auth>
+                            <username>${env.DOCKER_USERNAME}</username>
+                            <password>${env.DOCKER_PASSWORD}</password>
+                        </auth>
                     </to>
                     <container>
                         <jvmFlags>

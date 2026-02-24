@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Complete Configuration Example</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>8. Complete Configuration Example</h2>
+    </div>
+
+    <div class="question"><strong>Production-Ready Jib Configuration</strong></div>
+    <div class="answer">
+        <p>A production-ready Jib configuration with all common options:</p>
+        
+        <pre><code class="language-xml">&lt;plugin&gt;
+    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.4.0&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;!-- Base Image --&gt;
+        &lt;from&gt;
+            &lt;image&gt;gcr.io/distroless/java17-debian12&lt;/image&gt;
+        &lt;/from&gt;
+        
+        &lt;!-- Target Image --&gt;
+        &lt;to&gt;
+            &lt;image&gt;ghcr.io/myorg/myapp&lt;/image&gt;
+            &lt;tags&gt;
+                &lt;tag&gt;latest&lt;/tag&gt;
+                &lt;tag&gt;${project.version}&lt;/tag&gt;
+                &lt;tag&gt;${git.commit.id.abbrev}&lt;/tag&gt;
+            &lt;/tags&gt;
+            &lt;auth&gt;
+                &lt;username&gt;${env.GITHUB_ACTOR}&lt;/username&gt;
+                &lt;password&gt;${env.GITHUB_TOKEN}&lt;/password&gt;
+            &lt;/auth&gt;
+        &lt;/to&gt;
+        
+        &lt;!-- Container Configuration --&gt;
+        &lt;container&gt;
+            &lt;jvmFlags&gt;
+                &lt;jvmFlag&gt;-Xms256m&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-Xmx512m&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-XX:MaxRAMPercentage=75.0&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-XX:+UseG1GC&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-Djava.security.egd=file:/dev/./urandom&lt;/jvmFlag&gt;
+            &lt;/jvmFlags&gt;
+            
+            &lt;mainClass&gt;com.example.Application&lt;/mainClass&gt;
+            
+            &lt;args&gt;
+                &lt;arg&gt;--spring.profiles.active=prod&lt;/arg&gt;
+            &lt;/args&gt;
+            
+            &lt;ports&gt;
+                &lt;port&gt;8080&lt;/port&gt;
+                &lt;port&gt;9090&lt;/port&gt;
+            &lt;/ports&gt;
+            
+            &lt;environment&gt;
+                &lt;SPRING_PROFILES_ACTIVE&gt;production&lt;/SPRING_PROFILES_ACTIVE&gt;
+                &lt;TZ&gt;UTC&lt;/TZ&gt;
+            &lt;/environment&gt;
+            
+            &lt;labels&gt;
+                &lt;maintainer&gt;devops@example.com&lt;/maintainer&gt;
+                &lt;version&gt;${project.version}&lt;/version&gt;
+                &lt;org.opencontainers.image.title&gt;${project.artifactId}&lt;/org.opencontainers.image.title&gt;
+                &lt;org.opencontainers.image.version&gt;${project.version}&lt;/org.opencontainers.image.version&gt;
+                &lt;org.opencontainers.image.created&gt;${maven.build.timestamp}&lt;/org.opencontainers.image.created&gt;
+                &lt;org.opencontainers.image.source&gt;https://github.com/myorg/myapp&lt;/org.opencontainers.image.source&gt;
+            &lt;/labels&gt;
+            
+            &lt;user&gt;nonroot:nonroot&lt;/user&gt;
+            &lt;workingDirectory&gt;/app&lt;/workingDirectory&gt;
+            &lt;format&gt;OCI&lt;/format&gt;
+            &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+            
+            &lt;volumes&gt;
+                &lt;volume&gt;/tmp&lt;/volume&gt;
+            &lt;/volumes&gt;
+        &lt;/container&gt;
+        
+        &lt;!-- Extra Files --&gt;
+        &lt;extraDirectories&gt;
+            &lt;paths&gt;
+                &lt;path&gt;
+                    &lt;from&gt;src/main/jib&lt;/from&gt;
+                &lt;/path&gt;
+            &lt;/paths&gt;
+            &lt;permissions&gt;
+                &lt;permission&gt;
+                    &lt;file&gt;/app/scripts/*.sh&lt;/file&gt;
+                    &lt;mode&gt;755&lt;/mode&gt;
+                &lt;/permission&gt;
+            &lt;/permissions&gt;
+        &lt;/extraDirectories&gt;
+        
+        &lt;!-- Output Paths --&gt;
+        &lt;outputPaths&gt;
+            &lt;digest&gt;${project.build.directory}/jib-image.digest&lt;/digest&gt;
+            &lt;imageId&gt;${project.build.directory}/jib-image.id&lt;/imageId&gt;
+        &lt;/outputPaths&gt;
+        
+        &lt;!-- Allow insecure registries (dev only) --&gt;
+        &lt;allowInsecureRegistries&gt;false&lt;/allowInsecureRegistries&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+
+        <h4>Profile-Based Configuration</h4>
+        <pre><code class="language-xml">&lt;profiles&gt;
+    &lt;!-- Development Profile --&gt;
+    &lt;profile&gt;
+        &lt;id&gt;dev&lt;/id&gt;
+        &lt;build&gt;
+            &lt;plugins&gt;
+                &lt;plugin&gt;
+                    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+                    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+                    &lt;configuration&gt;
+                        &lt;to&gt;
+                            &lt;image&gt;localhost:5000/myapp&lt;/image&gt;
+                        &lt;/to&gt;
+                        &lt;container&gt;
+                            &lt;jvmFlags&gt;
+                                &lt;jvmFlag&gt;-Xdebug&lt;/jvmFlag&gt;
+                                &lt;jvmFlag&gt;-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005&lt;/jvmFlag&gt;
+                            &lt;/jvmFlags&gt;
+                            &lt;ports&gt;
+                                &lt;port&gt;8080&lt;/port&gt;
+                                &lt;port&gt;5005&lt;/port&gt;
+                            &lt;/ports&gt;
+                        &lt;/container&gt;
+                    &lt;/configuration&gt;
+                &lt;/plugin&gt;
+            &lt;/plugins&gt;
+        &lt;/build&gt;
+    &lt;/profile&gt;
+    
+    &lt;!-- Production Profile --&gt;
+    &lt;profile&gt;
+        &lt;id&gt;prod&lt;/id&gt;
+        &lt;build&gt;
+            &lt;plugins&gt;
+                &lt;plugin&gt;
+                    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+                    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+                    &lt;configuration&gt;
+                        &lt;from&gt;
+                            &lt;image&gt;gcr.io/distroless/java17-debian12&lt;/image&gt;
+                        &lt;/from&gt;
+                        &lt;to&gt;
+                            &lt;image&gt;prod-registry.io/myapp&lt;/image&gt;
+                            &lt;tags&gt;
+                                &lt;tag&gt;${project.version}&lt;/tag&gt;
+                            &lt;/tags&gt;
+                        &lt;/to&gt;
+                        &lt;container&gt;
+                            &lt;jvmFlags&gt;
+                                &lt;jvmFlag&gt;-Xms512m&lt;/jvmFlag&gt;
+                                &lt;jvmFlag&gt;-Xmx1024m&lt;/jvmFlag&gt;
+                                &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+                            &lt;/jvmFlags&gt;
+                            &lt;user&gt;nonroot:nonroot&lt;/user&gt;
+                            &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+                        &lt;/container&gt;
+                    &lt;/configuration&gt;
+                &lt;/plugin&gt;
+            &lt;/plugins&gt;
+        &lt;/build&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

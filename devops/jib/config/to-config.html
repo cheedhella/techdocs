@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - To Configuration (Target Image)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>3. To Configuration (Target Image)</h2>
+    </div>
+
+    <div class="question"><strong>Configuring the Target Image</strong></div>
+    <div class="answer">
+        <p>Configure where and how your built image will be stored:</p>
+        
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;to&gt;
+        &lt;!-- Target image name --&gt;
+        &lt;image&gt;myregistry.io/myapp&lt;/image&gt;
+        
+        &lt;!-- Image tags --&gt;
+        &lt;tags&gt;
+            &lt;tag&gt;latest&lt;/tag&gt;
+            &lt;tag&gt;${project.version}&lt;/tag&gt;
+            &lt;tag&gt;${git.commit.id.abbrev}&lt;/tag&gt;
+        &lt;/tags&gt;
+        
+        &lt;!-- Registry authentication --&gt;
+        &lt;auth&gt;
+            &lt;username&gt;${env.DOCKER_USERNAME}&lt;/username&gt;
+            &lt;password&gt;${env.DOCKER_PASSWORD}&lt;/password&gt;
+        &lt;/auth&gt;
+        
+        &lt;!-- Credential helper (alternative to username/password) --&gt;
+        &lt;credHelper&gt;ecr-login&lt;/credHelper&gt;
+    &lt;/to&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <p><strong>Registry Examples:</strong></p>
+        <ul>
+            <li><strong>Docker Hub:</strong> <code>docker.io/username/myapp</code></li>
+            <li><strong>GitHub Container Registry:</strong> <code>ghcr.io/username/myapp</code></li>
+            <li><strong>Amazon ECR:</strong> <code>123456789.dkr.ecr.us-east-1.amazonaws.com/myapp</code></li>
+            <li><strong>Google Artifact Registry:</strong> <code>us-docker.pkg.dev/project-id/repo/myapp</code></li>
+            <li><strong>Azure Container Registry:</strong> <code>myregistry.azurecr.io/myapp</code></li>
+        </ul>
+
+        <p><strong>Credential Helpers:</strong></p>
+        <ul>
+            <li><code>ecr-login</code> - AWS ECR</li>
+            <li><code>gcr</code> - Google Container Registry</li>
+            <li><code>osxkeychain</code> - macOS Keychain</li>
+            <li><code>wincred</code> - Windows Credential Manager</li>
+            <li><code>pass</code> - Linux pass utility</li>
+        </ul>
+
+        <h4>Alternative Authentication Methods</h4>
+
+        <p><strong>1. Docker Config File (Recommended for Local Development):</strong></p>
+        <pre><code class="language-bash"># Login via Docker CLI - credentials saved to ~/.docker/config.json
+docker login myregistry.io
+
+# Jib automatically reads credentials from Docker config
+mvn jib:build</code></pre>
+
+        <p><strong>2. Maven settings.xml (Recommended for CI/CD):</strong></p>
+        <pre><code class="language-xml">&lt;!-- ~/.m2/settings.xml --&gt;
+&lt;settings&gt;
+    &lt;servers&gt;
+        &lt;server&gt;
+            &lt;id&gt;docker.io&lt;/id&gt;
+            &lt;username&gt;${env.DOCKER_USERNAME}&lt;/username&gt;
+            &lt;password&gt;${env.DOCKER_PASSWORD}&lt;/password&gt;
+        &lt;/server&gt;
+        &lt;server&gt;
+            &lt;id&gt;ghcr.io&lt;/id&gt;
+            &lt;username&gt;${env.GITHUB_ACTOR}&lt;/username&gt;
+            &lt;password&gt;${env.GITHUB_TOKEN}&lt;/password&gt;
+        &lt;/server&gt;
+        &lt;server&gt;
+            &lt;id&gt;gcr.io&lt;/id&gt;
+            &lt;username&gt;_json_key&lt;/username&gt;
+            &lt;password&gt;${env.GOOGLE_APPLICATION_CREDENTIALS}&lt;/password&gt;
+        &lt;/server&gt;
+    &lt;/servers&gt;
+&lt;/settings&gt;</code></pre>
+
+        <p><strong>3. Command-Line (For Quick Testing):</strong></p>
+        <pre><code class="language-bash">mvn jib:build \
+  -Djib.to.auth.username=$USERNAME \
+  -Djib.to.auth.password=$PASSWORD</code></pre>
+
+        <p><strong>4. Environment Variables (CI/CD):</strong></p>
+        <pre><code class="language-xml">&lt;to&gt;
+    &lt;auth&gt;
+        &lt;username&gt;${env.REGISTRY_USERNAME}&lt;/username&gt;
+        &lt;password&gt;${env.REGISTRY_PASSWORD}&lt;/password&gt;
+    &lt;/auth&gt;
+&lt;/to&gt;</code></pre>
+
+        <p><strong>Authentication Priority Order:</strong></p>
+        <ol>
+            <li>Explicit <code>&lt;auth&gt;</code> in pom.xml configuration</li>
+            <li>Command-line properties (<code>-Djib.to.auth.username</code>)</li>
+            <li>Maven settings.xml server credentials</li>
+            <li>Credential helpers (ecr-login, gcr, etc.)</li>
+            <li>Docker config file (~/.docker/config.json)</li>
+        </ol>
+    </div>
+
+    <div class="question"><strong>How to Generate a Docker Hub Access Token</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An access token is safer than using your Docker Hub password directly in CI/CD pipelines or CLI logins;</li>
+            <li>Steps to generate:
+                <ol>
+                    <li>Log in to <strong>hub.docker.com</strong>;</li>
+                    <li>Click your avatar (top-right) → <strong>My Account</strong>;</li>
+                    <li>Go to <strong>Security</strong> → <strong>New Access Token</strong>;</li>
+                    <li>Give it a description (e.g. <em>jib-ci-token</em>) and select permissions (<strong>Read &amp; Write</strong> for pushing images);</li>
+                    <li>Click <strong>Generate</strong> and copy the token — it is shown only once;</li>
+                </ol>
+            </li>
+            <li>Use the token to log in via CLI:
+                <pre><code class="language-bash">docker login -u &lt;your-dockerhub-username&gt; -p &lt;access-token&gt;</code></pre>
+            </li>
+            <li>Or pass credentials directly to Jib without a docker login:
+                <pre><code class="language-bash">mvn compile jib:build \
+  -Djib.to.auth.username=&lt;your-dockerhub-username&gt; \
+  -Djib.to.auth.password=&lt;access-token&gt;</code></pre>
+            </li>
+            <li>For CI/CD, store the token as a secret environment variable (e.g. <code>DOCKER_TOKEN</code>) and pass it as:
+                <pre><code class="language-bash">mvn compile jib:build \
+  -Djib.to.auth.username=&lt;your-dockerhub-username&gt; \
+  -Djib.to.auth.password=${DOCKER_TOKEN}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

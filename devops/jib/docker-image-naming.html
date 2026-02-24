@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Docker Image Naming</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker Image Naming</h2>
+    </div>
+
+    <div class="question"><strong>1. Image Name Syntax</strong></div>
+    <div class="answer">
+        <pre><code class="language-bash">[registry]/[namespace]/[repository]:[tag]</code></pre>
+        <p>Example:</p>
+        <pre><code class="language-bash">docker.io/cheedhella/jib-demo:latest</code></pre>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Part</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>registry</strong></td>
+                    <td>The container registry host. If omitted, Docker defaults to <code>docker.io</code></td>
+                    <td><code>docker.io</code>, <code>ghcr.io</code>, <code>gcr.io</code></td>
+                </tr>
+                <tr>
+                    <td><strong>namespace</strong></td>
+                    <td>Your Docker Hub account name (or organisation)</td>
+                    <td><code>cheedhella</code></td>
+                </tr>
+                <tr>
+                    <td><strong>repository</strong></td>
+                    <td>The image name</td>
+                    <td><code>jib-demo</code></td>
+                </tr>
+                <tr>
+                    <td><strong>tag</strong></td>
+                    <td>The version label. Defaults to <code>latest</code> if omitted</td>
+                    <td><code>latest</code>, <code>1.0-SNAPSHOT</code>, <code>v2.1</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. What Happens When You Pull an Image</strong></div>
+    <div class="answer">
+        <p>When you run:</p>
+        <pre><code class="language-bash">docker pull docker.io/cheedhella/jib-demo:latest</code></pre>
+        <p>Docker will:</p>
+        <ol>
+            <li>Connect to Docker Hub (<code>docker.io</code>)</li>
+            <li>Look under the namespace <code>cheedhella</code></li>
+            <li>Find the repository <code>jib-demo</code></li>
+            <li>Pull the image with tag <code>latest</code></li>
+        </ol>
+    </div>
+
+    <div class="question"><strong>3. What Happens if the Repository Does Not Exist on Docker Hub?</strong></div>
+    <div class="answer">
+        <p>When pushing (e.g. via <code>jib:build</code>), Docker / Jib will:</p>
+        <ol>
+            <li>Authenticate you with your credentials</li>
+            <li>Verify you own the namespace (<code>cheedhella</code>)</li>
+            <li>Create the repository automatically (if your account allows it)</li>
+            <li>Push the image layers and manifest</li>
+        </ol>
+        <p>When <strong>pulling</strong> a non-existent repository, Docker will return a <code>404 Not Found</code> error.</p>
+    </div>
+
+    <div class="question"><strong>4. Common Registry Formats</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Registry</th>
+                    <th>Image Name Format</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Docker Hub</td>
+                    <td><code>docker.io/username/myapp:tag</code></td>
+                </tr>
+                <tr>
+                    <td>GitHub Container Registry</td>
+                    <td><code>ghcr.io/username/myapp:tag</code></td>
+                </tr>
+                <tr>
+                    <td>Google Artifact Registry</td>
+                    <td><code>us-docker.pkg.dev/project-id/repo/myapp:tag</code></td>
+                </tr>
+                <tr>
+                    <td>Amazon ECR</td>
+                    <td><code>123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:tag</code></td>
+                </tr>
+                <tr>
+                    <td>Azure Container Registry</td>
+                    <td><code>myregistry.azurecr.io/myapp:tag</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Setting the Image Name in Jib</strong></div>
+    <div class="answer">
+        <p><strong>In pom.xml:</strong></p>
+        <pre><code class="language-xml">&lt;to&gt;
+    &lt;image&gt;docker.io/cheedhella/jib-demo&lt;/image&gt;
+    &lt;tags&gt;
+        &lt;tag&gt;latest&lt;/tag&gt;
+        &lt;tag&gt;${project.version}&lt;/tag&gt;
+    &lt;/tags&gt;
+&lt;/to&gt;</code></pre>
+
+        <p><strong>Override from CLI:</strong></p>
+        <pre><code class="language-bash">mvn compile jib:build -Dimage=docker.io/cheedhella/jib-demo:v2.0</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

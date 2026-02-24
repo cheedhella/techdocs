@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Output Paths</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>6. Output Paths Configuration</h2>
+    </div>
+
+    <div class="question"><strong>Configuring Where Jib Stores Build Artifacts</strong></div>
+    <div class="answer">
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;outputPaths&gt;
+        &lt;!-- Where to save the image digest --&gt;
+        &lt;digest&gt;${project.build.directory}/jib-image.digest&lt;/digest&gt;
+        
+        &lt;!-- Where to save the image ID --&gt;
+        &lt;imageId&gt;${project.build.directory}/jib-image.id&lt;/imageId&gt;
+        
+        &lt;!-- Where to save the image JSON --&gt;
+        &lt;imageJson&gt;${project.build.directory}/jib-image.json&lt;/imageJson&gt;
+        
+        &lt;!-- Tarball output location (for jib:buildTar) --&gt;
+        &lt;tar&gt;${project.build.directory}/jib-image.tar&lt;/tar&gt;
+    &lt;/outputPaths&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <p><strong>Why Use Output Paths:</strong></p>
+        <ul>
+            <li>Track image digests for deployment verification</li>
+            <li>Use image ID in subsequent CI/CD steps</li>
+            <li>Store image metadata for auditing</li>
+            <li>Generate SBOM (Software Bill of Materials)</li>
+        </ul>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

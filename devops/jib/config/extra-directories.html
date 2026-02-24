@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - Extra Directories</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>5. Extra Directories Configuration</h2>
+    </div>
+
+    <div class="question"><strong>Adding Additional Files and Directories to Your Image</strong></div>
+    <div class="answer">
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;extraDirectories&gt;
+        &lt;!-- Simple path --&gt;
+        &lt;paths&gt;
+            &lt;path&gt;src/main/jib&lt;/path&gt;
+        &lt;/paths&gt;
+        
+        &lt;!-- Advanced: Multiple paths with different targets --&gt;
+        &lt;paths&gt;
+            &lt;path&gt;
+                &lt;from&gt;src/main/custom-files&lt;/from&gt;
+                &lt;into&gt;/app/config&lt;/into&gt;
+            &lt;/path&gt;
+            &lt;path&gt;
+                &lt;from&gt;scripts&lt;/from&gt;
+                &lt;into&gt;/app/scripts&lt;/into&gt;
+                &lt;includes&gt;*.sh&lt;/includes&gt;
+                &lt;excludes&gt;test-*.sh&lt;/excludes&gt;
+            &lt;/path&gt;
+        &lt;/paths&gt;
+        
+        &lt;!-- Set permissions for files --&gt;
+        &lt;permissions&gt;
+            &lt;permission&gt;
+                &lt;file&gt;/app/scripts/startup.sh&lt;/file&gt;
+                &lt;mode&gt;755&lt;/mode&gt;
+            &lt;/permission&gt;
+            &lt;permission&gt;
+                &lt;file&gt;/app/config/*&lt;/file&gt;
+                &lt;mode&gt;644&lt;/mode&gt;
+            &lt;/permission&gt;
+        &lt;/permissions&gt;
+    &lt;/extraDirectories&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <p><strong>Common Use Cases:</strong></p>
+        <ul>
+            <li>Add configuration files (application.yml, logback.xml)</li>
+            <li>Include startup scripts or health check scripts</li>
+            <li>Add SSL certificates or keystores</li>
+            <li>Include static resources or templates</li>
+            <li>Add monitoring agents (APM tools, Prometheus exporters)</li>
+        </ul>
+
+        <h4>APM Agent Integration (e.g., New Relic, Datadog)</h4>
+        <pre><code class="language-xml">&lt;extraDirectories&gt;
+    &lt;paths&gt;
+        &lt;path&gt;
+            &lt;from&gt;agents&lt;/from&gt;
+            &lt;into&gt;/app/agents&lt;/into&gt;
+        &lt;/path&gt;
+    &lt;/paths&gt;
+&lt;/extraDirectories&gt;
+&lt;container&gt;
+    &lt;jvmFlags&gt;
+        &lt;jvmFlag&gt;-javaagent:/app/agents/newrelic-agent.jar&lt;/jvmFlag&gt;
+    &lt;/jvmFlags&gt;
+    &lt;environment&gt;
+        &lt;NEW_RELIC_APP_NAME&gt;myapp&lt;/NEW_RELIC_APP_NAME&gt;
+        &lt;NEW_RELIC_LICENSE_KEY&gt;${env.NEW_RELIC_KEY}&lt;/NEW_RELIC_LICENSE_KEY&gt;
+    &lt;/environment&gt;
+&lt;/container&gt;</code></pre>
+
+        <h4>Custom Startup Script</h4>
+        <pre><code class="language-xml">&lt;extraDirectories&gt;
+    &lt;paths&gt;
+        &lt;path&gt;
+            &lt;from&gt;scripts&lt;/from&gt;
+            &lt;into&gt;/app/scripts&lt;/into&gt;
+        &lt;/path&gt;
+    &lt;/paths&gt;
+    &lt;permissions&gt;
+        &lt;permission&gt;
+            &lt;file&gt;/app/scripts/startup.sh&lt;/file&gt;
+            &lt;mode&gt;755&lt;/mode&gt;
+        &lt;/permission&gt;
+    &lt;/permissions&gt;
+&lt;/extraDirectories&gt;
+&lt;container&gt;
+    &lt;entrypoint&gt;
+        &lt;shell&gt;sh&lt;/shell&gt;
+        &lt;option&gt;-c&lt;/option&gt;
+        &lt;arg&gt;/app/scripts/startup.sh&lt;/arg&gt;
+    &lt;/entrypoint&gt;
+&lt;/container&gt;</code></pre>
+
+        <h4>Native Library Support</h4>
+        <pre><code class="language-xml">&lt;extraDirectories&gt;
+    &lt;paths&gt;
+        &lt;path&gt;
+            &lt;from&gt;src/main/native-libs&lt;/from&gt;
+            &lt;into&gt;/app/native&lt;/into&gt;
+        &lt;/path&gt;
+    &lt;/paths&gt;
+&lt;/extraDirectories&gt;
+&lt;container&gt;
+    &lt;jvmFlags&gt;
+        &lt;jvmFlag&gt;-Djava.library.path=/app/native&lt;/jvmFlag&gt;
+    &lt;/jvmFlags&gt;
+&lt;/container&gt;</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib - From Configuration (Base Image)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+    <script src="../../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>2. From Configuration (Base Image)</h2>
+    </div>
+
+    <div class="question"><strong>Configuring the Base Image</strong></div>
+    <div class="answer">
+        <p>Configure the base image your application will be built on:</p>
+
+        <p><strong>Default Base Images (if not specified):</strong></p>
+        <ul>
+            <li><strong>JAR files:</strong> <code>eclipse-temurin:17-jre</code> (or latest available Java 17 JRE)</li>
+            <li><strong>WAR files:</strong> <code>jetty:11-jre17-alpine</code> (Jetty servlet container)</li>
+        </ul>
+        
+        <pre><code class="language-xml">&lt;configuration&gt;
+    &lt;from&gt;
+        &lt;!-- Base image --&gt;
+        &lt;image&gt;eclipse-temurin:17-jre&lt;/image&gt;
+        
+        &lt;!-- Alternative: Use distroless for smaller, more secure images --&gt;
+        &lt;!-- &lt;image&gt;gcr.io/distroless/java17-debian12&lt;/image&gt; --&gt;
+        
+        &lt;!-- Authentication for private base images --&gt;
+        &lt;auth&gt;
+            &lt;username&gt;${env.REGISTRY_USERNAME}&lt;/username&gt;
+            &lt;password&gt;${env.REGISTRY_PASSWORD}&lt;/password&gt;
+        &lt;/auth&gt;
+        
+        &lt;!-- Specify platform (for multi-arch) --&gt;
+        &lt;platforms&gt;
+            &lt;platform&gt;
+                &lt;architecture&gt;amd64&lt;/architecture&gt;
+                &lt;os&gt;linux&lt;/os&gt;
+            &lt;/platform&gt;
+            &lt;platform&gt;
+                &lt;architecture&gt;arm64&lt;/architecture&gt;
+                &lt;os&gt;linux&lt;/os&gt;
+            &lt;/platform&gt;
+        &lt;/platforms&gt;
+    &lt;/from&gt;
+&lt;/configuration&gt;</code></pre>
+
+        <p><strong>Popular Base Images:</strong></p>
+        <ul>
+            <li><code>eclipse-temurin:17-jre</code> - OpenJDK 17 (recommended for most apps)</li>
+            <li><code>eclipse-temurin:21-jre</code> - OpenJDK 21 (latest LTS)</li>
+            <li><code>gcr.io/distroless/java17-debian12</code> - Minimal distroless image (most secure)</li>
+            <li><code>amazoncorretto:17</code> - Amazon's OpenJDK distribution</li>
+            <li><code>azul/zulu-openjdk:17-jre</code> - Azul's OpenJDK build</li>
+        </ul>
+
+        <h4>Using Image Digest Instead of Tag</h4>
+        <pre><code class="language-xml">&lt;from&gt;
+    &lt;!-- More secure: pin to specific digest --&gt;
+    &lt;image&gt;gcr.io/distroless/java17-debian12@sha256:abc123...&lt;/image&gt;
+&lt;/from&gt;</code></pre>
+    </div>
+
+    <script>
+        hljs.highlightAll();
+    </script>
+</body>
+
+</html>
