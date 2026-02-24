@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Docker — Container Lifecycle</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker — Container Lifecycle</h2>
+    </div>
+
+    <div class="question"><strong>1. Container States</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Docker container moves through a well-defined set of states from creation to removal;</li>
+            <li>Understanding these states is essential for managing containers correctly in production;</li>
+        </ul>
+        <pre><code class="language-text">
+  docker create ──▶ [ created ]
+                         │
+                    docker start
+                         │
+                         ▼
+                    [ running ] ◀──── docker restart
+                    /    │    \
+         docker   /     │     \  docker
+         pause   /      │      \ stop / kill
+                ▼       │       ▼
+           [ paused ]   │   [ stopped / exited ]
+                │       │       │
+         docker │       │       │ docker start
+         unpause│       │       │
+                └──▶[ running ] │
+                                │
+                           docker rm
+                                │
+                                ▼
+                          [ removed ]
+        </code></pre>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>State</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>created</strong></td><td>Container has been created (<code>docker create</code>) but not yet started. Filesystem is set up; no process is running;</td></tr>
+                <tr><td><strong>running</strong></td><td>Container process is actively executing. Entered via <code>docker start</code> or <code>docker run</code>;</td></tr>
+                <tr><td><strong>paused</strong></td><td>All processes in the container are suspended via SIGSTOP. CPU is released but memory is retained;</td></tr>
+                <tr><td><strong>stopped / exited</strong></td><td>The main process has terminated (either normally or via <code>docker stop</code> / <code>docker kill</code>). Container still exists on disk and can be restarted;</td></tr>
+                <tr><td><strong>removed</strong></td><td>Container has been deleted with <code>docker rm</code>. Its writable layer is gone permanently;</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Creating a Container</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>docker run</code> is the most common way — it pulls the image (if not cached), creates, and starts the container in one step;</li>
+            <li><code>docker create</code> only prepares the container (allocates filesystem, sets config) without starting it; useful for pre-staging;</li>
+        </ul>
+        <pre><code class="language-bash"># Pull image + create + start (most common)
+docker run nginx
+
+# Run in background (detached)
+docker run -d --name my-nginx nginx
+
+# Run interactively with a shell
+docker run -it ubuntu /bin/bash
+
+# Run, then auto-remove when it exits
+docker run --rm alpine echo "hello"
+
+# Create only (do not start)
+docker create --name my-nginx nginx</code></pre>
+        <p><strong>What happens internally when you run <code>docker run -it ubuntu /bin/bash</code>:</strong></p>
+        <ul>
+            <li>Docker checks the local image cache for <code>ubuntu</code>; if not found, pulls it from Docker Hub;</li>
+            <li>Docker Daemon creates a new container — sets up namespaces, cgroups, and a writable layer on top of the image;</li>
+            <li>Docker allocates a virtual network interface and assigns an IP address to the container;</li>
+            <li>Docker starts the container and executes <code>/bin/bash</code>;</li>
+            <li>Because <code>-it</code> was specified, your terminal's STDIN/STDOUT is attached to the container's shell;</li>
+            <li>When you type <code>exit</code>, the shell process ends, and the container moves to the <em>exited</em> state (but is not removed);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Starting &amp; Stopping</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Signal Sent</th><th>Behaviour</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker stop &lt;container&gt;</code></td><td>SIGTERM → (10 s grace) → SIGKILL</td><td>Graceful shutdown — gives the app time to clean up, flush buffers, close connections;</td></tr>
+                <tr><td><code>docker kill &lt;container&gt;</code></td><td>SIGKILL (default)</td><td>Immediate, forceful termination — no cleanup time;</td></tr>
+                <tr><td><code>docker restart &lt;container&gt;</code></td><td>SIGTERM → SIGKILL → start</td><td>Equivalent to <code>stop</code> followed by <code>start</code>;</td></tr>
+                <tr><td><code>docker start &lt;container&gt;</code></td><td>—</td><td>Starts a previously stopped container, reusing its existing writable layer;</td></tr>
+                <tr><td><code>docker pause &lt;container&gt;</code></td><td>SIGSTOP</td><td>Freezes all processes; container stays in memory but uses no CPU;</td></tr>
+                <tr><td><code>docker unpause &lt;container&gt;</code></td><td>SIGCONT</td><td>Resumes a paused container;</td></tr>
+            </tbody>
+        </table>
+        <pre><code class="language-bash">docker stop my-nginx            # graceful stop (waits up to 10 s)
+docker stop -t 30 my-nginx      # extend grace period to 30 s
+docker kill my-nginx            # immediate kill
+docker restart my-nginx         # stop + start
+docker start my-nginx           # start a stopped container</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Interacting with a Running Container</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong><code>docker exec</code></strong> — runs a new process inside an already-running container. The container must be in the <em>running</em> state;</li>
+            <li><strong><code>docker attach</code></strong> — attaches your terminal to the container's main process (PID 1). Use <strong>Ctrl+P then Ctrl+Q</strong> to detach without stopping the container;</li>
+            <li><strong><code>docker logs</code></strong> — reads the stdout/stderr of the container's main process without attaching to it;</li>
+        </ul>
+        <pre><code class="language-bash"># Open an interactive shell in a running container
+docker exec -it my-nginx /bin/bash
+
+# Run a one-off command
+docker exec my-nginx ls /etc/nginx
+
+# Run a command in a specific directory
+docker exec --workdir /app my-nginx cat config.yaml
+
+# Follow live logs
+docker logs -f my-nginx
+
+# Show last 50 lines with timestamps
+docker logs -t --tail 50 my-nginx
+
+# Attach to the main process (Ctrl+P Q to detach)
+docker attach my-nginx</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Inspecting Containers</strong></div>
+    <div class="answer">
+        <pre><code class="language-bash"># List running containers
+docker ps
+
+# List all containers (running + stopped)
+docker ps -a
+
+# List only container IDs
+docker ps -q
+
+# Filter by status
+docker ps --filter status=exited
+
+# Full JSON details (IP, mounts, env vars, etc.)
+docker inspect my-nginx
+
+# Running processes inside a container
+docker top my-nginx
+
+# Live CPU / memory / I/O stats
+docker stats my-nginx
+
+# Show port mappings
+docker port my-nginx
+
+# Show filesystem changes made inside the container
+docker diff my-nginx</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Copying Files</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>docker cp</code> copies files between the host filesystem and a container (running or stopped);</li>
+            <li>You cannot copy directly between two containers — copy to the host first, then to the destination container;</li>
+            <li>Prefer using <strong>bind mounts or volumes</strong> for persistent data exchange rather than <code>docker cp</code>;</li>
+        </ul>
+        <pre><code class="language-bash"># Copy from host to container
+docker cp ./config.yaml my-nginx:/etc/nginx/config.yaml
+
+# Copy from container to host
+docker cp my-nginx:/var/log/nginx/error.log ./error.log</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Removing Containers</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A stopped container still occupies disk space (its writable layer persists). Explicitly remove it when no longer needed;</li>
+            <li>You <strong>cannot remove a running container</strong> without the <code>-f</code> flag;</li>
+            <li>Use <code>--rm</code> on <code>docker run</code> to auto-remove the container as soon as it exits — ideal for one-off tasks;</li>
+        </ul>
+        <pre><code class="language-bash"># Remove a stopped container
+docker rm my-nginx
+
+# Force-remove a running container
+docker rm -f my-nginx
+
+# Remove all stopped containers
+docker container prune
+
+# Remove all stopped containers, unused networks, dangling images, and build cache
+docker system prune
+
+# Auto-remove on exit (use at creation time)
+docker run --rm alpine echo "done"</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Persisting Data — Volumes &amp; Bind Mounts</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A container's writable layer is <strong>ephemeral</strong> — all data written inside is lost when the container is removed;</li>
+            <li>To persist data, use <strong>volumes</strong> (managed by Docker) or <strong>bind mounts</strong> (a host directory mapped into the container);</li>
+        </ul>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Type</th><th>Syntax</th><th>Best For</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Named volume</strong></td><td><code>-v my-vol:/app/data</code></td><td>Persistent app data managed by Docker; portable across containers</td></tr>
+                <tr><td><strong>Bind mount</strong></td><td><code>-v /host/path:/container/path</code></td><td>Sharing source code or config files from the host during development</td></tr>
+                <tr><td><strong>tmpfs mount</strong></td><td><code>--tmpfs /tmp</code></td><td>In-memory temporary storage; not persisted to disk</td></tr>
+            </tbody>
+        </table>
+        <pre><code class="language-bash"># Named volume (Docker manages the storage location)
+docker run -d -v my-data:/var/lib/mysql mysql
+
+# Bind mount (host directory)
+docker run -d -v $(pwd)/html:/usr/share/nginx/html nginx
+
+# tmpfs (in-memory only)
+docker run -d --tmpfs /tmp:size=100m nginx</code></pre>
+    </div>
+
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

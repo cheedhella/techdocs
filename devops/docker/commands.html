@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Docker Commands</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker Commands</h2>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ SYSTEM -->
+    <div class="question"><strong>1. System &amp; Info</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker version</code></td><td>Show Docker client &amp; daemon version</td></tr>
+                <tr><td><code>docker info</code></td><td>Display system-wide info (storage driver, registry, resources)</td></tr>
+                <tr><td><code>docker system df</code></td><td>Show disk usage by images, containers, volumes &amp; build cache</td></tr>
+                <tr><td><code>docker system prune</code></td><td>Remove all stopped containers, unused networks, dangling images &amp; build cache</td></tr>
+                <tr><td><code>docker system prune -a</code></td><td>Same as above but also removes unused images</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ IMAGES -->
+    <div class="question"><strong>2. Images</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker images</code></td><td>List all locally cached images</td></tr>
+                <tr><td><code>docker image ls</code></td><td>Same as <code>docker images</code></td></tr>
+                <tr><td><code>docker image ls --filter dangling=true</code></td><td>List dangling (untagged) images</td></tr>
+                <tr><td><code>docker pull &lt;image&gt;[:tag]</code></td><td>Download an image from a registry (defaults to Docker Hub &amp; <code>latest</code> tag)</td></tr>
+                <tr><td><code>docker build -t &lt;name&gt;:&lt;tag&gt; .</code></td><td>Build an image from the Dockerfile in the current directory</td></tr>
+                <tr><td><code>docker build --no-cache -t &lt;name&gt;:&lt;tag&gt; .</code></td><td>Build image without using layer cache</td></tr>
+                <tr><td><code>docker build -f &lt;Dockerfile&gt; -t &lt;name&gt;:&lt;tag&gt; .</code></td><td>Build using a non-default Dockerfile name</td></tr>
+                <tr><td><code>docker tag &lt;src&gt;:&lt;tag&gt; &lt;target&gt;:&lt;tag&gt;</code></td><td>Create an additional tag for an existing image</td></tr>
+                <tr><td><code>docker image inspect &lt;image&gt;</code></td><td>Show detailed metadata (layers, env vars, ports, etc.)</td></tr>
+                <tr><td><code>docker history &lt;image&gt;</code></td><td>Show build history / layer commands of an image</td></tr>
+                <tr><td><code>docker search &lt;keyword&gt;</code></td><td>Search Docker Hub for images</td></tr>
+                <tr><td><code>docker manifest inspect &lt;image&gt;</code></td><td>Inspect a manifest list (multi-arch support check)</td></tr>
+                <tr><td><code>docker rmi &lt;image&gt;</code></td><td>Remove a local image</td></tr>
+                <tr><td><code>docker rmi -f $(docker images -aq)</code></td><td>Force-remove ALL local images</td></tr>
+                <tr><td><code>docker image prune</code></td><td>Remove all dangling images</td></tr>
+                <tr><td><code>docker image prune -a</code></td><td>Remove all dangling &amp; unused images</td></tr>
+                <tr><td><code>docker save -o &lt;file.tar&gt; &lt;image&gt;</code></td><td>Export an image to a tar archive</td></tr>
+                <tr><td><code>docker load -i &lt;file.tar&gt;</code></td><td>Import an image from a tar archive</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ CONTAINERS LIFECYCLE -->
+    <div class="question"><strong>3. Containers — Lifecycle</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker run &lt;image&gt;</code></td><td>Pull (if needed) &amp; create + start a new container</td></tr>
+                <tr><td><code>docker run -d &lt;image&gt;</code></td><td>Run container in detached (background) mode</td></tr>
+                <tr><td><code>docker run -it &lt;image&gt; /bin/bash</code></td><td>Run interactively with a shell session</td></tr>
+                <tr><td><code>docker run --rm &lt;image&gt;</code></td><td>Auto-remove container when it exits</td></tr>
+                <tr><td><code>docker run --name &lt;name&gt; &lt;image&gt;</code></td><td>Assign a custom name to the container</td></tr>
+                <tr><td><code>docker run -p &lt;hostPort&gt;:&lt;containerPort&gt; &lt;image&gt;</code></td><td>Publish a container port to the host</td></tr>
+                <tr><td><code>docker run -v &lt;hostPath&gt;:&lt;containerPath&gt; &lt;image&gt;</code></td><td>Bind-mount a host directory into the container</td></tr>
+                <tr><td><code>docker run -e KEY=VALUE &lt;image&gt;</code></td><td>Set an environment variable inside the container</td></tr>
+                <tr><td><code>docker run --env-file &lt;file&gt; &lt;image&gt;</code></td><td>Load environment variables from a file</td></tr>
+                <tr><td><code>docker run --cpu=.5 --memory=512m &lt;image&gt;</code></td><td>Limit CPU &amp; memory resources for the container</td></tr>
+                <tr><td><code>docker start &lt;container&gt;</code></td><td>Start a stopped container</td></tr>
+                <tr><td><code>docker stop &lt;container&gt;</code></td><td>Gracefully stop a running container (SIGTERM → 10 s → SIGKILL)</td></tr>
+                <tr><td><code>docker kill &lt;container&gt;</code></td><td>Forcefully stop a running container (SIGKILL)</td></tr>
+                <tr><td><code>docker restart &lt;container&gt;</code></td><td>Stop then start a container</td></tr>
+                <tr><td><code>docker pause &lt;container&gt;</code></td><td>Suspend all processes in a container (SIGSTOP)</td></tr>
+                <tr><td><code>docker unpause &lt;container&gt;</code></td><td>Resume a paused container</td></tr>
+                <tr><td><code>docker rm &lt;container&gt;</code></td><td>Remove a stopped container</td></tr>
+                <tr><td><code>docker rm -f &lt;container&gt;</code></td><td>Force-remove a running container</td></tr>
+                <tr><td><code>docker container prune</code></td><td>Remove all stopped containers</td></tr>
+                <tr><td><code>docker rename &lt;old&gt; &lt;new&gt;</code></td><td>Rename a container</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ CONTAINERS INSPECT -->
+    <div class="question"><strong>4. Containers — Inspect &amp; Debug</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker ps</code></td><td>List running containers</td></tr>
+                <tr><td><code>docker ps -a</code></td><td>List all containers (running + stopped)</td></tr>
+                <tr><td><code>docker ps -q</code></td><td>List only container IDs</td></tr>
+                <tr><td><code>docker ps --filter status=exited</code></td><td>List only stopped/exited containers</td></tr>
+                <tr><td><code>docker inspect &lt;container&gt;</code></td><td>Show full low-level JSON details of a container</td></tr>
+                <tr><td><code>docker logs &lt;container&gt;</code></td><td>Fetch stdout/stderr logs of a container</td></tr>
+                <tr><td><code>docker logs -f &lt;container&gt;</code></td><td>Follow (tail) live log output</td></tr>
+                <tr><td><code>docker logs --tail 50 &lt;container&gt;</code></td><td>Show last 50 log lines</td></tr>
+                <tr><td><code>docker logs -t -f --tail 10 &lt;container&gt;</code></td><td>Follow last 10 lines with timestamps</td></tr>
+                <tr><td><code>docker exec -it &lt;container&gt; /bin/bash</code></td><td>Open an interactive shell in a running container</td></tr>
+                <tr><td><code>docker exec &lt;container&gt; &lt;cmd&gt;</code></td><td>Run a single command in a running container</td></tr>
+                <tr><td><code>docker exec --workdir /app &lt;container&gt; &lt;cmd&gt;</code></td><td>Run a command in a specific working directory</td></tr>
+                <tr><td><code>docker exec -e KEY=VAL &lt;container&gt; env</code></td><td>Pass extra env vars to an exec session</td></tr>
+                <tr><td><code>docker top &lt;container&gt;</code></td><td>Display running processes inside a container</td></tr>
+                <tr><td><code>docker stats</code></td><td>Live stream of CPU / memory / network / I/O for all containers</td></tr>
+                <tr><td><code>docker stats &lt;container&gt;</code></td><td>Live resource stats for a specific container</td></tr>
+                <tr><td><code>docker port &lt;container&gt;</code></td><td>List port mappings for a container</td></tr>
+                <tr><td><code>docker diff &lt;container&gt;</code></td><td>Show filesystem changes since container started</td></tr>
+                <tr><td><code>docker cp &lt;container&gt;:&lt;src&gt; &lt;dest&gt;</code></td><td>Copy files from a container to the host</td></tr>
+                <tr><td><code>docker cp &lt;src&gt; &lt;container&gt;:&lt;dest&gt;</code></td><td>Copy files from the host into a container</td></tr>
+                <tr><td><code>docker attach &lt;container&gt;</code></td><td>Attach terminal to a running container's STDIN/STDOUT (Ctrl+P Q to detach)</td></tr>
+                <tr><td><code>docker commit &lt;container&gt; &lt;image&gt;:&lt;tag&gt;</code></td><td>Create a new image from a container's current state</td></tr>
+                <tr><td><code>docker export -o &lt;file.tar&gt; &lt;container&gt;</code></td><td>Export a container's filesystem as a tar archive</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ REGISTRY -->
+    <div class="question"><strong>5. Registry</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker login</code></td><td>Log in to Docker Hub</td></tr>
+                <tr><td><code>docker login -u &lt;user&gt; -p &lt;token&gt; &lt;registry&gt;</code></td><td>Log in to a private registry</td></tr>
+                <tr><td><code>docker logout</code></td><td>Log out from a registry</td></tr>
+                <tr><td><code>docker push &lt;user&gt;/&lt;repo&gt;:&lt;tag&gt;</code></td><td>Push a tagged image to a registry</td></tr>
+                <tr><td><code>docker pull &lt;user&gt;/&lt;repo&gt;:&lt;tag&gt;</code></td><td>Pull an image from a registry</td></tr>
+                <tr><td><code>docker search &lt;term&gt; --filter "is-official=true"</code></td><td>Search Docker Hub for official images only</td></tr>
+                <tr><td><code>docker search &lt;term&gt; --filter "stars=50"</code></td><td>Search images with 50+ stars</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ VOLUMES -->
+    <div class="question"><strong>6. Volumes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker volume ls</code></td><td>List all volumes</td></tr>
+                <tr><td><code>docker volume create &lt;name&gt;</code></td><td>Create a named volume</td></tr>
+                <tr><td><code>docker volume inspect &lt;name&gt;</code></td><td>Show details of a volume</td></tr>
+                <tr><td><code>docker volume rm &lt;name&gt;</code></td><td>Remove a volume</td></tr>
+                <tr><td><code>docker volume prune</code></td><td>Remove all unused volumes</td></tr>
+                <tr><td><code>docker run -v &lt;vol&gt;:&lt;path&gt; &lt;image&gt;</code></td><td>Mount a named volume into a container</td></tr>
+                <tr><td><code>docker run -v &lt;hostPath&gt;:&lt;containerPath&gt; &lt;image&gt;</code></td><td>Bind-mount a host directory into a container</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ NETWORKING -->
+    <div class="question"><strong>7. Networking</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker network ls</code></td><td>List all networks</td></tr>
+                <tr><td><code>docker network create &lt;name&gt;</code></td><td>Create a new bridge network</td></tr>
+                <tr><td><code>docker network inspect &lt;name&gt;</code></td><td>Show details of a network (subnet, connected containers)</td></tr>
+                <tr><td><code>docker network connect &lt;net&gt; &lt;container&gt;</code></td><td>Connect a running container to a network</td></tr>
+                <tr><td><code>docker network disconnect &lt;net&gt; &lt;container&gt;</code></td><td>Disconnect a container from a network</td></tr>
+                <tr><td><code>docker network rm &lt;name&gt;</code></td><td>Remove a network</td></tr>
+                <tr><td><code>docker network prune</code></td><td>Remove all unused networks</td></tr>
+                <tr><td><code>docker run --network &lt;name&gt; &lt;image&gt;</code></td><td>Connect a new container to a specific network</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ CONTEXT -->
+    <div class="question"><strong>8. Context</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker context ls</code></td><td>List all configured Docker contexts (<code>*</code> = active)</td></tr>
+                <tr><td><code>docker context use &lt;name&gt;</code></td><td>Switch to a different Docker context</td></tr>
+                <tr><td><code>docker context create &lt;name&gt; --docker host=tcp://&lt;host&gt;:2375</code></td><td>Create a new remote TCP context</td></tr>
+                <tr><td><code>docker context create &lt;name&gt; --docker host=ssh://&lt;host&gt;</code></td><td>Create a new remote SSH context</td></tr>
+                <tr><td><code>docker context rm &lt;name&gt;</code></td><td>Remove a context</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ COMPOSE -->
+    <div class="question"><strong>9. Docker Compose</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker compose up</code></td><td>Create and start all services defined in <code>docker-compose.yml</code></td></tr>
+                <tr><td><code>docker compose up -d</code></td><td>Start services in detached mode</td></tr>
+                <tr><td><code>docker compose up --build</code></td><td>Rebuild images before starting services</td></tr>
+                <tr><td><code>docker compose down</code></td><td>Stop and remove containers, networks</td></tr>
+                <tr><td><code>docker compose down -v</code></td><td>Also remove named volumes</td></tr>
+                <tr><td><code>docker compose ps</code></td><td>List containers managed by Compose</td></tr>
+                <tr><td><code>docker compose logs -f</code></td><td>Follow logs from all services</td></tr>
+                <tr><td><code>docker compose exec &lt;service&gt; /bin/bash</code></td><td>Open a shell in a running service container</td></tr>
+                <tr><td><code>docker compose build</code></td><td>Build or rebuild service images</td></tr>
+                <tr><td><code>docker compose pull</code></td><td>Pull latest images for all services</td></tr>
+                <tr><td><code>docker compose stop</code></td><td>Stop services without removing containers</td></tr>
+                <tr><td><code>docker compose restart</code></td><td>Restart all services</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

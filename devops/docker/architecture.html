@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Docker — Architecture</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker — Architecture</h2>
+    </div>
+
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Docker uses a <strong>client-server architecture</strong>;</li>
+            <li>The <strong>Docker Client</strong> issues commands; the <strong>Docker Daemon</strong> (server) does the heavy lifting;</li>
+            <li>Client and daemon can run on the same machine, or the client can connect to a remote daemon over a network;</li>
+            <li>Communication between the client and daemon happens via a <strong>REST API</strong> over a Unix socket or TCP;</li>
+        </ul>
+        <pre><code class="language-text">┌──────────────────────────────────────────────────────────────────┐
+│                         Docker Host                              │
+│                                                                  │
+│   ┌─────────────┐   REST API   ┌──────────────────────────────┐  │
+│   │ Docker CLI  │ ──────────▶  │       Docker Daemon           │  │
+│   │  (Client)   │              │  (dockerd + containerd)       │  │
+│   └─────────────┘              │                               │  │
+│                                │  ┌──────────┐  ┌──────────┐  │  │
+│                                │  │ Container│  │  Image   │  │  │
+│                                │  │  (runc)  │  │  Cache   │  │  │
+│                                │  └──────────┘  └──────────┘  │  │
+│                                └──────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────────┐
+                              │    Docker Registry   │
+                              │  (e.g. Docker Hub)   │
+                              └─────────────────────┘</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Docker Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The Docker Client (<code>docker</code> CLI) is the primary way users interact with Docker;</li>
+            <li>When you run a command like <code>docker run</code> or <code>docker build</code>, the client translates it into a REST API call and sends it to the Docker Daemon;</li>
+            <li>A single Docker CLI can communicate with <strong>multiple Docker Daemons</strong> — local or remote — using <strong>Docker Contexts</strong>;</li>
+        </ul>
+        <pre><code class="language-bash">docker context ls                                          # list all configured daemons
+docker context use my-remote-server                        # switch to a remote daemon
+docker context create remote --docker host=ssh://user@host # create a new SSH context</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Docker Daemon (dockerd)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The Docker Daemon (<code>dockerd</code>) is a long-running background process on the Docker Host;</li>
+            <li>It listens for API requests from the client and manages all Docker objects: <strong>images, containers, networks, and volumes</strong>;</li>
+            <li>It delegates low-level container execution to <strong>containerd</strong>;</li>
+            <li>Responsibilities include:
+                <ul>
+                    <li>Building images from Dockerfiles;</li>
+                    <li>Pulling images from and pushing images to a registry;</li>
+                    <li>Creating, starting, stopping, and removing containers;</li>
+                    <li>Managing networks and volumes;</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash">docker version   # verify both client and daemon are running and their versions
+docker info      # detailed daemon configuration: storage driver, runtime, registry, etc.</code></pre>
+    </div>
+
+    <div class="question"><strong>4. containerd &amp; runc</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>containerd</strong> is an industry-standard container runtime that <code>dockerd</code> delegates to for managing the container lifecycle (create, start, stop, delete);</li>
+            <li>It is a CNCF project and is also used directly by Kubernetes (via CRI);</li>
+            <li><strong>runc</strong> is the low-level OCI-compliant runtime that containerd uses to actually spawn container processes on the host OS;</li>
+            <li>Every running container has its own <code>runc</code> instance managing it;</li>
+            <li>This layered design means Docker can be replaced at any layer — e.g., Kubernetes can use containerd directly without <code>dockerd</code>;</li>
+        </ul>
+        <pre><code class="language-text">Docker CLI (docker)
+       │
+       ▼  REST API
+  dockerd (Docker Daemon)
+       │
+       ▼  gRPC
+  containerd
+       │
+       ▼
+    runc  ──▶  Container Process (on host OS)</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Docker Registry</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Docker Registry is a centralized store for Docker images — similar to Maven Central for Java JARs;</li>
+            <li><strong>Docker Hub</strong> (<code>docker.io</code>) is the default public registry, hosting millions of official and community images;</li>
+            <li>Organizations can run <strong>private registries</strong> (e.g. Harbor, AWS ECR, GCR, Azure ACR) to store proprietary images securely;</li>
+            <li><code>docker pull</code> downloads an image from a registry to the local image cache;</li>
+            <li><code>docker push</code> uploads a locally built image to a registry;</li>
+        </ul>
+        <pre><code class="language-bash">docker pull nginx:latest                              # pull from Docker Hub (default)
+docker pull myregistry.local:5000/myapp:1.0           # pull from a private registry
+docker login myregistry.local:5000                    # authenticate to a private registry
+docker push myuser/myapp:v1.0                         # push image to Docker Hub</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Linux Namespaces — How Isolation Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When Docker creates a container, it sets up a set of <strong>Linux namespaces</strong> to isolate it from the host and other containers;</li>
+        </ul>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Namespace</th><th>What it Isolates</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>PID</strong></td><td>Process IDs — container processes cannot see host or other container processes</td></tr>
+                <tr><td><strong>NET</strong></td><td>Network interfaces, IP addresses, routing tables — each container gets its own network stack</td></tr>
+                <tr><td><strong>MNT</strong></td><td>Filesystem mount points — container has its own root filesystem</td></tr>
+                <tr><td><strong>IPC</strong></td><td>Inter-process communication — shared memory and semaphores are isolated</td></tr>
+                <tr><td><strong>UTS</strong></td><td>Hostname and domain name — each container can have a unique hostname</td></tr>
+                <tr><td><strong>USER</strong></td><td>User and group IDs — a root user inside a container need not be root on the host</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. cgroups — How Resource Limits Work</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Control Groups (cgroups)</strong> is a Linux kernel feature that limits, accounts for, and isolates resource usage of process groups;</li>
+            <li>Docker uses cgroups to enforce per-container resource constraints;</li>
+        </ul>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Resource</th><th>Docker Flag</th><th>Example</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>CPU</td><td><code>--cpu</code> / <code>--cpuset-cpus</code></td><td><code>docker run --cpu=0.5 nginx</code></td></tr>
+                <tr><td>Memory</td><td><code>--memory</code></td><td><code>docker run --memory=512m nginx</code></td></tr>
+                <tr><td>Memory + Swap</td><td><code>--memory-swap</code></td><td><code>docker run --memory-swap=1g nginx</code></td></tr>
+                <tr><td>Block I/O</td><td><code>--blkio-weight</code></td><td><code>docker run --blkio-weight=500 nginx</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>8. Image Layers &amp; Copy-on-Write</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Docker images are composed of <strong>read-only layers</strong> stacked on top of each other;</li>
+            <li>Each <code>RUN</code>, <code>COPY</code>, or <code>ADD</code> instruction in a Dockerfile creates a new layer;</li>
+            <li>Layers are identified by a SHA256 digest and are <strong>shared across images</strong> — stored only once on disk;</li>
+            <li>When a container starts, Docker adds a thin <strong>read-write layer</strong> on top (the container layer). All changes (new files, modifications, deletions) go into this layer;</li>
+            <li>This is the <strong>Copy-on-Write (CoW)</strong> strategy — a file from a lower read-only layer is only copied up to the writable layer when it is modified;</li>
+            <li>When the container is removed, its writable layer is discarded — use volumes to persist data;</li>
+        </ul>
+        <pre><code class="language-text">┌─────────────────────────────┐  ← Container layer (read-write, discarded on rm)
+├─────────────────────────────┤
+│  Layer 3: COPY app.jar /app │  ← read-only image layers
+├─────────────────────────────┤
+│  Layer 2: RUN apt-get ...   │
+├─────────────────────────────┤
+│  Layer 1: FROM ubuntu:22.04 │  ← base image layer (shared with other images)
+└─────────────────────────────┘</code></pre>
+    </div>
+</body>
+
+</html>

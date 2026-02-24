@@ -16,58 +16,121 @@
     <div class="question"><strong>1. What is Jib?</strong></div>
     <div class="answer">
         <ul>
-            <li>Jib takes your spring boot application and builds a docker image, compliant to OCI(Open Container Initiative) format, without any Dockerfile and pushes the images to registries like docker hub, GitHub Container Registry etc;</li>
-            <li>So, it is ideal choice for CI/CD environments;</li>
-            <li>You don&#x27;t need to know best practices for creating Dockerfiles;</li>
-            <li>You don&#x27;t need to install Docker to create image; // Docker is needed if you want to install image;</li>
-            <li>It is open-source and developed by Google;</li>
-            <li>Alternatives: Buildpacks, Spotify, Fabric8.io;</li>
-            <li>Smart Layering: Jib separates out application into layers: dependencies, snapshot dependencies, resources, classes; If you change only one class, Jib rebuilds only that layer; So, it is optimized for faster incremental builds;</li>
-            <li>Reproducible Builds: Images are Deterministic, Timestamp-independent, Consistent across environments;</li>
-            <li>OCI compliant images: Jib builds standard OCI images, so they run in: Docker, K8s, Podman, containerd;</li>
+            <li>Jib is an open-source tool developed by Google that builds OCI-compliant docker images for Java applications;</li>
+            <li>It works as a Maven or Gradle plugin — no Dockerfile, no Docker daemon required - So, it is ideal choice for CI/CD environments;</li>
+            <li>It packages your application directly into a docker image and can push it to any registry (Docker Hub, GitHub Container Registry, ECR, GCR, etc.);</li>
+            <li>Alternatives: Buildpacks, Spotify Docker Maven Plugin, Fabric8.io;</li>
+        </ul>
+        <p><strong>Key features:</strong></p>
+        <ul>
+            <li><strong>Smart Layering:</strong> Splits the app into layers — dependencies, snapshot dependencies, resources, classes; Only the changed layer is rebuilt on each build, making incremental builds fast;</li>
+            <li><strong>Reproducible Builds:</strong> Images are deterministic, timestamp-independent, and consistent across environments;</li>
+            <li><strong>OCI Compliant:</strong> Images run on Docker, Kubernetes, Podman, containerd — any OCI-compatible runtime;</li>
+            <li><strong>Daemonless:</strong> Does not require a running Docker daemon to build images; Docker is only needed if you want to run the image locally;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. How to use it?</strong></div>
+    <div class="question"><strong>2. Why use Jib?</strong></div>
     <div class="answer">
         <ul>
-            <li>Add this maven dependency:
-                <pre>
-<plugin>
-  <groupId>com.google.cloud.tools</groupId>
-  <artifactId>jib-maven-plugin</artifactId>
-  <version>3.4.0</version>
-</plugin>
-                </pre>
-            </li>
-            <li>Build and push: mvn compile jib:build -Dimage=myrepo/myapp</li>
+            <li><strong>No Dockerfile knowledge needed:</strong> Jib handles all image construction internally using sensible defaults for Java apps;</li>
+            <li><strong>No Docker installation needed:</strong> Jib pushes directly to a registry without a local Docker daemon — ideal for CI/CD environments where Docker may not be available;</li>
+            <li><strong>Faster builds:</strong> Because only changed layers are rebuilt, subsequent builds are significantly faster than a full <code>docker build</code>;</li>
+            <li><strong>CI/CD friendly:</strong> Works seamlessly in GitHub Actions, Jenkins, GitLab CI, etc. — just set credentials and run <code>mvn compile jib:build</code>;</li>
+            <li><strong>Secure by default:</strong> Encourages distroless base images and non-root users out of the box;</li>
+            <li><strong>Maven/Gradle native:</strong> Fits naturally into existing Java build pipelines with no extra tooling;</li>
         </ul>
     </div>
 
-
-    <div class="question"><strong>3. Docker image vs OCI Image?</strong></div>
+    <div class="question"><strong>3. How to use it?</strong></div>
     <div class="answer">
-        <pre>
-| Feature                     | Docker Image   | OCI Image     |
-| --------------------------- | -------------- | ------------- |
-| Format                      | Docker-defined | Open standard |
-| Compatible with Docker?     | Yes            | Yes           |
-| Compatible with Podman/K8s? | Yes            | Yes           |
-| Difference in practice      | Almost none    | Standardized  |
-        </pre>
+        <p><strong>Step 1 —</strong> Add the Jib plugin to your <code>pom.xml</code>:</p>
+        <pre><code class="language-xml">&lt;plugin&gt;
+  &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+  &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+  &lt;version&gt;3.4.0&lt;/version&gt;
+  &lt;configuration&gt;
+    &lt;to&gt;
+      &lt;image&gt;docker.io/myrepo/myapp&lt;/image&gt;
+    &lt;/to&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+
+        <p><strong>Step 2 —</strong> Build and push to a registry:</p>
+        <pre><code class="language-bash">mvn compile jib:build</code></pre>
+
+        <p><strong>Or</strong> build to your local Docker daemon instead:</p>
+        <pre><code class="language-bash">mvn compile jib:dockerBuild</code></pre>
+
+        <p><strong>Or</strong> override the image name directly from the CLI:</p>
+        <pre><code class="language-bash">mvn compile jib:build -Dimage=docker.io/myrepo/myapp:v1.0</code></pre>
     </div>
 
-    <div class="question"><strong>4. Jib vs Dockerfile?</strong></div>
+
+    <div class="question"><strong>4. Docker Image vs OCI Image?</strong></div>
     <div class="answer">
-        <pre>
-| Feature                 | Jib         | Dockerfile     |
-| ----------------------- | ----------- | -------------- |
-| Requires Docker         | ❌ No        | ✅ Yes          |
-| Custom OS setup         | ❌ Limited   | ✅ Full control |
-| Java-optimized layering | ✅ Yes       | ❌ Manual       |
-| CI friendly             | ✅ Excellent | Good           |
-| Multi-language support  | ❌ Java only | ✅ Any          |
-        </pre>
+        <ul>
+            <li><strong>Docker image</strong> — proprietary format created by Docker Inc;</li>
+            <li><strong>OCI image</strong> — open standard by the <a href="https://opencontainers.org/" target="_blank">Open Container Initiative</a>, backed by Google, Red Hat, Microsoft and others;</li>
+            <li>The key advantage of OCI is <strong>portability</strong> — an OCI image runs on Docker, Podman, Kubernetes, and containerd without any changes;</li>
+            <li>Jib produces OCI images by default, so your image is not tied to Docker and works on any OCI-compliant runtime;</li>
+            <li>Docker also adopted the OCI spec since Engine 1.10, so modern Docker images <em>are</em> OCI images — the difference in practice is almost none;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Jib vs Dockerfile?</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Jib</th>
+                    <th>Dockerfile</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Requires Docker to build</td>
+                    <td>❌ No</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td>Requires a Dockerfile</td>
+                    <td>❌ No</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td>Java-optimized layering</td>
+                    <td>✅ Automatic</td>
+                    <td>❌ Manual</td>
+                </tr>
+                <tr>
+                    <td>Incremental builds</td>
+                    <td>✅ Yes — only changed layers rebuilt</td>
+                    <td>⚠️ Depends on layer ordering</td>
+                </tr>
+                <tr>
+                    <td>CI/CD friendly</td>
+                    <td>✅ Excellent — no Docker daemon needed</td>
+                    <td>⚠️ Needs Docker in CI environment</td>
+                </tr>
+                <tr>
+                    <td>Custom OS setup</td>
+                    <td>❌ Limited — base image only</td>
+                    <td>✅ Full control (apt, yum, etc.)</td>
+                </tr>
+                <tr>
+                    <td>Multi-language support</td>
+                    <td>❌ Java only</td>
+                    <td>✅ Any language</td>
+                </tr>
+                <tr>
+                    <td>Learning curve</td>
+                    <td>✅ Low — just Maven/Gradle config</td>
+                    <td>⚠️ Need to know Dockerfile best practices</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 

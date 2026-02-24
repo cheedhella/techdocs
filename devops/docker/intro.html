@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Docker — Introduction</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker — Introduction</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Docker?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Docker is an open-source platform that enables developers to automate the building, shipping, and running of applications inside lightweight, portable containers;</li>
+            <li>It packages an application together with all its dependencies — runtime, libraries, environment variables, and config — into a single unit called an <strong>image</strong>;</li>
+            <li>That image can be run as a <strong>container</strong> on any machine that has Docker installed, regardless of the underlying OS or environment;</li>
+            <li>The full Docker ecosystem consists of: <strong>Docker Engine</strong> (Client + Daemon), <strong>Docker Images</strong>, <strong>Docker Hub</strong> (registry), and <strong>Docker Compose</strong>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why Docker? — The Problem it Solves</strong></div>
+    <div class="answer">
+        <p><strong>The era of physical servers:</strong></p>
+        <ul>
+            <li>In the early days, only one application could be deployed per physical server;</li>
+            <li>Operations teams had to guess resource requirements, often resulting in either under-powered or over-powered (5–10% utilization) servers — wasting capital;</li>
+        </ul>
+        <p><strong>Virtual Machines — better, but not perfect:</strong></p>
+        <ul>
+            <li>VMware introduced VMs, allowing multiple applications on a single server via a hypervisor;</li>
+            <li>However, each VM requires its own full Guest OS — consuming CPU, RAM, storage, licenses, and maintenance overhead;</li>
+        </ul>
+        <p><strong>Containers — the modern solution:</strong></p>
+        <ul>
+            <li>Containers share the host OS kernel — no Guest OS per application;</li>
+            <li>All containers on a host share the same Docker Engine, freeing up CPU, RAM, and storage;</li>
+            <li>Result: lower infrastructure cost, faster startup, and simpler maintenance;</li>
+        </ul>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Aspect</th><th>Physical Server</th><th>Virtual Machine</th><th>Container</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Startup time</td><td>Minutes</td><td>Minutes</td><td>Milliseconds</td></tr>
+                <tr><td>OS per app</td><td>Full OS</td><td>Full Guest OS</td><td>Shared host kernel</td></tr>
+                <tr><td>Resource usage</td><td>High (wasted)</td><td>Medium</td><td>Low</td></tr>
+                <tr><td>Portability</td><td>❌ Low</td><td>⚠️ Medium</td><td>✅ High</td></tr>
+                <tr><td>Isolation</td><td>Full</td><td>Full</td><td>Process-level (namespaces)</td></tr>
+                <tr><td>Image size</td><td>N/A</td><td>GBs</td><td>MBs</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Key Concepts</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Image:</strong> A read-only, layered package containing the application and all its dependencies. Built from a <code>Dockerfile</code>. Can be stored in and pulled from a registry;</li>
+            <li><strong>Container:</strong> A running instance of an image. Isolated from other containers and the host via Linux namespaces and cgroups. You can run many containers from the same image;</li>
+            <li><strong>Dockerfile:</strong> A plain-text script of instructions (<code>FROM</code>, <code>RUN</code>, <code>COPY</code>, <code>CMD</code>, etc.) used to build an image;</li>
+            <li><strong>Registry:</strong> A centralized repository for storing and sharing images. Docker Hub is the default public registry; private registries are also supported;</li>
+            <li><strong>Docker Engine:</strong> The core runtime — composed of the Docker Client (CLI) and the Docker Daemon (<code>dockerd</code>);</li>
+            <li><strong>Namespace:</strong> A Linux kernel feature that provides process isolation — each container gets its own PID, network, IPC, mount, UTS, and user namespaces;</li>
+            <li><strong>cgroups (Control Groups):</strong> A Linux kernel feature used to limit and account for resource usage (CPU, memory, disk I/O, network bandwidth) per container;</li>
+            <li><strong>Layer:</strong> Images are built in layers. Each <code>RUN</code>, <code>COPY</code>, or <code>ADD</code> instruction adds a new layer. Layers are cached and shared across images, saving disk space and speeding up builds;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Docker Image in Detail</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An image is a read-only template containing the app, its runtime, libraries, env vars, and config;</li>
+            <li>Images are identified by a <strong>tag</strong> (e.g. <code>nginx:1.25</code>) and an immutable <strong>digest</strong> (SHA256 hash of its content);</li>
+            <li>Tags are <em>mutable</em> — the same tag can be reassigned to a newer image. Digests are <em>immutable</em> — use them for reproducible deployments;</li>
+            <li><strong>Dangling image:</strong> An untagged image (shows as <code>&lt;none&gt;:&lt;none&gt;</code>) created when a newer build overwrites an existing tag. They waste disk space and can be removed with <code>docker image prune</code>;</li>
+            <li><strong>Unused image:</strong> An image that has a tag but has never been used to create a container;</li>
+            <li>Image layers are stored only once on disk even if referenced by multiple images — this is the copy-on-write (CoW) model;</li>
+        </ul>
+        <p><strong>Image identifier format:</strong></p>
+        <pre><code class="language-text">&lt;registry&gt;/&lt;namespace&gt;/&lt;repository&gt;:&lt;tag&gt;
+
+# Examples:
+docker.io/library/nginx:latest          # Official Docker Hub image
+docker.io/myuser/myapp:v1.0            # User image on Docker Hub
+myregistry.local:5000/team/myapp:1.2   # Private registry image</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Docker vs Virtual Machine</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Feature</th><th>Docker Container</th><th>Virtual Machine</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>OS overhead</td><td>✅ Shares host kernel — no Guest OS</td><td>❌ Full Guest OS per VM</td></tr>
+                <tr><td>Startup time</td><td>✅ Milliseconds</td><td>❌ Minutes</td></tr>
+                <tr><td>Image size</td><td>✅ MBs</td><td>❌ GBs</td></tr>
+                <tr><td>Isolation</td><td>⚠️ Process-level (namespace + cgroups)</td><td>✅ Full hardware-level isolation</td></tr>
+                <tr><td>Portability</td><td>✅ Runs anywhere Docker is installed</td><td>⚠️ Hypervisor-dependent</td></tr>
+                <tr><td>Resource efficiency</td><td>✅ High — shares OS resources</td><td>❌ Low — dedicated resources per VM</td></tr>
+                <tr><td>Use case</td><td>Microservices, CI/CD, cloud-native apps</td><td>Full OS isolation, legacy apps, different OS</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>6. Common Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Microservices:</strong> Package each service independently, deploy and scale them separately;</li>
+            <li><strong>CI/CD pipelines:</strong> Build, test, and deploy in consistent, reproducible environments — no more "works on my machine";</li>
+            <li><strong>Local development:</strong> Spin up databases, message brokers, or third-party services locally without installing them natively;</li>
+            <li><strong>Cloud-native applications:</strong> Containers are the unit of deployment on Kubernetes and all major cloud platforms (AWS ECS/EKS, GKE, AKS);</li>
+            <li><strong>Environment consistency:</strong> Dev, staging, and production all run the exact same image — eliminating environment drift;</li>
+        </ul>
+    </div>
+
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>
