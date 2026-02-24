@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Spring Boot Hello World with Jib</title>
+      <link rel="stylesheet" href="../../resources/css/styles.css" />
+      <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+   </head>
+   <body>
+      <div class="main-grid-item-1 grid-wide-column">
+         <h2>Spring Boot Hello World with Jib</h2>
+         <p>Complete step-by-step guide to containerize a Spring Boot application using Jib</p>
+      </div>
+
+      <div class="toc-container">
+         <h3>What You'll Learn</h3>
+         <ul>
+            <li>Create a simple Spring Boot REST API</li>
+            <li>Configure Jib Maven plugin</li>
+            <li>Build Docker images without Docker daemon</li>
+            <li>Run the containerized application</li>
+            <li>Push images to Docker Hub</li>
+         </ul>
+      </div>
+
+      <div class="question"><strong>Step 1: Create Spring Boot Project</strong></div>
+      <div class="answer">
+         <p>Generate a Spring Boot project using Spring Initializr or create manually:</p>
+         
+         <h4>Project Structure:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>spring-boot-jib-demo/
+├── pom.xml
+└── src/
+    └── main/
+        ├── java/
+        │   └── com/
+        │       └── example/
+        │           └── demo/
+        │               ├── DemoApplication.java
+        │               └── HelloController.java
+        └── resources/
+            └── application.yml</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 2: pom.xml Configuration</strong></div>
+      <div class="answer">
+         <p>Complete pom.xml with Spring Boot and Jib plugin:</p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;3.2.0&lt;/version&gt;
+        &lt;relativePath/&gt;
+    &lt;/parent&gt;
+    
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-jib-demo&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;name&gt;spring-boot-jib-demo&lt;/name&gt;
+    &lt;description&gt;Demo project for Spring Boot with Jib&lt;/description&gt;
+    
+    &lt;properties&gt;
+        &lt;java.version&gt;17&lt;/java.version&gt;
+        &lt;jib.version&gt;3.4.0&lt;/jib.version&gt;
+    &lt;/properties&gt;
+    
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+            
+            &lt;!-- Jib Maven Plugin --&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+                &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;${jib.version}&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;from&gt;
+                        &lt;image&gt;eclipse-temurin:17-jre&lt;/image&gt;
+                    &lt;/from&gt;
+                    &lt;to&gt;
+                        &lt;image&gt;docker.io/YOUR_USERNAME/spring-boot-jib-demo&lt;/image&gt;
+                        &lt;tags&gt;
+                            &lt;tag&gt;latest&lt;/tag&gt;
+                            &lt;tag&gt;${project.version}&lt;/tag&gt;
+                        &lt;/tags&gt;
+                    &lt;/to&gt;
+                    &lt;container&gt;
+                        &lt;jvmFlags&gt;
+                            &lt;jvmFlag&gt;-Xms256m&lt;/jvmFlag&gt;
+                            &lt;jvmFlag&gt;-Xmx512m&lt;/jvmFlag&gt;
+                            &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+                        &lt;/jvmFlags&gt;
+                        &lt;ports&gt;
+                            &lt;port&gt;8080&lt;/port&gt;
+                        &lt;/ports&gt;
+                        &lt;environment&gt;
+                            &lt;SPRING_OUTPUT_ANSI_ENABLED&gt;ALWAYS&lt;/SPRING_OUTPUT_ANSI_ENABLED&gt;
+                        &lt;/environment&gt;
+                        &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+                    &lt;/container&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 3: Create Main Application Class</strong></div>
+      <div class="answer">
+         <p><strong>DemoApplication.java</strong></p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>package com.example.demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class DemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 4: Create REST Controller</strong></div>
+      <div class="answer">
+         <p><strong>HelloController.java</strong></p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+public class HelloController {
+    
+    @GetMapping("/hello")
+    public Map&lt;String, Object&gt; hello() {
+        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();
+        response.put("message", "Hello from Spring Boot with Jib!");
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", "success");
+        return response;
+    }
+    
+    @GetMapping("/hello/{name}")
+    public Map&lt;String, Object&gt; helloName(@PathVariable String name) {
+        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();
+        response.put("message", "Hello, " + name + "!");
+        response.put("timestamp", LocalDateTime.now());
+        response.put("status", "success");
+        return response;
+    }
+    
+    @GetMapping("/health")
+    public Map&lt;String, String&gt; health() {
+        Map&lt;String, String&gt; response = new HashMap&lt;&gt;();
+        response.put("status", "UP");
+        response.put("application", "Spring Boot Jib Demo");
+        return response;
+    }
+}</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 5: Application Configuration</strong></div>
+      <div class="answer">
+         <p><strong>application.yml</strong></p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>spring:
+  application:
+    name: spring-boot-jib-demo
+  
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.example.demo: DEBUG</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 6: Build and Test Locally</strong></div>
+      <div class="answer">
+         <p>First, test your application locally:</p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Build the application
+mvn clean package
+
+# Run the application
+mvn spring-boot:run
+
+# Test the endpoints (in another terminal)
+curl http://localhost:8080/api/hello
+curl http://localhost:8080/api/hello/John
+curl http://localhost:8080/api/health</code></pre>
+         </div>
+
+         <p><strong>Expected Response:</strong></p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>{
+  "message": "Hello from Spring Boot with Jib!",
+  "timestamp": "2026-02-24T10:30:45.123",
+  "status": "success"
+}</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 7: Build Docker Image with Jib</strong></div>
+      <div class="answer">
+         <h4>Option 1: Build to Local Docker Daemon</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Build image to local Docker
+mvn compile jib:dockerBuild
+
+# Verify the image
+docker images | grep spring-boot-jib-demo
+
+# Run the container
+docker run -p 8080:8080 spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Test the containerized app
+curl http://localhost:8080/api/hello</code></pre>
+         </div>
+
+         <h4>Option 2: Build and Push to Docker Hub</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Login to Docker Hub
+docker login
+
+# Build and push (replace YOUR_USERNAME with your Docker Hub username)
+mvn compile jib:build -Dimage=docker.io/YOUR_USERNAME/spring-boot-jib-demo:latest
+
+# Or use command-line authentication
+mvn compile jib:build \
+  -Djib.to.auth.username=YOUR_USERNAME \
+  -Djib.to.auth.password=YOUR_PASSWORD</code></pre>
+         </div>
+
+         <h4>Option 3: Build as Tarball</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Build as tarball
+mvn compile jib:buildTar
+
+# Load the tarball into Docker
+docker load --input target/jib-image.tar
+
+# Run the container
+docker run -p 8080:8080 spring-boot-jib-demo:1.0-SNAPSHOT</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 8: Run and Test the Container</strong></div>
+      <div class="answer">
+         <h4>Run with Docker:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Run in foreground
+docker run -p 8080:8080 spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Run in background (detached mode)
+docker run -d -p 8080:8080 --name spring-app spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Check logs
+docker logs spring-app
+
+# Follow logs
+docker logs -f spring-app
+
+# Stop the container
+docker stop spring-app
+
+# Remove the container
+docker rm spring-app</code></pre>
+         </div>
+
+         <h4>Test All Endpoints:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Test hello endpoint
+curl http://localhost:8080/api/hello
+
+# Test hello with name
+curl http://localhost:8080/api/hello/Docker
+
+# Test health endpoint
+curl http://localhost:8080/api/health
+
+# Test actuator health
+curl http://localhost:8080/actuator/health</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 9: Advanced Jib Configuration</strong></div>
+      <div class="answer">
+         <h4>Production-Ready Configuration:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;com.google.cloud.tools&lt;/groupId&gt;
+    &lt;artifactId&gt;jib-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.4.0&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;from&gt;
+            &lt;image&gt;gcr.io/distroless/java17-debian12:nonroot&lt;/image&gt;
+        &lt;/from&gt;
+        &lt;to&gt;
+            &lt;image&gt;docker.io/YOUR_USERNAME/spring-boot-jib-demo&lt;/image&gt;
+            &lt;tags&gt;
+                &lt;tag&gt;latest&lt;/tag&gt;
+                &lt;tag&gt;${project.version}&lt;/tag&gt;
+            &lt;/tags&gt;
+        &lt;/to&gt;
+        &lt;container&gt;
+            &lt;jvmFlags&gt;
+                &lt;jvmFlag&gt;-Xms256m&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-Xmx512m&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-XX:+UseContainerSupport&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-XX:MaxRAMPercentage=75.0&lt;/jvmFlag&gt;
+                &lt;jvmFlag&gt;-Djava.security.egd=file:/dev/./urandom&lt;/jvmFlag&gt;
+            &lt;/jvmFlags&gt;
+            &lt;ports&gt;
+                &lt;port&gt;8080&lt;/port&gt;
+            &lt;/ports&gt;
+            &lt;environment&gt;
+                &lt;SPRING_PROFILES_ACTIVE&gt;production&lt;/SPRING_PROFILES_ACTIVE&gt;
+                &lt;SPRING_OUTPUT_ANSI_ENABLED&gt;ALWAYS&lt;/SPRING_OUTPUT_ANSI_ENABLED&gt;
+            &lt;/environment&gt;
+            &lt;labels&gt;
+                &lt;maintainer&gt;your-email@example.com&lt;/maintainer&gt;
+                &lt;version&gt;${project.version}&lt;/version&gt;
+                &lt;description&gt;Spring Boot Demo with Jib&lt;/description&gt;
+            &lt;/labels&gt;
+            &lt;user&gt;nonroot:nonroot&lt;/user&gt;
+            &lt;format&gt;OCI&lt;/format&gt;
+            &lt;creationTime&gt;USE_CURRENT_TIMESTAMP&lt;/creationTime&gt;
+        &lt;/container&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Step 10: Docker Compose Setup (Optional)</strong></div>
+      <div class="answer">
+         <p>Create <strong>docker-compose.yml</strong> for easy deployment:</p>
+         
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>version: '3.8'
+
+services:
+  spring-app:
+    image: spring-boot-jib-demo:1.0-SNAPSHOT
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge</code></pre>
+         </div>
+
+         <h4>Run with Docker Compose:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Start the application
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the application
+docker-compose down
+
+# Rebuild and restart
+docker-compose up -d --build</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Verification Steps</strong></div>
+      <div class="answer">
+         <h4>Check Image Details:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Inspect the image
+docker inspect spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Check image size
+docker images spring-boot-jib-demo:1.0-SNAPSHOT
+
+# View image layers
+docker history spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Check image labels
+docker inspect spring-boot-jib-demo:1.0-SNAPSHOT | jq '.[0].Config.Labels'</code></pre>
+         </div>
+
+         <h4>Expected Output:</h4>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code>REPOSITORY                TAG             IMAGE ID       CREATED         SIZE
+spring-boot-jib-demo      1.0-SNAPSHOT    abc123def456   2 minutes ago   280MB</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Troubleshooting</strong></div>
+      <div class="answer">
+         <h4>Common Issues and Solutions:</h4>
+         
+         <p><strong>1. Authentication Failed:</strong></p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Login to Docker Hub first
+docker login
+
+# Or use command-line auth
+mvn jib:build -Djib.to.auth.username=USERNAME -Djib.to.auth.password=PASSWORD</code></pre>
+         </div>
+
+         <p><strong>2. Port Already in Use:</strong></p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Use a different port
+docker run -p 9090:8080 spring-boot-jib-demo:1.0-SNAPSHOT
+
+# Or stop the conflicting container
+docker ps
+docker stop &lt;container-id&gt;</code></pre>
+         </div>
+
+         <p><strong>3. Out of Memory:</strong></p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Increase JVM memory
+docker run -p 8080:8080 \
+  -e JAVA_OPTS="-Xms512m -Xmx1024m" \
+  spring-boot-jib-demo:1.0-SNAPSHOT</code></pre>
+         </div>
+
+         <p><strong>4. Enable Debug Logging:</strong></p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Build with verbose output
+mvn compile jib:build -X
+
+# Run container with debug logging
+docker run -p 8080:8080 \
+  -e LOGGING_LEVEL_ROOT=DEBUG \
+  spring-boot-jib-demo:1.0-SNAPSHOT</code></pre>
+         </div>
+      </div>
+
+      <div class="question"><strong>Key Benefits of Using Jib</strong></div>
+      <div class="answer">
+         <ul>
+            <li><strong>No Docker Required:</strong> Build images without Docker daemon installed</li>
+            <li><strong>Fast Builds:</strong> Intelligent layer caching - only changed layers are rebuilt</li>
+            <li><strong>Reproducible:</strong> Same source code always produces the same image</li>
+            <li><strong>Optimized Layers:</strong> Dependencies, resources, and classes in separate layers</li>
+            <li><strong>Secure by Default:</strong> Uses distroless images and runs as non-root</li>
+            <li><strong>Maven Integration:</strong> Seamlessly integrates with Maven build lifecycle</li>
+            <li><strong>No Dockerfile:</strong> No need to learn Dockerfile syntax or best practices</li>
+         </ul>
+      </div>
+
+      <div class="question"><strong>Next Steps</strong></div>
+      <div class="answer">
+         <ul>
+            <li><a href="./Config.html">Complete Jib Configuration Reference</a></li>
+            <li><a href="./home.html">Jib Documentation Home</a></li>
+            <li><a href="./Notes.html">Jib Tips & Tricks</a></li>
+            <li>Deploy to Kubernetes</li>
+            <li>Set up CI/CD pipeline with GitHub Actions</li>
+            <li>Implement multi-stage builds</li>
+            <li>Add health checks and monitoring</li>
+         </ul>
+      </div>
+
+      <div class="question"><strong>Complete Project Repository</strong></div>
+      <div class="answer">
+         <p>Download or clone the complete example:</p>
+         <div class="code-block">
+            <button class="copy-btn">Copy</button>
+            <pre><code># Clone the repository
+git clone https://github.com/example/spring-boot-jib-demo.git
+cd spring-boot-jib-demo
+
+# Build and run
+mvn clean package
+mvn jib:dockerBuild
+docker run -p 8080:8080 spring-boot-jib-demo:1.0-SNAPSHOT</code></pre>
+         </div>
+      </div>
+
+      <script src="../../resources/js/codeblock.js"></script>
+   </body>
+</html>

@@ -1,60 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation Home</title>
-    <link rel="stylesheet" href="resources/css/styles.css" />
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            margin: 2em auto;
-            max-width: 800px;
-            padding: 0 1em;
-        }
-        h1 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #333;
-            font-size: 1.2em;
-            margin-top: 1.5em;
-            border-bottom: 1px solid #eee;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li {
-            margin-bottom: 0.5em;
-        }
-        a {
-            text-decoration: none;
-            color: #0066cc;
-            font-weight: 500;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .file-icon {
-            display: inline-block;
-            width: 20px;
-            text-align: center;
-            margin-right: 8px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Table of Contents</h1>
-    <h2>Root</h2>
-    <ul>
+    <head>
+        <title>Jib</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+        <script src="../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Jib</h2>
+        </div>
+
+        <div class="toc-container">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="./intro.html">1. What is Jib?</a></li>
+                <li><a href="./config.html">2. Jib Maven Plugin Configuration Guide</a></li>
+                <li><a href="./spring-boot-hello-world.html">3. Hello World with Jib</a></li>
+            </ul>
+            
+            <!-- <h3>All Topics</h3>
+            <ul>
+                <li>1️⃣ Introduction to Containerization
+                    <ul>
+                        <li><a href="./intro/what-are-containers.html">1.1 What Are Containers?</a></li>
+                        <li><a href="./intro/docker-vs-oci.html">1.2 Docker vs OCI Images</a></li>
+                        <li><a href="./intro/why-containerize-java.html">1.3 Why Containerize Java Applications?</a></li>
+                        <li><a href="./intro/dockerfile-challenges.html">1.4 Challenges with Dockerfiles for Java</a></li>
+                        <li><a href="./intro/container-best-practices.html">1.5 Container Best Practices for Java</a></li>
+                    </ul>
+                </li>
+                <li>2️⃣ Introduction to Jib
+                    <ul>
+                        <li><a href="./basics/what-is-jib.html">2.1 What Is Jib?</a></li>
+                        <li><a href="./basics/history.html">2.2 History and Background (by Google)</a></li>
+                        <li><a href="./basics/key-features.html">2.3 Key Features of Jib</a></li>
+                        <li><a href="./basics/jib-vs-dockerfile.html">2.4 Jib vs Dockerfile</a></li>
+                        <li><a href="./basics/jib-vs-buildpacks.html">2.5 Jib vs Buildpacks</a></li>
+                        <li><a href="./basics/jib-vs-native-image.html">2.6 Jib vs GraalVM Native Image</a></li>
+                        <li><a href="./basics/when-to-use-jib.html">2.7 When to Use Jib</a></li>
+                    </ul>
+                </li>
+                <li>3️⃣ Jib Architecture & How It Works
+                    <ul>
+                        <li><a href="./architecture/image-layers.html">3.1 Image Layers Explained</a></li>
+                        <li><a href="./architecture/java-layering.html">3.2 Java-Specific Layering Strategy</a></li>
+                        <li><a href="./architecture/reproducible-builds.html">3.3 Reproducible Builds</a></li>
+                        <li><a href="./architecture/daemonless-builds.html">3.4 How Jib Builds Images Without Docker</a></li>
+                        <li><a href="./architecture/oci-format.html">3.5 OCI Image Format Overview</a></li>
+                        <li><a href="./architecture/layer-optimization.html">3.6 Layer Optimization Strategies</a></li>
+                        <li><a href="./architecture/build-process.html">3.7 Jib Build Process Internals</a></li>
+                    </ul>
+                </li>
+                <li>4️⃣ Installing & Setting Up Jib
+                    <ul>
+                        <li><a href="./setup/maven-plugin.html">4.1 Using Jib with Maven</a></li>
+                        <li><a href="./setup/gradle-plugin.html">4.2 Using Jib with Gradle</a></li>
+                        <li><a href="./setup/jib-cli.html">4.3 Using Jib CLI</a></li>
+                        <li><a href="./setup/verification.html">4.4 Verifying Installation</a></li>
+                        <li><a href="./setup/first-image.html">4.5 Building Your First Image</a></li>
+                        <li><a href="./setup/running-locally.html">4.6 Running the Image Locally</a></li>
+                        <li><a href="./setup/project-structure.html">4.7 Project Structure Requirements</a></li>
+                    </ul>
+                </li>
+                <li>5️⃣ Basic Configuration
+                    <ul>
+                        <li><a href="./config/base-images.html">5.1 Selecting Base Images</a></li>
+                        <li><a href="./config/target-image.html">5.2 Configuring Target Image & Registry</a></li>
+                        <li><a href="./config/ports.html">5.3 Setting Ports</a></li>
+                        <li><a href="./config/jvm-flags.html">5.4 Setting JVM Flags</a></li>
+                        <li><a href="./config/environment-variables.html">5.5 Environment Variables</a></li>
+                        <li><a href="./config/entrypoint.html">5.6 Entry Point Customization</a></li>
+                        <li><a href="./config/working-directory.html">5.7 Working Directory Configuration</a></li>
+                        <li><a href="./config/labels-annotations.html">5.8 Labels & Annotations</a></li>
+                    </ul>
+                </li>
+                <li>6️⃣ Working with Registries
+                    <ul>
+                        <li><a href="./registries/docker-hub.html">6.1 Docker Hub</a></li>
+                        <li><a href="./registries/amazon-ecr.html">6.2 Amazon ECR</a></li>
+                        <li><a href="./registries/google-artifact-registry.html">6.3 Google Artifact Registry</a></li>
+                        <li><a href="./registries/github-container-registry.html">6.4 GitHub Container Registry</a></li>
+                        <li><a href="./registries/azure-container-registry.html">6.5 Azure Container Registry</a></li>
+                        <li><a href="./registries/harbor.html">6.6 Harbor Registry</a></li>
+                        <li><a href="./registries/authentication.html">6.7 Authentication & Credentials</a></li>
+                        <li><a href="./registries/private-registries.html">6.8 Pushing to Private Registries</a></li>
+                        <li><a href="./registries/registry-mirrors.html">6.9 Using Registry Mirrors</a></li>
+                    </ul>
+                </li>
+                <li>7️⃣ Advanced Configuration
+                    <ul>
+                        <li><a href="./advanced/custom-layers.html">7.1 Customizing Image Layers</a></li>
+                        <li><a href="./advanced/extra-directories.html">7.2 Extra Directories</a></li>
+                        <li><a href="./advanced/adding-files.html">7.3 Adding Files to Images</a></li>
+                        <li><a href="./advanced/user-security.html">7.4 Container User & Security Settings</a></li>
+                        <li><a href="./advanced/multi-module.html">7.5 Multi-Module Projects</a></li>
+                        <li><a href="./advanced/multi-architecture.html">7.6 Multi-Architecture Builds (ARM64, AMD64)</a></li>
+                        <li><a href="./advanced/custom-base-images.html">7.7 Creating Custom Base Images</a></li>
+                        <li><a href="./advanced/war-files.html">7.8 Building WAR Files</a></li>
+                        <li><a href="./advanced/native-libraries.html">7.9 Including Native Libraries</a></li>
+                        <li><a href="./advanced/jib-extensions.html">7.10 Jib Extensions & Plugins</a></li>
+                    </ul>
+                </li>
+                <li>8️⃣ Performance & Optimization
+                    <ul>
+                        <li><a href="./performance/incremental-builds.html">8.1 Incremental Builds</a></li>
+                        <li><a href="./performance/caching.html">8.2 Caching Mechanism</a></li>
+                        <li><a href="./performance/image-size.html">8.3 Reducing Image Size</a></li>
+                        <li><a href="./performance/distroless.html">8.4 Using Distroless Base Images</a></li>
+                        <li><a href="./performance/startup-time.html">8.5 Startup Time Optimization</a></li>
+                        <li><a href="./performance/jvm-tuning.html">8.6 JVM Memory & Performance Tuning</a></li>
+                        <li><a href="./performance/class-data-sharing.html">8.7 Class Data Sharing (CDS)</a></li>
+                        <li><a href="./performance/jlink-optimization.html">8.8 jlink & Custom JRE</a></li>
+                        <li><a href="./performance/build-speed.html">8.9 Build Speed Optimization</a></li>
+                    </ul>
+                </li>
+                <li>9️⃣ Jib in CI/CD Pipelines
+                    <ul>
+                        <li><a href="./cicd/github-actions.html">9.1 Using Jib in GitHub Actions</a></li>
+                        <li><a href="./cicd/gitlab-ci.html">9.2 Using Jib in GitLab CI</a></li>
+                        <li><a href="./cicd/jenkins.html">9.3 Jenkins Integration</a></li>
+                        <li><a href="./cicd/circleci.html">9.4 CircleCI Integration</a></li>
+                        <li><a href="./cicd/azure-devops.html">9.5 Azure DevOps Integration</a></li>
+                        <li><a href="./cicd/credentials.html">9.6 Secure Credential Management</a></li>
+                        <li><a href="./cicd/versioning.html">9.7 Version Tagging Strategies</a></li>
+                        <li><a href="./cicd/automated-testing.html">9.8 Automated Image Testing</a></li>
+                        <li><a href="./cicd/build-matrix.html">9.9 Multi-Platform Build Matrix</a></li>
+                    </ul>
+                </li>
+                <li>🔟 Jib with Kubernetes
+                    <ul>
+                        <li><a href="./kubernetes/deployment.html">10.1 Deploying Jib Images to Kubernetes</a></li>
+                        <li><a href="./kubernetes/best-practices.html">10.2 Best Practices for Microservices</a></li>
+                        <li><a href="./kubernetes/health-checks.html">10.3 Health Checks & Probes</a></li>
+                        <li><a href="./kubernetes/resource-limits.html">10.4 Resource Limits & JVM Tuning</a></li>
+                        <li><a href="./kubernetes/configmaps-secrets.html">10.5 ConfigMaps & Secrets</a></li>
+                        <li><a href="./kubernetes/helm-integration.html">10.6 Helm Chart Integration</a></li>
+                        <li><a href="./kubernetes/rolling-updates.html">10.7 Rolling Updates Strategy</a></li>
+                        <li><a href="./kubernetes/pod-disruption-budget.html">10.8 Pod Disruption Budgets</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣1️⃣ Security Best Practices
+                    <ul>
+                        <li><a href="./security/minimal-base-images.html">11.1 Minimal Base Images</a></li>
+                        <li><a href="./security/non-root.html">11.2 Running as Non-Root</a></li>
+                        <li><a href="./security/vulnerability-scanning.html">11.3 Vulnerability Scanning</a></li>
+                        <li><a href="./security/image-signing.html">11.4 Image Signing & SBOM</a></li>
+                        <li><a href="./security/secrets-management.html">11.5 Secrets Management</a></li>
+                        <li><a href="./security/security-context.html">11.6 Security Context Configuration</a></li>
+                        <li><a href="./security/supply-chain.html">11.7 Supply Chain Security</a></li>
+                        <li><a href="./security/compliance.html">11.8 Compliance & Hardening</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣2️⃣ Troubleshooting & Debugging
+                    <ul>
+                        <li><a href="./troubleshooting/common-errors.html">12.1 Common Build Errors</a></li>
+                        <li><a href="./troubleshooting/registry-auth.html">12.2 Registry Authentication Issues</a></li>
+                        <li><a href="./troubleshooting/layer-problems.html">12.3 Debugging Layer Problems</a></li>
+                        <li><a href="./troubleshooting/logging.html">12.4 Logging & Verbose Mode</a></li>
+                        <li><a href="./troubleshooting/network-issues.html">12.5 Network & Proxy Issues</a></li>
+                        <li><a href="./troubleshooting/memory-issues.html">12.6 Memory & Resource Issues</a></li>
+                        <li><a href="./troubleshooting/debugging-containers.html">12.7 Debugging Running Containers</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣3️⃣ Comparison & Decision Guide
+                    <ul>
+                        <li><a href="./comparison/when-to-use-jib.html">13.1 When to Use Jib</a></li>
+                        <li><a href="./comparison/when-dockerfile.html">13.2 When to Use Dockerfile Instead</a></li>
+                        <li><a href="./comparison/when-buildpacks.html">13.3 When to Use Buildpacks</a></li>
+                        <li><a href="./comparison/enterprise-considerations.html">13.4 Enterprise Architecture Considerations</a></li>
+                        <li><a href="./comparison/feature-matrix.html">13.5 Feature Comparison Matrix</a></li>
+                        <li><a href="./comparison/performance-benchmarks.html">13.6 Performance Benchmarks</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣4️⃣ Hands-On Projects
+                    <ul>
+                        <li><a href="./projects/spring-boot-rest.html">14.1 Spring Boot REST API with Jib</a></li>
+                        <li><a href="./projects/microservice-pipeline.html">14.2 Microservice Deployment Pipeline</a></li>
+                        <li><a href="./projects/production-image.html">14.3 Secure Production Image Setup</a></li>
+                        <li><a href="./projects/kubernetes-deployment.html">14.4 Optimized Kubernetes Deployment</a></li>
+                        <li><a href="./projects/multi-module-app.html">14.5 Multi-Module Maven Application</a></li>
+                        <li><a href="./projects/reactive-app.html">14.6 Reactive Spring WebFlux Application</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣5️⃣ Framework-Specific Integration
+                    <ul>
+                        <li><a href="./frameworks/spring-boot.html">15.1 Spring Boot Integration</a></li>
+                        <li><a href="./frameworks/quarkus.html">15.2 Quarkus Integration</a></li>
+                        <li><a href="./frameworks/micronaut.html">15.3 Micronaut Integration</a></li>
+                        <li><a href="./frameworks/helidon.html">15.4 Helidon Integration</a></li>
+                        <li><a href="./frameworks/jakarta-ee.html">15.5 Jakarta EE Applications</a></li>
+                        <li><a href="./frameworks/dropwizard.html">15.6 Dropwizard Integration</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣6️⃣ Advanced Topics
+                    <ul>
+                        <li><a href="./advanced-topics/custom-entrypoints.html">16.1 Custom Entrypoints & Scripts</a></li>
+                        <li><a href="./advanced-topics/jvm-debugging.html">16.2 Remote JVM Debugging</a></li>
+                        <li><a href="./advanced-topics/profiling.html">16.3 Profiling Containerized Apps</a></li>
+                        <li><a href="./advanced-topics/monitoring-integration.html">16.4 Monitoring & Observability Integration</a></li>
+                        <li><a href="./advanced-topics/graceful-shutdown.html">16.5 Graceful Shutdown Configuration</a></li>
+                        <li><a href="./advanced-topics/signal-handling.html">16.6 Signal Handling</a></li>
+                        <li><a href="./advanced-topics/timezone-locale.html">16.7 Timezone & Locale Configuration</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣7️⃣ Testing Containerized Applications
+                    <ul>
+                        <li><a href="./testing/local-testing.html">17.1 Local Testing Strategies</a></li>
+                        <li><a href="./testing/testcontainers.html">17.2 Using Testcontainers</a></li>
+                        <li><a href="./testing/integration-tests.html">17.3 Integration Testing</a></li>
+                        <li><a href="./testing/smoke-tests.html">17.4 Smoke Tests for Images</a></li>
+                        <li><a href="./testing/contract-testing.html">17.5 Contract Testing</a></li>
+                    </ul>
+                </li>
+                <li>1️⃣8️⃣ Monitoring & Observability
+                    <ul>
+                        <li><a href="./observability/prometheus-metrics.html">18.1 Prometheus Metrics Exposure</a></li>
+                        <li><a href="./observability/jmx-exporter.html">18.2 JMX Exporter Configuration</a></li>
+                        <li><a href="./observability/distributed-tracing.html">18.3 Distributed Tracing Setup</a></li>
+                        <li><a href="./observability/logging-config.html">18.4 Logging Configuration</a></li>
+                        <li><a href="./observability/apm-integration.html">18.5 APM Tool Integration</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-grid-item main-grid-item-2">
+            <h3>Learning Path</h3>
+            <p>Recommended order for mastering Jib:</p>
+            <ol>
+                <li>Start with <strong>Introduction to Containerization</strong> - Understand containers and Java-specific challenges</li>
+                <li>Learn <strong>Jib Basics</strong> - What Jib is and how it compares to alternatives</li>
+                <li>Understand <strong>Jib Architecture</strong> - How Jib builds images efficiently</li>
+                <li>Practice <strong>Installation & Setup</strong> - Get hands-on with Maven/Gradle</li>
+                <li>Master <strong>Basic Configuration</strong> - Configure images for your needs</li>
+                <li>Work with <strong>Registries</strong> - Push images to various container registries</li>
+                <li>Explore <strong>Advanced Configuration</strong> - Multi-module, multi-arch, custom layers</li>
+                <li>Optimize for <strong>Performance</strong> - Reduce size and improve startup time</li>
+                <li>Integrate into <strong>CI/CD</strong> - Automate your build pipeline</li>
+                <li>Deploy to <strong>Kubernetes</strong> - Production-ready deployments</li>
+                <li>Implement <strong>Security Best Practices</strong> - Harden your images</li>
+                <li>Learn <strong>Testing Strategies</strong> - Ensure quality of containerized apps</li>
+            </ol>
+
+            <h3>Quick Start</h3>
+            <ul>
+                <li><a href="./spring-boot-hello-world.html"><strong>🚀 Spring Boot Hello World Tutorial</strong></a> - Complete step-by-step guide</li>
+                <li><a href="./quickstart/maven-quickstart.html">Maven Quick Start (5 minutes)</a></li>
+                <li><a href="./quickstart/gradle-quickstart.html">Gradle Quick Start (5 minutes)</a></li>
+                <li><a href="./quickstart/spring-boot-example.html">Spring Boot Example</a></li>
+                <li><a href="./Config.html"><strong>Complete Configuration Reference</strong></a></li>
+            </ul>
+
+            <h3>Key Benefits</h3>
+            <ul>
+                <li><strong>No Docker Required</strong> - Build images without Docker daemon</li>
+                <li><strong>Fast Builds</strong> - Intelligent layer caching</li>
+                <li><strong>Reproducible</strong> - Same input = same output</li>
+                <li><strong>Optimized Layers</strong> - Separate dependencies from code</li>
+                <li><strong>Secure by Default</strong> - Distroless images, non-root user</li>
+            </ul>
+
+            <h3>Common Use Cases</h3>
+            <ul>
+                <li><a href="./use-cases/microservices.html">Microservices Architecture</a></li>
+                <li><a href="./use-cases/cloud-native.html">Cloud-Native Applications</a></li>
+                <li><a href="./use-cases/enterprise-java.html">Enterprise Java Applications</a></li>
+                <li><a href="./use-cases/serverless-containers.html">Serverless Containers</a></li>
+            </ul>
+        </div>
+
+        <ul>
         <li><span class="file-icon">&#128196;</span><a href="Config.html">Config</a></li>
         <li><span class="file-icon">&#128196;</span><a href="Notes.html">Notes</a></li>
         <li><span class="file-icon">&#128444;</span><a href="HelloWorld.png">HelloWorld</a></li>
         <li><span class="file-icon">&#128444;</span><a href="with vs without jib.png">with vs without jib</a></li>
-    </ul>
+    </ul> -->
 
-</body>
+    </body>
 </html>

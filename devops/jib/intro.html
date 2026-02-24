@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Jib</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Jib</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Jib?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Jib takes your spring boot application and builds a docker image, compliant to OCI(Open Container Initiative) format, without any Dockerfile and pushes the images to registries like docker hub, GitHub Container Registry etc;</li>
+            <li>So, it is ideal choice for CI/CD environments;</li>
+            <li>You don&#x27;t need to know best practices for creating Dockerfiles;</li>
+            <li>You don&#x27;t need to install Docker to create image; // Docker is needed if you want to install image;</li>
+            <li>It is open-source and developed by Google;</li>
+            <li>Alternatives: Buildpacks, Spotify, Fabric8.io;</li>
+            <li>Smart Layering: Jib separates out application into layers: dependencies, snapshot dependencies, resources, classes; If you change only one class, Jib rebuilds only that layer; So, it is optimized for faster incremental builds;</li>
+            <li>Reproducible Builds: Images are Deterministic, Timestamp-independent, Consistent across environments;</li>
+            <li>OCI compliant images: Jib builds standard OCI images, so they run in: Docker, K8s, Podman, containerd;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How to use it?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Add this maven dependency:
+                <pre>
+<plugin>
+  <groupId>com.google.cloud.tools</groupId>
+  <artifactId>jib-maven-plugin</artifactId>
+  <version>3.4.0</version>
+</plugin>
+                </pre>
+            </li>
+            <li>Build and push: mvn compile jib:build -Dimage=myrepo/myapp</li>
+        </ul>
+    </div>
+
+
+    <div class="question"><strong>3. Docker image vs OCI Image?</strong></div>
+    <div class="answer">
+        <pre>
+| Feature                     | Docker Image   | OCI Image     |
+| --------------------------- | -------------- | ------------- |
+| Format                      | Docker-defined | Open standard |
+| Compatible with Docker?     | Yes            | Yes           |
+| Compatible with Podman/K8s? | Yes            | Yes           |
+| Difference in practice      | Almost none    | Standardized  |
+        </pre>
+    </div>
+
+    <div class="question"><strong>4. Jib vs Dockerfile?</strong></div>
+    <div class="answer">
+        <pre>
+| Feature                 | Jib         | Dockerfile     |
+| ----------------------- | ----------- | -------------- |
+| Requires Docker         | ❌ No        | ✅ Yes          |
+| Custom OS setup         | ❌ Limited   | ✅ Full control |
+| Java-optimized layering | ✅ Yes       | ❌ Manual       |
+| CI friendly             | ✅ Excellent | Good           |
+| Multi-language support  | ❌ Java only | ✅ Any          |
+        </pre>
+    </div>
+</body>
+
+</html>
