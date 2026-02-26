@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Listing and Managing Releases</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Listing and Managing Releases</h2>
+    </div>
+
+    <div class="question"><strong>1. Listing Releases</strong></div>
+    <div class="answer">
+        <pre><code># List releases in current namespace
+helm list
+
+# List releases in specific namespace
+helm list --namespace production
+
+# List releases in all namespaces
+helm list --all-namespaces
+
+# Short form
+helm ls -A</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Helm List Output</strong></div>
+    <div class="answer">
+        <pre><code>NAME      NAMESPACE   REVISION  UPDATED                   STATUS    CHART         APP VERSION
+myapp     default     3         2026-02-26 10:30:15 UTC  deployed  myapp-1.0.0   1.0</code></pre>
+        <ul>
+            <li><strong>NAME:</strong> Release name;</li>
+            <li><strong>NAMESPACE:</strong> Kubernetes namespace;</li>
+            <li><strong>REVISION:</strong> Current revision number (increments on upgrade);</li>
+            <li><strong>UPDATED:</strong> Last update timestamp;</li>
+            <li><strong>STATUS:</strong> deployed, failed, pending-install, pending-upgrade, uninstalling;</li>
+            <li><strong>CHART:</strong> Chart name and version;</li>
+            <li><strong>APP VERSION:</strong> Application version from Chart.yaml;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Filtering Releases</strong></div>
+    <div class="answer">
+        <pre><code># Filter by status
+helm list --deployed
+helm list --failed
+helm list --pending
+
+# Filter by name (regex)
+helm list --filter '^my'
+
+# Show all releases (including uninstalled)
+helm list --all
+
+# Show only uninstalled releases
+helm list --uninstalled</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Getting Release Details</strong></div>
+    <div class="answer">
+        <p><strong>Release status:</strong></p>
+        <pre><code>helm status myapp
+
+# Output includes:
+# - Release metadata
+# - Resources deployed
+# - NOTES.txt content
+# - Last deployment time</code></pre>
+
+        <p><strong>Release values:</strong></p>
+        <pre><code># Show user-supplied values
+helm get values myapp
+
+# Show all values (including defaults)
+helm get values myapp --all
+
+# Output as JSON
+helm get values myapp -o json</code></pre>
+
+        <p><strong>Release manifest:</strong></p>
+        <pre><code># Show rendered Kubernetes manifests
+helm get manifest myapp
+
+# Save to file
+helm get manifest myapp > manifest.yaml</code></pre>
+
+        <p><strong>Release notes:</strong></p>
+        <pre><code># Show NOTES.txt from last deployment
+helm get notes myapp</code></pre>
+
+        <p><strong>Release hooks:</strong></p>
+        <pre><code># Show hooks used in release
+helm get hooks myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Release History</strong></div>
+    <div class="answer">
+        <pre><code># View revision history
+helm history myapp
+
+# Output:
+REVISION  UPDATED                   STATUS      CHART         APP VERSION  DESCRIPTION
+1         Mon Feb 26 10:00:00 2026  superseded  myapp-1.0.0   1.0          Install complete
+2         Mon Feb 26 10:15:00 2026  superseded  myapp-1.1.0   1.1          Upgrade complete
+3         Mon Feb 26 10:30:00 2026  deployed    myapp-1.2.0   1.2          Upgrade complete
+
+# Show maximum number of revisions
+helm history myapp --max 5</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Release Status Values</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>deployed</td>
+                    <td>Successfully installed and running</td>
+                </tr>
+                <tr>
+                    <td>failed</td>
+                    <td>Installation or upgrade failed</td>
+                </tr>
+                <tr>
+                    <td>pending-install</td>
+                    <td>Installation in progress</td>
+                </tr>
+                <tr>
+                    <td>pending-upgrade</td>
+                    <td>Upgrade in progress</td>
+                </tr>
+                <tr>
+                    <td>pending-rollback</td>
+                    <td>Rollback in progress</td>
+                </tr>
+                <tr>
+                    <td>superseded</td>
+                    <td>Replaced by a newer revision</td>
+                </tr>
+                <tr>
+                    <td>uninstalling</td>
+                    <td>Uninstallation in progress</td>
+                </tr>
+                <tr>
+                    <td>uninstalled</td>
+                    <td>Successfully uninstalled</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. Comparing Releases</strong></div>
+    <div class="answer">
+        <pre><code># Get manifest for specific revision
+helm get manifest myapp --revision 1 > rev1.yaml
+helm get manifest myapp --revision 2 > rev2.yaml
+
+# Compare with diff
+diff rev1.yaml rev2.yaml
+
+# Or use helm-diff plugin
+helm plugin install https://github.com/databus23/helm-diff
+helm diff revision myapp 1 2</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Managing Multiple Releases</strong></div>
+    <div class="answer">
+        <pre><code># List all releases across all namespaces
+helm list -A
+
+# List releases with specific label
+kubectl get secrets -l owner=helm -A
+
+# Count releases per namespace
+helm list -A | awk '{print $2}' | sort | uniq -c</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Release Metadata</strong></div>
+    <div class="answer">
+        <p>Helm stores release information as Kubernetes Secrets:</p>
+        <pre><code># View release secrets
+kubectl get secrets -l owner=helm
+
+# Secret naming: sh.helm.release.v1.&lt;release-name&gt;.v&lt;revision&gt;
+kubectl get secret sh.helm.release.v1.myapp.v3 -o yaml
+
+# Decode release data
+kubectl get secret sh.helm.release.v1.myapp.v3 -o jsonpath='{.data.release}' | base64 -d | base64 -d | gunzip</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use meaningful release names:</strong> <code>frontend-prod</code> instead of <code>release-1</code>;</li>
+            <li><strong>Namespace isolation:</strong> Deploy to appropriate namespaces (dev, staging, prod);</li>
+            <li><strong>Track revisions:</strong> Regularly check <code>helm history</code> to understand deployment timeline;</li>
+            <li><strong>Clean up old revisions:</strong> Use <code>--history-max</code> to limit stored revisions;</li>
+            <li><strong>Document changes:</strong> Use <code>--description</code> flag during upgrades;</li>
+        </ul>
+        <pre><code># Limit revision history
+helm upgrade myapp ./chart --history-max 5
+
+# Add description
+helm upgrade myapp ./chart --description "Updated to v2.0 with new features"</code></pre>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Helm Get</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm Get</h2>
+    </div>
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <p>Testing and debugging: <strong>Helm Get</strong></p>
+        <ul>
+            <li>Validating Helm charts before deployment;</li>
+            <li>Debugging template issues;</li>
+            <li>Testing strategies;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Example</strong></div>
+    <div class="answer">
+        <pre><code># Test commands
+helm lint ./chart
+helm template ./chart --debug
+helm install --dry-run --debug ./chart</code></pre>
+    </div>
+</body>
+</html>

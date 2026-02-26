@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chart Directory Structure</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Chart Directory Structure</h2>
+    </div>
+
+    <div class="question"><strong>1. Complete Chart Structure</strong></div>
+    <div class="answer">
+        <pre><code>mychart/
+├── Chart.yaml              # Chart metadata
+├── Chart.lock              # Dependency lock file (auto-generated)
+├── values.yaml             # Default configuration values
+├── values.schema.json      # JSON schema for values validation (optional)
+├── README.md               # Chart documentation
+├── LICENSE                 # Chart license
+├── .helmignore            # Files to ignore when packaging
+├── charts/                 # Dependent charts directory
+│   └── mysql-9.3.4.tgz    # Downloaded dependency
+├── crds/                   # Custom Resource Definitions
+│   └── mycrd.yaml
+└── templates/              # Kubernetes manifest templates
+    ├── NOTES.txt          # Post-install notes
+    ├── _helpers.tpl       # Template helpers
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── ingress.yaml
+    ├── configmap.yaml
+    ├── secret.yaml
+    ├── serviceaccount.yaml
+    ├── hpa.yaml
+    └── tests/             # Test files
+        └── test-connection.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Chart.yaml - Chart Metadata</strong></div>
+    <div class="answer">
+        <p>The main descriptor file for a chart:</p>
+        <pre><code>apiVersion: v2                    # Chart API version (v2 for Helm 3)
+name: myapp                       # Chart name
+version: 1.0.0                    # Chart version (SemVer)
+appVersion: "2.1.0"              # Version of the app being deployed
+description: A Helm chart for my application
+type: application                 # application or library
+keywords:
+  - web
+  - backend
+home: https://myapp.example.com
+sources:
+  - https://github.com/myorg/myapp
+maintainers:
+  - name: John Doe
+    email: john@example.com
+icon: https://example.com/icon.png
+deprecated: false                 # Mark chart as deprecated
+kubeVersion: ">=1.20.0"          # Compatible Kubernetes versions
+dependencies:                     # Chart dependencies
+  - name: mysql
+    version: "9.3.4"
+    repository: https://charts.bitnami.com/bitnami</code></pre>
+    </div>
+
+    <div class="question"><strong>3. values.yaml - Default Configuration</strong></div>
+    <div class="answer">
+        <p>Defines default values for templates:</p>
+        <pre><code>replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "1.21"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+    - host: myapp.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80</code></pre>
+    </div>
+
+    <div class="question"><strong>4. templates/ Directory</strong></div>
+    <div class="answer">
+        <p><strong>Purpose:</strong> Contains Kubernetes manifest templates that are rendered with values;</p>
+        
+        <p><strong>Common template files:</strong></p>
+        <ul>
+            <li><code>deployment.yaml</code> - Deployment configuration;</li>
+            <li><code>service.yaml</code> - Service configuration;</li>
+            <li><code>ingress.yaml</code> - Ingress rules;</li>
+            <li><code>configmap.yaml</code> - Configuration data;</li>
+            <li><code>secret.yaml</code> - Sensitive data;</li>
+            <li><code>serviceaccount.yaml</code> - Service account;</li>
+            <li><code>hpa.yaml</code> - Horizontal Pod Autoscaler;</li>
+            <li><code>_helpers.tpl</code> - Template helper functions;</li>
+            <li><code>NOTES.txt</code> - Post-installation notes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. _helpers.tpl - Template Helpers</strong></div>
+    <div class="answer">
+        <p>Defines reusable template snippets:</p>
+        <pre><code>{{/*
+Expand the name of the chart.
+*/}}
+{{- define "mychart.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+*/}}
+{{- define "mychart.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "mychart.labels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+app.kubernetes.io/name: {{ include "mychart.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}</code></pre>
+    </div>
+
+    <div class="question"><strong>6. NOTES.txt - Post-Install Instructions</strong></div>
+    <div class="answer">
+        <p>Displayed after installation/upgrade:</p>
+        <pre><code>Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access your application:
+
+{{- if .Values.ingress.enabled }}
+  http://{{ index .Values.ingress.hosts 0 "host" }}
+{{- else }}
+  export POD_NAME=$(kubectl get pods -n {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "mychart.name" . }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward $POD_NAME 8080:80
+  echo "Visit http://127.0.0.1:8080"
+{{- end }}
+
+For more information, visit: https://github.com/myorg/myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>7. charts/ Directory - Dependencies</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Contains dependent charts (subcharts);</li>
+            <li>Can be manually placed or downloaded via <code>helm dependency update</code>;</li>
+            <li>Each dependency is a .tgz file or unpacked directory;</li>
+        </ul>
+        <pre><code>charts/
+├── mysql-9.3.4.tgz
+└── redis-17.3.7.tgz</code></pre>
+    </div>
+
+    <div class="question"><strong>8. crds/ Directory - Custom Resource Definitions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Contains CRD YAML files;</li>
+            <li>CRDs are installed <strong>before</strong> any other resources;</li>
+            <li>CRDs are <strong>never</strong> upgraded or deleted by Helm;</li>
+            <li>Must be managed manually if changes are needed;</li>
+        </ul>
+        <pre><code>crds/
+└── myresource-crd.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>9. .helmignore - Exclude Files</strong></div>
+    <div class="answer">
+        <p>Specifies files to exclude when packaging:</p>
+        <pre><code># Development files
+.git/
+.gitignore
+.DS_Store
+
+# CI/CD
+.gitlab-ci.yml
+.github/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Test files
+test/
+*.test.yaml
+
+# Temporary files
+*.tmp
+*.bak
+*~</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Chart.lock - Dependency Lock File</strong></div>
+    <div class="answer">
+        <p>Auto-generated when running <code>helm dependency update</code>:</p>
+        <pre><code>dependencies:
+- name: mysql
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.3.4
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.3.7
+digest: sha256:abc123...</code></pre>
+        <ul>
+            <li>Locks dependency versions for reproducible builds;</li>
+            <li>Should be committed to version control;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>11. templates/tests/ - Chart Tests</strong></div>
+    <div class="answer">
+        <p>Contains test pods that validate the installation:</p>
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "mychart.fullname" . }}-test-connection"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "mychart.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never</code></pre>
+        <p>Run tests with: <code>helm test &lt;release-name&gt;</code></p>
+    </div>
+
+    <div class="question"><strong>12. Creating a Chart from Scratch</strong></div>
+    <div class="answer">
+        <pre><code># Create a new chart with default structure
+helm create mychart
+
+# This generates:
+mychart/
+├── Chart.yaml
+├── values.yaml
+├── .helmignore
+├── charts/
+└── templates/
+    ├── NOTES.txt
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── ingress.yaml
+    ├── serviceaccount.yaml
+    ├── hpa.yaml
+    └── tests/
+        └── test-connection.yaml</code></pre>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Uninstalling Releases</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Uninstalling Releases</h2>
+    </div>
+
+    <div class="question"><strong>1. Basic Uninstallation</strong></div>
+    <div class="answer">
+        <pre><code># Uninstall a release
+helm uninstall myapp
+
+# Uninstall from specific namespace
+helm uninstall myapp --namespace production
+
+# Short form
+helm uninstall myapp -n production</code></pre>
+    </div>
+
+    <div class="question"><strong>2. What Gets Deleted?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>All Kubernetes resources created by the release (Pods, Services, Deployments, etc.);</li>
+            <li>Release history (Secrets containing release metadata);</li>
+            <li>Hooks (unless they have deletion policies);</li>
+        </ul>
+        <p><strong>What does NOT get deleted:</strong></p>
+        <ul>
+            <li>PersistentVolumeClaims (by default, to prevent data loss);</li>
+            <li>Custom Resource Definitions (CRDs);</li>
+            <li>Resources with <code>"helm.sh/resource-policy": "keep"</code> annotation;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Uninstall Options</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>--keep-history</td>
+                    <td>Keep release history for rollback</td>
+                </tr>
+                <tr>
+                    <td>--dry-run</td>
+                    <td>Simulate uninstallation</td>
+                </tr>
+                <tr>
+                    <td>--no-hooks</td>
+                    <td>Skip running uninstall hooks</td>
+                </tr>
+                <tr>
+                    <td>--timeout</td>
+                    <td>Time to wait for deletion (default: 5m)</td>
+                </tr>
+                <tr>
+                    <td>--wait</td>
+                    <td>Wait for all resources to be deleted</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Keeping Release History</strong></div>
+    <div class="answer">
+        <pre><code># Uninstall but keep history (allows reinstall with same name)
+helm uninstall myapp --keep-history
+
+# View uninstalled releases
+helm list --uninstalled
+
+# Rollback an uninstalled release (reinstalls it)
+helm rollback myapp 3</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Dry Run Uninstall</strong></div>
+    <div class="answer">
+        <pre><code># See what would be deleted without actually deleting
+helm uninstall myapp --dry-run
+
+# Output shows:
+# - Release name
+# - Resources that would be deleted
+# - Any hooks that would run</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Preserving Resources</strong></div>
+    <div class="answer">
+        <p>Use <code>resource-policy</code> annotation to keep specific resources:</p>
+        <pre><code># In your template (e.g., pvc.yaml)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myapp-data
+  annotations:
+    "helm.sh/resource-policy": "keep"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi</code></pre>
+        <p>This PVC will NOT be deleted when the release is uninstalled.</p>
+    </div>
+
+    <div class="question"><strong>7. Uninstalling Multiple Releases</strong></div>
+    <div class="answer">
+        <pre><code># Uninstall multiple releases
+helm uninstall app1 app2 app3
+
+# Uninstall all releases in a namespace (be careful!)
+helm list -n staging --short | xargs -L1 helm uninstall -n staging
+
+# Uninstall releases matching pattern
+helm list --filter '^test-' --short | xargs -L1 helm uninstall</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Cleaning Up After Uninstall</strong></div>
+    <div class="answer">
+        <pre><code># Check for remaining resources
+kubectl get all -l app.kubernetes.io/instance=myapp
+
+# Delete PVCs if needed
+kubectl get pvc -l app.kubernetes.io/instance=myapp
+kubectl delete pvc myapp-data
+
+# Check for remaining secrets
+kubectl get secrets -l app.kubernetes.io/instance=myapp
+
+# Check for remaining configmaps
+kubectl get configmaps -l app.kubernetes.io/instance=myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Uninstall Hooks</strong></div>
+    <div class="answer">
+        <p>Hooks can run during uninstallation:</p>
+        <pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myapp-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: cleanup
+        image: busybox
+        command: ['sh', '-c', 'echo Cleaning up...']
+      restartPolicy: Never</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Troubleshooting Uninstallation</strong></div>
+    <div class="answer">
+        <p><strong>Issue: Uninstall hangs</strong></p>
+        <pre><code># Check for finalizers blocking deletion
+kubectl get all -n &lt;namespace&gt; -o json | jq '.items[] | select(.metadata.finalizers != null) | {kind: .kind, name: .metadata.name, finalizers: .metadata.finalizers}'
+
+# Remove finalizers if necessary (careful!)
+kubectl patch &lt;resource&gt; &lt;name&gt; -p '{"metadata":{"finalizers":[]}}' --type=merge</code></pre>
+
+        <p><strong>Issue: Resources remain after uninstall</strong></p>
+        <pre><code># Find resources by label
+kubectl get all -l app.kubernetes.io/instance=myapp -A
+
+# Manually delete if needed
+kubectl delete all -l app.kubernetes.io/instance=myapp -n &lt;namespace&gt;</code></pre>
+
+        <p><strong>Issue: Cannot reinstall with same name</strong></p>
+        <pre><code># If release history exists
+helm list --uninstalled
+
+# Delete release history
+helm delete myapp --purge  # Helm v2
+# Or in Helm v3, uninstall without --keep-history removes history</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Dry run first:</strong> Always use <code>--dry-run</code> in production;</li>
+            <li><strong>Backup data:</strong> Export PVC data before uninstalling;</li>
+            <li><strong>Use resource-policy:</strong> Annotate important resources to keep them;</li>
+            <li><strong>Check dependencies:</strong> Ensure no other apps depend on this release;</li>
+            <li><strong>Verify cleanup:</strong> Check for remaining resources after uninstall;</li>
+            <li><strong>Document process:</strong> Keep runbooks for uninstalling complex applications;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

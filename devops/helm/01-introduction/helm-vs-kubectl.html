@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm vs kubectl</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm vs kubectl</h2>
+    </div>
+
+    <div class="question"><strong>1. What is kubectl?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>kubectl</code> is the official Kubernetes command-line tool;</li>
+            <li>It directly interacts with the Kubernetes API to manage resources;</li>
+            <li>Works with raw YAML manifests — no templating or packaging;</li>
+            <li>Essential for any Kubernetes work, including when using Helm;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Key Differences</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>kubectl</th>
+                    <th>Helm</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Purpose</td>
+                    <td>Low-level Kubernetes API client</td>
+                    <td>High-level package manager</td>
+                </tr>
+                <tr>
+                    <td>Deployment unit</td>
+                    <td>Individual YAML files</td>
+                    <td>Charts (packaged collections)</td>
+                </tr>
+                <tr>
+                    <td>Templating</td>
+                    <td>❌ No built-in templating</td>
+                    <td>✅ Go templating with variables</td>
+                </tr>
+                <tr>
+                    <td>Release tracking</td>
+                    <td>❌ No release concept</td>
+                    <td>✅ Tracks every deployment as a release</td>
+                </tr>
+                <tr>
+                    <td>Rollback</td>
+                    <td>⚠️ Manual (kubectl rollout undo)</td>
+                    <td>✅ Automatic (helm rollback)</td>
+                </tr>
+                <tr>
+                    <td>Dependency management</td>
+                    <td>❌ None</td>
+                    <td>✅ Built-in dependency resolution</td>
+                </tr>
+                <tr>
+                    <td>Configuration management</td>
+                    <td>⚠️ Manual or with kustomize</td>
+                    <td>✅ values.yaml with overrides</td>
+                </tr>
+                <tr>
+                    <td>Versioning</td>
+                    <td>❌ No built-in versioning</td>
+                    <td>✅ SemVer for charts and releases</td>
+                </tr>
+                <tr>
+                    <td>Sharing</td>
+                    <td>⚠️ Copy YAML files</td>
+                    <td>✅ Chart repositories</td>
+                </tr>
+                <tr>
+                    <td>Learning curve</td>
+                    <td>✅ Simpler for beginners</td>
+                    <td>⚠️ Requires understanding of templating</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Deployment Comparison</strong></div>
+    <div class="answer">
+        <p><strong>Using kubectl:</strong></p>
+        <pre><code># Apply each file individually
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f configmap.yaml
+kubectl apply -f ingress.yaml
+
+# Update image version (manual edit or sed)
+kubectl set image deployment/myapp myapp=myapp:v2.0
+
+# Rollback (only works for Deployments)
+kubectl rollout undo deployment/myapp
+
+# Delete everything (must remember all resources)
+kubectl delete -f deployment.yaml
+kubectl delete -f service.yaml
+kubectl delete -f configmap.yaml
+kubectl delete -f ingress.yaml</code></pre>
+
+        <p><strong>Using Helm:</strong></p>
+        <pre><code># Install everything at once
+helm install myapp ./chart
+
+# Upgrade with new image version
+helm upgrade myapp ./chart --set image.tag=v2.0
+
+# Rollback entire release
+helm rollback myapp 1
+
+# Delete everything
+helm uninstall myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Configuration Management Comparison</strong></div>
+    <div class="answer">
+        <p><strong>kubectl approach:</strong></p>
+        <pre><code># Separate files for each environment
+deployment-dev.yaml    # replicas: 1, image: myapp:dev
+deployment-staging.yaml # replicas: 2, image: myapp:staging
+deployment-prod.yaml   # replicas: 5, image: myapp:v1.0
+
+# Deploy to each environment
+kubectl apply -f deployment-dev.yaml
+kubectl apply -f deployment-staging.yaml
+kubectl apply -f deployment-prod.yaml</code></pre>
+
+        <p><strong>Helm approach:</strong></p>
+        <pre><code># Single template: templates/deployment.yaml
+replicas: {{ .Values.replicaCount }}
+image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+# Different values files
+values-dev.yaml:    replicaCount: 1, tag: dev
+values-staging.yaml: replicaCount: 2, tag: staging
+values-prod.yaml:   replicaCount: 5, tag: v1.0
+
+# Deploy to each environment
+helm install myapp ./chart -f values-dev.yaml
+helm install myapp ./chart -f values-staging.yaml
+helm install myapp ./chart -f values-prod.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>5. When to Use Each</strong></div>
+    <div class="answer">
+        <p><strong>Use kubectl when:</strong></p>
+        <ul>
+            <li>Learning Kubernetes basics;</li>
+            <li>Quick one-off deployments or testing;</li>
+            <li>Debugging specific resources;</li>
+            <li>Very simple applications (1-2 resources);</li>
+            <li>You need direct, low-level control;</li>
+        </ul>
+
+        <p><strong>Use Helm when:</strong></p>
+        <ul>
+            <li>Managing complex applications with many resources;</li>
+            <li>Deploying across multiple environments;</li>
+            <li>Need versioning and rollback capabilities;</li>
+            <li>Want to share/reuse configurations;</li>
+            <li>Managing dependencies between applications;</li>
+            <li>CI/CD automation;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Can They Work Together?</strong></div>
+    <div class="answer">
+        <p><strong>Yes! They complement each other:</strong></p>
+        <ul>
+            <li>Helm uses kubectl under the hood to apply resources;</li>
+            <li>You can use <code>kubectl</code> to inspect resources deployed by Helm;</li>
+            <li>Use Helm for deployment, kubectl for debugging;</li>
+        </ul>
+        <pre><code># Deploy with Helm
+helm install myapp ./chart
+
+# Debug with kubectl
+kubectl get pods -l app=myapp
+kubectl logs myapp-pod-xyz
+kubectl describe pod myapp-pod-xyz
+kubectl exec -it myapp-pod-xyz -- /bin/sh</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Alternative: Kustomize</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Kustomize</strong> is another tool for managing Kubernetes configurations;</li>
+            <li>Built into kubectl (kubectl apply -k);</li>
+            <li>Uses overlays instead of templates;</li>
+            <li>Simpler than Helm but less powerful;</li>
+            <li>Good middle ground between raw kubectl and Helm;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Creating Your First Chart</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Creating Your First Chart (helm create)</h2>
+    </div>
+
+    <div class="question"><strong>1. Creating a New Chart</strong></div>
+    <div class="answer">
+        <pre><code># Create a new chart with default structure
+helm create mychart
+
+# This creates:
+mychart/
+├── Chart.yaml
+├── values.yaml
+├── charts/
+└── templates/
+    ├── NOTES.txt
+    ├── _helpers.tpl
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── ingress.yaml
+    ├── serviceaccount.yaml
+    ├── hpa.yaml
+    └── tests/
+        └── test-connection.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Understanding the Generated Files</strong></div>
+    <div class="answer">
+        <p><strong>Chart.yaml:</strong> Chart metadata</p>
+        <pre><code>apiVersion: v2
+name: mychart
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.16.0"</code></pre>
+
+        <p><strong>values.yaml:</strong> Default configuration (simplified)</p>
+        <pre><code>replicaCount: 1
+image:
+  repository: nginx
+  tag: ""
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Testing the Generated Chart</strong></div>
+    <div class="answer">
+        <pre><code># Lint the chart
+helm lint mychart
+
+# Dry run installation
+helm install test-release ./mychart --dry-run --debug
+
+# Install the chart
+helm install test-release ./mychart
+
+# Check the release
+helm list
+kubectl get all
+
+# Uninstall
+helm uninstall test-release</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Customizing Your Chart</strong></div>
+    <div class="answer">
+        <p><strong>Step 1: Update Chart.yaml</strong></p>
+        <pre><code>apiVersion: v2
+name: myapp
+description: My awesome application
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - web
+  - backend
+maintainers:
+  - name: Your Name
+    email: you@example.com</code></pre>
+
+        <p><strong>Step 2: Customize values.yaml</strong></p>
+        <pre><code>replicaCount: 2
+
+image:
+  repository: myregistry/myapp
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8080
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Simplifying the Chart</strong></div>
+    <div class="answer">
+        <p>Remove unnecessary files for a minimal chart:</p>
+        <pre><code># Keep only what you need
+mychart/
+├── Chart.yaml
+├── values.yaml
+└── templates/
+    ├── deployment.yaml
+    └── service.yaml
+
+# Delete unused files
+rm mychart/templates/ingress.yaml
+rm mychart/templates/serviceaccount.yaml
+rm mychart/templates/hpa.yaml
+rm -rf mychart/templates/tests/</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Creating a Minimal Chart from Scratch</strong></div>
+    <div class="answer">
+        <pre><code># Create directory structure
+mkdir -p myapp/{templates,charts}
+cd myapp
+
+# Create Chart.yaml
+cat &lt;&lt;EOF &gt; Chart.yaml
+apiVersion: v2
+name: myapp
+version: 1.0.0
+appVersion: "1.0.0"
+description: My application
+EOF
+
+# Create values.yaml
+cat &lt;&lt;EOF &gt; values.yaml
+replicaCount: 2
+image:
+  repository: nginx
+  tag: "1.21"
+service:
+  port: 80
+EOF
+
+# Create deployment template
+cat &lt;&lt;EOF &gt; templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.service.port }}
+EOF
+
+# Create service template
+cat &lt;&lt;EOF &gt; templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  ports:
+  - port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+  selector:
+    app: {{ .Release.Name }}
+EOF</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Adding NOTES.txt</strong></div>
+    <div class="answer">
+        <pre><code>cat &lt;&lt;EOF &gt; templates/NOTES.txt
+Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access your application:
+
+  export POD_NAME=$(kubectl get pods -n {{ .Release.Namespace }} -l "app={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl port-forward $POD_NAME 8080:{{ .Values.service.port }}
+  echo "Visit http://127.0.0.1:8080"
+EOF</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Validating Your Chart</strong></div>
+    <div class="answer">
+        <pre><code># Lint the chart
+helm lint ./myapp
+
+# Template rendering (see generated YAML)
+helm template myrelease ./myapp
+
+# Dry run with debug
+helm install myrelease ./myapp --dry-run --debug
+
+# Check for syntax errors
+helm template myrelease ./myapp | kubectl apply --dry-run=client -f -</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Installing Your Chart</strong></div>
+    <div class="answer">
+        <pre><code># Install the chart
+helm install myrelease ./myapp
+
+# Verify installation
+helm status myrelease
+kubectl get all -l app=myrelease
+
+# Test the application
+kubectl port-forward svc/myrelease 8080:80
+curl http://localhost:8080</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Iterating on Your Chart</strong></div>
+    <div class="answer">
+        <pre><code># Make changes to templates or values
+vim myapp/values.yaml
+
+# Test changes
+helm upgrade myrelease ./myapp --dry-run --debug
+
+# Apply changes
+helm upgrade myrelease ./myapp
+
+# Rollback if needed
+helm rollback myrelease</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Best Practices for New Charts</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Start simple:</strong> Begin with minimal templates, add complexity as needed;</li>
+            <li><strong>Use helm create:</strong> Good starting point, remove what you don't need;</li>
+            <li><strong>Test frequently:</strong> Use <code>helm lint</code> and <code>--dry-run</code> often;</li>
+            <li><strong>Document everything:</strong> Add comments in templates and comprehensive README;</li>
+            <li><strong>Use meaningful names:</strong> Clear, descriptive names for charts and resources;</li>
+            <li><strong>Follow conventions:</strong> Use standard Kubernetes labels and annotations;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

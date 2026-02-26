@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Upgrading and Rolling Back Releases</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Upgrading and Rolling Back Releases</h2>
+    </div>
+
+    <div class="question"><strong>1. Upgrading a Release</strong></div>
+    <div class="answer">
+        <pre><code># Basic upgrade
+helm upgrade myapp ./chart
+
+# Upgrade with new values
+helm upgrade myapp ./chart -f values-prod.yaml
+
+# Upgrade with --set
+helm upgrade myapp ./chart --set image.tag=v2.0
+
+# Upgrade and wait for completion
+helm upgrade myapp ./chart --wait --timeout 5m
+
+# Atomic upgrade (rollback on failure)
+helm upgrade myapp ./chart --atomic</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Install or Upgrade</strong></div>
+    <div class="answer">
+        <pre><code># Install if not exists, upgrade if exists
+helm upgrade --install myapp ./chart
+
+# Short form
+helm upgrade -i myapp ./chart
+
+# With namespace creation
+helm upgrade --install myapp ./chart --create-namespace -n production</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Upgrade Options</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>--install</td>
+                    <td>Install if release doesn't exist</td>
+                </tr>
+                <tr>
+                    <td>--atomic</td>
+                    <td>Rollback on failure</td>
+                </tr>
+                <tr>
+                    <td>--wait</td>
+                    <td>Wait for resources to be ready</td>
+                </tr>
+                <tr>
+                    <td>--timeout</td>
+                    <td>Time to wait (default: 5m)</td>
+                </tr>
+                <tr>
+                    <td>--force</td>
+                    <td>Force resource updates (recreate pods)</td>
+                </tr>
+                <tr>
+                    <td>--cleanup-on-fail</td>
+                    <td>Delete new resources on failure</td>
+                </tr>
+                <tr>
+                    <td>--reset-values</td>
+                    <td>Reset values to chart defaults</td>
+                </tr>
+                <tr>
+                    <td>--reuse-values</td>
+                    <td>Reuse values from previous release</td>
+                </tr>
+                <tr>
+                    <td>--history-max</td>
+                    <td>Limit number of revisions saved</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Understanding --reuse-values vs --reset-values</strong></div>
+    <div class="answer">
+        <pre><code># Default: merge new values with existing
+helm upgrade myapp ./chart --set image.tag=v2.0
+
+# Reset to chart defaults, then apply new values
+helm upgrade myapp ./chart --reset-values --set image.tag=v2.0
+
+# Reuse all previous values, override with new
+helm upgrade myapp ./chart --reuse-values --set image.tag=v2.0</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Rolling Back a Release</strong></div>
+    <div class="answer">
+        <pre><code># Rollback to previous revision
+helm rollback myapp
+
+# Rollback to specific revision
+helm rollback myapp 2
+
+# Rollback with wait
+helm rollback myapp 2 --wait --timeout 5m
+
+# Dry run rollback
+helm rollback myapp 2 --dry-run</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Rollback Options</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>--wait</td>
+                    <td>Wait for resources to be ready</td>
+                </tr>
+                <tr>
+                    <td>--timeout</td>
+                    <td>Time to wait for rollback</td>
+                </tr>
+                <tr>
+                    <td>--cleanup-on-fail</td>
+                    <td>Delete new resources if rollback fails</td>
+                </tr>
+                <tr>
+                    <td>--force</td>
+                    <td>Force resource updates</td>
+                </tr>
+                <tr>
+                    <td>--recreate-pods</td>
+                    <td>Recreate pods for rollback</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. Upgrade/Rollback Workflow</strong></div>
+    <div class="answer">
+        <pre><code># 1. Check current release
+helm list
+helm status myapp
+
+# 2. View current revision
+helm history myapp
+
+# 3. Dry run upgrade
+helm upgrade myapp ./chart --dry-run --debug
+
+# 4. Perform upgrade
+helm upgrade myapp ./chart --wait
+
+# 5. Verify upgrade
+helm status myapp
+kubectl get pods
+
+# 6. If issues, rollback
+helm rollback myapp
+
+# 7. Verify rollback
+helm history myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Revision History Management</strong></div>
+    <div class="answer">
+        <pre><code># View revision history
+helm history myapp
+
+# Limit stored revisions (saves cluster storage)
+helm upgrade myapp ./chart --history-max 5
+
+# Each upgrade creates a new revision
+# Revision 1: Initial install
+# Revision 2: First upgrade
+# Revision 3: Second upgrade
+# Revision 4: Rollback to revision 2 (creates new revision!)
+# Revision 5: Third upgrade</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Force Upgrade</strong></div>
+    <div class="answer">
+        <p>Use <code>--force</code> when resources need to be recreated:</p>
+        <pre><code># Force recreate pods (useful for ConfigMap/Secret changes)
+helm upgrade myapp ./chart --force
+
+# This will:
+# - Delete existing pods
+# - Create new pods with updated configuration
+# - May cause downtime!</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Troubleshooting Upgrades</strong></div>
+    <div class="answer">
+        <p><strong>Issue: Upgrade stuck in pending-upgrade</strong></p>
+        <pre><code># Check release status
+helm status myapp
+
+# View pods
+kubectl get pods -n &lt;namespace&gt;
+
+# If truly stuck, rollback
+helm rollback myapp</code></pre>
+
+        <p><strong>Issue: Upgrade fails but doesn't rollback</strong></p>
+        <pre><code># Use --atomic for automatic rollback
+helm upgrade myapp ./chart --atomic
+
+# Or manually rollback
+helm rollback myapp</code></pre>
+
+        <p><strong>Issue: ConfigMap/Secret changes not applied</strong></p>
+        <pre><code># Use --force to recreate pods
+helm upgrade myapp ./chart --force
+
+# Or add checksum annotation to force pod restart
+# In deployment template:
+annotations:
+  checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Always dry-run first:</strong> <code>helm upgrade --dry-run --debug</code>;</li>
+            <li><strong>Use --atomic in production:</strong> Automatic rollback on failure;</li>
+            <li><strong>Limit revision history:</strong> <code>--history-max 10</code> to save storage;</li>
+            <li><strong>Wait for readiness:</strong> Use <code>--wait</code> to ensure pods are ready;</li>
+            <li><strong>Test rollback procedure:</strong> Practice in non-prod environments;</li>
+            <li><strong>Monitor during upgrades:</strong> Watch pod status with <code>kubectl get pods -w</code>;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

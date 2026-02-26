@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is Helm?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is Helm?</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Helm?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm is the <strong>package manager for Kubernetes</strong> — think of it as apt/yum for Kubernetes;</li>
+            <li>It allows you to define, install, and upgrade even the most complex Kubernetes applications using <strong>Helm Charts</strong>;</li>
+            <li>A Helm Chart is a collection of YAML files that describe a related set of Kubernetes resources;</li>
+            <li>Helm simplifies deployment by packaging all resources (Deployments, Services, ConfigMaps, etc.) into a single, versioned unit;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Key Components</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Helm CLI:</strong> Command-line tool to interact with Kubernetes clusters and manage charts;</li>
+            <li><strong>Charts:</strong> Pre-configured Kubernetes resource templates packaged together;</li>
+            <li><strong>Releases:</strong> An instance of a chart running in a Kubernetes cluster;</li>
+            <li><strong>Repositories:</strong> Collections of charts that can be shared and distributed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What Problems Does Helm Solve?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Complexity Management:</strong> Managing dozens of YAML files for a single application becomes unwieldy — Helm packages them all together;</li>
+            <li><strong>Reusability:</strong> Create once, deploy anywhere with different configurations;</li>
+            <li><strong>Versioning:</strong> Track changes to your application deployments with semantic versioning;</li>
+            <li><strong>Rollbacks:</strong> Easily rollback to previous versions if something goes wrong;</li>
+            <li><strong>Templating:</strong> Use variables and logic to generate Kubernetes manifests dynamically;</li>
+            <li><strong>Dependency Management:</strong> Charts can depend on other charts (e.g., your app depends on MySQL, Redis);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Helm Versions</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Helm v2:</strong> Required Tiller (server-side component) running in the cluster — deprecated and no longer supported;</li>
+            <li><strong>Helm v3:</strong> Removed Tiller for security and simplicity — client-only architecture, uses Kubernetes RBAC directly;</li>
+            <li>Always use <strong>Helm v3</strong> for new projects;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Real-World Example</strong></div>
+    <div class="answer">
+        <p>Instead of managing these files separately:</p>
+        <pre><code>deployment.yaml
+service.yaml
+configmap.yaml
+secret.yaml
+ingress.yaml
+hpa.yaml</code></pre>
+        
+        <p>You create a single Helm chart and deploy with:</p>
+        <pre><code>helm install myapp ./mychart</code></pre>
+        
+        <p>And upgrade with:</p>
+        <pre><code>helm upgrade myapp ./mychart --set image.tag=v2.0</code></pre>
+        
+        <p>And rollback if needed:</p>
+        <pre><code>helm rollback myapp 1</code></pre>
+    </div>
+
+</body>
+
+</html>

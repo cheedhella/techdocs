@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Creating Repository</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Creating Repository</h2>
+    </div>
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <p>Chart distribution: <strong>Creating Repository</strong></p>
+        <ul>
+            <li>Packaging Helm charts for distribution;</li>
+            <li>Repository management;</li>
+            <li>Sharing charts with teams;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Example</strong></div>
+    <div class="answer">
+        <pre><code># Package a chart
+helm package ./mychart
+
+# Push to repository
+helm push mychart-1.0.0.tgz oci://registry.example.com/charts</code></pre>
+    </div>
+</body>
+</html>

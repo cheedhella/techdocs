@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Understanding Helm Charts</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Understanding Helm Charts</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Helm Chart?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Helm Chart is a <strong>package of pre-configured Kubernetes resources</strong>;</li>
+            <li>Think of it as a "blueprint" for deploying an application to Kubernetes;</li>
+            <li>Contains templates, default values, metadata, and dependencies;</li>
+            <li>Can be versioned, shared, and reused across environments;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Chart Components</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>File/Directory</th>
+                    <th>Purpose</th>
+                    <th>Required?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chart.yaml</td>
+                    <td>Chart metadata (name, version, description)</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td>values.yaml</td>
+                    <td>Default configuration values</td>
+                    <td>❌ No (but recommended)</td>
+                </tr>
+                <tr>
+                    <td>templates/</td>
+                    <td>Kubernetes manifest templates</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td>charts/</td>
+                    <td>Dependent charts (subcharts)</td>
+                    <td>❌ No</td>
+                </tr>
+                <tr>
+                    <td>README.md</td>
+                    <td>Human-readable documentation</td>
+                    <td>❌ No (but recommended)</td>
+                </tr>
+                <tr>
+                    <td>.helmignore</td>
+                    <td>Files to exclude when packaging</td>
+                    <td>❌ No</td>
+                </tr>
+                <tr>
+                    <td>templates/NOTES.txt</td>
+                    <td>Post-installation instructions</td>
+                    <td>❌ No (but helpful)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Types of Charts</strong></div>
+    <div class="answer">
+        <p><strong>📦 Application Charts</strong></p>
+        <ul>
+            <li>Standard charts that deploy applications;</li>
+            <li>Can have dependencies on other charts;</li>
+            <li>Example: WordPress chart that depends on MySQL chart;</li>
+        </ul>
+
+        <p><strong>📚 Library Charts</strong></p>
+        <ul>
+            <li>Provide reusable template helpers;</li>
+            <li>Cannot be installed directly;</li>
+            <li>Used as dependencies by other charts;</li>
+            <li>Defined with <code>type: library</code> in Chart.yaml;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Chart Lifecycle</strong></div>
+    <div class="answer">
+        <pre><code>1. Create    → helm create mychart
+2. Develop   → Edit templates and values
+3. Lint      → helm lint mychart
+4. Package   → helm package mychart (creates mychart-0.1.0.tgz)
+5. Publish   → Upload to repository
+6. Install   → helm install myapp mychart-0.1.0.tgz
+7. Upgrade   → helm upgrade myapp mychart-0.2.0.tgz
+8. Rollback  → helm rollback myapp 1
+9. Uninstall → helm uninstall myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Chart Naming Conventions</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Chart name:</strong> lowercase, hyphens allowed (e.g., <code>my-app</code>);</li>
+            <li><strong>Directory name:</strong> Must match chart name;</li>
+            <li><strong>Package name:</strong> <code>chartname-version.tgz</code> (e.g., <code>my-app-1.0.0.tgz</code>);</li>
+            <li><strong>Resource names:</strong> Use chart name as prefix for consistency;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Chart Versioning</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Charts use <strong>Semantic Versioning (SemVer)</strong>: <code>MAJOR.MINOR.PATCH</code>;</li>
+            <li><strong>MAJOR:</strong> Breaking changes (e.g., 1.0.0 → 2.0.0);</li>
+            <li><strong>MINOR:</strong> New features, backward compatible (e.g., 1.0.0 → 1.1.0);</li>
+            <li><strong>PATCH:</strong> Bug fixes, backward compatible (e.g., 1.0.0 → 1.0.1);</li>
+        </ul>
+        <pre><code># Chart.yaml
+apiVersion: v2
+name: myapp
+version: 1.2.3  # Chart version
+appVersion: "2.0.1"  # Application version</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Chart vs Release vs Revision</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chart</td>
+                    <td>The package/template</td>
+                    <td>nginx-1.0.0.tgz</td>
+                </tr>
+                <tr>
+                    <td>Release</td>
+                    <td>Instance of a chart in a cluster</td>
+                    <td>my-nginx (installed from nginx chart)</td>
+                </tr>
+                <tr>
+                    <td>Revision</td>
+                    <td>Version of a release (increments on upgrade)</td>
+                    <td>Revision 1, 2, 3...</td>
+                </tr>
+            </tbody>
+        </table>
+        <pre><code># One chart can have multiple releases
+helm install frontend nginx-1.0.0.tgz
+helm install backend nginx-1.0.0.tgz
+
+# Each release can have multiple revisions
+helm upgrade frontend nginx-1.1.0.tgz  # Creates revision 2
+helm upgrade frontend nginx-1.2.0.tgz  # Creates revision 3</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Finding Charts</strong></div>
+    <div class="answer">
+        <p><strong>🌐 Artifact Hub (Official)</strong></p>
+        <ul>
+            <li>Central hub for Helm charts: <a href="https://artifacthub.io" target="_blank">artifacthub.io</a>;</li>
+            <li>Search thousands of community charts;</li>
+        </ul>
+
+        <p><strong>📦 Popular Repositories</strong></p>
+        <pre><code># Bitnami (most popular, well-maintained)
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# Prometheus Community
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+# Ingress NGINX
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+# Search for charts
+helm search repo mysql
+helm search hub wordpress</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Chart Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use meaningful names:</strong> Chart and resource names should be descriptive;</li>
+            <li><strong>Provide good defaults:</strong> Chart should work with minimal configuration;</li>
+            <li><strong>Make it configurable:</strong> Expose important settings in values.yaml;</li>
+            <li><strong>Document everything:</strong> README.md and NOTES.txt are essential;</li>
+            <li><strong>Test thoroughly:</strong> Use <code>helm lint</code> and <code>helm test</code>;</li>
+            <li><strong>Follow SemVer:</strong> Version charts correctly;</li>
+            <li><strong>Keep it simple:</strong> Don't over-engineer templates;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Example: Simple Chart Structure</strong></div>
+    <div class="answer">
+        <pre><code>myapp/
+├── Chart.yaml
+│   apiVersion: v2
+│   name: myapp
+│   version: 1.0.0
+│   appVersion: "1.0"
+│
+├── values.yaml
+│   replicaCount: 2
+│   image:
+│     repository: nginx
+│     tag: "1.21"
+│
+└── templates/
+    ├── deployment.yaml
+    │   apiVersion: apps/v1
+    │   kind: Deployment
+    │   metadata:
+    │     name: {{ .Release.Name }}
+    │   spec:
+    │     replicas: {{ .Values.replicaCount }}
+    │
+    └── service.yaml
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: {{ .Release.Name }}</code></pre>
+    </div>
+
+</body>
+
+</html>

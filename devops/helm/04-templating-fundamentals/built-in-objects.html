@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Built-in Objects (.Values, .Chart, .Release)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Built-in Objects (.Values, .Chart, .Release)</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Built-in Objects?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Built-in objects are predefined variables available in all Helm templates;</li>
+            <li>Provide access to chart metadata, values, release information, and more;</li>
+            <li>Accessed using dot notation: <code>.Values</code>, <code>.Chart</code>, <code>.Release</code>, etc.;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. The .Values Object</strong></div>
+    <div class="answer">
+        <p>Contains values from <code>values.yaml</code> and overrides from <code>--set</code> or <code>-f</code>:</p>
+        <pre><code># values.yaml
+replicaCount: 3
+image:
+  repository: nginx
+  tag: "1.21"
+
+# In template:
+replicas: {{ .Values.replicaCount }}
+image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"</code></pre>
+    </div>
+
+    <div class="question"><strong>3. The .Chart Object</strong></div>
+    <div class="answer">
+        <p>Contains metadata from <code>Chart.yaml</code>:</p>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>.Chart.Name</td>
+                    <td>Chart name</td>
+                    <td>myapp</td>
+                </tr>
+                <tr>
+                    <td>.Chart.Version</td>
+                    <td>Chart version</td>
+                    <td>1.0.0</td>
+                </tr>
+                <tr>
+                    <td>.Chart.AppVersion</td>
+                    <td>Application version</td>
+                    <td>2.0.1</td>
+                </tr>
+                <tr>
+                    <td>.Chart.Description</td>
+                    <td>Chart description</td>
+                    <td>My application chart</td>
+                </tr>
+                <tr>
+                    <td>.Chart.Keywords</td>
+                    <td>Chart keywords</td>
+                    <td>[web, backend]</td>
+                </tr>
+                <tr>
+                    <td>.Chart.Home</td>
+                    <td>Project home URL</td>
+                    <td>https://example.com</td>
+                </tr>
+                <tr>
+                    <td>.Chart.Maintainers</td>
+                    <td>List of maintainers</td>
+                    <td>[{name: "John", email: "..."}]</td>
+                </tr>
+            </tbody>
+        </table>
+        <pre><code># In template:
+app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}</code></pre>
+    </div>
+
+    <div class="question"><strong>4. The .Release Object</strong></div>
+    <div class="answer">
+        <p>Contains information about the current release:</p>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>.Release.Name</td>
+                    <td>Release name</td>
+                    <td>myapp-prod</td>
+                </tr>
+                <tr>
+                    <td>.Release.Namespace</td>
+                    <td>Namespace for release</td>
+                    <td>production</td>
+                </tr>
+                <tr>
+                    <td>.Release.IsUpgrade</td>
+                    <td>True if upgrade</td>
+                    <td>true/false</td>
+                </tr>
+                <tr>
+                    <td>.Release.IsInstall</td>
+                    <td>True if install</td>
+                    <td>true/false</td>
+                </tr>
+                <tr>
+                    <td>.Release.Revision</td>
+                    <td>Revision number</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>.Release.Service</td>
+                    <td>Service rendering release</td>
+                    <td>Helm</td>
+                </tr>
+            </tbody>
+        </table>
+        <pre><code># In template:
+metadata:
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}</code></pre>
+    </div>
+
+    <div class="question"><strong>5. The .Capabilities Object</strong></div>
+    <div class="answer">
+        <p>Information about Kubernetes cluster capabilities:</p>
+        <pre><code># Check Kubernetes version
+{{- if .Capabilities.KubeVersion.GitVersion }}
+# Running on Kubernetes {{ .Capabilities.KubeVersion }}
+{{- end }}
+
+# Check API versions
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
+
+# Available fields:
+.Capabilities.KubeVersion.Version      # e.g., "1.24"
+.Capabilities.KubeVersion.Major        # e.g., "1"
+.Capabilities.KubeVersion.Minor        # e.g., "24"
+.Capabilities.APIVersions              # Set of API versions</code></pre>
+    </div>
+
+    <div class="question"><strong>6. The .Template Object</strong></div>
+    <div class="answer">
+        <p>Information about the current template being executed:</p>
+        <pre><code>.Template.Name       # Name of current template file
+.Template.BasePath   # Path to templates directory
+
+# Example usage:
+{{- define "mychart.labels" -}}
+# Generated from {{ .Template.Name }}
+app: {{ .Chart.Name }}
+{{- end }}</code></pre>
+    </div>
+
+    <div class="question"><strong>7. The .Files Object</strong></div>
+    <div class="answer">
+        <p>Access non-template files in the chart:</p>
+        <pre><code># Read a file
+{{ .Files.Get "config/app.properties" }}
+
+# Get file as bytes
+{{ .Files.GetBytes "data/image.png" | b64enc }}
+
+# Check if file exists
+{{- if .Files.Get "optional-config.yaml" }}
+# File exists
+{{- end }}
+
+# Glob pattern matching
+{{- range $path, $_ := .Files.Glob "config/*.yaml" }}
+{{ $path }}: |
+{{ $.Files.Get $path | indent 2 }}
+{{- end }}</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Complete Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Using .Release
+  name: {{ .Release.Name }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    # Using .Chart
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    # Using .Release
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  # Using .Values
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        # Using .Values
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Accessing Nested Values</strong></div>
+    <div class="answer">
+        <pre><code># values.yaml
+database:
+  host: mysql.example.com
+  port: 3306
+  credentials:
+    username: admin
+    password: secret
+
+# In template:
+env:
+- name: DB_HOST
+  value: {{ .Values.database.host }}
+- name: DB_PORT
+  value: {{ .Values.database.port | quote }}
+- name: DB_USER
+  value: {{ .Values.database.credentials.username }}
+- name: DB_PASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Release.Name }}-db-secret
+      key: password</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use .Release.Name for uniqueness:</strong> Ensures resources don't conflict;</li>
+            <li><strong>Use .Chart.AppVersion as default:</strong> <code>{{ .Values.image.tag | default .Chart.AppVersion }}</code>;</li>
+            <li><strong>Always quote version strings:</strong> <code>{{ .Chart.AppVersion | quote }}</code>;</li>
+            <li><strong>Use .Capabilities for compatibility:</strong> Check API versions before using them;</li>
+            <li><strong>Namespace awareness:</strong> Always use <code>.Release.Namespace</code> for cross-references;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

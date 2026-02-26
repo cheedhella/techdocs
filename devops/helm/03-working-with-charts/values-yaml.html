@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>values.yaml Explained</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>values.yaml Explained</h2>
+    </div>
+
+    <div class="question"><strong>1. What is values.yaml?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>values.yaml</strong> file contains default configuration values for a chart;</li>
+            <li>Separates configuration from templates, making charts reusable;</li>
+            <li>Values can be overridden during installation/upgrade;</li>
+            <li>Accessed in templates via <code>.Values</code> object;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Basic Structure</strong></div>
+    <div class="answer">
+        <pre><code># Simple flat values
+replicaCount: 2
+imagePullPolicy: IfNotPresent
+
+# Nested values (recommended)
+image:
+  repository: nginx
+  tag: "1.21"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Using Values in Templates</strong></div>
+    <div class="answer">
+        <p><strong>values.yaml:</strong></p>
+        <pre><code>replicaCount: 3
+image:
+  repository: nginx
+  tag: "1.21"</code></pre>
+
+        <p><strong>templates/deployment.yaml:</strong></p>
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    spec:
+      containers:
+      - name: app
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Data Types</strong></div>
+    <div class="answer">
+        <pre><code># Strings
+name: "myapp"
+version: '1.0'
+
+# Numbers
+replicaCount: 3
+port: 8080
+
+# Booleans
+enabled: true
+debug: false
+
+# Lists
+tags:
+  - production
+  - web
+  - backend
+
+# Maps/Objects
+database:
+  host: mysql.example.com
+  port: 3306
+  name: mydb
+
+# Multi-line strings
+config: |
+  server {
+    listen 80;
+    server_name example.com;
+  }</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Overriding Values</strong></div>
+    <div class="answer">
+        <p><strong>Using --set:</strong></p>
+        <pre><code># Single value
+helm install myapp ./chart --set replicaCount=5
+
+# Nested value
+helm install myapp ./chart --set image.tag=v2.0
+
+# Multiple values
+helm install myapp ./chart --set replicaCount=5 --set image.tag=v2.0
+
+# List values
+helm install myapp ./chart --set tags[0]=prod --set tags[1]=web</code></pre>
+
+        <p><strong>Using values file:</strong></p>
+        <pre><code># Create custom-values.yaml
+replicaCount: 5
+image:
+  tag: "v2.0"
+
+# Use it
+helm install myapp ./chart -f custom-values.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Environment-Specific Values</strong></div>
+    <div class="answer">
+        <p><strong>values-dev.yaml:</strong></p>
+        <pre><code>replicaCount: 1
+image:
+  tag: "latest"
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi</code></pre>
+
+        <p><strong>values-prod.yaml:</strong></p>
+        <pre><code>replicaCount: 5
+image:
+  tag: "v1.0.0"
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+autoscaling:
+  enabled: true</code></pre>
+
+        <p><strong>Usage:</strong></p>
+        <pre><code>helm install myapp ./chart -f values-dev.yaml
+helm install myapp ./chart -f values-prod.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Conditional Configuration</strong></div>
+    <div class="answer">
+        <pre><code># Enable/disable features
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+    - host: example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+
+# In template:
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+...
+{{- end }}</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Default Values with Fallbacks</strong></div>
+    <div class="answer">
+        <pre><code># values.yaml
+image:
+  repository: nginx
+  # tag is optional, defaults to Chart.appVersion
+
+# In template:
+image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Global Values</strong></div>
+    <div class="answer">
+        <p>Global values are accessible to all charts and subcharts:</p>
+        <pre><code># values.yaml
+global:
+  imageRegistry: myregistry.example.com
+  storageClass: fast-ssd
+
+# Accessible in any chart/subchart
+image: "{{ .Values.global.imageRegistry }}/myapp:1.0"</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Complex Values Example</strong></div>
+    <div class="answer">
+        <pre><code>replicaCount: 2
+
+image:
+  repository: myapp
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+  pullSecrets:
+    - name: regcred
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: myapp.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: myapp-tls
+      hosts:
+        - myapp.example.com
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+env:
+  - name: DATABASE_URL
+    value: "postgres://db:5432/mydb"
+  - name: REDIS_URL
+    value: "redis://redis:6379"
+
+configMap:
+  data:
+    app.properties: |
+      server.port=8080
+      logging.level=INFO</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Use nested structure:</strong> Group related values together;</li>
+            <li><strong>Provide sensible defaults:</strong> Chart should work with default values;</li>
+            <li><strong>Document values:</strong> Add comments explaining each value;</li>
+            <li><strong>Use consistent naming:</strong> camelCase for value names;</li>
+            <li><strong>Make features optional:</strong> Use <code>enabled</code> flags for optional features;</li>
+            <li><strong>Avoid hardcoding:</strong> Put all configuration in values.yaml;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Installing a Chart</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Installing a Chart</h2>
+    </div>
+
+    <div class="question"><strong>1. Basic Installation</strong></div>
+    <div class="answer">
+        <pre><code># Install from local directory
+helm install myrelease ./mychart
+
+# Install from packaged chart
+helm install myrelease mychart-0.1.0.tgz
+
+# Install from repository
+helm install myrelease bitnami/nginx
+
+# Install with auto-generated name
+helm install --generate-name bitnami/nginx</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Installation Options</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>--namespace</td>
+                    <td>Install in specific namespace</td>
+                    <td>helm install myapp ./chart --namespace production</td>
+                </tr>
+                <tr>
+                    <td>--create-namespace</td>
+                    <td>Create namespace if it doesn't exist</td>
+                    <td>helm install myapp ./chart --create-namespace -n prod</td>
+                </tr>
+                <tr>
+                    <td>--values / -f</td>
+                    <td>Override values from file</td>
+                    <td>helm install myapp ./chart -f values-prod.yaml</td>
+                </tr>
+                <tr>
+                    <td>--set</td>
+                    <td>Override individual values</td>
+                    <td>helm install myapp ./chart --set image.tag=v2.0</td>
+                </tr>
+                <tr>
+                    <td>--dry-run</td>
+                    <td>Simulate installation</td>
+                    <td>helm install myapp ./chart --dry-run</td>
+                </tr>
+                <tr>
+                    <td>--wait</td>
+                    <td>Wait for resources to be ready</td>
+                    <td>helm install myapp ./chart --wait --timeout 5m</td>
+                </tr>
+                <tr>
+                    <td>--atomic</td>
+                    <td>Rollback on failure</td>
+                    <td>helm install myapp ./chart --atomic</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Overriding Values</strong></div>
+    <div class="answer">
+        <p><strong>Using --set:</strong></p>
+        <pre><code># Single value
+helm install myapp ./chart --set replicaCount=3
+
+# Multiple values
+helm install myapp ./chart --set replicaCount=3 --set image.tag=v2.0
+
+# Nested values
+helm install myapp ./chart --set image.repository=nginx --set image.tag=1.21
+
+# Array values
+helm install myapp ./chart --set ingress.hosts[0].host=example.com</code></pre>
+
+        <p><strong>Using values file:</strong></p>
+        <pre><code># Single values file
+helm install myapp ./chart -f values-prod.yaml
+
+# Multiple values files (later files override earlier)
+helm install myapp ./chart -f values-common.yaml -f values-prod.yaml
+
+# Combine --set and -f (--set takes precedence)
+helm install myapp ./chart -f values-prod.yaml --set image.tag=v3.0</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Installation from Different Sources</strong></div>
+    <div class="answer">
+        <p><strong>From local directory:</strong></p>
+        <pre><code>helm install myapp ./mychart</code></pre>
+
+        <p><strong>From packaged chart:</strong></p>
+        <pre><code>helm install myapp mychart-1.0.0.tgz</code></pre>
+
+        <p><strong>From repository:</strong></p>
+        <pre><code>helm install myapp bitnami/nginx</code></pre>
+
+        <p><strong>From URL:</strong></p>
+        <pre><code>helm install myapp https://example.com/charts/mychart-1.0.0.tgz</code></pre>
+
+        <p><strong>From OCI registry:</strong></p>
+        <pre><code>helm install myapp oci://registry.example.com/charts/mychart --version 1.0.0</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Dry Run - Test Before Installing</strong></div>
+    <div class="answer">
+        <pre><code># See what would be installed without actually installing
+helm install myapp ./chart --dry-run --debug
+
+# Output shows:
+# - Rendered templates
+# - Values used
+# - Any errors in templates</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Waiting for Resources</strong></div>
+    <div class="answer">
+        <pre><code># Wait for all pods to be ready (default timeout: 5m)
+helm install myapp ./chart --wait
+
+# Custom timeout
+helm install myapp ./chart --wait --timeout 10m
+
+# Atomic install (rollback if fails)
+helm install myapp ./chart --atomic --timeout 5m</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Installing Specific Version</strong></div>
+    <div class="answer">
+        <pre><code># Install specific chart version
+helm install myapp bitnami/nginx --version 13.2.0
+
+# List available versions
+helm search repo bitnami/nginx --versions</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Post-Installation</strong></div>
+    <div class="answer">
+        <pre><code># View installation status
+helm status myapp
+
+# List all releases
+helm list
+
+# View deployed resources
+kubectl get all -l app.kubernetes.io/instance=myapp
+
+# View release values
+helm get values myapp
+
+# View release manifest
+helm get manifest myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Common Installation Patterns</strong></div>
+    <div class="answer">
+        <p><strong>Development environment:</strong></p>
+        <pre><code>helm install myapp ./chart \
+  --namespace dev \
+  --create-namespace \
+  -f values-dev.yaml \
+  --set image.tag=latest</code></pre>
+
+        <p><strong>Production environment:</strong></p>
+        <pre><code>helm install myapp ./chart \
+  --namespace production \
+  --create-namespace \
+  -f values-prod.yaml \
+  --set image.tag=v1.0.0 \
+  --wait \
+  --timeout 10m \
+  --atomic</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Troubleshooting Installation</strong></div>
+    <div class="answer">
+        <p><strong>Issue: Release already exists</strong></p>
+        <pre><code># Error: cannot re-use a name that is still in use
+# Solution: Use a different name or uninstall first
+helm uninstall myapp
+helm install myapp ./chart</code></pre>
+
+        <p><strong>Issue: Template rendering errors</strong></p>
+        <pre><code># Use --debug to see detailed error messages
+helm install myapp ./chart --dry-run --debug</code></pre>
+
+        <p><strong>Issue: Resources not ready</strong></p>
+        <pre><code># Check pod status
+kubectl get pods -n &lt;namespace&gt;
+
+# Check pod logs
+kubectl logs &lt;pod-name&gt; -n &lt;namespace&gt;
+
+# Describe pod for events
+kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;</code></pre>
+    </div>
+
+</body>
+
+</html>
