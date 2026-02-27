@@ -2,158 +2,50 @@
 <html lang="en">
 
 <head>
-    <title>Why Helm is Needed in Kubernetes</title>
+    <title>Why Helm is needed?</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
 </head>
 
 <body>
-    <div class="main-grid-item-1 grid-wide-column">
-        <h2>Why Helm is Needed in Kubernetes</h2>
-    </div>
-
-    <div class="question"><strong>1. The Problem: Managing Complex Kubernetes Applications</strong></div>
+    <div class="question"><strong>1. Why Helm is needed?</strong></div>
     <div class="answer">
         <ul>
-            <li>A typical microservices application might have 10-50+ Kubernetes YAML files;</li>
-            <li>Each environment (dev, staging, prod) needs different configurations;</li>
-            <li>Manually applying files with <code>kubectl apply -f</code> is error-prone and doesn't scale;</li>
-            <li>No built-in way to track what version of the application is deployed;</li>
-            <li>Rolling back requires manually reverting multiple files;</li>
+            <li>If you want to run your application on k8s cluster, you need to define so many objects such as deployment, service, configmap, secrets, ingress, PVC etc in YAML files;</li>
+            <li>As the project grows, the number of YAML files also increases and it becomes hard to maintain;</li>
+            <li>This is where Helm comes to the rescue!</li>
+            <li>It bundles/package the k8s resource files into a single versioned package(called helm chart) that can be easily(with just 1 command) deployed on any k8s cluster;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. How Helm Solves These Problems</strong></div>
+    <div class="question"><strong>2. What are the other benefits of Helm?</strong></div>
     <div class="answer">
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Problem</th>
-                    <th>Without Helm</th>
-                    <th>With Helm</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Multiple YAML files</td>
-                    <td>Manage 20+ files separately</td>
-                    <td>Single chart packages everything</td>
-                </tr>
-                <tr>
-                    <td>Configuration per environment</td>
-                    <td>Duplicate files or use kustomize</td>
-                    <td>Use values.yaml for each environment</td>
-                </tr>
-                <tr>
-                    <td>Deployment tracking</td>
-                    <td>No built-in versioning</td>
-                    <td>Release history with versions</td>
-                </tr>
-                <tr>
-                    <td>Rollback</td>
-                    <td>Manual revert of all files</td>
-                    <td><code>helm rollback</code> in one command</td>
-                </tr>
-                <tr>
-                    <td>Dependency management</td>
-                    <td>Manual coordination</td>
-                    <td>Declare dependencies in Chart.yaml</td>
-                </tr>
-                <tr>
-                    <td>Sharing configurations</td>
-                    <td>Copy-paste YAML files</td>
-                    <td>Publish charts to repositories</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="question"><strong>3. Key Benefits</strong></div>
-    <div class="answer">
-        <p><strong>📦 Packaging</strong></p>
         <ul>
-            <li>Bundle all Kubernetes resources into a single deployable unit;</li>
-            <li>Include documentation, default values, and templates;</li>
-        </ul>
-
-        <p><strong>🔄 Repeatability</strong></p>
-        <ul>
-            <li>Deploy the same application consistently across environments;</li>
-            <li>Reduce human error from manual deployments;</li>
-        </ul>
-
-        <p><strong>📊 Release Management</strong></p>
-        <ul>
-            <li>Track every deployment as a numbered release;</li>
-            <li>View history: <code>helm history myapp</code>;</li>
-            <li>Rollback to any previous release: <code>helm rollback myapp 3</code>;</li>
-        </ul>
-
-        <p><strong>🎯 Configuration Management</strong></p>
-        <ul>
-            <li>Separate configuration from templates;</li>
-            <li>Override values per environment without changing templates;</li>
-            <li>Example: <code>helm install myapp ./chart -f values-prod.yaml</code>;</li>
-        </ul>
-
-        <p><strong>🔗 Dependency Resolution</strong></p>
-        <ul>
-            <li>Automatically install required dependencies (databases, caches, etc.);</li>
-            <li>Manage complex application stacks as a single unit;</li>
-        </ul>
-
-        <p><strong>🌐 Community Ecosystem</strong></p>
-        <ul>
-            <li>Thousands of pre-built charts available (MySQL, PostgreSQL, Redis, Nginx, etc.);</li>
-            <li>Don't reinvent the wheel — use community-maintained charts;</li>
+            <li>Parameterized YAML files
+                <ul>
+                    <li>You can parameterize k8s resource files, which can be reused across many applications, thus reducing maintanance burden;</li>
+                    <li>This makes it easy to deploy the same application with different configurations in different environments such as development, staging and production; You can override the default values in the values.yaml file;</li>
+                </ul>
+            </li>
+            <li>Manage entire lifecycle of an application
+                <ul>
+                    <li>You can install/upgrade/uninstall the application using a single command;</li>
+                </ul>
+            </li>
+            <li>Keep track of history
+                <ul>
+                    <li>You can rollback to any state at any point in time;</li>
+                    <li>Without Helm, there is no way to track version of the application deployed in the cluster; To rollback, you have to manually revert the changes made to the multiple YAML files; </li>
+                </ul>
+            </li>
+            <li>Out-of-box charts are available for many applications
+                <ul>
+                    <li>Artifact Hub has free to use charts for many applications, so there is no need to build solutions from scratch;</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>4. When to Use Helm</strong></div>
-    <div class="answer">
-        <p><strong>✅ Good Use Cases:</strong></p>
-        <ul>
-            <li>Multi-environment deployments (dev, staging, prod);</li>
-            <li>Applications with many Kubernetes resources;</li>
-            <li>Need for versioning and rollback capabilities;</li>
-            <li>Deploying third-party applications (databases, monitoring tools);</li>
-            <li>CI/CD pipelines requiring automated deployments;</li>
-        </ul>
-
-        <p><strong>⚠️ May Not Need Helm:</strong></p>
-        <ul>
-            <li>Very simple applications with 1-2 Kubernetes resources;</li>
-            <li>One-time deployments with no configuration variations;</li>
-            <li>Learning Kubernetes basics (start with plain YAML first);</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>5. Real-World Scenario</strong></div>
-    <div class="answer">
-        <p><strong>Without Helm:</strong></p>
-        <pre><code># Deploy to dev
-kubectl apply -f deployment-dev.yaml
-kubectl apply -f service.yaml
-kubectl apply -f configmap-dev.yaml
-kubectl apply -f ingress-dev.yaml
-
-# Deploy to prod (different files!)
-kubectl apply -f deployment-prod.yaml
-kubectl apply -f service.yaml
-kubectl apply -f configmap-prod.yaml
-kubectl apply -f ingress-prod.yaml
-
-# Rollback? Good luck remembering what changed!</code></pre>
-
-        <p><strong>With Helm:</strong></p>
-        <pre><code># Deploy to dev
-helm install myapp ./chart -f values-dev.yaml
-
-# Deploy to prod
-helm install myapp ./chart -f values-prod.yaml
-
-# Rollback prod to previous version
-helm rollback myapp 2</code></pre>
-    </div>
+    New Terms: Chart, Release, Repository, Helm CLI, Helm Chart, Helm Release, Helm Repository, Helm Helm CLI, Helm Chart, Helm Release, Helm Repository;
 
 </body>
 
