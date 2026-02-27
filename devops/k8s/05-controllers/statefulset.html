@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>StatefulSet</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>StatefulSet</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a StatefulSet?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Manages <strong>stateful applications</strong> that need stable identities and persistent storage;</li>
+            <li>Unlike Deployments, Pods get <strong>stable, predictable names</strong>: <code>myapp-0</code>, <code>myapp-1</code>, <code>myapp-2</code>;</li>
+            <li>Each Pod gets its own <strong>persistent volume</strong> that follows it across rescheduling;</li>
+            <li>Pods are created and deleted in <strong>order</strong> (ordinal index);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. When to Use StatefulSet</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Databases: MySQL, PostgreSQL, MongoDB;</li>
+            <li>Distributed systems: Kafka, ZooKeeper, Elasticsearch;</li>
+            <li>Any application that needs: stable network identity, ordered deployment/scaling, persistent storage per instance;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. StatefulSet YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql-headless
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Key Differences from Deployment</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Deployment</th><th>StatefulSet</th></tr>
+            <tr><td>Pod names</td><td>Random suffix (myapp-7d8f9)</td><td>Ordinal index (myapp-0, myapp-1)</td></tr>
+            <tr><td>Storage</td><td>Shared or no persistent storage</td><td>Dedicated PVC per Pod</td></tr>
+            <tr><td>Ordering</td><td>Pods created/deleted in any order</td><td>Sequential creation/deletion</td></tr>
+            <tr><td>DNS</td><td>Service DNS only</td><td>Individual Pod DNS via headless Service</td></tr>
+            <tr><td>Use case</td><td>Stateless apps</td><td>Databases, distributed systems</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Headless Service Requirement</strong></div>
+    <div class="answer">
+        <ul>
+            <li>StatefulSets require a <strong>headless Service</strong> (ClusterIP: None) for Pod DNS;</li>
+            <li>Each Pod gets a DNS record: <code>&lt;pod-name&gt;.&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>;</li>
+            <li>Example: <code>mysql-0.mysql-headless.default.svc.cluster.local</code>;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

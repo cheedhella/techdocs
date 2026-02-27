@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Headless Service</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Headless Service</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Headless Service?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Service with <code>clusterIP: None</code> — no virtual IP is allocated;</li>
+            <li>DNS queries return the <strong>individual Pod IPs</strong> instead of a single Service IP;</li>
+            <li>No load balancing by kube-proxy — clients connect directly to Pods;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. When to Use</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>StatefulSets:</strong> Each Pod needs its own DNS record;</li>
+            <li><strong>Client-side load balancing:</strong> Application handles its own service discovery;</li>
+            <li><strong>Databases:</strong> Need to connect to a specific replica (e.g., primary vs read replica);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Headless Service YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless
+spec:
+  clusterIP: None
+  selector:
+    app: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306</code></pre>
+    </div>
+
+    <div class="question"><strong>4. DNS Behavior</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Regular Service: DNS returns the ClusterIP;</li>
+            <li>Headless Service: DNS returns <strong>A records for each Pod</strong>;</li>
+            <li>With StatefulSet: Each Pod gets a DNS name like <code>mysql-0.mysql-headless.default.svc.cluster.local</code>;</li>
+        </ul>
+        <pre><code># Query DNS for a headless service
+nslookup mysql-headless.default.svc.cluster.local
+
+# Returns multiple A records:
+# Address: 10.244.1.5
+# Address: 10.244.2.3
+# Address: 10.244.1.8</code></pre>
+    </div>
+
+</body>
+
+</html>

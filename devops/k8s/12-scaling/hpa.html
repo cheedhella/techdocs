@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Horizontal Pod Autoscaler (HPA)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Horizontal Pod Autoscaler (HPA)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is HPA?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Automatically scales the number of <strong>Pod replicas</strong> based on observed metrics;</li>
+            <li>Scales up when load increases, scales down when load decreases;</li>
+            <li>Requires <strong>Metrics Server</strong> (or a custom metrics adapter);</li>
+            <li>Checks metrics every <strong>15 seconds</strong> by default;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Create HPA</strong></div>
+    <div class="answer">
+        <pre><code># Imperative
+kubectl autoscale deployment myapp \
+  --min=2 \
+  --max=10 \
+  --cpu-percent=70
+
+# Declarative YAML
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: myapp-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80</code></pre>
+    </div>
+
+    <div class="question"><strong>3. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>HPA controller calculates: <code>desiredReplicas = ceil(currentReplicas × (currentMetric / targetMetric))</code>;</li>
+            <li>Example: 3 replicas at 90% CPU, target 70% → <code>ceil(3 × (90/70)) = ceil(3.86) = 4</code> replicas;</li>
+            <li>Cooldown periods prevent flapping (scale-up: 0s, scale-down: 5min by default);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Prerequisites</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Metrics Server must be installed;</li>
+            <li>Pods must have <strong>resource requests</strong> set (HPA uses requests as the baseline);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Commands</strong></div>
+    <div class="answer">
+        <pre><code># List HPAs
+kubectl get hpa
+
+# Describe (shows current metrics and events)
+kubectl describe hpa myapp-hpa
+
+# Delete
+kubectl delete hpa myapp-hpa</code></pre>
+    </div>
+
+</body>
+
+</html>

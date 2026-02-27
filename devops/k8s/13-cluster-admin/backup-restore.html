@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Backup and Restore (etcd)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Backup and Restore (etcd)</h2>
+    </div>
+
+    <div class="question"><strong>1. Why Backup etcd?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>etcd holds the <strong>entire cluster state</strong> — all objects, configs, secrets;</li>
+            <li>If etcd is corrupted or lost, the cluster becomes unrecoverable;</li>
+            <li>Regular backups are critical for <strong>disaster recovery</strong>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Taking a Snapshot (Backup)</strong></div>
+    <div class="answer">
+        <pre><code>ETCDCTL_API=3 etcdctl snapshot save /backup/etcd-$(date +%Y%m%d).db \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Verifying a Snapshot</strong></div>
+    <div class="answer">
+        <pre><code>ETCDCTL_API=3 etcdctl snapshot status /backup/etcd-20240101.db --write-table
+
+# Output:
+# +----------+----------+------------+------------+
+# |   HASH   | REVISION | TOTAL KEYS | TOTAL SIZE |
+# +----------+----------+------------+------------+
+# | 3f8a...  |   115200 |       1243 |    4.1 MB  |
+# +----------+----------+------------+------------+</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Restoring from a Snapshot</strong></div>
+    <div class="answer">
+        <pre><code># Stop the API Server and etcd
+# Restore to a new data directory
+ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-20240101.db \
+  --data-dir=/var/lib/etcd-restore
+
+# Update etcd configuration to use the new data directory
+# Restart etcd and API Server
+
+# For kubeadm clusters, update the etcd pod manifest:
+# /etc/kubernetes/manifests/etcd.yaml
+# Change --data-dir to /var/lib/etcd-restore</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Backup Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Automate backups with a <strong>CronJob</strong> or external scheduler;</li>
+            <li>Store backups in <strong>off-cluster storage</strong> (S3, GCS, Azure Blob);</li>
+            <li>Test restores regularly — a backup you can't restore is worthless;</li>
+            <li>Also backup Kubernetes manifests stored in Git (GitOps);</li>
+            <li>Consider tools like <strong>Velero</strong> for full cluster backup (etcd + persistent volumes);</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

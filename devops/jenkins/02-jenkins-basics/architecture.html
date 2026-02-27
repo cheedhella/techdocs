@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jenkins Architecture</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Jenkins Architecture (Controller, Agents)</h2>
+    </div>
+
+    <div class="question"><strong>1. Controller (Master)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>central brain</strong> of Jenkins;</li>
+            <li>Manages configuration, schedules jobs, dispatches builds to agents;</li>
+            <li>Serves the web UI;</li>
+            <li>Stores build results, logs, and plugin data;</li>
+            <li>Should NOT run builds directly in production (delegate to agents);</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Agents (Nodes)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Machines that <strong>execute builds</strong> on behalf of the controller;</li>
+            <li>Can be physical machines, VMs, Docker containers, or Kubernetes Pods;</li>
+            <li>Connected to the controller via SSH, JNLP, or WebSocket;</li>
+            <li>Labeled for routing specific jobs (e.g., <code>linux</code>, <code>docker</code>, <code>gpu</code>);</li>
+        </ul>
+    </div>
+    <div class="question"><strong>3. Architecture Diagram</strong></div>
+    <div class="answer">
+        <pre><code>                Jenkins Controller
+               /        |        \
+          Agent 1    Agent 2    Agent 3
+          (Linux)    (Docker)   (K8s Pod)
+           |           |          |
+         Build A    Build B    Build C</code></pre>
+    </div>
+    <div class="question"><strong>4. Executors</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each agent has a configurable number of <strong>executors</strong> (build slots);</li>
+            <li>One executor = one concurrent build;</li>
+            <li>More executors = more parallel builds (limited by machine resources);</li>
+        </ul>
+    </div>
+</body>
+</html>

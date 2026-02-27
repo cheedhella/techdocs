@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Output Formats and Filtering</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Output Formats and Filtering (JSONPath, custom-columns)</h2>
+    </div>
+
+    <div class="question"><strong>1. Output Formats (-o flag)</strong></div>
+    <div class="answer">
+        <pre><code># Default table output
+kubectl get pods
+
+# Wide output (node, IP, etc.)
+kubectl get pods -o wide
+
+# YAML output
+kubectl get pod my-pod -o yaml
+
+# JSON output
+kubectl get pod my-pod -o json
+
+# Just the name
+kubectl get pods -o name</code></pre>
+    </div>
+
+    <div class="question"><strong>2. JSONPath</strong></div>
+    <div class="answer">
+        <pre><code># Get pod IP
+kubectl get pod my-pod -o jsonpath='{.status.podIP}'
+
+# List all pod names
+kubectl get pods -o jsonpath='{.items[*].metadata.name}'
+
+# Get container images
+kubectl get pods -o jsonpath='{.items[*].spec.containers[*].image}'
+
+# Formatted output with newlines
+kubectl get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\n"}{end}'
+
+# Get node IPs
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}'</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Custom Columns</strong></div>
+    <div class="answer">
+        <pre><code># Custom column output
+kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName
+
+# From a file
+kubectl get pods -o custom-columns-file=columns.txt</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Filtering with Labels and Fields</strong></div>
+    <div class="answer">
+        <pre><code># Filter by label
+kubectl get pods -l app=nginx
+kubectl get pods -l 'app in (nginx, redis)'
+kubectl get pods -l app=nginx,tier=frontend
+
+# Filter by field
+kubectl get pods --field-selector status.phase=Running
+kubectl get pods --field-selector metadata.name=my-pod
+
+# Sort by a field
+kubectl get pods --sort-by=.metadata.creationTimestamp</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Dry Run — Generate YAML Without Applying</strong></div>
+    <div class="answer">
+        <pre><code># Generate YAML for a deployment (without creating it)
+kubectl create deployment nginx --image=nginx --dry-run=client -o yaml > deployment.yaml
+
+# Generate YAML for a service
+kubectl expose deployment nginx --port=80 --dry-run=client -o yaml > service.yaml</code></pre>
+    </div>
+
+</body>
+
+</html>

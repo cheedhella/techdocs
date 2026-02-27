@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Volumes (emptyDir, hostPath)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Volumes (emptyDir, hostPath)</h2>
+    </div>
+
+    <div class="question"><strong>1. Why Volumes?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Container filesystems are <strong>ephemeral</strong> — data is lost when a container restarts;</li>
+            <li>Volumes provide <strong>persistent or shared storage</strong> that survives container restarts;</li>
+            <li>Volumes are defined at the Pod level and mounted into containers;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. emptyDir</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Created when a Pod is assigned to a node — starts <strong>empty</strong>;</li>
+            <li>Data persists across <strong>container restarts</strong> within the same Pod;</li>
+            <li>Data is <strong>deleted when the Pod is removed</strong> from the node;</li>
+            <li>Ideal for: scratch space, sharing data between containers in a Pod;</li>
+        </ul>
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydir-demo
+spec:
+  containers:
+    - name: writer
+      image: busybox
+      command: ['sh', '-c', 'echo "hello" > /data/greeting; sleep 3600']
+      volumeMounts:
+        - name: shared-data
+          mountPath: /data
+    - name: reader
+      image: busybox
+      command: ['sh', '-c', 'cat /data/greeting; sleep 3600']
+      volumeMounts:
+        - name: shared-data
+          mountPath: /data
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+      # emptyDir:
+      #   medium: Memory    # Use RAM-backed tmpfs
+      #   sizeLimit: 100Mi</code></pre>
+    </div>
+
+    <div class="question"><strong>3. hostPath</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Mounts a file or directory from the <strong>host node's filesystem</strong> into the Pod;</li>
+            <li>Data persists even after the Pod is deleted (it's on the node);</li>
+            <li><strong>Security risk:</strong> Pod gets access to the host filesystem;</li>
+            <li>Not portable — Pod is tied to a specific node;</li>
+        </ul>
+        <pre><code>volumes:
+  - name: host-data
+    hostPath:
+      path: /var/log
+      type: Directory   # DirectoryOrCreate, File, FileOrCreate</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Other Volume Types</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Type</th><th>Description</th></tr>
+            <tr><td><strong>configMap</strong></td><td>Mount a ConfigMap as files</td></tr>
+            <tr><td><strong>secret</strong></td><td>Mount a Secret as files</td></tr>
+            <tr><td><strong>downwardAPI</strong></td><td>Expose Pod metadata as files</td></tr>
+            <tr><td><strong>nfs</strong></td><td>Mount an NFS share</td></tr>
+            <tr><td><strong>persistentVolumeClaim</strong></td><td>Mount a PVC (most common for production)</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

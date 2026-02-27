@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kubernetes Networking Model</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Kubernetes Networking Model</h2>
+    </div>
+
+    <div class="question"><strong>1. Fundamental Rules</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Every Pod gets its own <strong>unique IP address</strong>;</li>
+            <li>Pods on any node can communicate with all Pods on any other node <strong>without NAT</strong>;</li>
+            <li>Agents on a node (kubelet, kube-proxy) can communicate with all Pods on that node;</li>
+            <li>Containers within the same Pod share the network namespace — communicate via <code>localhost</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Four Levels of Networking</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Level</th><th>Description</th></tr>
+            <tr><td><strong>Container-to-Container</strong></td><td>Same Pod, via localhost</td></tr>
+            <tr><td><strong>Pod-to-Pod</strong></td><td>Direct IP communication, no NAT</td></tr>
+            <tr><td><strong>Pod-to-Service</strong></td><td>Via Service abstraction (ClusterIP)</td></tr>
+            <tr><td><strong>External-to-Service</strong></td><td>Via NodePort, LoadBalancer, or Ingress</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. CNI (Container Network Interface)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes does NOT implement networking itself — it uses <strong>CNI plugins</strong>;</li>
+            <li>The CNI plugin is responsible for assigning IPs and enabling Pod-to-Pod communication;</li>
+            <li>Popular CNI plugins:</li>
+        </ul>
+        <table>
+            <tr><th>Plugin</th><th>Features</th></tr>
+            <tr><td><strong>Calico</strong></td><td>BGP-based routing, network policies, widely used</td></tr>
+            <tr><td><strong>Flannel</strong></td><td>Simple overlay network, easy to set up</td></tr>
+            <tr><td><strong>Cilium</strong></td><td>eBPF-based, advanced security, observability</td></tr>
+            <tr><td><strong>Weave Net</strong></td><td>Mesh overlay, encryption support</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Pod IP Lifecycle</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pod IPs are <strong>ephemeral</strong> — they change when a Pod is recreated;</li>
+            <li>Never hardcode Pod IPs — use <strong>Services</strong> for stable endpoints;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

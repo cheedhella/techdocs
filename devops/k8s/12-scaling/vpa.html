@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Vertical Pod Autoscaler (VPA)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Vertical Pod Autoscaler (VPA)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is VPA?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Automatically adjusts <strong>CPU and memory requests/limits</strong> for containers;</li>
+            <li>Unlike HPA (more replicas), VPA gives each Pod <strong>more resources</strong>;</li>
+            <li>VPA is a separate project — must be installed separately;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. VPA Modes</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Mode</th><th>Description</th></tr>
+            <tr><td><strong>Off</strong></td><td>Only provides recommendations, doesn't apply changes</td></tr>
+            <tr><td><strong>Initial</strong></td><td>Applies recommendations only when Pods are created</td></tr>
+            <tr><td><strong>Auto</strong></td><td>Automatically evicts and recreates Pods with updated resources</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. VPA YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: myapp-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: myapp
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: app
+        minAllowed:
+          cpu: 100m
+          memory: 128Mi
+        maxAllowed:
+          cpu: 2
+          memory: 4Gi</code></pre>
+    </div>
+
+    <div class="question"><strong>4. VPA vs HPA</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>HPA</th><th>VPA</th></tr>
+            <tr><td>Scales</td><td>Number of Pods (horizontal)</td><td>Resources per Pod (vertical)</td></tr>
+            <tr><td>Pod disruption</td><td>No — adds/removes Pods</td><td>Yes — recreates Pods with new resources</td></tr>
+            <tr><td>Best for</td><td>Stateless, scalable apps</td><td>Stateful apps, right-sizing</td></tr>
+            <tr><td>Can combine?</td><td colspan="2">Not on the same metric — use HPA on CPU, VPA on memory</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. View Recommendations</strong></div>
+    <div class="answer">
+        <pre><code>kubectl describe vpa myapp-vpa
+
+# Shows:
+# Recommendation:
+#   Container: app
+#     Lower Bound:  cpu: 100m, memory: 200Mi
+#     Target:       cpu: 250m, memory: 400Mi
+#     Upper Bound:  cpu: 500m, memory: 800Mi</code></pre>
+    </div>
+
+</body>
+
+</html>

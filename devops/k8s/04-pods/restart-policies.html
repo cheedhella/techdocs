@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Restart Policies</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Restart Policies</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Restart Policies?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defined in <code>spec.restartPolicy</code> — tells Kubernetes what to do when a container exits;</li>
+            <li>Applies to <strong>all containers</strong> in the Pod;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Types</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Policy</th><th>Behavior</th><th>Use Case</th></tr>
+            <tr><td><strong>Always</strong></td><td>Always restart the container (default)</td><td>Long-running services (web servers, APIs)</td></tr>
+            <tr><td><strong>OnFailure</strong></td><td>Restart only if container exits with non-zero code</td><td>Jobs, batch processing</td></tr>
+            <tr><td><strong>Never</strong></td><td>Never restart the container</td><td>One-shot tasks, debugging</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. CrashLoopBackOff</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When a container keeps crashing, Kubernetes applies <strong>exponential backoff</strong>;</li>
+            <li>Delay between restarts: 10s, 20s, 40s, 80s, ..., up to 5 minutes;</li>
+            <li>Status shows <code>CrashLoopBackOff</code> — the container is in a restart loop;</li>
+            <li>Common causes: application error, missing config, wrong command, OOMKilled;</li>
+        </ul>
+        <pre><code># Investigate a CrashLoopBackOff
+kubectl describe pod my-pod        # Check Events section
+kubectl logs my-pod --previous     # Logs from the previous crashed container</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: job-pod
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: worker
+      image: busybox
+      command: ['sh', '-c', 'echo "Processing..." && sleep 5']</code></pre>
+    </div>
+
+</body>
+
+</html>

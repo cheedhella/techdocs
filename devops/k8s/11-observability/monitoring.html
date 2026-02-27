@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Monitoring with Metrics Server and Prometheus</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Monitoring with Metrics Server and Prometheus</h2>
+    </div>
+
+    <div class="question"><strong>1. Metrics Server</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A lightweight, in-cluster component that collects <strong>CPU and memory metrics</strong> from kubelets;</li>
+            <li>Required for <code>kubectl top</code> and <strong>Horizontal Pod Autoscaler</strong>;</li>
+            <li>NOT for long-term storage — it's a real-time snapshot;</li>
+        </ul>
+        <pre><code># Install Metrics Server
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# Check node resource usage
+kubectl top nodes
+
+# Check Pod resource usage
+kubectl top pods
+kubectl top pods -A --sort-by=cpu</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Prometheus</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The industry-standard <strong>open-source monitoring and alerting</strong> system for Kubernetes;</li>
+            <li>Scrapes metrics from targets at regular intervals;</li>
+            <li>Stores time-series data with a powerful query language (<strong>PromQL</strong>);</li>
+            <li>Usually deployed with <strong>kube-prometheus-stack</strong> (Helm chart);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Prometheus Stack Components</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td><strong>Prometheus</strong></td><td>Scrapes and stores metrics</td></tr>
+            <tr><td><strong>Grafana</strong></td><td>Visualization dashboards</td></tr>
+            <tr><td><strong>Alertmanager</strong></td><td>Handles alerts (email, Slack, PagerDuty)</td></tr>
+            <tr><td><strong>Node Exporter</strong></td><td>Exports node-level hardware metrics</td></tr>
+            <tr><td><strong>kube-state-metrics</strong></td><td>Exports Kubernetes object state metrics</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Exposing Application Metrics</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Annotate your Pods so Prometheus discovers them:</li>
+        </ul>
+        <pre><code>metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"</code></pre>
+    </div>
+
+</body>
+
+</html>

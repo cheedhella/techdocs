@@ -1,110 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation Home</title>
-    <link rel="stylesheet" href="resources/css/styles.css" />
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            margin: 2em auto;
-            max-width: 800px;
-            padding: 0 1em;
-        }
-        h1 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #333;
-            font-size: 1.2em;
-            margin-top: 1.5em;
-            border-bottom: 1px solid #eee;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li {
-            margin-bottom: 0.5em;
-        }
-        a {
-            text-decoration: none;
-            color: #0066cc;
-            font-weight: 500;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .file-icon {
-            display: inline-block;
-            width: 20px;
-            text-align: center;
-            margin-right: 8px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Table of Contents</h1>
-    <h2>00.Architecture</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="00.Architecture/FlowDiagram.png">FlowDiagram</a></li>
-    </ul>
-    <h2>01.Pod</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="01.Pod/02.Pod.png">02.Pod</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="01.Pod/04.Liveness.png">04.Liveness</a></li>
-    </ul>
-    <h2>02.Replicaset</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="02.Replicaset/1.ReplicaSet.png">1.ReplicaSet</a></li>
-    </ul>
-    <h2>03.Deployment</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="03.Deployment/1-deployment-demo.png">1-deployment-demo</a></li>
-    </ul>
-    <h2>13.Secret</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="13.Secret/01.Manage.png">01.Manage</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="13.Secret/02.Access-in-Pod.png">02.Access-in-Pod</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="13.Secret/03.dockerregistry.png">03.dockerregistry</a></li>
-    </ul>
-    <h2>Root</h2>
-    <ul>
-        <li><span class="file-icon">&#128196;</span><a href="00.QuickRef.html">00.QuickRef</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="01.kubectl.html">01.kubectl</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="02.commands.html">02.commands</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="03.Namespace.html">03.Namespace</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="04.ConfigMap.html">04.ConfigMap</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="05.Secrets.html">05.Secrets</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="11.ServiceAccount.html">11.ServiceAccount</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="12.Ingress.html">12.Ingress</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="12.Job.html">12.Job</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="13.CronJob.html">13.CronJob</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="24. Statefulset.html">24. Statefulset</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="25. Daemonset.html">25. Daemonset</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="dust 2.html">dust 2</a></li>
-        <li><span class="file-icon">&#128196;</span><a href="dust.html">dust</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="05.Secret-opaque.png">05.Secret-opaque</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="11.ServiceAccount-2.png">11.ServiceAccount-2</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust-1.png">dust-1</a></li>
-    </ul>
-    <h2>dust</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="dust/01. Why K8s.png">01. Why K8s</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/02. Cluster-1.png">02. Cluster-1</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/03. Cluster-2.png">03. Cluster-2</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/04. Minikube.png">04. Minikube</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/Service-NodePort.png">Service-NodePort</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/mZlH9.png">mZlH9</a></li>
-    </ul>
-    <h2>dust &raquo; code &raquo; hands-on</h2>
-    <ul>
-        <li><span class="file-icon">&#128444;</span><a href="dust/code/hands-on/fleetman-architecture-aws.png">fleetman-architecture-aws</a></li>
-        <li><span class="file-icon">&#128444;</span><a href="dust/code/hands-on/fleetman-architecture-minikube.png">fleetman-architecture-minikube</a></li>
-    </ul>
+    <head>
+        <title>Kubernetes</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+            <h2>Kubernetes</h2>
+        </div>
 
-</body>
+        <div class="toc-container">
+            <h3>Table of Contents</h3>
+            
+            <ul>
+                <li><strong>1️⃣ Introduction to Kubernetes</strong>
+                    <ul>
+                        <li><a href="./01-introduction/what-is-kubernetes.html">1.1 What is Kubernetes?</a></li>
+                        <li><a href="./01-introduction/why-kubernetes.html">1.2 Why Kubernetes? (Problems It Solves)</a></li>
+                        <li><a href="./01-introduction/kubernetes-vs-docker.html">1.3 Kubernetes vs Docker / Docker Swarm</a></li>
+                        <li><a href="./01-introduction/key-concepts.html">1.4 Key Concepts and Terminology</a></li>
+                        <li><a href="./01-introduction/installing-kubernetes.html">1.5 Installing Kubernetes (Minikube, kubeadm, Kind)</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>2️⃣ Cluster Architecture</strong>
+                    <ul>
+                        <li><a href="./02-architecture/cluster-overview.html">2.1 Cluster Architecture Overview</a></li>
+                        <li><a href="./02-architecture/control-plane.html">2.2 Control Plane Components (API Server, etcd, Scheduler, Controller Manager)</a></li>
+                        <li><a href="./02-architecture/worker-nodes.html">2.3 Worker Node Components (kubelet, kube-proxy, Container Runtime)</a></li>
+                        <li><a href="./02-architecture/nodes.html">2.4 Nodes (Master vs Worker)</a></li>
+                        <li><a href="./02-architecture/api-server.html">2.5 Kubernetes API and API Server</a></li>
+                        <li><a href="./02-architecture/etcd.html">2.6 etcd — The Cluster Data Store</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>3️⃣ kubectl — The CLI Tool</strong>
+                    <ul>
+                        <li><a href="./03-kubectl/what-is-kubectl.html">3.1 What is kubectl?</a></li>
+                        <li><a href="./03-kubectl/kubeconfig.html">3.2 kubeconfig and Context Management</a></li>
+                        <li><a href="./03-kubectl/imperative-vs-declarative.html">3.3 Imperative vs Declarative Approach</a></li>
+                        <li><a href="./03-kubectl/common-commands.html">3.4 Common Commands (get, describe, apply, delete, logs, exec)</a></li>
+                        <li><a href="./03-kubectl/output-formats.html">3.5 Output Formats and Filtering (JSONPath, custom-columns)</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>4️⃣ Pods</strong>
+                    <ul>
+                        <li><a href="./04-pods/what-is-a-pod.html">4.1 What is a Pod?</a></li>
+                        <li><a href="./04-pods/pod-lifecycle.html">4.2 Pod Lifecycle and Phases</a></li>
+                        <li><a href="./04-pods/multi-container-pods.html">4.3 Multi-Container Pods (Sidecar, Init, Ambassador, Adapter)</a></li>
+                        <li><a href="./04-pods/init-containers.html">4.4 Init Containers</a></li>
+                        <li><a href="./04-pods/probes.html">4.5 Health Checks — Liveness, Readiness, and Startup Probes</a></li>
+                        <li><a href="./04-pods/resource-requests-limits.html">4.6 Resource Requests and Limits</a></li>
+                        <li><a href="./04-pods/restart-policies.html">4.7 Restart Policies</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>5️⃣ Workload Controllers</strong>
+                    <ul>
+                        <li><a href="./05-controllers/replicaset.html">5.1 ReplicaSet</a></li>
+                        <li><a href="./05-controllers/deployment.html">5.2 Deployment</a></li>
+                        <li><a href="./05-controllers/rolling-updates-rollbacks.html">5.3 Rolling Updates and Rollbacks</a></li>
+                        <li><a href="./05-controllers/statefulset.html">5.4 StatefulSet</a></li>
+                        <li><a href="./05-controllers/daemonset.html">5.5 DaemonSet</a></li>
+                        <li><a href="./05-controllers/job.html">5.6 Job</a></li>
+                        <li><a href="./05-controllers/cronjob.html">5.7 CronJob</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>6️⃣ Services and Networking</strong>
+                    <ul>
+                        <li><a href="./06-services-networking/networking-model.html">6.1 Kubernetes Networking Model</a></li>
+                        <li><a href="./06-services-networking/clusterip.html">6.2 Service — ClusterIP</a></li>
+                        <li><a href="./06-services-networking/nodeport.html">6.3 Service — NodePort</a></li>
+                        <li><a href="./06-services-networking/loadbalancer.html">6.4 Service — LoadBalancer</a></li>
+                        <li><a href="./06-services-networking/headless-service.html">6.5 Headless Service</a></li>
+                        <li><a href="./06-services-networking/externalname.html">6.6 ExternalName Service</a></li>
+                        <li><a href="./06-services-networking/ingress.html">6.7 Ingress and Ingress Controllers</a></li>
+                        <li><a href="./06-services-networking/network-policies.html">6.8 Network Policies</a></li>
+                        <li><a href="./06-services-networking/dns.html">6.9 DNS in Kubernetes (CoreDNS)</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>7️⃣ Configuration</strong>
+                    <ul>
+                        <li><a href="./07-configuration/configmap.html">7.1 ConfigMap</a></li>
+                        <li><a href="./07-configuration/secrets.html">7.2 Secrets</a></li>
+                        <li><a href="./07-configuration/env-vars.html">7.3 Environment Variables</a></li>
+                        <li><a href="./07-configuration/labels-selectors.html">7.4 Labels and Selectors</a></li>
+                        <li><a href="./07-configuration/annotations.html">7.5 Annotations</a></li>
+                        <li><a href="./07-configuration/namespaces.html">7.6 Namespaces</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>8️⃣ Storage</strong>
+                    <ul>
+                        <li><a href="./08-storage/volumes.html">8.1 Volumes (emptyDir, hostPath)</a></li>
+                        <li><a href="./08-storage/persistent-volumes.html">8.2 Persistent Volumes (PV)</a></li>
+                        <li><a href="./08-storage/persistent-volume-claims.html">8.3 Persistent Volume Claims (PVC)</a></li>
+                        <li><a href="./08-storage/storage-classes.html">8.4 Storage Classes and Dynamic Provisioning</a></li>
+                        <li><a href="./08-storage/access-modes.html">8.5 Access Modes (RWO, ROX, RWX)</a></li>
+                        <li><a href="./08-storage/projected-volumes.html">8.6 Projected Volumes and CSI Drivers</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>9️⃣ Scheduling</strong>
+                    <ul>
+                        <li><a href="./09-scheduling/scheduler-overview.html">9.1 Kubernetes Scheduler Overview</a></li>
+                        <li><a href="./09-scheduling/node-selector.html">9.2 nodeSelector</a></li>
+                        <li><a href="./09-scheduling/node-affinity.html">9.3 Node Affinity and Anti-Affinity</a></li>
+                        <li><a href="./09-scheduling/pod-affinity.html">9.4 Pod Affinity and Anti-Affinity</a></li>
+                        <li><a href="./09-scheduling/taints-tolerations.html">9.5 Taints and Tolerations</a></li>
+                        <li><a href="./09-scheduling/topology-spread.html">9.6 Topology Spread Constraints</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>🔟 Security</strong>
+                    <ul>
+                        <li><a href="./10-security/rbac.html">10.1 RBAC (Roles, ClusterRoles, Bindings)</a></li>
+                        <li><a href="./10-security/service-accounts.html">10.2 Service Accounts</a></li>
+                        <li><a href="./10-security/security-contexts.html">10.3 Security Contexts (Pod and Container Level)</a></li>
+                        <li><a href="./10-security/pod-security-standards.html">10.4 Pod Security Standards / Pod Security Admission</a></li>
+                        <li><a href="./10-security/resource-quotas.html">10.5 Resource Quotas</a></li>
+                        <li><a href="./10-security/limit-ranges.html">10.6 Limit Ranges</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>1️⃣1️⃣ Observability</strong>
+                    <ul>
+                        <li><a href="./11-observability/logging.html">11.1 Logging (kubectl logs, centralized logging)</a></li>
+                        <li><a href="./11-observability/monitoring.html">11.2 Monitoring with Metrics Server and Prometheus</a></li>
+                        <li><a href="./11-observability/events.html">11.3 Kubernetes Events</a></li>
+                        <li><a href="./11-observability/debugging-pods.html">11.4 Debugging Pods and Troubleshooting</a></li>
+                        <li><a href="./11-observability/kubectl-debug.html">11.5 kubectl debug and Ephemeral Containers</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>1️⃣2️⃣ Scaling and Autoscaling</strong>
+                    <ul>
+                        <li><a href="./12-scaling/manual-scaling.html">12.1 Manual Scaling</a></li>
+                        <li><a href="./12-scaling/hpa.html">12.2 Horizontal Pod Autoscaler (HPA)</a></li>
+                        <li><a href="./12-scaling/vpa.html">12.3 Vertical Pod Autoscaler (VPA)</a></li>
+                        <li><a href="./12-scaling/cluster-autoscaler.html">12.4 Cluster Autoscaler</a></li>
+                        <li><a href="./12-scaling/keda.html">12.5 KEDA — Event-Driven Autoscaling</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>1️⃣3️⃣ Cluster Administration</strong>
+                    <ul>
+                        <li><a href="./13-cluster-admin/cluster-upgrade.html">13.1 Cluster Upgrade Strategy</a></li>
+                        <li><a href="./13-cluster-admin/backup-restore.html">13.2 Backup and Restore (etcd)</a></li>
+                        <li><a href="./13-cluster-admin/drain-cordon.html">13.3 Draining and Cordoning Nodes</a></li>
+                        <li><a href="./13-cluster-admin/high-availability.html">13.4 High Availability Clusters</a></li>
+                        <li><a href="./13-cluster-admin/managed-kubernetes.html">13.5 Managed Kubernetes (EKS, AKS, GKE)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
 </html>

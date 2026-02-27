@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Persistent Volume Claims (PVC)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Persistent Volume Claims (PVC)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a PVC?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A <strong>request for storage</strong> by a user — like a Pod requesting CPU/memory;</li>
+            <li>The PVC is bound to a PV that matches its requirements (size, access mode, StorageClass);</li>
+            <li>Pods reference PVCs — they don't interact with PVs directly;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. PVC YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: manual</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Using a PVC in a Pod</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-pvc
+spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      volumeMounts:
+        - name: storage
+          mountPath: /data
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: my-pvc</code></pre>
+    </div>
+
+    <div class="question"><strong>4. PV-PVC Binding</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes finds a PV that satisfies the PVC's requirements;</li>
+            <li><strong>Binding is 1:1</strong> — one PVC binds to exactly one PV;</li>
+            <li>If no matching PV exists, the PVC stays in <strong>Pending</strong> state;</li>
+            <li>With dynamic provisioning (StorageClass), a PV is created automatically;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Commands</strong></div>
+    <div class="answer">
+        <pre><code># List PVCs
+kubectl get pvc
+
+# Describe
+kubectl describe pvc my-pvc
+
+# Delete PVC (may trigger PV reclaim policy)
+kubectl delete pvc my-pvc</code></pre>
+    </div>
+
+</body>
+
+</html>

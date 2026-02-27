@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Init Containers</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Init Containers</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Init Containers?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Specialized containers that run <strong>before</strong> the main application containers start;</li>
+            <li>They run to <strong>completion</strong> — each must finish successfully before the next one starts;</li>
+            <li>If an init container fails, Kubernetes restarts the Pod (subject to restart policy);</li>
+            <li>They are defined in <code>spec.initContainers</code> (not <code>spec.containers</code>);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Wait for dependencies:</strong> Wait for a database or service to become available;</li>
+            <li><strong>Setup:</strong> Download config files, run database migrations;</li>
+            <li><strong>Security:</strong> Run as a different user to set up permissions;</li>
+            <li><strong>Clone a Git repo:</strong> Pull code before the main app starts;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo
+spec:
+  initContainers:
+    - name: wait-for-db
+      image: busybox:1.36
+      command: ['sh', '-c', 'until nc -z mysql-svc 3306; do echo waiting for db; sleep 2; done']
+    - name: init-config
+      image: busybox:1.36
+      command: ['sh', '-c', 'echo "config loaded" > /config/app.conf']
+      volumeMounts:
+        - name: config
+          mountPath: /config
+  containers:
+    - name: app
+      image: myapp:v1
+      volumeMounts:
+        - name: config
+          mountPath: /config
+  volumes:
+    - name: config
+      emptyDir: {}</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Init vs Regular Containers</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Init Container</th><th>Regular Container</th></tr>
+            <tr><td>Runs</td><td>Before app containers, sequentially</td><td>Concurrently after all inits complete</td></tr>
+            <tr><td>Must complete</td><td>Yes — must exit successfully</td><td>No — runs continuously</td></tr>
+            <tr><td>Probes</td><td>Not supported</td><td>Liveness, Readiness, Startup</td></tr>
+            <tr><td>Resource limits</td><td>Highest init container limit applies</td><td>Sum of all container limits</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Deployment</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Deployment</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Deployment?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>most common way to run stateless applications</strong> in Kubernetes;</li>
+            <li>A Deployment manages a <strong>ReplicaSet</strong>, which in turn manages <strong>Pods</strong>;</li>
+            <li>Provides declarative updates — change the spec and Kubernetes handles the rest;</li>
+            <li>Supports <strong>rolling updates</strong>, <strong>rollbacks</strong>, <strong>scaling</strong>, and <strong>pause/resume</strong>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Deployment YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.25
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Deployment Strategies</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Strategy</th><th>Description</th></tr>
+            <tr><td><strong>RollingUpdate</strong></td><td>Gradually replaces old Pods with new ones (default). Zero downtime.</td></tr>
+            <tr><td><strong>Recreate</strong></td><td>Kills all old Pods first, then creates new ones. Brief downtime.</td></tr>
+        </table>
+        <ul>
+            <li><strong>maxSurge:</strong> Max number of extra Pods above desired count during update;</li>
+            <li><strong>maxUnavailable:</strong> Max number of Pods that can be unavailable during update;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Common Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create
+kubectl create deployment nginx --image=nginx:1.25 --replicas=3
+
+# Apply from file
+kubectl apply -f deployment.yaml
+
+# Scale
+kubectl scale deployment nginx-deployment --replicas=5
+
+# Update image
+kubectl set image deployment/nginx-deployment nginx=nginx:1.26
+
+# View status
+kubectl rollout status deployment/nginx-deployment
+
+# View history
+kubectl rollout history deployment/nginx-deployment</code></pre>
+    </div>
+
+</body>
+
+</html>

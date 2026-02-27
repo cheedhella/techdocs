@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Environment Variables</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Environment Variables</h2>
+    </div>
+
+    <div class="question"><strong>1. Built-in Environment Variables</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Variable</th><th>Description</th></tr>
+            <tr><td><code>BUILD_NUMBER</code></td><td>Current build number</td></tr>
+            <tr><td><code>BUILD_URL</code></td><td>URL of the current build</td></tr>
+            <tr><td><code>JOB_NAME</code></td><td>Name of the job</td></tr>
+            <tr><td><code>WORKSPACE</code></td><td>Absolute path to the workspace</td></tr>
+            <tr><td><code>BRANCH_NAME</code></td><td>Branch being built (multibranch)</td></tr>
+            <tr><td><code>GIT_COMMIT</code></td><td>Git commit SHA</td></tr>
+        </table>
+        <pre><code>// View all env vars
+sh 'printenv | sort'</code></pre>
+    </div>
+    <div class="question"><strong>2. Custom Environment Variables</strong></div>
+    <div class="answer">
+        <pre><code>pipeline {
+    agent any
+    environment {
+        APP_NAME = 'my-app'
+        VERSION = '1.0.0'
+        DEPLOY_ENV = 'staging'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                echo "Building ${APP_NAME} v${VERSION}"
+            }
+        }
+    }
+}</code></pre>
+    </div>
+    <div class="question"><strong>3. Credentials as Environment Variables</strong></div>
+    <div class="answer">
+        <pre><code>environment {
+    DOCKER_CREDS = credentials('docker-hub-creds')
+    // Creates: DOCKER_CREDS_USR and DOCKER_CREDS_PSW
+}
+steps {
+    sh 'docker login -u $DOCKER_CREDS_USR -p $DOCKER_CREDS_PSW'
+}</code></pre>
+    </div>
+    <div class="question"><strong>4. Stage-Level Environment</strong></div>
+    <div class="answer">
+        <pre><code>stage('Deploy') {
+    environment {
+        DEPLOY_TARGET = 'production'
+    }
+    steps {
+        echo "Deploying to ${DEPLOY_TARGET}"
+    }
+}</code></pre>
+    </div>
+</body>
+</html>

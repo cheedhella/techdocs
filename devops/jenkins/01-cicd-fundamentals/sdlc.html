@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Software Development Lifecycle (SDLC)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Software Development Lifecycle (SDLC)</h2>
+    </div>
+    <div class="question"><strong>1. What is SDLC?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A structured process for <strong>planning, creating, testing, and deploying</strong> software;</li>
+            <li>Provides a framework that defines tasks at each phase of development;</li>
+            <li>CI/CD automates the later stages of the SDLC;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. SDLC Phases</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Phase</th><th>Description</th><th>CI/CD Role</th></tr>
+            <tr><td><strong>Planning</strong></td><td>Define requirements, scope, timeline</td><td>-</td></tr>
+            <tr><td><strong>Design</strong></td><td>Architecture, UI/UX, database design</td><td>-</td></tr>
+            <tr><td><strong>Development</strong></td><td>Write code, commit to version control</td><td>Triggers CI</td></tr>
+            <tr><td><strong>Testing</strong></td><td>Unit, integration, E2E tests</td><td>Automated by CI</td></tr>
+            <tr><td><strong>Deployment</strong></td><td>Release to production</td><td>Automated by CD</td></tr>
+            <tr><td><strong>Maintenance</strong></td><td>Bug fixes, updates, monitoring</td><td>Continuous loop</td></tr>
+        </table>
+    </div>
+    <div class="question"><strong>3. SDLC Models</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Waterfall:</strong> Sequential phases. Finish one before starting the next. Rigid, slow feedback;</li>
+            <li><strong>Agile:</strong> Iterative sprints (2-4 weeks). Fast feedback, adaptive planning;</li>
+            <li><strong>DevOps:</strong> Extends Agile. Bridges development and operations with automation, CI/CD, and monitoring;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>4. Where Jenkins Fits</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Developers push code to Git;</li>
+            <li>Jenkins picks up the change (CI);</li>
+            <li>Builds, tests, quality checks run automatically;</li>
+            <li>Artifact is packaged (Docker image, JAR);</li>
+            <li>Deployed to environments (CD);</li>
+        </ul>
+    </div>
+</body>
+</html>

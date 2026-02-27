@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Annotations</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Annotations</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Annotations?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Key-value pairs attached to objects for <strong>non-identifying metadata</strong>;</li>
+            <li>Unlike labels, annotations are NOT used for selection or filtering;</li>
+            <li>Can store larger data (up to 256KB), including structured data like JSON;</li>
+            <li>Used by tools, libraries, and controllers to store configuration;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Common Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Build/release info: <code>build.version</code>, <code>git.commit</code>;</li>
+            <li>Ingress controller config: <code>nginx.ingress.kubernetes.io/rewrite-target</code>;</li>
+            <li>Monitoring: <code>prometheus.io/scrape: "true"</code>;</li>
+            <li>Deployment tools: Helm release info, ArgoCD sync status;</li>
+        </ul>
+        <pre><code>metadata:
+  annotations:
+    description: "Main API gateway for the application"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    kubernetes.io/change-cause: "Updated image to v2.1"</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Labels vs Annotations</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Labels</th><th>Annotations</th></tr>
+            <tr><td>Purpose</td><td>Identify and select objects</td><td>Attach metadata</td></tr>
+            <tr><td>Used in selectors</td><td>Yes</td><td>No</td></tr>
+            <tr><td>Size limit</td><td>63 chars value</td><td>~256KB total</td></tr>
+            <tr><td>Characters</td><td>Alphanumeric, -, _, .</td><td>Any string</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Commands</strong></div>
+    <div class="answer">
+        <pre><code># Add annotation
+kubectl annotate pod my-pod description="API server"
+
+# Update
+kubectl annotate pod my-pod description="Updated API server" --overwrite
+
+# Remove
+kubectl annotate pod my-pod description-
+
+# View
+kubectl describe pod my-pod | grep Annotations</code></pre>
+    </div>
+
+</body>
+
+</html>

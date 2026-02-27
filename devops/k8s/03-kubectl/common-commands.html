@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Common kubectl Commands</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Common Commands (get, describe, apply, delete, logs, exec)</h2>
+    </div>
+
+    <div class="question"><strong>1. kubectl get — List Resources</strong></div>
+    <div class="answer">
+        <pre><code># List pods in default namespace
+kubectl get pods
+
+# List pods in all namespaces
+kubectl get pods -A
+
+# List with more detail
+kubectl get pods -o wide
+
+# List multiple resource types
+kubectl get pods,svc,deploy
+
+# Watch for changes in real-time
+kubectl get pods -w</code></pre>
+    </div>
+
+    <div class="question"><strong>2. kubectl describe — Detailed Info</strong></div>
+    <div class="answer">
+        <pre><code># Describe a pod (shows events, conditions, containers)
+kubectl describe pod my-pod
+
+# Describe a node
+kubectl describe node worker-1
+
+# Describe a service
+kubectl describe svc my-service</code></pre>
+    </div>
+
+    <div class="question"><strong>3. kubectl apply / create / delete</strong></div>
+    <div class="answer">
+        <pre><code># Apply a manifest (create or update)
+kubectl apply -f deployment.yaml
+
+# Create (fails if already exists)
+kubectl create -f deployment.yaml
+
+# Delete a resource
+kubectl delete -f deployment.yaml
+kubectl delete pod my-pod
+kubectl delete deployment --all</code></pre>
+    </div>
+
+    <div class="question"><strong>4. kubectl logs — View Container Logs</strong></div>
+    <div class="answer">
+        <pre><code># View logs
+kubectl logs my-pod
+
+# Follow logs (stream)
+kubectl logs -f my-pod
+
+# Logs from a specific container in a multi-container pod
+kubectl logs my-pod -c sidecar-container
+
+# Previous container logs (useful after a crash)
+kubectl logs my-pod --previous
+
+# Last 100 lines
+kubectl logs my-pod --tail=100</code></pre>
+    </div>
+
+    <div class="question"><strong>5. kubectl exec — Run Commands in a Container</strong></div>
+    <div class="answer">
+        <pre><code># Execute a command
+kubectl exec my-pod -- ls /app
+
+# Open an interactive shell
+kubectl exec -it my-pod -- /bin/bash
+
+# Specific container
+kubectl exec -it my-pod -c sidecar -- /bin/sh</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Other Useful Commands</strong></div>
+    <div class="answer">
+        <pre><code># Edit a resource in-place
+kubectl edit deployment my-app
+
+# Port forward to local machine
+kubectl port-forward pod/my-pod 8080:80
+kubectl port-forward svc/my-svc 8080:80
+
+# Copy files to/from a container
+kubectl cp my-pod:/path/to/file ./local-file
+kubectl cp ./local-file my-pod:/path/to/file
+
+# View resource usage
+kubectl top nodes
+kubectl top pods</code></pre>
+    </div>
+
+</body>
+
+</html>

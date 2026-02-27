@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Job</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Job</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Job?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Job creates Pods that run to <strong>completion</strong> — unlike Deployments which run forever;</li>
+            <li>Once all Pods finish successfully, the Job is <strong>complete</strong>;</li>
+            <li>If a Pod fails, the Job creates a new one (based on restart policy);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Job YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  name: data-migration
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 4
+  activeDeadlineSeconds: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate
+          image: myapp:migrate
+          command: ["python", "migrate.py"]</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Key Fields</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Field</th><th>Description</th></tr>
+            <tr><td><strong>completions</strong></td><td>Number of Pods that must complete successfully (default: 1)</td></tr>
+            <tr><td><strong>parallelism</strong></td><td>Number of Pods to run concurrently (default: 1)</td></tr>
+            <tr><td><strong>backoffLimit</strong></td><td>Number of retries before marking Job as failed (default: 6)</td></tr>
+            <tr><td><strong>activeDeadlineSeconds</strong></td><td>Max time the Job can run before being terminated</td></tr>
+            <tr><td><strong>ttlSecondsAfterFinished</strong></td><td>Auto-delete the Job N seconds after completion</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Job Patterns</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Single completion:</strong> <code>completions: 1, parallelism: 1</code> — run one task;</li>
+            <li><strong>Multiple completions:</strong> <code>completions: 5, parallelism: 2</code> — process 5 items, 2 at a time;</li>
+            <li><strong>Work queue:</strong> <code>completions: null, parallelism: 3</code> — run until all work is done;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create a Job imperatively
+kubectl create job test-job --image=busybox -- echo "Hello"
+
+# List Jobs
+kubectl get jobs
+
+# View logs
+kubectl logs job/data-migration
+
+# Delete
+kubectl delete job data-migration</code></pre>
+    </div>
+
+</body>
+
+</html>

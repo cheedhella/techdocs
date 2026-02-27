@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Builds Inside K8s</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Running Builds Inside K8s</h2></div>
+<div class="question"><strong>1. Multi-Container</strong></div><div class="answer"><pre><code>pipeline {
+    agent {
+        kubernetes {
+            yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: node
+    image: node:20
+    command: ["sleep","99999"]
+  - name: docker
+    image: docker:24
+    command: ["sleep","99999"]
+"""
+        }
+    }
+    stages {
+        stage("Test") {
+            steps { container("node") { sh "npm test" } }
+        }
+        stage("Build Image") {
+            steps { container("docker") { sh "docker build -t myapp ." } }
+        }
+    }
+}</code></pre></div><div class="question"><strong>2. Resource Limits</strong></div><div class="answer"><pre><code>containers:
+  - name: maven
+    image: maven:3.9
+    resources:
+      requests: { cpu: 500m, memory: 512Mi }
+      limits: { cpu: "1", memory: 1Gi }</code></pre></div>
+</body></html>

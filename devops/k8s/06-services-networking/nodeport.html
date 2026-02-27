@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service — NodePort</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Service — NodePort</h2>
+    </div>
+
+    <div class="question"><strong>1. What is NodePort?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Exposes the Service on a <strong>static port on every node</strong> in the cluster;</li>
+            <li>Accessible from outside the cluster via <code>&lt;NodeIP&gt;:&lt;NodePort&gt;</code>;</li>
+            <li>Allocates a port in the range <strong>30000–32767</strong> (configurable);</li>
+            <li>A ClusterIP is automatically created as well;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. NodePort YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-nodeport-svc
+spec:
+  type: NodePort
+  selector:
+    app: myapp
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080</code></pre>
+        <ul>
+            <li><strong>port:</strong> ClusterIP port (internal);</li>
+            <li><strong>targetPort:</strong> Pod port;</li>
+            <li><strong>nodePort:</strong> External port on every node (optional — auto-assigned if omitted);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Traffic Flow</strong></div>
+    <div class="answer">
+        <pre><code>External Client → NodeIP:30080 → Service (ClusterIP:80) → Pod:8080</code></pre>
+        <ul>
+            <li>You can hit any node's IP — even if the Pod isn't running on that node;</li>
+            <li>kube-proxy routes the traffic to the correct Pod;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. When to Use</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Development and testing;</li>
+            <li>Simple external access when you don't have a cloud load balancer;</li>
+            <li>Not recommended for production — use LoadBalancer or Ingress instead;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

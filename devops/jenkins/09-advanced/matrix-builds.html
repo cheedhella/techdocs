@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Matrix Builds</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Matrix Builds</h2></div>
+<div class="question"><strong>1. What?</strong></div><div class="answer"><ul><li>Run same stages across <strong>multiple combinations</strong> of parameters;</li><li>Test on different JDK versions, OS, browsers;</li></ul></div><div class="question"><strong>2. Example</strong></div><div class="answer"><pre><code>pipeline {
+    agent none
+    stages {
+        stage("Test Matrix") {
+            matrix {
+                axes {
+                    axis { name "JDK"; values "11","17","21" }
+                    axis { name "OS"; values "linux","windows" }
+                }
+                stages {
+                    stage("Test") {
+                        agent { label "" }
+                        steps { sh "java -version && mvn test" }
+                    }
+                }
+            }
+        }
+    }
+}</code></pre></div>
+</body></html>

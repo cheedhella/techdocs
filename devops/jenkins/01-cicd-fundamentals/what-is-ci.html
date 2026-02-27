@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is CI (Continuous Integration)?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is CI (Continuous Integration)?</h2>
+    </div>
+
+    <div class="question"><strong>1. Definition</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Continuous Integration (CI)</strong> is a development practice where developers merge their code changes into a shared repository <strong>frequently</strong> — ideally several times a day;</li>
+            <li>Each merge triggers an <strong>automated build and test</strong> to catch issues early;</li>
+            <li>The goal: detect integration problems as soon as possible, not at the end of a sprint;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. The CI Workflow</strong></div>
+    <div class="answer">
+        <pre><code>Developer pushes code
+    → CI server detects the change (webhook / poll)
+        → Pulls latest code
+            → Builds the application
+                → Runs automated tests (unit, integration)
+                    → Reports results (pass / fail)
+                        → Notifies the team</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Key Principles</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Single source repository:</strong> All code lives in one version-controlled repo;</li>
+            <li><strong>Automate the build:</strong> One command should build the entire project;</li>
+            <li><strong>Self-testing build:</strong> Every build runs automated tests;</li>
+            <li><strong>Commit frequently:</strong> Small, frequent commits reduce merge conflicts;</li>
+            <li><strong>Fix broken builds immediately:</strong> A failing build is the team's top priority;</li>
+            <li><strong>Keep the build fast:</strong> Feedback should come within minutes, not hours;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Benefits of CI</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Catch bugs early — before they reach production;</li>
+            <li>Reduce integration problems — no more "it works on my machine";</li>
+            <li>Faster feedback loop for developers;</li>
+            <li>Always have a working, testable build;</li>
+            <li>Increased team confidence in code quality;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Popular CI Tools</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Tool</th><th>Type</th></tr>
+            <tr><td><strong>Jenkins</strong></td><td>Self-hosted, open source, highly extensible</td></tr>
+            <tr><td><strong>GitHub Actions</strong></td><td>Cloud, integrated with GitHub</td></tr>
+            <tr><td><strong>GitLab CI</strong></td><td>Cloud / self-hosted, integrated with GitLab</td></tr>
+            <tr><td><strong>CircleCI</strong></td><td>Cloud, fast parallelism</td></tr>
+            <tr><td><strong>Azure DevOps</strong></td><td>Cloud, Microsoft ecosystem</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Topology Spread Constraints</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Topology Spread Constraints</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Topology Spread Constraints?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Control how Pods are <strong>distributed across failure domains</strong> (nodes, zones, regions);</li>
+            <li>More flexible than Pod Anti-Affinity for achieving even distribution;</li>
+            <li>Useful for high availability — ensure Pods are spread across zones;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Example</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Key Fields</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Field</th><th>Description</th></tr>
+            <tr><td><strong>maxSkew</strong></td><td>Max difference in Pod count between any two topology domains</td></tr>
+            <tr><td><strong>topologyKey</strong></td><td>Node label key that defines the topology domain</td></tr>
+            <tr><td><strong>whenUnsatisfiable</strong></td><td><code>DoNotSchedule</code> (hard) or <code>ScheduleAnyway</code> (soft)</td></tr>
+            <tr><td><strong>labelSelector</strong></td><td>Which Pods to consider when counting</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Practical Example — Zone Spreading</strong></div>
+    <div class="answer">
+        <pre><code># With 3 replicas across 3 zones, maxSkew: 1 ensures:
+# Zone A: 1 Pod
+# Zone B: 1 Pod
+# Zone C: 1 Pod
+#
+# If Zone C is full, maxSkew: 1 means the max difference
+# between any two zones is 1:
+# Zone A: 2 Pods, Zone B: 1 Pod — allowed (skew = 1)
+# Zone A: 3 Pods, Zone B: 1 Pod — NOT allowed (skew = 2)</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Multiple Constraints</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app: myapp
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app: myapp</code></pre>
+        <p>This spreads Pods evenly across zones (hard) and across nodes (soft).</p>
+    </div>
+
+</body>
+
+</html>

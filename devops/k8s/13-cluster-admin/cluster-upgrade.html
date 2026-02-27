@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cluster Upgrade Strategy</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cluster Upgrade Strategy</h2>
+    </div>
+
+    <div class="question"><strong>1. Version Skew Policy</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes supports upgrading <strong>one minor version at a time</strong> (e.g., 1.27 → 1.28, not 1.27 → 1.29);</li>
+            <li><strong>Control plane</strong> must be upgraded before worker nodes;</li>
+            <li>kubelet can be up to <strong>2 minor versions behind</strong> the API Server;</li>
+            <li>kubectl can be <strong>±1 minor version</strong> from the API Server;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Upgrade Order</strong></div>
+    <div class="answer">
+        <ol>
+            <li>Upgrade the <strong>control plane</strong> (API Server, Controller Manager, Scheduler);</li>
+            <li>Upgrade <strong>etcd</strong> (if managed separately);</li>
+            <li>Upgrade <strong>worker nodes</strong> (one at a time or in batches);</li>
+            <li>Upgrade <strong>kubectl</strong> on admin machines;</li>
+        </ol>
+    </div>
+
+    <div class="question"><strong>3. Upgrading with kubeadm</strong></div>
+    <div class="answer">
+        <pre><code># On control plane node:
+# 1. Upgrade kubeadm
+sudo apt-get update && sudo apt-get install -y kubeadm=1.28.0-00
+
+# 2. Plan the upgrade
+sudo kubeadm upgrade plan
+
+# 3. Apply the upgrade
+sudo kubeadm upgrade apply v1.28.0
+
+# 4. Upgrade kubelet and kubectl
+sudo apt-get install -y kubelet=1.28.0-00 kubectl=1.28.0-00
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+# On each worker node:
+# 1. Drain the node
+kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data
+
+# 2. Upgrade kubeadm, then kubelet
+sudo apt-get install -y kubeadm=1.28.0-00
+sudo kubeadm upgrade node
+sudo apt-get install -y kubelet=1.28.0-00
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+# 3. Uncordon the node
+kubectl uncordon worker-1</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Managed Kubernetes Upgrades</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>EKS/AKS/GKE:</strong> Control plane upgrades are handled by the cloud provider;</li>
+            <li>Worker node upgrades are done by updating node groups/pools;</li>
+            <li>Always test upgrades in a staging environment first;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

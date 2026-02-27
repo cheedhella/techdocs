@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Dynamic Agent Pods</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Dynamic Agent Pods</h2></div>
+<div class="question"><strong>1. How It Works</strong></div><div class="answer"><ul><li>Build starts: Jenkins creates a <strong>Pod in K8s</strong>;</li><li>Pod runs JNLP agent + build containers;</li><li>Build ends: Pod <strong>auto-deleted</strong>;</li></ul></div><div class="question"><strong>2. Benefits</strong></div><div class="answer"><ul><li><strong>Cost efficient:</strong> No idle agents;</li><li><strong>Scalable:</strong> K8s handles scheduling;</li><li><strong>Clean:</strong> Fresh environment per build;</li><li><strong>Flexible:</strong> Different pod templates per job;</li></ul></div><div class="question"><strong>3. Pod Template</strong></div><div class="answer"><ul><li>Defines containers in the agent Pod;</li><li>Use <code>container("name")</code> to target a specific container;</li></ul></div>
+</body></html>

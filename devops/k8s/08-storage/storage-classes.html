@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Storage Classes and Dynamic Provisioning</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Storage Classes and Dynamic Provisioning</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a StorageClass?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defines <strong>classes of storage</strong> available in the cluster (fast SSD, standard HDD, etc.);</li>
+            <li>Enables <strong>dynamic provisioning</strong> — PVs are created automatically when a PVC is created;</li>
+            <li>No need for admins to pre-create PVs;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. StorageClass YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+  iopsPerGB: "10"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Key Fields</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Field</th><th>Description</th></tr>
+            <tr><td><strong>provisioner</strong></td><td>The volume plugin that creates PVs (e.g., aws-ebs, gce-pd, csi driver)</td></tr>
+            <tr><td><strong>parameters</strong></td><td>Provisioner-specific settings (disk type, IOPS, etc.)</td></tr>
+            <tr><td><strong>reclaimPolicy</strong></td><td>Delete or Retain — what happens to PV when PVC is deleted</td></tr>
+            <tr><td><strong>allowVolumeExpansion</strong></td><td>Allow PVCs to request more storage</td></tr>
+            <tr><td><strong>volumeBindingMode</strong></td><td>Immediate or WaitForFirstConsumer</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Dynamic Provisioning Flow</strong></div>
+    <div class="answer">
+        <pre><code># 1. Admin creates a StorageClass
+# 2. User creates a PVC referencing the StorageClass
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 20Gi
+
+# 3. Kubernetes automatically provisions a PV (e.g., AWS EBS volume)
+# 4. PVC binds to the new PV
+# 5. Pod uses the PVC</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Default StorageClass</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A StorageClass annotated with <code>storageclass.kubernetes.io/is-default-class: "true"</code>;</li>
+            <li>PVCs without a <code>storageClassName</code> will use the default;</li>
+        </ul>
+        <pre><code># List StorageClasses
+kubectl get sc</code></pre>
+    </div>
+
+</body>
+
+</html>

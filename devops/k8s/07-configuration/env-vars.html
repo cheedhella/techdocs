@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Environment Variables</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Environment Variables</h2>
+    </div>
+
+    <div class="question"><strong>1. Ways to Set Environment Variables</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Direct:</strong> Define in the Pod spec;</li>
+            <li><strong>From ConfigMap:</strong> Reference a ConfigMap key;</li>
+            <li><strong>From Secret:</strong> Reference a Secret key;</li>
+            <li><strong>From Pod fields:</strong> Use the Downward API;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Direct Environment Variables</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      env:
+        - name: APP_ENV
+          value: "production"
+        - name: LOG_LEVEL
+          value: "info"</code></pre>
+    </div>
+
+    <div class="question"><strong>3. From ConfigMap and Secret</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DB_HOST
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-creds
+              key: password
+      # Load all keys from a ConfigMap
+      envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: db-creds</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Downward API — Pod Metadata as Env Vars</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: CPU_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName: app
+              resource: limits.cpu</code></pre>
+    </div>
+
+</body>
+
+</html>

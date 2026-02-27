@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Slack / Email Notifications</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Slack / Email Notifications</h2>
+    </div>
+    <div class="question"><strong>1. Slack Notifications</strong></div>
+    <div class="answer"><pre><code>post {
+    success {
+        slackSend(color: 'good', channel: '#builds',
+            message: "SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}")
+    }
+    failure {
+        slackSend(color: 'danger', channel: '#builds',
+            message: "FAILED: ${JOB_NAME} #${BUILD_NUMBER}")
+    }
+}</code></pre></div>
+    <div class="question"><strong>2. Email Notifications</strong></div>
+    <div class="answer"><pre><code>post {
+    failure {
+        emailext(
+            subject: "FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
+            body: "Check: ${BUILD_URL}",
+            to: 'team@example.com'
+        )
+    }
+}</code></pre><p>Configure SMTP in <strong>Manage Jenkins &gt; System &gt; E-mail Notification</strong>.</p></div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jenkinsfile</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Jenkinsfile</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Jenkinsfile?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A text file named <code>Jenkinsfile</code> that defines the pipeline;</li>
+            <li>Placed in the <strong>root of the repository</strong>;</li>
+            <li>Uses Groovy-based DSL (Domain Specific Language);</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Basic Jenkinsfile</strong></div>
+    <div class="answer">
+        <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+            }
+        }
+    }
+}</code></pre>
+    </div>
+    <div class="question"><strong>3. Key Sections</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Section</th><th>Purpose</th></tr>
+            <tr><td><strong>pipeline</strong></td><td>Root block for declarative pipeline</td></tr>
+            <tr><td><strong>agent</strong></td><td>Where to run (any, label, docker, kubernetes)</td></tr>
+            <tr><td><strong>stages</strong></td><td>Container for all stages</td></tr>
+            <tr><td><strong>stage</strong></td><td>A named phase (Build, Test, Deploy)</td></tr>
+            <tr><td><strong>steps</strong></td><td>Actual commands to run within a stage</td></tr>
+            <tr><td><strong>post</strong></td><td>Actions after pipeline completes</td></tr>
+            <tr><td><strong>environment</strong></td><td>Set environment variables</td></tr>
+            <tr><td><strong>parameters</strong></td><td>User input parameters</td></tr>
+        </table>
+    </div>
+</body>
+</html>

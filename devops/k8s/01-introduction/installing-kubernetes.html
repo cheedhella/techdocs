@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Installing Kubernetes</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Installing Kubernetes (Minikube, kubeadm, Kind)</h2>
+    </div>
+
+    <div class="question"><strong>1. Local Development Options</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Minikube:</strong> Runs a single-node Kubernetes cluster inside a VM or container on your local machine;</li>
+            <li><strong>Kind (Kubernetes in Docker):</strong> Runs Kubernetes clusters using Docker containers as nodes — fast and lightweight;</li>
+            <li><strong>Docker Desktop:</strong> Includes a built-in single-node Kubernetes cluster (enable in settings);</li>
+            <li><strong>k3s:</strong> Lightweight Kubernetes distribution, ideal for local dev, IoT, and edge;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Minikube Setup</strong></div>
+    <div class="answer">
+        <pre><code># Install minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Start a cluster
+minikube start --driver=docker
+
+# Verify
+kubectl get nodes
+minikube status</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Kind Setup</strong></div>
+    <div class="answer">
+        <pre><code># Install kind
+go install sigs.k8s.io/kind@latest
+
+# Create a cluster
+kind create cluster --name my-cluster
+
+# Verify
+kubectl cluster-info --context kind-my-cluster</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Production Setup with kubeadm</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>kubeadm</strong> is the official tool for bootstrapping production-grade Kubernetes clusters;</li>
+            <li>It initializes the control plane and joins worker nodes;</li>
+        </ul>
+        <pre><code># On master node
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+# Set up kubeconfig
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+
+# Install a CNI plugin (e.g., Flannel)
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+
+# On worker node — join the cluster
+sudo kubeadm join &lt;master-ip&gt;:6443 --token &lt;token&gt; --discovery-token-ca-cert-hash sha256:&lt;hash&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Installing kubectl</strong></div>
+    <div class="answer">
+        <pre><code># Linux
+curl -LO "https://dl.k8s.io/release/$(curl -sL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install kubectl /usr/local/bin/kubectl
+
+# Verify
+kubectl version --client</code></pre>
+    </div>
+
+</body>
+
+</html>

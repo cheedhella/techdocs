@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ExternalName Service</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>ExternalName Service</h2>
+    </div>
+
+    <div class="question"><strong>1. What is ExternalName?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Maps a Service to an <strong>external DNS name</strong> (CNAME record);</li>
+            <li>No proxying — DNS resolves directly to the external host;</li>
+            <li>No selector, no ClusterIP, no ports;</li>
+            <li>Useful for referencing external services (databases, APIs) with an internal name;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. ExternalName YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-database
+spec:
+  type: ExternalName
+  externalName: db.prod.example.com</code></pre>
+        <ul>
+            <li>Pods can now connect to <code>my-database</code> and it resolves to <code>db.prod.example.com</code>;</li>
+            <li>If the external endpoint changes, just update the Service — no app changes needed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Referencing an <strong>external RDS database</strong> via a Kubernetes Service name;</li>
+            <li><strong>Migration:</strong> Gradually move from external service to in-cluster service — just change the Service type;</li>
+            <li>Abstracting <strong>cross-namespace</strong> services;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

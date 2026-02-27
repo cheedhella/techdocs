@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kubectl debug and Ephemeral Containers</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>kubectl debug and Ephemeral Containers</h2>
+    </div>
+
+    <div class="question"><strong>1. The Problem</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Distroless and minimal container images lack debugging tools (no shell, no curl, no netstat);</li>
+            <li>You can't <code>kubectl exec</code> into a container that has no shell;</li>
+            <li>You don't want to add debugging tools to production images;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. kubectl debug</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Adds an <strong>ephemeral container</strong> to a running Pod for debugging;</li>
+            <li>The debug container shares the Pod's namespaces (network, PID);</li>
+            <li>Available since Kubernetes v1.25 (stable);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Usage</strong></div>
+    <div class="answer">
+        <pre><code># Attach a debug container to an existing Pod
+kubectl debug my-pod -it --image=busybox -- sh
+
+# Debug with full networking tools
+kubectl debug my-pod -it --image=nicolaka/netshoot -- bash
+
+# Share process namespace (see processes from the target container)
+kubectl debug my-pod -it --image=busybox --target=main -- sh
+
+# Debug by creating a copy of the Pod
+kubectl debug my-pod -it --image=busybox --copy-to=my-pod-debug -- sh
+
+# Debug a node
+kubectl debug node/worker-1 -it --image=busybox</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Ephemeral Containers</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Temporary containers added to a Pod <strong>after creation</strong>;</li>
+            <li>Cannot be restarted, have no ports, and lack probe support;</li>
+            <li>Designed exclusively for troubleshooting;</li>
+            <li>Visible in <code>kubectl describe pod</code> under "Ephemeral Containers";</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

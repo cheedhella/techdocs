@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Logging</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Logging (kubectl logs, centralized logging)</h2>
+    </div>
+
+    <div class="question"><strong>1. Container Logging Basics</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Containers should write logs to <strong>stdout and stderr</strong>;</li>
+            <li>The container runtime captures these and stores them on the node;</li>
+            <li>Default log location: <code>/var/log/containers/</code> on the node;</li>
+            <li>Logs are <strong>lost when a Pod is deleted</strong> — centralized logging is essential for production;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. kubectl logs</strong></div>
+    <div class="answer">
+        <pre><code># View logs
+kubectl logs my-pod
+
+# Follow (stream) logs
+kubectl logs -f my-pod
+
+# Last N lines
+kubectl logs my-pod --tail=50
+
+# Logs since a time
+kubectl logs my-pod --since=1h
+kubectl logs my-pod --since-time="2024-01-01T00:00:00Z"
+
+# Specific container (multi-container Pod)
+kubectl logs my-pod -c sidecar
+
+# Previous container (after a restart)
+kubectl logs my-pod --previous
+
+# All Pods with a label
+kubectl logs -l app=myapp --all-containers=true</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Centralized Logging Patterns</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Pattern</th><th>Description</th></tr>
+            <tr><td><strong>Node-level agent</strong></td><td>DaemonSet (Fluentd/Fluent Bit) on each node, collects logs from /var/log</td></tr>
+            <tr><td><strong>Sidecar container</strong></td><td>Log shipper sidecar in each Pod, sends logs to a backend</td></tr>
+            <tr><td><strong>Direct from app</strong></td><td>Application sends logs directly to the logging backend</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Common Logging Stacks</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>EFK:</strong> Elasticsearch + Fluentd + Kibana;</li>
+            <li><strong>ELK:</strong> Elasticsearch + Logstash + Kibana;</li>
+            <li><strong>PLG:</strong> Promtail + Loki + Grafana (lightweight, popular);</li>
+            <li><strong>Cloud native:</strong> CloudWatch (AWS), Stackdriver (GCP), Azure Monitor;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

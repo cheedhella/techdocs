@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>What is CD?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is CD (Continuous Delivery vs Deployment)?</h2>
+    </div>
+
+    <div class="question"><strong>1. Continuous Delivery</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An extension of CI where code is always in a <strong>deployable state</strong>;</li>
+            <li>After automated tests pass, the artifact is ready for production but deployment requires <strong>manual approval</strong>;</li>
+            <li>Think of it as: we can deploy at any time, but a human decides when;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Continuous Deployment</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Goes one step further: every change that passes all tests is <strong>automatically deployed to production</strong>;</li>
+            <li>No manual gates. The pipeline handles everything;</li>
+            <li>Requires extremely high confidence in automated tests;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Comparison</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Continuous Delivery</th><th>Continuous Deployment</th></tr>
+            <tr><td>Automated tests</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Automated deploy</td><td>No, manual approval</td><td>Yes, fully automated</td></tr>
+            <tr><td>Risk</td><td>Lower, human gate</td><td>Higher, requires solid tests</td></tr>
+            <tr><td>Speed</td><td>Fast but gated</td><td>Fastest possible</td></tr>
+            <tr><td>Common in</td><td>Enterprise, regulated</td><td>SaaS, startups</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Deployment Strategies</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Strategy</th><th>Description</th></tr>
+            <tr><td><strong>Rolling</strong></td><td>Gradually replace old instances with new ones</td></tr>
+            <tr><td><strong>Blue-Green</strong></td><td>Run two identical environments, switch traffic</td></tr>
+            <tr><td><strong>Canary</strong></td><td>Route a small percentage of traffic to new version first</td></tr>
+            <tr><td><strong>Recreate</strong></td><td>Stop old, start new (brief downtime)</td></tr>
+        </table>
+    </div>
+</body>
+</html>

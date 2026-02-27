@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Java Maven App</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Build and Deploy a Java App Using Maven</h2></div>
+<div class="question"><strong>Jenkinsfile</strong></div><div class="answer"><pre><code>pipeline {
+    agent { docker { image "maven:3.9-eclipse-temurin-17" } }
+    stages {
+        stage("Checkout") {
+            steps { git "https://github.com/user/java-app.git" }
+        }
+        stage("Build") {
+            steps { sh "mvn clean package -DskipTests" }
+        }
+        stage("Test") {
+            steps { sh "mvn test" }
+            post { always { junit "**/target/surefire-reports/*.xml" } }
+        }
+        stage("Archive") {
+            steps { archiveArtifacts artifacts: "target/*.jar" }
+        }
+    }
+}</code></pre></div>
+</body></html>

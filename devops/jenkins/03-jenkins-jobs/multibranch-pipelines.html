@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Multi-branch Pipelines</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Multi-branch Pipelines</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Multi-branch Pipeline?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Automatically <strong>discovers branches</strong> in a Git repository and creates a pipeline for each;</li>
+            <li>Each branch with a <code>Jenkinsfile</code> gets its own pipeline;</li>
+            <li>Branches without a Jenkinsfile are ignored;</li>
+            <li>Pull Requests can also trigger builds;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Jenkins scans the repo periodically (or via webhook);</li>
+            <li>Finds branches with a Jenkinsfile;</li>
+            <li>Creates a sub-job for each branch: <code>my-project/main</code>, <code>my-project/feature-x</code>;</li>
+            <li>When a branch is deleted, its pipeline is automatically removed;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>3. Creating a Multi-branch Pipeline</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Click <strong>New Item</strong> &gt; Select <strong>Multibranch Pipeline</strong>;</li>
+            <li>Add Branch Source: GitHub, GitLab, or Git;</li>
+            <li>Configure credentials and repository URL;</li>
+            <li>Set scan triggers (periodic or webhook);</li>
+        </ul>
+    </div>
+    <div class="question"><strong>4. Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Feature branch workflows: each branch gets CI automatically;</li>
+            <li>PR validation: test PRs before merging;</li>
+            <li>Release branches: different pipeline behavior per branch;</li>
+        </ul>
+    </div>
+</body>
+</html>

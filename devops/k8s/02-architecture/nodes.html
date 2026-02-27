@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Nodes (Master vs Worker)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Nodes (Master vs Worker)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Node?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A node is a <strong>machine</strong> (physical or virtual) in the Kubernetes cluster;</li>
+            <li>Each node has the services necessary to run Pods;</li>
+            <li>Nodes are managed by the control plane;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Master (Control Plane) Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Runs the control plane components: API Server, etcd, Scheduler, Controller Manager;</li>
+            <li>By default, Pods are <strong>not scheduled</strong> on master nodes (taint: <code>node-role.kubernetes.io/control-plane:NoSchedule</code>);</li>
+            <li>In production, you typically have <strong>3 or 5 master nodes</strong> for high availability;</li>
+            <li>An odd number ensures etcd quorum for leader election;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Worker Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Runs application workloads — this is where your Pods live;</li>
+            <li>Runs kubelet, kube-proxy, and the container runtime;</li>
+            <li>Can be scaled horizontally — add more worker nodes to handle more workloads;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Managing Nodes</strong></div>
+    <div class="answer">
+        <pre><code># List all nodes
+kubectl get nodes
+
+# View node details
+kubectl describe node &lt;node-name&gt;
+
+# Label a node
+kubectl label node &lt;node-name&gt; disktype=ssd
+
+# Cordon a node (prevent new Pods)
+kubectl cordon &lt;node-name&gt;
+
+# Drain a node (evict Pods gracefully)
+kubectl drain &lt;node-name&gt; --ignore-daemonsets --delete-emptydir-data
+
+# Uncordon a node
+kubectl uncordon &lt;node-name&gt;</code></pre>
+    </div>
+
+</body>
+
+</html>

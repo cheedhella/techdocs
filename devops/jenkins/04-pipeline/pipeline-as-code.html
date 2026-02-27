@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pipeline as Code</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Pipeline as Code</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Pipeline as Code?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defining your CI/CD pipeline in a <strong>file (Jenkinsfile)</strong> stored in version control;</li>
+            <li>The pipeline definition lives <strong>alongside your application code</strong>;</li>
+            <li>Changes to the pipeline go through the same review process as code changes;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Benefits</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Version controlled:</strong> Full history of pipeline changes in Git;</li>
+            <li><strong>Code review:</strong> Pipeline changes go through pull requests;</li>
+            <li><strong>Reproducible:</strong> Same pipeline runs on any Jenkins instance;</li>
+            <li><strong>Single source of truth:</strong> Code and pipeline live together;</li>
+            <li><strong>Branch-specific:</strong> Each branch can have its own pipeline;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>3. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Create a file named <code>Jenkinsfile</code> in the root of your repository;</li>
+            <li>Configure the Jenkins job to use "Pipeline script from SCM";</li>
+            <li>Jenkins checks out the code and reads the Jenkinsfile;</li>
+            <li>The pipeline executes as defined in the file;</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Key Concepts and Terminology</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Key Concepts and Terminology</h2>
+    </div>
+
+    <div class="question"><strong>1. Cluster</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A set of machines (nodes) that run containerized applications managed by Kubernetes;</li>
+            <li>Consists of at least one <strong>control plane</strong> (master) node and one or more <strong>worker</strong> nodes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A physical or virtual machine in the cluster;</li>
+            <li><strong>Master Node:</strong> Runs control plane components (API Server, Scheduler, Controller Manager, etcd);</li>
+            <li><strong>Worker Node:</strong> Runs application workloads (Pods) via kubelet and kube-proxy;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Pod</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>smallest deployable unit</strong> in Kubernetes;</li>
+            <li>A Pod wraps one or more containers that share networking and storage;</li>
+            <li>Every Pod gets its own IP address;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Service</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A stable network endpoint that exposes a set of Pods;</li>
+            <li>Pods are ephemeral — Services provide a <strong>permanent IP and DNS name</strong>;</li>
+            <li>Types: ClusterIP, NodePort, LoadBalancer, ExternalName;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Deployment</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A controller that manages the desired state of Pods (replicas, image version, update strategy);</li>
+            <li>Handles <strong>rolling updates</strong> and <strong>rollbacks</strong> automatically;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Namespace</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A way to <strong>logically partition</strong> a cluster into isolated groups;</li>
+            <li>Useful for multi-team environments — each team gets their own namespace;</li>
+            <li>Default namespaces: <code>default</code>, <code>kube-system</code>, <code>kube-public</code>, <code>kube-node-lease</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Label and Selector</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Labels:</strong> Key-value pairs attached to objects (Pods, Services, etc.) for identification;</li>
+            <li><strong>Selectors:</strong> Used to filter and select objects based on their labels;</li>
+            <li>This is how Services know which Pods to route traffic to;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Manifest / YAML</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes resources are defined in <strong>YAML or JSON files</strong> called manifests;</li>
+            <li>Every manifest has: <code>apiVersion</code>, <code>kind</code>, <code>metadata</code>, and <code>spec</code>;</li>
+        </ul>
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx:latest</code></pre>
+    </div>
+
+</body>
+
+</html>

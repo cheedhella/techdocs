@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Network Policies</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Network Policies</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Network Policies?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes resources that control <strong>traffic flow between Pods</strong>;</li>
+            <li>By default, all Pods can communicate with all other Pods — Network Policies restrict this;</li>
+            <li>Act as a <strong>firewall</strong> at the Pod level;</li>
+            <li>Require a CNI plugin that supports Network Policies (Calico, Cilium, Weave — NOT Flannel);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How They Work</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A NetworkPolicy selects Pods via <strong>podSelector</strong>;</li>
+            <li>Once a Pod is selected by any NetworkPolicy, it becomes <strong>isolated</strong> — only explicitly allowed traffic is permitted;</li>
+            <li>You can control both <strong>ingress</strong> (incoming) and <strong>egress</strong> (outgoing) traffic;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Example — Allow Only Specific Ingress</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend
+      ports:
+        - port: 8080
+          protocol: TCP</code></pre>
+        <p>This policy: allows traffic to <code>app: api</code> Pods only from <code>app: frontend</code> Pods on port 8080.</p>
+    </div>
+
+    <div class="question"><strong>4. Default Deny All</strong></div>
+    <div class="answer">
+        <pre><code># Deny all ingress to all Pods in a namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-ingress
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+# Deny all egress from all Pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-egress
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress</code></pre>
+    </div>
+
+</body>
+
+</html>

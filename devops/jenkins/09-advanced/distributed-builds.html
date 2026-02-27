@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Distributed Builds</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Distributed Builds</h2></div>
+<div class="question"><strong>1. Why?</strong></div><div class="answer"><ul><li>Scale build capacity with <strong>more agents</strong>;</li><li>Run builds on different OS/architectures;</li><li>Keep controller free from build workloads;</li></ul></div><div class="question"><strong>2. Connection Methods</strong></div><div class="answer"><table><tr><th>Method</th><th>Description</th></tr><tr><td><strong>SSH</strong></td><td>Controller connects to agent</td></tr><tr><td><strong>JNLP</strong></td><td>Agent connects back to controller</td></tr><tr><td><strong>WebSocket</strong></td><td>Firewall-friendly outbound</td></tr></table></div><div class="question"><strong>3. Adding an Agent</strong></div><div class="answer"><ul><li><strong>Manage Jenkins &gt; Nodes &gt; New Node</strong>;</li><li>Set: name, remote root, labels, launch method;</li></ul></div><div class="question"><strong>4. Labels</strong></div><div class="answer"><pre><code>pipeline {
+    agent { label "linux && docker" }
+    stages { ... }
+}</code></pre></div>
+</body></html>

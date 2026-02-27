@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Declarative vs Scripted Pipeline</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Declarative vs Scripted Pipeline</h2>
+    </div>
+
+    <div class="question"><strong>1. Declarative Pipeline</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Structured, opinionated syntax with a predefined structure;</li>
+            <li>Easier to read and write; recommended for most use cases;</li>
+            <li>Starts with <code>pipeline { }</code>;</li>
+        </ul>
+        <pre><code>pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+    }
+}</code></pre>
+    </div>
+    <div class="question"><strong>2. Scripted Pipeline</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Full Groovy programming language; maximum flexibility;</li>
+            <li>More complex, less structured;</li>
+            <li>Starts with <code>node { }</code>;</li>
+        </ul>
+        <pre><code>node {
+    stage('Build') {
+        sh 'make build'
+    }
+    stage('Test') {
+        try {
+            sh 'make test'
+        } catch (e) {
+            currentBuild.result = 'UNSTABLE'
+        }
+    }
+}</code></pre>
+    </div>
+    <div class="question"><strong>3. Comparison</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Declarative</th><th>Scripted</th></tr>
+            <tr><td>Syntax</td><td>Structured, predefined</td><td>Free-form Groovy</td></tr>
+            <tr><td>Learning curve</td><td>Lower</td><td>Higher</td></tr>
+            <tr><td>Flexibility</td><td>Good (with script blocks)</td><td>Maximum</td></tr>
+            <tr><td>Error handling</td><td>post { } block</td><td>try/catch/finally</td></tr>
+            <tr><td>Recommended</td><td>Yes, for most cases</td><td>When declarative is too limiting</td></tr>
+        </table>
+    </div>
+</body>
+</html>

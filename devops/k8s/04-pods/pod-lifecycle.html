@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pod Lifecycle and Phases</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Pod Lifecycle and Phases</h2>
+    </div>
+
+    <div class="question"><strong>1. Pod Phases</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Phase</th><th>Description</th></tr>
+            <tr><td><strong>Pending</strong></td><td>Pod accepted but not yet running. Waiting for scheduling, image pull, etc.</td></tr>
+            <tr><td><strong>Running</strong></td><td>Pod bound to a node. At least one container is running or starting.</td></tr>
+            <tr><td><strong>Succeeded</strong></td><td>All containers terminated successfully (exit code 0). Won't restart.</td></tr>
+            <tr><td><strong>Failed</strong></td><td>All containers terminated, at least one failed (non-zero exit code).</td></tr>
+            <tr><td><strong>Unknown</strong></td><td>Pod state cannot be determined. Usually a node communication issue.</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Container States</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Waiting:</strong> Container is not yet running (pulling image, applying secrets, etc.);</li>
+            <li><strong>Running:</strong> Container is executing;</li>
+            <li><strong>Terminated:</strong> Container has finished execution (either successfully or with an error);</li>
+        </ul>
+        <pre><code># Check container state
+kubectl get pod my-pod -o jsonpath='{.status.containerStatuses[0].state}'</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Pod Conditions</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>PodScheduled:</strong> Pod has been scheduled to a node;</li>
+            <li><strong>Initialized:</strong> All init containers have completed;</li>
+            <li><strong>ContainersReady:</strong> All containers in the Pod are ready;</li>
+            <li><strong>Ready:</strong> Pod is ready to serve traffic (passes readiness probe);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Common Status Values (kubectl get pods)</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Status</th><th>Meaning</th></tr>
+            <tr><td>ContainerCreating</td><td>Pulling image or setting up the container</td></tr>
+            <tr><td>Running</td><td>All containers are running</td></tr>
+            <tr><td>CrashLoopBackOff</td><td>Container keeps crashing and K8s is backing off restarts</td></tr>
+            <tr><td>ImagePullBackOff</td><td>Cannot pull the container image</td></tr>
+            <tr><td>ErrImagePull</td><td>Failed to pull image (wrong name, auth issue)</td></tr>
+            <tr><td>Completed</td><td>Container finished successfully (Jobs)</td></tr>
+            <tr><td>Terminating</td><td>Pod is being deleted (graceful shutdown period)</td></tr>
+            <tr><td>OOMKilled</td><td>Container exceeded memory limit</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

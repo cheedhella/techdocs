@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Git Basics</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Git Basics (clone, commit, push, pull request)</h2>
+    </div>
+    <div class="question"><strong>1. Why Git Matters for CI/CD</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Git is the <strong>source of truth</strong> for your code. Jenkins pulls code from Git;</li>
+            <li>Every pipeline starts with a Git event: push, pull request, tag;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Essential Commands</strong></div>
+    <div class="answer">
+        <pre><code>git clone https://github.com/user/repo.git
+git add .
+git commit -m "Add feature X"
+git push origin main
+git pull origin main
+git checkout -b feature/my-feature
+git checkout main
+git merge feature/my-feature</code></pre>
+    </div>
+    <div class="question"><strong>3. Branching Strategy</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Strategy</th><th>Description</th></tr>
+            <tr><td><strong>Git Flow</strong></td><td>main, develop, feature/*, release/*, hotfix/*</td></tr>
+            <tr><td><strong>GitHub Flow</strong></td><td>main + feature branches. Simple, PR-based.</td></tr>
+            <tr><td><strong>Trunk-Based</strong></td><td>Short-lived branches, merge to main frequently. Best for CI/CD.</td></tr>
+        </table>
+    </div>
+    <div class="question"><strong>4. Pull Requests and Jenkins</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A <strong>Pull Request (PR)</strong> is a request to merge a feature branch into main;</li>
+            <li>Jenkins can <strong>automatically build and test PRs</strong>;</li>
+            <li>The PR shows build status (pass/fail) before merging;</li>
+        </ul>
+    </div>
+</body>
+</html>

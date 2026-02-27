@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pod Security Standards / Pod Security Admission</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Pod Security Standards / Pod Security Admission</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Pod Security Standards?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Three <strong>security profiles</strong> that define different levels of restrictiveness for Pods;</li>
+            <li>Replaced the deprecated PodSecurityPolicy (PSP) since Kubernetes v1.25;</li>
+            <li>Enforced by <strong>Pod Security Admission</strong> (PSA) controller;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Security Levels</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Level</th><th>Description</th></tr>
+            <tr><td><strong>Privileged</strong></td><td>No restrictions. Allows everything.</td></tr>
+            <tr><td><strong>Baseline</strong></td><td>Prevents known privilege escalations. Allows most workloads.</td></tr>
+            <tr><td><strong>Restricted</strong></td><td>Heavily restricted. Best practice hardening for security-critical workloads.</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Enforcement Modes</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Mode</th><th>Behavior</th></tr>
+            <tr><td><strong>enforce</strong></td><td>Rejects Pods that violate the policy</td></tr>
+            <tr><td><strong>audit</strong></td><td>Allows but logs violations in the audit log</td></tr>
+            <tr><td><strong>warn</strong></td><td>Allows but shows a warning to the user</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Applying via Namespace Labels</strong></div>
+    <div class="answer">
+        <pre><code># Apply restricted policy to a namespace
+kubectl label namespace production \
+  pod-security.kubernetes.io/enforce=restricted \
+  pod-security.kubernetes.io/enforce-version=latest \
+  pod-security.kubernetes.io/warn=restricted \
+  pod-security.kubernetes.io/audit=restricted</code></pre>
+    </div>
+
+    <div class="question"><strong>5. What Restricted Level Requires</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Must run as non-root;</li>
+            <li>Must drop ALL capabilities;</li>
+            <li>Must set <code>allowPrivilegeEscalation: false</code>;</li>
+            <li>Must use a non-root seccomp profile;</li>
+            <li>No hostNetwork, hostPID, hostIPC;</li>
+            <li>No privileged containers;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

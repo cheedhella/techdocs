@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Labels and Selectors</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Labels and Selectors</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Labels?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Key-value pairs attached to Kubernetes objects for <strong>identification and organization</strong>;</li>
+            <li>Do NOT affect behavior — they are purely metadata for selecting and filtering;</li>
+            <li>Example: <code>app: nginx</code>, <code>env: production</code>, <code>tier: frontend</code>;</li>
+        </ul>
+        <pre><code>metadata:
+  labels:
+    app: myapp
+    env: production
+    tier: frontend
+    version: v2</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Selectors</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Equality-based:</strong> <code>=</code>, <code>==</code>, <code>!=</code></li>
+            <li><strong>Set-based:</strong> <code>in</code>, <code>notin</code>, <code>exists</code></li>
+        </ul>
+        <pre><code># Equality-based
+kubectl get pods -l app=nginx
+kubectl get pods -l env!=production
+
+# Set-based
+kubectl get pods -l 'app in (nginx, redis)'
+kubectl get pods -l 'tier notin (backend)'
+kubectl get pods -l 'version'           # has the label
+kubectl get pods -l '!canary'           # does NOT have the label
+
+# Multiple conditions (AND)
+kubectl get pods -l app=nginx,env=production</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Selectors in Resources</strong></div>
+    <div class="answer">
+        <pre><code># Service selector — routes traffic to matching Pods
+spec:
+  selector:
+    app: myapp
+
+# Deployment selector
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+    matchExpressions:
+      - key: env
+        operator: In
+        values: ["staging", "production"]</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Label Commands</strong></div>
+    <div class="answer">
+        <pre><code># Add a label
+kubectl label pod my-pod env=staging
+
+# Update a label
+kubectl label pod my-pod env=production --overwrite
+
+# Remove a label
+kubectl label pod my-pod env-
+
+# Show labels
+kubectl get pods --show-labels</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Recommended Labels</strong></div>
+    <div class="answer">
+        <pre><code>labels:
+  app.kubernetes.io/name: myapp
+  app.kubernetes.io/instance: myapp-prod
+  app.kubernetes.io/version: "1.2.3"
+  app.kubernetes.io/component: frontend
+  app.kubernetes.io/part-of: my-system
+  app.kubernetes.io/managed-by: helm</code></pre>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Control Plane Components</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Control Plane Components</h2>
+    </div>
+
+    <div class="question"><strong>1. kube-apiserver</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>front door</strong> of the Kubernetes cluster — all communication goes through it;</li>
+            <li>Exposes the Kubernetes API via REST (HTTPS);</li>
+            <li>Authenticates and authorizes all requests (RBAC, certificates);</li>
+            <li>The <strong>only component that reads/writes to etcd</strong>;</li>
+            <li>Horizontally scalable — you can run multiple instances behind a load balancer;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. etcd</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed, consistent <strong>key-value store</strong> that holds all cluster data;</li>
+            <li>Stores the entire cluster state: Pods, Services, ConfigMaps, Secrets, etc.;</li>
+            <li>Uses the <strong>Raft consensus algorithm</strong> for high availability;</li>
+            <li>Critical component — if etcd is lost, the entire cluster state is lost;</li>
+            <li>Always back up etcd regularly in production;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. kube-scheduler</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Watches for newly created Pods that have <strong>no node assigned</strong>;</li>
+            <li>Selects the best node for each Pod based on: resource requirements, affinity/anti-affinity rules, taints/tolerations, data locality;</li>
+            <li>Scoring process: <strong>Filtering</strong> (eliminate unfit nodes) → <strong>Scoring</strong> (rank remaining nodes) → <strong>Binding</strong> (assign Pod to top-scored node);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. kube-controller-manager</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Runs a collection of <strong>controller loops</strong> that regulate the state of the cluster;</li>
+            <li>Key controllers include:</li>
+        </ul>
+        <table>
+            <tr><th>Controller</th><th>Responsibility</th></tr>
+            <tr><td>Node Controller</td><td>Monitors node health, evicts Pods from unhealthy nodes</td></tr>
+            <tr><td>Replication Controller</td><td>Ensures the correct number of Pod replicas</td></tr>
+            <tr><td>Endpoints Controller</td><td>Populates the Endpoints object (joins Services and Pods)</td></tr>
+            <tr><td>Service Account Controller</td><td>Creates default ServiceAccounts for new namespaces</td></tr>
+            <tr><td>Job Controller</td><td>Watches Jobs and creates Pods to run tasks to completion</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. cloud-controller-manager</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Runs controllers that interact with the underlying <strong>cloud provider</strong> (AWS, Azure, GCP);</li>
+            <li>Handles cloud-specific logic: Load Balancers, Nodes, Routes, Volumes;</li>
+            <li>Only present when running Kubernetes on a cloud platform;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

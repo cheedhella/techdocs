@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Multi-Container Pods</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Multi-Container Pods (Sidecar, Init, Ambassador, Adapter)</h2>
+    </div>
+
+    <div class="question"><strong>1. Why Multi-Container Pods?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Containers in a Pod share network and storage — they can work together as a <strong>cohesive unit</strong>;</li>
+            <li>The main application container is enhanced by helper containers;</li>
+            <li>Each container has a single responsibility;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Sidecar Pattern</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A helper container that <strong>extends or enhances</strong> the main container;</li>
+            <li>Examples: log shipping (Fluentd sidecar), service mesh proxy (Envoy/Istio), file syncing;</li>
+        </ul>
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-example
+spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+    - name: log-shipper
+      image: fluentd:latest
+      volumeMounts:
+        - name: logs
+          mountPath: /var/log/app
+  volumes:
+    - name: logs
+      emptyDir: {}</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Ambassador Pattern</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A proxy container that <strong>handles external communication</strong> on behalf of the main container;</li>
+            <li>Main container talks to localhost; the ambassador routes to the correct external service;</li>
+            <li>Example: A Redis ambassador that handles connection pooling and failover;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Adapter Pattern</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A container that <strong>transforms output</strong> from the main container into a standardized format;</li>
+            <li>Example: Converting proprietary log format to a standard format for monitoring tools;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Key Points</strong></div>
+    <div class="answer">
+        <ul>
+            <li>All containers in a Pod start and stop <strong>together</strong>;</li>
+            <li>Containers share the same <strong>IP address</strong> — communicate via <code>localhost</code>;</li>
+            <li>Containers can share <strong>volumes</strong> for data exchange;</li>
+            <li>If the main container dies, the Pod is restarted (all containers);</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

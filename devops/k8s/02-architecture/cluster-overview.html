@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cluster Architecture Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cluster Architecture Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Kubernetes Cluster?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Kubernetes cluster is a set of machines (physical or virtual) that work together to run containerized applications;</li>
+            <li>It has two main parts: the <strong>Control Plane</strong> (brain) and the <strong>Worker Nodes</strong> (muscle);</li>
+            <li>The control plane makes global decisions (scheduling, detecting failures) while worker nodes run the actual workloads;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. High-Level Architecture</strong></div>
+    <div class="answer">
+        <pre><code>┌─────────────────────────────────────────────┐
+│              CONTROL PLANE                   │
+│  ┌───────────┐ ┌──────────┐ ┌────────────┐  │
+│  │ API Server│ │Scheduler │ │ Controller │  │
+│  │           │ │          │ │  Manager   │  │
+│  └───────────┘ └──────────┘ └────────────┘  │
+│  ┌──────────────────────────────────────┐    │
+│  │              etcd                     │    │
+│  └──────────────────────────────────────┘    │
+└─────────────────────────────────────────────┘
+
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│  Worker Node │  │  Worker Node │  │  Worker Node │
+│ ┌──────────┐ │  │ ┌──────────┐ │  │ ┌──────────┐ │
+│ │ kubelet  │ │  │ │ kubelet  │ │  │ │ kubelet  │ │
+│ │kube-proxy│ │  │ │kube-proxy│ │  │ │kube-proxy│ │
+│ │ runtime  │ │  │ │ runtime  │ │  │ │ runtime  │ │
+│ └──────────┘ │  │ └──────────┘ │  │ └──────────┘ │
+│  [Pod][Pod]  │  │  [Pod][Pod]  │  │  [Pod][Pod]  │
+└──────────────┘  └──────────────┘  └──────────────┘</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Communication Flow</strong></div>
+    <div class="answer">
+        <ul>
+            <li>All communication goes through the <strong>API Server</strong> — it is the only component that talks to etcd;</li>
+            <li><strong>kubectl</strong> sends requests to the API Server;</li>
+            <li>The <strong>Scheduler</strong> watches for unscheduled Pods and assigns them to nodes;</li>
+            <li>The <strong>kubelet</strong> on each node pulls the Pod spec from the API Server and runs containers;</li>
+            <li><strong>kube-proxy</strong> manages network rules so Pods can communicate;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Desired State vs Actual State</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You declare the <strong>desired state</strong> (e.g., "run 3 replicas of nginx");</li>
+            <li>Controllers continuously compare desired state with <strong>actual state</strong>;</li>
+            <li>If they differ, controllers take action to <strong>reconcile</strong> (e.g., start a new Pod if one crashed);</li>
+            <li>This is the <strong>control loop</strong> pattern — the heart of Kubernetes;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

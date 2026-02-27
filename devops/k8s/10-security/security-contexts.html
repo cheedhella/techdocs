@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Security Contexts</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Security Contexts (Pod and Container Level)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Security Context?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defines <strong>privilege and access control settings</strong> for Pods and containers;</li>
+            <li>Controls user/group IDs, Linux capabilities, filesystem permissions, SELinux, seccomp, AppArmor;</li>
+            <li>Can be set at <strong>Pod level</strong> (applies to all containers) or <strong>container level</strong> (overrides Pod level);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Pod-Level Security Context</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    runAsNonRoot: true</code></pre>
+        <ul>
+            <li><strong>runAsUser:</strong> UID to run the container process;</li>
+            <li><strong>runAsGroup:</strong> GID for the container process;</li>
+            <li><strong>fsGroup:</strong> GID that owns mounted volumes;</li>
+            <li><strong>runAsNonRoot:</strong> Refuse to start if running as root;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Container-Level Security Context</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  containers:
+    - name: app
+      image: myapp:v1
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - NET_BIND_SERVICE</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Always set <code>runAsNonRoot: true</code>;</li>
+            <li>Set <code>allowPrivilegeEscalation: false</code>;</li>
+            <li>Use <code>readOnlyRootFilesystem: true</code> when possible;</li>
+            <li>Drop ALL capabilities and add only what's needed;</li>
+            <li>Never run containers as privileged (<code>privileged: true</code>) in production;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

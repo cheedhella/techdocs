@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Imperative vs Declarative Approach</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Imperative vs Declarative Approach</h2>
+    </div>
+
+    <div class="question"><strong>1. Imperative Commands</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Tell Kubernetes <strong>what to do</strong> step by step;</li>
+            <li>Quick for ad-hoc tasks and experimentation;</li>
+            <li>Not reproducible — no record of what was done;</li>
+        </ul>
+        <pre><code># Create resources directly
+kubectl run nginx --image=nginx
+kubectl create deployment myapp --image=myapp:v1
+kubectl expose deployment myapp --port=80 --type=NodePort
+kubectl scale deployment myapp --replicas=3
+kubectl set image deployment/myapp myapp=myapp:v2</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Imperative Object Configuration</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use YAML files but with imperative commands (<code>create</code>, <code>replace</code>, <code>delete</code>);</li>
+        </ul>
+        <pre><code>kubectl create -f deployment.yaml
+kubectl replace -f deployment.yaml
+kubectl delete -f deployment.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Declarative Configuration (Recommended)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Tell Kubernetes the <strong>desired state</strong> and let it figure out how to get there;</li>
+            <li>Uses <code>kubectl apply</code> — creates if not exists, updates if it does;</li>
+            <li><strong>Idempotent:</strong> Running it multiple times produces the same result;</li>
+            <li><strong>GitOps-friendly:</strong> Store manifests in Git, apply them in CI/CD;</li>
+        </ul>
+        <pre><code># Apply a single file
+kubectl apply -f deployment.yaml
+
+# Apply all files in a directory
+kubectl apply -f ./manifests/
+
+# Apply recursively
+kubectl apply -R -f ./manifests/</code></pre>
+    </div>
+
+    <div class="question"><strong>4. When to Use Which?</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Approach</th><th>Use Case</th></tr>
+            <tr><td>Imperative commands</td><td>Quick experiments, CKA exam, one-off tasks</td></tr>
+            <tr><td>Imperative config</td><td>Simple workflows, learning</td></tr>
+            <tr><td>Declarative (<code>apply</code>)</td><td>Production, CI/CD, GitOps — always prefer this</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

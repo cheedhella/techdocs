@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Nexus / Artifactory</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Nexus / Artifactory (Artifact Storage)</h2>
+    </div>
+    <div class="question"><strong>1. What are Artifact Repositories?</strong></div>
+    <div class="answer"><ul><li>Centralized storage for <strong>build artifacts</strong> (JARs, WARs, Docker images, npm packages);</li><li><strong>Nexus</strong> and <strong>JFrog Artifactory</strong> are the most popular;</li></ul></div>
+    <div class="question"><strong>2. Nexus Integration</strong></div>
+    <div class="answer"><pre><code>stage('Upload to Nexus') {
+    steps {
+        nexusArtifactUploader(
+            nexusVersion: 'nexus3',
+            protocol: 'http',
+            nexusUrl: 'nexus.example.com:8081',
+            repository: 'maven-releases',
+            credentialsId: 'nexus-creds',
+            artifacts: [
+                [artifactId: 'myapp', file: 'target/myapp.jar', type: 'jar']
+            ]
+        )
+    }
+}</code></pre></div>
+</body>
+</html>

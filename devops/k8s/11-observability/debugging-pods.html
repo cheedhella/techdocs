@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Debugging Pods and Troubleshooting</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Debugging Pods and Troubleshooting</h2>
+    </div>
+
+    <div class="question"><strong>1. Troubleshooting Workflow</strong></div>
+    <div class="answer">
+        <pre><code># Step 1: Check Pod status
+kubectl get pods
+
+# Step 2: Describe for details and events
+kubectl describe pod my-pod
+
+# Step 3: Check logs
+kubectl logs my-pod
+kubectl logs my-pod --previous    # If crashed
+
+# Step 4: Check events
+kubectl get events --sort-by='.lastTimestamp'
+
+# Step 5: Exec into the container
+kubectl exec -it my-pod -- /bin/sh</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Common Issues and Solutions</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Status</th><th>Common Cause</th><th>Fix</th></tr>
+            <tr><td><strong>Pending</strong></td><td>Insufficient resources, no matching node</td><td>Check events, add nodes, fix affinity/tolerations</td></tr>
+            <tr><td><strong>ImagePullBackOff</strong></td><td>Wrong image name, private registry, no auth</td><td>Verify image name, check imagePullSecrets</td></tr>
+            <tr><td><strong>CrashLoopBackOff</strong></td><td>App crashes on start, wrong command, missing config</td><td>Check logs (--previous), fix app or config</td></tr>
+            <tr><td><strong>OOMKilled</strong></td><td>Container exceeded memory limit</td><td>Increase memory limit or optimize app</td></tr>
+            <tr><td><strong>CreateContainerConfigError</strong></td><td>Missing ConfigMap or Secret</td><td>Create the missing resource</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Network Debugging</strong></div>
+    <div class="answer">
+        <pre><code># Run a debug Pod with networking tools
+kubectl run netdebug --image=nicolaka/netshoot -it --rm -- bash
+
+# Inside the Pod:
+curl http://my-service:80
+nslookup my-service
+ping 10.244.1.5
+traceroute my-service</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Node Troubleshooting</strong></div>
+    <div class="answer">
+        <pre><code># Check node conditions
+kubectl describe node worker-1
+
+# Check node resource usage
+kubectl top node worker-1
+
+# Check system Pods on the node
+kubectl get pods -A --field-selector spec.nodeName=worker-1</code></pre>
+    </div>
+
+</body>
+
+</html>

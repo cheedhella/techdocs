@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Why Kubernetes?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Why Kubernetes? (Problems It Solves)</h2>
+    </div>
+
+    <div class="question"><strong>1. The Problem Before Kubernetes</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Manual deployments:</strong> Deploying containers across multiple servers required manual effort and scripting;</li>
+            <li><strong>No self-healing:</strong> If a container crashed, someone had to manually restart it or build custom monitoring;</li>
+            <li><strong>Scaling was hard:</strong> Adding more instances meant provisioning new servers and configuring load balancers;</li>
+            <li><strong>Configuration drift:</strong> Different environments (dev, staging, prod) ended up with inconsistent setups;</li>
+            <li><strong>Downtime during updates:</strong> Deploying new versions often required taking the application offline;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What Kubernetes Solves</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Automated Deployment:</strong> Declare the desired state and Kubernetes makes it happen — no manual server management;</li>
+            <li><strong>Self-Healing:</strong> Automatically restarts crashed containers, reschedules pods on healthy nodes;</li>
+            <li><strong>Horizontal Scaling:</strong> Scale from 1 to 1000 instances with a single command or automatically based on load;</li>
+            <li><strong>Zero-Downtime Deployments:</strong> Rolling updates gradually replace old pods with new ones;</li>
+            <li><strong>Environment Consistency:</strong> Same YAML manifests work across dev, staging, and production;</li>
+            <li><strong>Resource Efficiency:</strong> Bin-packs containers onto nodes to make the most of available hardware;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. When Do You Need Kubernetes?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You're running <strong>multiple microservices</strong> that need to communicate;</li>
+            <li>You need <strong>high availability</strong> and automatic failover;</li>
+            <li>Your application requires <strong>dynamic scaling</strong> based on traffic;</li>
+            <li>You deploy <strong>frequently</strong> and need zero-downtime updates;</li>
+            <li>You want <strong>infrastructure as code</strong> for reproducible environments;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. When You Might NOT Need Kubernetes</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A simple monolithic application running on a single server;</li>
+            <li>Very small teams where the operational overhead outweighs the benefits;</li>
+            <li>Serverless workloads that are better suited to AWS Lambda, Cloud Functions, etc.;</li>
+            <li>When managed PaaS solutions (Heroku, App Engine) already meet your needs;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

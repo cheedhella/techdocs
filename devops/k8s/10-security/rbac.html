@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>RBAC (Roles, ClusterRoles, Bindings)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>RBAC (Roles, ClusterRoles, Bindings)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is RBAC?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Role-Based Access Control</strong> — regulates access to Kubernetes resources based on roles;</li>
+            <li>Controls <strong>who</strong> (subject) can perform <strong>what actions</strong> (verbs) on <strong>which resources</strong>;</li>
+            <li>Enabled by default in modern Kubernetes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. RBAC Components</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Object</th><th>Scope</th><th>Purpose</th></tr>
+            <tr><td><strong>Role</strong></td><td>Namespace</td><td>Defines permissions within a namespace</td></tr>
+            <tr><td><strong>ClusterRole</strong></td><td>Cluster</td><td>Defines permissions cluster-wide</td></tr>
+            <tr><td><strong>RoleBinding</strong></td><td>Namespace</td><td>Binds a Role/ClusterRole to a subject within a namespace</td></tr>
+            <tr><td><strong>ClusterRoleBinding</strong></td><td>Cluster</td><td>Binds a ClusterRole to a subject cluster-wide</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Role Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev
+  name: pod-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]</code></pre>
+    </div>
+
+    <div class="question"><strong>4. RoleBinding Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: dev
+subjects:
+  - kind: User
+    name: jane
+    apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: my-sa
+    namespace: dev
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Common Verbs</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>get</code>, <code>list</code>, <code>watch</code> — read operations;</li>
+            <li><code>create</code>, <code>update</code>, <code>patch</code> — write operations;</li>
+            <li><code>delete</code>, <code>deletecollection</code> — delete operations;</li>
+            <li><code>*</code> — all verbs;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Useful Commands</strong></div>
+    <div class="answer">
+        <pre><code># Check if you can perform an action
+kubectl auth can-i create deployments
+kubectl auth can-i delete pods --namespace=dev
+
+# Check as another user
+kubectl auth can-i list pods --as=jane --namespace=dev
+
+# List roles and bindings
+kubectl get roles,rolebindings -n dev
+kubectl get clusterroles,clusterrolebindings</code></pre>
+    </div>
+
+</body>
+
+</html>

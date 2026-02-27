@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Docker Integration</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Docker Integration</h2>
+    </div>
+    <div class="question"><strong>1. Docker in Jenkins Pipelines</strong></div>
+    <div class="answer"><ul><li>Build Docker images, push to registries, use Docker as build agents;</li><li>Requires <strong>Docker Pipeline</strong> plugin and Docker installed on agents;</li></ul></div>
+    <div class="question"><strong>2. Build and Push Docker Image</strong></div>
+    <div class="answer"><pre><code>pipeline {
+    agent any
+    environment {
+        DOCKER_CREDS = credentials('docker-hub-creds')
+    }
+    stages {
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t myapp:${BUILD_NUMBER} .'
+            }
+        }
+        stage('Push Image') {
+            steps {
+                sh 'echo $DOCKER_CREDS_PSW | docker login -u $DOCKER_CREDS_USR --password-stdin'
+                sh 'docker push user/myapp:${BUILD_NUMBER}'
+            }
+        }
+    }
+}</code></pre></div>
+</body>
+</html>

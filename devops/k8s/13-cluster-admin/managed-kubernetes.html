@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Managed Kubernetes (EKS, AKS, GKE)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Managed Kubernetes (EKS, AKS, GKE)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Managed Kubernetes?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Cloud providers manage the <strong>control plane</strong> for you — API Server, etcd, Scheduler, Controller Manager;</li>
+            <li>You only manage <strong>worker nodes</strong> and your workloads;</li>
+            <li>Control plane is HA, patched, and backed up automatically;</li>
+            <li>Significantly reduces operational burden;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Major Offerings</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Service</th><th>Provider</th><th>Key Features</th></tr>
+            <tr><td><strong>EKS</strong></td><td>AWS</td><td>Deep AWS integration, Fargate for serverless Pods, managed node groups</td></tr>
+            <tr><td><strong>AKS</strong></td><td>Azure</td><td>Free control plane, Azure AD integration, virtual nodes</td></tr>
+            <tr><td><strong>GKE</strong></td><td>Google</td><td>Autopilot mode, fastest to adopt latest K8s, integrated monitoring</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Self-Managed vs Managed</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Aspect</th><th>Self-Managed</th><th>Managed (EKS/AKS/GKE)</th></tr>
+            <tr><td>Control plane</td><td>You manage everything</td><td>Provider manages</td></tr>
+            <tr><td>Upgrades</td><td>Manual kubeadm upgrade</td><td>One-click or automated</td></tr>
+            <tr><td>etcd backup</td><td>Your responsibility</td><td>Automatic</td></tr>
+            <tr><td>HA control plane</td><td>You configure</td><td>Built-in</td></tr>
+            <tr><td>Cost</td><td>Compute only</td><td>Compute + management fee</td></tr>
+            <tr><td>Flexibility</td><td>Full control</td><td>Some restrictions</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. EKS Quick Start</strong></div>
+    <div class="answer">
+        <pre><code># Using eksctl
+eksctl create cluster \
+  --name my-cluster \
+  --region us-east-1 \
+  --nodegroup-name workers \
+  --node-type t3.medium \
+  --nodes 3 \
+  --managed
+
+# Update kubeconfig
+aws eks update-kubeconfig --name my-cluster --region us-east-1
+
+# Verify
+kubectl get nodes</code></pre>
+    </div>
+
+    <div class="question"><strong>5. When to Choose Managed vs Self-Managed</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Choose managed</strong> when: running on cloud, small ops team, want to focus on apps not infra;</li>
+            <li><strong>Choose self-managed</strong> when: on-premise requirement, need full control, compliance restrictions, bare-metal;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

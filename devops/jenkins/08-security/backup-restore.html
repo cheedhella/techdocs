@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Backup and Restore</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Backup and Restore</h2></div>
+<div class="question"><strong>1. What to Back Up</strong></div><div class="answer"><ul><li><strong>JENKINS_HOME</strong> directory;</li><li>Contains: job configs, build history, plugins, credentials, system config;</li></ul></div><div class="question"><strong>2. Strategies</strong></div><div class="answer"><table><tr><th>Method</th><th>Description</th></tr><tr><td><strong>Filesystem</strong></td><td>tar/rsync JENKINS_HOME</td></tr><tr><td><strong>ThinBackup plugin</strong></td><td>Scheduled backups</td></tr><tr><td><strong>Docker volume</strong></td><td>Backup the volume</td></tr><tr><td><strong>JCasC</strong></td><td>Config as Code in Git</td></tr></table></div><div class="question"><strong>3. Backup Command</strong></div><div class="answer"><pre><code>tar -czf jenkins-backup-60227.tar.gz /var/jenkins_home</code></pre></div><div class="question"><strong>4. JCasC</strong></div><div class="answer"><ul><li>Define Jenkins config in YAML;</li><li>Store in Git for version control;</li><li>Restore by applying the YAML;</li></ul></div>
+</body></html>

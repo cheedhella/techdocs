@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>KEDA — Event-Driven Autoscaling</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>KEDA — Event-Driven Autoscaling</h2>
+    </div>
+
+    <div class="question"><strong>1. What is KEDA?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Kubernetes Event-Driven Autoscaling</strong> — a CNCF project;</li>
+            <li>Extends HPA with the ability to scale based on <strong>external event sources</strong>;</li>
+            <li>Can scale to/from <strong>zero replicas</strong> — unlike native HPA;</li>
+            <li>Supports 60+ scalers: Kafka, RabbitMQ, AWS SQS, Azure Queue, Prometheus, Cron, etc.;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>KEDA acts as a <strong>Kubernetes metrics adapter</strong>;</li>
+            <li>It polls external event sources and feeds metrics to HPA;</li>
+            <li>When there are no events, KEDA can scale to <strong>0 replicas</strong>;</li>
+            <li>When events arrive, it scales from 0 → 1 (activation), then HPA handles further scaling;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. ScaledObject Example</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: rabbitmq-scaler
+spec:
+  scaleTargetRef:
+    name: worker-deployment
+  minReplicaCount: 0
+  maxReplicaCount: 30
+  triggers:
+    - type: rabbitmq
+      metadata:
+        queueName: tasks
+        queueLength: "5"
+      authenticationRef:
+        name: rabbitmq-auth</code></pre>
+        <p>This scales the worker deployment based on the RabbitMQ queue length — 1 Pod per 5 messages.</p>
+    </div>
+
+    <div class="question"><strong>4. Common Scalers</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Scaler</th><th>Scales Based On</th></tr>
+            <tr><td>Kafka</td><td>Consumer group lag</td></tr>
+            <tr><td>RabbitMQ</td><td>Queue length</td></tr>
+            <tr><td>AWS SQS</td><td>Queue depth</td></tr>
+            <tr><td>Prometheus</td><td>Custom PromQL query result</td></tr>
+            <tr><td>Cron</td><td>Time-based schedule</td></tr>
+            <tr><td>MySQL/PostgreSQL</td><td>Query result count</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Installation</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add kedacore https://kedacore.github.io/charts
+helm install keda kedacore/keda --namespace keda --create-namespace</code></pre>
+    </div>
+
+</body>
+
+</html>

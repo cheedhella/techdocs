@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ingress and Ingress Controllers</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Ingress and Ingress Controllers</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Ingress?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An API object that manages <strong>external HTTP/HTTPS access</strong> to Services in the cluster;</li>
+            <li>Provides <strong>URL-based routing</strong>, <strong>SSL termination</strong>, and <strong>virtual hosting</strong>;</li>
+            <li>A single Ingress can route to multiple Services — more cost-efficient than multiple LoadBalancers;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Ingress Controller</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An Ingress resource alone does nothing — you need an <strong>Ingress Controller</strong> to implement it;</li>
+            <li>The controller watches for Ingress objects and configures the underlying load balancer;</li>
+            <li>Popular controllers:</li>
+        </ul>
+        <table>
+            <tr><th>Controller</th><th>Description</th></tr>
+            <tr><td><strong>NGINX Ingress</strong></td><td>Most popular, supports annotations for fine-tuning</td></tr>
+            <tr><td><strong>Traefik</strong></td><td>Cloud-native, auto-discovery, Let's Encrypt integration</td></tr>
+            <tr><td><strong>HAProxy</strong></td><td>High-performance, enterprise features</td></tr>
+            <tr><td><strong>AWS ALB</strong></td><td>Native AWS Application Load Balancer</td></tr>
+            <tr><td><strong>Istio Gateway</strong></td><td>Part of the Istio service mesh</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Ingress YAML — Path-Based Routing</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: myapp.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80</code></pre>
+    </div>
+
+    <div class="question"><strong>4. TLS / HTTPS</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  tls:
+    - hosts:
+        - myapp.example.com
+      secretName: myapp-tls
+  rules:
+    - host: myapp.example.com
+      ...</code></pre>
+        <ul>
+            <li>The TLS certificate is stored in a Kubernetes <strong>Secret</strong>;</li>
+            <li>Tools like <strong>cert-manager</strong> can automate certificate provisioning with Let's Encrypt;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

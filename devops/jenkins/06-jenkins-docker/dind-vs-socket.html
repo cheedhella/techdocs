@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>DinD vs Socket</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Docker-in-Docker vs Docker Socket</h2></div>
+<div class="question"><strong>1. Socket Mount (Recommended)</strong></div><div class="answer"><ul><li>Mount host socket: simpler, faster, shared cache;</li></ul><pre><code>docker run -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins</code></pre></div><div class="question"><strong>2. DinD</strong></div><div class="answer"><ul><li>Separate daemon, needs --privileged;</li></ul><pre><code>docker run --privileged docker:dind</code></pre></div><div class="question"><strong>3. Comparison</strong></div><div class="answer"><table><tr><th>Feature</th><th>Socket</th><th>DinD</th></tr><tr><td>Setup</td><td>Simple</td><td>Complex</td></tr><tr><td>Speed</td><td>Fast</td><td>Slower</td></tr><tr><td>Isolation</td><td>Shared</td><td>Full</td></tr></table></div>
+</body></html>

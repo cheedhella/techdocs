@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kubernetes Scheduler Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Kubernetes Scheduler Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is the Scheduler?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A control plane component that assigns <strong>Pods to Nodes</strong>;</li>
+            <li>Watches for newly created Pods that have no node assigned (<code>spec.nodeName</code> is empty);</li>
+            <li>Finds the best node for each Pod based on constraints and available resources;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Scheduling Process</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Step 1 — Filtering:</strong> Eliminate nodes that don't meet the Pod's requirements (insufficient resources, taints, affinity rules);</li>
+            <li><strong>Step 2 — Scoring:</strong> Rank the remaining nodes based on preferences (spread, affinity, resource balance);</li>
+            <li><strong>Step 3 — Binding:</strong> Assign the Pod to the highest-scored node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Scheduling Factors</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Factor</th><th>Description</th></tr>
+            <tr><td>Resource requests</td><td>Does the node have enough CPU/memory?</td></tr>
+            <tr><td>nodeSelector</td><td>Does the node have the required labels?</td></tr>
+            <tr><td>Node Affinity</td><td>Prefer or require specific nodes</td></tr>
+            <tr><td>Pod Affinity/Anti-Affinity</td><td>Co-locate or spread Pods</td></tr>
+            <tr><td>Taints and Tolerations</td><td>Node repels Pods unless they tolerate the taint</td></tr>
+            <tr><td>Topology Spread</td><td>Distribute Pods across failure domains</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Manual Scheduling</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You can bypass the scheduler by setting <code>spec.nodeName</code> directly;</li>
+        </ul>
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: manual-pod
+spec:
+  nodeName: worker-2
+  containers:
+    - name: nginx
+      image: nginx</code></pre>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kubernetes vs Docker / Docker Swarm</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Kubernetes vs Docker / Docker Swarm</h2>
+    </div>
+
+    <div class="question"><strong>1. Docker vs Kubernetes — Not Competitors</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Docker</strong> is a container runtime — it builds and runs containers on a single machine;</li>
+            <li><strong>Kubernetes</strong> is a container orchestrator — it manages containers across a cluster of machines;</li>
+            <li>They are <strong>complementary</strong>, not competing — Kubernetes uses a container runtime (like containerd, which powers Docker) to run containers;</li>
+            <li>Think of it as: Docker = "how to run a container", Kubernetes = "how to manage thousands of containers";</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Docker Swarm vs Kubernetes</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Feature</th><th>Docker Swarm</th><th>Kubernetes</th></tr>
+            <tr><td>Setup</td><td>Simple, built into Docker</td><td>More complex, requires separate installation</td></tr>
+            <tr><td>Scaling</td><td>Basic auto-scaling</td><td>Advanced auto-scaling (HPA, VPA, Cluster Autoscaler)</td></tr>
+            <tr><td>Load Balancing</td><td>Built-in basic load balancing</td><td>Flexible: Services, Ingress controllers</td></tr>
+            <tr><td>Networking</td><td>Overlay networking</td><td>CNI plugins (Calico, Flannel, Cilium)</td></tr>
+            <tr><td>Community</td><td>Smaller community</td><td>Massive community and ecosystem</td></tr>
+            <tr><td>Production Use</td><td>Small to medium workloads</td><td>Enterprise-grade, any scale</td></tr>
+            <tr><td>Learning Curve</td><td>Low</td><td>Steep but rewarding</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Why Kubernetes Won</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Ecosystem:</strong> Thousands of integrations, tools, and managed services;</li>
+            <li><strong>Cloud support:</strong> Every major cloud (AWS EKS, Azure AKS, Google GKE) offers managed Kubernetes;</li>
+            <li><strong>Flexibility:</strong> Supports any container runtime, storage backend, network plugin;</li>
+            <li><strong>Enterprise features:</strong> RBAC, network policies, resource quotas, and more;</li>
+            <li><strong>CNCF backing:</strong> Vendor-neutral governance ensures long-term viability;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Kubernetes Without Docker?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Since Kubernetes v1.24, <strong>dockershim was removed</strong> — Kubernetes no longer directly supports Docker as a runtime;</li>
+            <li>Kubernetes now uses <strong>containerd</strong> or <strong>CRI-O</strong> as the container runtime;</li>
+            <li>Docker images still work — they're OCI-compliant and compatible with containerd;</li>
+            <li>You still use Docker to <strong>build</strong> images, but Kubernetes uses containerd to <strong>run</strong> them;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pod Affinity and Anti-Affinity</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Pod Affinity and Anti-Affinity</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Pod Affinity?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Schedule Pods <strong>near other Pods</strong> (co-location) based on labels;</li>
+            <li>Useful when Pods need low-latency communication;</li>
+            <li>Example: Place the web frontend on the same node as the Redis cache;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Pod Affinity Example</strong></div>
+    <div class="answer">
+        <pre><code>spec:
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - redis
+          topologyKey: kubernetes.io/hostname</code></pre>
+        <ul>
+            <li>This Pod MUST be scheduled on a node that already runs a Pod with <code>app=redis</code>;</li>
+            <li><code>topologyKey</code> defines the "domain" — <code>hostname</code> means same node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Pod Anti-Affinity</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Schedule Pods <strong>away from other Pods</strong> — for high availability;</li>
+            <li>Example: Spread replicas of the same app across different nodes;</li>
+        </ul>
+        <pre><code>spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - myapp
+          topologyKey: kubernetes.io/hostname</code></pre>
+        <p>This ensures no two <code>app=myapp</code> Pods run on the same node.</p>
+    </div>
+
+    <div class="question"><strong>4. Topology Keys</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>topologyKey</th><th>Scope</th></tr>
+            <tr><td><code>kubernetes.io/hostname</code></td><td>Same node</td></tr>
+            <tr><td><code>topology.kubernetes.io/zone</code></td><td>Same availability zone</td></tr>
+            <tr><td><code>topology.kubernetes.io/region</code></td><td>Same region</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

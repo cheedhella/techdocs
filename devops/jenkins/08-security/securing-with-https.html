@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>HTTPS</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Securing Jenkins with HTTPS</h2></div>
+<div class="question"><strong>1. Why HTTPS?</strong></div><div class="answer"><ul><li>Encrypt all communication;</li><li>Protect credentials and build data in transit;</li></ul></div><div class="question"><strong>2. Options</strong></div><div class="answer"><table><tr><th>Method</th><th>Description</th></tr><tr><td><strong>Reverse proxy</strong></td><td>Nginx/Apache in front (recommended)</td></tr><tr><td><strong>Built-in</strong></td><td>--httpsPort with keystore</td></tr><tr><td><strong>Cloud LB</strong></td><td>Terminate SSL at load balancer</td></tr></table></div><div class="question"><strong>3. Nginx Example</strong></div><div class="answer"><pre><code>server {
+    listen 443 ssl;
+    server_name jenkins.example.com;
+    ssl_certificate /etc/ssl/certs/jenkins.crt;
+    ssl_certificate_key /etc/ssl/private/jenkins.key;
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host \;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}</code></pre></div>
+</body></html>

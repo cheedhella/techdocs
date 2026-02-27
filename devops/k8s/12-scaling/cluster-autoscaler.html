@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cluster Autoscaler</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cluster Autoscaler</h2>
+    </div>
+
+    <div class="question"><strong>1. What is the Cluster Autoscaler?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Automatically adjusts the <strong>number of nodes</strong> in the cluster;</li>
+            <li><strong>Scales up:</strong> Adds nodes when Pods are Pending due to insufficient resources;</li>
+            <li><strong>Scales down:</strong> Removes underutilized nodes (when Pods can be rescheduled elsewhere);</li>
+            <li>Works with cloud providers: AWS (ASG), Azure (VMSS), GCP (MIG);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Scale up trigger:</strong> A Pod is in Pending state because no node has enough resources;</li>
+            <li>Cluster Autoscaler checks if adding a node from a node group would help;</li>
+            <li>If yes, it requests a new node from the cloud provider;</li>
+            <li><strong>Scale down trigger:</strong> A node's utilization is below a threshold (~50%) for 10+ minutes;</li>
+            <li>All Pods on the node can be safely moved elsewhere;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Configuration</strong></div>
+    <div class="answer">
+        <pre><code># Key flags
+--scale-down-utilization-threshold=0.5     # Scale down if under 50% utilized
+--scale-down-delay-after-add=10m           # Wait after scale-up
+--scale-down-unneeded-time=10m             # Node must be unneeded for 10min
+--max-node-provision-time=15m              # Timeout for node provisioning
+--skip-nodes-with-local-storage=false
+--skip-nodes-with-system-pods=true</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Preventing Scale-Down</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Annotate Pods that should not be evicted:</li>
+        </ul>
+        <pre><code>metadata:
+  annotations:
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "false"</code></pre>
+        <ul>
+            <li>Nodes with non-replicated Pods (standalone Pods) won't be scaled down;</li>
+            <li>Nodes with Pods using local storage won't be scaled down by default;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Scaling Layers</strong></div>
+    <div class="answer">
+        <pre><code>Application Load ↑
+    → HPA scales Pods (more replicas)
+        → Pods go Pending (no room)
+            → Cluster Autoscaler adds Nodes
+                → Pods get scheduled</code></pre>
+    </div>
+
+</body>
+
+</html>

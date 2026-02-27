@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service — ClusterIP</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Service — ClusterIP</h2>
+    </div>
+
+    <div class="question"><strong>1. What is ClusterIP?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <strong>default Service type</strong> in Kubernetes;</li>
+            <li>Exposes the Service on a <strong>cluster-internal IP</strong> — only accessible from within the cluster;</li>
+            <li>Provides a stable IP and DNS name for a set of Pods;</li>
+            <li>Load balances traffic across all matching Pods;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. ClusterIP YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: ClusterIP
+  selector:
+    app: myapp
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP</code></pre>
+        <ul>
+            <li><strong>port:</strong> The port the Service listens on;</li>
+            <li><strong>targetPort:</strong> The port on the Pod to forward traffic to;</li>
+            <li><strong>selector:</strong> Labels to match Pods;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes assigns a virtual IP (ClusterIP) to the Service;</li>
+            <li>kube-proxy creates iptables/IPVS rules to route traffic from ClusterIP to Pod IPs;</li>
+            <li>DNS record: <code>&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code>;</li>
+            <li>Other Pods can reach this Service by name: <code>curl http://my-service</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create a ClusterIP service
+kubectl expose deployment myapp --port=80 --target-port=8080
+
+# List services
+kubectl get svc
+
+# Describe
+kubectl describe svc my-service
+
+# View endpoints (Pod IPs behind the Service)
+kubectl get endpoints my-service</code></pre>
+    </div>
+
+</body>
+
+</html>

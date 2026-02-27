@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Draining and Cordoning Nodes</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Draining and Cordoning Nodes</h2>
+    </div>
+
+    <div class="question"><strong>1. Cordon</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Marks a node as <strong>unschedulable</strong> — no new Pods will be placed on it;</li>
+            <li>Existing Pods continue running;</li>
+            <li>Useful before performing maintenance;</li>
+        </ul>
+        <pre><code># Cordon a node
+kubectl cordon worker-1
+
+# Verify — STATUS shows SchedulingDisabled
+kubectl get nodes
+
+# Uncordon (allow scheduling again)
+kubectl uncordon worker-1</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Drain</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Cordons the node AND <strong>evicts all Pods</strong> gracefully;</li>
+            <li>Pods managed by controllers (Deployment, ReplicaSet) are rescheduled on other nodes;</li>
+            <li>Standalone Pods (not managed by a controller) are deleted and NOT recreated;</li>
+        </ul>
+        <pre><code># Drain a node
+kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data
+
+# Force drain (for standalone Pods)
+kubectl drain worker-1 --ignore-daemonsets --delete-emptydir-data --force
+
+# With grace period
+kubectl drain worker-1 --ignore-daemonsets --grace-period=60</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Common Flags</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Flag</th><th>Purpose</th></tr>
+            <tr><td><code>--ignore-daemonsets</code></td><td>Skip DaemonSet Pods (they can't be rescheduled)</td></tr>
+            <tr><td><code>--delete-emptydir-data</code></td><td>Delete Pods using emptyDir volumes (data will be lost)</td></tr>
+            <tr><td><code>--force</code></td><td>Delete standalone Pods not managed by a controller</td></tr>
+            <tr><td><code>--grace-period</code></td><td>Seconds to wait for graceful termination</td></tr>
+            <tr><td><code>--timeout</code></td><td>Total time to wait for drain to complete</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Pod Disruption Budgets (PDB)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Limits the number of Pods that can be <strong>voluntarily disrupted</strong> at the same time;</li>
+            <li>Drain respects PDBs — it won't evict Pods if it would violate the budget;</li>
+        </ul>
+        <pre><code>apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: myapp-pdb
+spec:
+  minAvailable: 2          # OR: maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: myapp</code></pre>
+    </div>
+
+</body>
+
+</html>

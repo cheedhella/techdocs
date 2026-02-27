@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Build Tools Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Build Tools Overview (Maven, Gradle, npm)</h2>
+    </div>
+    <div class="question"><strong>1. What are Build Tools?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Software that <strong>automates</strong> compiling code, running tests, and packaging artifacts;</li>
+            <li>Jenkins calls these tools during the build stage of your pipeline;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Maven (Java)</strong></div>
+    <div class="answer">
+        <ul><li>Most popular build tool for <strong>Java</strong>. Uses <code>pom.xml</code>;</li></ul>
+        <pre><code>mvn clean install
+mvn test
+mvn package</code></pre>
+    </div>
+    <div class="question"><strong>3. Gradle (Java/Kotlin/Android)</strong></div>
+    <div class="answer">
+        <ul><li>Modern build tool using <strong>Groovy or Kotlin DSL</strong>. Faster than Maven;</li></ul>
+        <pre><code>gradle build
+gradle test
+gradle clean build</code></pre>
+    </div>
+    <div class="question"><strong>4. npm (Node.js)</strong></div>
+    <div class="answer">
+        <pre><code>npm install
+npm test
+npm run build</code></pre>
+    </div>
+    <div class="question"><strong>5. Using Build Tools in Jenkins</strong></div>
+    <div class="answer">
+        <pre><code>pipeline {
+    agent any
+    tools {
+        maven 'Maven-3.9'
+        jdk 'JDK-17'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+}</code></pre>
+    </div>
+</body>
+</html>

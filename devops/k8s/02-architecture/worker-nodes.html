@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Worker Node Components</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Worker Node Components</h2>
+    </div>
+
+    <div class="question"><strong>1. kubelet</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An agent that runs on <strong>every worker node</strong> in the cluster;</li>
+            <li>Registers the node with the API Server and reports node status;</li>
+            <li>Watches the API Server for Pods assigned to its node;</li>
+            <li>Instructs the container runtime to pull images, start/stop containers;</li>
+            <li>Runs <strong>health checks</strong> (liveness, readiness, startup probes) and reports Pod status;</li>
+            <li>Does NOT manage containers that were not created by Kubernetes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. kube-proxy</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A network proxy that runs on every node;</li>
+            <li>Maintains <strong>network rules</strong> that allow communication to Pods from inside or outside the cluster;</li>
+            <li>Implements the Kubernetes <strong>Service</strong> concept;</li>
+            <li>Uses iptables or IPVS to route traffic to the correct Pod;</li>
+            <li>Handles <strong>load balancing</strong> across Pod replicas behind a Service;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Container Runtime</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The software responsible for <strong>actually running containers</strong>;</li>
+            <li>Kubernetes supports any runtime that implements the <strong>Container Runtime Interface (CRI)</strong>;</li>
+            <li>Common runtimes:</li>
+        </ul>
+        <table>
+            <tr><th>Runtime</th><th>Description</th></tr>
+            <tr><td>containerd</td><td>Industry standard, used by Docker under the hood. Most common.</td></tr>
+            <tr><td>CRI-O</td><td>Lightweight runtime built specifically for Kubernetes.</td></tr>
+            <tr><td>gVisor (runsc)</td><td>Sandboxed runtime for enhanced security isolation.</td></tr>
+            <tr><td>Kata Containers</td><td>Uses lightweight VMs for stronger isolation.</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Node Status</strong></div>
+    <div class="answer">
+        <pre><code># View node details
+kubectl get nodes
+kubectl describe node &lt;node-name&gt;</code></pre>
+        <ul>
+            <li><strong>Conditions:</strong> Ready, MemoryPressure, DiskPressure, PIDPressure;</li>
+            <li><strong>Capacity:</strong> Total resources available (CPU, memory, max Pods);</li>
+            <li><strong>Allocatable:</strong> Resources available for scheduling (capacity minus system-reserved);</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

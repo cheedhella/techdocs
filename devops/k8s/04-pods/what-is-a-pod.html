@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is a Pod?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is a Pod?</h2>
+    </div>
+
+    <div class="question"><strong>1. Pod — The Smallest Unit</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A Pod is the <strong>smallest deployable unit</strong> in Kubernetes — not a container;</li>
+            <li>A Pod wraps one or more containers that share the same network namespace, IP address, and storage volumes;</li>
+            <li>Containers within a Pod can communicate via <code>localhost</code>;</li>
+            <li>Pods are <strong>ephemeral</strong> — they can be created, destroyed, and replaced at any time;</li>
+            <li>You almost never create Pods directly — you use controllers (Deployment, StatefulSet, etc.);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Pod YAML Manifest</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: main
+      image: nginx:1.25
+      ports:
+        - containerPort: 80</code></pre>
+    </div>
+
+    <div class="question"><strong>3. What Pods Share</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Network namespace:</strong> All containers in a Pod share the same IP and port space;</li>
+            <li><strong>Storage volumes:</strong> Volumes defined at the Pod level are mountable by any container in the Pod;</li>
+            <li><strong>IPC namespace:</strong> Containers can communicate via inter-process communication;</li>
+            <li><strong>NOT shared:</strong> Filesystem (each container has its own), PID namespace (by default);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Pod Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create a pod imperatively
+kubectl run nginx --image=nginx
+
+# Create from YAML
+kubectl apply -f pod.yaml
+
+# List pods
+kubectl get pods
+kubectl get pods -o wide
+
+# View pod details
+kubectl describe pod my-pod
+
+# Delete a pod
+kubectl delete pod my-pod</code></pre>
+    </div>
+
+</body>
+
+</html>

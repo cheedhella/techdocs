@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Blue-Green Deployment</title><link rel="stylesheet" href="../../../resources/css/styles.css" /></head>
+<body><div class="main-grid-item-1 grid-wide-column"><h2>Implement Blue-Green Deployment</h2></div>
+<div class="question"><strong>1. Concept</strong></div><div class="answer"><ul><li>Two identical environments: <strong>Blue</strong> (current) and <strong>Green</strong> (new);</li><li>Deploy to Green, test, then switch traffic;</li><li>Instant rollback by switching back to Blue;</li></ul></div><div class="question"><strong>2. Jenkinsfile</strong></div><div class="answer"><pre><code>pipeline {
+    agent any
+    environment { IMAGE = "registry.example.com/myapp" }
+    stages {
+        stage("Build") {
+            steps {
+                sh "docker build -t \:\ ."
+                sh "docker push \:"
+            }
+        }
+        stage("Deploy Green") {
+            steps {
+                sh "kubectl set image deployment/myapp-green myapp=\:"
+                sh "kubectl rollout status deployment/myapp-green"
+            }
+        }
+        stage("Smoke Test") {
+            steps { sh "curl -f http://myapp-green.internal/health" }
+        }
+        stage("Switch Traffic") {
+            input { message "Switch traffic to Green?" }
+            steps {
+                sh "kubectl patch service myapp -p '{ "spec": { "selector": { "version": "green" } } }'" 
+            }
+        }
+    }
+}</code></pre></div>
+</body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>nodeSelector</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>nodeSelector</h2>
+    </div>
+
+    <div class="question"><strong>1. What is nodeSelector?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The simplest way to constrain Pods to nodes with <strong>specific labels</strong>;</li>
+            <li>The Pod will only be scheduled on a node that has ALL the specified labels;</li>
+            <li>If no node matches, the Pod stays in <strong>Pending</strong> state;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Example</strong></div>
+    <div class="answer">
+        <pre><code># Step 1: Label a node
+kubectl label node worker-1 disktype=ssd
+
+# Step 2: Use nodeSelector in Pod spec
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssd-pod
+spec:
+  nodeSelector:
+    disktype: ssd
+  containers:
+    - name: app
+      image: myapp:v1</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Built-in Node Labels</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes automatically assigns labels to nodes:</li>
+        </ul>
+        <pre><code>kubernetes.io/hostname=worker-1
+kubernetes.io/os=linux
+kubernetes.io/arch=amd64
+topology.kubernetes.io/zone=us-east-1a
+topology.kubernetes.io/region=us-east-1
+node.kubernetes.io/instance-type=m5.large</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Limitations</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Only supports <strong>exact match</strong> (equality-based) — no "prefer" or "in/notin";</li>
+            <li>For more flexible scheduling, use <strong>Node Affinity</strong>;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

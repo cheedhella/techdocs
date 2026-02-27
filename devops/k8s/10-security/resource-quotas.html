@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Resource Quotas</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Resource Quotas</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Resource Quotas?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Set <strong>limits on the total resources</strong> a namespace can consume;</li>
+            <li>Prevents any single team/project from monopolizing cluster resources;</li>
+            <li>Applied per namespace;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. ResourceQuota YAML</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: dev-quota
+  namespace: dev
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    pods: "20"
+    services: "10"
+    persistentvolumeclaims: "5"
+    configmaps: "20"
+    secrets: "20"</code></pre>
+    </div>
+
+    <div class="question"><strong>3. How It Works</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When a quota is active, every Pod in the namespace <strong>must specify resource requests/limits</strong>;</li>
+            <li>If creating a resource would exceed the quota, the request is <strong>rejected</strong>;</li>
+            <li>Use with <strong>LimitRange</strong> to set default requests/limits for Pods that don't specify them;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create
+kubectl apply -f quota.yaml
+
+# View usage
+kubectl describe resourcequota dev-quota -n dev
+
+# Output:
+# Name:            dev-quota
+# Resource         Used   Hard
+# --------         ----   ----
+# limits.cpu       2      8
+# limits.memory    4Gi    16Gi
+# pods             5      20</code></pre>
+    </div>
+
+</body>
+
+</html>

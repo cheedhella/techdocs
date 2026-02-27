@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Health Checks — Probes</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Health Checks — Liveness, Readiness, and Startup Probes</h2>
+    </div>
+
+    <div class="question"><strong>1. Why Probes?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Kubernetes needs to know if your application is <strong>healthy</strong> and <strong>ready</strong> to serve traffic;</li>
+            <li>Without probes, Kubernetes assumes a container is ready as soon as its process starts;</li>
+            <li>Probes let you define custom health check logic;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Liveness Probe</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Checks if the container is <strong>alive</strong>;</li>
+            <li>If it fails, Kubernetes <strong>restarts</strong> the container;</li>
+            <li>Use for: detecting deadlocks, hung processes;</li>
+        </ul>
+        <pre><code>livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  failureThreshold: 3</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Readiness Probe</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Checks if the container is <strong>ready to accept traffic</strong>;</li>
+            <li>If it fails, the Pod is removed from Service endpoints (no traffic routed to it);</li>
+            <li>The container is NOT restarted — it just stops receiving traffic;</li>
+            <li>Use for: waiting for cache to warm, dependency availability;</li>
+        </ul>
+        <pre><code>readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Startup Probe</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Checks if the application has <strong>started</strong>;</li>
+            <li>Disables liveness and readiness probes until it succeeds;</li>
+            <li>Use for: slow-starting applications (large JVM apps, etc.);</li>
+        </ul>
+        <pre><code>startupProbe:
+  httpGet:
+    path: /healthz
+    port: 8080
+  failureThreshold: 30
+  periodSeconds: 10</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Probe Methods</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Method</th><th>Description</th></tr>
+            <tr><td><strong>httpGet</strong></td><td>HTTP GET request — success if status 200-399</td></tr>
+            <tr><td><strong>tcpSocket</strong></td><td>TCP connection attempt — success if port is open</td></tr>
+            <tr><td><strong>exec</strong></td><td>Run a command — success if exit code is 0</td></tr>
+            <tr><td><strong>grpc</strong></td><td>gRPC health check — success if status SERVING</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

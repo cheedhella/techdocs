@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Managing Plugins</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Managing Plugins</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Plugins?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Jenkins core is minimal. <strong>Plugins extend functionality</strong>;</li>
+            <li>Over 1,800 plugins available for: SCM, build tools, notifications, cloud providers, security;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>2. Managing Plugins</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Go to <strong>Manage Jenkins &gt; Plugins</strong>;</li>
+            <li><strong>Available:</strong> Browse and install new plugins;</li>
+            <li><strong>Installed:</strong> View, update, or uninstall existing plugins;</li>
+            <li><strong>Updates:</strong> Check for plugin updates;</li>
+        </ul>
+    </div>
+    <div class="question"><strong>3. Essential Plugins</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Plugin</th><th>Purpose</th></tr>
+            <tr><td><strong>Pipeline</strong></td><td>Core pipeline functionality (Jenkinsfile)</td></tr>
+            <tr><td><strong>Git</strong></td><td>Git SCM integration</td></tr>
+            <tr><td><strong>Docker Pipeline</strong></td><td>Use Docker in pipelines</td></tr>
+            <tr><td><strong>Kubernetes</strong></td><td>Dynamic K8s agents</td></tr>
+            <tr><td><strong>Credentials Binding</strong></td><td>Inject credentials into builds</td></tr>
+            <tr><td><strong>Blue Ocean</strong></td><td>Modern pipeline visualization UI</td></tr>
+            <tr><td><strong>Role-based Authorization</strong></td><td>RBAC for Jenkins</td></tr>
+            <tr><td><strong>Slack Notification</strong></td><td>Send build notifications to Slack</td></tr>
+        </table>
+    </div>
+    <div class="question"><strong>4. CLI Plugin Management</strong></div>
+    <div class="answer">
+        <pre><code># Install plugin via CLI
+java -jar jenkins-cli.jar -s http://localhost:8080/ install-plugin git
+java -jar jenkins-cli.jar -s http://localhost:8080/ safe-restart</code></pre>
+    </div>
+</body>
+</html>
