@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is Helm?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Helm?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm is a <strong>package manager</strong>(like apt/yum) for Kubernetes based applications;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why Helm is needed?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If you want to run your application on k8s cluster, you need to define so many objects such as deployment, service, configmap, secrets, ingress, PVC etc in YAML files;</li>
+            <li>As the project grows, the number of YAML files also increases and it becomes hard to maintain;</li>
+            <li>This is where Helm comes to the rescue!</li>
+            <li>It bundles/package the k8s resource files into a single versioned package(called helm chart) that can be easily(with just 1 command) deployed on any k8s cluster;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What are the other benefits of Helm?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Parameterized YAML files
+                <ul>
+                    <li>You can parameterize k8s resource files, which can be reused across many applications, thus reducing maintanance burden;</li>
+                    <li>This makes it easy to deploy the same application with different configurations in different environments such as development, staging and production; You can override the default values in the values.yaml file;</li>
+                </ul>
+            </li>
+            <li>Manage entire lifecycle of an application
+                <ul>
+                    <li>You can install/upgrade/uninstall the application using a single command;</li>
+                </ul>
+            </li>
+            <li>Keep track of history
+                <ul>
+                    <li>You can rollback to any state at any point in time;</li>
+                    <li>Without Helm, there is no way to track version of the application deployed in the cluster; To rollback, you have to manually revert the changes made to the multiple YAML files; </li>
+                </ul>
+            </li>
+            <li>Out-of-box charts are available for many applications
+                <ul>
+                    <li>Artifact Hub has free to use charts for many applications, so there is no need to build solutions from scratch;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. New Terms</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Chart</b>
+                <ul>
+                    <li>It is a package that contains everything to install the application in the k8s cluster;</li>
+                    <li>Every chart contains the following files and directories:
+                        <ul>
+                            <li><b>Chart.yaml</b> - chart metadata(name, type, version, app version, description, dependencies etc);</li>
+                            <li><b>values.yaml</b> - default configuration for the chart;</li>
+                            <li><b>crds/</b> - Optional, It contains Custom Resource Definitions that should be installed before templates are rendered;</li>
+                            <li><b>templates/</b> - It contains all the k8s manifest template files(deployment, service, ingress, HPA etc);</li>
+                            <li><b>templates/_helpers.tpl</b> - It contains all reusable/helper templates and partials;</li>
+                            <li><b>templates/NOTES.txt</b> - Post-installation instructions;</li>
+                            <li><b>charts/</b> - It contains 1 or more packages(.tgz) or unpacked chart directories, that your main chart depends on;</li>
+                            <li><b>README.md</b> - Human-readable documentation;</li>
+                            <li><b>LICENSE</b> - License for the chart;</li>
+                            <li><b>.helmignore</b> - Files to ignore when packaging the chart;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>Release</b>
+                <ul>
+                    <li>It is an instance of a chart deployed to a k8s cluster;</li>
+                    <li>It is created when you install a chart;</li>
+                    <li>It is identified by a unique name and version;</li>
+                    <li>It is stored in the k8s cluster as a secret;</li>
+                    <li>It is used to track the history of the chart deployments;</li>
+                    <li>It is used to rollback to a previous version of the chart;</li>
+                    <li>It is used to upgrade the chart to a new version;</li>
+                    <li>It is used to uninstall the chart;</li>
+                    <li>It is used to get the status of the chart;</li>
+                </ul>
+            </li>
+            <li><b>Repository</b>
+                <ul>
+                    <li>It is a artifact server which hosts a collection of charts/packages;</li>
+                    <li>You can use it manage(store, get, list, update, remove) charts;</li>
+                    <li>It is also used to share charts with others;</li>
+                </ul>
+            </li>
+            <li><b>Secrets</b></li>
+                <ul>
+                    <li>It is a storage for secrets;</li>
+                    <li>It is used to store and manage secrets;</li>
+                    <li>It is used to share secrets with others;</li>
+                    <li>It is used to get secrets from remote repositories;</li>
+                    <li>It is used to add remote repositories;</li>
+                </ul>
+            </li>
+            <li><b>Helm CLI</b>
+                <ul>
+                    <li>It is a command line tool that you install on your local machine or CI/CD system;</li>
+                    <li>It is used to manage charts, repositories, releases, secrets etc;</li>
+                </ul>
+            </li>
+            <li><b>Template</b>
+                <ul>
+                    <li>It is a blueprint for your k8s YAML resource files(deployment, service, ingress, HPA etc);</li>
+                    <li>It is written in the Helm template language, which is based on the Go template language and Sprig template functions;</li>
+                    <li>Each template file looks very similar to the Kubernetes resource definition which it is;</li>
+                    <li>Any file that begins with <b>_</b> doesn't output a k8s manifest file;</li>
+                    <li>Eg of Template: "Dear [Name], your balance is [Amount]."; Values: {"Name": "John", "Amount": 100}; Output: "Dear John, your balance is 100";</li>
+                    <li>Purpose: If you have 50 microservices that all look 90% the same, you don't want 50 different Deployment files; You create one template that defines how a "generic service" looks, and then you just provide a tiny unique values.yaml file for each service;</li>
+                </ul>
+            </li>
+            <li><b>Templating Engine</b>
+                <ul>
+                    <li>It is a tool that takes template and values, generates final YAML files by replacing placeholders with values;</li>
+                </ul>
+            </li>
+            <li><b>Parent Chart</b>
+                <ul>
+                    <li>It is the main chart that includes subcharts;</li>
+                </ul>
+            </li>
+            <li><b>Subchart</b>
+                <ul>
+                    <li>It is a chart that is included as a dependency inside another chart;</li>
+                    <li>Subchart = dependency that exists locally inside charts/ directory;</li>
+                </ul>
+            </li>
+            <li><b>Dependent Chart</b>
+                <ul>
+                    <li>It is a chart that is declared as a dependant in parent chart's Chart.yaml;</li>
+                    <li>This is just a declaration — nothing is downloaded yet;</li>
+                    <li>When you run <b>helm dependency update</b>, helm downloads the dependant charts to charts/ directory;</li>
+                </ul>
+            </li>
+            <li><b>Library Chart</b>
+                <ul>
+                    <li>It is a reusable chart that only provides template helpers (not installable on its own);</li>
+                </ul>
+            </li>
+            <li><b>Umbrella Chart</b>
+                <ul>
+                    <li>It is a chart that groups multiple subcharts together;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

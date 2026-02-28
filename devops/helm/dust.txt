@@ -1,0 +1,63 @@
+What is inside each subchart?
+
+Each subchart inside charts/ is a complete Helm chart by itself.
+So it contains:
+
+Chart.yaml
+
+values.yaml
+
+templates/
+
+(optional) charts/
+
+(optional) crds/
+
+It is fully self-contained.
+
+Where do these subcharts come from?
+
+Subcharts are defined in your main chart’s Chart.yaml under dependencies:
+
+dependencies:
+  - name: redis
+    version: "17.3.2"
+    repository: "https://charts.bitnami.com/bitnami"
+
+Then you run:
+
+helm dependency update
+
+Helm downloads them into the charts/ folder.
+
+Important Behavior of Subcharts
+1️⃣ They are independent
+
+A subchart:
+
+Cannot access parent chart values directly
+
+Has its own scope
+
+2️⃣ Parent chart overrides subchart values
+
+You configure subcharts in the parent values.yaml like this:
+
+redis:
+  replicaCount: 2
+
+The key must match the subchart name.
+
+3️⃣ They are installed together
+
+When you install the parent chart:
+
+helm install my-app ./my-app
+
+Helm installs:
+
+The parent chart
+
+All subcharts in charts/
+
+As one release.

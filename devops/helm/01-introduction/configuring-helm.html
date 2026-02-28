@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Configuring Helm CLI with a Kubernetes Cluster</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Configuring Helm CLI with a Kubernetes Cluster</h2>
+    </div>
+
+    <div class="question"><strong>1. How Helm Connects to Kubernetes</strong></div>
+    <div class="answer">
+        <p>Helm uses the same configuration as <code>kubectl</code>. It reads the <strong>kubeconfig</strong> file to
+            determine which cluster to talk to. By default, this file lives at <code>~/.kube/config</code>.</p>
+        <p>If <code>kubectl</code> can reach your cluster, Helm can too — no extra setup is needed.</p>
+        <pre><code># Confirm kubectl connectivity first
+kubectl cluster-info
+kubectl get nodes</code></pre>
+    </div>
+
+    <div class="question"><strong>2. Using the Default Kubeconfig</strong></div>
+    <div class="answer">
+        <p>Most Kubernetes tools (minikube, kind, EKS, GKE, AKS) automatically write a context into
+            <code>~/.kube/config</code> when you create or authenticate to a cluster.</p>
+        <pre><code># View current kubeconfig
+kubectl config view
+
+# See the active context (this is what Helm will use)
+kubectl config current-context
+
+# List all available contexts
+kubectl config get-contexts</code></pre>
+        <p>If the correct context is active, Helm is already configured:</p>
+        <pre><code># This will use the current kubectl context
+helm list</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Switching Between Clusters (Contexts)</strong></div>
+    <div class="answer">
+        <p>When you have multiple clusters configured, switch between them using <code>kubectl config use-context</code>.
+            Helm will automatically follow the active context.</p>
+        <pre><code># List contexts
+kubectl config get-contexts
+
+# CURRENT   NAME              CLUSTER           AUTHINFO          NAMESPACE
+# *         docker-desktop    docker-desktop    docker-desktop
+#           minikube          minikube          minikube
+#           eks-production    eks-production    eks-admin
+
+# Switch to a different cluster
+kubectl config use-context minikube
+
+# Helm now targets minikube
+helm list</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Pointing Helm to a Specific Kubeconfig File</strong></div>
+    <div class="answer">
+        <p>If your cluster config lives outside <code>~/.kube/config</code>, tell Helm where to find it with the
+            <code>--kubeconfig</code> flag or the <code>KUBECONFIG</code> environment variable.</p>
+
+        <p><strong>Using the --kubeconfig flag:</strong></p>
+        <pre><code>helm list --kubeconfig /path/to/custom-kubeconfig.yaml
+helm install myapp ./chart --kubeconfig /path/to/custom-kubeconfig.yaml</code></pre>
+
+        <p><strong>Using the KUBECONFIG environment variable:</strong></p>
+        <pre><code># Set for the current shell session
+export KUBECONFIG=/path/to/custom-kubeconfig.yaml
+
+# Helm and kubectl both respect this
+helm list
+kubectl get pods</code></pre>
+
+        <p><strong>Merging multiple kubeconfig files:</strong></p>
+        <pre><code># Combine multiple kubeconfig files into one view
+export KUBECONFIG=~/.kube/config:/path/to/cluster2-config:/path/to/cluster3-config
+
+# All contexts from all files are now available
+kubectl config get-contexts
+helm list</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Targeting a Specific Context Without Switching</strong></div>
+    <div class="answer">
+        <p>Use the <code>--kube-context</code> flag to run a single Helm command against a specific context without
+            changing the global default.</p>
+        <pre><code># Deploy to production without switching context
+helm install myapp ./chart --kube-context eks-production
+
+# List releases on staging
+helm list --kube-context eks-staging
+
+# Upgrade on a specific cluster
+helm upgrade myapp ./chart --kube-context gke-dev --set image.tag=v2.0</code></pre>
+    </div>
+
+    <div class="question"><strong>6. Overriding the Target Namespace</strong></div>
+    <div class="answer">
+        <p>By default, Helm deploys to the namespace set in the current context (or <code>default</code>). Override it
+            with <code>--namespace</code> / <code>-n</code>.</p>
+        <pre><code># Install into a specific namespace
+helm install myapp ./chart --namespace production
+
+# Create the namespace if it doesn't exist
+helm install myapp ./chart --namespace production --create-namespace
+
+# List releases across all namespaces
+helm list --all-namespaces</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Configuring Helm for Managed Kubernetes Services</strong></div>
+    <div class="answer">
+        <p><strong>Amazon EKS:</strong></p>
+        <pre><code># Update kubeconfig for an EKS cluster
+aws eks update-kubeconfig --name my-cluster --region us-east-1
+
+# Verify
+kubectl config current-context
+helm list</code></pre>
+
+        <p><strong>Google GKE:</strong></p>
+        <pre><code># Fetch credentials for a GKE cluster
+gcloud container clusters get-credentials my-cluster --zone us-central1-a --project my-project
+
+# Verify
+kubectl config current-context
+helm list</code></pre>
+
+        <p><strong>Azure AKS:</strong></p>
+        <pre><code># Merge AKS credentials into kubeconfig
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+
+# Verify
+kubectl config current-context
+helm list</code></pre>
+
+        <p><strong>DigitalOcean DOKS:</strong></p>
+        <pre><code># Save kubeconfig for a DOKS cluster
+doctl kubernetes cluster kubeconfig save my-cluster
+
+# Verify
+kubectl config current-context
+helm list</code></pre>
+    </div>
+
+    <div class="question"><strong>8. Configuring Helm for Local Clusters</strong></div>
+    <div class="answer">
+        <p><strong>Minikube:</strong></p>
+        <pre><code># Start minikube (auto-configures kubeconfig)
+minikube start
+
+# Helm is ready to use
+helm list</code></pre>
+
+        <p><strong>kind (Kubernetes in Docker):</strong></p>
+        <pre><code># Create a cluster (auto-configures kubeconfig)
+kind create cluster --name my-cluster
+
+# Verify context
+kubectl config current-context
+# kind-my-cluster
+
+helm list</code></pre>
+
+        <p><strong>Docker Desktop:</strong></p>
+        <pre><code># Enable Kubernetes in Docker Desktop Settings → Kubernetes → Enable
+# Context is automatically configured as "docker-desktop"
+
+kubectl config use-context docker-desktop
+helm list</code></pre>
+
+        <p><strong>k3d (k3s in Docker):</strong></p>
+        <pre><code># Create a cluster
+k3d cluster create my-cluster
+
+# Context is automatically set
+helm list</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Connecting via an API Server URL Directly</strong></div>
+    <div class="answer">
+        <p>Use <code>--kube-apiserver</code> and <code>--kube-token</code> to connect directly to a cluster API
+            without a kubeconfig file. This is common in CI/CD pipelines.</p>
+        <pre><code># Using API server URL with a bearer token
+helm list \
+  --kube-apiserver https://k8s-api.example.com:6443 \
+  --kube-token "$KUBE_TOKEN"
+
+# With a CA certificate for TLS verification
+helm install myapp ./chart \
+  --kube-apiserver https://k8s-api.example.com:6443 \
+  --kube-token "$KUBE_TOKEN" \
+  --kube-ca-file /path/to/ca.crt</code></pre>
+    </div>
+
+    <div class="question"><strong>10. Helm Environment Variables</strong></div>
+    <div class="answer">
+        <p>Helm respects several environment variables that control its behavior:</p>
+        <pre><code># Where Helm stores configuration (defaults to ~/.config/helm)
+export HELM_CONFIG_HOME=~/.config/helm
+
+# Where Helm stores cached data (defaults to ~/.cache/helm)
+export HELM_CACHE_HOME=~/.cache/helm
+
+# Where Helm stores local data (defaults to ~/.local/share/helm)
+export HELM_DATA_HOME=~/.local/share/helm
+
+# Override the Kubernetes namespace
+export HELM_NAMESPACE=production
+
+# Override the kubeconfig context
+export HELM_KUBECONTEXT=eks-production
+
+# Set a custom kubeconfig path
+export KUBECONFIG=~/.kube/custom-config</code></pre>
+        <p>View current Helm environment settings:</p>
+        <pre><code>helm env</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Verifying Helm-to-Cluster Connectivity</strong></div>
+    <div class="answer">
+        <p>After configuration, verify everything works end to end:</p>
+        <pre><code># 1. Check Helm version (client-side only)
+helm version
+
+# 2. List releases (requires cluster connectivity)
+helm list
+
+# 3. Search and install a test chart
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install test-nginx bitnami/nginx --namespace default
+
+# 4. Confirm the release
+helm list
+kubectl get pods
+
+# 5. Clean up
+helm uninstall test-nginx</code></pre>
+    </div>
+
+    <div class="question"><strong>12. Troubleshooting Connectivity</strong></div>
+    <div class="answer">
+        <p><strong>Issue: Kubernetes cluster unreachable</strong></p>
+        <ul>
+            <li>Verify kubectl works first: <code>kubectl cluster-info</code>;</li>
+            <li>Check that the correct context is active: <code>kubectl config current-context</code>;</li>
+            <li>Ensure credentials haven't expired (common with EKS/GKE tokens);</li>
+        </ul>
+
+        <p><strong>Issue: Unauthorized or Forbidden errors</strong></p>
+        <ul>
+            <li>Confirm your user/service account has the right RBAC roles;</li>
+            <li>Re-authenticate: <code>aws eks update-kubeconfig</code> or <code>gcloud container clusters get-credentials</code>;</li>
+            <li>Check token expiry: <code>kubectl auth can-i list pods</code>;</li>
+        </ul>
+
+        <p><strong>Issue: Wrong cluster targeted</strong></p>
+        <ul>
+            <li>Always verify before deploying: <code>kubectl config current-context</code>;</li>
+            <li>Use <code>--kube-context</code> explicitly in scripts to avoid mistakes;</li>
+            <li>Consider setting <code>HELM_KUBECONTEXT</code> in project-specific <code>.envrc</code> files (with direnv);</li>
+        </ul>
+
+        <p><strong>Issue: TLS certificate errors</strong></p>
+        <ul>
+            <li>Supply the CA certificate: <code>--kube-ca-file /path/to/ca.crt</code>;</li>
+            <li>For testing only: <code>--kube-insecure-skip-tls-verify</code> (never use in production);</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

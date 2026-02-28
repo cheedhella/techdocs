@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Installing Helm</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Installing Helm</h2>
+    </div>
+
+    <div class="question"><strong>1. Installing Helm</strong></div>
+    <div class="answer">
+        <p><strong>Option A — Package Managers (Recommended)</strong></p>
+        <pre><code># macOS
+brew install helm
+
+# RHEL / CentOS / Fedora (dnf or yum)
+sudo dnf install helm
+
+# Debian / Ubuntu
+sudo apt-get install helm</code></pre>
+        <p>If Helm isn't in your default repos, add the official Helm repository first:</p>
+        <pre><code># RHEL / CentOS / Fedora
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo dnf config-manager --add-repo https://baltocdn.com/helm/stable/rpm/
+sudo rpm --import https://baltocdn.com/helm/signing.asc
+sudo dnf install helm
+
+# Debian / Ubuntu
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" \
+  | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm</code></pre>
+
+        <p><strong>Option B — One-line Install Script (Linux / macOS)</strong></p>
+        <pre><code>curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash</code></pre>
+        <ul>
+            <li>Detects your OS and architecture automatically;</li>
+            <li>Downloads the latest Helm binary;</li>
+            <li>Installs it to <code>/usr/local/bin/helm</code>;</li>
+        </ul>
+
+        <p><strong>Option C — Manual Binary Download</strong></p>
+        <pre><code># Download from https://github.com/helm/helm/releases (example: Linux AMD64)
+wget https://get.helm.sh/helm-v3.14.0-linux-amd64.tar.gz
+tar -zxvf helm-v3.14.0-linux-amd64.tar.gz
+sudo mv linux-amd64/helm /usr/local/bin/helm</code></pre>
+
+        <p><strong>Verify:</strong></p>
+        <pre><code># Check Helm version
+helm version
+# version.BuildInfo{Version:"v3.14.0", GitCommit:"...", GitTreeState:"clean", GoVersion:"go1.21.5"}
+
+# Check cluster connectivity
+helm list
+# NAME    NAMESPACE    REVISION    UPDATED    STATUS    CHART    APP VERSION</code></pre>
+    </div>
+
+
+    <div class="question"><strong>3. Test Your Installation</strong></div>
+    <div class="answer">
+        <p><strong>Step 1 — Helm binary is working:</strong></p>
+        <pre><code>helm version
+# Should print version info; if "command not found", check your PATH</code></pre>
+
+        <p><strong>Step 2 — Cluster is reachable:</strong></p>
+        <pre><code># Confirm kubectl can reach the cluster first
+kubectl cluster-info
+kubectl get nodes
+
+# Helm uses the same kubeconfig — if kubectl works, Helm will too
+helm list
+# Empty output is fine; an error means the cluster is unreachable</code></pre>
+
+        <p><strong>Step 3 — Correct context and namespace:</strong></p>
+        <pre><code># Verify you're targeting the right cluster (critical in production)
+kubectl config current-context
+
+# Check which namespace Helm will deploy to
+kubectl config view --minify -o jsonpath='{.contexts[0].context.namespace}'
+# Empty means "default" namespace</code></pre>
+
+        <p><strong>Step 4 — RBAC permissions are sufficient:</strong></p>
+        <pre><code># Can you create deployments? (what Helm needs to install charts)
+kubectl auth can-i create deployments
+kubectl auth can-i create services
+kubectl auth can-i create secrets
+
+# All should return "yes"; if not, your role/rolebinding needs updating</code></pre>
+
+        <p><strong>Step 5 — Repositories are accessible:</strong></p>
+        <pre><code># Add a repo and update index
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# Search to confirm it works
+helm search repo bitnami/nginx</code></pre>
+
+        <p><strong>Step 6 — End-to-end dry run (safe for production):</strong></p>
+        <pre><code># Render templates without deploying — verifies the full pipeline
+helm install test-nginx bitnami/nginx --dry-run --debug
+
+# If this succeeds, Helm can: reach the repo, pull the chart,
+# render templates, and validate against the cluster API</code></pre>
+
+        <p><strong>Step 7 — Full install/uninstall cycle (non-production only):</strong></p>
+        <pre><code># Deploy a test release
+helm install test-nginx bitnami/nginx --namespace default
+
+# Verify resources are created
+helm list
+kubectl get pods -l app.kubernetes.io/instance=test-nginx
+
+# Clean up
+helm uninstall test-nginx</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Installing Helm in CI/CD</strong></div>
+    <div class="answer">
+        <p><strong>Jenkins:</strong></p>
+        <pre><code>stage('Install Helm') {
+    steps {
+        sh 'curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash'
+        sh 'helm version'
+    }
+}</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Initial Configuration</strong></div>
+    <div class="answer">
+        <p><strong>Add Popular Chart Repositories:</strong></p>
+        <pre><code># Add Bitnami repository (most popular)
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# Add Stable repository
+helm repo add stable https://charts.helm.sh/stable
+
+# Update repository index
+helm repo update
+
+# List repositories
+helm repo list
+
+# Search for charts
+helm search repo nginx</code></pre>
+    </div>
+
+
+    <div class="question"><strong>5. Helm Plugins (Optional)</strong></div>
+    <div class="answer">
+        <p>Extend Helm functionality with plugins:</p>
+        <pre><code># Install helm-diff (compare releases)
+helm plugin install https://github.com/databus23/helm-diff
+
+# Install helm-secrets (manage secrets)
+helm plugin install https://github.com/jkroepke/helm-secrets
+
+# List installed plugins
+helm plugin list
+
+# Use a plugin
+helm diff upgrade myapp ./chart</code></pre>
+    </div>
+
+</body>
+
+</html>

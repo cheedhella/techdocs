@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm Architecture</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm Architecture</h2>
+    </div>
+
+    <div class="question"><strong>1. Helm v3 Architecture Overview</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm is a <strong>client-only</strong> tool — nothing runs inside your cluster; Tiller (Helm v2) was removed;</li>
+            <li>The Helm CLI sits on your machine, reads a <strong>Chart</strong> (a package of template YAML files + default values),
+                fills in the blanks using Go templating, and sends the finished Kubernetes manifests to the API server;</li>
+            <li>Kubernetes does the actual work of creating Pods, Services, etc. — Helm is just the delivery mechanism;</li>
+            <li>After every operation, Helm saves a snapshot of what it deployed as a Kubernetes <strong>Secret</strong>
+                inside the cluster — this "receipt" enables upgrades, rollbacks, and history tracking;</li>
+            <li>Uses the <strong>same credentials as kubectl</strong> — reads <code>~/.kube/config</code> and uses your RBAC permissions;</li>
+            <li>Each release revision is stored as <code>sh.helm.release.v1.&lt;name&gt;.v&lt;n&gt;</code>;</li>
+            <li>On upgrades, Helm performs a <strong>three-way merge</strong> (old manifest vs new manifest vs live cluster state)
+                so manual changes aren't blindly overwritten;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How Does Helm CLI Know Which Cluster to Talk To?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm reads the <strong>kubeconfig</strong> file (default: <code>~/.kube/config</code>) — the same file <code>kubectl</code> uses;
+                if your kubeconfig lives elsewhere, point to it with <code>--kubeconfig /path/to/config</code> or
+                <code>export KUBECONFIG=/path/to/config</code>;</li>
+            <li>It connects to whichever cluster is set as the <strong>current context</strong> — if <code>kubectl</code> can reach your cluster, so can Helm;</li>
+            <li>You can override this per-command without changing the global context:</li>
+        </ul>
+
+        <p><strong>Common ways to control which cluster Helm targets:</strong></p>
+        <ul>
+            <li><code>--kube-context &lt;name&gt;</code> — target a specific context for a single command;</li>
+            <li><code>--kubeconfig &lt;path&gt;</code> — use a different kubeconfig file;</li>
+            <li><code>--namespace &lt;ns&gt;</code> / <code>-n &lt;ns&gt;</code> — override the target namespace;</li>
+            <li><code>KUBECONFIG</code> env var — point to one or more kubeconfig files;</li>
+            <li><code>HELM_KUBECONTEXT</code> env var — set a default context for all Helm commands;</li>
+        </ul>
+
+        <p><strong>Useful kubectl commands to verify what Helm will use:</strong></p>
+        <ul>
+            <li><code>kubectl config current-context</code> — show the active context (this is what Helm uses);</li>
+            <li><code>kubectl config get-contexts</code> — list all available contexts;</li>
+            <li><code>kubectl config use-context &lt;name&gt;</code> — switch the active context;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Architecture Diagram</strong></div>
+    <div class="answer">
+<pre><code>
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  DEVELOPER / CI-CD MACHINE                                                              │
+  │                                                                                         │
+  │   ┌──────────────┐       ┌──────────────────────────────────────┐                       │
+  │   │   Helm CLI   │──────▶│         Templating Engine            │                       │
+  │   │              │       │                                      │                       │
+  │   │  • install   │       │  Chart (.yaml templates)             │                       │
+  │   │  • upgrade   │       │       +                              │                       │
+  │   │  • rollback  │       │  Values (defaults + overrides)       │                       │
+  │   │  • uninstall │       │       ↓                              │                       │
+  │   │  • list      │       │  Go template rendering               │                       │
+  │   │  • repo      │       │       ↓                              │                       │
+  │   └──────┬───────┘       │  Final Kubernetes YAML manifests     │                       │
+  │          │               └──────────────────┬───────────────────┘                       │
+  │          │                                  │                                           │
+  │          │     reads ~/.kube/config          │  rendered manifests                       │
+  └──────────┼──────────────────────────────────┼───────────────────────────────────────────┘
+             │                                  │
+             ▼                                  ▼
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  KUBERNETES CLUSTER                                                                     │
+  │                                                                                         │
+  │   ┌───────────────────────────────────────────────────────┐                             │
+  │   │              Kubernetes API Server                     │                             │
+  │   │                                                        │                             │
+  │   │   • Receives manifests from Helm                       │                             │
+  │   │   • Creates / Updates / Deletes resources              │                             │
+  │   │   • Enforces RBAC policies                             │                             │
+  │   └───────────────┬───────────────────────┬────────────────┘                             │
+  │                   │                       │                                              │
+  │                   ▼                       ▼                                              │
+  │   ┌──────────────────────┐  ┌──────────────────────────────────┐                        │
+  │   │  Cluster Resources   │  │  Release Storage (Secrets)       │                        │
+  │   │                      │  │                                  │                        │
+  │   │  • Deployments       │  │  sh.helm.release.v1.myapp.v1    │                        │
+  │   │  • Services          │  │  sh.helm.release.v1.myapp.v2    │                        │
+  │   │  • ConfigMaps        │  │  sh.helm.release.v1.myapp.v3    │                        │
+  │   │  • Ingresses         │  │                                  │                        │
+  │   │  • etc.              │  │  Contains: manifest, values,     │                        │
+  │   │                      │  │  chart metadata, hooks, notes    │                        │
+  │   └──────────────────────┘  └──────────────────────────────────┘                        │
+  │                                                                                         │
+  └─────────────────────────────────────────────────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+  │  CHART SOURCES                                                                          │
+  │                                                                                         │
+  │   ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐                     │
+  │   │  Local Charts     │  │  HTTP Repos       │  │  OCI Registries  │                     │
+  │   │  ./mychart/       │  │  (Bitnami, Stable) │  │  (ECR, GCR, Hub) │                     │
+  │   └──────────────────┘  └──────────────────┘  └──────────────────┘                     │
+  │                                                                                         │
+  └─────────────────────────────────────────────────────────────────────────────────────────┘
+</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Core Components Explained</strong></div>
+    <div class="answer">
+        <p><strong>Helm CLI</strong></p>
+        <ul>
+            <li>Command-line client installed on your local machine or CI/CD system;</li>
+            <li>Communicates with Kubernetes API using kubeconfig;</li>
+            <li>Responsible for: chart management, release operations, repository interactions;</li>
+            <li>Written in Go, available for Linux, macOS, and Windows;</li>
+        </ul>
+
+        <p><strong>Templating Engine</strong></p>
+        <ul>
+            <li>Built into the Helm CLI (not a separate process);</li>
+            <li>Uses Go's <code>text/template</code> package with Sprig function library;</li>
+            <li>Combines chart templates + values to produce final Kubernetes YAML;</li>
+            <li>Helm does NOT deploy anything itself — it sends rendered YAML to the Kubernetes API server;</li>
+        </ul>
+
+        <p><strong>Charts</strong></p>
+        <ul>
+            <li>Packaged Kubernetes application definitions;</li>
+            <li>Contains templates, default values, metadata, and dependencies;</li>
+            <li>Versioned using Semantic Versioning (SemVer);</li>
+            <li>Can be stored locally or in repositories;</li>
+        </ul>
+
+        <p><strong>Releases</strong></p>
+        <ul>
+            <li>An instance of a chart deployed to a Kubernetes cluster;</li>
+            <li>Each installation creates a new release with a unique name;</li>
+            <li>Release history is tracked — allows upgrades and rollbacks;</li>
+            <li>Stored as Kubernetes Secrets in the namespace where the release is installed;</li>
+        </ul>
+
+        <p><strong>Repositories</strong></p>
+        <ul>
+            <li>HTTP servers that host chart packages and index files;</li>
+            <li>Can be public (Artifact Hub, Bitnami) or private (ChartMuseum, Harbor);</li>
+            <li>Support for OCI registries (Docker Hub, ECR, GCR, etc.);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Install Flow — <code>helm install myapp ./chart</code></strong></div>
+    <div class="answer">
+<pre><code>
+  ┌──────────┐    ┌────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+  │  User    │    │   Helm CLI     │    │  K8s API Server  │    │  Cluster        │
+  └────┬─────┘    └───────┬────────┘    └────────┬─────────┘    └───────┬─────────┘
+       │                  │                      │                      │
+       │  helm install    │                      │                      │
+       │─────────────────▶│                      │                      │
+       │                  │                      │                      │
+       │                  │── Read chart files   │                      │
+       │                  │   (Chart.yaml,       │                      │
+       │                  │    templates/,       │                      │
+       │                  │    values.yaml)      │                      │
+       │                  │                      │                      │
+       │                  │── Merge values       │                      │
+       │                  │   (defaults + --set  │                      │
+       │                  │    + -f overrides)   │                      │
+       │                  │                      │                      │
+       │                  │── Render templates   │                      │
+       │                  │   (Go templating)    │                      │
+       │                  │                      │                      │
+       │                  │── Validate YAML      │                      │
+       │                  │                      │                      │
+       │                  │   Send manifests     │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │                  │                      │── Create resources   │
+       │                  │                      │─────────────────────▶│
+       │                  │                      │                      │
+       │                  │                      │   Resources created  │
+       │                  │                      │◀─────────────────────│
+       │                  │                      │                      │
+       │                  │   Store release v1   │                      │
+       │                  │   as Secret          │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │  Release created │                      │                      │
+       │◀─────────────────│                      │                      │
+       │                  │                      │                      │
+</code></pre>
+        <p><strong>What happens step by step:</strong></p>
+        <ol>
+            <li>Helm CLI reads the chart directory — <code>Chart.yaml</code>, <code>templates/</code>, <code>values.yaml</code>;</li>
+            <li>Merges values: defaults from <code>values.yaml</code> → overridden by <code>-f custom.yaml</code> → overridden by <code>--set key=value</code>;</li>
+            <li>Renders all templates through the Go templating engine to produce final Kubernetes YAML;</li>
+            <li>Validates the rendered manifests;</li>
+            <li>Sends the manifests to the Kubernetes API server via REST calls;</li>
+            <li>Kubernetes creates the resources (Deployments, Services, ConfigMaps, etc.);</li>
+            <li>Helm stores release metadata (revision 1) as a Secret named <code>sh.helm.release.v1.myapp.v1</code>;</li>
+        </ol>
+    </div>
+
+    <div class="question"><strong>6. Upgrade Flow — <code>helm upgrade myapp ./chart --set image.tag=v2.0</code></strong></div>
+    <div class="answer">
+<pre><code>
+  ┌──────────┐    ┌────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+  │  User    │    │   Helm CLI     │    │  K8s API Server  │    │  Cluster        │
+  └────┬─────┘    └───────┬────────┘    └────────┬─────────┘    └───────┬─────────┘
+       │                  │                      │                      │
+       │  helm upgrade    │                      │                      │
+       │─────────────────▶│                      │                      │
+       │                  │                      │                      │
+       │                  │   Fetch current      │                      │
+       │                  │   release Secret     │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │                  │   Release v1 data    │                      │
+       │                  │◀─────────────────────│                      │
+       │                  │                      │                      │
+       │                  │── Render NEW         │                      │
+       │                  │   templates with     │                      │
+       │                  │   updated values     │                      │
+       │                  │                      │                      │
+       │                  │── THREE-WAY MERGE    │                      │
+       │                  │   ┌────────────────────────────────────┐    │
+       │                  │   │ 1. Old manifest  (release v1)     │    │
+       │                  │   │ 2. New manifest  (rendered now)   │    │
+       │                  │   │ 3. Live state    (what's in k8s)  │    │
+       │                  │   │                                    │    │
+       │                  │   │ Result: only the DIFF is applied  │    │
+       │                  │   └────────────────────────────────────┘    │
+       │                  │                      │                      │
+       │                  │   Apply changes only │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │── Update resources   │
+       │                  │                      │─────────────────────▶│
+       │                  │                      │                      │
+       │                  │   Store release v2   │                      │
+       │                  │   (keep v1 for       │                      │
+       │                  │    rollback)         │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │  Upgrade done    │                      │                      │
+       │◀─────────────────│                      │                      │
+       │                  │                      │                      │
+</code></pre>
+        <p><strong>What happens step by step:</strong></p>
+        <ol>
+            <li>Helm fetches the current release Secret from the cluster (e.g. revision 1);</li>
+            <li>Renders new templates with the updated values;</li>
+            <li>Performs a <strong>three-way merge</strong> comparing:
+                <ul>
+                    <li><strong>Old manifest</strong> — what Helm deployed last time (from the release Secret);</li>
+                    <li><strong>New manifest</strong> — what the new templates render to;</li>
+                    <li><strong>Live state</strong> — the actual current state of resources in the cluster;</li>
+                </ul>
+            </li>
+            <li>Only the <strong>differences</strong> are applied — unchanged resources are left alone;</li>
+            <li>Stores a new release revision (v2) as a Secret, keeps v1 for potential rollback;</li>
+        </ol>
+        <p>The three-way merge is critical — it means manual changes made directly with <code>kubectl edit</code>
+            are respected and not blindly overwritten.</p>
+    </div>
+
+    <div class="question"><strong>7. Rollback Flow — <code>helm rollback myapp 1</code></strong></div>
+    <div class="answer">
+<pre><code>
+  ┌──────────┐    ┌────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+  │  User    │    │   Helm CLI     │    │  K8s API Server  │    │  Cluster        │
+  └────┬─────┘    └───────┬────────┘    └────────┬─────────┘    └───────┬─────────┘
+       │                  │                      │                      │
+       │  helm rollback   │                      │                      │
+       │  myapp 1         │                      │                      │
+       │─────────────────▶│                      │                      │
+       │                  │                      │                      │
+       │                  │   Fetch release v1   │                      │
+       │                  │   Secret             │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │                  │   v1 manifest +      │                      │
+       │                  │   values returned    │                      │
+       │                  │◀─────────────────────│                      │
+       │                  │                      │                      │
+       │                  │── THREE-WAY MERGE    │                      │
+       │                  │   (current vs v1     │                      │
+       │                  │    vs live state)    │                      │
+       │                  │                      │                      │
+       │                  │   Apply v1 manifest  │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │── Revert resources   │
+       │                  │                      │─────────────────────▶│
+       │                  │                      │                      │
+       │                  │   Store as NEW       │                      │
+       │                  │   revision v3        │                      │
+       │                  │   (points to v1      │                      │
+       │                  │    config)           │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │  Rollback done   │                      │                      │
+       │◀─────────────────│                      │                      │
+       │                  │                      │                      │
+</code></pre>
+        <p><strong>What happens step by step:</strong></p>
+        <ol>
+            <li>Helm retrieves the target release revision (v1) from the cluster Secrets;</li>
+            <li>Performs a three-way merge between the current release, the target revision, and the live cluster state;</li>
+            <li>Applies the old manifest to bring resources back to the previous state;</li>
+            <li>Creates a <strong>new revision</strong> (v3) — rollback does not delete history, it adds a forward revision that points back to the old config;</li>
+        </ol>
+        <p>This means <code>helm history myapp</code> would show: v1 (install) → v2 (upgrade) → v3 (rollback to v1).</p>
+    </div>
+
+    <div class="question"><strong>8. Uninstall Flow — <code>helm uninstall myapp</code></strong></div>
+    <div class="answer">
+<pre><code>
+  ┌──────────┐    ┌────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+  │  User    │    │   Helm CLI     │    │  K8s API Server  │    │  Cluster        │
+  └────┬─────┘    └───────┬────────┘    └────────┬─────────┘    └───────┬─────────┘
+       │                  │                      │                      │
+       │  helm uninstall  │                      │                      │
+       │─────────────────▶│                      │                      │
+       │                  │                      │                      │
+       │                  │   Fetch latest       │                      │
+       │                  │   release Secret     │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │                  │   Release data       │                      │
+       │                  │◀─────────────────────│                      │
+       │                  │                      │                      │
+       │                  │   Delete all         │                      │
+       │                  │   resources from     │                      │
+       │                  │   the manifest       │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │── Remove Deployments │
+       │                  │                      │── Remove Services    │
+       │                  │                      │── Remove ConfigMaps  │
+       │                  │                      │── Remove Ingresses   │
+       │                  │                      │─────────────────────▶│
+       │                  │                      │                      │
+       │                  │   Delete ALL         │                      │
+       │                  │   release Secrets    │                      │
+       │                  │   (v1, v2, v3...)    │                      │
+       │                  │─────────────────────▶│                      │
+       │                  │                      │                      │
+       │  Release removed │                      │                      │
+       │◀─────────────────│                      │                      │
+       │                  │                      │                      │
+</code></pre>
+        <p><strong>What happens step by step:</strong></p>
+        <ol>
+            <li>Helm fetches the latest release Secret to get the full manifest;</li>
+            <li>Sends delete requests for every resource listed in the manifest;</li>
+            <li>Kubernetes removes the Deployments, Services, ConfigMaps, Ingresses, etc.;</li>
+            <li>Helm deletes <strong>all</strong> release Secrets (every revision) — the release is completely gone;</li>
+        </ol>
+        <p>To keep the release history after uninstall (for auditing), use:</p>
+        <pre><code>helm uninstall myapp --keep-history
+
+# The release Secrets remain, status changes to "uninstalled"
+# You can still view history:
+helm history myapp</code></pre>
+    </div>
+
+    <div class="question"><strong>9. Helm v2 vs Helm v3 Architecture</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Helm v2 (Deprecated)</th>
+                    <th>Helm v3 (Current)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Architecture</td>
+                    <td>Client-Server (Helm CLI + Tiller)</td>
+                    <td>Client-only (Helm CLI)</td>
+                </tr>
+                <tr>
+                    <td>Server component</td>
+                    <td>Tiller pod in cluster</td>
+                    <td>None</td>
+                </tr>
+                <tr>
+                    <td>Security</td>
+                    <td>Tiller had cluster-admin by default</td>
+                    <td>Uses user's Kubernetes RBAC</td>
+                </tr>
+                <tr>
+                    <td>Release storage</td>
+                    <td>ConfigMaps/Secrets in kube-system</td>
+                    <td>Secrets in release namespace</td>
+                </tr>
+                <tr>
+                    <td>Namespace</td>
+                    <td>Tiller namespace separate from release</td>
+                    <td>Release in same namespace as resources</td>
+                </tr>
+                <tr>
+                    <td>CRD handling</td>
+                    <td>CRDs upgraded with chart</td>
+                    <td>CRDs installed once, never upgraded</td>
+                </tr>
+                <tr>
+                    <td>Release names</td>
+                    <td>Globally unique</td>
+                    <td>Unique per namespace</td>
+                </tr>
+                <tr>
+                    <td>Upgrade strategy</td>
+                    <td>Two-way merge (old vs new)</td>
+                    <td>Three-way merge (old vs new vs live)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>10. Release Storage in Helm v3</strong></div>
+    <div class="answer">
+        <p>Every time Helm installs or upgrades a release, it saves a <strong>complete snapshot</strong> as a
+            Kubernetes Secret in the same namespace as the release. Think of it as a receipt — Helm can look at
+            any past receipt to know exactly what was deployed, with which values, and roll back to it.</p>
+
+        <ul>
+            <li>Secret name format: <code>sh.helm.release.v1.&lt;release-name&gt;.v&lt;revision&gt;</code>;</li>
+            <li>Each revision gets its own Secret — so revision history grows over time;</li>
+        </ul>
+
+        <p><strong>What is stored inside each Secret:</strong></p>
+        <ul>
+            <li><strong>Manifest</strong> — the full rendered Kubernetes YAML that was applied (Deployments, Services, etc.);
+                used during upgrades for the three-way merge and during uninstall to know what to delete;</li>
+            <li><strong>Values</strong> — the merged values (defaults + overrides) that were used for this revision;
+                lets you inspect exactly what config was active at any point: <code>helm get values myapp --revision 2</code>;</li>
+            <li><strong>Chart metadata</strong> — name, version, appVersion from <code>Chart.yaml</code>;
+                so <code>helm list</code> can show which chart version each release is running;</li>
+            <li><strong>Hooks</strong> — pre-install, post-install, pre-upgrade, etc. hook definitions;</li>
+            <li><strong>Notes</strong> — the rendered <code>NOTES.txt</code> output shown after install/upgrade;</li>
+            <li><strong>Release status</strong> — deployed, superseded, uninstalled, failed, etc.;</li>
+        </ul>
+
+        <p><strong>Why this matters:</strong></p>
+        <ul>
+            <li><strong>Upgrades</strong> — Helm compares the old manifest (from the Secret) against the new render to compute the diff;</li>
+            <li><strong>Rollbacks</strong> — Helm retrieves a previous revision's Secret and re-applies that manifest;</li>
+            <li><strong>Uninstalls</strong> — Helm reads the manifest to know exactly which resources to delete;</li>
+            <li><strong>Auditing</strong> — <code>helm history myapp</code> reads all revision Secrets to show who deployed what and when;</li>
+        </ul>
+
+        <pre><code># List all release Secrets in the current namespace
+kubectl get secrets -l owner=helm
+
+# Example output:
+# NAME                              TYPE                 DATA   AGE
+# sh.helm.release.v1.myapp.v1      helm.sh/release.v1   1      3d
+# sh.helm.release.v1.myapp.v2      helm.sh/release.v1   1      2d
+# sh.helm.release.v1.myapp.v3      helm.sh/release.v1   1      1d
+
+# Inspect what was deployed in a specific revision
+helm get manifest myapp --revision 1
+helm get values myapp --revision 1
+helm get notes myapp --revision 1</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Chart Structure</strong></div>
+    <div class="answer">
+        <pre><code>mychart/
+├── Chart.yaml          # Chart metadata (name, version, description)
+├── values.yaml         # Default configuration values
+├── charts/             # Dependent charts (subcharts)
+├── templates/          # Kubernetes manifest templates
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── _helpers.tpl   # Template helpers
+│   └── NOTES.txt      # Post-install notes
+├── .helmignore        # Files to ignore when packaging
+└── README.md          # Documentation</code></pre>
+    </div>
+
+    <div class="question"><strong>12. Helm and Kubernetes Interaction</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm uses the same kubeconfig as kubectl (<code>~/.kube/config</code>);</li>
+            <li>Respects current context and namespace;</li>
+            <li>Uses Kubernetes API for all operations (create, update, delete);</li>
+            <li>Does NOT require any special permissions beyond what the user already has;</li>
+            <li>Helm security = Kubernetes security (your RBAC permissions apply);</li>
+        </ul>
+        <pre><code># Helm uses your current kubectl context
+kubectl config current-context
+
+# Helm respects namespace flag
+helm install myapp ./chart --namespace production
+
+# Or uses current namespace
+kubectl config set-context --current --namespace=production
+helm install myapp ./chart</code></pre>
+    </div>
+
+    <div class="question"><strong>13. Repository Types</strong></div>
+    <div class="answer">
+        <p><strong>HTTP Chart Repositories (Traditional):</strong></p>
+        <ul>
+            <li>Simple HTTP server hosting chart packages (.tgz files);</li>
+            <li>Requires an index.yaml file listing all charts;</li>
+            <li>Examples: Bitnami, Artifact Hub;</li>
+        </ul>
+
+        <p><strong>OCI Registries (Modern):</strong></p>
+        <ul>
+            <li>Store charts as OCI artifacts in container registries;</li>
+            <li>Same infrastructure as Docker images;</li>
+            <li>Examples: Docker Hub, ECR, GCR, Harbor, ACR;</li>
+            <li>Becoming the preferred method in Helm v3;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>
