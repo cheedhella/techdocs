@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Repository</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is a Helm Repository?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a artifact server(like Docker Registry, maven repository) which hosts a collection of charts/packages;</li>
+            <li>You can use it manage(store, get, list, update, remove) charts;</li>
+            <li>It is also used to share charts with others;</li>
+            <li>Helm doesn't come with any repositories added, during installation;</li>
+            <li>Artifact Hub -&gt; helm repo add artifact-hub https://artifacthub.github.io/helm-charts    # By far, the biggest helm repository;</li>
+            <li>Nginx        -&gt; helm repo add nginx-stable https://helm.nginx.com/stable</li>
+            <li>Bitnami      -&gt; helm repo add bitnami https://charts.bitnami.com/bitnami</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How to add a repository?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>helm repo add &lt;name&gt; &lt;url&gt; # Add a repository</li>
+            <li>It adds the repository to your local helm CLI configuration(~/.config/helm/repositories.yaml);</li>
+            <li>It doesn't download any charts from the repository;</li>
+            <li>
+<pre><code> 
+    apiVersion: ""
+    generated: "2026-02-28T10:12:34.567Z"
+    repositories:
+      - name: bitnami
+        url: https://charts.bitnami.com/bitnami
+        cache: bitnami-index.yaml
+      - name: prometheus-community
+        url: https://prometheus-community.github.io/helm-charts
+        cache: prometheus-community-index.yaml
+</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How to list repositories?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo list</code></pre>
+    </div>
+
+    <div class="question"><strong>4. How to update a repository?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>helm repo update &lt;name&gt; # Update a repository</li>
+            <li>helm repo update # Update all repositories</li>
+            <li>It fetches latest index.yaml for the specified repository and updates cache(~/.cache/helm/repository/, which is used by search);</li>
+            <li>
+                <ul>
+                    <li>index.yaml - It is registry of the repository, it tells helm what charts exist, which versions are available, and where to download them;</li>
+                    <li>It is used by search to find charts;</li>
+                </ul>
+            </li>
+            <li>
+                <pre><code>
+# ~/.cache/helm/repository/<repo-name>-index.yaml
+apiVersion: v1
+generated: "2026-02-28T10:45:00Z"
+entries:
+  nginx:
+    - version: 15.2.3
+      appVersion: 1.25.3
+      description: NGINX Open Source web server
+      urls:
+        - https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz
+      digest: sha256:abc123xyz456
+      created: "2026-02-01T12:00:00Z"
+
+    - version: 15.2.2
+      appVersion: 1.25.2
+      description: NGINX Open Source web server
+      urls:
+        - https://charts.bitnami.com/bitnami/nginx-15.2.2.tgz
+      digest: sha256:def456uvw789
+      created: "2026-01-20T12:00:00Z"
+
+  redis:
+    - version: 18.0.0
+      appVersion: 7.2.1
+      description: Redis in-memory database
+      urls:
+        - https://charts.bitnami.com/bitnami/redis-18.0.0.tgz
+      digest: sha256:xyz789abc123
+                </code></pre>
+            </li>
+        </ul>
+    </div>
+
+
+does helm install downloads index.yaml, if it can't find it?
+    No, it doesn't download index.yaml, it only downloads the chart .tgz file;
+    helm install does NOT automatically download index.yaml if it’s missing or outdated.
+    If it is missing(helm repo update is not run), it will throw an error: Error: chart "nginx" matching not found in bitnami index;
+    <ul>
+        <li>helm repo add → stores repo URL</li>
+        <li>helm repo update → downloads index.yaml</li>
+        <li>helm search repo → searches inside index.yaml</li>
+        <li>helm install → reads index.yaml → downloads .tgz</li>
+    </ul>
+
+    Installing via Direct URL
+        If you install like this: helm install myapp https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz 
+        Then:
+        <ul>
+            <li>Helm does NOT need index.yaml</li>
+            <li>It directly downloads that .tgz</li>
+        </ul>
+
+    OCI Registry
+        If using OCI (e.g., container registry):
+        helm install myapp oci://registry-1.docker.io/bitnamicharts/nginx
+        Helm does NOT use index.yaml at all.
+        OCI uses registry APIs instead.
+
+        What is Repository?
+        It is a artifact server which hosts a collection of charts/packages;
+        It allows developers to share their charts with other other developers;
+    
+        You might be thinking that there is a predefined single repository containing every single software package in the world; 
+        Unfortunately, that&#x27;s not the case; If you want a software package, you need find a repository containing it;
+    
+        Helm doesn&#x27;t come with any repositories added, during installation;
+    
+        Artifact Hub -&gt; helm repo add artifact-hub https://artifacthub.github.io/helm-charts    # By far, the biggest helm repository;
+        Nginx        -&gt; helm repo add nginx-stable https://helm.nginx.com/stable
+        Bitnami      -&gt; helm repo add bitnami https://charts.bitnami.com/bitnami
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    helm repo add &lt;name&gt; &lt;url&gt;                # Add repository; It downloads index.yaml of specified repository into local cache directory; HELM_REPOSITORY_CACHE env variable specifies the cache directory;   
+    helm repo list                            # List all configured repositories;
+    helm repo update &lt;name&gt;                   # It fetches latest index.yaml for the specified repository and updates cache(which is used by search); 
+    helm repo update                          # It fetches latest index.yaml for all repositories added and updates cache;
+    helm repo remove &lt;name&gt;                   # Delete the repository;
+    
+    helm repo index &lt;dir&gt;                     # Every repository must have a valid index file; 
+                                              # It reads given directory/repository and generates index file with all the charts found;
+                                              # It is useful when you are setting up your own repository;
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    helm search repo &lt;keyword&gt;                # It scans through all repositories configured in the system and prints latest stable version of charts found in them;
+                                              # helm search repo nginx                      -&gt; Returns latest stable version of each chart whose name matches &#x27;nginx&#x27;
+                                              # helm search repo nginx --devel              -&gt; Returns latest version(could be stable/alpha/beta/release candidate etc) of each chart whose name matches &#x27;nginx&#x27;
+                                              # helm search repo nginx --versions           -&gt; Returns all versions(could be stable/alpha/beta/release candidate etc) of each chart whose name matches &#x27;nginx&#x27;
+                                              # helm search repo nginx --version ^1.0.0     -&gt; Returns all stable charts whose name matche nginx and major version of 1
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Repository
+	- It is a simple http server, from which we can download the charts;
+	- It will have index.yaml, which have information about all the charts it hosts;
+
+Local Repository
+	- You can host it using any folder on your machine;
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/testrepo
+
+	- You can create index.yaml either manually or use below command:
+	&gt; helm repo index
+	&gt; ls
+	index.yaml
+
+	- Let&#x27;s add first chart to this repository;
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code
+	
+	&gt; helm package firstchart -d testrepo/ 					# Package the chart and copy it to specified directory;
+	Successfully packaged chart and saved it to: testrepo/firstchart-0.1.0.tgz
+
+	- update index.yaml
+	&gt; helm repo index testrepo/ 		# If there are any new charts in testrepo, it updates the index.yaml;
+
+Host a Local Repository
+	- To host a local repository, we need a webserver, like nginx or even eaiser python, up and running;
+	- Make sure you have python3 installed: python3 --version
+	&gt; pwd
+	/Users/mcheedhe/Data-new/Technical/Backend/Helm/code/testrepo
+	&gt; pypthon3 -m http.server --bind 127.0.0.1 8080
+
+	- Open the browser and access http://127.0.0.1:8080
+
+Use a Local Repository
+	&gt; helm repo list
+	&gt; helm repo add localrepo http://127.0.0.1:8080
+	
+	# Install a chart using local repo
+	&gt; helm install mylocal01 localrepo/firstchart
+
+	# another way to install a chart using local repo
+	&gt; helm pull localrepo/firstchart 		# It downloads the specified chart to pwd;
+	&gt; helm install mylocal02 firstchart*.tgz
+
+TODO:
+	How to host chart repository using GitHub pages? It&#x27;s a free service;
+    
+    <div class="question"><strong>5. How to remove a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo remove &lt;name&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>6. How to search a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm search repo &lt;keyword&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>7. How to search a repository with versions?</strong></div>
+    <div class="answer">
+        <pre><code>helm search repo &lt;keyword&gt; --versions</code></pre>
+    </div>
+
+    <div class="question"><strong>8. How to search a repository on Artifact Hub?</strong></div>
+    <div class="answer">
+        <pre><code>helm search hub &lt;keyword&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>9. How to search a repository on Artifact Hub with versions?</strong></div>
+    <div class="answer">
+        <pre><code>helm search hub &lt;keyword&gt; --versions</code></pre>
+    </div>  
+
+    <div class="question"><strong>10. How to add a repository from Artifact Hub?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add artifact-hub https://artifacthub.github.io/helm-charts</code></pre>
+    </div>
+
+    <div class="question"><strong>11. How to add a repository from Nginx?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add nginx-stable https://helm.nginx.com/stable</code></pre>
+    </div>
+    
+
+    <div class="question"><strong>12. How to add a repository from Bitnami?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add bitnami https://charts.bitnami.com/bitnami</code></pre>
+    </div>  
+
+    <div class="question"><strong>13. How to search a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm search repo &lt;keyword&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>14. How to search a repository with versions?</strong></div>
+    <div class="answer">
+        <pre><code>helm search repo &lt;keyword&gt; --versions</code></pre>
+    </div>
+
+    <div class="question"><strong>15. How to search a repository on Artifact Hub?</strong></div>
+    <div class="answer">
+        <pre><code>helm search hub &lt;keyword&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>16. How to search a repository on Artifact Hub with versions?</strong></div>
+    <div class="answer">
+        <pre><code>helm search hub &lt;keyword&gt; --versions</code></pre>
+    </div>  
+
+    <div class="question"><strong>17. How to add a repository from Artifact Hub?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add artifact-hub https://artifacthub.github.io/helm-charts</code></pre>
+    </div>
+
+    <div class="question"><strong>18. How to add a repository from Nginx?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add nginx-stable https://helm.nginx.com/stable</code></pre>
+    </div>
+
+    <div class="question"><strong>19. How to add a repository from Bitnami?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add bitnami https://charts.bitnami.com/bitnami</code></pre>
+    </div>  
+</body>
+</html>

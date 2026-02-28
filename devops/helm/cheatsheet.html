@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm CLI Quick Reference</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm CLI Quick Reference</h2>
+    </div>
+
+    <div class="question"><strong>1. Release Management</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt;</code></td><td>Install a chart as a new release</td></tr>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt; -n &lt;ns&gt; --create-namespace</code></td><td>Install into a specific namespace, create it if missing</td></tr>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt; -f values.yaml</code></td><td>Install with a custom values file</td></tr>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt; --set key=val</code></td><td>Install with inline value overrides</td></tr>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt; --dry-run --debug</code></td><td>Simulate an install without deploying (preview rendered YAML)</td></tr>
+                <tr><td><code>helm upgrade &lt;name&gt; &lt;chart&gt;</code></td><td>Upgrade an existing release to a new chart version or values</td></tr>
+                <tr><td><code>helm upgrade --install &lt;name&gt; &lt;chart&gt;</code></td><td>Upgrade if exists, install if not (idempotent — great for CI/CD)</td></tr>
+                <tr><td><code>helm upgrade &lt;name&gt; &lt;chart&gt; --reuse-values</code></td><td>Upgrade keeping previously set values</td></tr>
+                <tr><td><code>helm rollback &lt;name&gt; &lt;revision&gt;</code></td><td>Roll back a release to a specific revision</td></tr>
+                <tr><td><code>helm uninstall &lt;name&gt;</code></td><td>Delete a release and all its resources</td></tr>
+                <tr><td><code>helm uninstall &lt;name&gt; --keep-history</code></td><td>Delete resources but keep release history for auditing</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Inspecting Releases</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm list</code></td><td>List all releases in the current namespace</td></tr>
+                <tr><td><code>helm list --all-namespaces</code></td><td>List releases across all namespaces</td></tr>
+                <tr><td><code>helm list --filter &lt;regex&gt;</code></td><td>Filter releases by name pattern</td></tr>
+                <tr><td><code>helm status &lt;name&gt;</code></td><td>Show status of a release (deployed resources, notes)</td></tr>
+                <tr><td><code>helm history &lt;name&gt;</code></td><td>Show revision history of a release</td></tr>
+                <tr><td><code>helm get values &lt;name&gt;</code></td><td>Show user-supplied values for a release</td></tr>
+                <tr><td><code>helm get values &lt;name&gt; --all</code></td><td>Show all values (defaults + overrides) for a release</td></tr>
+                <tr><td><code>helm get values &lt;name&gt; --revision &lt;n&gt;</code></td><td>Show values from a specific revision</td></tr>
+                <tr><td><code>helm get manifest &lt;name&gt;</code></td><td>Show the rendered Kubernetes YAML for a release</td></tr>
+                <tr><td><code>helm get notes &lt;name&gt;</code></td><td>Show post-install notes for a release</td></tr>
+                <tr><td><code>helm get all &lt;name&gt;</code></td><td>Show all information (values, manifest, notes, hooks)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Chart Repositories</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm repo add &lt;name&gt; &lt;url&gt;</code></td><td>Add a repository</td></tr>
+                <tr><td><code>helm repo update</code></td><td>Refresh local cache of all repository indexes</td></tr>
+                <tr><td><code>helm repo list</code></td><td>List configured repositories</td></tr>
+                <tr><td><code>helm repo remove &lt;name&gt;</code></td><td>Remove a repository</td></tr>
+                <tr><td><code>helm search repo &lt;keyword&gt;</code></td><td>Search charts across all added repos</td></tr>
+                <tr><td><code>helm search repo &lt;keyword&gt; --versions</code></td><td>Show all available versions of matching charts</td></tr>
+                <tr><td><code>helm search hub &lt;keyword&gt;</code></td><td>Search Artifact Hub (public chart registry)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Chart Development</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm create &lt;name&gt;</code></td><td>Scaffold a new chart directory with boilerplate files</td></tr>
+                <tr><td><code>helm template &lt;name&gt; &lt;chart&gt;</code></td><td>Render templates locally without connecting to a cluster</td></tr>
+                <tr><td><code>helm template &lt;name&gt; &lt;chart&gt; -f values.yaml</code></td><td>Render templates with custom values</td></tr>
+                <tr><td><code>helm lint &lt;chart&gt;</code></td><td>Check a chart for issues and best-practice violations</td></tr>
+                <tr><td><code>helm package &lt;chart&gt;</code></td><td>Package a chart directory into a <code>.tgz</code> archive</td></tr>
+                <tr><td><code>helm show chart &lt;chart&gt;</code></td><td>Display the <code>Chart.yaml</code> metadata</td></tr>
+                <tr><td><code>helm show values &lt;chart&gt;</code></td><td>Display the default <code>values.yaml</code> of a chart</td></tr>
+                <tr><td><code>helm show readme &lt;chart&gt;</code></td><td>Display the chart's README</td></tr>
+                <tr><td><code>helm show all &lt;chart&gt;</code></td><td>Display all chart info (chart + values + readme)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Dependencies</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm dependency list &lt;chart&gt;</code></td><td>List dependencies declared in <code>Chart.yaml</code></td></tr>
+                <tr><td><code>helm dependency update &lt;chart&gt;</code></td><td>Download and update dependencies into <code>charts/</code></td></tr>
+                <tr><td><code>helm dependency build &lt;chart&gt;</code></td><td>Rebuild <code>charts/</code> from <code>Chart.lock</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>6. Plugins</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm plugin list</code></td><td>List installed plugins</td></tr>
+                <tr><td><code>helm plugin install &lt;url&gt;</code></td><td>Install a plugin from a URL or path</td></tr>
+                <tr><td><code>helm plugin update &lt;name&gt;</code></td><td>Update an installed plugin</td></tr>
+                <tr><td><code>helm plugin uninstall &lt;name&gt;</code></td><td>Remove a plugin</td></tr>
+            </tbody>
+        </table>
+        <p><strong>Popular plugins:</strong></p>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Plugin</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm-diff</code></td><td>Preview changes before <code>helm upgrade</code></td></tr>
+                <tr><td><code>helm-secrets</code></td><td>Encrypt/decrypt values files (SOPS integration)</td></tr>
+                <tr><td><code>helm-unittest</code></td><td>Unit testing for chart templates</td></tr>
+                <tr><td><code>helm-s3</code></td><td>Use S3 buckets as chart repositories</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. OCI Registries</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm registry login &lt;host&gt;</code></td><td>Authenticate to an OCI registry</td></tr>
+                <tr><td><code>helm registry logout &lt;host&gt;</code></td><td>Log out from an OCI registry</td></tr>
+                <tr><td><code>helm push &lt;chart.tgz&gt; oci://&lt;registry&gt;</code></td><td>Push a packaged chart to an OCI registry</td></tr>
+                <tr><td><code>helm pull oci://&lt;registry&gt;/&lt;chart&gt; --version &lt;v&gt;</code></td><td>Download a chart from an OCI registry</td></tr>
+                <tr><td><code>helm install &lt;name&gt; oci://&lt;registry&gt;/&lt;chart&gt;</code></td><td>Install directly from an OCI registry</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>8. Cluster &amp; Environment</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command / Flag</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm env</code></td><td>Show Helm environment variables and paths</td></tr>
+                <tr><td><code>helm version</code></td><td>Show Helm client version</td></tr>
+                <tr><td><code>--kubeconfig &lt;path&gt;</code></td><td>Use a specific kubeconfig file</td></tr>
+                <tr><td><code>--kube-context &lt;name&gt;</code></td><td>Target a specific kubeconfig context</td></tr>
+                <tr><td><code>-n &lt;namespace&gt;</code></td><td>Target a specific namespace</td></tr>
+                <tr><td><code>--debug</code></td><td>Enable verbose output for troubleshooting</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>9. Testing &amp; Debugging</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm install &lt;name&gt; &lt;chart&gt; --dry-run</code></td><td>Render and validate against cluster without deploying</td></tr>
+                <tr><td><code>helm template &lt;name&gt; &lt;chart&gt;</code></td><td>Render locally (no cluster needed)</td></tr>
+                <tr><td><code>helm lint &lt;chart&gt;</code></td><td>Static analysis for chart errors and warnings</td></tr>
+                <tr><td><code>helm test &lt;name&gt;</code></td><td>Run test pods defined in the chart's <code>templates/tests/</code></td></tr>
+                <tr><td><code>helm get manifest &lt;name&gt;</code></td><td>See exactly what YAML was applied to the cluster</td></tr>
+                <tr><td><code>helm diff upgrade &lt;name&gt; &lt;chart&gt;</code></td><td>Preview what will change on upgrade (requires helm-diff plugin)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
