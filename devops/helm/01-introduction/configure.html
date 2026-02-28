@@ -242,36 +242,6 @@ kubectl get pods
 helm uninstall test-nginx</code></pre>
     </div>
 
-    <div class="question"><strong>12. Troubleshooting Connectivity</strong></div>
-    <div class="answer">
-        <p><strong>Issue: Kubernetes cluster unreachable</strong></p>
-        <ul>
-            <li>Verify kubectl works first: <code>kubectl cluster-info</code>;</li>
-            <li>Check that the correct context is active: <code>kubectl config current-context</code>;</li>
-            <li>Ensure credentials haven't expired (common with EKS/GKE tokens);</li>
-        </ul>
-
-        <p><strong>Issue: Unauthorized or Forbidden errors</strong></p>
-        <ul>
-            <li>Confirm your user/service account has the right RBAC roles;</li>
-            <li>Re-authenticate: <code>aws eks update-kubeconfig</code> or <code>gcloud container clusters get-credentials</code>;</li>
-            <li>Check token expiry: <code>kubectl auth can-i list pods</code>;</li>
-        </ul>
-
-        <p><strong>Issue: Wrong cluster targeted</strong></p>
-        <ul>
-            <li>Always verify before deploying: <code>kubectl config current-context</code>;</li>
-            <li>Use <code>--kube-context</code> explicitly in scripts to avoid mistakes;</li>
-            <li>Consider setting <code>HELM_KUBECONTEXT</code> in project-specific <code>.envrc</code> files (with direnv);</li>
-        </ul>
-
-        <p><strong>Issue: TLS certificate errors</strong></p>
-        <ul>
-            <li>Supply the CA certificate: <code>--kube-ca-file /path/to/ca.crt</code>;</li>
-            <li>For testing only: <code>--kube-insecure-skip-tls-verify</code> (never use in production);</li>
-        </ul>
-    </div>
-
 </body>
 
 </html>
