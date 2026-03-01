@@ -8,81 +8,108 @@
 
 <body>
     <div class="main-grid-item-1 grid-wide-column">
-        <h2>Configuring Helm CLI with a Kubernetes Cluster</h2>
+        <h2>Configuring Helm CLI with a k8s cluster</h2>
     </div>
 
-    <div class="question"><strong>1. How Helm Connects to Kubernetes</strong></div>
+    <div class="question"><strong>1. How Helm knows about k8s cluster?</strong></div>
     <div class="answer">
-        <p>Helm uses the same configuration as <code>kubectl</code>. It reads the <strong>kubeconfig</strong> file to
-            determine which cluster to talk to. By default, this file lives at <code>~/.kube/config</code>.</p>
-        <p>If <code>kubectl</code> can reach your cluster, Helm can too — no extra setup is needed.</p>
-        <pre><code># Confirm kubectl connectivity first
-kubectl cluster-info
-kubectl get nodes</code></pre>
+        <ul>
+            <li>Helm doesn't manager clusters by itselfl; It rather uses kubectl context(same cluster as kubectl is talking to);</li>
+            <li>If <code>kubectl</code> can reach your cluster, Helm can too — no extra setup is needed.</li>
+        </ul>
     </div>
 
-    <div class="question"><strong>2. Using the Default Kubeconfig</strong></div>
+    <div class="question"><strong>2. What is Context?</strong></div>
     <div class="answer">
-        <p>Most Kubernetes tools (minikube, kind, EKS, GKE, AKS) automatically write a context into
-            <code>~/.kube/config</code> when you create or authenticate to a cluster.</p>
-        <pre><code># View current kubeconfig
-kubectl config view
+        <ul>
+            <li>It defines the cluster, user/credentials and default namespace to use;</li>
+            <li>Think of it as a profile for kubectl to talk to a specific cluster;</li>
+            <li>
+                <pre><code>
+> kubectl config get-contexts  # List all contexts
+CURRENT   NAME              CLUSTER           AUTHINFO        NAMESPACE
+*         dev-cluster       dev-cluster       dev-user        default
+          prod-cluster      prod-cluster      prod-user       production
 
-# See the active context (this is what Helm will use)
-kubectl config current-context
-
-# List all available contexts
-kubectl config get-contexts</code></pre>
-        <p>If the correct context is active, Helm is already configured:</p>
-        <pre><code># This will use the current kubectl context
-helm list</code></pre>
+| Column      | Meaning                      |
+| ----------- | ---------------------------- |
+| `CURRENT`   | `*` shows the active context |
+| `NAME`      | Context name                 |
+| `CLUSTER`   | Kubernetes cluster name      |
+| `AUTHINFO`  | User credentials used        |
+| `NAMESPACE` | Default namespace            |
+                </code></pre>
+            </li>
+        </ul>
     </div>
 
-    <div class="question"><strong>3. Switching Between Clusters (Contexts)</strong></div>
+    <div class="question"><strong>3. What is kube config file?</strong></div>
     <div class="answer">
-        <p>When you have multiple clusters configured, switch between them using <code>kubectl config use-context</code>.
-            Helm will automatically follow the active context.</p>
-        <pre><code># List contexts
-kubectl config get-contexts
+        <ul>
+            <li>It is a YAML file that stores information about clusters, users, and contexts;</li>
+            <li>Kubectl loads config in this order:
+                <ul>
+                    <li><code>--kubeconfig</code> flag (highest priority)</li>
+                    <li><code>KUBECONFIG</code> environment variable</li>
+                    <li>Default <code>~/.kube/config</code></li>
+                </ul>
+            </li>
+            <li>KUBECONFIG is an environment variable that points to the kubeconfig file;</li>
+            <li>It can be set to a single file or a comma-separated list of files; Eg: <code>export KUBECONFIG=~/.kube/dev-config:~/.kube/prod-config</code></li>
+            <li>If KUBECONFIG is not set, Kubernetes uses the default ~/.kube/config</li>
+            <li>It is used by kubectl and Helm to determine which cluster to talk to;</li>
+            <li>It is also used to store authentication credentials for different clusters;</li>
+            <li>It is also used to store default namespace to use for a context;</li>
+            <li>It is also used to store the current active context;</li>
+            <li>Structure of kube config file:
+                <pre><code>
+apiVersion: v1
+kind: Config
+clusters:
+- name: dev-cluster
+  cluster:
+    server: https://1.2.3.4
+    certificate-authority-data: LS0tLS1CRUdJTi...
 
-# CURRENT   NAME              CLUSTER           AUTHINFO          NAMESPACE
-# *         docker-desktop    docker-desktop    docker-desktop
-#           minikube          minikube          minikube
-#           eks-production    eks-production    eks-admin
+users:
+- name: dev-user
+  user:
+    client-certificate-data: LS0tLS1CRUdJTi...
+    client-key-data: LS0tLS1CRUdJTi...
 
-# Switch to a different cluster
-kubectl config use-context minikube
+contexts:
+- name: dev-context
+  context:
+    cluster: dev-cluster
+    user: dev-user
+    namespace: default
 
-# Helm now targets minikube
-helm list</code></pre>
+current-context: dev-context
+                </code></pre>
+            </li>
+        </ul>
     </div>
 
-    <div class="question"><strong>4. Pointing Helm to a Specific Kubeconfig File</strong></div>
+    <div class="question"><strong>2. Commands to manage k8s cluster(contexts)</strong></div>
     <div class="answer">
-        <p>If your cluster config lives outside <code>~/.kube/config</code>, tell Helm where to find it with the
-            <code>--kubeconfig</code> flag or the <code>KUBECONFIG</code> environment variable.</p>
-
-        <p><strong>Using the --kubeconfig flag:</strong></p>
-        <pre><code>helm list --kubeconfig /path/to/custom-kubeconfig.yaml
-helm install myapp ./chart --kubeconfig /path/to/custom-kubeconfig.yaml</code></pre>
-
-        <p><strong>Using the KUBECONFIG environment variable:</strong></p>
-        <pre><code># Set for the current shell session
-export KUBECONFIG=/path/to/custom-kubeconfig.yaml
-
-# Helm and kubectl both respect this
-helm list
-kubectl get pods</code></pre>
-
-        <p><strong>Merging multiple kubeconfig files:</strong></p>
-        <pre><code># Combine multiple kubeconfig files into one view
-export KUBECONFIG=~/.kube/config:/path/to/cluster2-config:/path/to/cluster3-config
-
-# All contexts from all files are now available
-kubectl config get-contexts
-helm list</code></pre>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl config view</code></td><td>Displays the current kubeconfig file;</td></tr>
+                <tr><td><code>kubectl config view --raw</code></td><td>Displays the current kubeconfig file in raw format;</td></tr>
+                <tr><td><code>kubectl config get-contexts</code></td><td>Lists all contexts as per your kubeconfig file;</td></tr>
+                <tr><td><code>kubectl config current-context</code></td><td>Displays the current active context;</td></tr>
+                <tr><td><code>kubectl config use-context &lt;context-name&gt;</code></td><td>Switches the active context to the specified context; All kubectl/helm commands will use this context;</td></tr>
+                <tr><td><code>kubectl config set-context &lt;context-name&gt; --cluster=dev-cluster -user=dev-user --namespace=dev</code></td><td>It creates or modifies a context definition in the kubeconfig file; It doesn't switch the context;</td></tr>
+                <tr><td><code>kubectl config rename-context &lt;old-name&gt; &lt;new-name&gt;</code></td><td>Renames the specified context;</td></tr>
+                <tr><td><code>kubectl config delete-context &lt;context-name&gt;</code></td><td>Deletes the specified context;</td></tr>
+                <tr><td><code>kubectl cluster-info</code></td><td>It displays information about k8s control plane and core services running on it;</td></tr>
+            </tbody>
+        </table>
     </div>
-
+                 
     <div class="question"><strong>5. Targeting a Specific Context Without Switching</strong></div>
     <div class="answer">
         <p>Use the <code>--kube-context</code> flag to run a single Helm command against a specific context without

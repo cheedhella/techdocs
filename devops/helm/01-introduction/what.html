@@ -2,11 +2,15 @@
 <html lang="en">
 
 <head>
-    <title>What is Helm?</title>
+    <title>What and Why?</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
 </head>
 
 <body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What and Why?</h2>
+    </div>
+
     <div class="question"><strong>1. What is Helm?</strong></div>
     <div class="answer">
         <ul>
@@ -27,24 +31,24 @@
     <div class="question"><strong>3. What are the other benefits of Helm?</strong></div>
     <div class="answer">
         <ul>
-            <li>Parameterized YAML files
+            <li><b>Parameterized YAML files</b>
                 <ul>
                     <li>You can parameterize k8s resource files, which can be reused across many applications, thus reducing maintanance burden;</li>
                     <li>This makes it easy to deploy the same application with different configurations in different environments such as development, staging and production; You can override the default values in the values.yaml file;</li>
                 </ul>
             </li>
-            <li>Manage entire lifecycle of an application
+            <li><b>Manage entire lifecycle of an application</b>
                 <ul>
                     <li>You can install/upgrade/uninstall the application using a single command;</li>
                 </ul>
             </li>
-            <li>Keep track of history
+            <li><b>Keep track of history</b>
                 <ul>
                     <li>You can rollback to any state at any point in time;</li>
                     <li>Without Helm, there is no way to track version of the application deployed in the cluster; To rollback, you have to manually revert the changes made to the multiple YAML files; </li>
                 </ul>
             </li>
-            <li>Out-of-box charts are available for many applications
+            <li><b>Out-of-box charts</b>
                 <ul>
                     <li>Artifact Hub has free to use charts for many applications, so there is no need to build solutions from scratch;</li>
                 </ul>
@@ -77,14 +81,10 @@
             <li><b>Release</b>
                 <ul>
                     <li>It is an instance of a chart deployed to a k8s cluster;</li>
-                    <li>It is created when you install a chart;</li>
                     <li>It is identified by a unique name and version;</li>
                     <li>It is stored in the k8s cluster as a secret;</li>
-                    <li>It is used to track the history of the chart deployments;</li>
-                    <li>It is used to rollback to a previous version of the chart;</li>
-                    <li>It is used to upgrade the chart to a new version;</li>
-                    <li>It is used to uninstall the chart;</li>
-                    <li>It is used to get the status of the chart;</li>
+                    <li>Information in secret is used to track the history of the deployments;</li>
+                    <li>It is also used to rollback to a previous version of the chart;</li>
                 </ul>
             </li>
             <li><b>Repository</b>
@@ -92,15 +92,6 @@
                     <li>It is a artifact server which hosts a collection of charts/packages;</li>
                     <li>You can use it manage(store, get, list, update, remove) charts;</li>
                     <li>It is also used to share charts with others;</li>
-                </ul>
-            </li>
-            <li><b>Secrets</b></li>
-                <ul>
-                    <li>It is a storage for secrets;</li>
-                    <li>It is used to store and manage secrets;</li>
-                    <li>It is used to share secrets with others;</li>
-                    <li>It is used to get secrets from remote repositories;</li>
-                    <li>It is used to add remote repositories;</li>
                 </ul>
             </li>
             <li><b>Helm CLI</b>

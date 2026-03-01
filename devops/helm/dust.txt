@@ -61,3 +61,6 @@ The parent chart
 All subcharts in charts/
 
 As one release.
+
+
+https://bsg-confluence.broadcom.net/spaces/~nb892892/pages/928243908/SSP+K8s+single+node+cluster
