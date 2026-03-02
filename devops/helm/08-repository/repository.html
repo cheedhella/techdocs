@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm Repository</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm Repository</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Helm Repository?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a simple HTTP server (like Docker Registry, Maven repository) that hosts a collection of packaged charts (.tgz files);</li>
+            <li>It will have an <code>index.yaml</code> file, which contains metadata about all the charts it hosts;</li>
+            <li>You can use it to manage (store, get, list, update, remove) charts;</li>
+            <li>It is used to share charts with other developers;</li>
+            <li>Helm doesn't come with any repositories added during installation;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Popular Public Repositories</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add artifact-hub https://artifacthub.github.io/helm-charts    # Artifact Hub — by far, the biggest helm repository
+helm repo add nginx-stable https://helm.nginx.com/stable                # Nginx
+helm repo add bitnami https://charts.bitnami.com/bitnami                # Bitnami</code></pre>
+    </div>
+
+    <div class="question"><strong>3. How to add a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add &lt;name&gt; &lt;url&gt;</code></pre>
+        <ul>
+            <li>It adds the repository to your local Helm CLI configuration (<code>~/.config/helm/repositories.yaml</code>);</li>
+            <li>It does NOT download any charts — only registers the URL;</li>
+        </ul>
+        <pre><code># ~/.config/helm/repositories.yaml
+apiVersion: ""
+generated: "2026-02-28T10:12:34.567Z"
+repositories:
+  - name: bitnami
+    url: https://charts.bitnami.com/bitnami
+    cache: bitnami-index.yaml
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+    cache: prometheus-community-index.yaml</code></pre>
+    </div>
+
+    <div class="question"><strong>4. How to list repositories?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo list</code></pre>
+    </div>
+
+    <div class="question"><strong>5. How to update a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo update &lt;name&gt;       # Update a specific repository
+helm repo update              # Update all repositories</code></pre>
+        <ul>
+            <li>It fetches the latest <code>index.yaml</code> for the specified repository and updates the local cache (<code>~/.cache/helm/repository/</code>);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. What is index.yaml?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is the registry/manifest of a repository — it tells Helm what charts exist, which versions are available, and where to download them;</li>
+            <li>It is cached locally at <code>~/.cache/helm/repository/&lt;repo-name&gt;-index.yaml</code>;</li>
+            <li><code>helm search</code> uses this file to find charts;</li>
+        </ul>
+        <pre><code># ~/.cache/helm/repository/bitnami-index.yaml
+apiVersion: v1
+generated: "2026-02-28T10:45:00Z"
+entries:
+  nginx:
+    - version: 15.2.3
+      appVersion: 1.25.3
+      description: NGINX Open Source web server
+      urls:
+        - https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz
+      digest: sha256:abc123xyz456
+      created: "2026-02-01T12:00:00Z"
+
+    - version: 15.2.2
+      appVersion: 1.25.2
+      description: NGINX Open Source web server
+      urls:
+        - https://charts.bitnami.com/bitnami/nginx-15.2.2.tgz
+      digest: sha256:def456uvw789
+      created: "2026-01-20T12:00:00Z"
+
+  redis:
+    - version: 18.0.0
+      appVersion: 7.2.1
+      description: Redis in-memory database
+      urls:
+        - https://charts.bitnami.com/bitnami/redis-18.0.0.tgz
+      digest: sha256:xyz789abc123</code></pre>
+    </div>
+
+    <div class="question"><strong>7. Does helm install download index.yaml if it can't find it?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>No. <code>helm install</code> does NOT automatically download <code>index.yaml</code> if it's missing or outdated;</li>
+            <li>If <code>index.yaml</code> is missing (i.e., <code>helm repo update</code> was never run), it will throw: <code>Error: chart "nginx" matching not found in bitnami index</code>;</li>
+        </ul>
+        <p>The flow is:</p>
+        <pre><code>helm repo add       → stores repo URL in repositories.yaml
+helm repo update    → downloads index.yaml to local cache
+helm search repo    → searches inside cached index.yaml
+helm install        → reads index.yaml → downloads the .tgz chart</code></pre>
+        <p>Exception — installing via direct URL does NOT need index.yaml:</p>
+        <pre><code>helm install myapp https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz</code></pre>
+    </div>
+
+    <div class="question"><strong>8. How to remove a repository?</strong></div>
+    <div class="answer">
+        <pre><code>helm repo remove &lt;name&gt;</code></pre>
+    </div>
+
+    <div class="question"><strong>9. How to search repositories?</strong></div>
+    <div class="answer">
+        <pre><code>helm search repo &lt;keyword&gt;                  # Latest stable version of matching charts
+helm search repo &lt;keyword&gt; --devel          # Latest version (incl. alpha/beta/rc)
+helm search repo &lt;keyword&gt; --versions       # All versions of matching charts
+helm search repo &lt;keyword&gt; --version ^1.0.0 # Charts matching major version 1</code></pre>
+    </div>
+
+    <div class="question"><strong>10. How to search Artifact Hub?</strong></div>
+    <div class="answer">
+        <pre><code>helm search hub &lt;keyword&gt;              # Search Artifact Hub
+helm search hub &lt;keyword&gt; --versions   # With all versions</code></pre>
+    </div>
+
+    <div class="question"><strong>11. Packaging a Chart</strong></div>
+    <div class="answer">
+        <pre><code>helm package ./mychart                     # Creates mychart-0.1.0.tgz in current directory
+helm package ./mychart -d /path/to/repo/   # Package and place in a specific directory</code></pre>
+    </div>
+
+    <div class="question"><strong>12. Generating index.yaml</strong></div>
+    <div class="answer">
+        <pre><code>helm repo index &lt;dir&gt;</code></pre>
+        <ul>
+            <li>Every repository must have a valid <code>index.yaml</code>;</li>
+            <li>This command reads the given directory and generates an <code>index.yaml</code> with metadata for all the charts found;</li>
+            <li>Useful when setting up your own repository;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>13. Creating &amp; Hosting a Local Repository</strong></div>
+    <div class="answer">
+        <p><strong>Step 1:</strong> Create a directory for the repository</p>
+        <pre><code>mkdir testrepo && cd testrepo</code></pre>
+        <p><strong>Step 2:</strong> Generate an initial index.yaml</p>
+        <pre><code>helm repo index .</code></pre>
+        <p><strong>Step 3:</strong> Package a chart into the repository directory</p>
+        <pre><code>helm package ../firstchart -d .
+# Successfully packaged chart and saved it to: ./firstchart-0.1.0.tgz</code></pre>
+        <p><strong>Step 4:</strong> Regenerate index.yaml to include the new chart</p>
+        <pre><code>helm repo index .</code></pre>
+        <p><strong>Step 5:</strong> Host it using a simple HTTP server</p>
+        <pre><code>python3 -m http.server --bind 127.0.0.1 8080</code></pre>
+        <p><strong>Step 6:</strong> Add and use the local repository</p>
+        <pre><code>helm repo add localrepo http://127.0.0.1:8080
+helm repo update localrepo
+
+# Install from local repo
+helm install mylocal01 localrepo/firstchart
+
+# Or download first, then install
+helm pull localrepo/firstchart
+helm install mylocal02 firstchart*.tgz</code></pre>
+    </div>
+
+    <div class="question"><strong>14. Publishing Charts to a Remote Repository</strong></div>
+    <div class="answer">
+        <ul>
+            <li>For traditional HTTP repositories (e.g., GitHub Pages, ChartMuseum, Nexus), you upload the <code>.tgz</code> file and regenerate <code>index.yaml</code>;</li>
+            <li>For OCI registries (e.g., Docker Hub, AWS ECR, GCR), use <code>helm push</code> — see the <a href="oci-registry.html">OCI Registry</a> page;</li>
+        </ul>
+        <p>Example using GitHub Pages:</p>
+        <pre><code># Package the chart
+helm package ./mychart
+
+# Copy .tgz into your gh-pages branch directory
+cp mychart-0.1.0.tgz /path/to/gh-pages-repo/
+
+# Regenerate index.yaml (--url specifies the public URL)
+helm repo index /path/to/gh-pages-repo/ --url https://&lt;username&gt;.github.io/&lt;repo&gt;
+
+# Commit and push the gh-pages branch
+cd /path/to/gh-pages-repo/
+git add . && git commit -m "Add mychart 0.1.0" && git push</code></pre>
+    </div>
+
+    <div class="question"><strong>15. Quick Reference</strong></div>
+    <div class="answer">
+        <pre><code>helm repo add &lt;name&gt; &lt;url&gt;           # Add a repository
+helm repo list                       # List all configured repositories
+helm repo update &lt;name&gt;              # Fetch latest index.yaml for a repository
+helm repo update                     # Fetch latest index.yaml for all repositories
+helm repo remove &lt;name&gt;              # Remove a repository
+helm repo index &lt;dir&gt;                # Generate index.yaml for a chart directory
+
+helm search repo &lt;keyword&gt;           # Search across configured repositories
+helm search hub &lt;keyword&gt;            # Search Artifact Hub
+
+helm package ./mychart               # Package a chart into a .tgz
+helm push mychart-1.0.0.tgz &lt;repo&gt;  # Push to OCI registry (see OCI Registry page)</code></pre>
+    </div>
+
+</body>
+</html>
