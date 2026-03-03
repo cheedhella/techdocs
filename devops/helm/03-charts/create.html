@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Creating a Chart</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Creating a Chart</h2>
+    </div>
+
+    <div class="question"><strong>1. helm create — Scaffold a New Chart</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code>helm create &lt;chart-name&gt;</code></pre>
+            </li>
+            <li>Generates a chart directory with the standard structure and commonly used files;</li>
+            <li>The default scaffold deploys an Nginx application with Deployment, Service, ServiceAccount, Ingress, and HPA;</li>
+            <li>
+<pre><code>&gt; helm create hello-world
+Creating hello-world
+
+&gt; ls -a hello-world/
+.helmignore  Chart.yaml  charts/  templates/  values.yaml
+
+&gt; ls hello-world/templates/
+NOTES.txt  _helpers.tpl  deployment.yaml  hpa.yaml  ingress.yaml  service.yaml  serviceaccount.yaml  tests/</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Understanding the Generated Files</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Chart.yaml</b> — contains chart metadata:
+<pre><code>apiVersion: v2
+name: hello-world
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.16.0"</code></pre>
+            </li>
+            <li><b>values.yaml</b> — default configuration. Templates reference these values via <code>{{ .Values.&lt;key&gt; }}</code>:
+<pre><code>replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""            # When empty, defaults to appVersion in Chart.yaml
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80</code></pre>
+            </li>
+            <li><b>image.tag</b> — when left empty, the deployment template defaults to <code>.Chart.AppVersion</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Customizing the Chart — Example: Deploy a Custom App</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Say you have a Docker image <code>myuser/myapp:2.0.0</code> on Docker Hub. Edit the generated chart:</li>
+            <li><b>Step 1:</b> Update Chart.yaml
+<pre><code>apiVersion: v2
+name: myapp
+description: My custom application chart
+type: application
+version: 0.1.0
+appVersion: "2.0.0"</code></pre>
+            </li>
+            <li><b>Step 2:</b> Update values.yaml
+<pre><code>replicaCount: 2
+
+image:
+  repository: myuser/myapp
+  pullPolicy: IfNotPresent
+  tag: "2.0.0"
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: myapp.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi</code></pre>
+            </li>
+            <li><b>Step 3:</b> Customize templates as needed (e.g., add a ConfigMap, adjust health checks in deployment.yaml);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Validating the Chart</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># Lint the chart — checks for errors and best practices
+helm lint ./myapp
+
+# Render templates locally without installing (dry run)
+helm template myrelease ./myapp
+
+# Render with custom values
+helm template myrelease ./myapp -f production-values.yaml
+
+# Dry run against the cluster (validates against k8s API server)
+helm install myrelease ./myapp --dry-run --debug</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Packaging the Chart</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># Package the chart into a .tgz file
+helm package ./myapp
+# Successfully packaged chart and saved it to: /current/dir/myapp-0.1.0.tgz
+
+# Package to a specific directory
+helm package ./myapp -d /path/to/output/
+
+# Package with a different app version
+helm package ./myapp --app-version 2.1.0
+
+# Package with a different chart version
+helm package ./myapp --version 1.0.0</code></pre>
+            </li>
+            <li>The output file name follows the format: <code>&lt;chart-name&gt;-&lt;chart-version&gt;.tgz</code>;</li>
+            <li>Files matching patterns in <code>.helmignore</code> are excluded;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Pushing to Docker Hub (OCI Registry)</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Step 1:</b> Login to Docker Hub
+<pre><code>helm registry login registry-1.docker.io
+# Username: myuser
+# Password: ****</code></pre>
+            </li>
+            <li><b>Step 2:</b> Package the chart (if not already)
+<pre><code>helm package ./myapp
+# myapp-0.1.0.tgz</code></pre>
+            </li>
+            <li><b>Step 3:</b> Push to Docker Hub
+<pre><code>helm push myapp-0.1.0.tgz oci://registry-1.docker.io/myuser</code></pre>
+            </li>
+            <li>The chart will be stored at: <code>oci://registry-1.docker.io/myuser/myapp</code> with tag <code>0.1.0</code>;</li>
+            <li>The chart name comes from <code>Chart.yaml</code>, the tag comes from the chart version;</li>
+            <li>You only specify the namespace in the URL, NOT the chart name or version;</li>
+            <li><b>Step 4:</b> Verify it was pushed
+<pre><code># Pull it back to verify
+helm pull oci://registry-1.docker.io/myuser/myapp --version 0.1.0
+
+# Show chart info from registry
+helm show chart oci://registry-1.docker.io/myuser/myapp --version 0.1.0</code></pre>
+            </li>
+            <li><b>Step 5:</b> Others can now install your chart
+<pre><code>helm install myrelease oci://registry-1.docker.io/myuser/myapp --version 0.1.0</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Pushing to Other OCI Registries</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># AWS ECR
+aws ecr get-login-password --region us-east-1 | helm registry login \
+  --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
+helm push myapp-0.1.0.tgz oci://123456789.dkr.ecr.us-east-1.amazonaws.com
+
+# GitHub Container Registry (GHCR)
+echo $GITHUB_TOKEN | helm registry login ghcr.io --username myuser --password-stdin
+helm push myapp-0.1.0.tgz oci://ghcr.io/myuser
+
+# Azure ACR
+helm registry login myregistry.azurecr.io --username myuser --password mypass
+helm push myapp-0.1.0.tgz oci://myregistry.azurecr.io/charts
+
+# Google Artifact Registry
+gcloud auth print-access-token | helm registry login \
+  -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+helm push myapp-0.1.0.tgz oci://us-central1-docker.pkg.dev/myproject/myrepo</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Pushing New Versions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you update your chart, increment the version and push again:</li>
+            <li><b>Step 1:</b> Update <code>Chart.yaml</code> version
+<pre><code>version: 0.2.0        # bumped from 0.1.0
+appVersion: "2.1.0"   # updated app version</code></pre>
+            </li>
+            <li><b>Step 2:</b> Package and push
+<pre><code>helm package ./myapp
+# myapp-0.2.0.tgz
+
+helm push myapp-0.2.0.tgz oci://registry-1.docker.io/myuser</code></pre>
+            </li>
+            <li>Both versions (0.1.0 and 0.2.0) now exist in the registry as separate tags;</li>
+            <li>Users can install any specific version using <code>--version</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Complete Workflow — From Scratch to Docker Hub</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># 1. Create the chart
+helm create myapp
+
+# 2. Customize Chart.yaml, values.yaml, and templates
+#    (edit files as needed)
+
+# 3. Lint and validate
+helm lint ./myapp
+helm template myrelease ./myapp
+
+# 4. Test locally (install on local cluster)
+helm install myrelease ./myapp
+helm test myrelease
+
+# 5. Package
+helm package ./myapp
+
+# 6. Login and push to Docker Hub
+helm registry login registry-1.docker.io
+helm push myapp-0.1.0.tgz oci://registry-1.docker.io/myuser
+
+# 7. Verify
+helm show chart oci://registry-1.docker.io/myuser/myapp --version 0.1.0
+
+# 8. Logout
+helm registry logout registry-1.docker.io</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Quick Reference</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code>helm create &lt;name&gt;                              # Scaffold a new chart
+helm lint &lt;chart-dir&gt;                            # Validate chart structure and syntax
+helm template &lt;release&gt; &lt;chart-dir&gt;              # Render templates locally
+helm install &lt;release&gt; &lt;chart-dir&gt; --dry-run     # Validate against k8s API
+helm package &lt;chart-dir&gt;                         # Package into .tgz
+helm package &lt;chart-dir&gt; -d &lt;output-dir&gt;         # Package to specific directory
+helm package &lt;chart-dir&gt; --app-version &lt;ver&gt;     # Override appVersion during packaging
+helm registry login &lt;registry&gt;                   # Authenticate to OCI registry
+helm push &lt;tgz&gt; oci://&lt;registry&gt;/&lt;namespace&gt;    # Push chart to OCI registry
+helm registry logout &lt;registry&gt;                  # Logout from OCI registry</code></pre>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>
