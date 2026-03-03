@@ -31,7 +31,7 @@
     <div class="question"><strong>3. What are the other benefits of Helm?</strong></div>
     <div class="answer">
         <ul>
-            <li><b>Parameterized YAML files</b>
+            <li><b>Parameterize configurations for different environments</b>
                 <ul>
                     <li>You can parameterize k8s resource files, which can be reused across many applications, thus reducing maintanance burden;</li>
                     <li>This makes it easy to deploy the same application with different configurations in different environments such as development, staging and production; You can override the default values in the values.yaml file;</li>
@@ -51,6 +51,16 @@
             <li><b>Out-of-box charts</b>
                 <ul>
                     <li>Artifact Hub has free to use charts for many applications, so there is no need to build solutions from scratch;</li>
+                </ul>
+            </li>
+            <li><b>Manage dependencies</b>
+                <ul>
+                    <li>It can manage dependencies of the application(like databases, caches etc), thus reducing the manual effort;</li>
+                </ul>
+            </li>
+            <li><b>Enable reusable and automated deployments</b>
+                <ul>
+                    <li>You can reuse charts for different applications, thus reducing development time;</li>
                 </ul>
             </li>
         </ul>
