@@ -11,159 +11,397 @@
         <h2>OCI Registry</h2>
     </div>
 
-    <div class="question"><strong>1. What is an OCI Registry?</strong></div>
+    <div class="question"><strong>1. What is OCI Registry?</strong></div>
     <div class="answer">
         <ul>
-            <li>OCI stands for <strong>Open Container Initiative</strong> — a standard for container image formats and distribution;</li>
-            <li>An OCI registry is a container registry (like Docker Hub, AWS ECR, GCR, ACR, GitHub Container Registry) that can also store Helm charts;</li>
-            <li>Instead of using a traditional Helm repository (HTTP server + index.yaml), you push charts directly to a container registry using the OCI protocol;</li>
-            <li>OCI support was introduced as experimental in Helm 3.0 and became stable/GA in <strong>Helm 3.8+</strong>;</li>
+            <li>OCI Registry is nothing but a container registry(HTTP server like Docker Hub, GitHub Container Registry etc) which is capable of storing and distributing OCI artifacts over OCI protocol in a secured way;</li>
+            <li>OCI support was introduced as experimental in Helm 3.0 and became stable/GA in <strong>Helm 3.8+</strong>; It is enabled by default in Helm 3.8+;</li>
+            <li>OCI URL examples:
+                <ul>
+                    <li>oci://registry.example.com/myorg/mychart</li>
+                    <li>oci://registry.example.com/myorg/mychart:1.0.0</li>
+                    <li>oci://registry.example.com/myorg/mychart@sha256:xxxxx</li>
+                    <li>oci://registry.example.com/myorg/mychart:1.0.0@sha256:xxxxx</li>
+                    <li>oci://registry.example.com/myorg/mychart:1.0.0@sha256:xxxxx</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. OCI Registry vs Traditional Helm Repository</strong></div>
+    <div class="question"><strong>2. Why Use a Helm Registry?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Version control for deployments</b>
+                <ul>
+                    <li>You can version control your charts using tags and digests;</li>
+                    <li>You can rollback to a specific version if needed;</li>
+                    <li>You can track changes to the chart;</li>
+                    <li>You can see who made the changes;</li>
+                    <li>You can see when the changes were made;</li>
+                </ul>
+            </li>
+            <li>Share charts across teams</li>
+            <li>Private secure distribution</li>
+            <li>CI/CD integration</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Traditional Helm Repository vs OCI Registry</strong></div>
     <div class="answer">
         <table border="1" cellpadding="8" cellspacing="0">
             <tr>
-                <th></th>
-                <th>Traditional Repository</th>
+                <th>Category</th>
+                <th>Traditional Helm Repository</th>
                 <th>OCI Registry</th>
             </tr>
             <tr>
+                <td><strong>Storage Model</strong></td>
+                <td>Static .tgz files</td>
+                <td>Content-addressable blobs (SHA256)</td>
+            </tr>
+            <tr>
+                <td><strong>Indexing</strong></td>
+                <td>Requires index.yaml</td>
+                <td>No index file</td>
+            </tr>
+            <tr>
+                <td><strong>Version Management</strong></td>
+                <td>Listed in index.yaml</td>
+                <td>Managed via tags</td>
+            </tr>
+            <tr>
                 <td><strong>Protocol</strong></td>
-                <td>HTTP/HTTPS</td>
-                <td>OCI Distribution Spec (same as Docker images)</td>
+                <td>Simple HTTP file hosting</td>
+                <td>OCI Distribution API (REST over HTTPS)</td>
             </tr>
             <tr>
-                <td><strong>Discovery</strong></td>
-                <td>index.yaml</td>
-                <td>Registry API (no index.yaml needed)</td>
+                <td><strong>Content Addressability</strong></td>
+                <td>No</td>
+                <td>Yes</td>
             </tr>
             <tr>
-                <td><strong>helm repo add</strong></td>
-                <td>Required</td>
-                <td>Not used — you reference oci:// URLs directly</td>
-            </tr>
-            <tr>
-                <td><strong>helm repo update</strong></td>
-                <td>Required</td>
-                <td>Not used</td>
-            </tr>
-            <tr>
-                <td><strong>helm search</strong></td>
-                <td>helm search repo</td>
-                <td>Not supported — use registry UI or API to browse</td>
+                <td><strong>Immutability Support</strong></td>
+                <td>Not enforced</td>
+                <td>Supported</td>
             </tr>
             <tr>
                 <td><strong>Authentication</strong></td>
-                <td>Basic auth / token via repo URL</td>
-                <td>helm registry login (uses Docker-style auth)</td>
+                <td>Basic / custom</td>
+                <td>Standard registry auth (OAuth, IAM, token-based)</td>
             </tr>
             <tr>
-                <td><strong>Push</strong></td>
-                <td>Upload .tgz + regenerate index.yaml</td>
-                <td>helm push</td>
+                <td><strong>RBAC / Access Control</strong></td>
+                <td>Limited</td>
+                <td>Strong, registry-level RBAC</td>
             </tr>
             <tr>
-                <td><strong>Storage</strong></td>
-                <td>Separate chart server</td>
-                <td>Same registry as your container images</td>
+                <td><strong>Deduplication</strong></td>
+                <td>No</td>
+                <td>Yes (blob reuse)</td>
+            </tr>
+            <tr>
+                <td><strong>Artifact Types Supported</strong></td>
+                <td>Helm charts only</td>
+                <td>Images, Helm charts, SBOMs, signatures, WASM, etc.</td>
+            </tr>
+            <tr>
+                <td><strong>CI/CD Integration</strong></td>
+                <td>Requires index update</td>
+                <td>Direct push, no index management</td>
+            </tr>
+            <tr>
+                <td><strong>Promotion Strategy</strong></td>
+                <td>Re-upload per environment</td>
+                <td>Tag promotion or digest copy</td>
+            </tr>
+            <tr>
+                <td><strong>Scalability</strong></td>
+                <td>Index can become bottleneck</td>
+                <td>Designed for large-scale distribution</td>
+            </tr>
+            <tr>
+                <td><strong>Multi-Region Replication</strong></td>
+                <td>Manual</td>
+                <td>Built-in (registry dependent)</td>
+            </tr>
+            <tr>
+                <td><strong>Security Scanning</strong></td>
+                <td>Rare</td>
+                <td>Common (registry-integrated scanning)</td>
+            </tr>
+            <tr>
+                <td><strong>Signature Ecosystem</strong></td>
+                <td>Limited</td>
+                <td>Strong OCI signing ecosystem</td>
+            </tr>
+            <tr>
+                <td><strong>Enterprise Readiness</strong></td>
+                <td>Moderate</td>
+                <td>High</td>
+            </tr>
+            <tr>
+                <td><strong>Cloud IAM Integration</strong></td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td><strong>Concurrency Safety</strong></td>
+                <td>Risk of index conflicts</td>
+                <td>Safe (atomic manifest upload)</td>
+            </tr>
+            <tr>
+                <td><strong>Future Direction</strong></td>
+                <td>Legacy</td>
+                <td>Recommended standard</td>
             </tr>
         </table>
     </div>
+    
 
-    <div class="question"><strong>3. Authentication — helm registry login / logout</strong></div>
+    <div class="question"><strong>4. What is OCI Artifact?</strong></div>
     <div class="answer">
-        <pre><code># Login to a registry
-helm registry login registry.example.com
-# Prompts for username and password
-
-# Login with credentials inline
-helm registry login registry.example.com --username myuser --password mypass
-
-# Login to Docker Hub
-helm registry login registry-1.docker.io
-
-# Login to AWS ECR
-aws ecr get-login-password --region us-east-1 | helm registry login \
-  --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com
-
-# Login to GitHub Container Registry (GHCR)
-echo $GITHUB_TOKEN | helm registry login ghcr.io --username &lt;github-user&gt; --password-stdin
-
-# Logout
-helm registry logout registry.example.com</code></pre>
         <ul>
-            <li>Credentials are stored in <code>~/.config/helm/registry/config.json</code> (same format as Docker's config.json);</li>
-            <li>If you're already logged in via <code>docker login</code>, Helm can reuse those credentials;</li>
+            <li>For helm OCI chart, it is stored as:
+                <ul>
+                    <li>Config object (Helm metadata)</li>
+                    <li>One layer (the .tgz chart)</li>
+                    <li>Manifest tying them together</li>
+                    <li>Registry does not “know” it’s Helm. It just sees OCI artifact with Helm media types;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="question"><strong>5. Non-OCI Artifact vs OCI Artifact</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Non-OCI Artifact:</b>
+                <ul>
+                    <li>Store the file somewhere and refer it by it's name; Eg: https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz</li>
+                    <li>System cares about the file name, version, location; It doesn't care about the content of the file, whether it is changed or not, whether it is deduplicated or not;</li>
+                </ul>
+            </li>
+            <li><b>OCI Artifact:</b>
+                <ul>
+                    <li>Filename is irrelevant; Digest is the unique identifier of the content;</li>
+                    <li>You can store the file in a registry and refer it by it's digest; Eg: oci://registry.example.com/myorg/mychart@sha256:xxxxx</li>
+                    <li>If the content is changed, the digest will change; It is impossible to change the content of the file, without changing the digest;</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>4. Pushing a Chart — helm push</strong></div>
+    <div class="question"><strong>5. What is OCI Protocol?</strong></div>
     <div class="answer">
-        <p><strong>Step 1:</strong> Package the chart</p>
-        <pre><code>helm package ./mychart
-# Creates mychart-0.1.0.tgz</code></pre>
-        <p><strong>Step 2:</strong> Push to an OCI registry</p>
-        <pre><code>helm push mychart-0.1.0.tgz oci://registry.example.com/charts</code></pre>
         <ul>
-            <li>The chart is stored at <code>oci://registry.example.com/charts/mychart</code> with tag <code>0.1.0</code>;</li>
+            <li>It is a set of standards defined by the Open Container Initiative (OCI) for creating, storing(push) and distributing(pull) artifacts;</li>
+            <li>Helm leverages this protocol to store charts as OCI artifacts;</li>
+            <li>Communication is done over HTTP(S), and artifacts are layered tarballs, just like Docker images;</li>
+            <li>OCI registries provide authentication, access control, caching, and content-addressable storage;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. How does OCI Protocol work?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you push an artifact:
+                <ul>
+                    <li><b>Registry ping</b>
+                        <ul>
+                            <li>Client checks if the registry is reachable; GET https://registry.example.com/v2/, if it responds with 200 OK, then the registry is reachable;</li>
+                        </ul>
+                    </li>
+                    <li><b>Authentication</b> 
+                        <ul>
+                            <li>If it requires authentication, login to the registry using the following command:</li>
+                            <li>GitHub container registry:echo "$GITHUB_TOKEN" | helm registry login ghcr.io -u $GITHUB_USER --password-stdin </li>
+                            <li>Docker Hub: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD</li>
+                            <li>JFrog Artifactory: helm registry login $REGISTRY_URL -u $USERNAME -p $PASSWORD</li>
+                            <br>
+                            <li>Client requests a token from the registry; POST https://registry.example.com/v2/token, if it responds with 200 OK, then the client is authenticated and retries the request with the token in the Authorization header;</li>
+                        </ul>
+                    </li>
+                    <li><b>Repository check</b>
+                        <ul>
+                            <li>Client checks if the repository exists; GET https://registry.example.com/v2/myorg/mychart, if it responds with 200 OK, then the repository exists;</li>
+                        </ul>
+                    </li>
+                    <li><b>Check if the blob already exists(Deduplication)</b>
+                        <ul>
+                            <li>Client checks if the blob exists; HEAD https://registry.example.com/v2/myorg/mychart/blobs/sha256:xxxx, if it responds with 200 OK, then the blob exists;</li>
+                            <li>If 2 artifacts share the same blob, then the blob is stored only once and the same blob is used by both artifacts;</li>
+                        </ul>
+                    </li>
+                    <li><b>Upload the blob</b>
+                        <ul>
+                            <li>Client calls: POST https://registry.example.com/v2/myorg/mychart/blob/uploads/ and registry returns an upload URL;</li>
+                            <li>Client uploads the blob to the registry; PUT https://registry.example.com/v2/myorg/mychart/blobs/uploads/<uuid>?digest=sha256:abc123</li>
+                            <li>Registry verifies if digest matches content and stores blob in content-addressable storage;</li>
+                        </ul>
+                    </li>
+                    <li><b>Upload the config</b>
+                        <ul>
+                            <li>OCI artifacts have a small config JSON: For container image → image config, For Helm chart → Helm metadata;</li>
+                            <li>Config is uploaded same way as blobs;</li>
+                            <li>Client uploads the config to the registry; PUT https://registry.example.com/v2/myorg/mychart/config.json, if it responds with 200 OK, then the config is uploaded;</li>
+                        </ul>
+                    </li>
+                    <li><b>Upload the manifest</b>
+                        <ul>
+                            <li>Manifest is a JSON file that links the everything(config and blobs) together;</li>
+                            <li>Example: 
+                                <pre><code> {
+                                    "schemaVersion": 2,
+                                    "config": {
+                                      "digest": "sha256:config123"
+                                    },
+                                    "layers": [
+                                      {
+                                        "digest": "sha256:layer456"
+                                      }
+                                    ]
+                                  }
+                                </code></pre>
+                            </li>
+                            <li>Manifest is uploaded same way as blobs;</li>
+                            <li>Client uploads the manifest to the registry; PUT https://registry.example.com/v2/myorg/mychart/manifests/1.0.0, Content-Type: application/vnd.oci.image.manifest.v1+json</li>
+                            <li>Registry verifies if digest matches content and stores manifest in content-addressable storage;</li>
+                            <li>Only now the artifact becomes available;</li>
+                        </ul>
+                    </li>
+                    <li><b>Tag association</b>
+                        <ul>
+                            <li>What is a tag? A tag is a label that points to a specific manifest;</li>
+                            <li>Example: 1.0.0, latest, stable, etc;</li>
+                            <li>Internally, tag is mapped to a specific manifest digest: sha256:manifestDigest;</li>
+                            <li>Internally, tags are stored as symbolic links to the manifest;</li>
+                            <li>Client associates the tag with the manifest; PUT https://registry.example.com/v2/myorg/mychart/manifests/sha256:xxxx, if it responds with 200 OK, then the tag is associated with the manifest;</li>
+                            <li>Client uploads the manifest to the registry; PUT https://registry.example.com/v2/myorg/mychart/manifests/sha256:xxxx, if it responds with 200 OK, then the manifest is uploaded;</li>
+                            <li>Tags are mutable; Digests are immutable;</li>
+                        </ul>
+                    </li>
+                    <li><b>Tag association</b>
+                        <ul>
+                            <li>Client associates the tag with the manifest; PUT https://registry.example.com/v2/myorg/mychart/manifests/sha256:xxxx, if it responds with 200 OK, then the tag is associated with the manifest;</li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </li>
+            <li>When you pull an artifact:
+                <ul>
+                    <li>Client requests manifest;</li>
+                    <li>Registry returns layer digests;</li>
+                    <li>Client downloads blobs;</li>
+                    <li>Everything is verified by SHA256 hash.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>  
+
+    <div class="question"><strong>7. Authentication — helm registry login / logout</strong></div>
+    <div class="answer">
+        <ul>
+            <li>OCI registries typically use:
+                <ul>
+                    <li>Basic auth</li>
+                    <li>Bearer token auth</li>
+                    <li>Cloud IAM integration</li>
+                    <li>OAuth</li>
+                </ul>
+            </li>
+            <li>Helm and Docker both use the same auth model; Both save the credentials in the same location: <code>~/.docker/config.json</code>;</li>
+            <li>By default, credentails are base64 encoded in the config file;</li>
+            <li>You can configure a credential helper to store the credentials in a more secure way;</li>
+            <li>Example:
+                <pre><code>
+                    {
+                        "auths": {
+                            "registry.example.com": {
+                                "auth": "base64encoded(username:password)"
+                            }
+                        }
+                    }
+                </code></pre>
+            </li>
+            <li>How to login to a registry:
+                <pre><code>
+                    helm registry login registry.example.com # Prompts for username and password
+                    helm registry login registry.example.com --username myuser --password mypass
+                </code></pre>
+            </li>
+            <li>How to logout from a registry:
+                <pre><code>
+                    helm registry logout registry.example.com
+                </code></pre>
+            </li>
+            <li>docker login vs helm registry login
+                <ul>
+                    <li>You don't actually need both.</li>
+                    <li>If you already ran:
+                        <pre><code>
+                            docker login registry.example.com
+                        </code></pre>
+                    </li>
+                    <li>You can push/pull Helm OCI charts without running helm registry login.</li>
+                    <li>Because Helm reads Docker's credential store.</li>
+                    <li>In CI/CD:</li>
+                    <ul>
+                        <li>Most teams just use:</li>
+                        <pre><code>
+                            docker login ...
+                        </code></pre>
+                        <li>And Helm works automatically.</li>
+                    </ul>
+                    <li>Or:</li>
+                    <ul>
+                        <li>helm registry login ...</li>
+                        <li>If Docker is not installed.</li>
+                    </ul>
+                    <li>Both commands:</li>
+                    <ul>
+                        <li>Authenticate your client to an OCI registry.</li>
+                    </ul>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Pushing a Chart — helm push</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Step 1:</b> Package the chart <pre><code>helm package ./mychart # Creates mychart-0.1.0.tgz</code></pre></li>
+            <li><b>Step 2:</b> Push to an OCI registry <pre><code>helm push mychart-0.1.0.tgz oci://registry.example.com/myorg/myrepo</code></pre>; This chart is stored at <code>oci://registry.example.com/charts/mychart</code> with tag <code>0.1.0</code>;</li>
             <li>The chart name comes from <code>Chart.yaml</code>, the tag comes from the chart version;</li>
             <li>You do NOT specify the chart name or version in the URL — only the "namespace/path";</li>
         </ul>
-        <p>Examples with different registries:</p>
-        <pre><code># Docker Hub
-helm push mychart-0.1.0.tgz oci://registry-1.docker.io/mynamespace
-
-# AWS ECR
-helm push mychart-0.1.0.tgz oci://123456789.dkr.ecr.us-east-1.amazonaws.com
-
-# GitHub Container Registry
-helm push mychart-0.1.0.tgz oci://ghcr.io/myorg
-
-# Google Artifact Registry
-helm push mychart-0.1.0.tgz oci://us-central1-docker.pkg.dev/myproject/myrepo</code></pre>
     </div>
 
-    <div class="question"><strong>5. Pulling a Chart — helm pull</strong></div>
+    <div class="question"><strong>9. Pulling a Chart — helm pull</strong></div>
     <div class="answer">
-        <pre><code># Pull a specific version
-helm pull oci://registry.example.com/charts/mychart --version 0.1.0
-# Downloads mychart-0.1.0.tgz to the current directory
-
-# Pull and untar
-helm pull oci://registry.example.com/charts/mychart --version 0.1.0 --untar</code></pre>
-    </div>
-
-    <div class="question"><strong>6. Installing from an OCI Registry</strong></div>
-    <div class="answer">
-        <pre><code># Install directly from OCI registry
-helm install myrelease oci://registry.example.com/charts/mychart --version 0.1.0
-
-# Install from Docker Hub
-helm install myrelease oci://registry-1.docker.io/bitnamicharts/nginx
-
-# With custom values
-helm install myrelease oci://registry.example.com/charts/mychart --version 0.1.0 -f values.yaml</code></pre>
         <ul>
-            <li>Helm does NOT use <code>index.yaml</code> for OCI — it communicates directly with the registry API;</li>
-            <li>No need for <code>helm repo add</code> or <code>helm repo update</code>;</li>
+            <li><b>Step 1:</b> Pull a specific version <pre><code>helm pull oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This chart is downloaded to the current directory as <code>mychart-0.1.0.tgz</code>;</li>
+            <li><b>Step 2:</b> Pull and untar <pre><code>helm pull oci://registry.example.com/myorg/mychart --version 0.1.0 --untar</code></pre>; This chart is downloaded to the current directory and untarred;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>7. Inspecting a Chart in OCI Registry — helm show</strong></div>
+    <div class="question"><strong>10. Installing from an OCI Registry</strong></div>
     <div class="answer">
-        <pre><code># Show chart metadata
-helm show chart oci://registry.example.com/charts/mychart --version 0.1.0
+        <ul>
+            <li><b>Step 1:</b> Install directly from OCI registry <pre><code>helm install myrelease oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This chart is installed from the OCI registry;</li>
+            <li><b>Step 2:</b> Install from Docker Hub <pre><code>helm install myrelease oci://registry-1.docker.io/bitnamicharts/nginx</code></pre>; This chart is installed from the Docker Hub;</li>
+            <li><b>Step 3:</b> Install with custom values <pre><code>helm install myrelease oci://registry.example.com/myorg/mychart --version 0.1.0 -f values.yaml</code></pre>; This chart is installed from the OCI registry with custom values;</li>
+        </ul>
+    </div>
 
-# Show default values
-helm show values oci://registry.example.com/charts/mychart --version 0.1.0
-
-# Show README
-helm show readme oci://registry.example.com/charts/mychart --version 0.1.0
-
-# Show everything
-helm show all oci://registry.example.com/charts/mychart --version 0.1.0</code></pre>
+    <div class="question"><strong>11. Inspecting a Chart in OCI Registry — helm show</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Step 1:</b> Show chart metadata <pre><code>helm show chart oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This shows the chart metadata;</li>
+            <li><b>Step 2:</b> Show default values <pre><code>helm show values oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This shows the default values;</li>
+            <li><b>Step 3:</b> Show README <pre><code>helm show readme oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This shows the README;</li>
+            <li><b>Step 4:</b> Show everything <pre><code>helm show all oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This shows everything;</li>
+        </ul>
     </div>
 
     <div class="question"><strong>8. Listing Tags in a Registry</strong></div>
@@ -172,91 +410,39 @@ helm show all oci://registry.example.com/charts/mychart --version 0.1.0</code></
             <li><code>helm search</code> does NOT work with OCI registries;</li>
             <li>To list available versions/tags, you need to use the registry's API or UI;</li>
         </ul>
-        <pre><code># Using the OCI Distribution API (works with most registries)
-curl -s https://registry.example.com/v2/charts/mychart/tags/list
-
-# Using crane (a popular container registry CLI tool)
-crane ls registry.example.com/charts/mychart
-
-# For Docker Hub
-curl -s https://registry.hub.docker.com/v2/repositories/bitnamicharts/nginx/tags/?page_size=25
-
-# For AWS ECR
-aws ecr describe-images --repository-name mychart --query 'imageDetails[].imageTags'
-
-# For GHCR
-gh api /user/packages/container/mychart/versions</code></pre>
     </div>
 
     <div class="question"><strong>9. Helm Template / Upgrade with OCI</strong></div>
     <div class="answer">
-        <pre><code># Template rendering
-helm template myrelease oci://registry.example.com/charts/mychart --version 0.1.0
-
-# Upgrade a release
-helm upgrade myrelease oci://registry.example.com/charts/mychart --version 0.2.0</code></pre>
+        <ul>
+            <li><b>Step 1:</b> Template rendering <pre><code>helm template myrelease oci://registry.example.com/myorg/mychart --version 0.1.0</code></pre>; This renders the template;</li>
+            <li><b>Step 2:</b> Upgrade a release <pre><code>helm upgrade myrelease oci://registry.example.com/myorg/mychart --version 0.2.0</code></pre>; This upgrades the release;</li>
+        </ul>
     </div>
 
-    <div class="question"><strong>10. Common OCI Registry Providers</strong></div>
+    <div class="question"><strong>10. Commands</strong></div>
     <div class="answer">
         <table border="1" cellpadding="8" cellspacing="0">
-            <tr>
-                <th>Provider</th>
-                <th>OCI URL Prefix</th>
-            </tr>
-            <tr>
-                <td>Docker Hub</td>
-                <td><code>oci://registry-1.docker.io/&lt;namespace&gt;</code></td>
-            </tr>
-            <tr>
-                <td>AWS ECR</td>
-                <td><code>oci://&lt;account-id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com</code></td>
-            </tr>
-            <tr>
-                <td>Google Artifact Registry</td>
-                <td><code>oci://&lt;region&gt;-docker.pkg.dev/&lt;project&gt;/&lt;repo&gt;</code></td>
-            </tr>
-            <tr>
-                <td>Azure ACR</td>
-                <td><code>oci://&lt;registry&gt;.azurecr.io</code></td>
-            </tr>
-            <tr>
-                <td>GitHub GHCR</td>
-                <td><code>oci://ghcr.io/&lt;owner&gt;</code></td>
-            </tr>
-            <tr>
-                <td>Harbor</td>
-                <td><code>oci://&lt;harbor-host&gt;/&lt;project&gt;</code></td>
-            </tr>
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>helm registry login &lt;registry-url&gt; -u &lt;user&gt;</user></code></td><td>Login to an OCI registry;</td></tr>
+                <tr><td><code>helm registry logout &lt;registry-url&gt;</code></td><td>Logout from an OCI registry;</td></tr>
+                <br>
+                <tr><td><code>helm push &lt;chart-name&gt; oci://&lt;registry-url&gt;/&lt;path&gt;</code></td><td>Push a chart to an OCI registry;</td></tr>
+                <tr><td><code>helm pull oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Pull a chart by version;</td></tr>
+                <tr><td><code>helm pull oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt;@sha256:xxxxx</code></td><td>Pull a chart by digest;</td></tr>
+                <tr><td><code>helm install &lt;release-name&gt; oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Install a chart directly from an OCI registry;</td></tr>
+                <tr><td><code>helm show chart oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Show a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm show readme oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Show the README for a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm show values oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Show the values for a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm show all oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Show all information for a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm upgrade &lt;release-name&gt; oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Upgrade a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm template &lt;release-name&gt; oci://&lt;registry-url&gt;/&lt;path&gt;/&lt;chart-name&gt; --version &lt;version&gt;</code></td><td>Template a chart from an OCI registry;</td></tr>
+                <tr><td><code>helm delete &lt;release-name&gt;</code></td><td> Delete a release from a cluster; Helm itself does not delete charts from a registry; Use registry UI to delete the chart from the registry;</td></tr>
+            </tbody>
         </table>
     </div>
-
-    <div class="question"><strong>11. Quick Reference</strong></div>
-    <div class="answer">
-        <pre><code># Authentication
-helm registry login &lt;registry&gt;
-helm registry logout &lt;registry&gt;
-
-# Push
-helm package ./mychart
-helm push mychart-0.1.0.tgz oci://&lt;registry&gt;/&lt;path&gt;
-
-# Pull
-helm pull oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;
-
-# Install
-helm install &lt;release&gt; oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;
-
-# Inspect
-helm show chart oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;
-helm show values oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;
-
-# Upgrade
-helm upgrade &lt;release&gt; oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;
-
-# Template
-helm template &lt;release&gt; oci://&lt;registry&gt;/&lt;path&gt;/&lt;chart&gt; --version &lt;ver&gt;</code></pre>
-    </div>
-
 </body>
 </html>
