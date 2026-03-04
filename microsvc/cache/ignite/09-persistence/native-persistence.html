@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Native Persistence</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Native Persistence</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Native Persistence?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Native Persistence stores data on disk in addition to RAM, allowing the cluster to <strong>survive full restarts without data loss</strong>;</li>
+            <li>Data is written to disk in the same page format used in memory — no serialization overhead;</li>
+            <li>RAM acts as a caching layer over disk: hot data is in memory, cold data is on disk;</li>
+            <li>When the data set exceeds available RAM, Ignite transparently reads pages from disk;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Enabling Native Persistence</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+
+DataRegionConfiguration regionCfg = new DataRegionConfiguration();
+regionCfg.setName("persistentRegion");
+regionCfg.setPersistenceEnabled(true);           // enable persistence
+regionCfg.setInitialSize(100L * 1024 * 1024);    // 100 MB initial memory
+regionCfg.setMaxSize(500L * 1024 * 1024);        // 500 MB max memory
+
+storageCfg.setDefaultDataRegionConfiguration(regionCfg);
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setDataStorageConfiguration(storageCfg);</code></pre>
+            </li>
+            <li>After enabling persistence, you must <strong>activate the cluster</strong> before using caches:
+                <pre><code>ignite.cluster().state(ClusterState.ACTIVE);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How it Works Under the Hood</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite uses a <strong>Write-Ahead Log (WAL)</strong> to ensure durability:
+                <ol>
+                    <li>Every write is first recorded in the WAL;</li>
+                    <li>The in-memory page is updated;</li>
+                    <li>Dirty pages are periodically flushed to the main storage (partition files) during <strong>checkpointing</strong>;</li>
+                </ol>
+            </li>
+            <li>On restart, Ignite reads the partition files and replays the WAL to recover any changes made after the last checkpoint;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. WAL Modes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mode</th><th>Durability</th><th>Performance</th></tr>
+            <tr>
+                <td><b>FSYNC</b></td>
+                <td>Highest — every WAL record is fsync'd to disk</td>
+                <td>Slowest</td>
+            </tr>
+            <tr>
+                <td><b>LOG_ONLY</b> (default)</td>
+                <td>High — writes go to OS page cache; lost only on OS crash</td>
+                <td>Fast</td>
+            </tr>
+            <tr>
+                <td><b>BACKGROUND</b></td>
+                <td>Medium — WAL fsync'd in the background at intervals</td>
+                <td>Faster</td>
+            </tr>
+            <tr>
+                <td><b>NONE</b></td>
+                <td>None — WAL is disabled; data may be lost on crash</td>
+                <td>Fastest</td>
+            </tr>
+        </table>
+        <pre><code>storageCfg.setWalMode(WALMode.LOG_ONLY);</code></pre>
+    </div>
+
+    <div class="question"><strong>5. Checkpointing</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Checkpointing flushes dirty memory pages to disk;</li>
+            <li>After a checkpoint, the WAL records before the checkpoint are no longer needed for recovery;</li>
+            <li>Checkpoint frequency:
+                <pre><code>storageCfg.setCheckpointFrequency(180_000); // every 3 minutes (default)</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Data Regions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You can define multiple data regions with different settings (persistent vs. in-memory, different sizes):
+                <pre><code>// Persistent region for important data
+DataRegionConfiguration persistentRegion = new DataRegionConfiguration();
+persistentRegion.setName("persistent");
+persistentRegion.setPersistenceEnabled(true);
+persistentRegion.setMaxSize(1L * 1024 * 1024 * 1024); // 1 GB
+
+// In-memory region for temporary data
+DataRegionConfiguration volatileRegion = new DataRegionConfiguration();
+volatileRegion.setName("volatile");
+volatileRegion.setPersistenceEnabled(false);
+volatileRegion.setMaxSize(256L * 1024 * 1024); // 256 MB
+
+storageCfg.setDataRegionConfigurations(persistentRegion, volatileRegion);
+
+// Assign a cache to a region
+CacheConfiguration cacheCfg = new CacheConfiguration("tempCache");
+cacheCfg.setDataRegionName("volatile");</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

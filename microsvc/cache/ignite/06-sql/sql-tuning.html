@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SQL Tuning</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>SQL Tuning</h2>
+    </div>
+
+    <div class="question"><strong>1. Using EXPLAIN</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The <code>EXPLAIN</code> statement shows the query execution plan — which indexes are used, join order, scan types:
+                <pre><code>EXPLAIN SELECT * FROM Person WHERE city = 'NYC' AND age > 25;</code></pre>
+            </li>
+            <li>Look for:
+                <ul>
+                    <li><b>Index scans</b> — means an index is being used (good);</li>
+                    <li><b>Table scans</b> — means a full cache scan (bad for large datasets);</li>
+                    <li><b>Join type</b> — HASH join vs NESTED LOOP join;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Query Parallelism</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, each query runs in a single thread per node;</li>
+            <li>For complex analytical queries, you can increase parallelism:
+                <pre><code>CacheConfiguration cfg = new CacheConfiguration("analyticsCache");
+cfg.setQueryParallelism(4); // use 4 threads per node</code></pre>
+            </li>
+            <li>Higher parallelism benefits scans over large datasets but consumes more CPU;</li>
+            <li>Can only be set at cache creation time — not changeable later;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Lazy Query Execution</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, Ignite fetches all results into memory before returning;</li>
+            <li>For queries that return large result sets, enable lazy mode to stream results:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery("SELECT * FROM LargeTable");
+query.setLazy(true);</code></pre>
+            </li>
+            <li>Lazy execution reduces memory usage but may hold locks longer;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Colocation-Aware Queries</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If you know which partition holds the data, route the query directly:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery(
+    "SELECT * FROM Person WHERE id = ?"
+);
+query.setArgs(42);
+
+// Runs only on the node that owns partition for key=42
+cache.query(query);</code></pre>
+            </li>
+            <li>For joins, make sure tables are colocated to avoid distributed joins;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Memory and Resource Management</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>SQL query memory limit</b> — limit how much memory a single query can use:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery("...");
+query.setMaxMemory(50 * 1024 * 1024); // 50 MB</code></pre>
+            </li>
+            <li><b>Query timeout</b> — cancel long-running queries:
+                <pre><code>query.setTimeout(10_000, TimeUnit.MILLISECONDS);</code></pre>
+            </li>
+            <li><b>Page size</b> — control how many rows are fetched per page (default 1024):
+                <pre><code>query.setPageSize(5000);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Common Performance Tips</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Always create indexes for columns used in <code>WHERE</code> and <code>JOIN</code> clauses;</li>
+            <li>Use affinity colocation to make joins local;</li>
+            <li>Avoid <code>SELECT *</code> — select only the columns you need;</li>
+            <li>Use parameterized queries (<code>?</code> placeholders) instead of string concatenation for better plan caching;</li>
+            <li>Enable query parallelism for analytical workloads;</li>
+            <li>Use lazy execution for large result sets;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

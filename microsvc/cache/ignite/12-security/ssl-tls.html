@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SSL/TLS</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>SSL/TLS</h2>
+    </div>
+
+    <div class="question"><strong>1. Why SSL/TLS?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, all Ignite communication is <strong>unencrypted</strong>;</li>
+            <li>SSL/TLS encrypts data in transit between nodes and between clients and servers;</li>
+            <li>Essential for production deployments, especially when traffic crosses untrusted networks;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Enabling SSL for Node-to-Node Communication</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Create a keystore and truststore, then configure:
+                <pre><code>SslContextFactory sslFactory = new SslContextFactory();
+sslFactory.setKeyStoreFilePath("/path/to/keystore.jks");
+sslFactory.setKeyStorePassword("keystorePass".toCharArray());
+sslFactory.setTrustStoreFilePath("/path/to/truststore.jks");
+sslFactory.setTrustStorePassword("truststorePass".toCharArray());
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setSslContextFactory(sslFactory);</code></pre>
+            </li>
+            <li>All nodes must have SSL configured — a non-SSL node cannot join an SSL-enabled cluster;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Enabling SSL for Thin Clients</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Configure the thin client connector on the server:
+                <pre><code>ClientConnectorConfiguration connCfg = new ClientConnectorConfiguration();
+connCfg.setSslEnabled(true);
+connCfg.setSslClientAuth(true); // require client certificates
+
+cfg.setClientConnectorConfiguration(connCfg);</code></pre>
+            </li>
+            <li>Configure the thin client:
+                <pre><code>ClientConfiguration clientCfg = new ClientConfiguration()
+    .setAddresses("host:10800")
+    .setSslMode(SslMode.REQUIRED)
+    .setSslClientCertificateKeyStorePath("/path/to/client-keystore.jks")
+    .setSslClientCertificateKeyStorePassword("clientKeystorePass")
+    .setSslTrustCertificateKeyStorePath("/path/to/truststore.jks")
+    .setSslTrustCertificateKeyStorePassword("truststorePass");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. SSL for JDBC</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pass SSL parameters in the JDBC URL:
+                <pre><code>String url = "jdbc:ignite:thin://host:10800?" +
+    "sslMode=require" +
+    "&amp;sslClientCertificateKeyStoreUrl=/path/to/keystore.jks" +
+    "&amp;sslClientCertificateKeyStorePassword=pass" +
+    "&amp;sslTrustCertificateKeyStoreUrl=/path/to/truststore.jks" +
+    "&amp;sslTrustCertificateKeyStorePassword=pass";</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Generating Keystores</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code># Generate a keystore with a self-signed certificate
+keytool -genkeypair -alias ignite \
+    -keyalg RSA -keysize 2048 \
+    -validity 365 \
+    -keystore keystore.jks \
+    -storepass changeit
+
+# Export the certificate
+keytool -exportcert -alias ignite \
+    -keystore keystore.jks \
+    -storepass changeit \
+    -file ignite.cer
+
+# Import into truststore
+keytool -importcert -alias ignite \
+    -keystore truststore.jks \
+    -storepass changeit \
+    -file ignite.cer \
+    -noprompt</code></pre>
+            </li>
+            <li>For production, use certificates signed by a CA instead of self-signed;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

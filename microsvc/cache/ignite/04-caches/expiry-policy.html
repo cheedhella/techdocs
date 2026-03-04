@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Expiry Policy</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Expiry Policy</h2>
+    </div>
+
+    <div class="question"><strong>1. What is an Expiry Policy?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An expiry policy defines <strong>how long data entries live</strong> in the cache before they are automatically removed;</li>
+            <li>It follows the JCache (JSR 107) <code>ExpiryPolicy</code> interface;</li>
+            <li>Entries are removed after the expiry duration, freeing up memory;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Expiry Triggers</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Created</b> — TTL starts when the entry is first added to the cache;</li>
+            <li><b>Accessed</b> — TTL resets every time the entry is read;</li>
+            <li><b>Updated</b> — TTL resets every time the entry is modified;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Built-in Expiry Policies</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Policy</th><th>Expires After</th></tr>
+            <tr><td><code>CreatedExpiryPolicy</code></td><td>A fixed duration after creation</td></tr>
+            <tr><td><code>AccessedExpiryPolicy</code></td><td>A fixed duration after last access</td></tr>
+            <tr><td><code>ModifiedExpiryPolicy</code></td><td>A fixed duration after last modification</td></tr>
+            <tr><td><code>TouchedExpiryPolicy</code></td><td>A fixed duration after last access or modification</td></tr>
+            <tr><td><code>EternalExpiryPolicy</code></td><td>Never (default)</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Configuring Expiry Policy</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>At cache level:</b>
+                <pre><code>CacheConfiguration cfg = new CacheConfiguration("sessionCache");
+cfg.setExpiryPolicyFactory(
+    CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.MINUTES, 30))
+);</code></pre>
+            </li>
+            <li><b>Per operation (using withExpiryPolicy):</b>
+                <pre><code>ExpiryPolicy policy = new CreatedExpiryPolicy(new Duration(TimeUnit.HOURS, 1));
+
+cache.withExpiryPolicy(policy).put(key, value);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Eager TTL</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, <code>eagerTtl</code> is <code>true</code> — Ignite actively scans for and removes expired entries;</li>
+            <li>If set to <code>false</code>, expired entries are only removed when accessed (lazy expiration);</li>
+            <li>Eager TTL uses a background thread; disable it if you have very many caches and expiry is not critical;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

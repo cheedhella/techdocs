@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is Apache Ignite?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is Apache Ignite?</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Apache Ignite?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Apache Ignite is an open-source <strong>distributed database</strong> for high-performance computing with in-memory speed;</li>
+            <li>It stores data across a cluster of nodes in RAM (and optionally on disk), providing <strong>microsecond-level latency</strong> for reads and writes;</li>
+            <li>It is not just a cache — it is a full-fledged distributed database that supports SQL, key-value operations, compute, and more;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is Apache Ignite needed?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Performance</b> — traditional databases store data on disk; when traffic spikes, disk I/O becomes the bottleneck; Ignite stores data in RAM, which is orders of magnitude faster;</li>
+            <li><b>Scalability</b> — data is automatically partitioned and distributed across all cluster nodes; adding nodes increases both storage capacity and throughput linearly;</li>
+            <li><b>Reducing database load</b> — Ignite can sit between your application and a relational database, serving reads from memory and writing through to the DB, dramatically reducing load on the primary database;</li>
+            <li><b>Real-time processing</b> — use cases that demand sub-millisecond response times (fraud detection, trading systems, IoT telemetry) benefit from Ignite's memory-first architecture;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What are the core capabilities?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Distributed Key-Value Store</b> — store and retrieve data using key-value pairs with ACID transaction support;</li>
+            <li><b>Distributed SQL</b> — execute ANSI SQL queries across the distributed dataset, including joins, aggregations, and DML;</li>
+            <li><b>Distributed Compute</b> — execute arbitrary Java code (closures, tasks) on cluster nodes where the data resides, eliminating network overhead;</li>
+            <li><b>Native Persistence</b> — optionally persist data to disk so the cluster survives full restarts without data loss;</li>
+            <li><b>Machine Learning</b> — train ML models directly on data stored in Ignite without ETL to external systems;</li>
+            <li><b>Continuous Queries</b> — receive real-time notifications when data in the cache changes;</li>
+            <li><b>Services</b> — deploy singleton or per-node services that are automatically redeployed on failover;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. How is Ignite different from Redis, Memcached, and Hazelcast?</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Feature</th>
+                <th>Apache Ignite</th>
+                <th>Redis</th>
+                <th>Memcached</th>
+                <th>Hazelcast</th>
+            </tr>
+            <tr>
+                <td>Distributed SQL</td>
+                <td>Full ANSI SQL with joins</td>
+                <td>Limited (modules)</td>
+                <td>No</td>
+                <td>SQL-like (Jet)</td>
+            </tr>
+            <tr>
+                <td>ACID Transactions</td>
+                <td>Yes (cross-partition)</td>
+                <td>Single-key only</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Native Persistence</td>
+                <td>Yes (disk + memory tiers)</td>
+                <td>RDB/AOF snapshots</td>
+                <td>No</td>
+                <td>Hot Restart (Enterprise)</td>
+            </tr>
+            <tr>
+                <td>Compute Grid</td>
+                <td>Yes (collocated compute)</td>
+                <td>Lua scripting</td>
+                <td>No</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Machine Learning</td>
+                <td>Built-in ML library</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Data Partitioning</td>
+                <td>Automatic (affinity-based)</td>
+                <td>Manual (cluster mode)</td>
+                <td>Client-side</td>
+                <td>Automatic</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Key Terms</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Cluster</b> — a group of interconnected Ignite nodes that share data and computation;</li>
+            <li><b>Server Node</b> — stores data in memory (and optionally on disk), executes compute tasks, and processes SQL queries;</li>
+            <li><b>Client Node</b> — joins the cluster topology but does not store data; used to stream data in or execute queries;</li>
+            <li><b>Thin Client</b> — a lightweight client that connects to the cluster over TCP without joining the topology; available in Java, .NET, Python, Node.JS, C++;</li>
+            <li><b>Cache</b> — a named key-value data structure distributed across the cluster; equivalent to a SQL table;</li>
+            <li><b>Partition</b> — a subset of the data set; Ignite divides each cache into 1024 partitions by default, distributed evenly across server nodes;</li>
+            <li><b>Affinity</b> — the function that maps a key to a specific partition (and therefore to a specific node);</li>
+            <li><b>Backup</b> — a copy of a partition stored on a different node for fault tolerance;</li>
+            <li><b>Baseline Topology</b> — the set of server nodes that persists data; determines which nodes participate in data storage;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

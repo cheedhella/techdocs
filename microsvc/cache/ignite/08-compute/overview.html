@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Compute Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Compute Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is the Compute Grid?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The Compute Grid allows you to <strong>execute arbitrary code on cluster nodes</strong> — closures, callables, runnables, and custom tasks;</li>
+            <li>Instead of moving data to the application, you move the computation to where the data lives;</li>
+            <li>Ignite handles distribution, load balancing, and failover automatically;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why use Distributed Compute?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Data locality</b> — execute computations on nodes that hold the relevant data, eliminating network transfer;</li>
+            <li><b>Parallelism</b> — distribute work across all nodes for faster execution;</li>
+            <li><b>Failover</b> — if a node fails during computation, Ignite can retry on another node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Executing IgniteRunnable</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Fire-and-forget execution with no return value:
+                <pre><code>// Run on a random node
+ignite.compute().run(() -> {
+    System.out.println("Hello from " + Ignition.localIgnite().name());
+});
+
+// Broadcast to ALL nodes
+ignite.compute().broadcast(() -> {
+    System.out.println("Hello from every node!");
+});</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Executing IgniteCallable</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Execute tasks that return a value:
+                <pre><code>// Call on a random node
+int result = ignite.compute().call(() -> {
+    return Runtime.getRuntime().availableProcessors();
+});
+
+// Call on ALL nodes, collect results
+Collection&lt;Integer&gt; cpuCounts = ignite.compute().broadcast(() -> {
+    return Runtime.getRuntime().availableProcessors();
+});
+
+int totalCPUs = cpuCounts.stream().mapToInt(Integer::intValue).sum();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Map-Reduce with ComputeTask</strong></div>
+    <div class="answer">
+        <ul>
+            <li>For complex distributed computations, implement <code>ComputeTask</code>:
+                <pre><code>public class WordCountTask extends ComputeTaskSplitAdapter&lt;String, Integer&gt; {
+
+    @Override
+    protected Collection&lt;? extends ComputeJob&gt; split(int gridSize, String text) {
+        // Split work into jobs — one per word
+        String[] words = text.split(" ");
+        List&lt;ComputeJob&gt; jobs = new ArrayList&lt;&gt;();
+        for (String word : words) {
+            jobs.add(new ComputeJobAdapter() {
+                @Override public Object execute() {
+                    return word.length();
+                }
+            });
+        }
+        return jobs;
+    }
+
+    @Override
+    public Integer reduce(List&lt;ComputeJobResult&gt; results) {
+        // Aggregate results from all jobs
+        return results.stream()
+            .mapToInt(r -> (int) r.getData())
+            .sum();
+    }
+}
+
+int totalLength = ignite.compute().execute(WordCountTask.class, "Hello World");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Async Execution</strong></div>
+    <div class="answer">
+        <ul>
+            <li>All compute methods have async counterparts:
+                <pre><code>IgniteFuture&lt;Integer&gt; future = ignite.compute().callAsync(() -> {
+    return expensiveComputation();
+});
+
+future.listen(f -> System.out.println("Result: " + f.get()));</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

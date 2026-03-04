@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Affinity Colocation</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Affinity Colocation</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Affinity Colocation?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Affinity colocation ensures that <strong>related data is stored on the same node</strong>;</li>
+            <li>For example, all orders belonging to a customer can be colocated with that customer's record;</li>
+            <li>This means queries and computations that access related data don't need network hops — everything is local;</li>
+            <li>Without colocation, a join between <code>Customer</code> and <code>Order</code> tables would require shuffling data across the network;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How does it work?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite uses the <strong>affinity key</strong> to determine which partition (and therefore which node) a data entry belongs to;</li>
+            <li>By default, the entire cache key is used as the affinity key;</li>
+            <li>You can designate a specific field of the key as the affinity key using the <code>@AffinityKeyMapped</code> annotation;</li>
+            <li>All entries with the same affinity key value end up in the same partition on the same node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Configuring Affinity Colocation</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Using @AffinityKeyMapped annotation:</b>
+                <pre><code>public class OrderKey {
+    @AffinityKeyMapped
+    private int customerId;  // orders colocated by customerId
+    private int orderId;
+
+    // constructor, getters, equals, hashCode...
+}</code></pre>
+            </li>
+            <li><b>Using AffinityKey wrapper:</b>
+                <pre><code>// Key: orderId, Affinity key: customerId
+AffinityKey&lt;Integer&gt; key = new AffinityKey&lt;&gt;(orderId, customerId);
+orderCache.put(key, orderValue);</code></pre>
+            </li>
+            <li><b>Via SQL:</b>
+                <pre><code>CREATE TABLE Orders (
+    orderId INT,
+    customerId INT,
+    amount DECIMAL,
+    PRIMARY KEY (orderId, customerId)
+) WITH "affinityKey=customerId,cache_name=OrderCache,backups=1";</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. When should you use Affinity Colocation?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you frequently join or cross-reference two caches/tables (e.g., Customer + Orders, Product + Reviews);</li>
+            <li>When you run collocated compute tasks that need to process related data locally;</li>
+            <li>When you want to avoid the overhead of distributed joins;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Impact on SQL Joins</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If two tables are colocated on the same affinity key, Ignite can perform the join <strong>locally on each node</strong> — this is called a <strong>colocated join</strong>;</li>
+            <li>If tables are not colocated, Ignite must perform a <strong>non-colocated (distributed) join</strong>, which sends data across the network and is much slower;</li>
+            <li>Non-colocated joins must be explicitly enabled:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery("SELECT ... FROM A JOIN B ON ...");
+query.setDistributedJoins(true);</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

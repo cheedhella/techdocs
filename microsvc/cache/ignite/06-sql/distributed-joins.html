@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Distributed Joins</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Distributed Joins</h2>
+    </div>
+
+    <div class="question"><strong>1. Colocated vs. Non-Colocated Joins</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When two tables are joined, the data from both tables must be on the same node to perform the join locally;</li>
+            <li><b>Colocated join</b> — both tables use the same affinity key, so related rows live on the same node; the join is performed locally on each node and results are merged;</li>
+            <li><b>Non-colocated (distributed) join</b> — tables have different affinity keys; data must be shuffled across the network to perform the join;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How Colocated Joins Work</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If <code>Customer</code> is partitioned by <code>customerId</code> and <code>Order</code> is also affinity-colocated by <code>customerId</code>:
+                <pre><code>-- This join is fully local on each node
+SELECT c.name, o.amount
+FROM Customer c
+JOIN Order o ON c.customerId = o.customerId;</code></pre>
+            </li>
+            <li>Each node joins only its local data, then results are sent back to the query originator;</li>
+            <li>Fast and scalable — no data shuffling;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How Non-Colocated Joins Work</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If the joined tables are not colocated, Ignite must broadcast parts of one table to all nodes;</li>
+            <li>Must be explicitly enabled:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery(
+    "SELECT p.name, d.deptName FROM Person p JOIN Department d ON p.deptId = d.id"
+);
+query.setDistributedJoins(true);</code></pre>
+            </li>
+            <li>Or via JDBC:
+                <pre><code>jdbc:ignite:thin://host:10800?distributedJoins=true</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Performance Implications</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Aspect</th><th>Colocated Join</th><th>Non-Colocated Join</th></tr>
+            <tr><td>Network traffic</td><td>Minimal</td><td>High (data shuffling)</td></tr>
+            <tr><td>Latency</td><td>Low</td><td>High</td></tr>
+            <tr><td>Scalability</td><td>Linear with nodes</td><td>Limited by network</td></tr>
+            <tr><td>Configuration</td><td>Requires affinity colocation setup</td><td>Just enable <code>distributedJoins</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Joins with REPLICATED Tables</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Joining a PARTITIONED table with a REPLICATED table is always local — every node has the full replicated data;</li>
+            <li>This is a common pattern: keep small lookup tables (country codes, categories) as REPLICATED and large transactional tables as PARTITIONED;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Design your data model to use affinity colocation for frequently joined tables;</li>
+            <li>Use REPLICATED mode for small lookup/reference tables;</li>
+            <li>Avoid non-colocated joins on large tables in latency-sensitive paths;</li>
+            <li>Use <code>EXPLAIN</code> to analyze join strategies;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

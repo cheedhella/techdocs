@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Near Cache</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Near Cache</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Near Cache?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A near cache is a <strong>local, on-heap cache</strong> of the most recently or frequently accessed entries from a distributed cache;</li>
+            <li>It sits on the client node (or any node) and serves reads locally, avoiding network hops;</li>
+            <li>Particularly useful for <strong>PARTITIONED</strong> caches where reads may require contacting remote nodes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How does it work?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you read a key, the result is cached locally in the near cache;</li>
+            <li>Subsequent reads for the same key are served from the local near cache — no network hop;</li>
+            <li>When the entry is updated on the primary node, all near caches that hold that entry are <strong>automatically invalidated</strong>;</li>
+            <li>The near cache is populated on-demand (read-through), not preloaded;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Configuring Near Cache</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>On the server (cache configuration):</b>
+                <pre><code>NearCacheConfiguration&lt;Integer, String&gt; nearCfg = new NearCacheConfiguration&lt;&gt;();
+nearCfg.setNearEvictionPolicy(new LruEvictionPolicy&lt;&gt;(100_000));
+
+CacheConfiguration&lt;Integer, String&gt; cacheCfg = new CacheConfiguration&lt;&gt;("myCache");
+cacheCfg.setNearConfiguration(nearCfg);
+
+ignite.createCache(cacheCfg);</code></pre>
+            </li>
+            <li><b>On a client node (at runtime):</b>
+                <pre><code>NearCacheConfiguration&lt;Integer, String&gt; nearCfg = new NearCacheConfiguration&lt;&gt;();
+nearCfg.setNearEvictionPolicy(new LruEvictionPolicy&lt;&gt;(50_000));
+
+IgniteCache&lt;Integer, String&gt; cache = ignite.createNearCache("myCache", nearCfg);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Eviction Policies for Near Cache</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Policy</th><th>Description</th></tr>
+            <tr><td><code>LruEvictionPolicy</code></td><td>Removes least recently used entries when max size is reached</td></tr>
+            <tr><td><code>FifoEvictionPolicy</code></td><td>Removes oldest entries (first in, first out)</td></tr>
+            <tr><td><code>SortedEvictionPolicy</code></td><td>Removes entries based on custom comparator</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. When to use Near Cache</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you have a <strong>read-heavy workload</strong> with a hot set of frequently accessed keys;</li>
+            <li>When reads from client nodes are latency-sensitive and the data is in PARTITIONED mode;</li>
+            <li>Avoid near cache for write-heavy workloads — frequent invalidations negate the benefit;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

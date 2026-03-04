@@ -11,90 +11,234 @@
         <h2>Chart Management</h2>
     </div>
 
-    <div class="question"><strong>1. Installing a Chart — helm install</strong></div>
+    <div class="question"><strong>1. helm install</strong></div>
     <div class="answer">
         <ul>
-            <li>
-<pre><code># Install from OCI registry (Docker Hub, ECR, GHCR, etc.)
-helm install myrelease oci://registry-1.docker.io/myuser/myapp --version 0.1.0
-
-# Install from a traditional Helm repository
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo update
-helm install myrelease bitnami/nginx
-
-# Install from a local chart directory
-helm install myrelease ./myapp
-
-# Install from a .tgz package
-helm install myrelease myapp-0.1.0.tgz
-
-# Install from a direct URL
-helm install myrelease https://charts.bitnami.com/bitnami/nginx-15.2.3.tgz</code></pre>
+            <li>It is used to deploy a chart to a k8s cluster;</li>
+            <li>In other words, it is used to create a release(or running instance of the chart);</li>
+            <li>Syntax:
+                <pre><code>helm install <release-name> oci://<registry>/<namespace>/<chart-name> --version <chart-version></code></pre>
             </li>
-            <li><code>myrelease</code> is the release name — a unique identifier for this deployment;</li>
-            <li>You can install the same chart multiple times with different release names;</li>
-            <li>Each install creates a new <strong>release</strong> tracked by Helm (stored as a k8s Secret);</li>
+            <li>Login: <pre><code></code>helm registry login registry-1.docker.io -u cheedhella -p <password></code></pre></li>
+            <li>Install: <pre><code></code>helm install my-nginx-1 oci://registry-1.docker.io/bitnamicharts/nginx --version 15.5.2</code></pre></li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Install Options</strong></div>
+    <div class="question"><strong>2. helm install options</strong></div>
     <div class="answer">
         <ul>
-            <li>
-<pre><code># Override values with a file
-helm install myrelease oci://registry-1.docker.io/myuser/myapp -f custom-values.yaml
+            <li><code>--generate-name</code> - It auto generates the release name;</li>
+            <li><code>--version</code> - It specifies the version of the chart to install; If not provided, it defaults to latest version; <b>Best practice is to always specify the version explicitly;</b></li>
+            <li><code>-n</code> - It specifies the namespace to install the chart in; If specified namespace does not exist, command will fail; If not provided, it defaults to default namespace;</li>
+            <li><code>--create-namespace</code> - It creates the namespace, if it doesn't exist;</li>
+            <li><code>-f values-file.yaml</code> - It specifies values file with custom values; It overrides the default values of the chart; You can pass multiple files; Later files override earlier files; Eg: -f values-file1.yaml -f values-file2.yaml;</li>
+            <li><code>--set</code> - Override values inline; Eg: --set replicaCount=3 --set image.tag=v2.0;</li>
+            <li><code>--wait</code> - Wait for the resources to be ready, before marking the release as successful;</li>
+            <li><code>--timeout</code> - It specifies the wait time limit(default 5m);</li>
+            <li><code>--atomic</code> - It is used to rollback the installation(cleanup resources), if it fails;</li>
+            <li><code>--dry-run</code> - Simulate the installation without installing the chart;</li>
+            <li><code>--debug</code> - Show detailed output (use with dry-run for troubleshooting);</li>
+        </ul>
+    </div>
 
-# Override individual values
-helm install myrelease oci://registry-1.docker.io/myuser/myapp --set replicaCount=3
+    <div class="question"><strong>3. What happens internally, when you run 'helm install' command?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It downloads the chart from the registry and stores it in local cache;</li>
+            <li>Helm reads:
+                <ul>
+                    <li><code>Chart.yaml</code></li>
+                    <li><code>values.yaml</code></li>
+                    <li><code>templates/</code></li>
+                </ul>
+            </li>
+            <li>It merges:
+                <ul>
+                    <li>Default values</li>
+                    <li>User-provided values (--set or -f)</li>
+                </ul>
+            </li>
+            <li>It renders templates</li>
+            <li>It creates k8s resources;</li>
+            <li>It stores the release metadata in a k8s secret, in the same namespace as the release, in the cluster;</li>
+        </ul>
+    </div>
 
-# Override multiple values
-helm install myrelease oci://registry-1.docker.io/myuser/myapp \
-  --set service.type=NodePort --set service.port=8080
+    <div class="question"><strong>4. Where Does helm install Store Downloaded Charts?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Run: 'helm env' and look for <code>HELM_DATA_HOME</code> variable;</li>
+            <li>It defaults to <code>~/.cache/helm/</code>;</li>
+        </ul>
+    </div>
 
-# Install into a specific namespace (creates namespace if --create-namespace is used)
-helm install myrelease oci://registry-1.docker.io/myuser/myapp \
-  -n production --create-namespace
-
-# Auto-generate release name
-helm install oci://registry-1.docker.io/myuser/myapp --generate-name
-
-# Wait for all resources to be ready before marking as successful
-helm install myrelease oci://registry-1.docker.io/myuser/myapp --wait --timeout 5m
-
-# Dry run — render and validate without actually installing
-helm install myrelease oci://registry-1.docker.io/myuser/myapp --dry-run --debug</code></pre>
+    <div class="question"><strong>5. helm list</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Release is nothing but a running instance of a chart;</li>
+            <li>It lists all the active(deployed) releases in the current namespace;</li>
+            <li>Eg:
+                <pre><code>NAME      NAMESPACE   REVISION  UPDATED                   STATUS    CHART         APP VERSION
+my-nginx-1  default     1         2026-03-03 10:00:00 UTC  deployed  nginx-15.5.2   1.24.0</code></pre>
+            </li>
+            <li><b>Status values:</b>
+                <ul>
+                    <li><code>deployed</code> - installation is successful, application is healthy and usable;</li>
+                    <li><code>failed</code> - install/upgrade failed, due to invalid values, image pull errors,RBAC errors etc;</li>
+                    <li><code>pending-install</code> - installation is in-progress;</li>
+                    <li><code>pending-upgrade</code> - upgrade is in-progress;</li>
+                    <li><code>pending-rollback</code> - rollback is in-progress;</li>
+                    <li><code>superseded</code> - When you upgrade, helm creates a new revision, marks it as deployed and marks the old release as superseded(not active/running); superseded releases are not deleted, so that you can rollback to them if you want;</li>
+                    <li><code>uninstalling</code> - uninstallation is in-progress;</li>
+                    <li><code>uninstalled</code> - release has been uninstalled successfully; If you install again with same name, it will be a new release; As history is preserved, you can rollback the uninstalled release if you want; You can also remove history, while uninstalling: helm uninstall myapp --keep-history=false</li>
+                </ul>
+            </li>
+            <li><b>Options:</b>
+                <ul>
+                    <li><code>-n</code> - It lists the releases in specified namespace;</li>
+                    <li><code>-A</code> - It lists the releases in all namespaces;</li>
+                    <li><code>--all</code> - It lists all the releases including failed, pending, superseded, uninstalled;</li>
+                    <li><code>--failed</code> - It lists the failed releases;</li>
+                    <li><code>--deployed</code> - It lists the deployed releases;</li>
+                    <li><code>--pending</code> - It lists the pending releases;</li>
+                    <li><code>--superseded</code> - It lists the superseded releases;</li>
+                    <li><code>--uninstalled</code> - It lists the uninstalled releases;</li>
+                    <li><code>--uninstalling</code> - It lists the uninstalling releases;</li>
+                    <li><code>--filter</code> - It filters the releases by name; Eg: --filter "myapp.*", --filter "^myapp$";</li>
+                </ul>
             </li>
         </ul>
     </div>
 
-    <div class="question"><strong>3. Listing Releases — helm list</strong></div>
+    <div class="question"><strong>5. helm upgrade</strong></div>
     <div class="answer">
         <ul>
-            <li>
-<pre><code># List releases in current namespace
-helm list
-
-# List releases in all namespaces
-helm list --all-namespaces
-helm list -A
-
-# List releases in a specific namespace
-helm list -n production
-
-# List all releases including failed, pending, superseded
-helm list --all
-
-# Filter by release name
-helm list --filter "myapp.*"
-
-# Output in different formats
-helm list -o yaml
-helm list -o json</code></pre>
+            <li>It upgrades the release to a new chart version OR template OR values;</li>\
+            <li>Each upgrade increments the release <strong>revision</strong> number;</li>
+            <li>Syntax:
+                <pre><code>helm upgrade <release-name> oci://<registry>/<namespace>/<chart-name> --version <chart-version></code></pre>
             </li>
-            <li>Output columns: NAME, NAMESPACE, REVISION, UPDATED, STATUS, CHART, APP VERSION;</li>
+            <li><b>Upgrade chart version</b>: helm upgrade my-nginx-1 bitnami/nginx --version 15.5.2</li>
+            <li><b>Upgrade with new values</b>: helm upgrade my-nginx-1 bitnami/nginx -f prod-values.yaml</li>
+            <li><b>Override specific values</b>: helm upgrade my-nginx-1 bitnami/nginx --set replicaCount=3 --set image.tag=v2.0</li>
+            <li><b>Upgrade with install</b>(if release doesn't exist, it installs it; else, it upgrades it): helm upgrade --install my-nginx-2 bitnami/nginx --version 15.5.2</li>
+            <li><b></b>Upgrade with reuse values</b>(Reuse the existing release values and apply only the new overrides you specify): helm upgrade my-nginx-1 bitnami/nginx --reuse-values --set replicaCount=3</li>
+
+            <li>Options:
+                <ul>
+                    <li><code>--install</code> - It installs the release if it doesn't exist; If it exists, it upgrades it; Makes it idempotent, useful in CI/CD pipelines;</li>
+                    <li><code>--atomic</code> - It rolls back the upgrade if it fails;</li>
+                    <li><code>--version</code> - It specifies the version of the chart to upgrade to; If not provided, it defaults to latest version;</li>
+                    <li><code>-f</code> - It specifies the values file to use for the upgrade; If not provided, it uses the default values;</li>
+                    <li><code>--set</code> - It specifies the values to override; Eg: --set replicaCount=3 --set image.tag=v2.0;</li>
+                    <li><code>--reuse-values</code> - It reuses the previous values; Eg: --reuse-values;</li>
+                    <li><code>--wait</code> - It waits for the upgrade to complete; Eg: --wait;</li>
+                    <li><code>--timeout</code> - It specifies the wait time limit; Eg: --timeout 5m;</li>
+                    <li><code>--debug</code> - It shows the debug information; Eg: --debug;</li>
+                </ul>
+            </li>
         </ul>
     </div>
+
+    <div class="question"><strong>6. What happens internally, when you run 'helm upgrade' command?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It downloads the chart from the registry and stores it in local cache;</li>
+            <li>Helm reads:
+                <ul>
+                    <li><code>Chart.yaml</code></li>
+                    <li><code>values.yaml</code></li>
+                    <li><code>templates/</code></li>
+                </ul>
+            </li>
+            <li>It merges:
+                <ul>
+                    <li>Default values</li>
+                    <li>User-provided values (--set or -f)</li>
+                </ul>
+            </li>
+            <li>It renders templates</li>
+            <li>It creates k8s resources;</li>
+            <li>It stores the release metadata in a k8s secret, in the same namespace as the release, in the cluster;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. helm history</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It shows the revision history of a release, allowing you track install/upgrade operations and perform rollback if needed;</li>
+            <li>Each time you install, upgrade, or rollback a release, it creates a new revision;</li>
+            <li>Each revision is stored as a k8s Secret in the release's namespace;</li>
+            <li>Syntax:
+                <pre><code>helm history <release-name> <flags></code></pre>
+            </li>
+            <li>Output:
+                <pre><code>REVISION  UPDATED                   STATUS      CHART         APP VERSION  DESCRIPTION
+1         2026-03-01 10:00:00       superseded  myapp-0.1.0   1.0.0        Install complete
+2         2026-03-01 12:00:00       superseded  myapp-0.1.0   1.0.0        Upgrade complete
+3         2026-03-01 14:00:00       deployed    myapp-0.2.0   2.0.0        Upgrade complete</code></pre>
+            </li>
+            <li>Options:
+                <ul>
+                    <li><code>-n</code> - It specifies the namespace to show the history in; Eg: -n production;</li>
+                    <li><code>--max</code> - It specifies the maximum number of revisions to show; Eg: --max 5;</li>
+                </ul>
+            </li>
+            <li>Eg:
+                <pre><code>helm history my-nginx-1</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. helm rollback</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to rollback the release to a previous revision;</li>
+            <li>It helps in recovering from failed upgrades or broken deployments;</li>
+            <li>It creates a new revision, it doesn't reuse the previous revision number;</li>
+            <li>Syntax:
+                <pre><code>helm rollback <release-name> <revision-number></code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. helm uninstall</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It deletes all the k8s resources associated with the release and marks the release as uninstalled;</li>
+            <li>It removes release history (Secrets) unless <code>--keep-history</code> is used;</li>
+            <li>It does NOT remove CRDs (Custom Resource Definitions) — those must be deleted manually;</li>
+            <li>It does NOT remove PVCs (PersistentVolumeClaims) by default — data is preserved;</li>
+            <li>By default, helm list will not show the uninstalled releases;</li>
+            <li>Syntax:
+                <pre><code>helm uninstall <release-name> <flags></code></pre>
+            </li>
+            <li>Options:
+                <ul>
+                    <li><code>-n</code> - It specifies the namespace to uninstall the release in; Eg: -n production;</li>
+                    <li><code>--keep-history</code> - It deletes k8s resources, but keeps the release history, allowing you to rollback to the uninstalled release if needed;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+
+
+    <div class="question"><strong>7. helm status</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It shows the status of the release;</li>
+            <li>It shows the details of the release;</li>
+            <li>It shows the resources of the release;</li>
+        </ul>
+    </div>
+
+
+
 
     <div class="question"><strong>4. Viewing Release Details</strong></div>
     <div class="answer">
@@ -124,106 +268,8 @@ helm get hooks myrelease</code></pre>
         </ul>
     </div>
 
-    <div class="question"><strong>5. Upgrading a Release — helm upgrade</strong></div>
-    <div class="answer">
-        <ul>
-            <li>
-<pre><code># Upgrade to a new chart version
-helm upgrade myrelease oci://registry-1.docker.io/myuser/myapp --version 0.2.0
 
-# Upgrade with new values
-helm upgrade myrelease oci://registry-1.docker.io/myuser/myapp -f new-values.yaml
 
-# Upgrade with overridden values
-helm upgrade myrelease oci://registry-1.docker.io/myuser/myapp --set replicaCount=5
-
-# Reuse existing values and only change specific ones
-helm upgrade myrelease oci://registry-1.docker.io/myuser/myapp --reuse-values --set image.tag=2.1.0
-
-# Install if release doesn't exist, upgrade if it does
-helm upgrade --install myrelease oci://registry-1.docker.io/myuser/myapp --version 0.2.0
-
-# Upgrade from a local chart
-helm upgrade myrelease ./myapp
-
-# Wait for upgrade to complete
-helm upgrade myrelease oci://registry-1.docker.io/myuser/myapp --wait --timeout 5m</code></pre>
-            </li>
-            <li>Each upgrade increments the release <strong>revision</strong> number;</li>
-            <li><code>--reuse-values</code> keeps the previous values and only applies the new overrides;</li>
-            <li><code>--install</code> (or <code>-i</code>) makes it idempotent — useful in CI/CD pipelines;</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>6. Release History — helm history</strong></div>
-    <div class="answer">
-        <ul>
-            <li>
-<pre><code># View release history
-helm history myrelease
-
-# Output:
-# REVISION  UPDATED                   STATUS      CHART         APP VERSION  DESCRIPTION
-# 1         2026-03-01 10:00:00       superseded  myapp-0.1.0   1.0.0        Install complete
-# 2         2026-03-01 12:00:00       superseded  myapp-0.1.0   1.0.0        Upgrade complete
-# 3         2026-03-01 14:00:00       deployed    myapp-0.2.0   2.0.0        Upgrade complete
-
-# Limit output
-helm history myrelease --max 5</code></pre>
-            </li>
-            <li>Every install, upgrade, and rollback creates a new revision;</li>
-            <li>Each revision is stored as a k8s Secret in the release's namespace;</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>7. Rolling Back — helm rollback</strong></div>
-    <div class="answer">
-        <ul>
-            <li>
-<pre><code># Rollback to the previous revision
-helm rollback myrelease
-
-# Rollback to a specific revision
-helm rollback myrelease 1
-
-# Rollback with wait
-helm rollback myrelease 2 --wait --timeout 5m</code></pre>
-            </li>
-            <li>Rollback creates a <strong>new revision</strong> (it does not delete history);</li>
-            <li>E.g., if you're on revision 3 and rollback to revision 1, Helm creates revision 4 which is identical to revision 1;</li>
-            <li>
-<pre><code># After rolling back revision 3 to revision 1:
-# REVISION  STATUS      DESCRIPTION
-# 1         superseded  Install complete
-# 2         superseded  Upgrade complete
-# 3         superseded  Upgrade complete
-# 4         deployed    Rollback to 1</code></pre>
-            </li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>8. Uninstalling a Release — helm uninstall</strong></div>
-    <div class="answer">
-        <ul>
-            <li>
-<pre><code># Uninstall a release
-helm uninstall myrelease
-
-# Uninstall in a specific namespace
-helm uninstall myrelease -n production
-
-# Keep release history (allows rollback even after uninstall)
-helm uninstall myrelease --keep-history
-
-# Dry run
-helm uninstall myrelease --dry-run</code></pre>
-            </li>
-            <li>Removes all k8s resources associated with the release;</li>
-            <li>Removes release history (Secrets) unless <code>--keep-history</code> is used;</li>
-            <li>Does NOT remove CRDs (Custom Resource Definitions) — those must be deleted manually;</li>
-            <li>Does NOT remove PVCs (PersistentVolumeClaims) by default — data is preserved;</li>
-        </ul>
-    </div>
 
     <div class="question"><strong>9. Testing a Release — helm test</strong></div>
     <div class="answer">
@@ -390,84 +436,6 @@ helm uninstall &lt;release&gt;</code></pre>
         </ul>
     </div>
 
-    <div class="question"><strong>16. Common Flags Reference</strong></div>
-    <div class="answer">
-        <ul>
-            <li>
-                <table border="1" cellpadding="8" cellspacing="0">
-                    <tr>
-                        <th>Flag</th>
-                        <th>Works With</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td><code>-f / --values</code></td>
-                        <td>install, upgrade, template</td>
-                        <td>Specify a values file to override defaults</td>
-                    </tr>
-                    <tr>
-                        <td><code>--set</code></td>
-                        <td>install, upgrade, template</td>
-                        <td>Override individual values on the command line</td>
-                    </tr>
-                    <tr>
-                        <td><code>--version</code></td>
-                        <td>install, upgrade, pull, show, template</td>
-                        <td>Specify the chart version to use</td>
-                    </tr>
-                    <tr>
-                        <td><code>-n / --namespace</code></td>
-                        <td>all commands</td>
-                        <td>Specify the k8s namespace</td>
-                    </tr>
-                    <tr>
-                        <td><code>--create-namespace</code></td>
-                        <td>install, upgrade</td>
-                        <td>Create the namespace if it doesn't exist</td>
-                    </tr>
-                    <tr>
-                        <td><code>--wait</code></td>
-                        <td>install, upgrade, rollback, uninstall</td>
-                        <td>Wait for resources to be ready</td>
-                    </tr>
-                    <tr>
-                        <td><code>--timeout</code></td>
-                        <td>install, upgrade, rollback, uninstall, test</td>
-                        <td>Time to wait for operation (default 5m0s)</td>
-                    </tr>
-                    <tr>
-                        <td><code>--dry-run</code></td>
-                        <td>install, upgrade, uninstall</td>
-                        <td>Simulate the operation without executing</td>
-                    </tr>
-                    <tr>
-                        <td><code>--debug</code></td>
-                        <td>install, upgrade, template</td>
-                        <td>Output debug information</td>
-                    </tr>
-                    <tr>
-                        <td><code>--reuse-values</code></td>
-                        <td>upgrade</td>
-                        <td>Reuse previous release values and merge overrides</td>
-                    </tr>
-                    <tr>
-                        <td><code>--install / -i</code></td>
-                        <td>upgrade</td>
-                        <td>Install if release doesn't exist (idempotent)</td>
-                    </tr>
-                    <tr>
-                        <td><code>--keep-history</code></td>
-                        <td>uninstall</td>
-                        <td>Preserve release history after uninstall</td>
-                    </tr>
-                    <tr>
-                        <td><code>--generate-name</code></td>
-                        <td>install</td>
-                        <td>Auto-generate a release name</td>
-                    </tr>
-                </table>
-            </li>
-        </ul>
     </div>
 
 </body>

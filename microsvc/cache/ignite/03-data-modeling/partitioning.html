@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Data Partitioning</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Data Partitioning</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Data Partitioning?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Data partitioning divides the entire dataset into smaller chunks called <strong>partitions</strong>;</li>
+            <li>Partitions are distributed across server nodes so each node holds roughly an equal share of data;</li>
+            <li>By default each cache has <strong>1024 partitions</strong>;</li>
+            <li>This is how Ignite scales horizontally — more nodes means each node stores fewer partitions;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How Keys Map to Partitions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you write a key-value pair, Ignite applies the <strong>affinity function</strong> to the key to determine the partition number (0–1023);</li>
+            <li>The default affinity function uses a <strong>rendezvous hashing</strong> algorithm;</li>
+            <li>The partition is then assigned to a primary node and optionally to backup nodes;</li>
+            <li>
+                <pre><code>Key "user-42"  →  hash("user-42") mod 1024  →  Partition 317  →  Node B (primary)
+                                                                     →  Node D (backup)</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Partitioned vs. Replicated Mode</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Mode</th>
+                <th>Description</th>
+                <th>Reads</th>
+                <th>Writes</th>
+                <th>Best For</th>
+            </tr>
+            <tr>
+                <td><b>PARTITIONED</b></td>
+                <td>Data is split across nodes; each node holds a subset</td>
+                <td>May require network hop</td>
+                <td>Fast (update primary + backups)</td>
+                <td>Large datasets with frequent writes</td>
+            </tr>
+            <tr>
+                <td><b>REPLICATED</b></td>
+                <td>Every node holds a full copy of all data</td>
+                <td>Always local (fast)</td>
+                <td>Slow (must update all nodes)</td>
+                <td>Small, read-heavy lookup tables</td>
+            </tr>
+            <tr>
+                <td><b>LOCAL</b></td>
+                <td>Data stays on the node that created it; no distribution</td>
+                <td>Local only</td>
+                <td>Local only</td>
+                <td>Node-local caching, scratch space</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Backup Partitions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each partition has exactly one <strong>primary copy</strong> and zero or more <strong>backup copies</strong>;</li>
+            <li>Backups are stored on different nodes from the primary for fault tolerance;</li>
+            <li>If the primary node fails, a backup is automatically promoted to primary;</li>
+            <li>Number of backups is configured per cache:
+                <pre><code>CacheConfiguration cacheCfg = new CacheConfiguration("myCache");
+cacheCfg.setBackups(2); // 1 primary + 2 backups = 3 copies total</code></pre>
+            </li>
+            <li>Trade-off: more backups = better fault tolerance but more memory usage and slower writes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Partition Loss Policy</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If both the primary and all backup nodes for a partition fail simultaneously, the partition is <strong>lost</strong>;</li>
+            <li>The <code>partitionLossPolicy</code> controls what happens:
+                <ul>
+                    <li><b>READ_ONLY_SAFE</b> — lost partitions become read-only; reads from non-lost partitions continue;</li>
+                    <li><b>READ_ONLY_ALL</b> — all partitions become read-only;</li>
+                    <li><b>READ_WRITE_SAFE</b> — lost partitions throw exceptions; others continue normally;</li>
+                    <li><b>READ_WRITE_ALL</b> — all operations continue (may return incomplete data);</li>
+                    <li><b>IGNORE</b> (default) — partition loss is ignored;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

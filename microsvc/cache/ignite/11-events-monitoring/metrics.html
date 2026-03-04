@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Metrics &amp; Monitoring</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Metrics &amp; Monitoring</h2>
+    </div>
+
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite exposes metrics for caches, compute, memory, persistence, and cluster health;</li>
+            <li>Metrics can be accessed programmatically, via JMX, or exported to external monitoring systems;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Cache Metrics</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Enable per cache:
+                <pre><code>CacheConfiguration cfg = new CacheConfiguration("myCache");
+cfg.setStatisticsEnabled(true);</code></pre>
+            </li>
+            <li>Query cache metrics:
+                <pre><code>CacheMetrics metrics = cache.metrics();
+
+long gets = metrics.getCacheGets();
+long puts = metrics.getCachePuts();
+long hits = metrics.getCacheHits();
+long misses = metrics.getCacheMisses();
+float hitRate = metrics.getCacheHitPercentage();
+long size = metrics.getCacheSize();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Cluster Metrics</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ClusterMetrics clusterMetrics = ignite.cluster().metrics();
+
+int totalNodes = clusterMetrics.getTotalNodes();
+long heapUsed = clusterMetrics.getHeapMemoryUsed();
+long heapMax = clusterMetrics.getHeapMemoryMaximum();
+double cpuLoad = clusterMetrics.getCurrentCpuLoad();
+int activeJobs = clusterMetrics.getCurrentActiveJobs();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Data Region Metrics</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Enable data region metrics to monitor memory usage:
+                <pre><code>DataRegionConfiguration regionCfg = new DataRegionConfiguration();
+regionCfg.setMetricsEnabled(true);
+
+// Query at runtime
+DataRegionMetrics drm = ignite.dataRegionMetrics("Default_Region");
+long allocatedPages = drm.getTotalAllocatedPages();
+float fillFactor = drm.getPagesFillFactor();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. JMX Monitoring</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite exposes all metrics via <strong>JMX MBeans</strong>;</li>
+            <li>Connect with JConsole, VisualVM, or any JMX-compatible monitoring tool;</li>
+            <li>MBeans are organized under the <code>org.apache.ignite</code> domain;</li>
+            <li>Key MBean groups: Caches, Data Regions, Thread Pools, Transactions, Discovery;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Integration with External Monitoring</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Prometheus + Grafana</b> — use a JMX exporter to expose Ignite metrics to Prometheus;</li>
+            <li><b>OpenCensus</b> — Ignite has an OpenCensus metrics exporter module;</li>
+            <li><b>GridGain Control Center</b> — a commercial tool for monitoring Ignite clusters;</li>
+            <li>Example JMX exporter setup:
+                <pre><code># Add JMX exporter as a JVM agent
+export JVM_OPTS="$JVM_OPTS -javaagent:jmx_prometheus_javaagent.jar=9090:config.yaml"</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

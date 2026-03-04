@@ -175,10 +175,11 @@ helm install myrelease mychart -f base.yaml -f production.yaml</code></pre>
             <li><b>hpa.yaml</b> — sets up automatic scaling based on resource utilization;</li>
             <li><b>serviceaccount.yaml</b> — creates a k8s service account for the application;</li>
             <li><b>NOTES.txt</b> — rendered like other templates, but output is printed to the user after install/upgrade (not sent to k8s); useful for displaying access instructions;</li>
-            <li><b>_helpers.tpl</b> — reusable template snippets (e.g., generating labels, fullname); included by other templates using <code>{{ include "mychart.fullname" . }}</code>;</li>
-            <li><b>tests/</b> — contains test pod definitions run by <code>helm test</code> to verify an installation;</li>
+            <li><b>_helpers.tpl</b> — It contains reusable template snippets;</li>
+            <li><b>tests/</b> — Tests are used to verify if an installation ends with success; <code>helm test</code> command is used to repeat those tests;</li>
         </ul>
     </div>
+    ometimes, you want to create some reusable parts(called named templates), in that case you can use this file; 
 
     <div class="question"><strong>7. charts/ Directory</strong></div>
     <div class="answer">

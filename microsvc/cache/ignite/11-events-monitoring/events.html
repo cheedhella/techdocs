@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Events</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Events</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Ignite Events?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite generates <strong>events</strong> for various operations: cache operations, task executions, topology changes, discovery events, etc.;</li>
+            <li>Events are disabled by default for performance — you must explicitly enable the event types you need;</li>
+            <li>You can listen for events locally or remotely;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Enabling Events</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Enable specific event types in the configuration:
+                <pre><code>IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setIncludeEventTypes(
+    EventType.EVT_CACHE_OBJECT_PUT,
+    EventType.EVT_CACHE_OBJECT_READ,
+    EventType.EVT_CACHE_OBJECT_REMOVED,
+    EventType.EVT_NODE_JOINED,
+    EventType.EVT_NODE_LEFT,
+    EventType.EVT_NODE_FAILED
+);</code></pre>
+            </li>
+            <li>Only enable the events you actually need — each enabled event type adds overhead;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Local Event Listeners</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Listen for events on the local node:
+                <pre><code>ignite.events().localListen(event -> {
+    CacheEvent cacheEvent = (CacheEvent) event;
+    System.out.printf("Cache op: %s, key: %s%n",
+        cacheEvent.type(), cacheEvent.key());
+    return true; // return true to continue listening
+}, EventType.EVT_CACHE_OBJECT_PUT, EventType.EVT_CACHE_OBJECT_REMOVED);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Remote Event Listeners</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Listen for events on remote nodes — useful for monitoring from a client:
+                <pre><code>// Remote filter runs on each node (filters events)
+IgnitePredicate&lt;CacheEvent&gt; remoteFilter = event ->
+    event.cacheName().equals("importantCache");
+
+// Local listener runs on the client (receives filtered events)
+IgnitePredicate&lt;CacheEvent&gt; localListener = event -> {
+    System.out.println("Remote event: " + event.type());
+    return true;
+};
+
+ignite.events().remoteListen(
+    localListener,
+    remoteFilter,
+    EventType.EVT_CACHE_OBJECT_PUT
+);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Common Event Types</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Category</th><th>Event Types</th></tr>
+            <tr><td>Cache</td><td>EVT_CACHE_OBJECT_PUT, EVT_CACHE_OBJECT_READ, EVT_CACHE_OBJECT_REMOVED, EVT_CACHE_REBALANCE_STARTED</td></tr>
+            <tr><td>Discovery</td><td>EVT_NODE_JOINED, EVT_NODE_LEFT, EVT_NODE_FAILED</td></tr>
+            <tr><td>Task</td><td>EVT_TASK_STARTED, EVT_TASK_FINISHED, EVT_TASK_FAILED</td></tr>
+            <tr><td>Job</td><td>EVT_JOB_STARTED, EVT_JOB_FINISHED, EVT_JOB_FAILED</td></tr>
+        </table>
+    </div>
+</body>
+
+</html>

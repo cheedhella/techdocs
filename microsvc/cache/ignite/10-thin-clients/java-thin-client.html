@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Java Thin Client</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Java Thin Client</h2>
+    </div>
+
+    <div class="question"><strong>1. Dependency</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.ignite&lt;/groupId&gt;
+    &lt;artifactId&gt;ignite-core&lt;/artifactId&gt;
+    &lt;version&gt;2.17.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Connecting</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ClientConfiguration cfg = new ClientConfiguration()
+    .setAddresses("192.168.1.10:10800", "192.168.1.11:10800")
+    .setPartitionAwarenessEnabled(true);
+
+try (IgniteClient client = Ignition.startClient(cfg)) {
+    // use the client
+}</code></pre>
+            </li>
+            <li>Provide multiple addresses for failover — if one node is down, the client connects to another;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Key-Value Operations</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ClientCache&lt;Integer, String&gt; cache = client.getOrCreateCache("myCache");
+
+// Put
+cache.put(1, "Alice");
+
+// Get
+String value = cache.get(1);
+
+// Remove
+cache.remove(1);
+
+// Put all
+Map&lt;Integer, String&gt; batch = Map.of(2, "Bob", 3, "Charlie");
+cache.putAll(batch);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. SQL Queries via Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Execute SQL
+SqlFieldsQuery query = new SqlFieldsQuery(
+    "SELECT name, age FROM Person WHERE city = ?")
+    .setArgs("NYC");
+
+try (QueryCursor&lt;List&lt;?&gt;&gt; cursor = cache.query(query)) {
+    for (List&lt;?&gt; row : cursor) {
+        System.out.println(row.get(0) + " - " + row.get(1));
+    }
+}
+
+// DDL
+client.query(new SqlFieldsQuery(
+    "CREATE TABLE IF NOT EXISTS City (id INT PRIMARY KEY, name VARCHAR)")
+).getAll();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Transactions via Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ClientTransactions txs = client.transactions();
+
+try (ClientTransaction tx = txs.txStart(PESSIMISTIC, REPEATABLE_READ)) {
+    ClientCache&lt;Integer, Integer&gt; accounts = client.cache("accounts");
+    
+    int balance = accounts.get(1);
+    accounts.put(1, balance - 100);
+    accounts.put(2, accounts.get(2) + 100);
+    
+    tx.commit();
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Connection Configuration Options</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ClientConfiguration cfg = new ClientConfiguration()
+    .setAddresses("host1:10800", "host2:10800")
+    .setPartitionAwarenessEnabled(true)
+    .setTimeout(5000)                    // connection timeout
+    .setSendBufferSize(64 * 1024)        // TCP send buffer
+    .setReceiveBufferSize(64 * 1024)     // TCP receive buffer
+    .setRetryLimit(3);                   // retry failed operations</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Collocated Computations</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Collocated Computations</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Collocated Compute?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Collocated compute sends the computation <strong>to the node that owns a specific key</strong>;</li>
+            <li>The computation runs locally on that node, accessing data without any network hops;</li>
+            <li>This is one of Ignite's most powerful features — "send computation to data" instead of "send data to computation";</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. affinityRun / affinityCall</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Run a closure on the node that owns key=42 in "PersonCache"
+ignite.compute().affinityRun("PersonCache", 42, () -> {
+    IgniteCache&lt;Integer, Person&gt; cache = Ignition.localIgnite().cache("PersonCache");
+    Person person = cache.localPeek(42); // local read — no network
+    System.out.println("Name: " + person.getName());
+});
+
+// affinityCall returns a value
+String name = ignite.compute().affinityCall("PersonCache", 42, () -> {
+    IgniteCache&lt;Integer, Person&gt; cache = Ignition.localIgnite().cache("PersonCache");
+    Person person = cache.localPeek(42);
+    return person.getName();
+});</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Why is this efficient?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Without collocated compute:
+                <pre><code>Application → (network) → Node holding data → (network) → Application
+2 network hops + data serialization</code></pre>
+            </li>
+            <li>With collocated compute:
+                <pre><code>Application → (network) → Node holding data (compute runs locally) → (network) → result
+Only the small result is sent back; data stays on the node</code></pre>
+            </li>
+            <li>For operations that read/write large objects but return small results, this is dramatically faster;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Multi-Cache Collocated Compute</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If multiple caches are colocated (same affinity key), you can access all of them locally:
+                <pre><code>ignite.compute().affinityRun(
+    Arrays.asList("CustomerCache", "OrderCache"), // multiple caches
+    customerId,                                    // affinity key
+    () -> {
+        Ignite local = Ignition.localIgnite();
+        Customer c = local.cache("CustomerCache").localPeek(customerId);
+        // Access all orders for this customer — all local!
+    }
+);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Aggregations</b> — compute totals, averages, or summaries per partition locally;</li>
+            <li><b>Complex business logic</b> — execute multi-step operations that involve reading and writing multiple related keys;</li>
+            <li><b>Data enrichment</b> — join data from colocated caches and compute derived fields;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

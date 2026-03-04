@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Baseline Topology</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Baseline Topology</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Baseline Topology?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The Baseline Topology (BLT) is the set of server nodes that are expected to store persistent data;</li>
+            <li>It only matters when <strong>Native Persistence</strong> is enabled;</li>
+            <li>Ignite will not activate the cluster until all nodes in the baseline topology are present;</li>
+            <li>This prevents the cluster from starting with partial data after a restart;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is it needed?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Without BLT, if only 2 of 5 nodes restart, the cluster would activate and serve incomplete data;</li>
+            <li>BLT ensures the cluster waits until all expected nodes are online before becoming active;</li>
+            <li>It also controls data rebalancing — data is only rebalanced when the BLT changes, not on every transient topology event;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Managing the Baseline Topology</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Set via the <strong>control script</strong>:
+                <pre><code># View current baseline
+$IGNITE_HOME/bin/control.sh --baseline
+
+# Add a node to the baseline
+$IGNITE_HOME/bin/control.sh --baseline add consistentId1,consistentId2
+
+# Remove a node from the baseline
+$IGNITE_HOME/bin/control.sh --baseline remove consistentId1
+
+# Set a specific baseline topology
+$IGNITE_HOME/bin/control.sh --baseline set consistentId1,consistentId2,consistentId3</code></pre>
+            </li>
+            <li>Set programmatically:
+                <pre><code>ignite.cluster().setBaselineTopology(ignite.cluster().forServers().nodes());</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Auto-Adjust Baseline</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite can automatically adjust the baseline after a timeout when nodes join or leave:
+                <pre><code>ignite.cluster().baselineAutoAdjustEnabled(true);
+ignite.cluster().baselineAutoAdjustTimeout(30_000); // 30 seconds</code></pre>
+            </li>
+            <li>This avoids manual baseline management at the cost of potential rebalancing on transient node departures;</li>
+            <li>Enabled by default since Ignite 2.8;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Consistent ID</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each server node has a <strong>consistent ID</strong> — a unique identifier that persists across restarts;</li>
+            <li>By default, it is derived from the node's IP address and discovery port;</li>
+            <li>You can set it explicitly:
+                <pre><code>IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setConsistentId("node-1");</code></pre>
+            </li>
+            <li>The consistent ID is used to identify nodes in the baseline topology and to map partitions to nodes;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Architecture Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Architecture Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. Memory-First Architecture</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite's primary storage tier is <strong>RAM</strong>; data is kept in off-heap memory regions managed outside the JVM heap to avoid GC pauses;</li>
+            <li>The off-heap memory is organized into fixed-size <strong>pages</strong> (default 4 KB); pages hold data entries, indexes, and metadata;</li>
+            <li>This page-based memory architecture is called the <strong>Durable Memory</strong> (or PageMemory) layer;</li>
+            <li>It behaves like a virtual memory system: pages in RAM can optionally be backed by pages on disk (Native Persistence);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Node Types</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Server Node</b>
+                <ul>
+                    <li>Participates in data storage, caching, compute, SQL processing, and streaming;</li>
+                    <li>By default a node starts as a server;</li>
+                    <li>Forms the backbone of the cluster; all data is partitioned among server nodes;</li>
+                </ul>
+            </li>
+            <li><b>Client Node</b>
+                <ul>
+                    <li>Joins the cluster topology as a full member (receives topology updates, discovery events);</li>
+                    <li>Does not store data; forwards requests to server nodes;</li>
+                    <li>Useful for applications that need full API access (compute, transactions, continuous queries);</li>
+                    <li>Configured via: <code>IgniteConfiguration.setClientMode(true)</code>;</li>
+                </ul>
+            </li>
+            <li><b>Thin Client</b>
+                <ul>
+                    <li>Connects over a lightweight TCP protocol; does not join the topology;</li>
+                    <li>Much smaller footprint than a client node — no discovery overhead;</li>
+                    <li>Supports key-value, SQL, compute (Ignite 2.16+), and continuous queries;</li>
+                    <li>Available in Java, .NET, C++, Python, Node.JS, PHP;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Data Distribution</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Every cache is divided into a fixed number of <strong>partitions</strong> (1024 by default);</li>
+            <li>Each partition is assigned to a <strong>primary node</strong> and zero or more <strong>backup nodes</strong> via the <strong>affinity function</strong>;</li>
+            <li>When a key-value pair is written, Ignite hashes the key to determine which partition it belongs to, then routes the operation to the primary node of that partition;</li>
+            <li>If the primary node goes down, one of the backup nodes is automatically promoted to primary;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Multi-Tier Storage</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite supports a multi-tier storage model:
+                <ul>
+                    <li><b>Off-Heap Memory (Tier 1)</b> — primary storage; managed by PageMemory outside the JVM heap;</li>
+                    <li><b>Native Persistence (Tier 2)</b> — data is written to disk in the same page format; survives full cluster restarts;</li>
+                    <li><b>3rd-Party Persistence (Tier 3)</b> — Ignite can read-through / write-through to an external database (RDBMS, Cassandra, etc.) via the CacheStore interface;</li>
+                </ul>
+            </li>
+            <li>You can use any combination of tiers: memory-only, memory + native persistence, memory + external DB, or all three;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Discovery and Communication</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite uses two network subsystems:
+                <ul>
+                    <li><b>Discovery</b> — responsible for detecting nodes joining and leaving the cluster; used by TCP/IP Discovery or ZooKeeper Discovery;</li>
+                    <li><b>Communication</b> — responsible for direct point-to-point messaging between nodes (data replication, compute task execution, SQL query distribution);</li>
+                </ul>
+            </li>
+            <li>Discovery forms a logical ring; communication uses direct TCP connections;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. High-Level Component Map</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>┌──────────────────────────────────────────────────────┐
+│                   Application Layer                  │
+│  (Thin Client / Client Node / Embedded Server Node)  │
+├──────────────────────────────────────────────────────┤
+│        Key-Value API  │  SQL Engine  │  Compute Grid │
+├──────────────────────────────────────────────────────┤
+│                  Data Grid (Caches)                   │
+│       Partitioning │ Replication │ Transactions       │
+├──────────────────────────────────────────────────────┤
+│          Durable Memory (Off-Heap PageMemory)         │
+├──────────────────────────────────────────────────────┤
+│  Native Persistence  │  External CacheStore (RDBMS)   │
+├──────────────────────────────────────────────────────┤
+│        Discovery (TCP / ZooKeeper) │ Communication    │
+└──────────────────────────────────────────────────────┘</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

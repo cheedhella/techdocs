@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Binary Object Format</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Binary Object Format</h2>
+    </div>
+
+    <div class="question"><strong>1. What is the Binary Object Format?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite serializes all data entries into a compact <strong>binary object</strong> format before storing them;</li>
+            <li>This is Ignite's internal serialization format — it is not Java serialization;</li>
+            <li>Binary objects are stored in off-heap memory (outside the JVM heap);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why use Binary Objects?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Field-level access without deserialization</b> — you can read individual fields from a binary object without deserializing the entire object; this is significantly faster for server-side operations;</li>
+            <li><b>No class on the server classpath</b> — server nodes do not need the Java class definitions; only the binary format matters;</li>
+            <li><b>Schema evolution</b> — you can add or remove fields from objects of the same type; different clients with different class versions can coexist;</li>
+            <li><b>Cross-platform</b> — binary objects enable interoperability between Java, .NET, C++, and other clients;</li>
+            <li><b>Dynamic type creation</b> — you can construct objects by type name without having class definitions;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Working with Binary Objects</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Access the binary view of a cache using <code>withKeepBinary()</code>:
+                <pre><code>IgniteCache&lt;Integer, BinaryObject&gt; binaryCache =
+    ignite.cache("myCache").withKeepBinary();
+
+BinaryObject binaryObj = binaryCache.get(1);
+
+// Read individual fields without full deserialization
+String name = binaryObj.field("name");
+int age = binaryObj.field("age");</code></pre>
+            </li>
+            <li>Build a binary object dynamically:
+                <pre><code>BinaryObject person = ignite.binary().builder("Person")
+    .setField("name", "Alice")
+    .setField("age", 30)
+    .setField("city", "NYC")
+    .build();
+
+binaryCache.put(1, person);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Modifying Binary Objects</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Binary objects are immutable; to modify one, create a new builder from the existing object:
+                <pre><code>BinaryObject updated = binaryObj.toBuilder()
+    .setField("age", 31)
+    .removeField("city")
+    .build();
+
+binaryCache.put(1, updated);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. When to use Binary Objects</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When server nodes should not have application classes on the classpath;</li>
+            <li>When you need to access a single field without deserializing the entire object (e.g., in CacheEntryProcessor);</li>
+            <li>When building generic tooling or admin UIs that work with any data type;</li>
+            <li>When you need cross-platform access (.NET reading data written by Java);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

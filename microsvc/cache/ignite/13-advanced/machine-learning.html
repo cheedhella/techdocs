@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Machine Learning</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Machine Learning</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Ignite ML?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite ML is a <strong>distributed machine learning library</strong> built into Apache Ignite;</li>
+            <li>It trains models <strong>directly on data stored in Ignite</strong> — no ETL to external ML systems;</li>
+            <li>Algorithms run in a distributed fashion across cluster nodes using collocated computations;</li>
+            <li>Requires the <code>ignite-ml</code> module;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Key Benefits</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Zero ETL</b> — train on data where it lives; no need to export to Spark, Python, or another system;</li>
+            <li><b>Distributed training</b> — algorithms are parallelized across cluster nodes;</li>
+            <li><b>Fault tolerance</b> — if a node fails during training, the computation can recover;</li>
+            <li><b>Real-time inference</b> — trained models can serve predictions with in-memory speed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Supported Algorithms</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Category</th><th>Algorithms</th></tr>
+            <tr><td>Classification</td><td>Logistic Regression, SVM, k-NN, Decision Tree, Random Forest, Naive Bayes, ANN</td></tr>
+            <tr><td>Regression</td><td>Linear Regression, Decision Tree Regression, k-NN Regression</td></tr>
+            <tr><td>Clustering</td><td>K-Means, GMM</td></tr>
+            <tr><td>Preprocessing</td><td>Normalization, Binarization, Imputation, encoding</td></tr>
+            <tr><td>Model Selection</td><td>Cross-validation, Hyperparameter tuning</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Basic ML Example</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Prepare training data in an Ignite cache
+IgniteCache&lt;Integer, double[]&gt; trainingData = ...;
+
+// Define a trainer
+DecisionTreeClassificationTrainer trainer = new DecisionTreeClassificationTrainer();
+
+// Train the model
+DecisionTreeModel model = trainer.fit(
+    ignite,
+    trainingData,
+    (k, v) -> VectorUtils.of(Arrays.copyOfRange(v, 0, v.length - 1)), // features
+    (k, v) -> v[v.length - 1]                                          // label
+);
+
+// Make predictions
+double prediction = model.predict(VectorUtils.of(5.1, 3.5, 1.4, 0.2));</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Pipeline API</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Chain preprocessing and training into a pipeline:
+                <pre><code>Pipeline pipeline = new Pipeline()
+    .addPreprocessingTrainer(new MinMaxScalerTrainer())
+    .addTrainer(new LogisticRegressionSGDTrainer());
+
+PipelineMdl model = pipeline.fit(ignite, trainingData, featureExtractor, labelExtractor);
+
+double prediction = model.predict(inputVector);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. When to Use Ignite ML</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When your data is already in Ignite and you want to avoid moving it to an external ML platform;</li>
+            <li>When you need low-latency inference directly from the cache;</li>
+            <li>For simpler ML tasks (classification, regression, clustering) that fit the built-in algorithms;</li>
+            <li>For complex deep learning, consider exporting data to TensorFlow/PyTorch (Ignite has a TensorFlow integration);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Concurrency &amp; Isolation Modes</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Concurrency &amp; Isolation Modes</h2>
+    </div>
+
+    <div class="question"><strong>1. Concurrency Modes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mode</th><th>Description</th></tr>
+            <tr>
+                <td><b>PESSIMISTIC</b></td>
+                <td>Locks are acquired immediately when a key is first accessed within the transaction; other transactions that try to access the same key are blocked until the lock is released;</td>
+            </tr>
+            <tr>
+                <td><b>OPTIMISTIC</b></td>
+                <td>No locks are acquired during the transaction; locks are only acquired at commit time; if another transaction modified the same key, the commit fails with a conflict exception;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Isolation Levels</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Level</th><th>Description</th></tr>
+            <tr>
+                <td><b>READ_COMMITTED</b></td>
+                <td>A transaction reads the latest committed value; two reads of the same key may return different values if another transaction committed in between;</td>
+            </tr>
+            <tr>
+                <td><b>REPEATABLE_READ</b></td>
+                <td>Once a key is read, subsequent reads within the same transaction return the same value;</td>
+            </tr>
+            <tr>
+                <td><b>SERIALIZABLE</b></td>
+                <td>Transactions behave as if they executed one at a time (fully serial); highest isolation but lowest concurrency;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Valid Combinations</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Concurrency</th><th>Isolation</th><th>Behavior</th></tr>
+            <tr>
+                <td>PESSIMISTIC</td>
+                <td>READ_COMMITTED</td>
+                <td>Lock on first access; reads see latest committed value</td>
+            </tr>
+            <tr>
+                <td>PESSIMISTIC</td>
+                <td>REPEATABLE_READ</td>
+                <td>Lock on first access; reads are consistent within the transaction</td>
+            </tr>
+            <tr>
+                <td>PESSIMISTIC</td>
+                <td>SERIALIZABLE</td>
+                <td>Same as PESSIMISTIC + REPEATABLE_READ in practice</td>
+            </tr>
+            <tr>
+                <td>OPTIMISTIC</td>
+                <td>READ_COMMITTED</td>
+                <td>No locks until commit; no conflict detection</td>
+            </tr>
+            <tr>
+                <td>OPTIMISTIC</td>
+                <td>REPEATABLE_READ</td>
+                <td>No locks until commit; conflict detection at commit time</td>
+            </tr>
+            <tr>
+                <td>OPTIMISTIC</td>
+                <td>SERIALIZABLE</td>
+                <td>No locks until commit; full conflict detection (strongest)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Choosing a Mode</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>PESSIMISTIC + REPEATABLE_READ</b> — safest and most predictable; use for most transactional workloads;</li>
+            <li><b>OPTIMISTIC + SERIALIZABLE</b> — highest concurrency but transactions may fail on commit and need retry logic; good when conflicts are rare;</li>
+            <li><b>OPTIMISTIC + READ_COMMITTED</b> — lightweight but no conflict detection; use only when you can tolerate stale reads;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Default Transaction Settings</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Configure defaults so you don't have to specify them on every transaction:
+                <pre><code>TransactionConfiguration txCfg = new TransactionConfiguration();
+txCfg.setDefaultTxConcurrency(TransactionConcurrency.PESSIMISTIC);
+txCfg.setDefaultTxIsolation(TransactionIsolation.REPEATABLE_READ);
+txCfg.setDefaultTxTimeout(10_000);
+
+IgniteConfiguration igniteCfg = new IgniteConfiguration();
+igniteCfg.setTransactionConfiguration(txCfg);</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

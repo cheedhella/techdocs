@@ -56,7 +56,7 @@ repositories:
     <div class="question"><strong>5. How to update a repository?</strong></div>
     <div class="answer">
         <pre><code>helm repo update &lt;name&gt;       # Update a specific repository
-helm repo update              # Update all repositories</code></pre>
+helm repo update              # It fetches latest index.yaml for all repositories and updates the local cache;</code></pre>
         <ul>
             <li>It fetches the latest <code>index.yaml</code> for the specified repository and updates the local cache (<code>~/.cache/helm/repository/</code>);</li>
         </ul>

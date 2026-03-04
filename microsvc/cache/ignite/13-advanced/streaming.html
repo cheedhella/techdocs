@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Data Streaming</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Data Streaming</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Data Streaming?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Data streaming allows <strong>high-throughput ingestion</strong> of data into Ignite caches;</li>
+            <li>The <code>IgniteDataStreamer</code> batches and parallelizes writes automatically;</li>
+            <li>Much faster than individual <code>cache.put()</code> calls for bulk loading;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Basic Data Streaming</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>try (IgniteDataStreamer&lt;Integer, String&gt; streamer = ignite.dataStreamer("myCache")) {
+    streamer.perNodeBufferSize(1024);      // buffer size per node
+    streamer.perNodeParallelOperations(8); // parallel operations per node
+
+    for (int i = 0; i &lt; 1_000_000; i++) {
+        streamer.addData(i, "value-" + i);
+    }
+} // auto-flush on close</code></pre>
+            </li>
+            <li>The streamer buffers entries and sends them in batches to the nodes that own the partitions;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Streamer Configuration</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
+            <tr><td><code>perNodeBufferSize</code></td><td>Entries buffered per node before flushing</td><td>1024</td></tr>
+            <tr><td><code>perNodeParallelOperations</code></td><td>Concurrent operations per node</td><td>16</td></tr>
+            <tr><td><code>allowOverwrite</code></td><td>If true, existing entries are overwritten; if false, they are skipped</td><td>false</td></tr>
+            <tr><td><code>autoFlushFrequency</code></td><td>Milliseconds between auto-flushes (0 = disabled)</td><td>0</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Stream Receiver (Custom Processing)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use a <code>StreamReceiver</code> to process entries on the receiving node before storing:
+                <pre><code>streamer.receiver(StreamTransformer.from((entry, args) -> {
+    // Transform the value before storing
+    String original = entry.getValue();
+    entry.setValue(original.toUpperCase());
+    return null;
+}));</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Kafka Integration</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite provides a Kafka streamer module for consuming Kafka topics directly into caches:
+                <pre><code>KafkaStreamer&lt;Integer, String&gt; kafkaStreamer = new KafkaStreamer&lt;&gt;();
+
+kafkaStreamer.setIgnite(ignite);
+kafkaStreamer.setTopic("my-topic");
+kafkaStreamer.setThreads(4);
+kafkaStreamer.setConsumerConfig(kafkaProperties);
+
+kafkaStreamer.start();</code></pre>
+            </li>
+            <li>Requires the <code>ignite-kafka</code> module;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. When to Use Streaming vs. Regular Puts</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Use streaming</b> for bulk loading (initial data load, batch imports, ETL pipelines);</li>
+            <li><b>Use regular puts</b> for individual transactional operations;</li>
+            <li>Streaming is not transactional — it provides at-least-once semantics;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

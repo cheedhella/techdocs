@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cache Configuration</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cache Configuration</h2>
+    </div>
+
+    <div class="question"><strong>1. Key Configuration Parameters</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Parameter</th><th>Description</th><th>Default</th></tr>
+            <tr><td><code>name</code></td><td>Cache name (must be unique)</td><td>None (required)</td></tr>
+            <tr><td><code>cacheMode</code></td><td>PARTITIONED, REPLICATED, or LOCAL</td><td>PARTITIONED</td></tr>
+            <tr><td><code>atomicityMode</code></td><td>ATOMIC or TRANSACTIONAL</td><td>ATOMIC</td></tr>
+            <tr><td><code>backups</code></td><td>Number of backup copies (partitioned mode)</td><td>0</td></tr>
+            <tr><td><code>writeSynchronizationMode</code></td><td>FULL_SYNC, FULL_ASYNC, or PRIMARY_SYNC</td><td>PRIMARY_SYNC</td></tr>
+            <tr><td><code>rebalanceMode</code></td><td>SYNC, ASYNC, or NONE</td><td>ASYNC</td></tr>
+            <tr><td><code>readFromBackup</code></td><td>Read from local backup if available</td><td>true</td></tr>
+            <tr><td><code>partitionLossPolicy</code></td><td>Behavior when partitions are lost</td><td>IGNORE</td></tr>
+            <tr><td><code>eagerTtl</code></td><td>Eagerly remove expired entries</td><td>true</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Write Synchronization Modes</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>FULL_SYNC</b> — the client waits until the write is confirmed by the primary node AND all backup nodes; safest but slowest;</li>
+            <li><b>PRIMARY_SYNC</b> (default) — the client waits until the primary node confirms; backups are updated asynchronously; good balance of safety and performance;</li>
+            <li><b>FULL_ASYNC</b> — the client does not wait at all; fastest but risk of data loss on failure;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Full Configuration Example</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>CacheConfiguration&lt;Integer, Person&gt; cacheCfg = new CacheConfiguration&lt;&gt;("PersonCache");
+
+cacheCfg.setCacheMode(CacheMode.PARTITIONED);
+cacheCfg.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
+cacheCfg.setBackups(2);
+cacheCfg.setWriteSynchronizationMode(CacheWriteSynchronizationMode.FULL_SYNC);
+cacheCfg.setRebalanceMode(CacheRebalanceMode.SYNC);
+cacheCfg.setReadFromBackup(true);
+cacheCfg.setPartitionLossPolicy(PartitionLossPolicy.READ_ONLY_SAFE);
+
+IgniteConfiguration igniteCfg = new IgniteConfiguration();
+igniteCfg.setCacheConfiguration(cacheCfg);
+
+Ignite ignite = Ignition.start(igniteCfg);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Cache Templates</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A cache template is a pre-registered <code>CacheConfiguration</code> that can be used as a basis for creating new caches;</li>
+            <li>Useful when thin clients or SQL need to create caches with specific settings;
+                <pre><code>CacheConfiguration template = new CacheConfiguration("myTemplate*");
+template.setBackups(2);
+template.setCacheMode(CacheMode.PARTITIONED);
+ignite.addCacheConfiguration(template);
+
+// Later, create a cache from the template
+CREATE TABLE Person (...) WITH "template=myTemplate";</code></pre>
+            </li>
+            <li>Template names must end with <code>*</code> when registered via XML;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Immutability After Creation</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Once a cache is created, most configuration parameters <strong>cannot be changed</strong>;</li>
+            <li>To change configuration, you must destroy the cache and recreate it;</li>
+            <li>Some parameters (like memory policy size) can be adjusted at the cluster level;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

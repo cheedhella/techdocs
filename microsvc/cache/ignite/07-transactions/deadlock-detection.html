@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Deadlock Detection</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Deadlock Detection</h2>
+    </div>
+
+    <div class="question"><strong>1. How Deadlocks Happen</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A deadlock occurs when two or more transactions are waiting for each other to release locks:
+                <pre><code>Transaction A: locks key 1, then tries to lock key 2 (blocked by B)
+Transaction B: locks key 2, then tries to lock key 1 (blocked by A)
+→ Both wait forever</code></pre>
+            </li>
+            <li>Deadlocks are possible with <b>PESSIMISTIC</b> transactions that access keys in different orders;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Deadlock Detection in Ignite</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite can detect deadlocks and report which transactions and keys are involved;</li>
+            <li>Enable by setting a transaction timeout — when the timeout expires, Ignite runs deadlock detection:
+                <pre><code>try (Transaction tx = ignite.transactions().txStart(
+        PESSIMISTIC, REPEATABLE_READ, 5000, 0)) {
+
+    cache.put(key1, val1);
+    cache.put(key2, val2);
+    tx.commit();
+} catch (CacheException e) {
+    if (e.getCause() instanceof TransactionTimeoutException) {
+        System.out.println("Possible deadlock: " + e.getMessage());
+    }
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Preventing Deadlocks</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Access keys in a consistent order</b> — if all transactions lock keys in the same order (e.g., by ascending key), deadlocks cannot occur;</li>
+            <li><b>Use OPTIMISTIC + SERIALIZABLE</b> — optimistic transactions don't acquire locks until commit, so deadlocks are not possible (but conflicts may cause retries);</li>
+            <li><b>Set transaction timeouts</b> — ensures that deadlocked transactions are eventually rolled back;</li>
+            <li><b>Keep transactions short</b> — hold locks for as little time as possible;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Deadlock-Free Transaction Pattern</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Sort the keys before accessing them:
+                <pre><code>List&lt;Integer&gt; keys = Arrays.asList(key1, key2, key3);
+Collections.sort(keys); // consistent order
+
+try (Transaction tx = ignite.transactions().txStart(PESSIMISTIC, REPEATABLE_READ)) {
+    for (Integer key : keys) {
+        cache.get(key); // acquires locks in order
+    }
+    // perform updates...
+    tx.commit();
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

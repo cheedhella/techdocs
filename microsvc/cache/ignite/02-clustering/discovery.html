@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Node Discovery</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Node Discovery</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Node Discovery?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Discovery is the mechanism that allows Ignite nodes to find each other and form a cluster;</li>
+            <li>It runs a protocol that detects when nodes join, leave, or fail;</li>
+            <li>Ignite provides two discovery implementations: <strong>TCP/IP Discovery</strong> and <strong>ZooKeeper Discovery</strong>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. TCP/IP Discovery</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The default discovery mechanism; nodes form a <strong>ring topology</strong>;</li>
+            <li>Each node communicates only with its neighbor in the ring to detect failures;</li>
+            <li>Optimized for clusters of up to <strong>hundreds of nodes</strong>;</li>
+            <li>Uses an <strong>IP Finder</strong> to get the initial list of nodes to connect to;</li>
+            <li>Common IP Finders:
+                <ul>
+                    <li><b>TcpDiscoveryMulticastIpFinder</b> (default) — uses multicast to discover nodes on the local network;</li>
+                    <li><b>TcpDiscoveryVmIpFinder</b> — you provide a static list of IP addresses;</li>
+                    <li><b>TcpDiscoveryKubernetesIpFinder</b> — queries the Kubernetes API for pod IPs;</li>
+                    <li><b>TcpDiscoveryS3IpFinder</b> — uses an AWS S3 bucket for IP discovery;</li>
+                </ul>
+            </li>
+            <li>
+                <pre><code>TcpDiscoverySpi discoverySpi = new TcpDiscoverySpi();
+
+TcpDiscoveryVmIpFinder ipFinder = new TcpDiscoveryVmIpFinder();
+ipFinder.setAddresses(Arrays.asList(
+    "192.168.1.10:47500..47509",
+    "192.168.1.11:47500..47509"
+));
+
+discoverySpi.setIpFinder(ipFinder);
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setDiscoverySpi(discoverySpi);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. ZooKeeper Discovery</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Designed for clusters of <strong>hundreds to thousands of nodes</strong>;</li>
+            <li>Uses an external Apache ZooKeeper ensemble for coordination;</li>
+            <li>Scales better than TCP/IP Discovery because nodes don't form a ring — ZooKeeper handles membership;</li>
+            <li>Requires the <code>ignite-zookeeper</code> module:
+                <pre><code>ZookeeperDiscoverySpi discoverySpi = new ZookeeperDiscoverySpi();
+discoverySpi.setZkConnectionString("zkhost1:2181,zkhost2:2181,zkhost3:2181");
+discoverySpi.setSessionTimeout(30_000);
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setDiscoverySpi(discoverySpi);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. TCP/IP Discovery vs. ZooKeeper Discovery</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Aspect</th>
+                <th>TCP/IP Discovery</th>
+                <th>ZooKeeper Discovery</th>
+            </tr>
+            <tr>
+                <td>Topology</td>
+                <td>Ring</td>
+                <td>Star (via ZooKeeper)</td>
+            </tr>
+            <tr>
+                <td>Scale</td>
+                <td>Hundreds of nodes</td>
+                <td>Thousands of nodes</td>
+            </tr>
+            <tr>
+                <td>External dependency</td>
+                <td>None</td>
+                <td>ZooKeeper ensemble</td>
+            </tr>
+            <tr>
+                <td>Failure detection</td>
+                <td>Heartbeat along ring</td>
+                <td>ZooKeeper sessions</td>
+            </tr>
+            <tr>
+                <td>Split-brain handling</td>
+                <td>Segment detection (network segmentation)</td>
+                <td>ZooKeeper handles it</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Discovery in Kubernetes</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In Kubernetes, multicast is usually disabled, so you cannot use the default multicast IP finder;</li>
+            <li>Use the <code>TcpDiscoveryKubernetesIpFinder</code> which queries the Kubernetes API server to find pod IPs:
+                <pre><code>TcpDiscoverySpi discoverySpi = new TcpDiscoverySpi();
+
+TcpDiscoveryKubernetesIpFinder ipFinder = new TcpDiscoveryKubernetesIpFinder();
+ipFinder.setNamespace("my-namespace");
+ipFinder.setServiceName("ignite-service");
+
+discoverySpi.setIpFinder(ipFinder);
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setDiscoverySpi(discoverySpi);</code></pre>
+            </li>
+            <li>Requires the <code>ignite-kubernetes</code> module and a Kubernetes Service with the appropriate RBAC permissions;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Working with Binary Objects</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Working with Binary Objects</h2>
+    </div>
+
+    <div class="question"><strong>1. Why use Binary Objects in Key-Value API?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Server nodes don't need the application's Java class definitions on their classpath;</li>
+            <li>You can read individual fields without deserializing the entire object — faster for server-side processing;</li>
+            <li>Enables schema evolution — add/remove fields without breaking existing nodes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Switching to Binary View</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use <code>withKeepBinary()</code> to get a binary view of any cache:
+                <pre><code>IgniteCache&lt;Integer, BinaryObject&gt; binaryCache =
+    ignite.cache("PersonCache").withKeepBinary();
+
+BinaryObject person = binaryCache.get(1);
+String name = person.field("name");
+int age = person.field("age");</code></pre>
+            </li>
+            <li>The original cache still works with deserialized objects; <code>withKeepBinary()</code> returns a view, not a new cache;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Creating Binary Objects Dynamically</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Build objects without having Java classes:
+                <pre><code>BinaryObject person = ignite.binary().builder("Person")
+    .setField("name", "Alice")
+    .setField("age", 30)
+    .setField("email", "alice@example.com")
+    .build();
+
+binaryCache.put(1, person);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Modifying Binary Objects</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Binary objects are immutable; create a builder from an existing object to modify:
+                <pre><code>BinaryObject existing = binaryCache.get(1);
+
+BinaryObject updated = existing.toBuilder()
+    .setField("age", 31)
+    .setField("phone", "+1234567890")  // add new field
+    .removeField("email")              // remove existing field
+    .build();
+
+binaryCache.put(1, updated);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Binary Objects in Entry Processors</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Combine <code>withKeepBinary()</code> and entry processors for efficient server-side operations:
+                <pre><code>binaryCache.invoke(1, (entry, args) -> {
+    BinaryObject val = entry.getValue();
+    int currentAge = val.field("age");
+
+    BinaryObject updated = val.toBuilder()
+        .setField("age", currentAge + 1)
+        .build();
+
+    entry.setValue(updated);
+    return null;
+});</code></pre>
+            </li>
+            <li>This reads and updates a field without ever deserializing the full object;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

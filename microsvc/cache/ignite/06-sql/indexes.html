@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Indexes</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Indexes</h2>
+    </div>
+
+    <div class="question"><strong>1. Why Indexes Matter</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Without indexes, SQL queries must scan every entry in the cache (full scan);</li>
+            <li>Indexes allow the query engine to quickly locate matching rows without scanning everything;</li>
+            <li>Properly designed indexes can improve query performance by orders of magnitude;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Creating Indexes</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Via SQL:</b>
+                <pre><code>-- Single-column index
+CREATE INDEX idx_person_city ON Person (city);
+
+-- Composite index
+CREATE INDEX idx_person_city_age ON Person (city, age);
+
+-- Descending index
+CREATE INDEX idx_person_age_desc ON Person (age DESC);
+
+-- Drop an index
+DROP INDEX idx_person_city;</code></pre>
+            </li>
+            <li><b>Via annotations (Java):</b>
+                <pre><code>public class Person {
+    @QuerySqlField(index = true)
+    private String city;
+
+    @QuerySqlField(index = true, descending = true)
+    private int age;
+
+    @QuerySqlField  // queryable but not indexed
+    private String name;
+}</code></pre>
+            </li>
+            <li><b>Via QueryEntity configuration:</b>
+                <pre><code>QueryEntity queryEntity = new QueryEntity(Integer.class, Person.class);
+
+LinkedHashMap&lt;String, String&gt; fields = new LinkedHashMap&lt;&gt;();
+fields.put("name", String.class.getName());
+fields.put("city", String.class.getName());
+fields.put("age", Integer.class.getName());
+queryEntity.setFields(fields);
+
+queryEntity.setIndexes(Arrays.asList(
+    new QueryIndex("city"),
+    new QueryIndex(Arrays.asList("city", "age"), QueryIndexType.SORTED)
+));
+
+CacheConfiguration cfg = new CacheConfiguration("PersonCache");
+cfg.setQueryEntities(Collections.singletonList(queryEntity));</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Index Types</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Type</th><th>Description</th></tr>
+            <tr><td><b>SORTED</b> (default)</td><td>B+ tree index; supports equality, range, and ordering queries</td></tr>
+            <tr><td><b>FULLTEXT</b></td><td>Lucene-based full-text search index for text fields</td></tr>
+            <tr><td><b>GEOSPATIAL</b></td><td>Spatial index for geographic queries (requires ignite-geospatial module)</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Inline Index Size</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite can store part of the indexed value <strong>inline</strong> in the B+ tree pages;</li>
+            <li>This reduces I/O because the query engine can compare values without fetching the full data page;</li>
+            <li>Configure inline size:
+                <pre><code>CREATE INDEX idx_person_name ON Person (name) INLINE_SIZE 30;</code></pre>
+            </li>
+            <li>Rule of thumb: set inline size to the typical length of the indexed field value + a few bytes overhead;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Index columns used in <code>WHERE</code>, <code>JOIN</code>, and <code>ORDER BY</code> clauses;</li>
+            <li>Use composite indexes for queries that filter on multiple columns — order the columns by selectivity (most selective first);</li>
+            <li>Avoid over-indexing: each index consumes memory and slows down writes;</li>
+            <li>Use <code>EXPLAIN</code> to verify that your query uses the expected index:
+                <pre><code>EXPLAIN SELECT * FROM Person WHERE city = 'NYC';</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

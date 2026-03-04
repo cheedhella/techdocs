@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Continuous Queries</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Continuous Queries</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Continuous Queries?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A continuous query allows you to receive <strong>real-time notifications</strong> whenever data in a cache changes (insert, update, delete);</li>
+            <li>The listener runs on the client that registered the query;</li>
+            <li>Optional: a <strong>remote filter</strong> runs on the server nodes to filter events before sending them to the client — this reduces network traffic;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Basic Continuous Query</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>ContinuousQuery&lt;Integer, String&gt; query = new ContinuousQuery&lt;&gt;();
+
+// Local listener — runs on the client
+query.setLocalListener(events -> {
+    for (CacheEntryEvent&lt;? extends Integer, ? extends String&gt; e : events) {
+        System.out.printf("Key: %d, Old: %s, New: %s, Type: %s%n",
+            e.getKey(), e.getOldValue(), e.getValue(), e.getEventType());
+    }
+});
+
+// Register — cursor stays open and receives events
+QueryCursor&lt;Cache.Entry&lt;Integer, String&gt;&gt; cursor = cache.query(query);
+
+// When done, close the cursor to stop receiving events
+cursor.close();</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Remote Filter</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A remote filter runs on <strong>server nodes</strong> to decide which events to forward to the client:
+                <pre><code>query.setRemoteFilterFactory(() -> event -> {
+    // Only notify for values that start with "VIP"
+    return event.getValue().toString().startsWith("VIP");
+});</code></pre>
+            </li>
+            <li>This prevents sending every single change over the network — only matching events reach the client;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Initial Query</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You can combine a continuous query with an <strong>initial query</strong> — first get a snapshot of current data, then receive live updates:
+                <pre><code>query.setInitialQuery(new ScanQuery&lt;&gt;()); // or SqlFieldsQuery
+
+QueryCursor&lt;Cache.Entry&lt;Integer, String&gt;&gt; cursor = cache.query(query);
+
+// Iterate over initial results
+for (Cache.Entry&lt;Integer, String&gt; entry : cursor) {
+    System.out.println("Initial: " + entry.getKey() + " = " + entry.getValue());
+}
+
+// After iteration, continuous events flow to the local listener</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Real-time dashboards</b> — update UI when data changes;</li>
+            <li><b>Event-driven architectures</b> — trigger downstream processing on data mutations;</li>
+            <li><b>Cache synchronization</b> — keep a local data structure in sync with the distributed cache;</li>
+            <li><b>Auditing</b> — log all changes to a specific cache;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

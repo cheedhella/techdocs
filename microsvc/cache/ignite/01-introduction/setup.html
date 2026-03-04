@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Installation &amp; Setup</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Installation &amp; Setup</h2>
+    </div>
+
+    <div class="question"><strong>1. System Requirements</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Requirement</th><th>Details</th></tr>
+            <tr><td>JDK</td><td>Oracle JDK 11/17 or OpenJDK 11/17</td></tr>
+            <tr><td>OS</td><td>Linux, macOS 10.6+, Windows XP+</td></tr>
+            <tr><td>RAM</td><td>Minimum 1 GB (production: depends on dataset size)</td></tr>
+            <tr><td>Network</td><td>No restrictions (10G recommended for production)</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Using Binary Distribution</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Download the binary package from <a href="https://ignite.apache.org/download.cgi">Apache Ignite Downloads</a>;</li>
+            <li>Unzip and set the <code>IGNITE_HOME</code> environment variable:
+                <pre><code># Unzip
+unzip apache-ignite-2.17.0-bin.zip
+
+# Set IGNITE_HOME
+export IGNITE_HOME=/path/to/apache-ignite-2.17.0-bin
+
+# Start a node
+$IGNITE_HOME/bin/ignite.sh</code></pre>
+            </li>
+            <li>The default configuration starts a server node with TCP/IP discovery on localhost;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Using Maven</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Add Ignite as a dependency in your <code>pom.xml</code>:
+                <pre><code>&lt;properties&gt;
+    &lt;ignite.version&gt;2.17.0&lt;/ignite.version&gt;
+&lt;/properties&gt;
+
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.ignite&lt;/groupId&gt;
+        &lt;artifactId&gt;ignite-core&lt;/artifactId&gt;
+        &lt;version&gt;${ignite.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.ignite&lt;/groupId&gt;
+        &lt;artifactId&gt;ignite-spring&lt;/artifactId&gt;
+        &lt;version&gt;${ignite.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.ignite&lt;/groupId&gt;
+        &lt;artifactId&gt;ignite-indexing&lt;/artifactId&gt;
+        &lt;version&gt;${ignite.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+            </li>
+            <li><code>ignite-core</code> — core functionality;</li>
+            <li><code>ignite-spring</code> — Spring XML-based configuration support;</li>
+            <li><code>ignite-indexing</code> — SQL indexing and querying support;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Using Docker</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code># Pull and run the latest Ignite image
+docker run -d \
+  --name ignite-node \
+  -p 10800:10800 \
+  -p 47100:47100 \
+  -p 47500:47500 \
+  apacheignite/ignite:2.17.0
+
+# Port 10800 — thin client connections
+# Port 47100 — node communication
+# Port 47500 — node discovery</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Starting a Node Programmatically</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Minimal embedded node
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setClientMode(false); // server mode (default)
+
+try (Ignite ignite = Ignition.start(cfg)) {
+    System.out.println("Node started: " + ignite.name());
+}</code></pre>
+            </li>
+            <li>Ignite will automatically discover other nodes on the same network using multicast (default TCP/IP discovery with multicast IP finder);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Configuration Approaches</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Programmatic (Java)</b> — configure using <code>IgniteConfiguration</code> objects in Java code;</li>
+            <li><b>Spring XML</b> — define beans in an XML file; pass the file path to <code>Ignition.start("config.xml")</code> or to <code>ignite.sh</code>;</li>
+            <li><b>Spring Boot</b> — use the <code>ignite-spring-boot-autoconfigure</code> module for auto-configuration;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Work Directory</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite uses a work directory to store persistence data, index files, metadata, and logs;</li>
+            <li>Default: <code>$IGNITE_HOME/work</code> (if IGNITE_HOME is set) or <code>./ignite/work</code>;</li>
+            <li>Override with:
+                <pre><code>IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setWorkDirectory("/path/to/work/directory");</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

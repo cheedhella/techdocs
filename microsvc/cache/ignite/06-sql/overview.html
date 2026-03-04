@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SQL Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>SQL Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. SQL in Apache Ignite</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite includes a <strong>distributed SQL engine</strong> based on Apache Calcite (Ignite 2 uses H2);</li>
+            <li>You can run standard ANSI SQL queries — <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>MERGE</code>;</li>
+            <li>Queries are automatically distributed across cluster nodes — each node processes its local partitions;</li>
+            <li>SQL tables and key-value caches are two views of the same data — you can use both interchangeably;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. DDL (Data Definition Language)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Create tables and indexes with standard SQL:
+                <pre><code>CREATE TABLE Person (
+    id INT PRIMARY KEY,
+    name VARCHAR,
+    age INT,
+    city VARCHAR
+) WITH "cache_name=PersonCache,template=partitioned,backups=1";
+
+CREATE INDEX idx_person_city ON Person (city);
+
+ALTER TABLE Person ADD COLUMN email VARCHAR;
+
+DROP TABLE Person;</code></pre>
+            </li>
+            <li>The <code>WITH</code> clause passes cache configuration parameters (cache name, template, backups, affinity key, etc.);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. DML (Data Manipulation Language)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>-- Insert
+INSERT INTO Person (id, name, age, city) VALUES (1, 'Alice', 30, 'NYC');
+
+-- Update
+UPDATE Person SET age = 31 WHERE id = 1;
+
+-- Delete
+DELETE FROM Person WHERE city = 'NYC';
+
+-- Merge (upsert)
+MERGE INTO Person (id, name, age, city) VALUES (1, 'Alice', 32, 'Boston');</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Querying via Java API</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>SqlFieldsQuery</b> — the primary query API; returns rows as lists of fields:
+                <pre><code>SqlFieldsQuery query = new SqlFieldsQuery(
+    "SELECT name, age FROM Person WHERE city = ?"
+);
+query.setArgs("NYC");
+
+try (QueryCursor&lt;List&lt;?&gt;&gt; cursor = cache.query(query)) {
+    for (List&lt;?&gt; row : cursor) {
+        String name = (String) row.get(0);
+        int age = (int) row.get(1);
+    }
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. JDBC and ODBC Access</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite provides a <strong>JDBC thin driver</strong> for connecting external tools (DBeaver, IntelliJ, custom apps):
+                <pre><code>String url = "jdbc:ignite:thin://192.168.1.10:10800";
+Connection conn = DriverManager.getConnection(url);
+
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM Person WHERE age > 25");</code></pre>
+            </li>
+            <li>ODBC driver is also available for non-Java clients;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Limitations</strong></div>
+    <div class="answer">
+        <ul>
+            <li>DML inside transactions requires <code>TRANSACTIONAL</code> atomicity mode (or the <code>ALLOW_DML_INSIDE_TRANSACTION</code> flag for ATOMIC caches);</li>
+            <li>DDL operations (<code>CREATE TABLE</code>, <code>CREATE INDEX</code>) are not transactional;</li>
+            <li>Subqueries and correlated subqueries have performance implications in distributed mode;</li>
+            <li>Non-colocated joins must be explicitly enabled and are slower than colocated joins;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

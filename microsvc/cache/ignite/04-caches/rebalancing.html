@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Data Rebalancing</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Data Rebalancing</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Data Rebalancing?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When server nodes join or leave the cluster, the partition-to-node mapping changes;</li>
+            <li><strong>Rebalancing</strong> is the process of moving partitions between nodes to restore an even distribution;</li>
+            <li>For example, if a 4-node cluster had 256 partitions per node and a 5th node joins, ~51 partitions are moved to the new node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. When is Rebalancing Triggered?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A server node joins the cluster;</li>
+            <li>A server node leaves the cluster (graceful shutdown or crash);</li>
+            <li>The baseline topology changes (when persistence is enabled);</li>
+            <li>A cache is created or destroyed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Rebalancing Modes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mode</th><th>Behavior</th></tr>
+            <tr>
+                <td><b>SYNC</b></td>
+                <td>Cache API calls are blocked until rebalancing completes; safest option — all reads see complete data;</td>
+            </tr>
+            <tr>
+                <td><b>ASYNC</b> (default)</td>
+                <td>Rebalancing happens in the background; cache operations work immediately but may miss data that hasn't been rebalanced yet;</td>
+            </tr>
+            <tr>
+                <td><b>NONE</b></td>
+                <td>No rebalancing occurs; useful if you manage data placement manually;</td>
+            </tr>
+        </table>
+        <pre><code>CacheConfiguration cfg = new CacheConfiguration("myCache");
+cfg.setRebalanceMode(CacheRebalanceMode.ASYNC);</code></pre>
+    </div>
+
+    <div class="question"><strong>4. Tuning Rebalancing</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Rebalance batch size</b> — how much data is sent in a single message (default 512 KB):
+                <pre><code>cfg.setRebalanceBatchSize(1024 * 1024); // 1 MB</code></pre>
+            </li>
+            <li><b>Rebalance throttle</b> — delay between batches to reduce impact on running operations:
+                <pre><code>cfg.setRebalanceThrottle(100); // 100ms between batches</code></pre>
+            </li>
+            <li><b>Rebalance order</b> — lower values rebalance first; useful for prioritizing critical caches:
+                <pre><code>cfg.setRebalanceOrder(1);</code></pre>
+            </li>
+            <li><b>Rebalance delay</b> — wait before starting rebalance (to avoid churn from rapid node join/leave):
+                <pre><code>cfg.setRebalanceDelay(5000); // 5 seconds</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Monitoring Rebalancing</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite logs rebalancing progress with messages like "Rebalancing started", "Rebalancing complete";</li>
+            <li>Use the <code>CacheMetrics</code> API to check rebalancing state:
+                <pre><code>CacheMetrics metrics = cache.localMetrics();
+long keysToRebalance = metrics.getKeysToRebalanceLeft();</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

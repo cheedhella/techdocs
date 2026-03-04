@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Services</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Services</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Ignite Services?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite Services allow you to deploy <strong>managed, user-defined services</strong> on the cluster;</li>
+            <li>Services are automatically deployed, redeployed on node failure, and managed by Ignite;</li>
+            <li>Think of them as microservices that live inside the Ignite cluster;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Service Deployment Types</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Type</th><th>Description</th></tr>
+            <tr>
+                <td><b>Cluster Singleton</b></td>
+                <td>Exactly one instance in the entire cluster; automatically redeployed if the hosting node fails;</td>
+            </tr>
+            <tr>
+                <td><b>Node Singleton</b></td>
+                <td>One instance per node;</td>
+            </tr>
+            <tr>
+                <td><b>Key Affinity</b></td>
+                <td>Deployed on the node that owns a specific affinity key;</td>
+            </tr>
+            <tr>
+                <td><b>Custom</b></td>
+                <td>Deploy a specific number of instances across the cluster;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Implementing a Service</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>public class CounterService implements Service {
+    private String name;
+    private AtomicInteger counter = new AtomicInteger(0);
+
+    @Override
+    public void cancel(ServiceContext ctx) {
+        System.out.println("Service " + ctx.name() + " cancelled");
+    }
+
+    @Override
+    public void init(ServiceContext ctx) {
+        name = ctx.name();
+        System.out.println("Service " + name + " initialized");
+    }
+
+    @Override
+    public void execute(ServiceContext ctx) {
+        System.out.println("Service " + name + " executing");
+    }
+
+    public int increment() {
+        return counter.incrementAndGet();
+    }
+
+    public int get() {
+        return counter.get();
+    }
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Deploying Services</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Cluster singleton
+ignite.services().deployClusterSingleton("counterService", new CounterService());
+
+// Node singleton (one per node)
+ignite.services().deployNodeSingleton("nodeCounter", new CounterService());
+
+// Key affinity (on the node owning key=42 in "myCache")
+ignite.services().deployKeyAffinitySingleton("affinityCounter",
+    new CounterService(), "myCache", 42);
+
+// Custom: 3 instances total, max 1 per node
+ignite.services().deploy(
+    new ServiceConfiguration()
+        .setName("customCounter")
+        .setService(new CounterService())
+        .setTotalCount(3)
+        .setMaxPerNodeCount(1)
+);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Calling Services</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Get a proxy to the service
+CounterService counter = ignite.services()
+    .serviceProxy("counterService", CounterService.class, false);
+
+counter.increment();
+int value = counter.get();</code></pre>
+            </li>
+            <li>The <code>sticky</code> parameter (last argument): if <code>true</code>, all calls go to the same node; if <code>false</code>, calls are load-balanced;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

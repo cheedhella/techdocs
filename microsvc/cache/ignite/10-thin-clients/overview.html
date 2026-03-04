@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Thin Clients Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Thin Clients Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Thin Client?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A thin client connects to the Ignite cluster over a <strong>lightweight TCP protocol</strong> on port 10800;</li>
+            <li>Unlike a client node, a thin client does <strong>not join the cluster topology</strong> — no discovery overhead, no ring membership;</li>
+            <li>Thin clients have a much smaller footprint and faster startup;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Thin Client vs. Client Node</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Aspect</th><th>Thin Client</th><th>Client Node</th></tr>
+            <tr><td>Protocol</td><td>Lightweight TCP binary</td><td>Full Ignite protocol</td></tr>
+            <tr><td>Joins topology</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Discovery overhead</td><td>None</td><td>Full discovery protocol</td></tr>
+            <tr><td>Startup time</td><td>Fast (milliseconds)</td><td>Slower (seconds)</td></tr>
+            <tr><td>Memory footprint</td><td>Small</td><td>Large (full Ignite instance)</td></tr>
+            <tr><td>Key-Value API</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>SQL</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Compute</td><td>Yes (since 2.16)</td><td>Yes</td></tr>
+            <tr><td>Continuous queries</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Transactions</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Near cache</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Languages</td><td>Java, .NET, C++, Python, Node.JS, PHP</td><td>Java, .NET, C++</td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. When to use Thin Client vs. Client Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Use thin client</b> when:
+                <ul>
+                    <li>You need a lightweight connection (microservices, serverless, short-lived processes);</li>
+                    <li>You need non-Java access (Python, Node.JS, PHP);</li>
+                    <li>You have many client connections (thin clients scale better);</li>
+                </ul>
+            </li>
+            <li><b>Use client node</b> when:
+                <ul>
+                    <li>You need near cache support;</li>
+                    <li>You need full event subscription capabilities;</li>
+                    <li>You need to run collocated compute directly;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Partition Awareness</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, thin clients send all requests to a single server node, which then routes to the correct partition owner;</li>
+            <li><strong>Partition-aware</strong> thin clients learn the partition map and route requests directly to the node that owns the data — eliminating the extra hop:
+                <pre><code>ClientConfiguration cfg = new ClientConfiguration()
+    .setAddresses("192.168.1.10:10800", "192.168.1.11:10800")
+    .setPartitionAwarenessEnabled(true);
+
+IgniteClient client = Ignition.startClient(cfg);</code></pre>
+            </li>
+            <li>Partition awareness significantly improves read/write latency;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

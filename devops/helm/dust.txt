@@ -64,3 +64,18 @@ As one release.
 
 
 https://bsg-confluence.broadcom.net/spaces/~nb892892/pages/928243908/SSP+K8s+single+node+cluster
+
+
+TLS / API Connection Flags (Advanced)
+
+Used when connecting to secured clusters:
+
+--kube-ca-file
+
+--kube-cert-file
+
+--kube-key-file
+
+--kube-apiserver
+
+--insecure-skip-tls-verify

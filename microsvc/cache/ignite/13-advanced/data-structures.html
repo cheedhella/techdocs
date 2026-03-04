@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Distributed Data Structures</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Distributed Data Structures</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Distributed Data Structures?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite provides <strong>cluster-wide data structures</strong> that behave like their single-JVM counterparts but are shared across all nodes;</li>
+            <li>They are built on top of Ignite's distributed cache infrastructure;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. IgniteAtomicLong</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed, atomic long counter:
+                <pre><code>IgniteAtomicLong counter = ignite.atomicLong("myCounter", 0, true);
+
+counter.incrementAndGet();  // 1
+counter.addAndGet(10);      // 11
+long value = counter.get(); // 11
+
+counter.close(); // remove from cluster</code></pre>
+            </li>
+            <li>Useful for generating distributed IDs, counting events, etc.;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. IgniteAtomicReference</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed atomic reference to a single object:
+                <pre><code>IgniteAtomicReference&lt;String&gt; ref = ignite.atomicReference("myRef", "initial", true);
+
+ref.set("updated");
+String value = ref.get();
+
+// Compare-and-set
+boolean success = ref.compareAndSet("updated", "newValue");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. IgniteQueue</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed, bounded or unbounded FIFO queue:
+                <pre><code>CollectionConfiguration colCfg = new CollectionConfiguration();
+colCfg.setCacheMode(CacheMode.PARTITIONED);
+colCfg.setBackups(1);
+
+IgniteQueue&lt;String&gt; queue = ignite.queue("myQueue", 0, colCfg); // 0 = unbounded
+
+queue.add("item1");
+queue.add("item2");
+
+String item = queue.poll(); // "item1"
+int size = queue.size();    // 1</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. IgniteSet</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed set with unique elements:
+                <pre><code>CollectionConfiguration colCfg = new CollectionConfiguration();
+
+IgniteSet&lt;String&gt; set = ignite.set("mySet", colCfg);
+
+set.add("apple");
+set.add("banana");
+set.add("apple"); // duplicate, ignored
+
+boolean contains = set.contains("apple"); // true
+int size = set.size(); // 2</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. IgniteCountDownLatch &amp; IgniteSemaphore</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>CountDownLatch</b> — distributed synchronization barrier:
+                <pre><code>IgniteCountDownLatch latch = ignite.countDownLatch("myLatch", 3, false, true);
+
+// On different nodes/threads:
+latch.countDown();
+
+// Wait until count reaches 0
+latch.await();</code></pre>
+            </li>
+            <li><b>Semaphore</b> — distributed rate limiter:
+                <pre><code>IgniteSemaphore semaphore = ignite.semaphore("mySemaphore", 5, true, true);
+
+semaphore.acquire();  // decrement permit count
+// ... do work ...
+semaphore.release();  // release permit</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. IgniteLock</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed reentrant lock:
+                <pre><code>IgniteLock lock = ignite.reentrantLock("myLock", true, true, true);
+
+lock.lock();
+try {
+    // critical section — only one node/thread at a time
+} finally {
+    lock.unlock();
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

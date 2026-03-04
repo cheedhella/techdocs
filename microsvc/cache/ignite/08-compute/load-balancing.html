@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Load Balancing</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Load Balancing</h2>
+    </div>
+
+    <div class="question"><strong>1. How Ignite Load Balances Compute Tasks</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you submit a compute task with multiple jobs, Ignite distributes jobs across nodes using a <strong>load balancing SPI</strong>;</li>
+            <li>The goal is to spread work evenly so no single node becomes a bottleneck;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Built-in Load Balancing Strategies</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Strategy</th><th>Description</th></tr>
+            <tr>
+                <td><b>RoundRobinLoadBalancingSpi</b> (default)</td>
+                <td>Distributes jobs to nodes in round-robin order;</td>
+            </tr>
+            <tr>
+                <td><b>WeightedRandomLoadBalancingSpi</b></td>
+                <td>Assigns jobs randomly but with configurable weights per node;</td>
+            </tr>
+            <tr>
+                <td><b>AdaptiveLoadBalancingSpi</b></td>
+                <td>Adapts to node load metrics (CPU, job count); sends more work to less loaded nodes;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Configuring Load Balancing</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Round-robin (default)
+RoundRobinLoadBalancingSpi lbSpi = new RoundRobinLoadBalancingSpi();
+lbSpi.setPerTask(true); // round-robin per task (not global)
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setLoadBalancingSpi(lbSpi);
+
+// Adaptive — based on CPU load
+AdaptiveLoadBalancingSpi adaptiveSpi = new AdaptiveLoadBalancingSpi();
+adaptiveSpi.setLoadProbe(new AdaptiveCpuLoadProbe());
+cfg.setLoadBalancingSpi(adaptiveSpi);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Failover</strong></div>
+    <div class="answer">
+        <ul>
+            <li>If a node fails while executing a compute job, Ignite can <strong>automatically retry the job on another node</strong>;</li>
+            <li>Failover is handled by the <code>FailoverSpi</code>:
+                <ul>
+                    <li><b>AlwaysFailoverSpi</b> (default) — always retries on another node;</li>
+                    <li><b>NeverFailoverSpi</b> — never retries;</li>
+                    <li><b>JobStealingFailoverSpi</b> — steals jobs from overloaded nodes;</li>
+                </ul>
+            </li>
+            <li>Configure max failover attempts:
+                <pre><code>AlwaysFailoverSpi failoverSpi = new AlwaysFailoverSpi();
+failoverSpi.setMaximumFailoverAttempts(3);
+cfg.setFailoverSpi(failoverSpi);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Job Stealing</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Job stealing allows underloaded nodes to "steal" queued jobs from overloaded nodes;</li>
+            <li>Useful when job execution times vary significantly;</li>
+            <li>Requires both <code>JobStealingCollisionSpi</code> and <code>JobStealingFailoverSpi</code>;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

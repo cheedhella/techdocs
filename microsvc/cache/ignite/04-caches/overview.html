@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cache Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cache Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is an Ignite Cache?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A cache is a <strong>named, distributed key-value store</strong> that lives in memory across the cluster;</li>
+            <li>It is the primary data structure in Ignite — all data storage goes through caches;</li>
+            <li>A cache is equivalent to a SQL table: the same data can be accessed via key-value API or SQL;</li>
+            <li>Caches are created at runtime (dynamically) or at startup (via configuration);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Creating Caches</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Programmatically:</b>
+                <pre><code>CacheConfiguration&lt;Long, String&gt; cfg = new CacheConfiguration&lt;&gt;("myCache");
+cfg.setCacheMode(CacheMode.PARTITIONED);
+cfg.setBackups(1);
+
+IgniteCache&lt;Long, String&gt; cache = ignite.getOrCreateCache(cfg);</code></pre>
+            </li>
+            <li><b>Via XML configuration:</b>
+                <pre><code>&lt;bean class="org.apache.ignite.configuration.IgniteConfiguration"&gt;
+    &lt;property name="cacheConfiguration"&gt;
+        &lt;bean class="org.apache.ignite.configuration.CacheConfiguration"&gt;
+            &lt;property name="name" value="myCache"/&gt;
+            &lt;property name="cacheMode" value="PARTITIONED"/&gt;
+            &lt;property name="backups" value="1"/&gt;
+        &lt;/bean&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre>
+            </li>
+            <li><b>Via SQL:</b>
+                <pre><code>CREATE TABLE myTable (
+    id INT PRIMARY KEY,
+    name VARCHAR
+) WITH "cache_name=myCache,template=partitioned,backups=1";</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Destroying Caches</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Destroy the cache and delete all data
+ignite.destroyCache("myCache");
+
+// Or via SQL
+DROP TABLE myTable;</code></pre>
+            </li>
+            <li>Destroying a cache removes all data from all nodes — this is irreversible;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Cache Groups</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default each cache has its own set of partitions, which consumes memory for partition metadata;</li>
+            <li>Cache groups allow multiple caches to share the same set of partitions, reducing overhead;</li>
+            <li>Caches in the same group must have compatible configurations (same cache mode, same number of backups);
+                <pre><code>CacheConfiguration cfg1 = new CacheConfiguration("cache1");
+cfg1.setGroupName("myGroup");
+
+CacheConfiguration cfg2 = new CacheConfiguration("cache2");
+cfg2.setGroupName("myGroup");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Atomicity Modes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Mode</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><b>TRANSACTIONAL</b></td>
+                <td>Full ACID transactions across multiple keys and caches; supports pessimistic/optimistic concurrency;</td>
+            </tr>
+            <tr>
+                <td><b>ATOMIC</b> (default)</td>
+                <td>Each individual operation is atomic, but no multi-key transactions; better throughput for simple operations;</td>
+            </tr>
+            <tr>
+                <td><b>TRANSACTIONAL_SNAPSHOT</b></td>
+                <td>MVCC-based transactions (experimental); provides snapshot isolation;</td>
+            </tr>
+        </table>
+        <pre><code>CacheConfiguration cfg = new CacheConfiguration("myCache");
+cfg.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);</code></pre>
+    </div>
+</body>
+
+</html>

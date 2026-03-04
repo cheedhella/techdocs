@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cluster Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cluster Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. What is an Ignite Cluster?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A cluster is a group of Ignite nodes that have discovered each other and work together to store data, execute queries, and run compute tasks;</li>
+            <li>Every node in the cluster is aware of all other nodes (full topology awareness);</li>
+            <li>Nodes can be added or removed at runtime without stopping the cluster — Ignite automatically rebalances data;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Server Nodes vs. Client Nodes</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Aspect</th>
+                <th>Server Node</th>
+                <th>Client Node</th>
+            </tr>
+            <tr>
+                <td>Stores data</td>
+                <td>Yes</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Executes compute</td>
+                <td>Yes</td>
+                <td>Yes (delegates to servers)</td>
+            </tr>
+            <tr>
+                <td>Joins topology ring</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Receives partition map</td>
+                <td>Yes</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Configuration</td>
+                <td><code>setClientMode(false)</code> (default)</td>
+                <td><code>setClientMode(true)</code></td>
+            </tr>
+            <tr>
+                <td>Use case</td>
+                <td>Data storage, heavy processing</td>
+                <td>Application entry point, streaming data in</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. How Nodes Form a Cluster</strong></div>
+    <div class="answer">
+        <ul>
+            <li>On startup, each node uses a <strong>discovery mechanism</strong> to find existing cluster members;</li>
+            <li>The discovery mechanism uses an <strong>IP Finder</strong> to obtain a list of addresses to try;</li>
+            <li>Once a node connects to any existing member, it receives the full topology and joins the cluster;</li>
+            <li>All nodes must use the same discovery configuration to find each other;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Cluster Topology Events</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When a node joins or leaves, Ignite fires topology change events;</li>
+            <li><b>NODE_JOINED</b> — a new node has joined the cluster;</li>
+            <li><b>NODE_LEFT</b> — a node has gracefully left the cluster;</li>
+            <li><b>NODE_FAILED</b> — a node has unexpectedly disconnected (crash, network failure);</li>
+            <li>Applications can listen for these events to react to topology changes;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Cluster States</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>ACTIVE</b> — the cluster is fully operational; caches can be created, data can be read/written;</li>
+            <li><b>ACTIVE_READ_ONLY</b> — the cluster allows reads but blocks writes; useful for maintenance;</li>
+            <li><b>INACTIVE</b> — the cluster does not allow any cache operations; used when persistence is enabled and the baseline topology is not complete;</li>
+            <li>You can change the cluster state via the control script or programmatically:
+                <pre><code>ignite.cluster().state(ClusterState.ACTIVE);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Network Ports</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Port</th><th>Purpose</th><th>Default</th></tr>
+            <tr><td>Discovery</td><td>Node discovery (ring protocol)</td><td>47500–47509</td></tr>
+            <tr><td>Communication</td><td>Direct node-to-node messaging</td><td>47100–47109</td></tr>
+            <tr><td>Thin Client</td><td>Thin client connections</td><td>10800</td></tr>
+            <tr><td>REST</td><td>HTTP REST API (if enabled)</td><td>8080</td></tr>
+        </table>
+    </div>
+</body>
+
+</html>

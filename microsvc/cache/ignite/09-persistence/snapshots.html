@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cluster Snapshots</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Cluster Snapshots</h2>
+    </div>
+
+    <div class="question"><strong>1. What are Cluster Snapshots?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A snapshot is a <strong>consistent, point-in-time copy</strong> of all persistent caches in the cluster;</li>
+            <li>Snapshots can be used for backup, disaster recovery, or migrating data between clusters;</li>
+            <li>Available since Ignite 2.9; requires Native Persistence to be enabled;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Creating a Snapshot</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Via control script:</b>
+                <pre><code>$IGNITE_HOME/bin/control.sh --snapshot create my_snapshot</code></pre>
+            </li>
+            <li><b>Programmatically:</b>
+                <pre><code>ignite.snapshot().createSnapshot("my_snapshot").get();</code></pre>
+            </li>
+            <li>Snapshots are taken online — no downtime required;</li>
+            <li>Each node stores its local portion of the snapshot in the snapshot directory;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Restoring from a Snapshot</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Via control script:</b>
+                <pre><code># Restore all caches
+$IGNITE_HOME/bin/control.sh --snapshot restore my_snapshot
+
+# Restore specific caches
+$IGNITE_HOME/bin/control.sh --snapshot restore my_snapshot --caches cache1,cache2</code></pre>
+            </li>
+            <li><b>Programmatically:</b>
+                <pre><code>ignite.snapshot().restoreSnapshot("my_snapshot", null).get();</code></pre>
+            </li>
+            <li>The caches being restored must not exist in the cluster (destroy them first);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Snapshot Validation</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Verify snapshot integrity before restoring:
+                <pre><code>$IGNITE_HOME/bin/control.sh --snapshot check my_snapshot</code></pre>
+            </li>
+            <li>This validates partition checksums and ensures the snapshot is consistent;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Snapshot Storage</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, snapshots are stored in <code>$IGNITE_WORK_DIR/snapshots/</code>;</li>
+            <li>Configure a custom path:
+                <pre><code>storageCfg.setSnapshotPath("/mnt/backups/ignite-snapshots");</code></pre>
+            </li>
+            <li>Each snapshot is a directory containing partition files for each node — you can copy them to remote storage for backup;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

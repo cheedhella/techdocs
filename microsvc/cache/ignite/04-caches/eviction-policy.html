@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Eviction Policy</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Eviction Policy</h2>
+    </div>
+
+    <div class="question"><strong>1. What is an Eviction Policy?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An eviction policy controls <strong>which entries to remove when memory is running low</strong>;</li>
+            <li>It is different from expiry — expiry removes entries after a time duration; eviction removes entries based on memory pressure;</li>
+            <li>Eviction is configured at the <strong>data region</strong> level (not at the cache level);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Page-Based Eviction</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite evicts data at the <strong>page level</strong>, not at the individual entry level;</li>
+            <li>When a data region reaches its maximum size, Ignite starts evicting the least recently used pages;</li>
+            <li>Two eviction modes:
+                <ul>
+                    <li><b>RANDOM_LRU</b> — randomly samples pages and evicts the least recently used among the sample;</li>
+                    <li><b>RANDOM_2_LRU</b> — uses two random samples for better LRU approximation (slightly more CPU);</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Configuring Eviction</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Eviction is enabled by setting the max size on a data region and choosing an eviction mode:
+                <pre><code>DataRegionConfiguration regionCfg = new DataRegionConfiguration();
+regionCfg.setName("myRegion");
+regionCfg.setInitialSize(100L * 1024 * 1024);   // 100 MB initial
+regionCfg.setMaxSize(500L * 1024 * 1024);        // 500 MB max
+regionCfg.setPageEvictionMode(DataPageEvictionMode.RANDOM_LRU);
+
+DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+storageCfg.setDataRegionConfigurations(regionCfg);
+
+IgniteConfiguration igniteCfg = new IgniteConfiguration();
+igniteCfg.setDataStorageConfiguration(storageCfg);</code></pre>
+            </li>
+            <li>Assign a cache to a specific data region:
+                <pre><code>CacheConfiguration cacheCfg = new CacheConfiguration("myCache");
+cacheCfg.setDataRegionName("myRegion");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. On-Heap Cache (Near Cache Eviction)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Ignite also supports on-heap caching via <strong>Near Cache</strong> with entry-level eviction policies;</li>
+            <li>Near cache eviction policies: <b>LRU</b> (Least Recently Used) and <b>FIFO</b> (First In First Out);
+                <pre><code>NearCacheConfiguration nearCfg = new NearCacheConfiguration();
+nearCfg.setNearEvictionPolicy(new LruEvictionPolicy(10_000)); // keep 10K entries max
+
+CacheConfiguration cacheCfg = new CacheConfiguration("myCache");
+cacheCfg.setNearConfiguration(nearCfg);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Eviction vs. Expiry vs. Persistence</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mechanism</th><th>Trigger</th><th>Data Recovery</th></tr>
+            <tr><td>Eviction</td><td>Memory pressure (region full)</td><td>Re-loaded from persistence/CacheStore</td></tr>
+            <tr><td>Expiry</td><td>Time duration elapsed</td><td>Gone permanently</td></tr>
+            <tr><td>Persistence</td><td>N/A — data stored on disk</td><td>Available after restart</td></tr>
+        </table>
+    </div>
+</body>
+
+</html>

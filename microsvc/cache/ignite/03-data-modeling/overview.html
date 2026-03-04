@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Data Modeling Overview</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Data Modeling Overview</h2>
+    </div>
+
+    <div class="question"><strong>1. How does Ignite store data?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Internally, every data entry is stored as a <strong>binary object</strong> in off-heap memory;</li>
+            <li>The entire dataset is divided into <strong>partitions</strong>, which are evenly distributed across server nodes;</li>
+            <li>Ignite provides two equivalent logical views of the same data:
+                <ul>
+                    <li><b>Key-Value Cache</b> — access data through a key-value API;</li>
+                    <li><b>SQL Table</b> — access data through standard SQL statements;</li>
+                </ul>
+            </li>
+            <li>Both views read/write the same underlying data structure — you can mix them freely;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Key-Value Cache vs. SQL Table</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Aspect</th>
+                <th>Key-Value Cache</th>
+                <th>SQL Table</th>
+            </tr>
+            <tr>
+                <td>Access pattern</td>
+                <td><code>cache.get(key)</code>, <code>cache.put(key, value)</code></td>
+                <td><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></td>
+            </tr>
+            <tr>
+                <td>Schema</td>
+                <td>Optional (schemaless with binary objects)</td>
+                <td>Required (columns, types, primary key)</td>
+            </tr>
+            <tr>
+                <td>Transactions</td>
+                <td>Full ACID support</td>
+                <td>DML in transactions (with limitations)</td>
+            </tr>
+            <tr>
+                <td>Joins</td>
+                <td>Not applicable</td>
+                <td>Distributed joins supported</td>
+            </tr>
+            <tr>
+                <td>Best for</td>
+                <td>High-throughput point lookups</td>
+                <td>Complex queries, aggregations, reporting</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Physical vs. Logical Representation</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Physical level</b>:
+                <ul>
+                    <li>Data is stored in off-heap memory pages (default 4 KB);</li>
+                    <li>Pages are organized into partitions (1024 per cache by default);</li>
+                    <li>Partitions are distributed across server nodes by the affinity function;</li>
+                </ul>
+            </li>
+            <li><b>Logical level</b>:
+                <ul>
+                    <li>Applications see either a <code>IgniteCache&lt;K, V&gt;</code> (key-value) or a SQL table;</li>
+                    <li>A SQL table with primary key <code>id</code> and columns <code>name, age</code> maps to a cache where the key is <code>id</code> and the value is an object with fields <code>name</code> and <code>age</code>;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Creating a Cache Programmatically</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>CacheConfiguration&lt;Integer, String&gt; cacheCfg = new CacheConfiguration&lt;&gt;("myCache");
+cacheCfg.setCacheMode(CacheMode.PARTITIONED);
+cacheCfg.setBackups(1);
+
+IgniteCache&lt;Integer, String&gt; cache = ignite.getOrCreateCache(cacheCfg);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Creating a Table via SQL</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>CREATE TABLE Person (
+    id INT PRIMARY KEY,
+    name VARCHAR,
+    age INT,
+    city VARCHAR
+) WITH "cache_name=PersonCache,template=partitioned,backups=1";</code></pre>
+            </li>
+            <li>The <code>WITH</code> clause maps the SQL table to an Ignite cache and sets cache configuration parameters;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

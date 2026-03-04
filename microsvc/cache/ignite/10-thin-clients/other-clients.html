@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>.NET, Python &amp; Node.JS Clients</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>.NET, Python &amp; Node.JS Clients</h2>
+    </div>
+
+    <div class="question"><strong>1. .NET Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Install via NuGet: <code>Apache.Ignite</code></li>
+            <li>
+                <pre><code>var cfg = new IgniteClientConfiguration
+{
+    Endpoints = new[] { "192.168.1.10:10800" },
+    EnablePartitionAwareness = true
+};
+
+using var client = Ignition.StartClient(cfg);
+var cache = client.GetOrCreateCache&lt;int, string&gt;("myCache");
+
+cache.Put(1, "Alice");
+string value = cache.Get(1);</code></pre>
+            </li>
+            <li>Supports key-value, SQL, transactions, and binary objects;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Python Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Install: <code>pip install pyignite</code></li>
+            <li>
+                <pre><code>from pyignite import Client
+
+client = Client()
+client.connect('192.168.1.10', 10800)
+
+cache = client.get_or_create_cache('myCache')
+cache.put(1, 'Alice')
+value = cache.get(1)
+
+# SQL queries
+result = client.sql('SELECT * FROM Person WHERE age > ?', query_args=[25])
+for row in result:
+    print(row)</code></pre>
+            </li>
+            <li>Supports key-value, SQL queries, and partition awareness;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Node.JS Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Install: <code>npm install apache-ignite-client</code></li>
+            <li>
+                <pre><code>const IgniteClient = require('apache-ignite-client');
+const IgniteClientConfiguration = IgniteClient.IgniteClientConfiguration;
+
+const client = new IgniteClient();
+const config = new IgniteClientConfiguration('192.168.1.10:10800');
+
+await client.connect(config);
+
+const cache = await client.getOrCreateCache('myCache');
+await cache.put(1, 'Alice');
+const value = await cache.get(1);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. C++ Thin Client</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Included in the Ignite binary distribution under <code>platforms/cpp/</code>;</li>
+            <li>
+                <pre><code>#include &lt;ignite/thin/ignite_client.h&gt;
+#include &lt;ignite/thin/ignite_client_configuration.h&gt;
+
+using namespace ignite::thin;
+
+IgniteClientConfiguration cfg;
+cfg.SetEndPoints("192.168.1.10:10800");
+
+IgniteClient client = IgniteClient::Start(cfg);
+cache::CacheClient&lt;int, std::string&gt; cache =
+    client.GetOrCreateCache&lt;int, std::string&gt;("myCache");
+
+cache.Put(1, "Alice");
+std::string value = cache.Get(1);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Feature Comparison Across Languages</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Feature</th><th>Java</th><th>.NET</th><th>Python</th><th>Node.JS</th><th>C++</th></tr>
+            <tr><td>Key-Value</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>SQL</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Transactions</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+            <tr><td>Continuous Queries</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+            <tr><td>Compute</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+            <tr><td>Partition Awareness</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+        </table>
+    </div>
+</body>
+
+</html>

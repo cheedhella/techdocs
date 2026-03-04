@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>External Storage (CacheStore)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>External Storage (CacheStore)</h2>
+    </div>
+
+    <div class="question"><strong>1. What is CacheStore?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>CacheStore is an interface that allows Ignite to <strong>read from and write to an external database</strong> (MySQL, PostgreSQL, Cassandra, etc.);</li>
+            <li>Ignite sits in front of the database as a caching layer: reads go to Ignite first, misses are loaded from the DB, and writes are pushed to the DB;</li>
+            <li>This is useful when you already have data in a relational database and want to accelerate access with in-memory caching;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Read-Through and Write-Through</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mode</th><th>Description</th></tr>
+            <tr>
+                <td><b>Read-Through</b></td>
+                <td>If a key is not in the cache, Ignite automatically calls <code>CacheStore.load()</code> to fetch it from the external DB;</td>
+            </tr>
+            <tr>
+                <td><b>Write-Through</b></td>
+                <td>When data is written to the cache, Ignite automatically calls <code>CacheStore.write()</code> to persist it to the external DB;</td>
+            </tr>
+            <tr>
+                <td><b>Write-Behind</b></td>
+                <td>Writes to the external DB are batched and done asynchronously in the background — improves write performance;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Implementing CacheStore</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>public class PersonCacheStore extends CacheStoreAdapter&lt;Integer, Person&gt; {
+
+    @Override
+    public Person load(Integer key) {
+        // Load from external DB
+        return jdbc.queryForObject(
+            "SELECT * FROM person WHERE id = ?", key);
+    }
+
+    @Override
+    public void write(Cache.Entry&lt;? extends Integer, ? extends Person&gt; entry) {
+        // Write to external DB
+        jdbc.update(
+            "MERGE INTO person (id, name, age) VALUES (?, ?, ?)",
+            entry.getKey(), entry.getValue().getName(), entry.getValue().getAge());
+    }
+
+    @Override
+    public void delete(Object key) {
+        // Delete from external DB
+        jdbc.update("DELETE FROM person WHERE id = ?", key);
+    }
+
+    @Override
+    public void loadCache(IgniteBiInClosure&lt;Integer, Person&gt; clo, Object... args) {
+        // Bulk load from DB into cache on startup
+        jdbc.query("SELECT * FROM person", rs -> {
+            clo.apply(rs.getInt("id"),
+                new Person(rs.getString("name"), rs.getInt("age")));
+        });
+    }
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Configuring CacheStore</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>CacheConfiguration&lt;Integer, Person&gt; cacheCfg = new CacheConfiguration&lt;&gt;("PersonCache");
+
+cacheCfg.setCacheStoreFactory(FactoryBuilder.factoryOf(PersonCacheStore.class));
+cacheCfg.setReadThrough(true);     // enable read-through
+cacheCfg.setWriteThrough(true);    // enable write-through
+cacheCfg.setWriteBehindEnabled(true); // async writes
+
+// Preload data from DB on startup
+ignite.cache("PersonCache").loadCache(null);</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Write-Behind Configuration</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Write-behind batches writes to the external DB for better performance:
+                <pre><code>cacheCfg.setWriteBehindEnabled(true);
+cacheCfg.setWriteBehindFlushSize(1024);       // flush after 1024 entries
+cacheCfg.setWriteBehindFlushFrequency(5000);  // or every 5 seconds
+cacheCfg.setWriteBehindBatchSize(512);        // batch size for DB writes</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

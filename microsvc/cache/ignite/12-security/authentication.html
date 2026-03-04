@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Authentication</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Authentication</h2>
+    </div>
+
+    <div class="question"><strong>1. Authentication in Ignite</strong></div>
+    <div class="answer">
+        <ul>
+            <li>By default, Ignite has <strong>no authentication</strong> — any client or node can connect to the cluster;</li>
+            <li>For production, you should enable authentication to restrict who can join the cluster and access data;</li>
+            <li>Ignite supports thin client authentication and node authentication;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Enabling Thin Client Authentication</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Requires persistence to be enabled (credentials are stored persistently):
+                <pre><code>DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+
+IgniteConfiguration cfg = new IgniteConfiguration();
+cfg.setDataStorageConfiguration(storageCfg);
+cfg.setAuthenticationEnabled(true);</code></pre>
+            </li>
+            <li>Default user: <code>ignite</code> / <code>ignite</code>;</li>
+            <li>Connecting with credentials:
+                <pre><code>ClientConfiguration clientCfg = new ClientConfiguration()
+    .setAddresses("host:10800")
+    .setUserName("myuser")
+    .setUserPassword("mypassword");</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Managing Users</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use SQL to manage users once connected as an admin:
+                <pre><code>-- Create a new user
+ALTER USER "newuser" WITH PASSWORD 'securePassword123';
+
+-- Change password
+ALTER USER "newuser" WITH PASSWORD 'newSecurePassword456';
+
+-- Drop a user
+DROP USER "newuser";</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Custom Authentication SPI</strong></div>
+    <div class="answer">
+        <ul>
+            <li>For integration with external identity providers (LDAP, OAuth, etc.), implement a custom security plugin;</li>
+            <li>GridGain (commercial distribution) provides built-in LDAP integration;</li>
+            <li>The open-source version supports custom authentication via plugin SPI;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. JDBC Authentication</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pass credentials via the JDBC connection string:
+                <pre><code>String url = "jdbc:ignite:thin://host:10800?user=myuser&amp;password=mypassword";
+Connection conn = DriverManager.getConnection(url);</code></pre>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
