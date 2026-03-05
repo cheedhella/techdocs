@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Distributed Locks</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Distributed Locks</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Distributed Lock?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed lock provides <strong>mutual exclusion across all nodes in the cluster</strong> — only one thread on one node can hold the lock at a time;</li>
+            <li>It is the cluster-wide equivalent of Java's <code>ReentrantLock</code>;</li>
+            <li>Ignite implements it via <code>IgniteLock</code> (obtained from <code>ignite.reentrantLock()</code>);</li>
+            <li>The lock state is stored inside a distributed cache, so it survives individual node failures (as long as backups are configured);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. When to Use Distributed Locks</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Leader election</b> — ensure only one node performs a specific operation (e.g., scheduling, cleanup);</li>
+            <li><b>Protecting external resources</b> — coordinate access to a shared file system, external API, or database that doesn't support concurrent writes;</li>
+            <li><b>One-time initialization</b> — ensure a migration script or cache preload runs exactly once across the cluster;</li>
+            <li><b>Preventing duplicate processing</b> — ensure only one node processes a specific event or message;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Creating and Using a Lock</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>// Parameters: name, failoverSafe, fair, create
+IgniteLock lock = ignite.reentrantLock(
+    "myDistributedLock",  // lock name (cluster-wide unique)
+    true,                  // failoverSafe — auto-release if owner node fails
+    true,                  // fair — FIFO ordering for waiting threads
+    true                   // create — create if doesn't exist
+);
+
+lock.lock();
+try {
+    // Critical section — only one thread across the entire cluster runs this
+    performExclusiveOperation();
+} finally {
+    lock.unlock();
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Lock Parameters Explained</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Parameter</th><th>Description</th></tr>
+            <tr>
+                <td><b>name</b></td>
+                <td>Unique identifier for the lock across the cluster; all nodes requesting the same name compete for the same lock;</td>
+            </tr>
+            <tr>
+                <td><b>failoverSafe</b></td>
+                <td>If <code>true</code>, the lock is automatically released when the node that holds it fails; prevents deadlocks on node crashes; if <code>false</code>, the lock becomes a broken barrier on node failure;</td>
+            </tr>
+            <tr>
+                <td><b>fair</b></td>
+                <td>If <code>true</code>, threads acquire the lock in the order they requested it (FIFO); if <code>false</code>, no ordering guarantee (better throughput);</td>
+            </tr>
+            <tr>
+                <td><b>create</b></td>
+                <td>If <code>true</code>, creates the lock if it doesn't already exist; if <code>false</code>, returns <code>null</code> when the lock doesn't exist;</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. Try-Lock with Timeout</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Avoid blocking forever by using <code>tryLock()</code> with a timeout:
+                <pre><code>IgniteLock lock = ignite.reentrantLock("myLock", true, true, true);
+
+if (lock.tryLock(5, TimeUnit.SECONDS)) {
+    try {
+        // Acquired within 5 seconds
+        performExclusiveOperation();
+    } finally {
+        lock.unlock();
+    }
+} else {
+    // Could not acquire lock within 5 seconds
+    System.out.println("Lock is busy — skipping or retrying");
+}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Reentrant Behavior</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Like Java's <code>ReentrantLock</code>, <code>IgniteLock</code> can be acquired multiple times by the same thread:
+                <pre><code>lock.lock();   // hold count = 1
+lock.lock();   // hold count = 2 (same thread, reentrant)
+
+lock.unlock(); // hold count = 1
+lock.unlock(); // hold count = 0 (lock released)</code></pre>
+            </li>
+            <li>Each <code>lock()</code> must be matched with an <code>unlock()</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Failover Behavior</strong></div>
+    <div class="answer">
+        <ul>
+            <li>With <code>failoverSafe=true</code>:
+                <ul>
+                    <li>If the node holding the lock crashes, the lock is <strong>automatically released</strong>;</li>
+                    <li>The next waiting thread (on another node) acquires the lock;</li>
+                    <li>This prevents the entire cluster from deadlocking on a single node failure;</li>
+                </ul>
+            </li>
+            <li>With <code>failoverSafe=false</code>:
+                <ul>
+                    <li>If the owner node fails, all threads waiting on the lock receive a <code>IgniteInterruptedException</code>;</li>
+                    <li>The lock becomes unusable until it is explicitly removed and recreated;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Removing a Lock</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When a lock is no longer needed, close it to free cluster resources:
+                <pre><code>lock.close();  // removes the lock from the cluster</code></pre>
+            </li>
+            <li>A closed lock cannot be used again — calling <code>lock()</code> will throw an exception;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Distributed Lock vs. Transactions vs. Entry Processors</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Mechanism</th><th>Use When</th><th>Scope</th></tr>
+            <tr>
+                <td><b>IgniteLock</b></td>
+                <td>Coordinating access to external resources or non-cache operations</td>
+                <td>Cluster-wide, arbitrary code</td>
+            </tr>
+            <tr>
+                <td><b>Transactions</b></td>
+                <td>Multi-key read-modify-write on cache data with ACID guarantees</td>
+                <td>Cache entries only</td>
+            </tr>
+            <tr>
+                <td><b>Entry Processors</b></td>
+                <td>Atomic read-modify-write on a single cache entry</td>
+                <td>Single entry, runs on owning node</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>10. Best Practices</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Always use <code>failoverSafe=true</code> in production to avoid cluster-wide deadlocks on node failure;</li>
+            <li>Always unlock in a <code>finally</code> block to prevent accidental lock leaks;</li>
+            <li>Prefer <code>tryLock()</code> with a timeout over <code>lock()</code> to avoid indefinite blocking;</li>
+            <li>Keep the critical section as short as possible — long-held locks reduce cluster throughput;</li>
+            <li>For cache-only operations, prefer transactions or entry processors over distributed locks — they are more efficient;</li>
+            <li>Use descriptive lock names to make debugging easier (e.g., <code>"migration-lock"</code>, <code>"report-generation-lock"</code>);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

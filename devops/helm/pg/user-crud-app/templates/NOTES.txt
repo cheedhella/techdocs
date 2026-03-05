@@ -1,0 +1,13 @@
+============================================================
+  User CRUD App has been deployed!
+============================================================
+
+To access the application:
+
+1. Port-forward to your local machine:
+
+   kubectl port-forward svc/{{ include "user-crud-app.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+
+2. Test the API:
+
+   curl http://localhost:{{ .Values.service.port }}/api/users
