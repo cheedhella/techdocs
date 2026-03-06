@@ -9,33 +9,28 @@ Source app     : devops/jib/pg/UserCrudApp/
 ================================================================
   STEP 1 — Build and push the Docker image (Jib)
 ================================================================
+> cd devops/jib/pg/UserCrudApp
 
-  cd devops/jib/pg/UserCrudApp
-
-  # Option A: Push directly to Docker Hub (requires auth)
+  # 1.1 Set authentication environment variables 
   export DOCKER_USERNAME=cheedhella
   export DOCKER_PASSWORD=<your-docker-hub-password>
+
+  # 1.2 Compile and create docker image 
   mvn compile jib:build
 
-  # Option B: Load into local Docker daemon (no auth needed)
-  mvn compile jib:dockerBuild
-
-  # Verify the image
+  # 1.3 Verify the image
   docker images | grep user-crud-app
 
 ================================================================
   STEP 2 — Validate the Helm chart
 ================================================================
 
-  cd devops/helm/pg/
+> cd devops/helm/pg/
 
-  # Lint
+  # 2.1 Lint
   helm lint ./user-crud-app
 
-  # Render templates locally to inspect the output
-  helm template my-release ./user-crud-app
-
-  # Dry-run against a running cluster
+  # 2.2 Dry-run against a running cluster
   helm install my-release ./user-crud-app --dry-run --debug
 
 ================================================================
@@ -46,9 +41,7 @@ Source app     : devops/jib/pg/UserCrudApp/
   helm install my-release ./user-crud-app
 
   # Or install with overrides
-  helm install my-release ./user-crud-app \
-    --set replicaCount=2 \
-    --set image.tag=1.0-SNAPSHOT
+  helm install my-release ./user-crud-app --set replicaCount=2 --set image.tag=1.0-SNAPSHOT
 
   # Check rollout status
   kubectl rollout status deployment/my-release-user-crud-app
@@ -72,14 +65,10 @@ Source app     : devops/jib/pg/UserCrudApp/
   curl http://localhost:8080/api/users
 
   # Create a user
-  curl -X POST http://localhost:8080/api/users \
-    -H "Content-Type: application/json" \
-    -d '{"name": "Alice"}'
+  curl -X POST http://localhost:8080/api/users -H "Content-Type: application/json" -d '{"name": "Alice"}'
 
   # Create another user
-  curl -X POST http://localhost:8080/api/users \
-    -H "Content-Type: application/json" \
-    -d '{"name": "Bob"}'
+  curl -X POST http://localhost:8080/api/users -H "Content-Type: application/json"  -d '{"name": "Bob"}'
 
   # List all users
   curl http://localhost:8080/api/users
@@ -88,9 +77,7 @@ Source app     : devops/jib/pg/UserCrudApp/
   curl http://localhost:8080/api/users/1
 
   # Update a user
-  curl -X PUT http://localhost:8080/api/users/1 \
-    -H "Content-Type: application/json" \
-    -d '{"name": "Alice Updated"}'
+  curl -X PUT http://localhost:8080/api/users/1 -H "Content-Type: application/json" -d '{"name": "Alice Updated"}'
 
   # Delete a user
   curl -X DELETE http://localhost:8080/api/users/2

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm Linting</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm Linting</h2>
+    </div>
+
+    <div class="question"><strong>1. helm lint</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It validates the chart for syntax errors, missing required fields and best practices;</li>
+            <li>It is recommended to run linting before pushing the chart to repository, installation, or upgrade;</li>
+            <li>Syntax: <pre><code>helm lint <chart-name></code></pre></li>
+            <li>It’s commonly run in CI/CD pipelines before deploying helm charts;</li>
+            <li>Note: It never connects to k8s cluster, it does it's job on your local machine; Use --dry-run if needed;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What all does it check?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It checks the chart directory structure(for any missing files or directories);</li>
+            <li>It checks the syntax of all the YAML files(Chart.yaml, values.yaml, template YAML files etc);</li>
+            <li>It validates the syntax of all Go template expressions in the templates/ directory;</li>
+            <li>It checks Chart.yaml for required fields like name, version, and apiVersion;</li>
+            <li>It checks if the dependencies defined in Chart.yaml are present in the charts/ directory or not;</li>
+            <li>It checks if the dependencies are valid(such as version, repository, condition etc);</li>            
+            <li>It converts the template files into k8s manifest files and checks the syntax of the generated k8s manifest files;
+                <ul>
+                    <li>It checks the syntax of the generated k8s manifest files;</li>
+                    <li>It checks each k8s object contains the required fields(such as apiVersion, kind, metadata, spec etc);</li>
+                    <li>It ensures every k8s object is named as per DNS naming conventions(only alphanumeric, lowercase and hyphen characters); It should not exceed 253 characters;</li>
+                </ul>
+            </li>
+            <li>It checks for below best practices and warns:
+                <ul>
+                    <li>Missing icon, maintainers, description in Chart.yaml;</li>
+                    <li>Chart version not following semantic versioning(MAJOR.MINOR.PATCH);</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Options</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>--strict</code> - It treats warnings as errors, so that best practices are enforced; It is useful in CI/CD pipelines;</li>
+            <li><code>--with-subcharts</code> - It lints the chart and all its subcharts(dependencies);</li>
+            <li><code>-f values.yaml</code> - It renders the templates with values.yaml and check their validity;</li>
+            <li><code>-n</code> - Some templates(like .Release.Namespace) require namespace to be set; helm needs namespace to be set before linting; It doesn't check if the namespace exists in the cluster;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

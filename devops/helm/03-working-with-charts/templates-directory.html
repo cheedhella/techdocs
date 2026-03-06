@@ -8,28 +8,244 @@
 
 <body>
     <div class="main-grid-item-1 grid-wide-column">
-        <h2>Templates Directory</h2>
+        <h2>templates/ Directory</h2>
     </div>
 
-    <div class="question"><strong>1. Overview</strong></div>
-    <div class="answer">
-        <p>This topic covers Templates Directory in Helm charts.</p>
-        <p>Content will be added based on Helm best practices and official documentation.</p>
-    </div>
-
-    <div class="question"><strong>2. Key Concepts</strong></div>
+    <div class="question"><strong>1. What is the templates/ directory?</strong></div>
     <div class="answer">
         <ul>
-            <li>Understanding the fundamentals of Templates Directory;</li>
-            <li>Practical examples and use cases;</li>
-            <li>Best practices and common patterns;</li>
+            <li>Contains <strong>Go-template files</strong> that Helm renders into Kubernetes manifests;</li>
+            <li>During <code>helm install</code> / <code>helm upgrade</code>, Helm processes every <code>.yaml</code> and <code>.tpl</code> file through the Go template engine, injects values, and sends the resulting YAML to the k8s API server;</li>
+            <li>Files starting with <code>_</code> (e.g., <code>_helpers.tpl</code>) are <b>not</b> rendered as standalone manifests — they only define reusable named templates;</li>
+            <li><code>NOTES.txt</code> is rendered but its output is printed to the terminal, not sent to Kubernetes;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>3. Example</strong></div>
+    <div class="question"><strong>2. Standard Files</strong></div>
     <div class="answer">
-        <pre><code># Example code will be provided here
-# Demonstrating Templates Directory concepts</code></pre>
+        <ul>
+            <li>
+<pre><code>templates/
+├── _helpers.tpl           # named template definitions
+├── deployment.yaml        # Deployment
+├── service.yaml           # Service
+├── serviceaccount.yaml    # ServiceAccount
+├── ingress.yaml           # Ingress (usually conditional)
+├── hpa.yaml               # HorizontalPodAutoscaler (usually conditional)
+├── configmap.yaml         # ConfigMap
+├── secret.yaml            # Secret
+├── NOTES.txt              # post-install/upgrade message
+└── tests/
+    └── test-connection.yaml   # helm test pod</code></pre>
+            </li>
+            <li>You can add any number of extra files — each <code>.yaml</code> file produces one or more k8s resources;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. _helpers.tpl</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defines reusable named templates via <code>{{- define "name" }}</code> … <code>{{- end }}</code>;</li>
+            <li>Other templates include them via <code>{{ include "name" . }}</code>;</li>
+            <li>Typical definitions:
+<pre><code>{{- define "myapp.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "myapp.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name (include "myapp.name" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+
+{{- define "myapp.labels" -}}
+helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "myapp.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. deployment.yaml</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Defines the application workload — image, replicas, ports, probes, resources:
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "myapp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "myapp.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. service.yaml</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Exposes the Deployment as a stable network endpoint:
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+  selector:
+    {{- include "myapp.selectorLabels" . | nindent 4 }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Conditional Resources (ingress, hpa)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Guard optional resources with <code>{{- if }}</code> so they are only created when enabled in values:
+<pre><code>{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ include "myapp.fullname" $ }}
+                port:
+                  number: {{ $.Values.service.port }}
+          {{- end }}
+    {{- end }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. NOTES.txt</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Rendered like any template but output is printed to the terminal after <code>helm install</code> / <code>helm upgrade</code>;</li>
+            <li>Not sent to Kubernetes — purely informational;</li>
+            <li>Typically shows how to access the deployed application:
+<pre><code>Thank you for installing {{ .Chart.Name }}!
+
+Your release is named {{ .Release.Name }}.
+
+To access your application:
+
+  export POD_NAME=$(kubectl get pods -n {{ .Release.Namespace }} \
+    -l "app.kubernetes.io/instance={{ .Release.Name }}" \
+    -o jsonpath="{.items[0].metadata.name}")
+
+  kubectl port-forward $POD_NAME 8080:{{ .Values.service.port }}
+
+  echo "Visit http://127.0.0.1:8080"</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. tests/ Directory</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Contains pod definitions annotated with <code>"helm.sh/hook": test</code>;</li>
+            <li>Executed via <code>helm test &lt;release&gt;</code> after installation;</li>
+            <li>Typical test — curl the Service to verify a successful response:
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "myapp.fullname" . }}-test"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:latest
+      command: ['curl', '--fail', '{{ include "myapp.fullname" . }}:{{ .Values.service.port }}']</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Template Rendering Order</strong></div>
+    <div class="answer">
+        <ul>
+            <li>CRDs in <code>crds/</code> are installed first (plain YAML, no templating);</li>
+            <li>All files in <code>templates/</code> are rendered through the Go template engine;</li>
+            <li>Files starting with <code>_</code> contribute named templates but produce no output;</li>
+            <li><code>NOTES.txt</code> output goes to terminal only;</li>
+            <li>All other rendered YAML is sent to the k8s API server in a single batch;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Common Patterns</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>toYaml</b> — convert a values block to YAML (useful for resources, annotations):
+<pre><code>{{- with .Values.resources }}
+resources:
+  {{- toYaml . | nindent 2 }}
+{{- end }}</code></pre>
+            </li>
+            <li><b>nindent</b> — indent rendered output by N spaces (critical for correct YAML nesting);</li>
+            <li><b>with</b> — scope a block to a value; the block is skipped if the value is empty:
+<pre><code>{{- with .Values.nodeSelector }}
+nodeSelector:
+  {{- toYaml . | nindent 2 }}
+{{- end }}</code></pre>
+            </li>
+            <li><b>range</b> — iterate over lists or maps:
+<pre><code>{{- range .Values.env }}
+- name: {{ .name }}
+  value: {{ .value | quote }}
+{{- end }}</code></pre>
+            </li>
+            <li><b>include vs template</b> — prefer <code>include</code> over <code>template</code> because <code>include</code> returns a string that can be piped to functions like <code>nindent</code>;</li>
+        </ul>
     </div>
 
 </body>

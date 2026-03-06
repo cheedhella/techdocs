@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helm Template Functions</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helm Template Functions</h2>
+    </div>
+
+    <div class="question"><strong>1. Syntax</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Direct call: <code>{{ functionName arg1 arg2 }}</code></li>
+            <li>Pipeline: <code>{{ arg1 | functionName arg2 }}</code> — arg1 becomes the <b>last</b> argument</li>
+            <li>Helm functions come from three sources: Go built-in, <a href="https://masterminds.github.io/sprig/">Sprig library</a>, and Helm-specific;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. String Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>quote</code></td><td>Wraps string in double quotes</td><td><code>{{ .Values.name | quote }}</code> → <code>"myapp"</code></td></tr>
+            <tr><td><code>squote</code></td><td>Wraps string in single quotes</td><td><code>{{ .Values.name | squote }}</code> → <code>'myapp'</code></td></tr>
+            <tr><td><code>upper</code></td><td>Converts to uppercase</td><td><code>{{ "hello" | upper }}</code> → <code>HELLO</code></td></tr>
+            <tr><td><code>lower</code></td><td>Converts to lowercase</td><td><code>{{ "HELLO" | lower }}</code> → <code>hello</code></td></tr>
+            <tr><td><code>title</code></td><td>Title-cases the string</td><td><code>{{ "hello world" | title }}</code> → <code>Hello World</code></td></tr>
+            <tr><td><code>trim</code></td><td>Removes leading/trailing whitespace</td><td><code>{{ "  hi  " | trim }}</code> → <code>hi</code></td></tr>
+            <tr><td><code>trimPrefix</code></td><td>Removes prefix</td><td><code>{{ "v1.2" | trimPrefix "v" }}</code> → <code>1.2</code></td></tr>
+            <tr><td><code>trimSuffix</code></td><td>Removes suffix</td><td><code>{{ "app-" | trimSuffix "-" }}</code> → <code>app</code></td></tr>
+            <tr><td><code>trunc</code></td><td>Truncates to N characters</td><td><code>{{ "abcdef" | trunc 3 }}</code> → <code>abc</code></td></tr>
+            <tr><td><code>replace</code></td><td>Replaces old with new</td><td><code>{{ "a+b" | replace "+" "_" }}</code> → <code>a_b</code></td></tr>
+            <tr><td><code>contains</code></td><td>Returns true if string contains substring</td><td><code>{{ if contains "app" .Values.name }}yes{{ end }}</code></td></tr>
+            <tr><td><code>hasPrefix</code></td><td>True if string starts with prefix</td><td><code>{{ hasPrefix "v" .Values.tag }}</code></td></tr>
+            <tr><td><code>hasSuffix</code></td><td>True if string ends with suffix</td><td><code>{{ hasSuffix ".yaml" .Template.Name }}</code></td></tr>
+            <tr><td><code>repeat</code></td><td>Repeats a string N times</td><td><code>{{ "ab" | repeat 3 }}</code> → <code>ababab</code></td></tr>
+            <tr><td><code>nospace</code></td><td>Removes all whitespace</td><td><code>{{ "a b c" | nospace }}</code> → <code>abc</code></td></tr>
+            <tr><td><code>snakecase</code></td><td>Converts to snake_case</td><td><code>{{ "myApp" | snakecase }}</code> → <code>my_app</code></td></tr>
+            <tr><td><code>camelcase</code></td><td>Converts to CamelCase</td><td><code>{{ "my_app" | camelcase }}</code> → <code>MyApp</code></td></tr>
+            <tr><td><code>kebabcase</code></td><td>Converts to kebab-case</td><td><code>{{ "myApp" | kebabcase }}</code> → <code>my-app</code></td></tr>
+            <tr><td><code>cat</code></td><td>Concatenates strings with spaces</td><td><code>{{ cat .Chart.Name "svc" }}</code> → <code>myapp svc</code></td></tr>
+            <tr><td><code>indent</code></td><td>Indents every line by N spaces</td><td><code>{{ .Values.config | indent 4 }}</code></td></tr>
+            <tr><td><code>nindent</code></td><td>Same as indent but adds a leading newline</td><td><code>{{- toYaml .Values.labels | nindent 4 }}</code></td></tr>
+            <tr><td><code>printf</code></td><td>Sprintf-style formatting</td><td><code>{{ printf "%s-%s" .Release.Name .Chart.Name }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Type Conversion Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>toYaml</code></td><td>Converts value to YAML string</td><td><code>{{ toYaml .Values.resources }}</code></td></tr>
+            <tr><td><code>fromYaml</code></td><td>Parses YAML string into an object</td><td><code>{{ $obj := fromYaml .Values.rawYaml }}</code></td></tr>
+            <tr><td><code>toJson</code></td><td>Converts value to JSON string</td><td><code>{{ toJson .Values.config }}</code></td></tr>
+            <tr><td><code>fromJson</code></td><td>Parses JSON string into an object</td><td><code>{{ $obj := fromJson .Values.rawJson }}</code></td></tr>
+            <tr><td><code>toToml</code></td><td>Converts value to TOML string</td><td><code>{{ toToml .Values.config }}</code></td></tr>
+            <tr><td><code>fromJsonArray</code></td><td>Parses JSON array string into a list</td><td><code>{{ $arr := fromJsonArray .Values.list }}</code></td></tr>
+            <tr><td><code>atoi</code></td><td>Converts string to integer</td><td><code>{{ "8080" | atoi }}</code> → <code>8080</code> (int)</td></tr>
+            <tr><td><code>toString</code></td><td>Converts value to string</td><td><code>{{ 8080 | toString }}</code> → <code>"8080"</code></td></tr>
+            <tr><td><code>int</code></td><td>Converts to int</td><td><code>{{ "3" | int }}</code> → <code>3</code></td></tr>
+            <tr><td><code>float64</code></td><td>Converts to float64</td><td><code>{{ "3.14" | float64 }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>4. Default / Logic Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>default</code></td><td>Returns default if value is empty/nil/zero</td><td><code>{{ .Values.tag | default "latest" }}</code></td></tr>
+            <tr><td><code>required</code></td><td>Fails rendering if value is empty</td><td><code>{{ required "image.repository is required" .Values.image.repository }}</code></td></tr>
+            <tr><td><code>empty</code></td><td>Returns true if value is empty</td><td><code>{{ if empty .Values.name }}no name{{ end }}</code></td></tr>
+            <tr><td><code>coalesce</code></td><td>Returns first non-empty value</td><td><code>{{ coalesce .Values.tag .Chart.AppVersion "latest" }}</code></td></tr>
+            <tr><td><code>ternary</code></td><td>If-then-else in one expression</td><td><code>{{ ternary "yes" "no" .Values.enabled }}</code></td></tr>
+            <tr><td><code>eq</code></td><td>Equal</td><td><code>{{ if eq .Values.env "prod" }}...{{ end }}</code></td></tr>
+            <tr><td><code>ne</code></td><td>Not equal</td><td><code>{{ if ne .Values.env "dev" }}...{{ end }}</code></td></tr>
+            <tr><td><code>lt</code> / <code>le</code></td><td>Less than / less or equal</td><td><code>{{ if lt .Values.replicas 3 }}...{{ end }}</code></td></tr>
+            <tr><td><code>gt</code> / <code>ge</code></td><td>Greater than / greater or equal</td><td><code>{{ if gt .Values.replicas 1 }}...{{ end }}</code></td></tr>
+            <tr><td><code>and</code></td><td>Logical AND</td><td><code>{{ if and .Values.ingress.enabled .Values.tls }}...{{ end }}</code></td></tr>
+            <tr><td><code>or</code></td><td>Logical OR</td><td><code>{{ if or .Values.nodePort .Values.loadBalancer }}...{{ end }}</code></td></tr>
+            <tr><td><code>not</code></td><td>Logical NOT</td><td><code>{{ if not .Values.disabled }}...{{ end }}</code></td></tr>
+            <tr><td><code>fail</code></td><td>Unconditionally fails rendering with a message</td><td><code>{{ fail "unsupported database type" }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>5. List Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>list</code></td><td>Creates a new list</td><td><code>{{ $l := list "a" "b" "c" }}</code></td></tr>
+            <tr><td><code>first</code></td><td>Returns first element</td><td><code>{{ first .Values.tags }}</code></td></tr>
+            <tr><td><code>last</code></td><td>Returns last element</td><td><code>{{ last .Values.tags }}</code></td></tr>
+            <tr><td><code>rest</code></td><td>Returns all elements except the first</td><td><code>{{ rest .Values.tags }}</code></td></tr>
+            <tr><td><code>initial</code></td><td>Returns all elements except the last</td><td><code>{{ initial .Values.tags }}</code></td></tr>
+            <tr><td><code>append</code></td><td>Adds an element to the end</td><td><code>{{ $l := append .Values.tags "new" }}</code></td></tr>
+            <tr><td><code>prepend</code></td><td>Adds an element to the beginning</td><td><code>{{ $l := prepend .Values.tags "first" }}</code></td></tr>
+            <tr><td><code>concat</code></td><td>Concatenates multiple lists</td><td><code>{{ concat .Values.list1 .Values.list2 }}</code></td></tr>
+            <tr><td><code>has</code></td><td>True if list contains the element</td><td><code>{{ if has "prod" .Values.envs }}...{{ end }}</code></td></tr>
+            <tr><td><code>without</code></td><td>Returns list without specified elements</td><td><code>{{ without .Values.tags "deprecated" }}</code></td></tr>
+            <tr><td><code>uniq</code></td><td>Removes duplicates</td><td><code>{{ .Values.tags | uniq }}</code></td></tr>
+            <tr><td><code>reverse</code></td><td>Reverses the list</td><td><code>{{ .Values.tags | reverse }}</code></td></tr>
+            <tr><td><code>sortAlpha</code></td><td>Sorts strings alphabetically</td><td><code>{{ .Values.tags | sortAlpha }}</code></td></tr>
+            <tr><td><code>len</code></td><td>Returns length</td><td><code>{{ len .Values.tags }}</code></td></tr>
+            <tr><td><code>compact</code></td><td>Removes empty string entries</td><td><code>{{ .Values.tags | compact }}</code></td></tr>
+            <tr><td><code>index</code></td><td>Gets element at index</td><td><code>{{ index .Values.tags 0 }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>6. Dict (Map) Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>dict</code></td><td>Creates a new dictionary</td><td><code>{{ $d := dict "key1" "val1" "key2" "val2" }}</code></td></tr>
+            <tr><td><code>get</code></td><td>Gets a value by key</td><td><code>{{ get $d "key1" }}</code> → <code>val1</code></td></tr>
+            <tr><td><code>set</code></td><td>Sets a key-value pair (mutates)</td><td><code>{{ $_ := set $d "key3" "val3" }}</code></td></tr>
+            <tr><td><code>unset</code></td><td>Removes a key (mutates)</td><td><code>{{ $_ := unset $d "key1" }}</code></td></tr>
+            <tr><td><code>hasKey</code></td><td>True if key exists</td><td><code>{{ if hasKey .Values.annotations "app" }}...{{ end }}</code></td></tr>
+            <tr><td><code>keys</code></td><td>Returns list of keys</td><td><code>{{ keys $d }}</code></td></tr>
+            <tr><td><code>values</code></td><td>Returns list of values</td><td><code>{{ values $d }}</code></td></tr>
+            <tr><td><code>merge</code></td><td>Deep-merges dicts (first wins)</td><td><code>{{ merge $defaults $overrides }}</code></td></tr>
+            <tr><td><code>mergeOverwrite</code></td><td>Deep-merges dicts (last wins)</td><td><code>{{ mergeOverwrite $defaults $overrides }}</code></td></tr>
+            <tr><td><code>pick</code></td><td>Returns dict with only specified keys</td><td><code>{{ pick $d "key1" "key2" }}</code></td></tr>
+            <tr><td><code>omit</code></td><td>Returns dict without specified keys</td><td><code>{{ omit $d "key1" }}</code></td></tr>
+            <tr><td><code>pluck</code></td><td>Gets a key from a list of dicts</td><td><code>{{ pluck "name" $dict1 $dict2 }}</code></td></tr>
+            <tr><td><code>deepCopy</code></td><td>Deep-copies a dict</td><td><code>{{ $copy := deepCopy .Values.config }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. Math Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>add</code></td><td>Addition</td><td><code>{{ add 3 2 }}</code> → <code>5</code></td></tr>
+            <tr><td><code>sub</code></td><td>Subtraction</td><td><code>{{ sub 5 2 }}</code> → <code>3</code></td></tr>
+            <tr><td><code>mul</code></td><td>Multiplication</td><td><code>{{ mul 3 4 }}</code> → <code>12</code></td></tr>
+            <tr><td><code>div</code></td><td>Integer division</td><td><code>{{ div 10 3 }}</code> → <code>3</code></td></tr>
+            <tr><td><code>mod</code></td><td>Modulo</td><td><code>{{ mod 10 3 }}</code> → <code>1</code></td></tr>
+            <tr><td><code>max</code></td><td>Returns the largest value</td><td><code>{{ max 1 5 3 }}</code> → <code>5</code></td></tr>
+            <tr><td><code>min</code></td><td>Returns the smallest value</td><td><code>{{ min 1 5 3 }}</code> → <code>1</code></td></tr>
+            <tr><td><code>ceil</code></td><td>Rounds up</td><td><code>{{ ceil 2.1 }}</code> → <code>3</code></td></tr>
+            <tr><td><code>floor</code></td><td>Rounds down</td><td><code>{{ floor 2.9 }}</code> → <code>2</code></td></tr>
+            <tr><td><code>round</code></td><td>Rounds to N decimal places</td><td><code>{{ round 3.1456 2 }}</code> → <code>3.15</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>8. Date Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>now</code></td><td>Current timestamp</td><td><code>{{ now }}</code></td></tr>
+            <tr><td><code>date</code></td><td>Formats a date (Go layout)</td><td><code>{{ now | date "2006-01-02" }}</code> → <code>2026-03-04</code></td></tr>
+            <tr><td><code>dateModify</code></td><td>Adds/subtracts duration</td><td><code>{{ now | dateModify "-1h" }}</code></td></tr>
+            <tr><td><code>toDate</code></td><td>Parses string to date</td><td><code>{{ toDate "2006-01-02" "2026-01-15" }}</code></td></tr>
+            <tr><td><code>unixEpoch</code></td><td>Converts date to Unix timestamp</td><td><code>{{ now | unixEpoch }}</code></td></tr>
+            <tr><td><code>dateInZone</code></td><td>Formats date in a specific timezone</td><td><code>{{ dateInZone "15:04" (now) "UTC" }}</code></td></tr>
+            <tr><td><code>ago</code></td><td>Returns duration since a date</td><td><code>{{ ago .startTime }}</code></td></tr>
+            <tr><td><code>duration</code></td><td>Formats seconds as duration string</td><td><code>{{ duration 3600 }}</code> → <code>1h0m0s</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>9. Encoding / Crypto Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>b64enc</code></td><td>Base64 encode</td><td><code>{{ "password" | b64enc }}</code> → <code>cGFzc3dvcmQ=</code></td></tr>
+            <tr><td><code>b64dec</code></td><td>Base64 decode</td><td><code>{{ "cGFzc3dvcmQ=" | b64dec }}</code> → <code>password</code></td></tr>
+            <tr><td><code>sha256sum</code></td><td>SHA-256 hash</td><td><code>{{ .Values.secret | sha256sum }}</code></td></tr>
+            <tr><td><code>sha1sum</code></td><td>SHA-1 hash</td><td><code>{{ .Values.data | sha1sum }}</code></td></tr>
+            <tr><td><code>adler32sum</code></td><td>Adler-32 checksum</td><td><code>{{ .Values.data | adler32sum }}</code></td></tr>
+            <tr><td><code>uuidv4</code></td><td>Generates a random UUID v4</td><td><code>{{ uuidv4 }}</code></td></tr>
+            <tr><td><code>htpasswd</code></td><td>Generates bcrypt hash for HTTP basic auth</td><td><code>{{ htpasswd "user" "pass" }}</code></td></tr>
+            <tr><td><code>randAlphaNum</code></td><td>Random alphanumeric string of length N</td><td><code>{{ randAlphaNum 16 }}</code></td></tr>
+            <tr><td><code>randAlpha</code></td><td>Random alphabetic string of length N</td><td><code>{{ randAlpha 8 }}</code></td></tr>
+            <tr><td><code>randNumeric</code></td><td>Random numeric string of length N</td><td><code>{{ randNumeric 6 }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>10. Regex Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>regexMatch</code></td><td>True if string matches pattern</td><td><code>{{ if regexMatch "^v[0-9]+" .Values.tag }}...{{ end }}</code></td></tr>
+            <tr><td><code>regexFind</code></td><td>Returns first match</td><td><code>{{ regexFind "[0-9]+" "v1.2.3" }}</code> → <code>1</code></td></tr>
+            <tr><td><code>regexFindAll</code></td><td>Returns all matches (up to N)</td><td><code>{{ regexFindAll "[0-9]+" "v1.2.3" -1 }}</code> → <code>[1 2 3]</code></td></tr>
+            <tr><td><code>regexReplaceAll</code></td><td>Replaces all matches</td><td><code>{{ regexReplaceAll "[^a-z]" .Values.name "" }}</code></td></tr>
+            <tr><td><code>regexReplaceAllLiteral</code></td><td>Replaces all matches (no expansion)</td><td><code>{{ regexReplaceAllLiteral "\\d" "a1b2" "X" }}</code> → <code>aXbX</code></td></tr>
+            <tr><td><code>regexSplit</code></td><td>Splits string by pattern</td><td><code>{{ regexSplit "\\." "1.2.3" -1 }}</code> → <code>[1 2 3]</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>11. Helm-Specific Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>include</code></td><td>Renders a named template and returns the string</td><td><code>{{ include "myapp.labels" . | nindent 4 }}</code></td></tr>
+            <tr><td><code>tpl</code></td><td>Renders a string as a template</td><td><code>{{ tpl .Values.annotations.custom . }}</code></td></tr>
+            <tr><td><code>required</code></td><td>Fails if value is empty</td><td><code>{{ required "image required" .Values.image.repository }}</code></td></tr>
+            <tr><td><code>fail</code></td><td>Unconditionally fails rendering</td><td><code>{{ fail "unsupported type" }}</code></td></tr>
+            <tr><td><code>lookup</code></td><td>Queries live k8s resources (not available in <code>helm template</code>)</td><td><code>{{ lookup "v1" "Secret" "ns" "name" }}</code></td></tr>
+            <tr><td><code>toYaml</code></td><td>Converts to YAML string</td><td><code>{{ toYaml .Values.resources | nindent 2 }}</code></td></tr>
+            <tr><td><code>toJson</code></td><td>Converts to JSON string</td><td><code>{{ toJson .Values.config }}</code></td></tr>
+            <tr><td><code>semverCompare</code></td><td>Compares SemVer constraint against version</td><td><code>{{ if semverCompare ">=1.21" .Capabilities.KubeVersion.Version }}...{{ end }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>12. Path Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>base</code></td><td>Returns filename from path</td><td><code>{{ base "/a/b/c.yaml" }}</code> → <code>c.yaml</code></td></tr>
+            <tr><td><code>dir</code></td><td>Returns directory from path</td><td><code>{{ dir "/a/b/c.yaml" }}</code> → <code>/a/b</code></td></tr>
+            <tr><td><code>ext</code></td><td>Returns file extension</td><td><code>{{ ext "file.yaml" }}</code> → <code>.yaml</code></td></tr>
+            <tr><td><code>isAbs</code></td><td>True if path is absolute</td><td><code>{{ isAbs "/etc/config" }}</code> → <code>true</code></td></tr>
+            <tr><td><code>clean</code></td><td>Cleans up a path</td><td><code>{{ clean "/a//b/../c" }}</code> → <code>/a/c</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>13. OS / Network Functions</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Function</th><th>Description</th><th>Example</th></tr>
+            <tr><td><code>env</code></td><td>Reads an environment variable (disabled by default)</td><td><code>{{ env "HOME" }}</code></td></tr>
+            <tr><td><code>expandenv</code></td><td>Expands env vars in a string (disabled by default)</td><td><code>{{ expandenv "$HOME/app" }}</code></td></tr>
+            <tr><td><code>getHostByName</code></td><td>DNS lookup (returns first IP)</td><td><code>{{ getHostByName "example.com" }}</code></td></tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>14. Commonly Used Patterns</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Safe image tag with fallback:</b>
+<pre><code>image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"</code></pre>
+            </li>
+            <li><b>Truncated, DNS-safe name:</b>
+<pre><code>{{ printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" }}</code></pre>
+            </li>
+            <li><b>Embed resources block only if defined:</b>
+<pre><code>{{- with .Values.resources }}
+resources:
+  {{- toYaml . | nindent 2 }}
+{{- end }}</code></pre>
+            </li>
+            <li><b>Required value (fail fast):</b>
+<pre><code>image: {{ required "image.repository is required" .Values.image.repository }}</code></pre>
+            </li>
+            <li><b>Base64-encode a Secret value:</b>
+<pre><code>data:
+  password: {{ .Values.dbPassword | b64enc | quote }}</code></pre>
+            </li>
+            <li><b>Auto-trigger rollout on ConfigMap change:</b>
+<pre><code>annotations:
+  checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

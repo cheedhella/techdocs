@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Flow Control</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Flow Control</h2>
+    </div>
+
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Go templates provide four control structures: <code>if</code>/<code>else</code>, <code>with</code>, <code>range</code>, and <code>define</code>/<code>template</code>;</li>
+            <li>All blocks end with <code>{{ end }}</code>;</li>
+            <li>Use <code>{{-</code> and <code>-}}</code> to trim whitespace around control blocks;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. if / else if / else</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Conditionally include or exclude blocks of YAML;</li>
+            <li><b>Falsy values</b> (evaluate to false): <code>false</code>, <code>0</code>, <code>""</code>, <code>nil</code>, empty list <code>[]</code>, empty map <code>{}</code>;</li>
+            <li>Basic syntax:
+<pre><code>{{- if CONDITION }}
+  # rendered when CONDITION is truthy
+{{- else if OTHER_CONDITION }}
+  # rendered when OTHER_CONDITION is truthy
+{{- else }}
+  # rendered when all conditions are falsy
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2.1 if — Simple Boolean</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+ingress:
+  enabled: true
+
+# template
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}
+                port:
+                  number: {{ .Values.service.port }}
+{{- end }}</code></pre>
+            </li>
+            <li>The entire Ingress resource is only rendered when <code>ingress.enabled</code> is <code>true</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2.2 if / else if / else — Multi-Branch</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+service:
+  type: NodePort
+
+# template
+{{- if eq .Values.service.type "LoadBalancer" }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+{{- else if eq .Values.service.type "NodePort" }}
+  nodePort: {{ .Values.service.nodePort | default 30080 }}
+{{- else }}
+  # ClusterIP — no extra config needed
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2.3 if — Checking Existence</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Check if a value exists (is not nil/empty):
+<pre><code>{{- if .Values.resources }}
+resources:
+  {{- toYaml .Values.resources | nindent 2 }}
+{{- end }}</code></pre>
+            </li>
+            <li>Use <code>hasKey</code> to check if a specific key exists in a map:
+<pre><code>{{- if hasKey .Values.annotations "prometheus.io/scrape" }}
+  prometheus.io/scrape: {{ index .Values.annotations "prometheus.io/scrape" | quote }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2.4 if — Compound Conditions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use <code>and</code>, <code>or</code>, <code>not</code>:
+<pre><code># Enable TLS only if ingress is enabled AND tls secret is set
+{{- if and .Values.ingress.enabled .Values.ingress.tlsSecret }}
+  tls:
+    - secretName: {{ .Values.ingress.tlsSecret }}
+      hosts:
+        - {{ .Values.ingress.host }}
+{{- end }}
+
+# Include debug logging unless explicitly disabled
+{{- if not (eq .Values.logLevel "off") }}
+- name: LOG_LEVEL
+  value: {{ .Values.logLevel | default "info" | quote }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. with</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>with</code> sets the scope (<code>.</code>) to the specified object — and the block is <b>skipped</b> if the value is empty/nil;</li>
+            <li>Combines scoping + conditional in one construct;</li>
+            <li>Basic syntax:
+<pre><code>{{- with PIPELINE }}
+  # . is now PIPELINE's value
+  # block is skipped if PIPELINE is empty
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3.1 with — Resources Block</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# template
+{{- with .Values.resources }}
+resources:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+
+# Output:
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi</code></pre>
+            </li>
+            <li>If <code>resources</code> is not set in values.yaml, the entire block is omitted;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3.2 with — Accessing Root Context via $</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Inside <code>with</code>, <code>.</code> is re-scoped — use <code>$</code> to access root objects:
+<pre><code>{{- with .Values.nodeSelector }}
+nodeSelector:
+  {{- toYaml . | nindent 2 }}
+  release: {{ $.Release.Name }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3.3 with / else</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>with</code> supports <code>else</code> — the else block runs when the value is empty:
+<pre><code>{{- with .Values.customAnnotations }}
+annotations:
+  {{- toYaml . | nindent 2 }}
+{{- else }}
+annotations:
+  app: {{ $.Release.Name }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. range</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Iterates over lists or maps; inside the loop, <code>.</code> is the current element;</li>
+            <li>Basic syntax:
+<pre><code># Iterate a list
+{{- range PIPELINE }}
+  # . = current element
+{{- end }}
+
+# With index variable
+{{- range $index, $element := PIPELINE }}
+  # $index = 0, 1, 2...
+  # $element = current element
+{{- end }}
+
+# Iterate a map
+{{- range $key, $val := PIPELINE }}
+  # $key = map key
+  # $val = map value
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.1 range — Iterating a List</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+ports:
+  - name: http
+    containerPort: 8080
+  - name: metrics
+    containerPort: 9090
+
+# template
+ports:
+{{- range .Values.ports }}
+  - name: {{ .name }}
+    containerPort: {{ .containerPort }}
+{{- end }}
+
+# Output:
+ports:
+  - name: http
+    containerPort: 8080
+  - name: metrics
+    containerPort: 9090</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.2 range — Iterating a Map (Environment Variables)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+env:
+  APP_ENV: production
+  LOG_LEVEL: info
+  DB_HOST: postgres.default.svc
+
+# template
+env:
+{{- range $key, $val := .Values.env }}
+  - name: {{ $key }}
+    value: {{ $val | quote }}
+{{- end }}
+
+# Output:
+env:
+  - name: APP_ENV
+    value: "production"
+  - name: DB_HOST
+    value: "postgres.default.svc"
+  - name: LOG_LEVEL
+    value: "info"</code></pre>
+            </li>
+            <li>Map keys are iterated in <b>alphabetical order</b>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.3 range — Using $ for Root Access</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code>{{- range .Values.containers }}
+- name: {{ .name }}
+  image: "{{ $.Values.image.registry }}/{{ .image }}:{{ .tag }}"
+  # $.Values.image.registry comes from root context
+  # .image and .tag come from the current container element
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.4 range — Generating Multiple Resources</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use <code>range</code> to generate multiple complete k8s resources from a single template file:
+<pre><code># values.yaml
+configMaps:
+  - name: app-config
+    data:
+      APP_MODE: production
+  - name: db-config
+    data:
+      DB_HOST: localhost
+
+# template
+{{- range .Values.configMaps }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+data:
+  {{- range $k, $v := .data }}
+  {{ $k }}: {{ $v | quote }}
+  {{- end }}
+{{- end }}</code></pre>
+            </li>
+            <li>The <code>---</code> YAML document separator is needed between resources;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.5 range — Fixed List (list function)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Create a list inline with the <code>list</code> function:
+<pre><code>{{- range list "http" "https" "grpc" }}
+- {{ . }}
+{{- end }}
+# Output:
+# - http
+# - https
+# - grpc</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4.6 range — until (numeric loop)</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>until N</code> generates a list <code>[0, 1, ..., N-1]</code>:
+<pre><code>{{- range $i := until 3 }}
+worker-{{ $i }}:
+  replicas: 1
+{{- end }}
+# Output:
+# worker-0:
+#   replicas: 1
+# worker-1:
+#   replicas: 1
+# worker-2:
+#   replicas: 1</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Nesting Control Structures</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Control structures can be nested freely:
+<pre><code>{{- range .Values.services }}
+{{- if .enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}
+spec:
+  type: {{ .type | default "ClusterIP" }}
+  ports:
+    {{- range .ports }}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      {{- if eq $.Values.service.type "NodePort" }}
+      nodePort: {{ .nodePort }}
+      {{- end }}
+    {{- end }}
+  selector:
+    app: {{ $.Release.Name }}
+{{- end }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Summary</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Construct</th><th>Purpose</th><th>Changes <code>.</code> ?</th></tr>
+            <tr><td><code>if</code> / <code>else</code></td><td>Conditional rendering</td><td>No</td></tr>
+            <tr><td><code>with</code></td><td>Scope change + skip if empty</td><td>Yes — <code>.</code> = the value</td></tr>
+            <tr><td><code>range</code></td><td>Loop over list/map</td><td>Yes — <code>.</code> = current element</td></tr>
+        </table>
+        <ul>
+            <li>Use <code>$</code> to access root context inside <code>with</code> and <code>range</code>;</li>
+            <li>Use <code>{{-</code> and <code>-}}</code> to keep output clean;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Built-in Objects</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Built-in Objects</h2>
+    </div>
+
+    <div class="question"><strong>1. Overview</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm injects several top-level objects into every template — they are available via the <code>.</code> context;</li>
+            <li>6 built-in objects: <code>.Values</code>, <code>.Release</code>, <code>.Chart</code>, <code>.Files</code>, <code>.Capabilities</code>, <code>.Template</code>;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Built-in Objects</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>.Values</b>
+                <ul>
+                    <li>It contains all configuration values from <b>values.yaml</b>, <code>-f</code> files, and <code>--set</code> flags (merged, later sources win);</li>
+                </ul>
+            </li>
+            <li><b>.Release</b> 
+                <ul>
+                    <li>It contains information about the current release;</li>
+                    <li>Fields:
+                        <ul>
+                            <li>.Release.Name -> Release name</li>
+                            <li>.Release.Namespace -> k8s namespace</li>
+                            <li>.Release.IsUpgrade -> True if upgrade</li>
+                            <li>.Release.IsInstall -> True if install</li>
+                            <li>.Release.Revision -> Revision number</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>.Chart</b>
+                <ul>
+                    <li>It contains information about the chart from Chart.yaml file;</li>
+                    <li>Fields:
+                        <ul>
+                            <li>.Chart.Name -> Chart name</li>
+                            <li>.Chart.Version -> Chart version</li>
+                            <li>.Chart.AppVersion -> Application version</li>
+                            <li>.Chart.Type -> Chart type, application or library</li>
+                            <li>.Chart.Description -> Chart description</li>
+                            <li>.Chart.Keywords -> Chart keywords</li>
+                            <li>.Chart.Home -> Chart home URL</li>
+                            <li>.Chart.Maintainers -> List of maintainers</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>.Files</b>
+                <ul>
+                    <li>It is used to read non-template files in the chart;</li>
+                    <li>Fields:
+                        <ul>
+                            <li>.Files.Get -> Get file content as string</li>
+                            <li>.Files.Glob -> Match multiple files</li>
+                            <li>.Files.Lines -> Read file line by line</li>
+                        </ul>
+                    </li>
+                    <li>Eg: 
+                        <ul>
+                            <li>Template -> <pre><code>{{ .Files.Get "config/db.conf" | indent 4 }}</code></pre></li>
+                            <li>Values.yaml -> <pre><code>data:
+                                app.conf: |
+                                {{ .Files.Get "config/app.conf" | indent 4 }}</code></pre></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>.Capabilities</b>
+                <ul>
+                    <li>It provides information about the k8s cluster capabilities;</li>
+                    <li>Fields:
+                        <ul>
+                            <li>.Capabilities.KubeVersion.Version -> k8s version</li>
+                            <li>.Capabilities.KubeVersion.Major -> k8s major version</li>
+                            <li>.Capabilities.KubeVersion.Minor -> k8s minor version</li>
+                            <li>.Capabilities.APIVersions -> Set of k8s API versions</li>
+                            <li>.Capabilities.HelmVersion -> Helm version</li>
+                        </ul>
+                    </li>
+                    <li>Eg: Check if the cluster supports Ingress API
+                        <ul>
+                            <li>Template -> <pre><code>{{ if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+                                apiVersion: networking.k8s.io/v1
+                                {{ else }}
+                                apiVersion: networking.k8s.io/v1beta1
+                                {{ end }}</code></pre></li>
+                        </ul>
+                    </li>
+                </ul> 
+            </li>
+            <li><b>.Template</b>
+                <ul>
+                    <li>It provides information about the current template being executed;</li>
+                    <li>Fields:
+                        <ul>
+                            <li>.Template.Name -> file name</li>
+                            <li>.Template.BasePath -> Path to templates directory containing this template</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

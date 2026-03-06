@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>helm template</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>helm template</h2>
+    </div>
+
+    <div class="question"><strong>1. helm template</strong></div>
+    <div class="answer">
+        <ul>
+            <li>During dry run, Helm contacts Kubernetes API Server for validating the templates(generated k8s manifest files); So, you must have valid k8s cluster credential to execute a dry run;<br>
+            <li>If you don’t have credentials for the Kubernetes server, you can use the <b>helm template</b> command to generate template YAML;<br>
+            <li>As Helm does not contact the API server, output of the commands <b>--dry-run</b> and <b>template</b> can differ;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What happens when you run <b>helm template</b> command?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It loads the chart(Chart.yaml, templates/, values.yaml) from the given path;</li>
+            <li>It combines configuration values in this order and produces a final merged values.yaml  
+                <ul>
+                    <li>values.yaml defined in the chart;</li>
+                    <li>values.yaml defined in the parent chart;</li>
+                    <li>-f values.yaml files;</li>
+                    <li>--set CLI overrides;</li>
+                </ul>
+            </li>
+            <li>It processes the all the files in templates/ folder;</li>
+            <li>Processes the templates in the templates/ folder and prints the fully rendered k8s manifest files to stdout;</li>
+        </ul>
+    </div>
+    
+    <div class="question"><strong>3. helm template command</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Syntax: <pre><code>helm template [RELEASE_NAME] [CHART] [flags]</code></pre></li>
+            <li>
+                <ul>
+                    <li>It is used to preview k8s manifest files(in templates/ directory) before installation;</li>
+                    <li>Chart.yaml is mandatory for helm template to work; templates directory holds the templates; values.yaml holds the default values for the templates; Additional values files can be used to override values defined in values.yaml;</li>
+                </ul>
+            </li>
+            <li>Options:
+                <ul>
+                    <li><code>-f values.yaml</code> - you can override the default values defined in values.yaml; You can pass multiple files; Later files override earlier files;</li>
+                    <li><code>--set</code> - override values inline; helm converts values to numbers, whenever possible; Eg: --set replicaCount=3 --set image.tag=v2.0;</li>
+                    <li><code>--set-string</code> - override values as strings;</li>
+                    <li><code>--namespace</code> - Used to specify namespace for rendered templates;</li>
+                    <li><code>--output-dir</code> - Instead of writing manifests to stdout, it writes to a directory;</li>
+                    <li><code>--show-only template/deployment.yaml</code> - Used to render only specific templates;</li>
+                    <li><code>--include-crds</code> - CRDs are not rendered by default, it is used to include CRDs;</li>
+                    <li><code>--kube-version</code> - Used to simulate cluster version; This is useful to check if the templates are compatible with the cluster version;</li>
+                    <li><code>--api-versions</code> - Used to add API versions; This is useful to check if the templates are compatible with the API versions;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="question"><strong>4. helm template vs dry run</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use helm template:
+                <ul>
+                    <li>When you don't have k8s cluster credential</li>
+                    <li>In CI/CD pipelines</li>
+                    <li>Debugging templates</li>
+                </ul>
+            </li>
+            <li>Use helm install --dry-run, in other cases:
+                <ul>
+                    <li>When you have k8s cluster credential</li>
+                    <li>Validating against the cluster</li>
+                    <li>Checking API compatibility</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

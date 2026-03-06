@@ -14,35 +14,32 @@
     <div class="question"><strong>1. What is Chart.yaml?</strong></div>
     <div class="answer">
         <ul>
-            <li>The <strong>Chart.yaml</strong> file is the main descriptor for a Helm chart;</li>
-            <li>Contains metadata about the chart: name, version, description, dependencies;</li>
-            <li>Required for every Helm chart;</li>
-            <li>Must be valid YAML format;</li>
+            <li>The main descriptor file for a Helm chart — every chart must have one;</li>
+            <li>Contains metadata: name, version, description, dependencies, maintainers;</li>
+            <li>Must be valid YAML;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Complete Chart.yaml Example</strong></div>
+    <div class="question"><strong>2. Complete Example</strong></div>
     <div class="answer">
-        <pre><code>apiVersion: v2
+        <ul>
+            <li>
+<pre><code>apiVersion: v2
 name: myapp
 version: 1.2.3
 appVersion: "2.0.1"
-description: A comprehensive Helm chart for my application
+description: A Helm chart for my application
 type: application
 keywords:
   - web
   - backend
-  - microservice
 home: https://myapp.example.com
 sources:
   - https://github.com/myorg/myapp
-  - https://github.com/myorg/myapp-chart
 maintainers:
   - name: John Doe
     email: john@example.com
     url: https://github.com/johndoe
-  - name: Jane Smith
-    email: jane@example.com
 icon: https://example.com/images/myapp-icon.png
 deprecated: false
 kubeVersion: ">=1.20.0 <1.28.0"
@@ -51,168 +48,95 @@ dependencies:
     version: "9.3.4"
     repository: https://charts.bitnami.com/bitnami
     condition: mysql.enabled
-  - name: redis
-    version: "17.3.7"
-    repository: https://charts.bitnami.com/bitnami
-    condition: redis.enabled
 annotations:
   category: ApplicationServer
   licenses: Apache-2.0</code></pre>
+            </li>
+        </ul>
     </div>
 
     <div class="question"><strong>3. Required Fields</strong></div>
     <div class="answer">
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Field</th>
-                    <th>Description</th>
-                    <th>Example</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>apiVersion</td>
-                    <td>Chart API version (v2 for Helm 3)</td>
-                    <td>v2</td>
-                </tr>
-                <tr>
-                    <td>name</td>
-                    <td>Chart name (must match directory name)</td>
-                    <td>myapp</td>
-                </tr>
-                <tr>
-                    <td>version</td>
-                    <td>Chart version (SemVer)</td>
-                    <td>1.0.0</td>
-                </tr>
-            </tbody>
-        </table>
+        <ul>
+            <li><b>apiVersion</b> — must be <code>v2</code> for Helm 3 (<code>v1</code> was for Helm 2);</li>
+            <li><b>name</b> — chart name; must match the directory name;</li>
+            <li><b>version</b> — chart version (SemVer: Major.Minor.Patch); must be incremented on every change;</li>
+        </ul>
     </div>
 
     <div class="question"><strong>4. Optional Fields</strong></div>
     <div class="answer">
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Field</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>appVersion</td>
-                    <td>Version of the application being deployed</td>
-                </tr>
-                <tr>
-                    <td>description</td>
-                    <td>One-sentence description of the chart</td>
-                </tr>
-                <tr>
-                    <td>type</td>
-                    <td>application or library</td>
-                </tr>
-                <tr>
-                    <td>keywords</td>
-                    <td>List of keywords for searching</td>
-                </tr>
-                <tr>
-                    <td>home</td>
-                    <td>URL of the project home page</td>
-                </tr>
-                <tr>
-                    <td>sources</td>
-                    <td>List of URLs to source code</td>
-                </tr>
-                <tr>
-                    <td>maintainers</td>
-                    <td>List of maintainers with contact info</td>
-                </tr>
-                <tr>
-                    <td>icon</td>
-                    <td>URL to an SVG or PNG image icon</td>
-                </tr>
-                <tr>
-                    <td>deprecated</td>
-                    <td>Mark chart as deprecated</td>
-                </tr>
-                <tr>
-                    <td>kubeVersion</td>
-                    <td>Compatible Kubernetes versions</td>
-                </tr>
-                <tr>
-                    <td>dependencies</td>
-                    <td>List of chart dependencies</td>
-                </tr>
-                <tr>
-                    <td>annotations</td>
-                    <td>Additional metadata</td>
-                </tr>
-            </tbody>
-        </table>
+        <ul>
+            <li><b>appVersion</b> — version of the application being deployed; purely informational — Helm does not use it;</li>
+            <li><b>description</b> — one-line description;</li>
+            <li><b>type</b> — <code>application</code> (default) or <code>library</code>;</li>
+            <li><b>keywords</b> — list of keywords for searching in repositories;</li>
+            <li><b>home</b> — project home page URL;</li>
+            <li><b>sources</b> — list of source code URLs;</li>
+            <li><b>maintainers</b> — list with <code>name</code>, <code>email</code>, and optional <code>url</code>;</li>
+            <li><b>icon</b> — URL to an SVG or PNG icon;</li>
+            <li><b>deprecated</b> — <code>true</code> to mark the chart as deprecated;</li>
+            <li><b>kubeVersion</b> — compatible Kubernetes version constraint;</li>
+            <li><b>dependencies</b> — list of sub-charts this chart depends on;</li>
+            <li><b>annotations</b> — arbitrary key-value metadata;</li>
+        </ul>
     </div>
 
     <div class="question"><strong>5. version vs appVersion</strong></div>
     <div class="answer">
         <ul>
-            <li><strong>version:</strong> Version of the <em>chart</em> itself (template changes, value changes);</li>
-            <li><strong>appVersion:</strong> Version of the <em>application</em> being deployed;</li>
-        </ul>
-        <pre><code># Example: Updating nginx version
-# Chart v1.0.0, App v1.20
+            <li><b>version</b> — version of the <em>chart</em> (changes when templates, values, or structure change);</li>
+            <li><b>appVersion</b> — version of the <em>application</em> the chart deploys;</li>
+            <li>They are independent — you can bump one without the other:
+<pre><code># Chart v1.0.0, App v1.20 — initial release
 version: 1.0.0
 appVersion: "1.20"
 
-# Chart unchanged, but app updated
-# Chart v1.0.0, App v1.21
+# Chart unchanged, app updated → only appVersion changes
 version: 1.0.0
 appVersion: "1.21"
 
-# Chart template changed, app same
-# Chart v1.1.0, App v1.21
+# Template changed, app unchanged → only version changes
 version: 1.1.0
 appVersion: "1.21"</code></pre>
+            </li>
+        </ul>
     </div>
 
     <div class="question"><strong>6. Chart Type</strong></div>
     <div class="answer">
-        <p><strong>application (default):</strong></p>
         <ul>
-            <li>Standard installable chart;</li>
-            <li>Contains templates that render Kubernetes resources;</li>
-        </ul>
-
-        <p><strong>library:</strong></p>
-        <ul>
-            <li>Provides reusable template helpers;</li>
-            <li>Cannot be installed directly;</li>
-            <li>Used as a dependency by other charts;</li>
-        </ul>
-        <pre><code># Library chart
-apiVersion: v2
+            <li><b>application</b> (default) — installable chart that renders Kubernetes resources;</li>
+            <li><b>library</b> — provides reusable template helpers only; cannot be installed directly; used as a dependency by application charts:
+<pre><code>apiVersion: v2
 name: common-helpers
 type: library
 version: 1.0.0</code></pre>
+            </li>
+        </ul>
     </div>
 
-    <div class="question"><strong>7. Kubernetes Version Constraints</strong></div>
+    <div class="question"><strong>7. kubeVersion Constraints</strong></div>
     <div class="answer">
-        <pre><code># Exact version
-kubeVersion: "1.24.0"
-
-# Minimum version
+        <ul>
+            <li>Prevents installation on incompatible clusters; Helm checks before install/upgrade:
+<pre><code># Minimum version
 kubeVersion: ">=1.20.0"
 
-# Version range
+# Range
 kubeVersion: ">=1.20.0 <1.28.0"
 
-# Multiple constraints
+# Multiple constraints (OR)
 kubeVersion: ">=1.20.0 <1.28.0 || >=1.29.0"</code></pre>
+            </li>
+        </ul>
     </div>
 
     <div class="question"><strong>8. Dependencies</strong></div>
     <div class="answer">
-        <pre><code>dependencies:
+        <ul>
+            <li>Declares sub-charts this chart needs; downloaded to <code>charts/</code> via <code>helm dependency update</code>:
+<pre><code>dependencies:
   - name: mysql
     version: "9.3.4"
     repository: https://charts.bitnami.com/bitnami
@@ -227,12 +151,22 @@ kubeVersion: ">=1.20.0 <1.28.0 || >=1.29.0"</code></pre>
     version: "~17.3.0"
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled</code></pre>
+            </li>
+            <li><b>name</b> — dependency chart name;</li>
+            <li><b>version</b> — SemVer range constraint;</li>
+            <li><b>repository</b> — chart repo URL;</li>
+            <li><b>condition</b> — values.yaml path that enables/disables this dependency;</li>
+            <li><b>tags</b> — group-enable/disable multiple dependencies at once;</li>
+            <li><b>alias</b> — alternate name (useful when depending on the same chart twice);</li>
+            <li><b>import-values</b> — import values from child chart into parent;</li>
+        </ul>
     </div>
 
     <div class="question"><strong>9. Annotations</strong></div>
     <div class="answer">
-        <p>Custom metadata for tools and repositories:</p>
-        <pre><code>annotations:
+        <ul>
+            <li>Arbitrary metadata consumed by tools and repositories (e.g., Artifact Hub):
+<pre><code>annotations:
   category: Database
   licenses: Apache-2.0
   artifacthub.io/changes: |
@@ -242,29 +176,22 @@ kubeVersion: ">=1.20.0 <1.28.0 || >=1.29.0"</code></pre>
       description: Fixed service port mapping
   artifacthub.io/links: |
     - name: Documentation
-      url: https://docs.example.com
-    - name: Support
-      url: https://support.example.com</code></pre>
+      url: https://docs.example.com</code></pre>
+            </li>
+        </ul>
     </div>
 
     <div class="question"><strong>10. Deprecated Charts</strong></div>
     <div class="answer">
-        <pre><code>apiVersion: v2
+        <ul>
+            <li>Set <code>deprecated: true</code> and note the replacement in the description:
+<pre><code>apiVersion: v2
 name: oldapp
 version: 2.0.0
 deprecated: true
-description: This chart is deprecated. Use newapp instead.</code></pre>
-    </div>
-
-    <div class="question"><strong>11. Best Practices</strong></div>
-    <div class="answer">
-        <ul>
-            <li><strong>Use SemVer:</strong> Follow semantic versioning for chart versions;</li>
-            <li><strong>Update version on changes:</strong> Increment version whenever templates or values change;</li>
-            <li><strong>Keep appVersion in sync:</strong> Update appVersion when deploying new application versions;</li>
-            <li><strong>Provide good description:</strong> Clear, concise description helps users;</li>
-            <li><strong>Add maintainers:</strong> Include contact information for support;</li>
-            <li><strong>Specify kubeVersion:</strong> Prevent installation on incompatible clusters;</li>
+description: "DEPRECATED — use newapp chart instead"</code></pre>
+            </li>
+            <li>Helm will show a warning when users try to install a deprecated chart;</li>
         </ul>
     </div>
 

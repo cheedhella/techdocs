@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Go Template Basics</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Go Template Basics</h2>
+    </div>
+
+    <div class="question"><strong>1. Expressions</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Expression is any piece of code written inside <b>{{ }}</b> braces;</li>
+            <li>Helm evaluates the expression and replaces it with the result, when the template is rendered;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>1.1 Expression Types</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Lookup Expression: It is used to access values from values.yaml file;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ .Values.name }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: myapp</li>
+                </ul>
+            </li>
+            <li>Function Expression: It is used to call functions;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ upper .Values.name }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: MYAPP</li>
+                </ul>
+            </li>
+            <li>Pipeline Expression: It is used to chain multiple expressions together;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ .Values.name | upper | quote }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: "MYAPP"</li>
+                </ul>
+            </li>
+            <li>Conditional Expression: It is used to control the flow of the template;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ if .Values.name }} {{ .Values.name }} {{ else }} default {{ end }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: myapp</li>
+                </ul>
+            </li>
+            <li>Loop Expression: It is used to iterate over a list or map;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ range .Values.name }} {{ . }} {{ end }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: myapp</li>
+                </ul>
+            </li>
+            <li>Variable Expression: It is used to declare variables;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> <pre>{{ range .Values.ports }}
+                        - containerPort: {{ . }}
+                        {{ end }}</pre></li>
+                    <li>Values.yaml -> <pre>ports:
+                        - 80
+                        - 443</pre></li>
+                    <li>Output -> <pre>- containerPort: 80
+                        - containerPort: 443</pre></li>
+                </ul>
+            </li>
+            <li>Comment Expression: It is used to add comments to the template;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> <pre>{{/* This is a comment */}} 
+                        name: {{ .Values.name }}</pre></li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: myapp</li>
+                </ul>
+            </li>
+            <li>Whitespace Control Expression: 
+                <ul>
+                    <li>It is used to remove unwanted spaces and newlines;</li>
+                    <li>As YAML is indent sensitive, extra spaces and newlines can break the YAML files, so we need to remove them;</li>
+                    <li>We can use the following syntax to remove unwanted spaces and newlines:</li>
+                    <li>
+                        <ul>
+                            <li>{{- expression -}} -> Removes leading spaces</li>
+                            <li>{{ expression -}} -> Removes trailing spaces</li>
+                            <li>{{- expression -}} -> Removes both leading and trailing spaces</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>Eg1: 
+                <ul>
+                    <li>Template -> <pre><code>metadata:
+                        name: myapp
+                      
+                      {{- if .Values.enabled }}
+                      enabled: true
+                      {{ end }}</code></pre></li>
+                    <li>If enabled = true, the blank line before if is removed;</li>
+                    <li>If enabled = false, the blank line before if is not removed;</li>
+                    <li>Output -> If true: <pre><code>metadata:
+                        name: myapp
+                      enabled: true</code></pre><br>If false: <pre><code>metadata:
+                        name: myapp
+
+                    </code></pre></li>
+                </ul>
+            </li>
+            <li>Eg2: 
+                <ul>
+                    <li>Template -> <pre><code>labels:
+                        {{ toYaml .Values.labels }}</code></pre></li>
+                        <li>Values.yaml -> <pre><code>labels:
+                            app: myapp
+                            tier: backend</code></pre></li>
+                        <li>Output -> <pre><code>labels:
+app: myapp
+tier: backend</code></pre></li>
+                            <li>Correct Template -> labels:
+                                {{- toYaml .Values.labels | nindent 2 }}</li>
+                                <li>Output -> <pre><code>labels:
+  app: myapp
+  tier: backend</code></pre></li>
+                </ul>
+            </li>
+            <li>Template Action Expression: It is used to call template actions;</li>
+            <li>Eg: 
+                <ul>
+                    <li>Template -> name: {{ template "mychart.fullname" . }}</li>
+                    <li>Values.yaml -> appName: myapp</li>
+                    <li>Output -> name: myapp</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Template Action</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Rather than returning a value, it performs an operation that controls template behaviour;</li>
+            <li>It includes:
+                <ul>
+                    <li>variable assignment</li>
+                    <li>conditional logic</li>
+                    <li>loops</li>
+                    <li>invoking functions</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Template Action Types</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Variable action
+                <ul>
+                    <li>It is used to assign value from expression to a variable;</li>
+                    <li>Why is it useful? -> it simplifies code and avoids running same expression multiple times;</li>
+                    <li>Syntax: <pre><code>{{ $variable := expression }}</code></pre></li>
+                    <li>Eg: <pre><code>{{ $name := .Values.name }}</code></pre></li>
+                    <li>Output: <pre><code>{{ $name }}</code></pre></li>
+                </ul>
+            </li>
+            <li>Conditional action
+                <ul>
+                    <li>It is used to control the flow of the template based on condition;</li>
+                    <li>Syntax: <pre><code>{{ if expression }} action {{ end }}</code></pre></li>
+                    <li>Eg: <pre><code>{{ if .Values.name }} {{ .Values.name }} {{ else }} default {{ end }}</code></pre></li>
+                    <li>Eg2: <pre><code>{{ if .Values.enabled }}
+enabled: true
+{{ end }}</code></pre></li>
+                </ul>
+            </li>
+            <li>Loop action
+                <ul>
+                    <li>It is used to iterate over a list or map;</li>
+                    <li>Syntax: <pre><code>{{ range expression }} action {{ end }}</code></pre></li>
+                    <li>Eg: <pre><code>{{ range .Values.ports }}
+                        - containerPort: {{ . }}
+                        {{ end }}</code></pre></li>
+                </ul>
+            </li>
+            <li>Function action
+                <ul>
+                    <li>It is used to invoke a function;</li>
+                    <li>Syntax: <pre><code>{{ range expression }} action {{ end }}</code></pre></li>
+                    <li>Eg: <pre><code>{{ range .Values.name }} {{ . }} {{ end }}</code></pre></li>
+                    <li>Output: <pre><code>{{ range .Values.name }} {{ . }} {{ end }}</code></pre></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Expression vs Action</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Expression returns a value;</li>
+            <li>Action does something and doesn't return anything;</li>
+        </ul>
+    </div>
+
+    
+
+    <div class="question"><strong>5. Functions in Helm Templates</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Helm provides over 60 functions;</li>
+            <li>Syntax: function arg1 arg2...</li>
+            <li>Eg: quote .Values.favorite.drink</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Pipelines</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pipelines chain functions together, passing each result to the next function;</li>
+            <li>Eg: {{ cat .Chart.Name "Container" | snakecase | lower }}</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Variables and Scope</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Variables are used to store values;</li>
+            <li>Syntax: {{ $variable := expression }}</li>
+            <li>Eg: {{ $name := .Values.name }}</li>
+            <li>Output: {{ $name }}</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Pipelines and Chaining</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pipelines chain functions together, passing each result to the next function;</li>
+            <li>Eg: {{ cat .Chart.Name "Container" | snakecase | lower }}</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Template Helpers and Reusable Templates</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Template helpers are used to reuse template code;</li>
+            <li>Syntax: {{ define "name" }} action {{ end }}</li>
+            <li>Eg: {{ define "mychart.fullname" }} {{ .Release.Name }}-{{ .Chart.Name }} {{ end }}</li>
+            <li>Output: {{ define "mychart.fullname" }} {{ .Release.Name }}-{{ .Chart.Name }} {{ end }}</li>
+        </ul>
+
+
+    <div class="question"><strong>10. Working with Files</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to access files in the chart;</li>
+            <li>Syntax: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
+            <li>Eg: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
+            <li>Output: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>11. Template Flow and Debugging</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to control the flow of the template;</li>
+            <li>Syntax: <pre><code>{{ . }}</code></pre></li>
+            <li>Eg: <pre><code>{{ . }}</code></pre></li>
+            <li>Output: <pre><code>{{ . }}</code></pre></li>
+        </ul>
+    </div>
+
+
+
+
+5. Functions in Helm Templates
+
+5.1 Built-in Go template functions
+5.2 Helm-specific functions
+5.3 Sprig template functions
+5.4 String functions
+5.5 Math functions
+5.6 Date functions
+5.7 Encoding and decoding functions
+
+6. Control Structures
+
+6.1 if conditions
+6.2 else and else if
+6.3 with blocks
+6.4 range loops
+6.5 Nested control structures
+
+7. Variables and Scope
+
+7.1 Declaring variables
+7.2 Variable scope rules
+7.3 Using $ root context
+7.4 Passing variables between templates
+
+8. Pipelines and Chaining
+
+8.1 What pipelines are
+8.2 Function chaining
+8.3 Combining pipelines with variables
+8.4 Practical examples
+
+9. Template Helpers and Reusable Templates
+
+9.1 Defining templates with define
+9.2 Using template
+9.3 Using include
+9.4 Creating _helpers.tpl
+9.5 Naming conventions for helpers
+
+10. Working with Files
+
+10.1 Accessing files using .Files
+10.2 Reading file contents
+10.3 Using Files.Get
+10.4 Using Files.Glob
+10.5 Encoding files
+
+11. Template Flow and Debugging
+
+11.1 Rendering templates (helm template)
+11.2 Debugging (--debug)
+11.3 Linting charts (helm lint)
+11.4 Common template errors
+11.5 Debugging tips
+
+12. Advanced Template Techniques
+
+12.1 Dynamic resource generation
+12.2 Conditional resource creation
+12.3 Looping to generate multiple resources
+12.4 Complex value merging
+12.5 Template composition
+
+13. Best Practices
+
+13.1 Chart maintainability
+13.2 Naming conventions
+13.3 Avoiding overly complex templates
+13.4 Keeping logic out of templates when possible
+13.5 Using helper templates effectively
+
+14. Real-World Examples
+
+14.1 Deployment template
+14.2 Service template
+14.3 ConfigMap template
+14.4 Secret template
+14.5 Ingress template
+
+
+
+
+Template function
+    It is used to format text, manipulate arrays and objects, perform calculations etc;
+    Helm provides over 60 functions;
+    Syntax: function arg1 arg2...
+    Eg: quote .Values.favorite.drink
+
+Pipeline
+    Pipeline is powerful tool for chaining multiple functions together to create a powerful workflow;
+    It redirects the output of one function to the input of the next function;
+    Eg: {{ cat .Chart.Name &quot;Container&quot; | snakecase | lower }}  // fetch chart name | append &#x27;Container&#x27; | snakecase | lowercase; Ouput: mychart_container
+------------------------------------------------------------------------------------------------------------------------------------------------------
+default 
+    - If the input is not defined, it returns a default value;
+    - Definition of undefined depends on type:
+        -- number: 0
+        -- string: &#x27;&#x27;
+        -- Lists: []
+        -- Dicts: {}
+        -- Boolean: false 
+        -- null
+
+    - Eg: drink: {{ .Values.favorite.drink | default &quot;tea&quot; | quote }}
+    - Eg: default &#x27;tea&#x27; .Values.favorite.drink      # If .Values.favorite.drink is not defined, it defaults to tea;
+
+    indent
+        - It indents every line in a given string to the specified indent width(defaults 4 spaces); 
+        Eg: indent: {{ indent 4 .Values.myVal }}
+
+    nindent
+        - It is same as indent, but prepends the output with a newline;
+
+    toYaml 
+        - Used to convert an array or object to indented YAML string;
+        Eg: 
+            // values.yaml 
+            items: [&#x27;first&#x27;, &#x27;second&#x27;]
+
+            example: {{- .Values.items | toYaml | nindent 2}}
+
+            // Output:
+            example:
+              - first 
+              - second
+
+    fromYaml
+        - 
+
+    https://helm.sh/docs/chart_template_guide/function_list/
+    
+    printf function 
+    - It returns a string based on formatting string; We need to pass arguments in order;
+    - Eg: {{- printf &quot;%s-%s&quot; .Release.Name .Chart.Name }}
+    - {{- define &quot;chart.chart&quot; -}}
+      {{- printf &quot;%s-%s&quot; .Chart.Name .Chart.Version | replace &quot;+&quot; &quot;_&quot; | trunc 63 | trimSuffix &quot;-&quot; }}
+      {{- end }}
+
+    <div class="question"><strong>3. Pipelines</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pipelines chain functions together, passing each result to the next function;            </li>
+            <li>Eg: name: {{ .Values.name | lower | trunc 63 | trimSuffix "-" }}</li>
+        </ul>
+    </div>
+
+
+    helm unittest plugin
+    Snapshot testing
+
+
+    Whitespace Control: Hyphens (-) can be used inside the delimiters to trim leading or trailing whitespace.
+{{- expression }} removes leading whitespace.
+{{ expression -}} removes trailing whitespace.
+{{- expression -}} removes both leading and trailing whitespace. 
+faun.pub
+faun.pub
+ +4
+Key Concepts
+Built-in Objects: Helm provides several pre-defined objects accessible within templates, such as .Values, .Release, .Chart, and .Capabilities.
+Variables: You can assign results of expressions to variables using :=. Variables are scoped to the block where they are declared. The special variable $ always refers to the root context.
+{{- $servicePort := .Values.service.port -}}
+Pipelines: Expressions can be chained together using the pipe | operator, where the output of one function becomes the input for the next.
+{{ .Values.image.tag | quote }} applies the quote function to the image tag value. 
+Helm
+Helm
+ +4
+Functions
+Helm includes a large library of functions, many from the Sprig template library, in addition to specific Helm functions like include, required, and tpl. 
+Helm
+Helm
+Categories of functions include: 
+Helm
+Helm
+Logic and Flow Control: if/else, eq (equals), ne (not equals), and, or, required, default.
+String Manipulation: lower, upper, replace, hasPrefix, indent, nindent.
+Type Conversion: atoi (string to int), toString, toJson, toYaml.
+Cryptographic/Security: b64enc, sha256sum, uuidv4. 
+Helm
+Helm
+ +2
+Flow Control
+Control structures manage the flow of template generation. 
+Helm
+Helm
+Conditionals: The if, else, and else if actions control which blocks of content are rendered based on conditions.
+yaml
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+...
+{{- end }}
+Loops: The range action is used to iterate over lists or maps, useful for generating multiple similar resource definitions or list items.
+yaml
+{{- range .Values.env }}
+- name: {{ .name }}
+  value: {{ .value | quote }}
+{{- end }}
+Scope Modification: The with action changes the current context (the . operator) to a specific sub-object, simplifying access to nested data.
+yaml
+{{ with .Values.resources }}
+resources:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+ 
+Helm
+Helm
+ +4
+Reusing Code
+Named Templates: You can define reusable blocks of template code using the {{- define "name" -}}...{{- end -}} action, typically stored in a templates/_helpers.tpl file.
+include function: This function calls a named template and returns its rendered content as a string, allowing the output to be used in pipelines for further processing (e.g., indentation).
+labels: {{- include "myapp.labels" . | nindent 4 }} 
+Helm
+Helm
+ +3
+
+
+ Learn how to use Helm template functions, pipelines, and the Sprig library to create powerful, flexible Kubernetes manifests.
+
+
+
+
+ Special File: _helpers.tpl
+
+Used for reusable template functions.
+
+Example:
+
+templates/_helpers.tpl
+
+Example helper:
+
+{{- define "mychart.fullname" -}}
+{{ .Release.Name }}-{{ .Chart.Name }}
+{{- end }}
+
+Used like:
+
+{{ include "mychart.fullname" . }}
+
+
+
+.Values, range, if, include, toYaml, nindent, etc.
+</body>
+
+</html>

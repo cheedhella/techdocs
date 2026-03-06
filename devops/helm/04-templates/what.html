@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Templates</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Templates</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Template?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Template is nothing but a parameterized k8s manifest file;</li>
+            <li>Instead of writing static YAML files, helm lets to you create reusable templates that generate k8s manifest files dynamically based on the input values;</li>
+            <li>Templates are written in the Helm template language, which is based on the Go template language and Sprig template functions;</li>
+            <li>Templates are stored in the <b>templates/</b> directory of the chart;</li>
+            <li>Templates are combined with values.yaml to generate the final k8s manifest files;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Purpose of Templates?</strong></div>
+    <div class="answer">
+        <ul>It makes charts:
+            <li><b>Reusable</b> 
+                <ul>
+                    <li>Say, if your deployment file looks same for multiple services, you can reuse the same template for all of them;</li>
+                    <li>So that you don't have to write the same deployment file for multiple services;</li>
+                    <li>Rather, you can use same template for multiple services;</li>
+                </ul>
+            </li>
+            <li><b>Configurable</b>
+                <ul>
+                    <li>Template can behave differently based on the values;</li>
+                    <li>Example:
+                        <pre><code>{{ if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+{{ end }}</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><b>Environment-aware</b>
+                <ul>
+                    <li>Templates separate the configuration from infrastructure code;</li>
+                    <li>You can change the configuration without editing the template;</li>
+                    <li>So, Instead of writing multiple YAML files for different environments(dev, staging, prod), you can reuse one template;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

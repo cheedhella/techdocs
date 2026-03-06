@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Helpers and Reusable Templates</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Helpers and Reusable Templates</h2>
+    </div>
+
+    <div class="question"><strong>1. What is _helpers.tpl?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A file in <code>templates/</code> that contains <b>named template definitions</b> (also called "partials" or "helpers");</li>
+            <li>Files starting with <code>_</code> are processed by the template engine but do <b>not</b> produce any Kubernetes manifest output on their own;</li>
+            <li>Other templates call these named templates via <code>include</code> or <code>template</code>;</li>
+            <li>Convention: name helpers with the chart name prefix (e.g., <code>myapp.fullname</code>) to avoid collisions with sub-charts;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. define — Declaring a Named Template</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Syntax:
+<pre><code>{{- define "templateName" -}}
+  ... template body ...
+{{- end -}}</code></pre>
+            </li>
+            <li>The body can contain any valid Go template code — it receives a context (passed when called);</li>
+            <li>Multiple <code>define</code> blocks can exist in the same file;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. include vs template</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Both call a named template, but they differ in how the output is handled:
+                <table border="1" cellpadding="6" cellspacing="0">
+                    <tr><th></th><th><code>include</code></th><th><code>template</code></th></tr>
+                    <tr><td>Returns</td><td>A <b>string</b></td><td>Directly inserts output (not a string)</td></tr>
+                    <tr><td>Pipeable</td><td>Yes — can pipe to <code>nindent</code>, <code>quote</code>, etc.</td><td>No — cannot be piped</td></tr>
+                    <tr><td>Recommended</td><td><b>Yes</b></td><td>Avoid — use <code>include</code> instead</td></tr>
+                </table>
+            </li>
+            <li>Example showing why <code>include</code> is preferred:
+<pre><code># With include — works: output can be piped to nindent
+labels:
+  {{- include "myapp.labels" . | nindent 2 }}
+
+# With template — BREAKS: cannot pipe the output
+labels:
+  {{ template "myapp.labels" . }}
+  # output is not indented → invalid YAML</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Standard Helpers — Chart Name</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Returns the chart name, optionally overridden via <code>.Values.nameOverride</code>:
+<pre><code>{{- define "myapp.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+# Usage:
+app.kubernetes.io/name: {{ include "myapp.name" . }}</code></pre>
+            </li>
+            <li><code>trunc 63</code> — Kubernetes names are limited to 63 characters;</li>
+            <li><code>trimSuffix "-"</code> — avoid trailing hyphens after truncation;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Standard Helpers — Full Name</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Generates <code>&lt;release&gt;-&lt;chart&gt;</code>, with override support:
+<pre><code>{{- define "myapp.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+# Usage:
+metadata:
+  name: {{ include "myapp.fullname" . }}</code></pre>
+            </li>
+            <li>Avoids names like <code>myapp-myapp</code> when the release name already contains the chart name;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Standard Helpers — Labels</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Common labels applied to every resource for identification and management:
+<pre><code>{{- define "myapp.labels" -}}
+helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 }}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+# Usage in any resource:
+metadata:
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Standard Helpers — Selector Labels</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A subset of labels used for <code>matchLabels</code> in Deployments and Services — must be <b>immutable</b> across upgrades:
+<pre><code>{{- define "myapp.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+# Usage in Deployment:
+spec:
+  selector:
+    matchLabels:
+      {{- include "myapp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "myapp.selectorLabels" . | nindent 8 }}
+
+# Usage in Service:
+spec:
+  selector:
+    {{- include "myapp.selectorLabels" . | nindent 4 }}</code></pre>
+            </li>
+            <li>Never include version-dependent fields in selector labels — they cannot change after creation;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Standard Helpers — Chart Label</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Identifies the chart version used to create the resource:
+<pre><code>{{- define "myapp.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+# Output: myapp-0.1.0</code></pre>
+            </li>
+            <li><code>replace "+" "_"</code> — SemVer allows <code>+</code> in build metadata but <code>+</code> is not valid in label values;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Standard Helpers — ServiceAccount Name</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code>{{- define "myapp.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "myapp.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+# values.yaml
+serviceAccount:
+  create: true
+  name: ""       # empty → uses fullname
+  # name: "my-sa" # explicit → uses this
+
+# Usage:
+serviceAccountName: {{ include "myapp.serviceAccountName" . }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Custom Helpers — Passing Data with dict</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pass custom data to a helper using the <code>dict</code> function:
+<pre><code># _helpers.tpl
+{{- define "myapp.container" -}}
+- name: {{ .name }}
+  image: "{{ .root.Values.image.registry }}/{{ .image }}:{{ .tag }}"
+  ports:
+    - containerPort: {{ .port }}
+{{- end }}
+
+# deployment.yaml
+containers:
+  {{- include "myapp.container" (dict
+    "root" $
+    "name" "app"
+    "image" "myapp"
+    "tag" .Values.image.tag
+    "port" 8080
+  ) | nindent 2 }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>11. tpl — Rendering Values as Templates</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>tpl</code> renders a string through the template engine — useful when values.yaml contains Go template expressions:
+<pre><code># values.yaml
+annotations:
+  custom: "release={{ .Release.Name }}"
+
+# template — without tpl, the value is literal text:
+annotations:
+  custom: {{ .Values.annotations.custom }}
+# Output: custom: "release={{ .Release.Name }}"  ← NOT rendered
+
+# template — with tpl, the value is rendered:
+annotations:
+  custom: {{ tpl .Values.annotations.custom . }}
+# Output: custom: release=myrelease  ← rendered correctly</code></pre>
+            </li>
+            <li>Use with caution — allows users to inject arbitrary template code via values;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>12. Complete _helpers.tpl Example</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code>{{/*
+Chart name — allows override via .Values.nameOverride
+*/}}
+{{- define "myapp.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Fully qualified app name — allows override via .Values.fullnameOverride
+*/}}
+{{- define "myapp.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Chart label: name-version
+*/}}
+{{- define "myapp.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels — applied to every resource
+*/}}
+{{- define "myapp.labels" -}}
+helm.sh/chart: {{ include "myapp.chart" . }}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels — used in matchLabels (immutable)
+*/}}
+{{- define "myapp.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "myapp.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+ServiceAccount name
+*/}}
+{{- define "myapp.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "myapp.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Summary</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Concept</th><th>Keyword</th><th>Purpose</th></tr>
+            <tr><td>Declare a helper</td><td><code>define</code></td><td>Creates a named template block</td></tr>
+            <tr><td>Call a helper (preferred)</td><td><code>include</code></td><td>Returns string — pipeable to <code>nindent</code>, <code>quote</code></td></tr>
+            <tr><td>Call a helper (avoid)</td><td><code>template</code></td><td>Inserts output directly — not pipeable</td></tr>
+            <tr><td>Render values as templates</td><td><code>tpl</code></td><td>Evaluates Go template expressions inside values</td></tr>
+            <tr><td>Pass custom data</td><td><code>dict</code></td><td>Build a map to pass as context to <code>include</code></td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

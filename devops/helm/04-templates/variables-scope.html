@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Variables and Scope</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Variables and Scope</h2>
+    </div>
+
+    <div class="question"><strong>1. The Dot (.) — Current Context</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>.</code> (dot) is the current scope/context passed to the template;</li>
+            <li>At the top level of a template, <code>.</code> contains all built-in objects (<code>.Values</code>, <code>.Release</code>, <code>.Chart</code>, etc.);</li>
+            <li>Some actions (<code>with</code>, <code>range</code>) change what <code>.</code> points to inside their block;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Declaring Variables</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Use <code>:=</code> to declare and assign; use <code>=</code> to reassign an existing variable:
+<pre><code>{{- $name := .Values.name }}
+{{- $port := .Values.service.port }}
+
+metadata:
+  name: {{ $name }}
+  annotations:
+    port: {{ $port | quote }}</code></pre>
+            </li>
+            <li>Variables start with <code>$</code> — this is required;</li>
+            <li>They simplify templates by avoiding repeated long expressions;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Scope Rules</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Variables declared <b>outside</b> a block are accessible <b>inside</b> the block;</li>
+            <li>Variables declared <b>inside</b> a block (<code>if</code>, <code>range</code>, <code>with</code>) are <b>not</b> accessible outside it;</li>
+            <li>Example — variable declared inside <code>if</code> is not available after <code>end</code>:
+<pre><code>{{- if .Values.ingress.enabled }}
+  {{- $host := .Values.ingress.host }}
+  host: {{ $host }}
+{{- end }}
+# $host is NOT accessible here — it's out of scope</code></pre>
+            </li>
+            <li>Fix — declare the variable before the block:
+<pre><code>{{- $host := "" }}
+{{- if .Values.ingress.enabled }}
+  {{- $host = .Values.ingress.host }}
+{{- end }}
+# $host IS accessible here
+annotation: {{ $host }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. How <code>with</code> Changes Scope</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>with</code> re-scopes <code>.</code> to the specified value — inside the block, <code>.</code> is no longer the root context:
+<pre><code>{{- with .Values.resources }}
+resources:
+  limits:
+    cpu: {{ .limits.cpu }}
+    memory: {{ .limits.memory }}
+{{- end }}
+# Inside the block: . = .Values.resources
+# .limits.cpu works because . is already the resources map</code></pre>
+            </li>
+            <li>This means <code>.Release.Name</code> or <code>.Values.image</code> are <b>not</b> directly accessible inside a <code>with</code> block;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. How <code>range</code> Changes Scope</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>range</code> re-scopes <code>.</code> to the current iteration element:
+<pre><code># values.yaml
+ports:
+  - name: http
+    port: 80
+  - name: https
+    port: 443
+
+# template
+{{- range .Values.ports }}
+- name: {{ .name }}
+  containerPort: {{ .port }}
+{{- end }}
+# Inside the loop: . = current port object
+# .name and .port work because . is each port map</code></pre>
+            </li>
+            <li><code>.Release.Name</code> is <b>not</b> accessible via <code>.</code> inside the loop;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. The $ Root Variable</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>$</code> always refers to the <b>root context</b> — the same scope that <code>.</code> has at the top level of the template;</li>
+            <li>Use <code>$</code> to access built-in objects when <code>.</code> has been re-scoped by <code>with</code> or <code>range</code>:
+<pre><code>{{- range .Values.ports }}
+- name: {{ .name }}
+  containerPort: {{ .port }}
+  # Need release name? Use $ to escape the range scope:
+  release: {{ $.Release.Name }}
+  image: {{ $.Values.image.repository }}
+{{- end }}</code></pre>
+            </li>
+            <li>Same pattern with <code>with</code>:
+<pre><code>{{- with .Values.resources }}
+resources:
+  {{- toYaml . | nindent 2 }}
+# Access something outside the with block:
+# releaseName: {{ $.Release.Name }}
+{{- end }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. range with Index/Key Variables</strong></div>
+    <div class="answer">
+        <ul>
+            <li>For lists — <code>range</code> can capture the index and value:
+<pre><code>{{- range $index, $port := .Values.ports }}
+# port {{ $index }}: {{ $port.name }} on {{ $port.port }}
+{{- end }}
+# $index = 0, 1, 2, ...
+# $port = the list element</code></pre>
+            </li>
+            <li>For maps — <code>range</code> captures key and value:
+<pre><code># values.yaml
+env:
+  APP_ENV: production
+  LOG_LEVEL: info
+
+# template
+{{- range $key, $val := .Values.env }}
+- name: {{ $key }}
+  value: {{ $val | quote }}
+{{- end }}
+# Output:
+# - name: APP_ENV
+#   value: "production"
+# - name: LOG_LEVEL
+#   value: "info"</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Passing Context to Named Templates</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When calling a named template via <code>include</code>, you pass it a context (usually <code>.</code> or <code>$</code>):
+<pre><code># _helpers.tpl
+{{- define "myapp.labels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+# deployment.yaml — pass the root context
+labels:
+  {{- include "myapp.labels" . | nindent 4 }}</code></pre>
+            </li>
+            <li>Inside a <code>range</code> or <code>with</code> block, pass <code>$</code> instead of <code>.</code> so the helper sees the full root context:
+<pre><code>{{- range .Values.services }}
+  labels:
+    {{- include "myapp.labels" $ | nindent 4 }}
+{{- end }}</code></pre>
+            </li>
+            <li>You can also pass a custom dict:
+<pre><code>{{- include "myapp.container" (dict "root" $ "container" .) }}</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>Summary</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr><th>Symbol</th><th>Meaning</th><th>Changes Inside with/range?</th></tr>
+            <tr><td><code>.</code></td><td>Current context</td><td>Yes — re-scoped to the block's value</td></tr>
+            <tr><td><code>$</code></td><td>Root context (top-level dot)</td><td>No — always the root</td></tr>
+            <tr><td><code>$var</code></td><td>User-defined variable</td><td>Scoped to the block where declared</td></tr>
+        </table>
+    </div>
+
+</body>
+
+</html>
