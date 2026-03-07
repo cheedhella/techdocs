@@ -1,0 +1,43 @@
+# Without trimming spaces
+metadata:
+  name: myapp
+
+{{ if .Values.enabled }}
+replicas: 2
+{{ end }}
+
+labels:
+  app: myapp
+
+# Trim spaces before 
+metadata:
+  name: myapp
+
+{{- if .Values.enabled }}
+replicas: 2
+{{ end }}
+
+labels:
+  app: myapp
+
+# Trim spaces after
+metadata:
+  name: myapp
+
+{{ if .Values.enabled }}
+replicas: 2
+{{- end }}
+
+labels:
+  app: myapp
+
+# Trim spaces before and after
+metadata:
+  name: myapp
+
+{{- if .Values.enabled }}
+replicas: 2
+{{- end }}
+
+labels:
+  app: myapp
