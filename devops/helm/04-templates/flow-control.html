@@ -16,8 +16,207 @@
         <ul>
             <li>Go templates provide four control structures: <code>if</code>/<code>else</code>, <code>with</code>, <code>range</code>, and <code>define</code>/<code>template</code>;</li>
             <li>All blocks end with <code>{{ end }}</code>;</li>
-            <li>Use <code>{{-</code> and <code>-}}</code> to trim whitespace around control blocks;</li>
         </ul>
+    </div>
+
+    <div class="question"><strong>1.1 Whitespace Trimming — {{- and -}}</strong></div>
+    <div class="answer">
+        <ul>
+            <li>YAML is whitespace-sensitive — extra blank lines from control blocks can break output;</li>
+            <li>Hyphens inside delimiters eat the whitespace (including newlines) on that side:
+                <ul>
+                    <li><code>{{- expr }}</code> — trims whitespace/newlines <b>before</b> the tag</li>
+                    <li><code>{{ expr -}}</code> — trims whitespace/newlines <b>after</b> the tag</li>
+                    <li><code>{{- expr -}}</code> — trims <b>both</b> sides</li>
+                </ul>
+            </li>
+        </ul>
+        <table border="1" cellpadding="8" cellspacing="0" width="100%">
+            <tr>
+                <th>Template</th>
+                <th>What Helm Sees</th>
+                <th>Output (enabled=true)</th>
+                <th>Output (enabled=false)</th>
+            </tr>
+            <tr>
+                <td><b>No trimming</b>
+<pre><code>metadata:
+  name: myapp
+
+{{ if .Values.enabled }}
+replicas: 2
+{{ end }}
+
+labels:
+  app: myapp</code></pre>
+                </td>
+                <td>
+<pre><code>metadata:\n
+  name: myapp\n
+\n
+{{ if }}\n
+replicas: 2\n
+{{ end }}\n
+\n
+labels:\n
+  app: myapp</code></pre>
+                    Every line ends with <code>\n</code>; the <code>{{ }}</code> tags produce nothing but the <code>\n</code> after them stays
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+
+replicas: 2
+
+
+labels:
+  app: myapp</code></pre>
+                    Blank lines above and below <code>replicas</code>
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+
+
+labels:
+  app: myapp</code></pre>
+                    Three blank lines where the block was
+                </td>
+            </tr>
+            <tr>
+                <td><b>Trim before</b> (<code>{{-</code>)
+<pre><code>metadata:
+  name: myapp
+
+{{- if .Values.enabled }}
+replicas: 2
+{{ end }}
+
+labels:
+  app: myapp</code></pre>
+                </td>
+                <td>
+<pre><code>metadata:\n
+  name: myapp\n
+\n
+{{- if }}\n
+replicas: 2\n
+{{ end }}\n
+\n
+labels:\n
+  app: myapp</code></pre>
+                    <code>{{-</code> eats the <code>\n</code> before it (the blank line), so <code>myapp</code> and <code>replicas</code> become adjacent
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+replicas: 2
+
+
+labels:
+  app: myapp</code></pre>
+                    Blank line before <code>replicas</code> is gone
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+labels:
+  app: myapp</code></pre>
+                    Clean — only one blank line
+                </td>
+            </tr>
+            <tr>
+                <td><b>Trim after</b> (<code>-}}</code>)
+<pre><code>metadata:
+  name: myapp
+
+{{ if .Values.enabled }}
+replicas: 2
+{{- end }}
+
+labels:
+  app: myapp</code></pre>
+                </td>
+                <td>
+<pre><code>metadata:\n
+  name: myapp\n
+\n
+{{ if }}\n
+replicas: 2\n
+{{- end }}\n
+\n
+labels:\n
+  app: myapp</code></pre>
+                    <code>-}}</code> on <code>end</code> eats the <code>\n</code> after it, so <code>replicas</code> and <code>labels</code> get closer
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+
+replicas: 2
+
+labels:
+  app: myapp</code></pre>
+                    Blank line after <code>replicas</code> is gone
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+
+
+labels:
+  app: myapp</code></pre>
+                    Still messy — three blank lines
+                </td>
+            </tr>
+            <tr>
+                <td><b>Trim both</b> (<code>{{-</code> and <code>{{-</code>)
+<pre><code>metadata:
+  name: myapp
+
+{{- if .Values.enabled }}
+replicas: 2
+{{- end }}
+
+labels:
+  app: myapp</code></pre>
+                </td>
+                <td>
+<pre><code>metadata:\n
+  name: myapp\n
+\n
+{{- if }}\n
+replicas: 2\n
+{{- end }}\n
+\n
+labels:\n
+  app: myapp</code></pre>
+                    <code>{{-</code> on <code>if</code> eats the <code>\n</code> before it; <code>{{-</code> on <code>end</code> eats the <code>\n</code> before it — both gaps removed
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+replicas: 2
+
+labels:
+  app: myapp</code></pre>
+                    Cleanest output
+                </td>
+                <td>
+<pre><code>metadata:
+  name: myapp
+
+labels:
+  app: myapp</code></pre>
+                    Clean — block vanishes without a trace
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div class="question"><strong>2. if / else if / else</strong></div>
@@ -37,39 +236,47 @@
         </ul>
     </div>
 
-    <div class="question"><strong>2.1 if — Simple Boolean</strong></div>
+    <div class="question"><strong>2.1 if</strong></div>
     <div class="answer">
         <ul>
             <li>
 <pre><code># values.yaml
-ingress:
-  enabled: true
+production: true
 
 # template
-{{- if .Values.ingress.enabled }}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ .Release.Name }}-ingress
-spec:
-  rules:
-    - host: {{ .Values.ingress.host }}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ .Release.Name }}
-                port:
-                  number: {{ .Values.service.port }}
-{{- end }}</code></pre>
+{{ if .Values.production }}
+env: production
+{{ end }}
+
+# Output:
+env: production
+</code></pre>
             </li>
-            <li>The entire Ingress resource is only rendered when <code>ingress.enabled</code> is <code>true</code>;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2.2 if / else if / else — Multi-Branch</strong></div>
+    <div class="question"><strong>2.2 if / else</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+<pre><code># values.yaml
+production: true
+
+# template
+{{ if .Values.production }}
+env: production
+{{ else }}
+env: development
+{{ end }}
+
+# Output:
+env: production
+</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2.3 if / else if / else</strong></div>
     <div class="answer">
         <ul>
             <li>
@@ -78,52 +285,13 @@ service:
   type: NodePort
 
 # template
-{{- if eq .Values.service.type "LoadBalancer" }}
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: nlb
-{{- else if eq .Values.service.type "NodePort" }}
-  nodePort: {{ .Values.service.nodePort | default 30080 }}
-{{- else }}
-  # ClusterIP — no extra config needed
-{{- end }}</code></pre>
-            </li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>2.3 if — Checking Existence</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Check if a value exists (is not nil/empty):
-<pre><code>{{- if .Values.resources }}
-resources:
-  {{- toYaml .Values.resources | nindent 2 }}
-{{- end }}</code></pre>
-            </li>
-            <li>Use <code>hasKey</code> to check if a specific key exists in a map:
-<pre><code>{{- if hasKey .Values.annotations "prometheus.io/scrape" }}
-  prometheus.io/scrape: {{ index .Values.annotations "prometheus.io/scrape" | quote }}
-{{- end }}</code></pre>
-            </li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>2.4 if — Compound Conditions</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Use <code>and</code>, <code>or</code>, <code>not</code>:
-<pre><code># Enable TLS only if ingress is enabled AND tls secret is set
-{{- if and .Values.ingress.enabled .Values.ingress.tlsSecret }}
-  tls:
-    - secretName: {{ .Values.ingress.tlsSecret }}
-      hosts:
-        - {{ .Values.ingress.host }}
-{{- end }}
-
-# Include debug logging unless explicitly disabled
-{{- if not (eq .Values.logLevel "off") }}
-- name: LOG_LEVEL
-  value: {{ .Values.logLevel | default "info" | quote }}
-{{- end }}</code></pre>
+{{ if eq .Values.environment "prod" }}
+env: production
+{{ else if eq .Values.environment "stage" }}
+env: staging
+{{ else }}
+env: development
+{{ end }}</code></pre>
             </li>
         </ul>
     </div>

@@ -2,43 +2,52 @@
 <html lang="en">
 
 <head>
-    <title>Helm Template Functions</title>
+    <title>Template Functions</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
 </head>
 
 <body>
     <div class="main-grid-item-1 grid-wide-column">
-        <h2>Helm Template Functions</h2>
+        <h2>Template Functions</h2>
     </div>
 
-    <div class="question"><strong>1. Syntax</strong></div>
+    <div class="question"><strong>1. What is Template Function?</strong></div>
     <div class="answer">
         <ul>
-            <li>Direct call: <code>{{ functionName arg1 arg2 }}</code></li>
-            <li>Pipeline: <code>{{ arg1 | functionName arg2 }}</code> — arg1 becomes the <b>last</b> argument</li>
-            <li>Helm functions come from three sources: Go built-in, <a href="https://masterminds.github.io/sprig/">Sprig library</a>, and Helm-specific;</li>
+            <li>It is a function(built-in or custom) used inside templates, to process the input(template data) and dynamically generate the k8s manifest;</li>
+            <li>Helm functions are derived from 3 different sources: Go template functions, Sprig library and Helm-specific;</li>
+            <li><b>Direct call:</b> {{ function arg1 arg2... }} </li>
+            <li><b>Pipeline:</b> {{ arg1 | function arg2 }}</li>
         </ul>
     </div>
 
     <div class="question"><strong>2. String Functions</strong></div>
     <div class="answer">
+        <ul>
+            <li><pre><code>values.yaml
+name: myapp
+appName: "  myAppName  "
+            </code></pre></li>
+        </ul>
         <table border="1" cellpadding="6" cellspacing="0">
             <tr><th>Function</th><th>Description</th><th>Example</th></tr>
-            <tr><td><code>quote</code></td><td>Wraps string in double quotes</td><td><code>{{ .Values.name | quote }}</code> → <code>"myapp"</code></td></tr>
-            <tr><td><code>squote</code></td><td>Wraps string in single quotes</td><td><code>{{ .Values.name | squote }}</code> → <code>'myapp'</code></td></tr>
+            <tr><td><code>quote</code></td><td>Wraps the input in double quotes</td><td><code>{{ .Values.name | quote }}</code> → <code>"myapp"</code></td></tr>
+            <tr><td><code>squote</code></td><td>Wraps the input in single quotes</td><td><code>{{ .Values.name | squote }}</code> → <code>'myapp'</code></td></tr>
             <tr><td><code>upper</code></td><td>Converts to uppercase</td><td><code>{{ "hello" | upper }}</code> → <code>HELLO</code></td></tr>
             <tr><td><code>lower</code></td><td>Converts to lowercase</td><td><code>{{ "HELLO" | lower }}</code> → <code>hello</code></td></tr>
-            <tr><td><code>title</code></td><td>Title-cases the string</td><td><code>{{ "hello world" | title }}</code> → <code>Hello World</code></td></tr>
-            <tr><td><code>trim</code></td><td>Removes leading/trailing whitespace</td><td><code>{{ "  hi  " | trim }}</code> → <code>hi</code></td></tr>
-            <tr><td><code>trimPrefix</code></td><td>Removes prefix</td><td><code>{{ "v1.2" | trimPrefix "v" }}</code> → <code>1.2</code></td></tr>
-            <tr><td><code>trimSuffix</code></td><td>Removes suffix</td><td><code>{{ "app-" | trimSuffix "-" }}</code> → <code>app</code></td></tr>
-            <tr><td><code>trunc</code></td><td>Truncates to N characters</td><td><code>{{ "abcdef" | trunc 3 }}</code> → <code>abc</code></td></tr>
-            <tr><td><code>replace</code></td><td>Replaces old with new</td><td><code>{{ "a+b" | replace "+" "_" }}</code> → <code>a_b</code></td></tr>
-            <tr><td><code>contains</code></td><td>Returns true if string contains substring</td><td><code>{{ if contains "app" .Values.name }}yes{{ end }}</code></td></tr>
+            <tr><td><code>title</code></td><td>Title case(capitalizes first letter of each word)</td><td><code>{{ "hello world" | title }}</code> → <code>Hello World</code></td></tr>
+            <br>
+            <tr><td><code>contains</code></td><td>Returns true if string contains substring; Syntax: contains "substring" "string";</td><td><code>{{ if contains "app" .Values.name }}yes{{ end }}</code></td></tr>
             <tr><td><code>hasPrefix</code></td><td>True if string starts with prefix</td><td><code>{{ hasPrefix "v" .Values.tag }}</code></td></tr>
             <tr><td><code>hasSuffix</code></td><td>True if string ends with suffix</td><td><code>{{ hasSuffix ".yaml" .Template.Name }}</code></td></tr>
-            <tr><td><code>repeat</code></td><td>Repeats a string N times</td><td><code>{{ "ab" | repeat 3 }}</code> → <code>ababab</code></td></tr>
+            <tr><td><code>trim</code></td><td>Removes leading and trailing whitespace (spaces, tabs, newlines) from a string</td><td><code>{{ "  hi  " | trim }}</code> → <code>hi</code></td></tr>
+            <tr><td><code>trimPrefix</code></td><td>Removes specified prefix from the beginning of a string</td><td><code>{{ "v1.2" | trimPrefix "v" }}</code> → <code>1.2</code></td></tr>
+            <tr><td><code>trimSuffix</code></td><td>Removes specified suffix</td><td><code>{{ "app-" | trimSuffix "-" }}</code> → <code>app</code></td></tr>
             <tr><td><code>nospace</code></td><td>Removes all whitespace</td><td><code>{{ "a b c" | nospace }}</code> → <code>abc</code></td></tr>
+            <tr><td><code>trunc</code></td><td>Truncates to N characters</td><td><code>{{ "abcdef" | trunc 3 }}</code> → <code>abc</code></td></tr>
+            <tr><td><code>replace</code></td><td>Replaces old with new</td><td><code>{{ "a+b" | replace "+" "_" }}</code> → <code>a_b</code></td></tr>
+            <br>
+            <tr><td><code>repeat</code></td><td>Repeats a string N times</td><td><code>{{ "ab" | repeat 3 }}</code> → <code>ababab</code></td></tr>
             <tr><td><code>snakecase</code></td><td>Converts to snake_case</td><td><code>{{ "myApp" | snakecase }}</code> → <code>my_app</code></td></tr>
             <tr><td><code>camelcase</code></td><td>Converts to CamelCase</td><td><code>{{ "my_app" | camelcase }}</code> → <code>MyApp</code></td></tr>
             <tr><td><code>kebabcase</code></td><td>Converts to kebab-case</td><td><code>{{ "myApp" | kebabcase }}</code> → <code>my-app</code></td></tr>
