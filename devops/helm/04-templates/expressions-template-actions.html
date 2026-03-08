@@ -22,7 +22,7 @@
     <div class="question"><strong>1.1 Expression Types</strong></div>
     <div class="answer">
         <ul>
-            <li>Lookup Expression: It is used to access values from values.yaml file;</li>
+            <li><b>Lookup Expression:</b> It is used to access values from values.yaml file;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ .Values.name }}</li>
@@ -30,7 +30,7 @@
                     <li>Output -> name: myapp</li>
                 </ul>
             </li>
-            <li>Function Expression: It is used to call functions;</li>
+            <li><b>Function Expression:</b> It is used to call functions;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ upper .Values.name }}</li>
@@ -38,7 +38,7 @@
                     <li>Output -> name: MYAPP</li>
                 </ul>
             </li>
-            <li>Pipeline Expression: It is used to chain multiple expressions together;</li>
+            <li><b>Pipeline Expression:</b> It is used to chain multiple expressions together;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ .Values.name | upper | quote }}</li>
@@ -46,7 +46,7 @@
                     <li>Output -> name: "MYAPP"</li>
                 </ul>
             </li>
-            <li>Conditional Expression: It is used to control the flow of the template;</li>
+            <li><b>Conditional Expression:</b> It is used to control the flow of the template;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ if .Values.name }} {{ .Values.name }} {{ else }} default {{ end }}</li>
@@ -54,7 +54,7 @@
                     <li>Output -> name: myapp</li>
                 </ul>
             </li>
-            <li>Loop Expression: It is used to iterate over a list or map;</li>
+            <li><b>Loop Expression:</b> It is used to iterate over a list or map;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ range .Values.name }} {{ . }} {{ end }}</li>
@@ -62,7 +62,7 @@
                     <li>Output -> name: myapp</li>
                 </ul>
             </li>
-            <li>Variable Expression: It is used to declare variables;</li>
+            <li><b>Variable Expression:</b> It is used to declare variables;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> <pre>{{ range .Values.ports }}
@@ -75,7 +75,7 @@
                         - containerPort: 443</pre></li>
                 </ul>
             </li>
-            <li>Comment Expression: It is used to add comments to the template;</li>
+            <li><b>Comment Expression:</b> It is used to add comments to the template;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> <pre>{{/* This is a comment */}} 
@@ -84,7 +84,7 @@
                     <li>Output -> name: myapp</li>
                 </ul>
             </li>
-            <li>Whitespace Control Expression: 
+            <li><b>Whitespace Control Expression:</b> 
                 <ul>
                     <li>It is used to remove unwanted spaces and newlines;</li>
                     <li>As YAML is indent sensitive, extra spaces and newlines can break the YAML files, so we need to remove them;</li>
@@ -133,7 +133,7 @@ tier: backend</code></pre></li>
   tier: backend</code></pre></li>
                 </ul>
             </li>
-            <li>Template Action Expression: It is used to call template actions;</li>
+            <li><b>Template Action Expression:</b> It is used to call template actions;</li>
             <li>Eg: 
                 <ul>
                     <li>Template -> name: {{ template "mychart.fullname" . }}</li>
@@ -148,21 +148,13 @@ tier: backend</code></pre></li>
     <div class="answer">
         <ul>
             <li>Rather than returning a value, it performs an operation that controls template behaviour;</li>
-            <li>It includes:
-                <ul>
-                    <li>variable assignment</li>
-                    <li>conditional logic</li>
-                    <li>loops</li>
-                    <li>invoking functions</li>
-                </ul>
-            </li>
         </ul>
     </div>
 
     <div class="question"><strong>2. Template Action Types</strong></div>
     <div class="answer">
         <ul>
-            <li>Variable action
+            <li><b>Variable action</b>
                 <ul>
                     <li>It is used to assign value from expression to a variable;</li>
                     <li>Why is it useful? -> it simplifies code and avoids running same expression multiple times;</li>
@@ -171,7 +163,7 @@ tier: backend</code></pre></li>
                     <li>Output: <pre><code>{{ $name }}</code></pre></li>
                 </ul>
             </li>
-            <li>Conditional action
+            <li><b>Conditional action</b>
                 <ul>
                     <li>It is used to control the flow of the template based on condition;</li>
                     <li>Syntax: <pre><code>{{ if expression }} action {{ end }}</code></pre></li>
@@ -181,7 +173,7 @@ enabled: true
 {{ end }}</code></pre></li>
                 </ul>
             </li>
-            <li>Loop action
+            <li><b>Loop action</b>
                 <ul>
                     <li>It is used to iterate over a list or map;</li>
                     <li>Syntax: <pre><code>{{ range expression }} action {{ end }}</code></pre></li>
@@ -190,7 +182,7 @@ enabled: true
                         {{ end }}</code></pre></li>
                 </ul>
             </li>
-            <li>Function action
+            <li><b>Function action</b>
                 <ul>
                     <li>It is used to invoke a function;</li>
                     <li>Syntax: <pre><code>{{ range expression }} action {{ end }}</code></pre></li>
@@ -211,98 +203,10 @@ enabled: true
 
     
 
-    <div class="question"><strong>5. Functions in Helm Templates</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Helm provides over 60 functions;</li>
-            <li>Syntax: function arg1 arg2...</li>
-            <li>Eg: quote .Values.favorite.drink</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>6. Pipelines</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Pipelines chain functions together, passing each result to the next function;</li>
-            <li>Eg: {{ cat .Chart.Name "Container" | snakecase | lower }}</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>7. Variables and Scope</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Variables are used to store values;</li>
-            <li>Syntax: {{ $variable := expression }}</li>
-            <li>Eg: {{ $name := .Values.name }}</li>
-            <li>Output: {{ $name }}</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>8. Pipelines and Chaining</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Pipelines chain functions together, passing each result to the next function;</li>
-            <li>Eg: {{ cat .Chart.Name "Container" | snakecase | lower }}</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>9. Template Helpers and Reusable Templates</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Template helpers are used to reuse template code;</li>
-            <li>Syntax: {{ define "name" }} action {{ end }}</li>
-            <li>Eg: {{ define "mychart.fullname" }} {{ .Release.Name }}-{{ .Chart.Name }} {{ end }}</li>
-            <li>Output: {{ define "mychart.fullname" }} {{ .Release.Name }}-{{ .Chart.Name }} {{ end }}</li>
-        </ul>
-
-
-    <div class="question"><strong>10. Working with Files</strong></div>
-    <div class="answer">
-        <ul>
-            <li>It is used to access files in the chart;</li>
-            <li>Syntax: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
-            <li>Eg: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
-            <li>Output: <pre><code>{{ .Files.Get "filename" }}</code></pre></li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>11. Template Flow and Debugging</strong></div>
-    <div class="answer">
-        <ul>
-            <li>It is used to control the flow of the template;</li>
-            <li>Syntax: <pre><code>{{ . }}</code></pre></li>
-            <li>Eg: <pre><code>{{ . }}</code></pre></li>
-            <li>Output: <pre><code>{{ . }}</code></pre></li>
-        </ul>
-    </div>
 
 
 
 
-5. Functions in Helm Templates
-
-5.1 Built-in Go template functions
-5.2 Helm-specific functions
-5.3 Sprig template functions
-5.4 String functions
-5.5 Math functions
-5.6 Date functions
-5.7 Encoding and decoding functions
-
-6. Control Structures
-
-6.1 if conditions
-6.2 else and else if
-6.3 with blocks
-6.4 range loops
-6.5 Nested control structures
-
-7. Variables and Scope
-
-7.1 Declaring variables
-7.2 Variable scope rules
-7.3 Using $ root context
-7.4 Passing variables between templates
 
 8. Pipelines and Chaining
 

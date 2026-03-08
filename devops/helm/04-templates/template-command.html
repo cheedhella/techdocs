@@ -14,7 +14,7 @@
     <div class="question"><strong>1. helm template</strong></div>
     <div class="answer">
         <ul>
-            <li>During dry run, Helm contacts Kubernetes API Server for validating the templates(generated k8s manifest files); So, you must have valid k8s cluster credential to execute a dry run;<br>
+            <li>During dry run, Helm contacts Kubernetes API Server for validating the templates(generated k8s manifest files); So, you must have valid credentials to talk to the k8s cluster in order to execute a dry run;<br>
             <li>If you don’t have credentials for the Kubernetes server, you can use the <b>helm template</b> command to generate template YAML;<br>
             <li>As Helm does not contact the API server, output of the commands <b>--dry-run</b> and <b>template</b> can differ;</li>
         </ul>

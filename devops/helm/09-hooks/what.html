@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Hooks</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Hooks</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Hook?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Hooks are used to run a script/command/job at specific points in the release lifecycle(before/after installation/upgrade/deletion/rollback);</li>
+            <li>Hook is nothing but an annotation added to any k8s object;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Purpose of Hooks</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Sometimes, deployment requires some additional steps to be taken, such as:
+                <ul>
+                    <li>Running database migration, before upgrading an application;</li>
+                    <li>Running a job to backup a database before installing a new chart and a second job to restore the data in the database;</li>
+                    <li>Running a job before deleting a release to gracefully take out a service before completely removing it;</li>
+                </ul>
+            </li>
+            <li>It is just like any other template file, under templates folder;</li>    
+            <li>Hooks run in a separate pod inside of your Kubernetes cluster. The value specified in the helm.sh/hook annotation determines when the hook should be rendered.</li>        
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Hook Types</strong></div>
+    <div class="answer">
+        <ul>
+            <li>pre-install: Executes after templates are rendered, but before any resources are created in Kubernetes</li>
+            <li>post-install: Executes after all resources are loaded into Kubernetes</li>
+            <li>pre-delete: Executes on a deletion request before any resources are deleted from Kubernetes</li>
+            <li>post-delete: Executes on a deletion request after all of the release’s resources have been deleted</li>
+            <li>pre-upgrade: Executes on an upgrade request after templates are rendered, but before any resources are updated</li>
+            <li>post-upgrade: Executes on an upgrade after all resources have been upgraded</li>
+            <li>pre-rollback: Executes on a rollback request after templates are rendered, but before any resources are rolled back</li>
+            <li>post-rollback: Executes on a rollback request after all resources have been modified</li>
+            <li>test: Executes when the Helm test subcommand is invoked ( view test docs)</li>
+            <li>before-hook-creation: Executes before a hook is created</li>
+            <li>hook-succeeded: Executes after a hook succeeds</li>
+            <li>hook-failed: Executes after a hook fails</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Release Lifecycle with Hooks</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Install Lifecycle: 
+                <ul>
+                    <li>pre-install hooks run</li>
+                    <li>resources are created in k8s cluster</li>
+                    <li>post-install hooks run</li>
+                </ul>
+            <li>Upgrade Lifecycle: 
+                <ul>
+                    <li>pre-upgrade hooks run</li>
+                    <li>resources are updated in k8s cluster</li>
+                    <li>post-upgrade hooks run</li>
+                </ul>
+            </li>
+            <li>Deletion Lifecycle: 
+                <ul>
+                    <li>pre-delete hooks run</li>
+                    <li>resources are deleted from k8s cluster</li>
+                    <li>post-delete hooks run</li>
+                </ul>
+            </li>
+            <li>Rollback Lifecycle: 
+                <ul>
+                    <li>pre-rollback hooks run</li>
+                    <li>resources are rolled back in k8s cluster</li>
+                    <li>post-rollback hooks run</li>
+                </ul>
+            </li>
+            <li>Test Lifecycle: 
+                <ul>
+                    <li>test hooks run</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+Hooks is a helm feature that allows helm to launch resources into the cluster in response to helm lifecycle events (such as a chart being installed). All it takes to turn a regular Kubernetes object into a helm hook is to apply an annotation that indicates which lifecycle event the object should be tied to.
+
+https://medium.com/@pratyush.mathur/introduction-to-helm-hooks-460c704021b
+
+</body>
+</html>

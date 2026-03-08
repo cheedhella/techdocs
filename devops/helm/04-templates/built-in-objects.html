@@ -14,7 +14,7 @@
     <div class="question"><strong>1. Overview</strong></div>
     <div class="answer">
         <ul>
-            <li>Helm injects several top-level objects into every template — they are available via the <code>.</code> context;</li>
+            <li>Built-in Objects are the objects that are passed to every template by template engine; They are available via the <code>.</code> context;</li>
             <li>6 built-in objects: <code>.Values</code>, <code>.Release</code>, <code>.Chart</code>, <code>.Files</code>, <code>.Capabilities</code>, <code>.Template</code>;</li>
         </ul>
     </div>
@@ -22,6 +22,12 @@
     <div class="question"><strong>2. Built-in Objects</strong></div>
     <div class="answer">
         <ul>
+            <li><b>Root object</b>
+                <ul>
+                    <li>Top level helm object;</li>
+                    <li>It contains 7 objects: <code>.Release</code>, <code>.Chart</code>, <code>.Values</code>, <code>.Capabilities</code>, <code>.Template</code>, <code>.Files</code>, <code>.Subcharts</code>;</li>
+                </ul>
+            </li>
             <li><b>.Values</b>
                 <ul>
                     <li>It contains all configuration values from <b>values.yaml</b>, <code>-f</code> files, and <code>--set</code> flags (merged, later sources win);</li>
@@ -43,7 +49,7 @@
             </li>
             <li><b>.Chart</b>
                 <ul>
-                    <li>It contains information about the chart from Chart.yaml file;</li>
+                    <li>Using this, we can access any data from Chart.yaml file;</li>
                     <li>Fields:
                         <ul>
                             <li>.Chart.Name -> Chart name</li>
@@ -114,6 +120,48 @@
             </li>
         </ul>
     </div>
+
+    <img src="built-in-objects-demo.png" alt="Built-in Objects Demo" width="300">
+
+
+    <div class="question"><strong>1. The Dot (.) — Current Context</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>.</code> (dot) is the current scope/context passed to the template;</li>
+            <li>At the top level of a template, <code>.</code> contains all built-in objects (<code>.Values</code>, <code>.Release</code>, <code>.Chart</code>, etc.);</li>
+            <li>Some actions (<code>with</code>, <code>range</code>) change what <code>.</code> points to inside their block;</li>
+        </ul>
+    </div>
+    
+    <pre>
+        
+        ------------------------------------------------------------------------------------------------------------------------------------------------------
+        Files Object 
+            - It provides access to all non-special files in a chart;
+            - We can use it to access files in the charts folder;
+            - We can&#x27;t use it to access templates;
+        
+        &gt; cat config1.ini 
+        msg1 = Hello from config1.ini Line1
+        msg2 = Hello from config1.ini Line2
+        msg3 = Hello from config1.ini Line3
+        
+        &gt; cat config-files/myconfig2.toml 
+        appName: myapp2
+        appType: db 
+        appConfigEnable: true 
+        
+        &gt; cat config-files/myconfig3.toml 
+        
+        
+        {{/* .Files Object Demo */}}
+        File Get: {{ .Files.Get &quot;myconfig1.ini&quot; }}          # Prints the content of the file specified 
+        File Glob as Config: {{ (.Files.Glob &quot;config-files/*&quot;).AsConfig }}           # Returns file body as YAML map
+        File Glob as Secret: {{ (.Files.Glob &quot;config-files/*&quot;).AsSecrets }}          # Returns file body as base-64 encoded string
+        File Lines: {{ .Files.Lines &quot;myconfig1.ini&quot; }}          # It iterates over file content line by line and prints as single line;
+        File Glob: {{ .Files.Glob &quot;config-files/*&quot; }}          # It is useful iterate over file content line by line;
+        ------------------------------------------------------------------------------------------------------------------------------------------------------
+    </pre>
 </body>
 
 </html>

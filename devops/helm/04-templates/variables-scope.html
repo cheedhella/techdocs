@@ -11,14 +11,29 @@
         <h2>Variables and Scope</h2>
     </div>
 
-    <div class="question"><strong>1. The Dot (.) — Current Context</strong></div>
-    <div class="answer">
-        <ul>
-            <li><code>.</code> (dot) is the current scope/context passed to the template;</li>
-            <li>At the top level of a template, <code>.</code> contains all built-in objects (<code>.Values</code>, <code>.Release</code>, <code>.Chart</code>, etc.);</li>
-            <li>Some actions (<code>with</code>, <code>range</code>) change what <code>.</code> points to inside their block;</li>
-        </ul>
-    </div>
+    7. Variables and Scope
+
+7.1 Declaring variables
+7.2 Variable scope rules
+7.3 Using $ root context
+7.4 Passing variables between templates
+
+
+Variables 
+- variables are used to simplify code;
+- Primary used in WITH, RANGE functions and named templates;
+- variables are assigned with special assignment operator :=
+
+How to define a variable?
+    {{- $chartName := .Chart.Name -}}
+\How to refer a varialbe?
+    appName: {{ $chartName }}
+
+- during declaration you can also use pipeline and functions;
+{{- $chartName := .Chart.Name | quote | upper -}}
+
+
+    
 
     <div class="question"><strong>2. Declaring Variables</strong></div>
     <div class="answer">
