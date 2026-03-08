@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Hooks Demo — All Hook Types</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Hooks Demo — All Hook Types</h2>
+    </div>
+
+    <div class="question"><strong>1. The Demo Chart</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Chart: <code>hook-types-demo</code> (located in <code>helm/pg/hook-types-demo/</code>);</li>
+            <li>Deploys a simple Nginx Deployment + Service;</li>
+            <li>Contains one hook Job for every lifecycle event — each prints a message so you can see exactly when it ran;</li>
+            <li>Structure:
+<pre><code>hook-types-demo/
+├── Chart.yaml
+├── values.yaml
+├── .helmignore
+└── templates/
+    ├── deployment.yaml
+    ├── service.yaml
+    ├── pre-install-hook.yaml
+    ├── post-install-hook.yaml
+    ├── pre-upgrade-hook.yaml
+    ├── post-upgrade-hook.yaml
+    ├── pre-delete-hook.yaml
+    ├── post-delete-hook.yaml
+    ├── pre-rollback-hook.yaml
+    ├── post-rollback-hook.yaml
+    └── test-hook.yaml</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What Makes a Template a Hook?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A single annotation on any Kubernetes resource turns it into a hook:
+<pre><code>metadata:
+  annotations:
+    "helm.sh/hook": pre-install</code></pre>
+            </li>
+            <li>The resource is <b>not</b> managed as part of the release — it is created/deleted independently by Helm at the designated lifecycle point;</li>
+            <li>Hook resources run as <b>Jobs</b> (or Pods) — Helm waits for them to complete before proceeding;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Hook Annotations</strong></div>
+    <div class="answer">
+        <ul>
+            <li><code>helm.sh/hook</code> — which lifecycle event triggers this resource:
+                <table border="1" cellpadding="6" cellspacing="0">
+                    <tr><th>Value</th><th>When It Runs</th></tr>
+                    <tr><td><code>pre-install</code></td><td>After templates are rendered, <b>before</b> any resources are created</td></tr>
+                    <tr><td><code>post-install</code></td><td><b>After</b> all resources are loaded into Kubernetes</td></tr>
+                    <tr><td><code>pre-upgrade</code></td><td>After templates are rendered, <b>before</b> any resources are updated</td></tr>
+                    <tr><td><code>post-upgrade</code></td><td><b>After</b> all resources have been upgraded</td></tr>
+                    <tr><td><code>pre-delete</code></td><td><b>Before</b> any resources are deleted from Kubernetes</td></tr>
+                    <tr><td><code>post-delete</code></td><td><b>After</b> all release resources have been deleted</td></tr>
+                    <tr><td><code>pre-rollback</code></td><td>After templates are rendered, <b>before</b> any resources are rolled back</td></tr>
+                    <tr><td><code>post-rollback</code></td><td><b>After</b> all resources have been rolled back</td></tr>
+                    <tr><td><code>test</code></td><td>When you run <code>helm test &lt;release&gt;</code></td></tr>
+                </table>
+            </li>
+            <li><code>helm.sh/hook-weight</code> — execution order when multiple hooks share the same event (lower runs first; default <code>"0"</code>);</li>
+            <li><code>helm.sh/hook-delete-policy</code> — when to clean up the hook resource:
+                <table border="1" cellpadding="6" cellspacing="0">
+                    <tr><th>Policy</th><th>Behaviour</th></tr>
+                    <tr><td><code>before-hook-creation</code></td><td>Delete the previous hook resource before creating a new one (recommended)</td></tr>
+                    <tr><td><code>hook-succeeded</code></td><td>Delete the hook resource after it succeeds</td></tr>
+                    <tr><td><code>hook-failed</code></td><td>Delete the hook resource if it fails</td></tr>
+                </table>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Anatomy of a Hook Template</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Every hook in this demo follows the same pattern — a Job that runs busybox and prints a message:
+<pre><code># templates/pre-install-hook.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-pre-install
+  annotations:
+    "helm.sh/hook": pre-install              # ← lifecycle event
+    "helm.sh/hook-weight": "0"               # ← execution order
+    "helm.sh/hook-delete-policy": before-hook-creation  # ← cleanup policy
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pre-install
+          image: busybox
+          command: ["sh", "-c", "echo '>>> PRE-INSTALL hook executed at:' $(date)"]</code></pre>
+            </li>
+            <li>All other hooks are identical except for the <code>helm.sh/hook</code> value and the echo message;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Install — pre-install and post-install</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Install the chart:
+<pre><code>helm install demo ./hook-types-demo</code></pre>
+            </li>
+            <li>Lifecycle order:
+                <ol>
+                    <li>Helm renders all templates;</li>
+                    <li><b>pre-install</b> hook Job is created → Helm waits for it to complete;</li>
+                    <li>All release resources are created (Deployment, Service);</li>
+                    <li><b>post-install</b> hook Job is created → Helm waits for it to complete;</li>
+                    <li><code>helm install</code> returns;</li>
+                </ol>
+            </li>
+            <li>Verify the hooks ran:
+<pre><code># List hook Jobs
+kubectl get jobs
+NAME                  COMPLETIONS   DURATION   AGE
+demo-pre-install      1/1           3s         45s
+demo-post-install     1/1           3s         38s
+
+# Check the pre-install log
+kubectl logs job/demo-pre-install
+>>> PRE-INSTALL hook executed at: Wed Mar 5 10:00:01 UTC 2026
+
+# Check the post-install log
+kubectl logs job/demo-post-install
+>>> POST-INSTALL hook executed at: Wed Mar 5 10:00:08 UTC 2026</code></pre>
+            </li>
+            <li>Notice the timestamps: pre-install ran <b>before</b> the resources were created, post-install ran <b>after</b>;</li>
+            <li>Verify the app resources:
+<pre><code>kubectl get deploy,svc
+NAME                       READY   UP-TO-DATE   AVAILABLE
+deployment.apps/demo-app   1/1     1            1
+
+NAME               TYPE        CLUSTER-IP      PORT(S)
+service/demo-svc   ClusterIP   10.96.123.45    80/TCP</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Upgrade — pre-upgrade and post-upgrade</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Change a value and upgrade:
+<pre><code>helm upgrade demo ./hook-types-demo --set replicaCount=2</code></pre>
+            </li>
+            <li>Lifecycle order:
+                <ol>
+                    <li>Helm renders templates with new values;</li>
+                    <li><b>pre-upgrade</b> hook Job is created → Helm waits;</li>
+                    <li>Release resources are updated (Deployment scaled to 2);</li>
+                    <li><b>post-upgrade</b> hook Job is created → Helm waits;</li>
+                    <li><code>helm upgrade</code> returns;</li>
+                </ol>
+            </li>
+            <li>Verify:
+<pre><code>kubectl get jobs
+NAME                  COMPLETIONS   DURATION   AGE
+demo-pre-install      1/1           3s         5m
+demo-post-install     1/1           3s         5m
+demo-pre-upgrade      1/1           3s         30s
+demo-post-upgrade     1/1           3s         22s
+
+kubectl logs job/demo-pre-upgrade
+>>> PRE-UPGRADE hook executed at: Wed Mar 5 10:05:01 UTC 2026
+
+kubectl logs job/demo-post-upgrade
+>>> POST-UPGRADE hook executed at: Wed Mar 5 10:05:09 UTC 2026
+
+# Confirm the upgrade took effect
+kubectl get deploy demo-app
+NAME       READY   UP-TO-DATE   AVAILABLE
+demo-app   2/2     2            2</code></pre>
+            </li>
+            <li>Only the upgrade hooks ran — install hooks did <b>not</b> re-run;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Rollback — pre-rollback and post-rollback</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Roll back to revision 1 (the original install):
+<pre><code>helm rollback demo 1</code></pre>
+            </li>
+            <li>Lifecycle order:
+                <ol>
+                    <li>Helm renders templates for revision 1;</li>
+                    <li><b>pre-rollback</b> hook Job is created → Helm waits;</li>
+                    <li>Release resources are reverted (Deployment back to 1 replica);</li>
+                    <li><b>post-rollback</b> hook Job is created → Helm waits;</li>
+                    <li><code>helm rollback</code> returns;</li>
+                </ol>
+            </li>
+            <li>Verify:
+<pre><code>kubectl get jobs
+NAME                   COMPLETIONS   DURATION   AGE
+demo-pre-rollback      1/1           3s         25s
+demo-post-rollback     1/1           3s         18s
+
+kubectl logs job/demo-pre-rollback
+>>> PRE-ROLLBACK hook executed at: Wed Mar 5 10:10:01 UTC 2026
+
+kubectl logs job/demo-post-rollback
+>>> POST-ROLLBACK hook executed at: Wed Mar 5 10:10:08 UTC 2026
+
+# Confirm rollback
+kubectl get deploy demo-app
+NAME       READY   UP-TO-DATE   AVAILABLE
+demo-app   1/1     1            1
+
+helm history demo
+REVISION    STATUS        DESCRIPTION
+1           superseded    Install complete
+2           superseded    Upgrade complete
+3           deployed      Rollback to 1</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Test — test hook</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Run the test hook:
+<pre><code>helm test demo</code></pre>
+            </li>
+            <li>Lifecycle: Helm creates the test Pod, waits for it to complete, and reports pass/fail;</li>
+            <li>Verify:
+<pre><code>helm test demo
+NAME: demo
+LAST DEPLOYED: Wed Mar  5 10:10:08 2026
+STATUS: deployed
+TEST SUITE:     demo-test
+Last Started:   Wed Mar  5 10:15:01 2026
+Last Completed: Wed Mar  5 10:15:05 2026
+Phase:          Succeeded
+
+kubectl logs demo-test
+>>> TEST hook executed at: Wed Mar 5 10:15:02 UTC 2026
+Service endpoint:
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+>>> TEST PASSED</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. Uninstall — pre-delete and post-delete</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Uninstall the release:
+<pre><code>helm uninstall demo</code></pre>
+            </li>
+            <li>Lifecycle order:
+                <ol>
+                    <li><b>pre-delete</b> hook Job is created → Helm waits;</li>
+                    <li>All release resources are deleted (Deployment, Service);</li>
+                    <li><b>post-delete</b> hook Job is created → Helm waits;</li>
+                    <li><code>helm uninstall</code> returns;</li>
+                </ol>
+            </li>
+            <li>Verify (must check quickly before Jobs are cleaned up, or use <code>before-hook-creation</code> delete policy so they persist until next run):
+<pre><code># Check the pre-delete log before the Job is gone
+kubectl logs job/demo-pre-delete
+>>> PRE-DELETE hook executed at: Wed Mar 5 10:20:01 UTC 2026
+
+kubectl logs job/demo-post-delete
+>>> POST-DELETE hook executed at: Wed Mar 5 10:20:06 UTC 2026
+
+# Confirm everything is gone
+kubectl get deploy,svc | grep demo
+# (no output)
+
+helm list
+# (no output)</code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Complete Lifecycle Summary</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0" width="100%">
+            <tr>
+                <th>Command</th>
+                <th>Hooks Executed (in order)</th>
+                <th>What Happens Between Hooks</th>
+            </tr>
+            <tr>
+                <td><code>helm install</code></td>
+                <td><code>pre-install</code> → <code>post-install</code></td>
+                <td>All chart resources are <b>created</b></td>
+            </tr>
+            <tr>
+                <td><code>helm upgrade</code></td>
+                <td><code>pre-upgrade</code> → <code>post-upgrade</code></td>
+                <td>Chart resources are <b>updated</b></td>
+            </tr>
+            <tr>
+                <td><code>helm rollback</code></td>
+                <td><code>pre-rollback</code> → <code>post-rollback</code></td>
+                <td>Chart resources are <b>reverted</b> to the target revision</td>
+            </tr>
+            <tr>
+                <td><code>helm test</code></td>
+                <td><code>test</code></td>
+                <td>Nothing — test just validates the running release</td>
+            </tr>
+            <tr>
+                <td><code>helm uninstall</code></td>
+                <td><code>pre-delete</code> → <code>post-delete</code></td>
+                <td>All chart resources are <b>deleted</b></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="question"><strong>11. Hook Weights — Controlling Execution Order</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When multiple hooks share the same event, <code>helm.sh/hook-weight</code> determines the order (ascending, lowest first):
+<pre><code># Runs first (weight -5)
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-5"
+
+# Runs second (weight 0)
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
+
+# Runs third (weight 10)
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "10"</code></pre>
+            </li>
+            <li>Use case: run DB migration (<code>weight: -5</code>) before cache warming (<code>weight: 5</code>), both as pre-upgrade hooks;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>12. Hook Delete Policies</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Controls when Helm cleans up the hook resource:
+                <table border="1" cellpadding="6" cellspacing="0">
+                    <tr><th>Policy</th><th>When Deleted</th><th>Best For</th></tr>
+                    <tr>
+                        <td><code>before-hook-creation</code></td>
+                        <td>Old hook is deleted just before the new one is created</td>
+                        <td>Most hooks — ensures a clean slate on each run</td>
+                    </tr>
+                    <tr>
+                        <td><code>hook-succeeded</code></td>
+                        <td>Deleted immediately after the hook succeeds</td>
+                        <td>When you don't want completed Jobs lingering</td>
+                    </tr>
+                    <tr>
+                        <td><code>hook-failed</code></td>
+                        <td>Deleted if the hook fails (keeps it on success for debugging)</td>
+                        <td>Rarely used alone</td>
+                    </tr>
+                </table>
+            </li>
+            <li>You can combine policies:
+<pre><code>annotations:
+  "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"</code></pre>
+            </li>
+            <li>If no delete policy is set, hook resources are <b>never</b> automatically deleted — they accumulate;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>13. Multiple Hooks on a Single Resource</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A single resource can respond to multiple lifecycle events by listing them comma-separated:
+<pre><code>annotations:
+  "helm.sh/hook": "pre-install,pre-upgrade"</code></pre>
+            </li>
+            <li>This Job runs before both install and upgrade — useful for DB migrations that should run on every deploy;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>14. Practical Use Cases</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>pre-install / pre-upgrade:</b> Database migration, schema validation, dependency checks;</li>
+            <li><b>post-install:</b> Seed initial data, send deployment notification, register with service mesh;</li>
+            <li><b>post-upgrade:</b> Warm caches, notify monitoring, run smoke tests;</li>
+            <li><b>pre-delete:</b> Backup database, deregister from load balancer, drain connections;</li>
+            <li><b>post-delete:</b> Clean up external resources (DNS records, cloud storage), send notification;</li>
+            <li><b>pre-rollback:</b> Backup current state before reverting;</li>
+            <li><b>post-rollback:</b> Invalidate caches, notify team;</li>
+            <li><b>test:</b> Verify HTTP endpoints, check database connectivity, validate configuration;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-post-rollback
+  annotations:
+    "helm.sh/hook": post-rollback
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: post-rollback
+          image: busybox
+          command: ["sh", "-c", "echo '>>> POST-ROLLBACK hook executed at:' $(date)"]
