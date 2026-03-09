@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tips to Debug a Failed Deployment</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Tips to Debug a Failed Deployment</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Hook?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Check the release status: <code>helm status &lt;release-name&gt;</code></li>
+            <li>List all resources created by the release: <code>kubectl get all -l app.kubernetes.io/instance=<release-name> </release-name></code><code>helm get manifest &lt;release-name&gt;</code></li>
+            <li>Get all pods created by the release: <code>kubectl get pods -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get container logs: <code>kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt;</code></li>
+            <li>Inspect failed jobs: <code>kubectl get jobs </code></li>
+            <li>Check failed hooks: <code>kubectl get jobs -l 'helm.sh/hook-succeeded=false' </code></li>
+            <li>Get failed hooks logs: <code>kubectl logs &lt;job-name&gt; -c &lt;container-name&gt;</code></li>
+            <li>Get all events(Events often reveal the root cause of the failure): <code>kubectl get events --sort-by=.lastTimestamp</code></li>
+            <li>Get all services created by the release: <code>kubectl get services -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all deployments created by the release: <code>kubectl get deployments -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all statefulsets created by the release: <code>kubectl get statefulsets -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all configmaps created by the release: <code>kubectl get configmaps -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all secrets created by the release: <code>kubectl get secrets -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all volumes created by the release: <code>kubectl get volumes -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all nodes created by the release: <code>kubectl get nodes -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            <li>Get all namespaces created by the release: <code>kubectl get namespaces -l app.kubernetes.io/instance=<release-name> </release-name></code></li>
+            pull image from registry: <code>helm pull oci://registry.example.com/charts/mychart</code>, docker pull nginx:latest
+            <li>Check the events</li>
+            <li>Check the logs</li>
+            <li>Check the resources</li>
+            <li>Check the pods</li>
+            <li>Check the services</li>
+            <li>Check the deployments</li>
+            <li>Check the statefulsets</li>
+            <li>Check the configmaps</li>
+            <li>Check the secrets</li>
+            <li>Check the volumes</li>
+            <li>Check the nodes</li>
+            <li>Check the namespaces</li>
+            <li>Check the roles</li>
+            <li>Check the rolebindings</li>
+            <li>Hooks are used to run a script/command/job at specific points in the release lifecycle(before/after installation/upgrade/deletion/rollback);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Common Reasons for Failed Deployment</strong></div>
+    <div class="answer">
+        <ul>
+            | Issue            | Symptom                  |
+            | ---------------- | ------------------------ |
+            | Invalid template | Helm install fails       |
+            | Missing values   | Template rendering error |
+            | Image pull error | `ImagePullBackOff`       |
+            | Bad probes       | `CrashLoopBackOff`       |
+            | Hook job failure | install stuck            |
+            | RBAC issues      | permission denied        |
+
+            <ul>
+                <li>
+                    <ul>
+                        <li><b><code>ErrImagePull</code></b> → first pull attempt failed</li>
+                        <li><b><code></code>ImagePullBackOff</code></b> → Kubernetes is retrying with exponential delay</li>
+                        <li>Both indicate they can't pull the image from the registry and k8s is backing off(waiting before retrying);</li>
+                        <li>Common causes:
+                            <ul>
+                                <li>Wrong image name or tag</li>
+                                <li>Image doesn't exist in the registry</li>
+                                <li>Private registry without credentials - helm registry login registry-1.docker.io</li>
+                                <li>Network issues</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <ul>
+                        <li><b><code>CrashLoopBackOff</code></b> → Pod is restarting continuously due to application crashes</li>
+                        <li>Common causes:
+                            <ul>
+                                <li>Application code is buggy</li>
+                                <li>Configuration issues</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><b><code></code>manifest unknown</code></b> → Wrong tag
+                    <ul>
+                        <li><b><code>toomanyrequests</code></b> → Pull rate limit</li>
+                        <li>Pull rate limit is a common issue when pulling images from a registry;</li>
+                        <li>You can try again later or use a different registry(use a different registry like quay.io);</li>
+                    </ul>
+                <li>
+                    manifest unknown	Wrong tag
+toomanyrequests	Pull rate limit
+                </li>
+            </ul>
+
+        </ul>
+    </div>
+'helm pull oci://registry.example.com/charts/mychart
+helm install my-release oci://registry.example.com/charts/mychart
+
+
+    <div class="question"><strong>3. Remove a failed deployment</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Uninstall the release: <code>helm uninstall my-release -n my-namespace</code></li>
+            <li>Verify the release is removed: <code>helm list -A -n my-namespace</code></li>
+            <li>Sometimes, resources remain after uninstall, due to:
+                <ul>
+                    <li>helm.sh/resource-policy: keep</li>
+                    <li>Failed hooks</li>
+                    <li>Manual resources</li>
+                </ul>
+            <li>Get all resources created by the release: <code>kubectl get all -l app.kubernetes.io/instance=my-release</code></li>
+            <li>Delete the resources: <code>kubectl delete all -l app.kubernetes.io/instance=my-release -n my-namespace</code></li>
+            <li>Remove failed hook jobs: kubectl get jobs, <code>kubectl delete jobs -l 'helm.sh/hook-succeeded=false' -n my-namespace</code></li>
+        </ul>
+    </div>
+
+    
+</body>

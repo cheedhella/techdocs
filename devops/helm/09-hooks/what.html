@@ -13,7 +13,6 @@
     <div class="answer">
         <ul>
             <li>Hooks are used to run a script/command/job at specific points in the release lifecycle(before/after installation/upgrade/deletion/rollback);</li>
-            <li>Hook is nothing but an annotation added to any k8s object;</li>
         </ul>
     </div>
 
@@ -32,7 +31,84 @@
         </ul>
     </div>
 
-    <div class="question"><strong>3. Hook Types</strong></div>
+    <div class="question"><strong>3. What makes a Hook different from a regular template?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A template becomes a hook, when you add 'helm.sh/hook' annotation to it, which tells Helm to run that resource at a particular point in the release lifecycle (instead of as a normal resource);</li>
+            <li>Eg:<pre><code>apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"</code></pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Hook Annotations</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>helm.sh/hook</b>
+                <ul>
+                    <li>It specifies the type of hook to run(pre-install, post-install etc);</li>
+                    <li>In other words, it specifies the point in the release lifecycle at which the resource should be run;</li>
+                </ul>
+            </li>
+            <li><b>helm.sh/hook-weight</b>
+                <ul>
+                    <li>It controls the order in which the hooks are executed;</li>
+                    <li>Default weight is 0; lower weights run first; Negative weights are allowed;</li>
+                </ul>
+            </li>
+            <li><b>helm.sh/resource-policy</b>
+                <ul>
+                    <li>It is for normal resources, not for hook resources;</li>
+                    <li>By default, helm deletes all normal resources, when the release is removed;</li>
+                    <li>It can be one of the following values:
+                        <ul>
+                            <li><b>keep</b>: It prevents helm from deleting a resouce(normal or hook resource);</li>
+                        </ul>
+                    </li>
+                    <li>Eg:
+    <pre><code>apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: my-data
+      annotations:
+        "helm.sh/resource-policy": keep
+    
+    When the release is removed, the PVC will not be deleted. If needed, you can manually delete the PVC;
+    </code></pre>
+                    </li>
+                    <li>It is useful for:
+                        <ul>
+                            <li>Persistent volumes</li>
+                            <li>Databases</li>
+                            <li>Shared secrets</b></li>
+                            <li>Manually managed resources</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>helm.sh/hook-delete-policy</b>
+                <ul>
+                    <li>It is for hook resources, not for normal resources;</li>
+                    <li>It specifies the policy to use when deleting the hook;</li>
+                    <li>It can be one of the following values:
+                        <ul>
+                            <li><b>before-hook-creation</b>: Delete the previous hook resource before creating a new one (recommended);</li>
+                            <li><b>hook-succeeded</b> -> Delete the hook resource after it succeeds;</li>
+                            <li><b>hook-failed</b> -> Delete the hook resource if it fails;</li>
+                        </ul>
+                    </li>
+                    <li>You can specify multiple policies, separated by commas;</li>
+                    <li>If no delete policy is set, hook resources are <b>never</b> automatically deleted — they accumulate;</li>
+                    <li>Without hook-delete-policy, repeated installs/upgrades can create many leftover hook jobs;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Hook Types</strong></div>
     <div class="answer">
         <ul>
             <li>pre-install: Executes after templates are rendered, but before any resources are created in Kubernetes</li>
@@ -50,7 +126,7 @@
         </ul>
     </div>
 
-    <div class="question"><strong>4. Release Lifecycle with Hooks</strong></div>
+    <div class="question"><strong>6. Release Lifecycle with Hooks</strong></div>
     <div class="answer">
         <ul>
             <li>Install Lifecycle: 
@@ -87,6 +163,8 @@
             </li>
         </ul>
     </div>
+
+
 
     <div class="question"><strong>5. Demo</strong></div>
     <div class="answer">
