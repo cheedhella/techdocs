@@ -1,29 +1,3 @@
-What is K8s? // Pronounced as Koo-Ber-Net-ees;
-	It is an open-source container orchestration platform;
-
-What is Container Orchestration?
-	It is all about managing the lifecycle of containers;
-		- Deployment
-		- Rolling out new version of the apps and configuration without downtime; If something goes wrong, it can rollback the change for you; 
-		- Load balancing - distributing the load between containers;
-		- Scaling up/down by adding/removing containers when demand changes;
-		- Health monitoring and Auto healing - Move the containers from one host to another, if the host dies or there is shortage of resources in it;
-		- Storage, Networking, Service Discovery;
-		- Monitoring, Logging, Debugging;
-		- Apps build to work with k8s can be easily moved from one IaaS to another, without any changes to app source code;
-		  Apps are deployed on K8s cluster and K8s cluster is deployed in IaaS;
-
-Why K8s?
-	Check '01. Why K8s.png';
-
-	It has already been stated that Kubernetes can abstract lower-level on-prem and cloud infrastructure, allowing you to write your applications to run on Kubernetes without even knowing which cloud is behind it. Well, this has a few side benefits, including:
-	You can deploy to one cloud today and switch to another tomorrow.
-	You can run multi-cloud
-	You can ramp onto a cloud and then ramp off back to on-prem more easily.
-	Basically, applications written for Kubernetes will run anywhere that you have Kubernetes.
-
-	containerization -> application to docker image;
-	resulting application is called a containerized application
 
 What is K8s Cluster?
 	Cluster is nothing but a set of nodes;

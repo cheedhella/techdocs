@@ -1,0 +1,23 @@
+Probe 
+    - Probe is a periodic check to determine the health of a Pod;
+    - There are 3 types of probes: Startup, Liveness, Readiness;
+    - 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Restart Policy 
+    - Pods managed via Deployments, DaemonSets, and StatefulSets only support a restart policy of Always;
+    - Sidecar containers, like logging and observability services, will always restart by default;
+
+    Always      -> default; 
+    OnFailure   -> kubelet restarts the Pod, after a failed probe;
+    Never       -> It leaves the container in failed state;
+
+    Setting the restart policy to Always doesn’t mean Kubernetes will keep trying to restart a failed Pod perpetually;
+    Instead, it uses an exponential back-off delay that starts at 10 seconds and goes up to five minutes;
+    In other words, let’s say you have a Pod with a critical error that prevents it from completing its startup process;
+    Kubernetes will try to start it, see that it failed, wait 10 seconds, then restart it; 
+    The next time it fails, Kubernetes will wait 20 seconds, then 40 seconds, then 1 minute 20 seconds, etc, all the way up to five minutes;
+    After this point, if the container still fails to start, Kubernetes will no longer try to start it. 
+    But if Kubernetes does manage to get the container running, this timer will reset after 10 minutes of continuous runtime;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://www.gremlin.com/blog/how-to-ensure-your-kubernetes-pods-and-containers-can-restart-automatically

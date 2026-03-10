@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Resource Requests and Limits</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Resource Requests and Limits</h2>
+    </div>
+
+    <div class="question"><strong>1. Requests vs Limits</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Request:</strong> The <strong>minimum</strong> amount of CPU/memory guaranteed to the container. Used by the scheduler to decide which node to place the Pod on;</li>
+            <li><strong>Limit:</strong> The <strong>maximum</strong> amount of CPU/memory the container can use. If exceeded, the container is throttled (CPU) or killed (memory);</li>
+        </ul>
+    </div>
+    Controls security settings.
+
+    Examples:
+    
+    runAsUser
+    
+    runAsGroup
+    
+    readOnlyRootFilesystem
+    
+    privileged containers
+    
+    Also learn:
+    
+    Pod Security Standards
+    
+    RBAC
+    
+</body>
+
+</html>

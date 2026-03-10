@@ -1,13 +1,121 @@
-What is Image?
-	It is a package which contains everything(OS, dependant libraries, code etc) to run an application;
 
-What is Container?
-	Container is an instance of image;
-	Containers are stateless and immutable - it makes containers reliable, scalable, easier to manage;
-		immutable - You can't make any changes to a running container; If you need a change, create new image and redeploy it;
-		stateless - All the state should be stored externally(in a volume or database), so that if a container crashes or restarts, it don't lose any data; It makes containers replacable and scalable;
+            <li>Pods are <strong>ephemeral</strong> — they can be created, destroyed, and replaced at any time;</li>
+            Ephemeral = short-lived and replaceable.
+            Pods can be terminated anytime
+            When they fail, Kubernetes deletes the old Pod and creates new Pods instead of fixing the old ones
 
-What is Pod?
+            Every new Pod gets:
+
+a new UID
+
+often a new IP address
+
+a new container instance
+
+
+Local Data Inside Pods Is Lost
+
+Because Pods are ephemeral:
+
+Any data stored inside the container filesystem is lost when the Pod dies.
+That’s why Kubernetes uses volumes or persistent storage.
+
+
+Pods Can Be Recreated for Many Reasons
+
+Pods may disappear or be recreated when:
+
+Node crashes
+
+Application crashes
+
+Scaling happens
+
+Rolling updates occur
+
+Cluster upgrades happen
+
+Manual deletion
+
+
+
+
+Why Kubernetes Uses Ephemeral Pods
+
+This design provides:
+
+Reliability
+
+Broken Pods are replaced automatically.
+
+Scalability
+
+Pods can be created or destroyed quickly.
+
+Upgrades
+
+Applications can be updated without downtime.
+
+Self-healing
+
+Cluster recovers automatically.
+
+
+
+Think of Pods like temporary workers:
+
+Worker leaves → new worker replaces them
+
+The job continues, even though the worker changed.
+        </ul>
+    </div>
+
+
+
+
+
+
+    <div class="question"><strong>2. Pod YAML Manifest</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: main
+      image: nginx:1.25
+      ports:
+        - containerPort: 80</code></pre>
+    </div>
+
+
+
+    <div class="question"><strong>4. Pod Commands</strong></div>
+    <div class="answer">
+        <pre><code># Create a pod imperatively
+kubectl run nginx --image=nginx
+
+# Create from YAML
+kubectl apply -f pod.yaml
+
+# List pods
+kubectl get pods
+kubectl get pods -o wide
+
+# View pod details
+kubectl describe pod my-pod
+
+# Delete a pod
+kubectl delete pod my-pod</code></pre>
+    </div>
+
+
+
+
+    What is Pod?
 	It is a group of Containers deployed on the same host/VM;
 	All containers in a Pod share the network space(IP addresses), port space, CPU, memory, storage(volumes) and secrets, lifecycle;
 	Pod is the atomic unit of replication in K8s (When a Pod is scaled up/down, a pod is added/removed - as opposed to containers);

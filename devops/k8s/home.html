@@ -15,41 +15,20 @@
             <h3>Table of Contents</h3>
             
             <ul>
-                <li><strong>1️⃣ Introduction to Kubernetes</strong>
+                <li><strong>1️⃣ Introduction</strong>
                     <ul>
-                        <li><a href="./01-introduction/what-is-kubernetes.html">1.1 What is Kubernetes?</a></li>
-                        <li><a href="./01-introduction/why-kubernetes.html">1.2 Why Kubernetes? (Problems It Solves)</a></li>
-                        <li><a href="./01-introduction/kubernetes-vs-docker.html">1.3 Kubernetes vs Docker / Docker Swarm</a></li>
-                        <li><a href="./01-introduction/key-concepts.html">1.4 Key Concepts and Terminology</a></li>
-                        <li><a href="./01-introduction/installing-kubernetes.html">1.5 Installing Kubernetes (Minikube, kubeadm, Kind)</a></li>
+                        <li><a href="./01-introduction/what.html">1.1 What is K8s?</a></li>
+                        <li><a href="./01-introduction/new-terms.html">1.2 New Terms</a></li>
+                        <li><a href="./01-introduction/architecture.html">1.3 Architecture</a></li>
+                        <li><a href="./01-introduction/kubectl.html">1.4 kubectl</a></li>
+                        <li><a href="./01-introduction/kubeconfig.html">1.5 kubeconfig</a></li>
                     </ul>
                 </li>
 
-                <li><strong>2️⃣ Cluster Architecture</strong>
+                <li><strong>2️⃣ Pods</strong>
                     <ul>
-                        <li><a href="./02-architecture/cluster-overview.html">2.1 Cluster Architecture Overview</a></li>
-                        <li><a href="./02-architecture/control-plane.html">2.2 Control Plane Components (API Server, etcd, Scheduler, Controller Manager)</a></li>
-                        <li><a href="./02-architecture/worker-nodes.html">2.3 Worker Node Components (kubelet, kube-proxy, Container Runtime)</a></li>
-                        <li><a href="./02-architecture/nodes.html">2.4 Nodes (Master vs Worker)</a></li>
-                        <li><a href="./02-architecture/api-server.html">2.5 Kubernetes API and API Server</a></li>
-                        <li><a href="./02-architecture/etcd.html">2.6 etcd — The Cluster Data Store</a></li>
-                    </ul>
-                </li>
-
-                <li><strong>3️⃣ kubectl — The CLI Tool</strong>
-                    <ul>
-                        <li><a href="./03-kubectl/what-is-kubectl.html">3.1 What is kubectl?</a></li>
-                        <li><a href="./03-kubectl/kubeconfig.html">3.2 kubeconfig and Context Management</a></li>
-                        <li><a href="./03-kubectl/imperative-vs-declarative.html">3.3 Imperative vs Declarative Approach</a></li>
-                        <li><a href="./03-kubectl/common-commands.html">3.4 Common Commands (get, describe, apply, delete, logs, exec)</a></li>
-                        <li><a href="./03-kubectl/output-formats.html">3.5 Output Formats and Filtering (JSONPath, custom-columns)</a></li>
-                    </ul>
-                </li>
-
-                <li><strong>4️⃣ Pods</strong>
-                    <ul>
-                        <li><a href="./04-pods/what-is-a-pod.html">4.1 What is a Pod?</a></li>
-                        <li><a href="./04-pods/pod-lifecycle.html">4.2 Pod Lifecycle and Phases</a></li>
+                        <li><a href="./04-pods/what.html">4.1 What is a Pod?</a></li>
+                        <li><a href="./04-pods/lifecycle.html">4.2 Pod Lifecycle and Phases</a></li>
                         <li><a href="./04-pods/multi-container-pods.html">4.3 Multi-Container Pods (Sidecar, Init, Ambassador, Adapter)</a></li>
                         <li><a href="./04-pods/init-containers.html">4.4 Init Containers</a></li>
                         <li><a href="./04-pods/probes.html">4.5 Health Checks — Liveness, Readiness, and Startup Probes</a></li>
@@ -160,6 +139,40 @@
             </ul>
         </div>
         
+        Containers & images
+
+Pod basics
+
+Pod YAML
+
+Pod lifecycle
+
+Pod networking
+
+Volumes
+
+ConfigMaps & Secrets
+
+Probes
+
+Resource limits
+
+Scheduling
+
+Multi-container Pods
+
+Init containers
+
+Controllers (Deployments etc.)
+
+Services
+
+Security context
+
+Debugging Pods
+
+Advanced topics
+
         <script src="../../resources/js/codeblock.js"></script>
     </body>
 </html>

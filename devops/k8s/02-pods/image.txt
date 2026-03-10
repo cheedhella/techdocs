@@ -1,0 +1,155 @@
+Docker Image vs OCI Image
+
+Docker originally defined the container image format.
+
+Later the industry created Open Container Initiative.
+
+OCI standardized:
+
+Image format
+
+Runtime format
+
+So today:
+
+Docker images follow OCI image spec
+
+Most tools support OCI images
+
+Tools supporting OCI images:
+
+Docker
+
+containerd
+
+Podman
+
+CRI-O
+
+Kubernetes
+
+3. Structure of an OCI Image
+4
+
+An OCI image is made of layers stacked together.
+
+Example layers:
+
+Layer 1 → Ubuntu base OS
+Layer 2 → Install Python
+Layer 3 → Install dependencies
+Layer 4 → Add application code
+Layer 5 → Startup command
+
+Advantages:
+
+Layer caching
+
+Smaller downloads
+
+Faster builds
+
+If only layer 4 changes, layers 1–3 are reused.
+
+4. OCI Image Components
+
+An OCI image contains:
+
+Filesystem Layers
+
+Actual files of the container
+
+Image Manifest
+
+Lists layers and metadata
+
+Config
+
+Environment variables
+
+Entrypoint
+
+Command
+
+Image Digest
+
+Cryptographic hash for verification
+
+5. How Images Are Built
+
+Images are built using a Dockerfile.
+
+Example:
+
+FROM node:18
+
+WORKDIR /app
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+CMD ["node", "app.js"]
+
+Build image:
+
+docker build -t myapp:1.0 .
+6. Where Images Are Stored
+
+Images are stored in container registries.
+
+Examples:
+
+Docker Hub
+
+Amazon Elastic Container Registry
+
+Google Artifact Registry
+
+GitHub Container Registry
+
+7. How Kubernetes Uses OCI Images
+
+In Kubernetes:
+
+Pod spec references an image:
+
+containers:
+- name: app
+  image: nginx:latest
+
+Kubernetes asks the container runtime (containerd/CRI-O):
+
+Pull the OCI image
+
+Create container from it
+
+Run inside a Pod
+
+8. Key Properties of OCI Images
+
+Immutable (cannot change after build)
+
+Layered filesystem
+
+Portable across platforms
+
+Versioned with tags and digests
+
+Standardized by OCI
+
+✅ Interview one-liner
+
+A Docker/OCI image is a read-only, layered filesystem package containing an application and its dependencies, used to create containers and standardized by the Open Container Initiative.
+
+If you're learning Kubernetes / platform engineering, the next concepts that connect to this are:
+
+Image layers & caching
+
+Multi-stage builds
+
+Distroless images
+
+Image registries & pulling
+
+Container runtime (containerd)

@@ -1,3 +1,11 @@
+- Scheduling 
+            -- You can schedule/create the Pods on most appropriate nodes in a automated way;
+            For eg, if a pod requires 2GB of memory, K8s will filter out all nodes that have less than 2GB of memory;
+            scheduling refers to making sure that Pods are matched to Nodes so that Kubelet can run them.
+            Scheduling -> https://romanglushach.medium.com/kubernetes-scheduling-understanding-the-math-behind-the-magic-2305b57d45b1
+
+
+
 "Dhttps://enterprisersproject.com/article/2021/3/kubernetes-autoscaling-explanation
 
 https://awkwardferny.medium.com/getting-started-with-kubernetes-ingress-nginx-on-minikube-d75e58f52b6c

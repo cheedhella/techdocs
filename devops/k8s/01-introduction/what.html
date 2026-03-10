@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is Kubernetes?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>What is Kubernetes?</h2>
+    </div>
+
+    <div class="question"><strong>1. What is K8s(Pronounced as Koo-Ber-Net-ees)?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a container orchestration platform;</li>
+            <li>It manages the lifecycle of containers(deploy, scale, monitor) across a Cluster of machines;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why K8s?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Before K8s, running applications at scale was hard;</li>
+            <li>K8s is used to:
+                <ul>
+                    <li><b>Automated Deployment</b>
+                        <ul>
+                            <li>Declare the desired state and K8s takes care of the rest;</li>
+                        </ul>
+                    </li>
+                    <li><b>Self-Healing</b>
+                        <ul>
+                            <li>If application crashes, K8s automatically restart it;</li>
+                            <li>If the node crashes, K8s automatically reschedules the application on healthy node;</li>
+                            <li>Move the containers from one host to another, if the host dies or there is shortage of resources in it;</li>
+                        </ul>
+                    </li>
+                    <li><b>Horizontal Scaling</b>
+                        <ul>
+                            <li>If traffic increases, K8s automatically creates more containers to handle the load(Scaling Up);</li>
+                            <li>If traffic decreases, K8s automatically removes containers to save resources(Scaling Down);</li>
+                        </ul>
+                    </li>
+                    <li><b>Zero-Downtime Upgrades</b>
+                        <ul>
+                            <li>Rolling updates and rollbacks</li>
+                            <li>By gradually replacing old replicas with new ones, it ensures that the application remains available throughout the update process;</li>
+                            <li>If new version of the application is released, k8s can update your application without downtime;</li>
+                            <li>If something goes wrong, k8s can rollback to the previous version;</li>
+                        </ul>
+                    </li>
+                    <li><b>Resource Efficiency</b>
+                        <ul>
+                            <li>K8s bin-packs containers onto nodes to make the most of available hardware;</li>
+                        </ul>
+                    </li>
+                    <li>Managing the communication b/w applications;</li>
+                    <li>The best part is, it does all of this, without our involvement;</li>
+                    <li>Apps build to work with k8s can be easily moved from one IaaS to another, without any changes to app source code;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. K8s at a High Level</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You package your application into a <strong>container image</strong> (e.g., Docker image);</li>
+            <li>You describe how to run it in a <strong>YAML manifest</strong> (Deployment, Service, etc.);</li>
+            <li>You submit the manifest to the <strong>Kubernetes API Server</strong>;</li>
+            <li>Kubernetes schedules containers onto available <strong>worker nodes</strong> in the cluster;</li>
+            <li>Kubernetes continuously monitors and maintains the <strong>desired state</strong>;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

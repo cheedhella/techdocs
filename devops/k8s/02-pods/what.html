@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pod</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Pod</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Pod?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pod is a group of Containers deployed on the same host/VM;</li>
+            <li>It is the <strong>smallest deployable unit</strong> in k8s — not a container;</li>
+            <li>You can't create a container, without creating a Pod;</li>
+            <li>You almost never create Pods directly — Instead, use Deployment, StatefulSet etc;</li>
+            <li>Each Pod is assigned a unique IP address; All containers running inside that pod share that IP address, thus they need to be run on different ports;</li>
+            <li>A container can communicate with another container in the same pod, using localhost;</li>
+            <li>A container can communicate with another container in a different pod in the same Node, using IP address;</li>
+            <li>A container can communicate with another container in a different pod in a different Node but same cluster, How?;</li>
+            <li>All containers in a Pod share the port space(So, they need to be run on different ports), CPU/Memory/Storage(you can define limits at container level)
+                <ul>
+                    <li>Port space: All containers in a Pod share the same port space; So, they need to be run on different ports;</li>
+                    <li>CPU/Memory/Storage: You can define limits at container level;</li>
+                    <li>Environment variables, ConfigMap and Secrets: Environment variables, Secrets and ConfigMaps mounted into a Pod are accessible to all containers;</li>
+                    <li>Lifecycle: All containers in a Pod share the same lifecycle; They are scheduled together(on same node), started together, stopped together;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+
+    1. Pod Fundamentals
+
+Start with the basics of what a Pod is and why it exists.
+
+What a Pod is (smallest deployable unit in Kubernetes)
+
+Relationship between Pod and containers
+
+Single-container vs multi-container Pods
+
+Pod lifecycle
+
+Why Pods are ephemeral
+
+Difference between Pods and nodes
+
+2. Pod Specification (PodSpec)
+
+Understanding the YAML structure that defines a Pod.
+
+Key fields to learn:
+
+apiVersion
+
+kind
+
+metadata
+
+spec
+
+containers
+
+initContainers
+
+restartPolicy
+
+imagePullPolicy
+
+serviceAccountName
+
+Important container fields:
+
+image
+
+command vs args
+
+ports
+
+env / envFrom
+
+resources
+
+3. Multi-Container Pod Patterns
+
+Why multiple containers might share one Pod.
+
+Common patterns:
+
+Sidecar container
+
+Adapter container
+
+Ambassador container
+
+Important concept:
+
+Containers share the same network namespace
+
+Containers can share volumes
+
+4. Pod Networking
+
+Pods have a unique networking model.
+
+Topics:
+
+Pod IP
+
+Pod-to-Pod communication
+
+Containers share localhost
+
+Cluster networking model
+
+Interaction with Kubernetes Service objects
+
+5. Pod Storage
+
+How Pods store and share data.
+
+Concepts:
+
+Volumes
+
+emptyDir
+
+hostPath
+
+Persistent Volumes
+
+Persistent Volume Claims
+
+Storage sharing between containers in a Pod.
+
+6. Pod Lifecycle & Status
+
+Understanding how Pods transition through states.
+
+Phases:
+
+Pending
+
+Running
+
+Succeeded
+
+Failed
+
+Unknown
+
+Related concepts:
+
+Container states
+
+CrashLoopBackOff
+
+Restart policies
+
+7. Init Containers
+
+Containers that run before the main containers.
+
+Concepts:
+
+Sequential execution
+
+Setup / bootstrap tasks
+
+Configuration preparation
+
+Dependency checks
+
+8. Probes (Health Checking)
+
+How Kubernetes determines container health.
+
+Types:
+
+Liveness Probe
+
+Readiness Probe
+
+Startup Probe
+
+Probe methods:
+
+HTTP
+
+TCP
+
+Command (exec)
+
+9. Resource Management
+
+Controlling CPU and memory usage.
+
+Concepts:
+
+requests
+
+limits
+
+QoS classes (Guaranteed, Burstable, BestEffort)
+
+Resource throttling
+
+OOMKilled
+
+10. Pod Scheduling
+
+How Pods get placed on nodes.
+
+Topics:
+
+Scheduler
+
+nodeSelector
+
+Node affinity
+
+Pod affinity / anti-affinity
+
+Taints and tolerations
+
+Topology spread constraints
+
+11. Pod Security
+
+Security controls around Pods.
+
+Concepts:
+
+Security Context
+
+runAsUser
+
+fsGroup
+
+privileged
+
+capabilities
+
+Pod Security Standards
+
+12. Pod Controllers (How Pods Are Managed)
+
+Pods are rarely created directly.
+
+Controllers that manage Pods:
+
+Kubernetes Deployment
+
+Kubernetes ReplicaSet
+
+Kubernetes StatefulSet
+
+Kubernetes DaemonSet
+
+Kubernetes Job
+
+Concepts:
+
+Desired state
+
+Replica management
+
+Rolling updates
+
+13. Pod Disruptions & Availability
+
+How Kubernetes handles Pod failures.
+
+Topics:
+
+PodDisruptionBudget
+
+Evictions
+
+Node failures
+
+Graceful termination
+
+14. Pod Debugging & Operations
+
+Essential operational skills.
+
+Commands:
+
+kubectl get pods
+
+kubectl describe pod
+
+kubectl logs
+
+kubectl exec
+
+kubectl port-forward
+
+Debugging concepts:
+
+Events
+
+Container logs
+
+Ephemeral containers
+
+💡 Recommended learning order
+
+Pod basics
+
+Pod YAML spec
+
+Containers in Pods
+
+Networking
+
+Storage/Volumes
+
+Lifecycle
+
+Probes
+
+Scheduling
+
+Resources
+
+Security
+
+Controllers
+        
+</body>
+
+</html>

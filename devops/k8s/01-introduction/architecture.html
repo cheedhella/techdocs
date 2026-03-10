@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Architecture</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Architecture</h2>
+    </div>
+
+    <div class="question"><strong>1. Cluster</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A cluster is a set of nodes (machines) working together;</li>
+            <li>If one node fails, others take over the workload – ensuring high availability (HA);</li>
+            <li>When all nodes are operational, load balancing distributes the workload evenly;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Master</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Who is responsible for managing cluster?</li>
+            <li>It stores the information about members of the cluster;</li>
+            <li>It monitors the nodes; When a node fails, it moves the workload of the failed node to another worker node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Master or Control Plane Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li>etcd -> Distributed Database
+                <ul>
+                    <li>It is a distributed database, which stores desired state(how many deployments/replicasets/pods/services to create etc) of the cluster;</li>
+                    <li>Only API server can access it, for security reasons;</li>
+                </ul>
+            </li>
+            <li>kube-apiserver -> API Server
+                <ul>
+                    <li>API Management
+                        <ul>
+                            <li>It exposes API to the cluster objects and servers as frontend/interface to the cluster;</li>
+                            <li>All kubectl commands that we run on the host machines interact with it using REST API; However, internal cluster components(like scheduler, controller) talk to the API server using gRPC;</li>
+                            <li>It takes each incoming request in the form of JSON manifest file, validates it and executes the bound business logic;</li>
+                        </ul>
+                    </li>
+                    <li>Authentication (Using client certificates, bearer tokens, and HTTP Basic Authentication) and Authorization (ABAC and RBAC evaluation);
+                        <ul>
+                            <li>All clients should be authenticated with API Server in order to interact with it;</li>
+                            <li>Authentication (Using client certificates, bearer tokens, and HTTP Basic Authentication);</li>
+                            <li>Authorization (ABAC and RBAC evaluation);</li>
+                        </ul>
+                    </li>
+                    <li>Custom APIs
+                        <ul>
+                            <li>It allows you to extend existing API, to create custom APIs;</li>
+                        </ul>
+                    </li>
+                    <li>The only component that API server initiates a connection to is etcd, while all other components connect to the API server;</li>
+                    <li>API server supports watching resources for changes;
+                        <ul>
+                            <li>For eg, clients can establish a watch on specific resources and receive real-time notifications when those resources are created, modified, or deleted;</li>
+                        </ul>
+                    </li>
+                    <li>Other components(kubelet, scheduler, controllers) independently watches the API server to figure out what it needs to do;</li>
+                </ul>
+            </li>
+            <li>kube-scheduler -> Scheduler
+                <ul>
+                    <li>It is responsible for scheduling the Pods on to the Nodes;</li>
+                    <li>A Cluster can have many worker nodes; When you want to create a Pod, Scheduler decides on which Node to create the Pod;</li>
+                    <li>It picks the node based on: available memory, available CPU, port conflicts and many other factors;</li>
+                </ul>
+            </li>
+            <li>kube-controller-manager -> Controller
+                <ul>
+                    <li>It manages the health of the Cluster;</li>
+                    <li>It does whatever is needed to make sure that actual state of the Cluster matches with desired state;</li>
+                    <li>It responds whenever a node goes down;</li>
+                </ul>
+            </li>
+            <li>Note# 1: What if master node goes down? Existing applications will continue to work, but you will not be able to make any changes to it; Master node is not involved, when a user tries to access a Service;</li>
+            <li>Note# 2: In production, you should set up Kubernetes with multiple masters for high availability;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Worker Node OR Node</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Container Runtime
+                <ul>
+                    <li>It defines gRPC API for managing containers, images, networks;</li>
+                    <li>K8s works with many container runtimes such as Docker, containerd, podman etc;</li>
+                    <li>It is responsible for pulling the image from registry, unpacking it, creating the necessary environment for the container to run it and manages(start/stop/pause/resume/delete) it;</li>
+                    <li>Environment includes creating namespaces for isolation(eg: process, network, filesystem etc) and cgroups for resource management(CPU, memory);</li>
+                    <li>Docker vs Podman
+                        <ul>
+                            <li>Docker requires root privileges to run containers; Though, it has introduced rootless mode, there are limitations;</li>
+                            <li>A daemon running with root privileges presents a potential security risk if compromised;</li>
+                            <li>Podman allows us to run containers as non root user, by default;</li>
+                            <li>Choose Podman, if security is a top priority;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>kubelet -> Kubelet
+                <ul>
+                    <li>It is an agent(not a pod, but a systemd process) running on every node(both master and worker), it registers the node on which it is running with the API server in master node; // Join the cluster!</li>
+                    <li>On Master Node
+                        <ul>
+                            <li>It starts the api-server, scheduler, and controller manager as static pods from podSpecs located at /etc/kubernetes/manifests;</li>
+                            <li>Static pods are managed by kubelet itself, not the API server;</li>
+                        </ul>
+                    </li>
+                    <li>On Worker Node
+                        <ul>
+                            <li>It takes podSpec(like create/update/delete pod) from the API Server, works with container runtime(gRPC API call) to ensure containers are in desired state;</li>
+                            <li>It uses the configured CNI plugin to allocate IP address to the Pod and setup any network and firewall rules for the Pod;</li>
+                            <li>It periodically checks the health of the Containers(liveness probe), restarts it in case of any health check failure and reports the same to API Server;</li>
+                            <li>It periodically reports the health of the Node and Pods(available CPU, memory, disk etc) to API Server(using cAdvisor implementation);</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>kube-proxy -> Kube Proxy
+                <ul>
+                    <li>Why kube-proxy?
+                        <ul>
+                            <li>Pods are ephemeral in k8s - they can be restarted or terminated at any time;</li>
+                            <li>Due to this, we cannot rely on IP address of a Pod, as it changes continously;</li>
+                            <li>That's why services came into picture; Service provides a stable IP address to underlying pods;</li>
+                            <li>Whenever a request reaches the service, it is redirected to the backend pods;</li>
+                            <li>But, how service-to-pod mapping is implemented? That's the role of kube-proxy;</li>
+                        </ul>
+                    </li>
+                    <li>What is kube-proxy?
+                        <ul>
+                            <li>It is a Pod(created using DaemonSet) that runs on every node in the cluster;</li>
+                            <li>kubectl get daemonset kube-proxy -n kube-system;</li>
+                        </ul>
+                    </li>
+                    <li>How it works?
+                        <ul>
+                            <li>IPTables (default)
+                                <ul>
+                                    <li>kube-proxy monitors the changes that happen to each service and underlying pods, then it translates the changes into network rules and updates iptables in that node;</li>
+                                    <li>By doing this, Kube-Proxy frees itself from getting in the way of the traffic;</li>
+                                    <li>Pros: The requests are automatically routed to underlying pods, based on the iptables, kube-proxy is not involved for every request;</li>
+                                    <li>Cons: The downside of this mode is that IPtables uses a sequential approach when performing a table lookup. So it goes through each rule in the table until it finds a match and applies it. When the number of services on a node grows, it impacts the performance; Another downside is that IPtables don’t support load-balancing algorithms;</li>
+                                </ul>
+                            </li>
+                            <li>IPVS mode
+                                <ul>
+                                    <li>For efficient routing, it uses a hashtable for managing the routing rules;</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>CNI Plugin
+                <ul>
+                    <li>It is a plugin that is used to manage the network of the Pods;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    - kube-proxy
+		
+		-- How it works?
+			
+			- IPVS mode 
+				-- For efficient routing, it uses a hashtable for managing the routing rules;
+
+			For eg, when you create below service, kube-proxy sets up a rule so that traffic to port 80 on the Service IP gets routed to one of the pods on port 8080.
+				apiVersion: v1
+				kind: Service
+				metadata:
+				   	name: my-service
+				spec:
+					selector:
+						app: my-app
+					ports:
+						- protocol: TCP
+						  port: 80
+						  targetPort: 8080
+					type: ClusterIP
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Add-ons:
+	- CNI Plugin 
+	- CoreDNS 
+	- Web UI 
+		- It enables k8s dashboard, which allows you to manage the objects via UI;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+How they work together (A simplified example):
+	You (the developer) say: "I want to deploy my super cool web application. I need 3 copies of it, and it's packaged in this Docker image." You express this desire in a configuration file (usually YAML) and submit it to Kubernetes using a command-line tool called kubectl.
+	kubectl talks to the API Server: Your request goes to the API Server.
+	API Server stores the desired state: The API Server records your request in etcd, which now knows that the desired state is "3 copies of super cool web app."
+	Scheduler finds a home: The Scheduler notices that there's a new request and no applications running for it. It looks at the available Worker Nodes and decides where to place your 3 copies of the application, based on resources.
+	Controller Manager acts: The Deployment Controller (part of the Controller Manager) notices that the current state (0 copies running) doesn't match the desired state (3 copies running). It tells the API Server to create the necessary "Pods."
+	Kubelet starts the work: The API Server sends instructions to the Kubelets on the chosen Worker Nodes. Each Kubelet then tells its Container Runtime to pull the Docker image and start a "Pod" (the smallest deployable unit in Kubernetes, which can contain one or more containers) with your application inside.
+	Kube-Proxy handles networking: As the Pods start, Kube-Proxy ensures they can communicate with each other and that external users can reach your application through a "Service" (another Kubernetes object that provides a stable network endpoint for your application, even if the individual Pods change).
+	Constant Monitoring: The Controller Manager, through its various controllers, continuously monitors the cluster. If a Pod crashes, the Controller Manager will detect it (via the API Server and Kubelets) and instruct the Scheduler to create a new Pod to maintain the desired count of 3 copies.
+
+
+
+
+		
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Kubernetes Client -> System(may be your local system) where you are running kubectl command;
+# Kubernetes Server -> Wherever you setup k8s cluster;
+# Both Client and Server have kubectl installed;
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+https://medium.com/jorgeacetozi/kubernetes-master-components-etcd-api-server-controller-manager-and-scheduler-3a0179fc8186
+https://betterprogramming.pub/k8s-a-closer-look-at-kube-proxy-372c4e8b090
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.educative.io/courses/practical-guide-to-kubernetes/sequential-breakdown-of-the-process-xVozZnlZNn3
+
+
+How to setup k8s cluster? 
+	- kubeadm, Rancher, Kubespray, OpenShift;
+	- Rancher is used to manage multiple clusters;
+
+Check if API server is reachable or not?
+	> curl https://<api-server-address> --insecure
+	> kubectl cluster-info 
+
+References:
+	https://devopscube.com/kubernetes-architecture-explained/
+	https://tetrate.io/blog/kubernetes-networking - CNI
+	https://www.youtube.com/watch?v=YumoKGhuZ2o - CNI 
+	https://www.linkedin.com/pulse/comprehensive-guide-iptables-from-zero-hero-hamed-enayatzare-hsczf/ - IPTables 
+	https://medium.com/@amroessameldin/kube-proxy-what-is-it-and-how-it-works-6def85d9bc8f
+	https://www.linkedin.com/pulse/comprehensive-guide-iptables-from-zero-hero-hamed-enayatzare-hsczf/ - IPTables 
+	https://www.linkedin.com/pulse/demystifying-kubernetes-kube-proxy-managing-behind-scenes-adamson-zgwlc/
+	https://learnk8s.io/kubernetes-services-and-load-balancing
+	https://kodekloud.com/blog/kube-proxy/
+	https://medium.com/norma-dev/benchmarking-containerd-vs-dockerd-performance-efficiency-and-scalability-64c9043924b1 - containerd vs docker 
+
+Questions:
+	- Does kubelet needed on master node?
+		If the cluster is setup using kubeadm/minikube/kind, kubelet is needed on master;
+		If the cluster is managed cluster(AKS/GKS etc), kubelet is not needed on master;
+
+	- What is cAdvisor?
+		It is an open-source tool developed by Google to monitor containers;
+		It gathers and exports container-based metrics such as CPU and memory usage, filesystem and network statistics to API server;
+		It supports multiple container runtimes such as docker;
+		It is part of kubelet binary and when kubelet starts, it also starts an instance of cAdvisor;
+		From k8s v1.19 onwards, cAdvisor exposes only limited metrics via /metrics endpoin on the node, to reduce resource usage;
+		It is not recommended to use cAdvisor directly, instead use a metrics-server like Prometheus;
+		Accessing cAdvisor manually: curl http://<node-ip>:10255/metrics/cadvisor
+
+	- What is CNI plugin?
+		kubeadm doesn't install any CNI plugin, by default; You need to install any CNI plugn on nodes that run user workloads(pods); But, typically, it is installed on both master and worker nodes;
+		When a Pod is created, kubelet calls the CNI plugin, to do this: 	
+			- It sets up a network interface(like eth0) inside the Pod and assigns a IP address to the Pod;
+			- Configure routing, firewall and NAT rules for the Pod;
+			- Ensure pod-to-pod communication;
+			- Optionally, connects Pods across nodes;
+		When a Pod is deleted, kubelet calls the CNI plugin to cleanup the networking;
+		Eg of CNI plugins: Calico, Flannel, Canal etc;
+		Without CNI Plugin, we can create the Pods, but they don't have a IP address and won't be able to talk to each other;
+		Summary: CNI plugin manages Pod IP allocation, inter-node communication, and network policies.
+
+	How does a node becomes master and other becomes slaves?
+		Master node has API server installed and worker nodes have kubelet running;
+
+
+		
+
+		
+</body>
+
+</html>

@@ -13,16 +13,19 @@
 
     <div class="question"><strong>1. Pod Phases</strong></div>
     <div class="answer">
+        <ul>
+            <li>Kubelet monitors the containers running on the node and based on that, it reports pod's state to the K8s API server;</li>
+        </ul>
         <table>
             <tr><th>Phase</th><th>Description</th></tr>
-            <tr><td><strong>Pending</strong></td><td>Pod accepted but not yet running. Waiting for scheduling, image pull, etc.</td></tr>
-            <tr><td><strong>Running</strong></td><td>Pod bound to a node. At least one container is running or starting.</td></tr>
-            <tr><td><strong>Succeeded</strong></td><td>All containers terminated successfully (exit code 0). Won't restart.</td></tr>
-            <tr><td><strong>Failed</strong></td><td>All containers terminated, at least one failed (non-zero exit code).</td></tr>
+            <tr><td><strong>Pending</strong></td><td>Pod is accepted by the cluster, but containers inside it are not yet running; May be the pod is not yet scheduled to a node OR image is yet to be pulled etc;</td></tr>
+            <tr><td><strong>Running</strong></td><td>Pod moves to Running state, once all of it's containers are started and active;</td></tr>
+            <tr><td><strong>Succeeded</strong></td><td>Pod moves to Succeeded state, when all of it's containers are terminated successfully(exit code 0) and are not restarted;</td></tr>
+            <tr><td><strong>Failed</strong></td><td>Pod moves to Failed state, when any of the container is terminated with failure code(non-zero exit code);</td></tr>
             <tr><td><strong>Unknown</strong></td><td>Pod state cannot be determined. Usually a node communication issue.</td></tr>
         </table>
     </div>
-
+    
     <div class="question"><strong>2. Container States</strong></div>
     <div class="answer">
         <ul>

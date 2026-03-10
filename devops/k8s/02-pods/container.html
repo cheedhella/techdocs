@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Container</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Container</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Container?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Container is instance of Image;</li>
+            <li>Containers are stateless, immutable and disposable/ephemeral;
+                <ul>
+                    <li><b>Stateless</b>: Container doesn't have any state of it's own; If you need a state, use volumes or databases;</li>
+                    <li><b>Immutable</b>: You can't make any changes to a running container; If you need a change, create new image and redeploy it;</li>
+                    <li><b>Disposable/Ephemeral</b>: Container is not meant to be long-lived; It is meant to be replaced with a new one if it fails or is replaced;</li>
+                    <li>Why Stateless and Immutable? It allows k8s to:
+                        <ul>
+                            <li>Restart a container without losing any data;</li>
+                            <li>Scale up/down as needed;</li>
+                            <li>Replace a failed container with a new one;</li>
+                            <li>Reschedule a container to a different node;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Container YAML Configuration</strong></div>
+    <div class="answer">
+        <ul>
+            <li><pre><code>containers:
+                - name: web                         # Name of the container, must be unique with in a Pod. You can't update it, once container is created.
+                  image: nginx:latest               # Name and tag of Docker Image.
+                  imagePullPolicy: IfNotPresent        
+                  command: ["echo"]                
+                  args: ["Hello k8s"]              
+                  workingDir: /app                  # Working directory for the container; Commands are executed from this directory; All relative paths are resolved relative to this directory; It overrides WORKDIR instruction in Dockerfile;
+                  
+                  ports:
+                    - containerPort: 80             # Port on which the application in the container is listening; 
+                      name: http                    # Optional name for the port; Used by other resources like Service, Ingress, etc;
+                      protocol: TCP                 # Protocol for the port; Can be TCP, UDP or SCTP; Defaults to TCP;      
+              
+                  env:                              
+                    - name: ENV
+                      value: production
+              
+                  resources:
+                    requests:
+                      cpu: "100m"
+                      memory: "128Mi"
+                    limits:
+                      cpu: "500m"
+                      memory: "512Mi"
+              
+                  volumeMounts:
+                    - name: config
+                      mountPath: /etc/config
+              
+                  livenessProbe:    # Detect broken container; If broken, kubelet will restart the container;
+                    httpGet:
+                      path: /health
+                      port: 80
+                    initialDelaySeconds: 10
+                    periodSeconds: 5
+
+                  startupProbe: # Wait for the container to start up; If not started, kubelet will restart the container;
+                    httpGet:
+                      path: /health
+                      port: 8080
+                    failureThreshold: 30
+                    periodSeconds: 10
+              
+                  readinessProbe: # Determine if ready for traffic; If not ready, kubelet will not send any traffic to the container;
+                    httpGet:
+                      path: /ready
+                      port: 8080
+                    periodSeconds: 5
+                    </code></pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. imagePullPolicy</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>imagePullPolicy</b>: It specifies the image pull policy for the container;</li>
+            <li>It can be Always, Never, IfNotPresent;</li>
+            <li>Defaults to Always if tag is :latest; Otherwise, IfNotPresent;</li>
+            <li>
+                <ul>
+                    <li><b>Always</b> - It will not blindly download the image always; But, It always contacts registry for the digest and matches it with the local cache; It there is a mismatch, it downloads the image(only the layers that are not matching) from registry; It does this, even when the container is restarted;</li>
+                    <li><b>IfNotPresent</b> - It contacts registry only if that image is not present in local cache;</li>
+                    <li><b>Never</b> - It never pulls the image from docker registry;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. command and args</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>command</b>: It overrides the default startup command(ENTRYPOINT) defined in docker image; This is executed every time the container is started;</li>
+            <li><b>args</b>: It overrides the default arguments(CMD) defined in docker image, which are passed to the command;</li>
+            <li>If you define args without a command, default command is used with new args;</li>
+            <li>If you define command without args, default args are used with new command;</li>
+            <li>If you define command and args, command is executed with new args;</li>
+            <li>By default, command is not executed within a shell; It is executed directly as a process by the container runtime; So, things like pipes(|), redirection(>), environment variables expansion($HOME), chaining(&&) will not work;</li>
+            <li>If you want to execute a command in a shell, do this: command: ["/bin/sh", "-c"] args: ["echo hello && sleep 10"]</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. ports</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It can be a single port or a list of ports;</li>
+            <li>Each port can have a name, protocol and port number;</li>
+            <li><b>containerPort</b>: 
+                <ul>
+                    <li>server.port=8080 in application.yml -> Actual port on which the application is listening;</li>
+                    <li>It doesn't override the port on which the application is listening;</li>
+                    <li>It is used to pass the port to the container runtime;</li>
+                    <li>Why is this needed? Container can run absolutely fine without this; But, it is used by other resources like Service, Ingress, etc to route traffic to the container;</li>
+                    <li>Can containers running in different pods(may be same or different nodes) use same port?
+                        <ul>
+                            <li>Yes, they can; But, they need to be in different pods; If they are in the same pod, they will conflict;</li>
+                        </ul>
+                    </li>
+                    <li>what is the purpose of supporting multiple ports in container spec?
+                        <ul>
+                            <li>Many modern apps expose a metrics port separate from the main API;</li>
+                            <li>Eg: Prometheus 8080 for REST API and 9090 for metrics;</li>
+                            <li>Application can support multiple protocols like HTTP(60), HTTPS(443), TCP(9090), gRPC(50051), etc;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>name</b>: Optional name for the port; Used by other resources like Service, Ingress, etc;</li>
+            <li><b>protocol</b>: Protocol for the port; Can be TCP, UDP or SCTP; Defaults to TCP;</li>
+            <li><b>hostPort</b>
+                <ul>
+                    <li>It maps a port on the node (host machine) to a port inside the container;</li>
+                    <li>It is optional and if not specified, a random port is assigned;</li>
+                    <li>Only one Pod per node can use a given hostPort;</li>
+                </ul>
+            </li>
+            <li><b>hostIP</b>
+                <ul>
+                    <li>If hostIP is not specified, container will listen on all node interfaces; Eg: node-ip1:8080, node-ip2:8080, localhost:8080</li>
+                    <li>If hostIP is specified, container is accessible only on that IP address;</li>
+                    <li></li>
+                    - containerPort: 80
+                    hostPort: 8080
+                    http://node-ip:8080 -> http://container-ip:80
+                    kubectl port-forward pod/my-pod 8080:80
+                </ul>: It specifies the IP address of the host; It is optional and if not specified, the container will be assigned an IP address from the node's IP address space;</li>
+            </li>
+            <li><b>hostPort</b>
+                <ul>
+                    <li>It is rarely used; Alternatively, use: ClusterIP, NodePort, LoadBalancer, Ingress;</li>
+                    <li>When is it used?
+                        <ul>
+                            <li>Monitoring agents like Prometheus, Grafana, etc;</li>
+                            <li>Log collectors</li>
+                            <li>These often run as DaemonSets so each node has one Pod;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. env</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It defines environment variables that are avaialble inside the container; They are available to all processes in the container;</li>
+            <li>Instead of hardcoded values, k8s can pull these values from a ConfigMap or Secret or Pod metadata;</li>
+            <li>ConfigMap
+                <ul>
+                    <li><pre><code># ConfigMap 
+                        apiVersion: v1
+                        kind: ConfigMap
+                        metadata:
+                          name: app-config
+                        data:
+                          APP_MODE: production
+                        
+                        # Pod 
+                        env:
+                            - name: APP_MODE
+                                valueFrom:
+                                configMapKeyRef:
+                                    name: app-config
+                                    key: APP_MODE
+                        </code></pre></li>
+                </ul>
+            </li>
+            <li>Secret
+                <ul>
+                    <li><pre><code># Secret 
+                        apiVersion: v1
+                        kind: Secret
+                        metadata:
+                          name: app-secret
+                        data:
+                          DB_PASSWORD: cGFzc3dvcmQ=
+                        
+                        # Pod 
+                        env:
+                            - name: DB_PASSWORD
+                                valueFrom:
+                                secretKeyRef:
+                                    name: app-secret
+                                    key: DB_PASSWORD
+                        </code></pre>
+                        </li>
+                </ul>
+            </li>
+            <li>Pod Metadata
+                <ul>
+                    <li><pre><code># Pod 
+                        env:
+                            - name: POD_NAME
+                                valueFrom:
+                                fieldRef:
+                                    fieldPath: metadata.name
+                        
+                        # Inside the container 
+                        POD_NAME=myapp-7d8c9f   # Useful for logging, tracing etc;
+                    </code></pre></li>
+                </ul>
+            </li>
+            <li>Resource Fields - Application can then read its CPU limit;
+                <ul>
+                    <li><pre><code># Pod 
+                        env:
+                            - name: CPU_LIMIT
+                                valueFrom:
+                                resourceFieldRef:
+                                    containerName: app
+                                    resource: limits.cpu
+                                    </code></pre></li>
+                </ul>
+            <li>If the value changes in a ConfigMap or Secret, the container must be restarted to see the change;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. envFrom</strong></div>
+    <div class="answer">
+        <ul>
+            
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. resources</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Example</b>
+                <ul>
+                    <li><pre><code>resources:
+                        limits:
+                          memory: "256Mi"
+                          cpu: "500m"  # 500 millicores = 0.5 CPU
+                          ephemeral-storage: "1Gi" 
+                        requests:
+                          memory: "128Mi"
+                          cpu: "250m"</code></pre></li>
+                    </ul>
+                </li>
+            <li>It defines the maximum amount of CPU and memory that a container is a allowed to use;</li>
+            <li>It ensure that a container doesn't effect other containers running on the same node;</li>
+            <li><b>CPU Limit</b>
+                <ul>
+                    <li>It defines the maximum CPU that a container is allowed to use;</li>
+                    <li>It is specified in millicores; 1000 millicores = 1 CPU;</li>
+                    <li>If a container exceeds its CPU limit, CPU throttling occurs;</li>
+                </ul>
+            </li>
+            <li><b>Memory Limit</b>
+                <ul>
+                    <li>It defines the maximum memory that a container is allowed to use;</li>
+                    <li>It is specified in bytes; Ki -> kibibytes; Mi -> mebibytes; Gi -> gibibytes;</li>
+                    <li>If a container exceeds its memory limit, it is killed;</li>
+                </ul>
+            </li>
+            <li><b>Ephemeral Storage Limit</b>
+                <ul>
+                    <li>It defines the maximum disk storage that a container is allowed to use; It is used for temporary storage; It is deleted when the container is deleted;</li>
+                    <li>It includes /tmp, emptyDir volume etc;</li>
+                    <li>If a container exceeds its ephemeral storage limit, it is killed;</li>
+                </ul>
+            </li>
+            <li><b>Requests</b>
+                <ul>
+                    <li>It defines the minimum CPU and memory needed by the container;</li>
+                    <li>When scheduling a Pod on a node, Kubernetes looks at requests, not limits; If the node doesn't have enough resources, scheduler will look for another node;</li>
+                    <li>Limits are enforced after the container starts;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>9. volumeMounts</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It specifies where to mount the specified volume inside the container;</li>
+            <li>It can be a single volume or a list of volumes;</li>
+            <li><b>name</b>: Name of the volume to mount;</li>
+            <li><b>mountPath</b>: Path inside the container to mount the volume;</li>
+            <li><b>readOnly</b>: If true, the volume is mounted as read-only; Defaults to false;</li>
+            <li><b>subPath</b>: If specified, only a sub-path of the volume is mounted; Defaults to empty;</li>
+            <li><b>subPathExpr</b>: If specified, a sub-path expression of the volume is mounted; Defaults to empty;</li>
+            <li>Example
+                <ul>
+                    <li><pre><code>volumeMounts:
+                        - name: config
+                          mountPath: /etc/config
+                    </code></pre></li>  
+                </ul>
+            </li>
+            <li>Why volumeMounts is needed?
+                <ul>
+                    <li>To use external storage systems;</li>
+                    <li>To share data between containers in the same Pod;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>10. Probes</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to check the health of a container;</li>
+            <li>It can be a single probe or a list of probes;</li>
+            <li>Each probe can have a name and type;</li>
+            <li>There are 3 types of probes: Startup, Liveness, Readiness;</li>
+            <li>K8s uses probes to automatically restart the container if it is not healthy or ready to serve traffic;</li>
+            <li>Startup probe is executed only on startup, liveness and readiness probes are run periodically(as defined by periodSeconds) after startup probe succeeds;            </li>
+            <li><b>Liveness probe</b>
+                <ul>
+                    <li>
+                        <pre>
+                            - Liveness probe don't wait for the readiness probes to succeed; If you want to wait, use initialDelaySeconds;
+- It is used check the health of a Pod - whether the Pod is up and running and responding(may be deadlocked and not responding);
+- If the probe is successful, no action is taken and no logs are recorded;
+- If a liveness probe fails failureThreshold number of times, kubelet will restart the application;
+
+initialDelaySeconds -> how long to wait after the container starts and before sending the probe; Defaults to 0;
+timeoutSeconds      -> how long to wait for the response, during probing; If the time is exceeded, probe is considered failed; Defaults to 1;
+periodSeconds       -> It specifies the period/gap between each check; Defaults to 10;
+successThreshold    -> Specifies the minimum consecutive successes for the probe to be considered successful after it has failed; Defaults to 1;
+failureThreshold    -> Specifies the minimum consecutive failures for the probe to be considered failed after it has succeeded; Defaults to 3;
+
+Type of probes 
+- Command probe 
+    -- It executes the specified command in the container and considers the container ready, if the command returns zero exit code;
+- HTTP probe 
+    -- It sends HTTP request to specified endpoint in the container and checks if it receives a successful response;
+- TCP probe 
+    -- It checks if a specific port is open and listening on the container;
+                        </pre></li>
+                </ul>
+            </li>
+            <li><b>Readiness probe</b>
+                <ul>
+                    <li>It indicates whether the container is ready to receive requests or not;</li>
+                    <li>It is useful to perform time-consuming initial tasks, such as loading/warming caches etc;</li>
+                    <li>If it fails, K8s will not send traffic to the container;</li>
+                    <li>If a readiness probe fails failureThreshold number of times, kubelet will restart the application;</li>
+                </ul>
+            </li>
+            <li><b>Startup probe</b>
+                <ul>
+                    <li>It is used to check if the container has started up;</li>
+                    <li>If you specify a startup probe, k8s will not send any traffic to that pod, until that container's startup succeeds;</li>
+                    <li>It is useful in some situations, where you have to deal with legacy applications that take lot of time to start up, thus avoiding them getting killed by kubelet, before they are up and running;</li>
+                    <li>If you specify a startup probe, liveness and readiness probes will not run, until startup succeeds, making sure these probes don't interfere with the application startup;</li>
+                    <li>If startup probe fails, kubelet logs an event, kills the container and follows the Pod's restartPolicy;</li>
+                    <li>Make sure failureThreshold * periodSeconds is enough to cover the worst case startup time;</li>
+                </ul>
+            </li>
+            <li>Example
+                <ul>
+                    <li><pre><code>livenessProbe:
+                        httpGet:
+                        path: /healthz
+                        port: 8080
+                    </code></pre></li>
+                </ul>
+            </li>
+            <li><b>Best Practices</b>
+                <ul>
+                    <li>Misconfigured probes can impact application performance, if they run too frequently;</li>
+                    <li>If a container performs a simple operation and terminates quickly, it may not need health probe;</li>
+                    <li>Set a realist wait time - if the readiness probe takes more than configured wait time, kubelet may assume the application is not responing and restart it, while it is still running;</li>
+                    <li>Set a failure threshold for your liveness probes to avoid unnecessary restarts of your application;</li>
+                    <li>Use the kubectl command-line tool to test your probes and make sure that they are correctly configured;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+
+
+
+
+
+    <div class="question"><strong>2. Container States</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Phase</th><th>Description</th></tr>
+            <tr><td><strong>Waiting</strong></td><td>Container is not yet running (pulling image, applying secrets, etc.);</td></tr>
+            <tr><td><strong>Running</strong></td><td>Container is executing;</td></tr>
+            <tr><td><strong>Terminated</strong></td><td>Container has finished execution (either successfully or with an error);</td></tr>
+        </table>
+    </div>
+    
+    <div class="question"><strong>2. Container States</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Waiting:</strong> Container is not yet running (pulling image, applying secrets, etc.);</li>
+            <li><strong>Running:</strong> Container is executing;</li>
+            <li><strong>Terminated:</strong> Container has finished execution (either successfully or with an error);</li>
+        </ul>
+        <pre><code># Check container state
+kubectl get pod my-pod -o jsonpath='{.status.containerStatuses[0].state}'</code></pre>
+    </div>
+
+    <div class="question"><strong>3. Pod Conditions</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>PodScheduled:</strong> Pod has been scheduled to a node;</li>
+            <li><strong>Initialized:</strong> All init containers have completed;</li>
+            <li><strong>ContainersReady:</strong> All containers in the Pod are ready;</li>
+            <li><strong>Ready:</strong> Pod is ready to serve traffic (passes readiness probe);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Common Status Values (kubectl get pods)</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Status</th><th>Meaning</th></tr>
+            <tr><td>ContainerCreating</td><td>Pulling image or setting up the container</td></tr>
+            <tr><td>Running</td><td>All containers are running</td></tr>
+            <tr><td>CrashLoopBackOff</td><td>Container keeps crashing and K8s is backing off restarts</td></tr>
+            <tr><td>ImagePullBackOff</td><td>Cannot pull the container image</td></tr>
+            <tr><td>ErrImagePull</td><td>Failed to pull image (wrong name, auth issue)</td></tr>
+            <tr><td>Completed</td><td>Container finished successfully (Jobs)</td></tr>
+            <tr><td>Terminating</td><td>Pod is being deleted (graceful shutdown period)</td></tr>
+            <tr><td>OOMKilled</td><td>Container exceeded memory limit</td></tr>
+        </table>
+    </div>
+
+
+
+</body>
+
+</html>
