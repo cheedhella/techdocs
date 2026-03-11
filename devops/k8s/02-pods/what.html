@@ -35,6 +35,16 @@
 
 
 
+  
+  What causes a Pod to die/fail?
+  There are lot of reasons why the life of a particular pod could come to an end:
+    - Underlying node might have failed;
+    - K8s has evicted that pod 
+      -- to better utilize the resources of the cluster;
+      -- to prepare the node for shutdown/restart;
+    - Deleted by mistake;
+    
+
     1. Pod Fundamentals
 
 Start with the basics of what a Pod is and why it exists.

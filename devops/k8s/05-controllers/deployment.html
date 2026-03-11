@@ -4,6 +4,7 @@
 <head>
     <title>Deployment</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 
 <body>
@@ -14,82 +15,114 @@
     <div class="question"><strong>1. What is a Deployment?</strong></div>
     <div class="answer">
         <ul>
-            <li>The <strong>most common way to run stateless applications</strong> in Kubernetes;</li>
-            <li>A Deployment manages a <strong>ReplicaSet</strong>, which in turn manages <strong>Pods</strong>;</li>
-            <li>Provides declarative updates — change the spec and Kubernetes handles the rest;</li>
-            <li>Supports <strong>rolling updates</strong>, <strong>rollbacks</strong>, <strong>scaling</strong>, and <strong>pause/resume</strong>;</li>
+          <li>Deployment = ReplicaSet + Rollout and Rollback;</li>
+          <li>It extends ReplicaSet and provides rollout and rollback features;</li>
+          <li>It is the most common way to deploy stateless applications in K8s;</li>
+          <li><pre>Let's say you have a Pod running V1 of an application; 
+            Your team has developed V2 and you would like upgrade the Pod with V2?
+            How would you upgrade the pods with latest version? 
+            How about rolling back, if you find any issues with V2? 
+            Can Replicaset handle Rollout and Rollback? Not really!
+            Deployment does it!</pre></li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Deployment YAML</strong></div>
+    <div class="question"><strong>2. Benefits of Deployment?</strong></div>
     <div class="answer">
-        <pre><code>apiVersion: apps/v1
+        <ul>
+            <li><strong>Rollout and Rollback</strong> - It handles rolling updates and rollbacks, without any downtime(zero downtime upgrade);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Why Zero Down Time important?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The Deployment must produce no downtime;</li>
+            <li>It does not matter whether it is performed on a testing or a production cluster;</li>
+            <li>Interrupting consumers is disruptive and leads to a loss of money and confidence in a product;</li>
+            <li>Gone are the days when users did not care if an application sometimes did not work;</li>
+            <li>There are so many competitors out there that a single bad experience might lead users to another solution;</li>
+            <li>With today’s scale, a 0.1% rate of failed requests is considered disastrous;</li>
+            <li>While we might never be able to reach 100% availability, we should certainly not cause downtime ourselves and must minimize other factors that could cause downtime;</li>
+            <li>Deployment is a tool that helps us avoid such failures, by allowing us to update our applications without downtime;</li>
+        </ul>
+    </div>
+
+    <div class="question" id="yaml-config"><strong>4. Deployment YAML Configuration</strong></div>
+    <div class="answer">
+        <div class="yaml-container">
+            <pre>
+apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: nginx-deployment
+  namespace: default
+  labels:
+    app: nginx
+    environment: production
+
 spec:
   replicas: 3
+
   selector:
     matchLabels:
       app: nginx
+<b>
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+    type: RollingUpdate               # It specifies the strategy for rolling updates: RollingUpdate and Recreate;
+    rollingUpdate:                    # With 5 replicas, maxUnavailable: 1, maxSurge: 1, it ensures atleast 4 pods and atmost 6 pods are running at any time;
+      maxUnavailable: 1               # It specifies the maximum number of Pods that can be unavailable during the update; Defaults to 25%;
+      maxSurge: 1                     # It specifies the maximum number of extra Pods that can be created during the update; Defaults to 25%; 
+
+  minReadySeconds: 10
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600
+</b>
   template:
     metadata:
       labels:
         app: nginx
+
     spec:
       containers:
-        - name: nginx
+        - name: nginx-container
           image: nginx:1.25
           ports:
             - containerPort: 80
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: 250m
-              memory: 256Mi</code></pre>
-    </div>
+  
+<b>minReadySeconds:</b> 10
+  - It specifies the minimum number of seconds a Pod should be in ready state before it is considered ready for the deployment;
+  - Sometimes, a Pod becomes ready quickly, but it crashes soon after that;
+  - In such cases, we can set minReadySeconds to a higher value, to consider the Pod as ready;
 
-    <div class="question"><strong>3. Deployment Strategies</strong></div>
+<b>revisionHistoryLimit:</b> 5
+  - It specifies the number of old versions to retain in the history; Defaults to 10;
+  
+<b>progressDeadlineSeconds:</b> 600        
+  - It specifies the maximum number of seconds to wait before marking the deployment as failed; Defaults to 600 seconds(10 minutes);
+
+<b>Recreate Strategy:</b>
+  - It deletes all the old ReplicaSets first, and then creates new ReplicaSets with the new version of the image;
+  - It causes downtime during the update;
+  - It is useful for applications that cannot run multiple versions simultaneously;
+  - For eg: 
+      -- Database schema changes;
+      -- Applications using shared state; That can corrupt the data;
+
+<b>Default Strategy:</b>
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%    
+            </pre>
+        </div>
+    </div>
+    
+    <div class="question"><strong>5. Deployment Demo</strong></div>
     <div class="answer">
-        <table>
-            <tr><th>Strategy</th><th>Description</th></tr>
-            <tr><td><strong>RollingUpdate</strong></td><td>Gradually replaces old Pods with new ones (default). Zero downtime.</td></tr>
-            <tr><td><strong>Recreate</strong></td><td>Kills all old Pods first, then creates new ones. Brief downtime.</td></tr>
-        </table>
-        <ul>
-            <li><strong>maxSurge:</strong> Max number of extra Pods above desired count during update;</li>
-            <li><strong>maxUnavailable:</strong> Max number of Pods that can be unavailable during update;</li>
-        </ul>
+        <img src="deployment-demo.png" alt="Deployment Demo" style="width: 100%;" />
     </div>
-
-    <div class="question"><strong>4. Common Commands</strong></div>
-    <div class="answer">
-        <pre><code># Create
-kubectl create deployment nginx --image=nginx:1.25 --replicas=3
-
-# Apply from file
-kubectl apply -f deployment.yaml
-
-# Scale
-kubectl scale deployment nginx-deployment --replicas=5
-
-# Update image
-kubectl set image deployment/nginx-deployment nginx=nginx:1.26
-
-# View status
-kubectl rollout status deployment/nginx-deployment
-
-# View history
-kubectl rollout history deployment/nginx-deployment</code></pre>
-    </div>
-
 </body>
 
 </html>

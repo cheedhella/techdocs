@@ -4,6 +4,7 @@
 <head>
     <title>ReplicaSet</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 
 <body>
@@ -14,69 +15,84 @@
     <div class="question"><strong>1. What is a ReplicaSet?</strong></div>
     <div class="answer">
         <ul>
-            <li>A ReplicaSet ensures that a <strong>specified number of Pod replicas</strong> are running at any given time;</li>
-            <li>If a Pod crashes or is deleted, the ReplicaSet creates a new one to maintain the desired count;</li>
+            <li>ReplicaSet = Pod + self-healing + scaling;</li>
+            <li>A Pod, by itself, is not self-healing; In case of any failure, it won't recover on its own;</li>
+            <li>It means: If you create a Pod without Replicaset, then a new Pod won't be created, in case of any failure;</li>
+            <br>
+            <li>Replicaset ensures that a specified number of Pod replicas are running at all times; No need to monitor 24/7 manually;</li>
+            <li>If there are lesser number of pods than what is specified, may be a pod crashed, it spins up new pods;</li>
+            <li>If there are more number of pods than what is specified, may be you reduced the number of replicas, it deletes the pods;</li>
+            <br>
             <li>It uses <strong>label selectors</strong> to identify which Pods it manages;</li>
-            <li>You rarely create ReplicaSets directly — <strong>Deployments</strong> manage them for you;</li>
+            <li>You rarely create ReplicaSets directly; Instead, use <strong>Deployments</strong>;</li>            
         </ul>
     </div>
 
-    <div class="question"><strong>2. ReplicaSet YAML</strong></div>
+    <div class="question"><strong>2. Benefits of ReplicaSet?</strong></div>
     <div class="answer">
-        <pre><code>apiVersion: apps/v1
+        <ul>
+            <li><strong>Fault tolerance</strong> - If a Pod fails, controller can detect and replace the failed replica with a new one;</li>
+            <li><strong>Scalability</strong> - You can scale up or down the number of replicas;</li>
+            <li><strong>High Availability</strong> - By running multiple replicas of a Pod, we can ensure that application remains available, even if one or more replicas fail;</li>
+        </ul>
+    </div>
+    
+    <div class="question" id="yaml-config"><strong>3. ReplicaSet YAML Configuration</strong></div>
+    <div class="answer">
+        <div class="yaml-container">
+            <pre>
+apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: nginx-rs
+  labels:                             # These labels belong to the ReplicaSet itself, not the Pods;
+    app: nginx 
 spec:
-  replicas: 3
-  selector:
-    matchLabels:
+  replicas: 3                         # It specifies the desired number of replicas/pods;
+  selector:                           # It selects the pods to monitor; It supports 2 types of selectors: matchLabels and matchExpressions;
+    matchLabels:                      # It monitors all the Pods with both labels: app=nginx AND tier=frontend!
       app: nginx
+      tier: frontend
   template:
     metadata:
-      labels:
+      labels:                         # Assigns these lables to every pod created by the ReplicaSet! It should be superset of .spec.selector.matchLabels;
         app: nginx
+        tier: frontend
     spec:
-      containers:
+      containers:                     # Container configuration;
         - name: nginx
-          image: nginx:1.25
+          image: nginx:1.25           # Image to use;
           ports:
-            - containerPort: 80</code></pre>
+            - containerPort: 80        # Port to expose;
+
+<b>Note:</b> What if selector.matchLabels is different from template.metadata.Labels? To avoid creating Pods in a infinite loop, k8s rejects the ReplicaSet!
+
+matchExpressions:                     # It supports more advanced selectors; If specify multiple expressions, all must be true for a pod to be selected;
+  - key: app                          # It selects Pods with label: app = nginx OR app = frontend
+    operator: In                      
+    values:
+    - nginx
+    - frontend
+  - key: team                         # It selects all the Pods whose team label is anything other than team1, team2;
+    operator: NotIn
+    values:
+    - team1
+    - tema2
+  - key: env                         # It selects Pods with env label;
+    operator: Exists
+  - key: debug                       # It selects Pods without debug label;
+    operator: DoesNotExist
+
+    | Operator       | Meaning                             |
+    | -------------- | ----------------------------------- |
+    | `In`           | Label value must be in the list     |
+    | `NotIn`        | Label value must NOT be in the list |
+    | `Exists`       | Label key must exist                |
+    | `DoesNotExist` | Label key must not exist            |
+    
+            </pre>
+        </div>
     </div>
-
-    <div class="question"><strong>3. Key Fields</strong></div>
-    <div class="answer">
-        <ul>
-            <li><strong>replicas:</strong> Desired number of Pod copies;</li>
-            <li><strong>selector:</strong> Defines how the ReplicaSet finds Pods to manage — must match <code>template.metadata.labels</code>;</li>
-            <li><strong>template:</strong> The Pod template used to create new Pods;</li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>4. Commands</strong></div>
-    <div class="answer">
-        <pre><code># List ReplicaSets
-kubectl get rs
-
-# Scale a ReplicaSet
-kubectl scale rs nginx-rs --replicas=5
-
-# Delete (also deletes managed Pods)
-kubectl delete rs nginx-rs
-
-# Delete without deleting Pods
-kubectl delete rs nginx-rs --cascade=orphan</code></pre>
-    </div>
-
-    <div class="question"><strong>5. ReplicaSet vs ReplicationController</strong></div>
-    <div class="answer">
-        <ul>
-            <li><strong>ReplicationController</strong> is the older version — supports only equality-based selectors;</li>
-            <li><strong>ReplicaSet</strong> supports <strong>set-based selectors</strong> (<code>matchExpressions</code>) — more flexible;</li>
-            <li>Always use ReplicaSet (via Deployments) in modern Kubernetes;</li>
-        </ul>
-    </div>
-
 </body>
 
 </html>

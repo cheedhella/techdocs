@@ -126,3 +126,13 @@ a {
 .image-container {
     text-align: center;
 }
+
+tr.table-comment td {
+    background-color: #f5f5dc;
+    color: #666;
+    font-style: italic;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-left: 3px solid #ccc;
+}
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kubectl commands quick reference</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>kubectl commands quick reference</h2>
+    </div>
+
+
+    <div class="question"><strong>1. Containers</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr class="table-comment"><td colspan="2"># exec -> Execute a command in a container;</td></tr>
+                <tr><td><code>kubectl exec &lt;pod-name&gt; -- &lt;command&gt;</code></td><td>Executes a command in a pod;</td></tr>
+                <tr><td><code>kubectl exec &lt;pod-name&gt; -c &lt;container-name&gt; -- &lt;command&gt;</code></td><td>Executes a command in a specific container;</td></tr>
+                <tr class="table-comment"><td colspan="2"># exec -it -> Open an interactive terminal with container shell;</td></tr>
+                <tr><td><code>kubectl exec -it &lt;pod-name&gt; -- bash</code></td><td>Executes a command in a pod and opens an interactive terminal;</td></tr>
+                <tr><td><code>kubectl exec -it &lt;pod-name&gt; -c &lt;container-name&gt; -- bash</code></td><td>Executes a command in a specific container and opens an interactive terminal;</td></tr>
+                <tr class="table-comment"><td colspan="2"># Logs -> View logs of a container;</td></tr>
+                <tr><td><code>kubectl logs &lt;pod-name&gt; -c &lt;container-name&gt;</code></td><td>Get logs of a specific container in a pod;</td></tr>
+                <tr><td><code>kubectl logs -f &lt;pod-name&gt; -c &lt;container-name&gt;</code></td><td>Tail the logs of a container;</td></tr>
+                <tr><td><code>kubectl logs &lt;pod-name&gt; --previous</code></td><td>Get logs from previous crashed container;</td></tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>2. Pods</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl run &lt;pod-name&gt; --image=&lt;image-name&gt; --port=&lt;port&gt; -n &lt;namespace&gt;</code></td><td>Creates a pod with one container(running on specified port);</td></tr>
+                <tr><td><code>kubectl run mc-bb-p0 --image=busybox -it --rm -- sh</code></td><td>it -> opens interactiver terminal with container shell; --rm -> removes the pod after you exit the container; -- separates kubectl options from container command; BusyBox / Alpine -> sh; Ubuntu / Debian -> bash; Alpine -> ash;</td></tr>
+                <tr><td><code>kubectl get pods</code></td><td>Lists all pods in the current namespace;</td></tr>
+                <tr><td><code>kubectl describe pod &lt;pod-name&gt;</code></td><td>Shows detailed information about a pod - image, port, environment variables, resource limits etc;</td></tr>
+                <tr><td><code>kubectl get pod &lt;pod-name&gt; -o yaml</code></td><td>Shows the YAML definition of a pod;</td></tr>
+                <tr><td><code>kubectl delete pod &lt;pod-name&gt;</code></td><td>Deletes a pod;</td></tr>
+                <tr><td><code>kubectl logs &lt;pod-name&gt;</code></td><td>Shows the logs for a pod;</td></tr>
+                <tr><td><code>kubectl port-forward &lt;pod-name&gt; 8080:80</code></td><td>Forwards a port from a pod to a local port;</td></tr>
+                <tr><td><code>kubectl attach &lt;pod-name&gt;</code></td><td>Attaches to a running pod;</td></tr>
+                <tr><td><code>kubectl top pod &lt;pod-name&gt;</code></td><td>Shows resource usage for a pod;</td></tr>
+                <tr><td><code>kubectl cp file.txt &lt;pod-name&gt;:/tmp/file.txt</code></td><td>Copy file from local machine to pod;</td></tr>
+                <tr><td><code>kubectl cp &lt;pod-name&gt;:/tmp/file.txt file.txt</code></td><td>Copy file from pod to local machine;</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. Deployment</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl create -f devops/k8s/pg/deployment-1.yaml </code></td><td>It creates a deployment from a YAML file;</td></tr>
+                <tr><td><code>kubectl get deploy</code></td><td>List all deployments in the current namespace;</td></tr>
+                <tr><td><code>kubectl get pods</code></td><td>Lists all pods in the current namespace;</td></tr>
+                <tr><td><code>kubectl scale deployment nginx-deployment --replicas=4</code></td><td>Scale up;</td></tr>
+                <tr><td><code>kubectl scale deployment nginx-deployment --replicas=2</code></td><td>Scale down;</td></tr>
+                <tr><td><code>kubectl set image deployment/nginx-deployment nginx=nginx:1.26</code></td><td>Rolling upgrade;</td></tr>
+                <tr><td><code>kubectl rollout status deployment nginx-deployment</code></td><td>View status of a deployment;</td></tr>
+                <tr><td><code>kubectl rollout history deployment nginx-deployment</code></td><td>View history of a deployment;</td></tr>
+                <tr><td><code>kubectl rollout undo deployment nginx-deployment</code></td><td>Rollback to previous version;</td></tr>
+                <tr><td><code>kubectl rollout undo deployment nginx-deployment --to-revision=2</code></td><td>Rollback to a specific revision;</td></tr>
+                <tr><td><code>kubectl rollout pause deployment nginx-deployment</code></td><td>Pause a deployment;</td></tr>
+                <tr><td><code>kubectl rollout resume deployment nginx-deployment</code></td><td>Resume a deployment;</td></tr>
+                <tr><td><code>kubectl delete deployment nginx-deployment</code></td><td>Delete a deployment;</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>kubectl get and describe</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Resource Type</th><th>Short Name</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>pods</td><td>po</td></tr>
+                <tr><td>services</td><td>svc</td></tr>
+                <tr><td>deployments</td><td>deploy</td></tr>
+                <tr><td>replicasets</td><td>rs</td></tr>
+                <tr><td>nodes</td><td>no</td></tr>
+                <tr><td>namespaces</td><td>ns</td></tr>
+            </tbody>
+        </table>
+        <br>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr class="table-comment"><td colspan="2"># get -> Quick summary;</td></tr>
+                <tr><td><code>kubectl get &lt;resource-type&gt; &lt;resource-name&gt;</code></td><td>It gives quick summmary of a specific object of a given resource type(such as pods, nodes, services, deployments etc);</td></tr>
+                <tr><td><code>kubectl get &lt;resource-type&gt;</code></td><td>It gives quick summmary of all objects of a given resource type(such as pods, nodes, services, deployments etc);</td></tr>
+                <tr><td><code>kubectl get all</code></td><td>It gives quick summmary of all the resources in the cluster;</td></tr>
+                <tr class="table-comment"><td colspan="2"># describe -> Detailed information about a specific resource;</td></tr>
+                <tr><td><code>kubectl describe &lt;resource-type&gt; &lt;resource-name&gt;</code></td><td>It gives detailed information about a given resource type(such as pods, nodes, services, deployments etc);</td></tr>
+                <tr class="table-comment"><td colspan="2"># get -o yaml -> Complete YAML definition;</td></tr>
+                <tr><td><code>kubectl get &lt;resource-type&gt; &lt;resource-name&gt; -o yaml</code></td><td>Shows the YAML definition of a given resource type(such as pods, nodes, services, deployments etc);</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>kubectl cp</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr class="table-comment"><td colspan="2"># When there is only one container in the pod, you don't need to specify the container name;</td></tr>
+                <tr><td><code>kubectl cp &lt;source&gt; &lt;pod-name&gt;:&lt;destination&gt;</code></td><td>Copy file from local machine to pod;</td></tr>
+                <tr><td><code>kubectl cp &lt;pod-name&gt;:&lt;source&gt; &lt;destination&gt;</code></td><td>Copy file from pod to local machine;</td></tr>
+                <tr class="table-comment"><td colspan="2"># When there are multiple containers in the pod, you need to specify the container name;</td></tr>
+                <tr><td><code>kubectl cp &lt;source&gt; &lt;pod-name&gt;:&lt;destination&gt; -c &lt;container-name&gt;</code></td><td>Copy file from local machine to pod specific container;</td></tr>
+                <tr><td><code>kubectl cp &lt;pod-name&gt;:&lt;source&gt; &lt;destination&gt; -c &lt;container-name&gt;</code></td><td>Copy file from pod specific container to local machine;</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+
+kubectl delete all --all    # Delete all resources in default namespace;
+kubectl delete all --all -n &lt;namespace&gt;    # Delete all resources in specified namespace;
+kubectl delete all --all --all-namespaces    # Delete all resources in all namespaces;
+kubectl delete pods,deployments,services --all --all-namespaces    # Delete all pods, deployments and services in all namespaces;   
+
+
+
+</body>
+
+</html>

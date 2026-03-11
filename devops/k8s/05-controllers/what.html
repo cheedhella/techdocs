@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Controller</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Controller</h2>
+    </div>
+
+
+    <div class="question"><strong>1. What is a K8s Controller Manager?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>K8s Controller Manager is a daemon that runs on the master node and creates multiple controllers such as Deployment Controller, ReplicaSet Controller, StatefulSet Controller, DaemonSet Controller, Job Controller, CronJob Controller etc;</li>
+            <li>Each controller is responsible for managing the state of a specific resource type(such as Deployment, Job etc);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What is a Controller?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a daemon that gets the current state of the cluster and takes corrective actions to reconcile it with desired state defined in the manifest file;</li>
+            <li>In other words, controllers are responsible for self-healing; If something drifts from what it should be, a controller steps in and makes it right;</li>
+            <li>For example, if a deployment specifies 3 Pods and the current state is 2 Pods, Deployment Controller will take corrective action to reconcile the state by creating a new Pod;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Controller Types</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Deployment Controller</b> 
+                <ul>
+                    <li>It ensures desired number of Pods(stateless applications) are running at all times;</li>
+                    <li>It handles rolling updates and rollbacks;</li>
+                </ul>
+            </li>
+            
+            <li><b>StatefulSet Controller</b>
+                <ul>
+                    <li>It ensures desired number of Pods(stateful applications) are running at all times;</li>
+                    <li>Eg: Database, Kafka, etcd etc;</li>
+                </ul>
+            </li>
+            
+            <li><b>DaemonSet Controller</b>
+                <ul>
+                    <li>It ensures desired number of Pods(daemons) are running on all nodes at all times;</li>
+                    <li>Useful for Logging(Fluentd), Monitoring(Prometheus), Networking(Calico) etc;</li>
+                </ul>
+            </li>
+            
+            <li><b>Job Controller</b>
+                <ul>
+                    <li>It ensures desired number of Pods(jobs) are running and completed at all times;</li>
+                </ul>
+            </li>
+            
+            <li><b>CronJob Controller</b>
+                <ul>
+                    <li>It ensures desired number of Pods(cronjobs) are running at scheduled intervals;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+        
+</body>
+
+</html>

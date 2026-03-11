@@ -2,16 +2,147 @@
 <html lang="en">
 
 <head>
-    <title>Container</title>
+    <title>Containers</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 
 <body>
     <div class="main-grid-item-1 grid-wide-column">
-        <h2>Container</h2>
+        <h2>Containers</h2>
     </div>
 
-    <div class="question"><strong>1. What is Container?</strong></div>
+    <div class="toc-container">
+        <ol>
+            <li><strong>Introduction</strong>
+                <ul>
+                    <li><a href="#what-is-container">What is a Container?</a></li>
+                    <li><a href="#pod-container-relationship">Container vs Pod</a></li>
+                    <li><a href="#yaml-config">Container YAML Configuration</a></li>
+                    <li><a href="#container-lifecycle">Lifecycle and Hooks</a></li>
+                </ul>
+            </li>
+            <li><strong>Basic Container Fields</strong>
+                <ul>
+                    <li><a href="#name">name</a></li>
+                    <li><a href="#image">image</a></li>
+                    <li><a href="#imagePullPolicy">imagePullPolicy</a></li>
+                    <li><a href="#command-args">command</a></li>
+                    <li><a href="#command-args">args</a></li>
+                    <li><a href="#workingDir">workingDir</a></li>
+                </ul>
+            </li>
+            <li><strong>Container Ports</strong>
+                <ul>
+                    <li><a href="#ports">ports</a></li>
+                    <li><a href="#ports">containerPort</a></li>
+                    <li><a href="#ports">hostPort</a></li>
+                    <li><a href="#ports">protocol</a></li>
+                    <li><a href="#ports">Naming ports</a></li>
+                </ul>
+            </li>
+            <li><strong>4. Environment Configuration</strong>
+                <ul>
+                    <li><a href="#env">env</a></li>
+                    <li><a href="#envFrom">envFrom</a></li>
+                    <li><a href="#env">Using ConfigMap</a></li>
+                    <li><a href="#env">Using Secret</a></li>
+                    <li><a href="#env">Variable expansion</a></li>
+                </ul>
+            </li>
+            <li><strong>5. Resource Management</strong>
+                <ul>
+                    <li><a href="#resources">resources.requests</a></li>
+                    <li><a href="#resources">resources.limits</a></li>
+                    <li><a href="#resources">CPU limits</a></li>
+                    <li><a href="#resources">Memory limits</a></li>
+                    <li><a href="#resources">Resource scheduling impact</a></li>
+                </ul>
+            </li>
+            <li><strong>6. Container Health Checks</strong>
+                <ul>
+                    <li><a href="#probes">livenessProbe</a></li>
+                    <li><a href="#probes">readinessProbe</a></li>
+                    <li><a href="#probes">startupProbe</a></li>
+                    <li><a href="#probes">Probe types: HTTP, TCP, Exec</a></li>
+                </ul>
+            </li>
+            <li><strong>7. Container Lifecycle Hooks</strong>
+                <ul>
+                    <li><a href="#lifecycle-hooks">postStart</a></li>
+                    <li><a href="#lifecycle-hooks">preStop</a></li>
+                    <li><a href="#lifecycle-hooks">Lifecycle event timing</a></li>
+                    <li><a href="#lifecycle-hooks">Common use cases</a></li>
+                </ul>
+            </li>
+            <li><strong>8. Volume Mounting</strong>
+                <ul>
+                    <li><a href="#volumeMounts">volumeMounts</a></li>
+                    <li><a href="#volumeMounts">mountPath</a></li>
+                    <li><a href="#volumeMounts">subPath</a></li>
+                    <li><a href="#volumeMounts">readOnly</a></li>
+                    <li><a href="#volumeMounts">Relationship with Pod volumes</a></li>
+                </ul>
+            </li>
+            <li><strong>9. Security Context (Container Level)</strong>
+                <ul>
+                    <li><a href="#securityContext">securityContext</a></li>
+                    <li><a href="#securityContext">runAsUser</a></li>
+                    <li><a href="#securityContext">runAsGroup</a></li>
+                    <li><a href="#securityContext">privileged</a></li>
+                    <li><a href="#securityContext">allowPrivilegeEscalation</a></li>
+                    <li><a href="#securityContext">capabilities</a></li>
+                </ul>
+            </li>
+            <li><strong>10. Image Pull Configuration</strong>
+                <ul>
+                    <li><a href="#imagePullSecrets">imagePullSecrets</a></li>
+                    <li><a href="#imagePullSecrets">Private registries</a></li>
+                    <li><a href="#imagePullSecrets">Authentication to registries</a></li>
+                </ul>
+            </li>
+            <li><strong>11. Container Termination Settings</strong>
+                <ul>
+                    <li><a href="#termination">terminationMessagePath</a></li>
+                    <li><a href="#termination">terminationMessagePolicy</a></li>
+                    <li><a href="#termination">terminationGracePeriodSeconds (Pod level but affects container)</a></li>
+                </ul>
+            </li>
+            <li><strong>12. Standard Streams</strong>
+                <ul>
+                    <li><a href="#standard-streams">stdin</a></li>
+                    <li><a href="#standard-streams">stdinOnce</a></li>
+                    <li><a href="#standard-streams">tty</a></li>
+                </ul>
+            </li>
+            <li><strong>13. Advanced Container Options</strong>
+                <ul>
+                    <li><a href="#advanced-options">workingDir</a></li>
+                    <li><a href="#advanced-options">volumeDevices</a></li>
+                    <li><a href="#advanced-options">resizePolicy</a></li>
+                    <li><a href="#advanced-options">restartPolicy interaction</a></li>
+                    <li><a href="#advanced-options">Container restart behavior</a></li>
+                </ul>
+            </li>
+            <li><strong>14. Debugging Containers</strong>
+                <ul>
+                    <li><a href="#debugging">kubectl logs</a></li>
+                    <li><a href="#debugging">kubectl exec</a></li>
+                    <li><a href="#debugging">Ephemeral containers (for debugging)</a></li>
+                </ul>
+            </li>
+            <li><strong>15. Full Container YAML Example</strong>
+                <ul>
+                    <li><a href="#full-yaml">Minimal container spec</a></li>
+                    <li><a href="#full-yaml">Production-level container spec</a></li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+
+    <!-- 1. Introduction to the Container Object -->
+    <div class="question" id="what-is-container"><strong>1. What is a Container?</strong></div>
     <div class="answer">
         <ul>
             <li>Container is instance of Image;</li>
@@ -19,8 +150,7 @@
                 <ul>
                     <li><b>Stateless</b>: Container doesn't have any state of it's own; If you need a state, use volumes or databases;</li>
                     <li><b>Immutable</b>: You can't make any changes to a running container; If you need a change, create new image and redeploy it;</li>
-                    <li><b>Disposable/Ephemeral</b>: Container is not meant to be long-lived; It is meant to be replaced with a new one if it fails or is replaced;</li>
-                    <li>Why Stateless and Immutable? It allows k8s to:
+                    <li><b>Why Stateless and Immutable?</b> It allows k8s to:
                         <ul>
                             <li>Restart a container without losing any data;</li>
                             <li>Scale up/down as needed;</li>
@@ -33,78 +163,160 @@
         </ul>
     </div>
 
-    <div class="question"><strong>2. Container YAML Configuration</strong></div>
+    <div class="question" id="pod-container-relationship"><strong>2. Relationship between Pod and Container</strong></div>
     <div class="answer">
         <ul>
-            <li><pre><code>containers:
-                - name: web                         # Name of the container, must be unique with in a Pod. You can't update it, once container is created.
-                  image: nginx:latest               # Name and tag of Docker Image.
-                  imagePullPolicy: IfNotPresent        
-                  command: ["echo"]                
-                  args: ["Hello k8s"]              
-                  workingDir: /app                  # Working directory for the container; Commands are executed from this directory; All relative paths are resolved relative to this directory; It overrides WORKDIR instruction in Dockerfile;
-                  
-                  ports:
-                    - containerPort: 80             # Port on which the application in the container is listening; 
-                      name: http                    # Optional name for the port; Used by other resources like Service, Ingress, etc;
-                      protocol: TCP                 # Protocol for the port; Can be TCP, UDP or SCTP; Defaults to TCP;      
-              
-                  env:                              
-                    - name: ENV
-                      value: production
-              
-                  resources:
-                    requests:
-                      cpu: "100m"
-                      memory: "128Mi"
-                    limits:
-                      cpu: "500m"
-                      memory: "512Mi"
-              
-                  volumeMounts:
-                    - name: config
-                      mountPath: /etc/config
-              
-                  livenessProbe:    # Detect broken container; If broken, kubelet will restart the container;
-                    httpGet:
-                      path: /health
-                      port: 80
-                    initialDelaySeconds: 10
-                    periodSeconds: 5
-
-                  startupProbe: # Wait for the container to start up; If not started, kubelet will restart the container;
-                    httpGet:
-                      path: /health
-                      port: 8080
-                    failureThreshold: 30
-                    periodSeconds: 10
-              
-                  readinessProbe: # Determine if ready for traffic; If not ready, kubelet will not send any traffic to the container;
-                    httpGet:
-                      path: /ready
-                      port: 8080
-                    periodSeconds: 5
-                    </code></pre></li>
-        </ul>
-    </div>
-
-    <div class="question"><strong>3. imagePullPolicy</strong></div>
-    <div class="answer">
-        <ul>
-            <li><b>imagePullPolicy</b>: It specifies the image pull policy for the container;</li>
-            <li>It can be Always, Never, IfNotPresent;</li>
-            <li>Defaults to Always if tag is :latest; Otherwise, IfNotPresent;</li>
-            <li>
+            <li>A Pod is the smallest deployable unit in Kubernetes — not a container;</li>
+            <li>A Pod wraps one or more containers;</li>
+            <li><b>What they share?</b>
                 <ul>
-                    <li><b>Always</b> - It will not blindly download the image always; But, It always contacts registry for the digest and matches it with the local cache; It there is a mismatch, it downloads the image(only the layers that are not matching) from registry; It does this, even when the container is restarted;</li>
-                    <li><b>IfNotPresent</b> - It contacts registry only if that image is not present in local cache;</li>
-                    <li><b>Never</b> - It never pulls the image from docker registry;</li>
+                    <li>All containers in a Pod share the same network namespace(IP Address, Port Space);
+                        <ul>
+                            <li>Every Pod gets it's own IP address, which is unique within the cluster;</li>
+                            <li>Container doesn't have it's own IP address; All containers in a Pod share the IP address of their Pod;</li>
+                            <li>Containers within the same Pod communicate via localhost;</li>
+                            <li>You can't run multiple containers on the same port in the same Pod;</li>
+                        </ul>
+                    </li>
+                    <li>Storage volumes</li>
+                </ul>
+            </li>
+            <li><b>What they don't share?</b>
+                <ul>
+                    <li>Container Image</li>
+                    <li>File system - Each container has it's own file system;</li>
+                    <li>Environment variables</li>
+                    <li>CPU/Memory limits</li>
                 </ul>
             </li>
         </ul>
     </div>
 
-    <div class="question"><strong>4. command and args</strong></div>
+    <div class="question" id="yaml-config"><strong>3. Container YAML Configuration</strong></div>
+    <div class="answer">
+        <div class="yaml-container">
+            <pre>
+- name: web                                 # Name of the container, must be unique with in a Pod. You can't update it, once container is created.
+  image: nginx:latest                       # Name and tag of Docker Image.
+  imagePullPolicy: IfNotPresent
+  workingDir: /app                          # Working directory for the container; Commands are executed from this directory; All relative paths are resolved relative to this directory; It overrides WORKDIR instruction in Dockerfile;
+  command: [ "echo" ]
+  args: [ "Hello k8s" ]
+
+  ports:
+    - containerPort: 80
+      name: http
+      protocol: TCP
+
+  env:
+    - name: ENV
+      value: production
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  volumeMounts:
+    - name: config
+      mountPath: /etc/config
+
+  livenessProbe:                          # Detect broken container; If broken, kubelet will restart the container; It doesn't wait for the readiness probes to succeed; If you want to wait, use initialDelaySeconds;
+    httpGet:                            
+      path: /health
+    port: 80
+    initialDelaySeconds: 10
+    periodSeconds: 5
+
+  startupProbe:                           # Wait for the container to start up; If not started, kubelet will restart the container;
+    httpGet:
+      path: /health
+      port: 8080
+    failureThreshold: 30
+    periodSeconds: 10
+
+  readinessProbe:                         # Determine if ready for traffic; If not ready, kubelet will not send any traffic to the container;
+    httpGet:
+      path: /ready
+      port: 8080
+    periodSeconds: 5
+            </pre>
+        </div>
+    </div>
+
+    <div class="question" id="container-lifecycle"><strong>3. Lifecycle and Hooks</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr><th>Phase</th><th>Description</th></tr>
+            <tr><td><strong>Waiting</strong></td><td>Container is not yet running; Reason could be one of the errors: <b>ContainerCreating</b>, <b>ErrImagePull</b>, <b>ImagePullBackOff</b>, <b>CrashLoopBackOff</b>;</td></tr>
+            <tr><td><strong>Running</strong></td><td>Container is running;</td></tr>
+            <tr><td><strong>Terminated</strong></td><td>Container has finished execution (either successfully or with an error);</td></tr>
+        </table> 
+        <ul>
+            <li><b>Common Reasons for Waiting State</b>
+                <ul>
+                    <li><b>ContainerCreating</b> - Container is not yet running, being created; This is normal and temporary;</li>
+                    <li><b>ErrImagePull</b> - It indicates an error pulling the image from the registry, on first attempt; It could be because of:
+                        <ul>
+                            <li>Invalid image name or tag;</li>
+                            <li>Image not found in the registry;</li>
+                            <li>Authentication issue;</li>
+                        </ul>
+                    </li>
+                    <li><b>ImagePullBackOff</b> - K8s is backing off (waiting) before retrying image pull, to avoid hammering the registry with requests; This state indicates that further pull attempts also failed;</li>
+                    <li><b>CrashLoopBackOff</b> - Container has started and crashed; K8s backed off before restarting and restart also crashed; Repeated crashes indicate a problem with the application code;</li>
+                </ul>
+            </li>
+            <li><b>Lifecycle Hooks</b>
+                <ul>
+                    <li><b>postStart</b> - Runs immediately after the container is started;</li>
+                    <li>        <div class="yaml-container">
+                        <pre>postStart:
+    exec:
+      command: ["/bin/sh", "-c", "echo started > /tmp/started"]</pre>
+                    </div>
+                    </li>
+                    <li><b>preStop</b> - Executed immediately before a container is terminated;</li>
+                    <li>        <div class="yaml-container">
+                        <pre>preStop:
+    httpGet:
+      path: /health
+      port: 8080</pre>
+                    </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- 2. Basic Container Fields -->
+
+    <div class="question" id="image"><strong>image</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Specifies the Docker image name and tag to use for the container;</li>
+            <li>Format: <b>registry/repository:tag</b> (e.g., nginx:latest, gcr.io/my-project/my-app:v1.2);</li>
+            <li>If no tag is specified, <b>:latest</b> is assumed;</li>
+            <li>If no registry is specified, Docker Hub is assumed;</li>
+        </ul>
+    </div>
+
+    <div class="question" id="imagePullPolicy"><strong>3. imagePullPolicy</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It tells kubelet when to pull the image from the registry, while creating a container;</li>
+            <li>It can be Always, Never, IfNotPresent; Defaults to <b>Always</b> if tag is <b>:latest</b>; Otherwise, <b>IfNotPresent</b>;</li>
+            <li><b>Always</b> - It will not blindly download the image always; But, It always contacts registry for the digest and matches it with the local cache; It there is a mismatch, it downloads the image(only the layers that are not matching) from registry; It does this, even when the container is restarted;</li>
+            <li><b>IfNotPresent</b> - It contacts registry only if that image is not present in local cache;</li>
+            <li><b>Never</b> - It never pulls the image from docker registry;</li>
+        </ul>
+    </div>
+
+    <div class="question" id="command-args"><strong>4. command and args</strong></div>
     <div class="answer">
         <ul>
             <li><b>command</b>: It overrides the default startup command(ENTRYPOINT) defined in docker image; This is executed every time the container is started;</li>
@@ -113,27 +325,41 @@
             <li>If you define command without args, default args are used with new command;</li>
             <li>If you define command and args, command is executed with new args;</li>
             <li>By default, command is not executed within a shell; It is executed directly as a process by the container runtime; So, things like pipes(|), redirection(>), environment variables expansion($HOME), chaining(&&) will not work;</li>
-            <li>If you want to execute a command in a shell, do this: command: ["/bin/sh", "-c"] args: ["echo hello && sleep 10"]</li>
+            <li><b>If you want to execute a command in the shell</b>, do this: command: ["/bin/sh", "-c"] args: ["echo hello && sleep 10"]</li>
         </ul>
     </div>
 
-    <div class="question"><strong>5. ports</strong></div>
+    <div class="question" id="workingDir"><strong>workingDir</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Sets the working directory for the container's main process;</li>
+            <li>Commands are executed from this directory; All relative paths are resolved relative to this directory;</li>
+            <li>It overrides the WORKDIR instruction in the Dockerfile;</li>
+            <li>If not specified, the container runtime default is used (usually / or the WORKDIR from the image);</li>
+        </ul>
+    </div>
+
+
+    <!-- 3. Container Ports -->
+
+    <div class="question" id="ports"><strong>5. ports</strong></div>
     <div class="answer">
         <ul>
             <li>It can be a single port or a list of ports;</li>
             <li>Each port can have a name, protocol and port number;</li>
             <li><b>containerPort</b>: 
                 <ul>
-                    <li>server.port=8080 in application.yml -> Actual port on which the application is listening;</li>
+                    <li><b>server.port=8080 in application.yml</b> -> Actual port on which the application is listening;</li>
                     <li>It doesn't override the port on which the application is listening;</li>
                     <li>It is used to pass the port to the container runtime;</li>
-                    <li>Why is this needed? Container can run absolutely fine without this; But, it is used by other resources like Service, Ingress, etc to route traffic to the container;</li>
-                    <li>Can containers running in different pods(may be same or different nodes) use same port?
+                    <br>
+                    <li><b>Why is this needed?</b> Container can run absolutely fine without this; But, it is used by other resources like Service, Ingress, etc to route traffic to the container;</li>
+                    <li><b>Can containers running in different pods(may be same or different nodes) use same port?</b>
                         <ul>
                             <li>Yes, they can; But, they need to be in different pods; If they are in the same pod, they will conflict;</li>
                         </ul>
                     </li>
-                    <li>what is the purpose of supporting multiple ports in container spec?
+                    <li><b>What is the purpose of supporting multiple ports in container spec?</b>
                         <ul>
                             <li>Many modern apps expose a metrics port separate from the main API;</li>
                             <li>Eg: Prometheus 8080 for REST API and 9090 for metrics;</li>
@@ -149,6 +375,14 @@
                     <li>It maps a port on the node (host machine) to a port inside the container;</li>
                     <li>It is optional and if not specified, a random port is assigned;</li>
                     <li>Only one Pod per node can use a given hostPort;</li>
+                    <li>It is rarely used; Alternatively, use: ClusterIP, NodePort, LoadBalancer, Ingress;</li>
+                    <li>When is it used?
+                        <ul>
+                            <li>Monitoring agents like Prometheus, Grafana, etc;</li>
+                            <li>Log collectors</li>
+                            <li>These often run as DaemonSets so each node has one Pod;</li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li><b>hostIP</b>
@@ -162,104 +396,117 @@
                     kubectl port-forward pod/my-pod 8080:80
                 </ul>: It specifies the IP address of the host; It is optional and if not specified, the container will be assigned an IP address from the node's IP address space;</li>
             </li>
-            <li><b>hostPort</b>
-                <ul>
-                    <li>It is rarely used; Alternatively, use: ClusterIP, NodePort, LoadBalancer, Ingress;</li>
-                    <li>When is it used?
-                        <ul>
-                            <li>Monitoring agents like Prometheus, Grafana, etc;</li>
-                            <li>Log collectors</li>
-                            <li>These often run as DaemonSets so each node has one Pod;</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>6. env</strong></div>
+
+    <!-- 4. Environment Configuration -->
+
+    <div class="question" id="env"><strong>6. env</strong></div>
     <div class="answer">
         <ul>
             <li>It defines environment variables that are avaialble inside the container; They are available to all processes in the container;</li>
             <li>Instead of hardcoded values, k8s can pull these values from a ConfigMap or Secret or Pod metadata;</li>
             <li>ConfigMap
-                <ul>
-                    <li><pre><code># ConfigMap 
-                        apiVersion: v1
-                        kind: ConfigMap
-                        metadata:
-                          name: app-config
-                        data:
-                          APP_MODE: production
-                        
-                        # Pod 
-                        env:
-                            - name: APP_MODE
-                                valueFrom:
-                                configMapKeyRef:
-                                    name: app-config
-                                    key: APP_MODE
-                        </code></pre></li>
-                </ul>
+<div class="yaml-container">
+    <pre>
+# ConfigMap 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: app-config
+data:
+    APP_MODE: production
+
+# Pod 
+env:
+    - name: APP_MODE
+        valueFrom:
+        configMapKeyRef:
+            name: app-config
+            key: APP_MODE
+</pre>
+</div>
             </li>
             <li>Secret
-                <ul>
-                    <li><pre><code># Secret 
-                        apiVersion: v1
-                        kind: Secret
-                        metadata:
-                          name: app-secret
-                        data:
-                          DB_PASSWORD: cGFzc3dvcmQ=
-                        
-                        # Pod 
-                        env:
-                            - name: DB_PASSWORD
-                                valueFrom:
-                                secretKeyRef:
-                                    name: app-secret
-                                    key: DB_PASSWORD
-                        </code></pre>
-                        </li>
-                </ul>
+<div class="yaml-container">
+    <pre>
+# Secret 
+apiVersion: v1
+kind: Secret
+metadata:
+    name: app-secret
+data:
+    DB_PASSWORD: cGFzc3dvcmQ=
+
+# Pod 
+env:
+    - name: DB_PASSWORD
+        valueFrom:
+        secretKeyRef:
+            name: app-secret
+            key: DB_PASSWORD
+</pre>
+</div>
             </li>
             <li>Pod Metadata
-                <ul>
-                    <li><pre><code># Pod 
-                        env:
-                            - name: POD_NAME
-                                valueFrom:
-                                fieldRef:
-                                    fieldPath: metadata.name
-                        
-                        # Inside the container 
-                        POD_NAME=myapp-7d8c9f   # Useful for logging, tracing etc;
-                    </code></pre></li>
-                </ul>
+<div class="yaml-container">
+    <pre>
+# Pod 
+env:
+    - name: POD_NAME
+        valueFrom:
+        fieldRef:
+            fieldPath: metadata.name
+
+# Inside the container 
+POD_NAME=myapp-7d8c9f   # Useful for logging, tracing etc;
+</pre>
+</div>
             </li>
             <li>Resource Fields - Application can then read its CPU limit;
-                <ul>
-                    <li><pre><code># Pod 
-                        env:
-                            - name: CPU_LIMIT
-                                valueFrom:
-                                resourceFieldRef:
-                                    containerName: app
-                                    resource: limits.cpu
-                                    </code></pre></li>
-                </ul>
+<div class="yaml-container">
+    <pre>
+# Pod 
+env:
+    - name: CPU_LIMIT
+        valueFrom:
+        resourceFieldRef:
+            containerName: app
+            resource: limits.cpu
+
+# Inside the container 
+CPU_LIMIT=500m   # Useful for logging, tracing etc;
+</pre>
+</div>
             <li>If the value changes in a ConfigMap or Secret, the container must be restarted to see the change;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>7. envFrom</strong></div>
+    <div class="question" id="envFrom"><strong>7. envFrom</strong></div>
     <div class="answer">
         <ul>
-            
+            <li>Instead of mapping individual keys from a ConfigMap or Secret, envFrom loads all key-value pairs at once;</li>
+            <li>
+<div class="yaml-container">
+    <pre>
+envFrom:
+  - configMapRef:
+      name: app-config
+  - secretRef:
+      name: app-secret
+</pre>
+</div>
+            </li>
+            <li>All keys from the referenced ConfigMap/Secret become environment variables inside the container;</li>
+            <li>You can add an optional <b>prefix</b> to avoid naming collisions;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>8. resources</strong></div>
+
+    <!-- 5. Resource Management -->
+
+    <div class="question" id="resources"><strong>8. resources</strong></div>
     <div class="answer">
         <ul>
             <li><b>Example</b>
@@ -307,34 +554,10 @@
         </ul>
     </div>
 
-    <div class="question"><strong>9. volumeMounts</strong></div>
-    <div class="answer">
-        <ul>
-            <li>It specifies where to mount the specified volume inside the container;</li>
-            <li>It can be a single volume or a list of volumes;</li>
-            <li><b>name</b>: Name of the volume to mount;</li>
-            <li><b>mountPath</b>: Path inside the container to mount the volume;</li>
-            <li><b>readOnly</b>: If true, the volume is mounted as read-only; Defaults to false;</li>
-            <li><b>subPath</b>: If specified, only a sub-path of the volume is mounted; Defaults to empty;</li>
-            <li><b>subPathExpr</b>: If specified, a sub-path expression of the volume is mounted; Defaults to empty;</li>
-            <li>Example
-                <ul>
-                    <li><pre><code>volumeMounts:
-                        - name: config
-                          mountPath: /etc/config
-                    </code></pre></li>  
-                </ul>
-            </li>
-            <li>Why volumeMounts is needed?
-                <ul>
-                    <li>To use external storage systems;</li>
-                    <li>To share data between containers in the same Pod;</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
 
-    <div class="question"><strong>10. Probes</strong></div>
+    <!-- 6. Container Health Checks -->
+
+    <div class="question" id="probes"><strong>10. Probes</strong></div>
     <div class="answer">
         <ul>
             <li>It is used to check the health of a container;</li>
@@ -406,60 +629,268 @@ Type of probes
             </li>
         </ul>
     </div>
-    
 
 
+    <!-- 7. Container Lifecycle Hooks -->
 
-
-
-    <div class="question"><strong>2. Container States</strong></div>
-    <div class="answer">
-        <table>
-            <tr><th>Phase</th><th>Description</th></tr>
-            <tr><td><strong>Waiting</strong></td><td>Container is not yet running (pulling image, applying secrets, etc.);</td></tr>
-            <tr><td><strong>Running</strong></td><td>Container is executing;</td></tr>
-            <tr><td><strong>Terminated</strong></td><td>Container has finished execution (either successfully or with an error);</td></tr>
-        </table>
-    </div>
-    
-    <div class="question"><strong>2. Container States</strong></div>
+    <div class="question" id="lifecycle-hooks"><strong>Container Lifecycle Hooks</strong></div>
     <div class="answer">
         <ul>
-            <li><strong>Waiting:</strong> Container is not yet running (pulling image, applying secrets, etc.);</li>
-            <li><strong>Running:</strong> Container is executing;</li>
-            <li><strong>Terminated:</strong> Container has finished execution (either successfully or with an error);</li>
+            <li>Kubernetes provides two lifecycle hooks for containers: <b>postStart</b> and <b>preStop</b>;</li>
+            <li><b>postStart</b>
+                <ul>
+                    <li>Executed immediately after a container is created;</li>
+                    <li>There is no guarantee that it will execute before the container's ENTRYPOINT;</li>
+                    <li>If the handler fails, the container is killed and restarted according to restartPolicy;</li>
+                </ul>
+            </li>
+            <li><b>preStop</b>
+                <ul>
+                    <li>Called immediately before a container is terminated;</li>
+                    <li>It is blocking — the container is not killed until the hook completes (or the grace period expires);</li>
+                    <li>Useful for graceful shutdown: draining connections, deregistering from service discovery, flushing logs;</li>
+                </ul>
+            </li>
+            <li><b>Hook handlers</b> can be: exec (run a command), httpGet (send an HTTP request);</li>
+            <li>Example
+<div class="yaml-container">
+    <pre>
+lifecycle:
+  postStart:
+    exec:
+      command: ["/bin/sh", "-c", "echo started > /tmp/started"]
+  preStop:
+    httpGet:
+      path: /shutdown
+      port: 8080
+</pre>
+</div>
+            </li>
         </ul>
-        <pre><code># Check container state
-kubectl get pod my-pod -o jsonpath='{.status.containerStatuses[0].state}'</code></pre>
     </div>
 
-    <div class="question"><strong>3. Pod Conditions</strong></div>
+
+    <!-- 8. Volume Mounting -->
+
+    <div class="question" id="volumeMounts"><strong>9. volumeMounts</strong></div>
     <div class="answer">
         <ul>
-            <li><strong>PodScheduled:</strong> Pod has been scheduled to a node;</li>
-            <li><strong>Initialized:</strong> All init containers have completed;</li>
-            <li><strong>ContainersReady:</strong> All containers in the Pod are ready;</li>
-            <li><strong>Ready:</strong> Pod is ready to serve traffic (passes readiness probe);</li>
+            <li>It specifies where to mount the specified volume inside the container;</li>
+            <li>It can be a single volume or a list of volumes;</li>
+            <li><b>name</b>: Name of the volume to mount;</li>
+            <li><b>mountPath</b>: Path inside the container to mount the volume;</li>
+            <li><b>readOnly</b>: If true, the volume is mounted as read-only; Defaults to false;</li>
+            <li><b>subPath</b>: If specified, only a sub-path of the volume is mounted; Defaults to empty;</li>
+            <li><b>subPathExpr</b>: If specified, a sub-path expression of the volume is mounted; Defaults to empty;</li>
+            <li>Example
+                <ul>
+                    <li><pre><code>volumeMounts:
+                        - name: config
+                          mountPath: /etc/config
+                    </code></pre></li>  
+                </ul>
+            </li>
+            <li>Why volumeMounts is needed?
+                <ul>
+                    <li>To use external storage systems;</li>
+                    <li>To share data between containers in the same Pod;</li>
+                </ul>
+            </li>
+            <li><b>Relationship with Pod volumes</b>: Volumes are defined at the Pod level (spec.volumes), and then each container mounts the volumes it needs via volumeMounts; A volume must be declared in spec.volumes before it can be referenced in a container's volumeMounts;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>4. Common Status Values (kubectl get pods)</strong></div>
+
+    <!-- 9. Security Context (Container Level) -->
+
+    <div class="question" id="securityContext"><strong>Security Context (Container Level)</strong></div>
     <div class="answer">
-        <table>
-            <tr><th>Status</th><th>Meaning</th></tr>
-            <tr><td>ContainerCreating</td><td>Pulling image or setting up the container</td></tr>
-            <tr><td>Running</td><td>All containers are running</td></tr>
-            <tr><td>CrashLoopBackOff</td><td>Container keeps crashing and K8s is backing off restarts</td></tr>
-            <tr><td>ImagePullBackOff</td><td>Cannot pull the container image</td></tr>
-            <tr><td>ErrImagePull</td><td>Failed to pull image (wrong name, auth issue)</td></tr>
-            <tr><td>Completed</td><td>Container finished successfully (Jobs)</td></tr>
-            <tr><td>Terminating</td><td>Pod is being deleted (graceful shutdown period)</td></tr>
-            <tr><td>OOMKilled</td><td>Container exceeded memory limit</td></tr>
-        </table>
+        <ul>
+            <li>Defines privilege and access control settings for a container;</li>
+            <li><b>runAsUser</b>: Specifies the UID to run the container process as;</li>
+            <li><b>runAsGroup</b>: Specifies the GID to run the container process as;</li>
+            <li><b>privileged</b>: If true, the container runs in privileged mode (access to all host devices); Defaults to false;</li>
+            <li><b>allowPrivilegeEscalation</b>: Controls whether a process can gain more privileges than its parent; Defaults to true;</li>
+            <li><b>capabilities</b>: Add or drop Linux capabilities (e.g., NET_ADMIN, SYS_TIME);</li>
+            <li>Example
+<div class="yaml-container">
+    <pre>
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - NET_BIND_SERVICE
+</pre>
+</div>
+            </li>
+        </ul>
     </div>
 
 
+    <!-- 10. Image Pull Configuration -->
 
+    <div class="question" id="imagePullSecrets"><strong>Image Pull Configuration</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>imagePullSecrets</b> is defined at the Pod level but directly affects container image pulling;</li>
+            <li>It references Kubernetes Secrets of type docker-registry that contain credentials for private registries;</li>
+            <li>Example
+<div class="yaml-container">
+    <pre>
+# Create the secret
+kubectl create secret docker-registry my-registry-cred \
+  --docker-server=registry.example.com \
+  --docker-username=user \
+  --docker-password=pass
+
+# Reference in Pod spec
+spec:
+  imagePullSecrets:
+    - name: my-registry-cred
+  containers:
+    - name: app
+      image: registry.example.com/my-app:v1
+</pre>
+</div>
+            </li>
+            <li>Without this, pulling from a private registry will result in ErrImagePull or ImagePullBackOff;</li>
+        </ul>
+    </div>
+
+
+    <!-- 11. Container Termination Settings -->
+
+    <div class="question" id="termination"><strong>Container Termination Settings</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>terminationMessagePath</b>: Path where the container writes its termination message; Defaults to /dev/termination-log; Kubernetes reads this file and surfaces it in the container's status;</li>
+            <li><b>terminationMessagePolicy</b>: Can be File (default) or FallbackToLogsOnError (uses the last chunk of container log output if the termination message file is empty);</li>
+            <li><b>terminationGracePeriodSeconds</b>: Defined at the Pod level; Time (in seconds) given to a container to shut down gracefully after receiving SIGTERM; Defaults to 30 seconds; After this period, the container receives SIGKILL;</li>
+        </ul>
+    </div>
+
+
+    <!-- 12. Standard Streams -->
+
+    <div class="question" id="standard-streams"><strong>Standard Streams</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>stdin</b>: If true, allocates a stdin buffer for the container; Defaults to false;</li>
+            <li><b>stdinOnce</b>: If true, stdin is closed after the first attach session; Defaults to false;</li>
+            <li><b>tty</b>: If true, allocates a TTY (terminal) for the container; Requires stdin to be true; Useful for interactive containers;</li>
+            <li>These are primarily used for interactive/debugging scenarios, not typical production workloads;</li>
+        </ul>
+    </div>
+
+
+    <!-- 13. Advanced Container Options -->
+
+    <div class="question" id="advanced-options"><strong>Advanced Container Options</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>volumeDevices</b>: Allows mapping raw block devices (instead of filesystems) into a container; Used with PersistentVolumeClaims that have volumeMode: Block;</li>
+            <li><b>resizePolicy</b>: Controls how the container behaves when its resource requests/limits are changed in-place (without restarting); Part of the In-Place Pod Vertical Scaling feature;</li>
+            <li><b>restartPolicy interaction</b>: The Pod-level restartPolicy (Always, OnFailure, Never) determines what happens when a container exits; Kubernetes restarts individual containers within a Pod, not the entire Pod;</li>
+            <li><b>Container restart behavior</b>: When a container crashes, kubelet restarts it with exponential back-off delay (10s, 20s, 40s, ...) capped at 5 minutes;</li>
+        </ul>
+    </div>
+
+
+    <!-- 15. Full Container YAML Example -->
+
+    <div class="question" id="full-yaml"><strong>Full Container YAML Example</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Minimal container spec</b>
+<div class="yaml-container">
+    <pre>
+containers:
+  - name: app
+    image: nginx:1.25
+</pre>
+</div>
+            </li>
+            <li><b>Production-level container spec</b>
+<div class="yaml-container">
+    <pre>
+containers:
+  - name: web
+    image: myregistry.io/myapp:v2.1.0
+    imagePullPolicy: Always
+    ports:
+      - containerPort: 8080
+        name: http
+        protocol: TCP
+    env:
+      - name: APP_ENV
+        value: production
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secret
+            key: password
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: "1"
+        memory: 512Mi
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: 8080
+      periodSeconds: 5
+    startupProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      failureThreshold: 30
+      periodSeconds: 10
+    lifecycle:
+      preStop:
+        exec:
+          command: ["/bin/sh", "-c", "sleep 5"]
+    volumeMounts:
+      - name: config-vol
+        mountPath: /etc/config
+        readOnly: true
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 3000
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+</pre>
+</div>
+            </li>
+        </ul>
+    </div>
+
+
+<pre>
+    OOMKilled occurs when a container exceeds its configured memory limit, and the Linux kernel kills the container to protect the node from running out of memory.
+    <li><b>Ephemeral containers</b>
+        <ul>
+            <li>Temporary containers added to an existing Pod for debugging;</li>
+            <li>Useful when the main container lacks debugging tools (e.g., distroless images);</li>
+            <li>kubectl debug -it pod-name --image=busybox --target=container-name;</li>
+            <li>Ephemeral containers cannot be restarted and do not have ports or probes;</li>
+        </ul>
+    </li>
+</pre>
 </body>
 
 </html>
