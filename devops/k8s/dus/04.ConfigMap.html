@@ -11,24 +11,8 @@
 <body>
     <div class="question"><strong>1. Hello</strong></div>
     <div class="answer">
-    <pre>What is ConfigMap?
-  Almost every application can be fine-tuned through configuration.
-  Never store application configuration(like database URL, username, password etc) in the image/pod/deployment/server, separate it!
-  In case of non-sensitive configuration, use ConfigMap; 
-	In case of sensitive configuration(passwords, API keys), use Secret;
-
-	It stores data in key-value pairs, like a Map;
-	Data in ConfigMap is passed to Pods via environment variables, command line arguments or mount configmap as file in a volume;
-
-	It is tied to the namespace in which it is created;
-
-Why to use ConfigMap?
-	- Runtime configuration
-	  By separating the configuration from image, it allows us to change the configuration, without rebuilding the image OR redeploying;
-  - Share configuration between pods 
-    You can share configuration between multiple pods or containers;
-  - Environment specific configuration 
-	  You can use different ConfigMaps for different environments(development, staging, production etc);
+    
+	
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 kubectl create -f &lt;configmap.yml&gt; 													                  # Create configmap from ConfigMap resource;
 kubectl create cm &lt;name&gt; --from-literal k1=v1 --from-literal k2=v2 					  # CLI: Create configmap from literals;
@@ -43,7 +27,6 @@ kubectl edit cm &lt;name&gt;                                                    
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Use envFrom to load all keys as environment variables.
 Use env with configMapKeyRef for selective keys.
 Use volumes to mount config as files.
 
@@ -98,7 +81,7 @@ spec:
 ------------------------------------------------------------
 # Pass the configuration(key-value pairs) from command line;
 ------------------------------------------------------------
-&gt; kubectl create configmap cm1 --from-literal=k1=v1
+&gt; kubectl create configmap cm1 --from-literal k1=v1
 configmap/cm1 created
 
 &gt; kubectl create configmap cm2 --from-literal k2=v2 --from-literal k3=v3

@@ -20,6 +20,12 @@
             <li>emptyDir is deleted, when the Pod is restarted or deleted or rescheduled to a different node;</li>
             <li>Data in the emptyDir volume survives even if the containers are restarted or deleted;</li>
             <li>Data in the emptyDir volume is lost, when the Pod is restarted or deleted or rescheduled to a different node;</li>
+            <li>Why, on eath, anyone would need a storage which by nature is ephemral, and no longer exists when Pod is destroyed OR Node is down?
+                <ul>
+                    <li>For storing intermediate results, in case of disk-based merge sort etc;</li>
+                    <li>For checkpointing a long computation, for recovery from crashes;</li>
+                </ul>
+            </li>
         </ul>
     </div>
 

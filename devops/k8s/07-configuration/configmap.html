@@ -14,74 +14,63 @@
     <div class="question"><strong>1. What is a ConfigMap?</strong></div>
     <div class="answer">
         <ul>
-            <li>A Kubernetes object that stores <strong>non-confidential configuration data</strong> as key-value pairs;</li>
-            <li>Decouples configuration from container images — change config without rebuilding;</li>
-            <li>Can be consumed as <strong>environment variables</strong>, <strong>command-line arguments</strong>, or <strong>mounted files</strong>;</li>
+            <li>It is a k8s object that stores configuration as key-value pairs;</li>
+            <li>It is used to store non-sensitive configuration like database URL, username etc; For sensitive configuration like passwords and tokens, use Secret;</li>
+            <li>ConfigMaps are stored in the namespace in which they are created;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Creating ConfigMaps</strong></div>
+    <div class="question"><strong>2. Why use a ConfigMap?</strong></div>
     <div class="answer">
-        <pre><code># From literal values
-kubectl create configmap app-config \
-  --from-literal=DB_HOST=mysql \
-  --from-literal=DB_PORT=3306
-
-# From a file
-kubectl create configmap app-config --from-file=config.properties
-
-# From an env file
-kubectl create configmap app-config --from-env-file=.env
-
-# YAML manifest
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  DB_HOST: mysql
-  DB_PORT: "3306"
-  app.properties: |
-    server.port=8080
-    server.host=0.0.0.0</code></pre>
-    </div>
-
-    <div class="question"><strong>3. Using as Environment Variables</strong></div>
-    <div class="answer">
-        <pre><code>spec:
-  containers:
-    - name: app
-      image: myapp:v1
-      envFrom:
-        - configMapRef:
-            name: app-config
-      # Or individual keys:
-      env:
-        - name: DATABASE_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: DB_HOST</code></pre>
-    </div>
-
-    <div class="question"><strong>4. Using as Mounted Files</strong></div>
-    <div class="answer">
-        <pre><code>spec:
-  containers:
-    - name: app
-      image: myapp:v1
-      volumeMounts:
-        - name: config-volume
-          mountPath: /etc/config
-  volumes:
-    - name: config-volume
-      configMap:
-        name: app-config</code></pre>
         <ul>
-            <li>Each key in the ConfigMap becomes a <strong>file</strong> in the mount path;</li>
-            <li>Mounted ConfigMaps are <strong>updated automatically</strong> when the ConfigMap changes (with a delay);</li>
+          <li><b>Runtime configuration</b>
+            <ul>
+              <li>Almost every application can be fine-tuned through configuration;</li>
+              <li>Never store application configuration(like database URL, username, password etc) in the image/pod/deployment/server, separate it!</li>
+              <li>By separating the configuration from image, it allows us to change the configuration, without rebuilding the image OR redeploying;</li>
+            </ul>
+          </li>
+          <li><b>Share configuration between pods</b>
+            <ul>
+              <li>You can share configuration between multiple pods or containers;</li>
+            </ul>
+          </li>
+          <li><b>Environment specific configuration</b>
+            <ul>
+              <li>You can use different ConfigMaps for different environments(development, staging, production etc);</li>
+            </ul>
+          </li>
         </ul>
     </div>
+
+    <div class="question"><strong>3. ConfigMap Demo</strong></div>
+    <div class="answer">
+        <img src="cm-demo.png" alt="ConfigMap Demo" style="width: 60%;" />
+    </div>
+
+
+    <div class="question"><strong>4. What happens when a ConfigMap is updated while Pods are running?</strong></div>
+    <div class="answer">
+        <ul>
+          <li><b>If ConfigMap is used as environment variables</b>: 
+            <ul>
+              <li>Environment variables are set when the container is started;</li>
+              <li>So, running pods don't get the udpated value;</li>
+              <li>Restart: kubectl rollout restart deployment &lt;name&gt;</li>
+            </ul>
+          </li>
+          <li><b>If ConfigMap is used as a volume</b>:
+            <ul>
+              <li>Files are updated automatically in the running pod(with around 1 min of delay);</li>
+              <li>But, the application must reload the file to get new config;</li>
+            </ul>
+
+          </li>
+        </ul>
+        <img src="cm-demo.png" alt="ConfigMap Demo" style="width: 60%;" />
+    </div>
+
+    
 
 </body>
 
