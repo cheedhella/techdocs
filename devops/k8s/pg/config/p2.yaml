@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm-p2
+spec:
+  containers:
+    - name: cm-p2-c1
+      image: nginx
+      volumeMounts:
+        - name: cm2-volume
+          mountPath: /etc/cm2
+  volumes:
+    - name: cm2-volume
+      configMap:
+        name: cm2

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ed-demo-1
+spec:
+  containers:
+  - name: writer
+    image: busybox
+    command: ["sh", "-c", "echo Hello Kubernetes > /shared/message.txt; sleep 300"]
+    volumeMounts:
+    - name: ed-volume
+      mountPath: /shared
+
+  - name: reader
+    image: busybox
+    command: ["sh", "-c", "cat /shared/message.txt; sleep 300"]
+    volumeMounts:
+    - name: ed-volume
+      mountPath: /shared
+
+  volumes:                      # Volume is created at Pod level and shared b/w containers;
+  - name: ed-volume
+    emptyDir:
+      medium: ""                # when the pod is created, empty dir is created in Node disk/file system, under /var/lib/kubele folder;
+      sizeLimit: "500Mi"        # Limits the maximum storage the volume can use;
+
