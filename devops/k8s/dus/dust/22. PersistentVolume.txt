@@ -1,9 +1,170 @@
+What is a Persistent Volume?
+	A PV is a resource object in a Kubernetes cluster which continues to exist even after the pods using it have been destroyed.
+	PVs must be requested through persistent volume claims (PVCs), which are requests for storage. A PVC is essentially a request to mount a PV meeting certain requirements on a pod. 
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  local:
+    path: /mnt/data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - my-node  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is a Persistent Volume Claim?
+
+When you create a persistent volume claim, the Kubernetes control plane finds the correct PV. If found, it will bind the PVC to the PV.
 
 
 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  storageClassName: local-storage // manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi 
 
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+What is a Storage Class?
+	Before StorageClass, cluster admin creates a PV; Developer creates a PVC, PVC binds to an available PV;
+	After StorageClass, when a Pod requests a PV through PVC, K8s uses StorageClasss to provision the PV dynamically;
 
+	When a PVC is created, Kubernetes creates a PersistentVolume and binds it to the PVC automatically, if binding mode is Immediate;
+
+# StorageClass YAML 
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-storage
+
+provisioner: kubernetes.io/aws-ebs
+
+parameters:
+  type: gp3
+
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+
+provisioner 
+	- It specifies the plugin that creates the storage;
+	- Common Provisioners: AWS -> ebs.csi.aws.com; GCP -> pd.csi.storage.gke.io; Azure -> disk.csi.azure.com;
+parameters 
+	- It specifies type and other configuration of the provisioner;
+
+reclaimPolicy
+	- What happens after PVC deletion;
+		- Delete -> Volume is deleted automatically;
+		- Retain -> Volume stays for manual recovery; 
+
+volumeBindingMode
+	- When the PV is created/bound;
+		-- Immediate -> PV is created when PVC is created;
+		-- WaitForFirstConsumer -> PV is created, when scheduling the Pod;
+
+allowVolumeExpansion
+	- Allows resizing the volume later; Eg: old PVC -> 10Gi, update the PVC -> 15Gi, k8s automatically expands the storage;
+
+What is Default StorageClass?
+	Clusters usually have a default StorageClass;
+	If PVC does not specify storageClassName, k8s uses the default one;
+
+
+ Persistent Volume Claim (PVC) is a user's request for storage that can be fulfilled by a Persistent Volume (PV)
+When a user creates a PVC, Kubernetes looks for a suitable PV to bind it to, ensuring that the storage requirements specified in the PVC are met. If a matching PV is found, the PVC is bound to that PV, making the storage accessible to the application.
+
+Here's a simple analogy: If a Persistent Volume is like a parking garage, a Persistent Volume Claim is the parking ticket that gives you a spot in that garage.
+
+> kubectl get sc 
+standard 		- default storage
+fast-ssd 		- high-performance disks
+nfs-storage 	- shared storage
+
+
+A cluster may define multiple storage classes based on the need;
+
+# Standard storage: used for normal workloads;
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp3
+
+# Fast SSD Storage: used for databases or high IOPS applications;
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: ebs.csi.aws.com
+parameters:
+  type: io1
+
+# Shared Storage (NFS): used for multiple pods sharing storage;
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage
+provisioner: nfs.csi.k8s.io
+
+# Using a cluster storage class in PVC 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-storage
+spec:
+  storageClassName: fast-ssd
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+Default StorageClass
+	- A cluster usually has one default storage class.
+	- If PVC doesn't specify any storage class, k8s uses the default storage class;
+
+Cluster StorageClasses in Kubernetes are cluster-scoped resources that define different storage provisioning configurations that can be used by PersistentVolumeClaims across all namespaces.
+
+Clusters use different storage classes for different workloads.
+
+| Workload       | StorageClass |
+| -------------- | ------------ |
+| Web apps       | standard     |
+| Databases      | fast-ssd     |
+| Shared files   | nfs          |
+| Backup storage | slow-hdd     |
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Attaching volumes to pods
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Static Provisioning 
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dynamic Provisioning
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -15,7 +176,7 @@ Often, these are different type of tasks, that are often managed by different te
 We can decouple this configuration using PersistentVolume (infrastructure task) and PersistentVolumeClaim (development task);
 
 What is Persistent Volume?
-	It is a piece of storage in the cluster, that has been provisioned by an cluster administrator OR dynamically provisioned using StorageClass;
+	It is a piece of storage in the cluster, that has been provisioned manually by an Cluster Administrator OR dynamically provisioned using StorageClass;
 	It abstracts away different type of storages; 
 	It has a lifecycle that is independent of any Pod that uses it; Event if you shutdown or terminate the Pod, 
 
@@ -345,14 +506,6 @@ K8s Volume Types
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-	It declares the path on the host Node that is the location of this shared directory.
-	hostPath: /var/sharedPodDir -> It creates a directory called sharedPodDir in /var on the Node hosting the Pod.
-
-	life of hostPath Volume?
-	https://learning.oreilly.com/library/view/devops-with-kubernetes/9781789533996/dbcfee51-6b94-489c-80c2-46a4e5e27066.xhtml
+local_machine -software-aprisma -spectrum_spectrum60

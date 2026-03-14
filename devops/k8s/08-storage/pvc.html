@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Persistent Volume Claim</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Persistent Volume Claim</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Persistent Volume Claim?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a <strong>request for storage</strong> by an application — like a Pod requesting CPU/memory;</li>
+            <li>K8s finds or creates a PV that matches the PVC's requirements (size, access mode, StorageClass) and binds it to PVC;</li>
+            <li>Pod referencing PVC uses it;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. PVC Lifecycle</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Pending</b>: PVC is created, but no PV is bound to it;</li>
+            <li><b>Bound</b>: PVC is bound to a PV;</li>
+            <li><b>Lost</b>: PV is lost, but PVC is still bound to it;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. PVC YAML Configuration</strong></div>
+    <div class="answer">
+        <div class="yaml-container">
+          <pre>
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+  namespace: production
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+          </pre>
+      </div>
+      <br>
+      <ul>
+        <li><b>Access Modes</b>
+          <ul>
+            <li>It specifies how the volume can be used by the Pods;</li>
+            <li>ReadWriteOnce: The volume can be mounted as read-write by a single node;</li>
+            <li>ReadOnlyMany: The volume can be mounted as read-only by many nodes;</li>
+            <li>ReadWriteMany: The volume can be mounted as read-write by many nodes;</li>
+          </ul>
+          <br>
+          <ul><b>Why Pods needs specify this informaton?</b>
+            <ul>
+              <li>Different storage systems support different capabilities;</li>
+              <li>So, K8s uses this information to match the PVC with the appropriate PV;</li>
+            </ul>
+          </ul>
+        </li>
+        <li><b>resources.requests.storage</b> - It specifies the size of the volume needed by the application;</li>
+        <li><b>volumeMode</b> - Filesystem or Block;
+          <ul>
+            <li><b>Filesystem</b> - Volume is formatted with a file system and can be mounted in specified directory inside the container;
+              <div class="yaml-container">
+                <pre>
+                  # Pod YAML
+                  spec:
+                    containers:
+                      - name: my-container
+                        volumeMounts:
+                          - name: my-volume
+                            mountPath: /data
+                  volumes:
+                    - name: my-volume
+                      persistentVolumeClaim:
+                        claimName: my-pvc
+                </pre>
+              </div>
+            </li>
+            <li>It is the default mode; It is used for: webapps, logs, databases etc;</li>
+            <li><b>Block</b> - Volume doesn't have any filesystem, storage is given as raw disk to the container; Application itself decides how to use it;</li>
+            <li>So, instead of /data/file1, /data/file2, container sees something like /dev/xvdb, /dev/xvdc etc;</li>
+            <li>Application can format the block device with custom file system and mount it as a directory; Eg: mkfs.ext4 /dev/xvda and mount /dev/xvda /data
+              <div class="yaml-container">
+                <pre>
+# Block PVC 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: block-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  volumeMode: Block
+  resources:
+    requests:
+      storage: 20Gi
+
+# Block Pod YAML
+apiVersion: v1
+kind: Pod
+metadata:
+  name: block-app
+spec:
+  containers:
+  - name: app
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeDevices:
+    - name: data
+      devicePath: /dev/xvda
+  volumes:
+  - name: data
+    persistentVolumeClaim:
+      claimName: block-storage
+
+Inside the container, you will see: /dev/xvda;
+                </pre>
+              </div>
+            </li>
+            <li>When using block volumes, containers must use volumeDevices instead of volumeMounts;</li>
+          </ul>
+        </li>
+        <li><b>storageClassName</b> - It specifies the name of the StorageClass to use;</li>
+      </ul>
+    </div>
+</body>
+
+</html>

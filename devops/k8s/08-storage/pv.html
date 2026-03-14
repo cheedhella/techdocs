@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Persistent Volume</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Persistent Volume</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Persistent Volume?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a piece of storage provisioned by an admin or dynamically via StorageClass;</li>
+            <li>It is a cluster-level resource that can be made available to multiple Pods;</li>
+            <li>It has a lifecycle <strong>independent of any Pod</strong> — data persists even after the Pod is deleted;</li>
+            <li>It abstracts the underlying storage technology (NFS, AWS EBS, GCE PD, etc.) from the application;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. PV Lifecycle Status</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Phase</th><th>Description</th></tr>
+            <tr><td><strong>Available</strong></td><td>PV is provisioned by the administrator or dynamically by the StorageClass, but not yet bound to a PVC;</td></tr>
+            <tr><td><strong>Bound</strong></td><td>PV is bound to a PVC;</td></tr>
+            <tr><td><strong>Released</strong></td><td>PVC is deleted, but PV still exists;</td></tr>
+            <tr><td><strong>Failed</strong></td><td>PV reclaim or cleanup failed; PV is not usable;</td></tr>
+        </table>
+    </div>
+    
+    <div class="question"><strong>3. PV Yaml Configuration</strong></div>
+    <div class="answer">
+        <div class="yaml-container">
+        <pre>
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: pv-example
+spec:
+    capacity:
+      storage: 10Gi
+    accessModes:
+    - ReadWriteOnce
+    storageClassName: standard
+    persistentVolumeReclaimPolicy: Retain
+    volumeMode: Filesystem
+    hostPath:
+    path: /mnt/data
+        </pre></div>
+        <br>
+        <ul>
+            <li><b>capacity.storage</b>
+                <ul>
+                    <li>It specifies total storage available in the volume;</li>
+                </ul>
+            </li>
+            <li><b>accessModes</b> - It specifies how the volume can be used by the Pods;
+              <ul>
+                <li>ReadWriteOnce: The volume can be mounted as read-write by a single node;</li>
+                <li>ReadOnlyMany: The volume can be mounted as read-only by many nodes;</li>
+                <li>ReadWriteMany: The volume can be mounted as read-write by many nodes;</li>
+                <li>ReadWriteOncePod: The volume can be mounted as read-write by one pod;</li>
+              </ul>
+            </li>
+            <li><b>storageClassName</b> - It specifies the name of the StorageClass to use;</li>
+            <li><b>persistentVolumeReclaimPolicy</b> - It specifies the policy to use when the PVC is deleted; Possible values are: Delete(default), Retain;</li>
+            <li><b>volumeMode</b> - It specifies the type of the volume; Possible values are: filesystem(default), block;</li>
+              <li><div class="yaml-container">
+                <pre>
+                  # PV YAML
+                  apiVersion: v1
+                  kind: PersistentVolume
+                  metadata:
+                    name: pv-example
+                  spec:
+                    capacity:
+                      storage: 10Gi
+                    accessModes:
+                    - ReadWriteOnce
+                    storageClassName: standard
+                    persistentVolumeReclaimPolicy: Retain
+                    volumeMode: Filesystem
+                    hostPath:
+                    path: /mnt/data
+                  spec:
+                    containers:
+                      - name: my-container
+                        volumeMounts:
+                          - name: my-volume
+                            mountPath: /data
+                  volumes:
+                    - name: my-volume
+                      persistentVolumeClaim:
+                        claimName: my-pvc
+                </pre>
+              </div>
+            </li>
+            <li>In production clusters, PVs YAML is rarely written manually because dynamic provisioning via StorageClasses automatically creates PVs</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Choosing the Right Mode</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>RWO:</strong> Databases (MySQL, PostgreSQL) — single writer;</li>
+            <li><strong>ROX:</strong> Shared configuration files, static assets;</li>
+            <li><strong>RWX:</strong> Shared file uploads, CMS content, logs — multiple writers;</li>
+            <li><strong>RWOP:</strong> When you need to ensure only one Pod writes (stricter than RWO);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

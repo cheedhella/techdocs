@@ -76,12 +76,12 @@
 
                 <li><strong>8️⃣ Storage</strong>
                     <ul>
-                        <li><a href="./08-storage/volumes.html">8.1 Volumes (emptyDir, hostPath)</a></li>
-                        <li><a href="./08-storage/persistent-volumes.html">8.2 Persistent Volumes (PV)</a></li>
-                        <li><a href="./08-storage/persistent-volume-claims.html">8.3 Persistent Volume Claims (PVC)</a></li>
-                        <li><a href="./08-storage/storage-classes.html">8.4 Storage Classes and Dynamic Provisioning</a></li>
-                        <li><a href="./08-storage/access-modes.html">8.5 Access Modes (RWO, ROX, RWX)</a></li>
-                        <li><a href="./08-storage/projected-volumes.html">8.6 Projected Volumes and CSI Drivers</a></li>
+                        <li><a href="./08-storage/what.html">8.0 What is a Volume?</a></li>
+                        <li><a href="./08-storage/emptyDir.html">8.1 emptyDir</a></li>
+                        <li><a href="./08-storage/hostPath.html">8.2 hostPath</a></li>
+                        <li><a href="./08-storage/pv.html">Persistent Volume (PV)</a></li>
+                        <li><a href="./08-storage/pvc.html">Persistent Volume Claim (PVC)</a></li>
+                        <li><a href="./08-storage/sc.html">Storage Class</a></li>
                     </ul>
                 </li>
 
@@ -139,6 +139,65 @@
             </ul>
         </div>
         
+
+        <h1>Table of Contents</h1>
+    <h2>00.Architecture</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="00.Architecture/FlowDiagram.png">FlowDiagram</a></li>
+    </ul>
+    <h2>01.Pod</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="01.Pod/02.Pod.png">02.Pod</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="01.Pod/04.Liveness.png">04.Liveness</a></li>
+    </ul>
+    <h2>02.Replicaset</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="02.Replicaset/1.ReplicaSet.png">1.ReplicaSet</a></li>
+    </ul>
+    <h2>03.Deployment</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="03.Deployment/1-deployment-demo.png">1-deployment-demo</a></li>
+    </ul>
+    <h2>13.Secret</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="13.Secret/01.Manage.png">01.Manage</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="13.Secret/02.Access-in-Pod.png">02.Access-in-Pod</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="13.Secret/03.dockerregistry.png">03.dockerregistry</a></li>
+    </ul>
+    <h2>Root</h2>
+    <ul>
+        <li><span class="file-icon">&#128196;</span><a href="00.QuickRef.html">00.QuickRef</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="01.kubectl.html">01.kubectl</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="02.commands.html">02.commands</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="03.Namespace.html">03.Namespace</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="04.ConfigMap.html">04.ConfigMap</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="05.Secrets.html">05.Secrets</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="11.ServiceAccount.html">11.ServiceAccount</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="12.Ingress.html">12.Ingress</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="12.Job.html">12.Job</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="13.CronJob.html">13.CronJob</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="24. Statefulset.html">24. Statefulset</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="25. Daemonset.html">25. Daemonset</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="dust 2.html">dust 2</a></li>
+        <li><span class="file-icon">&#128196;</span><a href="dust.html">dust</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="05.Secret-opaque.png">05.Secret-opaque</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="11.ServiceAccount-2.png">11.ServiceAccount-2</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust-1.png">dust-1</a></li>
+    </ul>
+    <h2>dust</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="dust/01. Why K8s.png">01. Why K8s</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/02. Cluster-1.png">02. Cluster-1</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/03. Cluster-2.png">03. Cluster-2</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/04. Minikube.png">04. Minikube</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/Service-NodePort.png">Service-NodePort</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/mZlH9.png">mZlH9</a></li>
+    </ul>
+    <h2>dust &raquo; code &raquo; hands-on</h2>
+    <ul>
+        <li><span class="file-icon">&#128444;</span><a href="dust/code/hands-on/fleetman-architecture-aws.png">fleetman-architecture-aws</a></li>
+        <li><span class="file-icon">&#128444;</span><a href="dust/code/hands-on/fleetman-architecture-minikube.png">fleetman-architecture-minikube</a></li>
+    </ul>
         Containers & images
 
 Pod basics

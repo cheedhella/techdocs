@@ -81,6 +81,29 @@
         </table>
     </div>
 
+    <div class="question"><strong>3. Storage</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl sc</code></td><td>List all storage classes in the current namespace;</td></tr>
+                <tr><td><code>kubectl get pv</code></td><td>List all PVs in the current namespace;</td></tr>
+                <tr><td><code>kubectl get pvc</code></td><td>List all PVCs in the current namespace;</td></tr>
+                <tr><td><code>kubectl get sc,pv,pvc -A</code></td><td>List all SCs, PVs and PVCs across all namespaces;</td></tr>
+                <tr><td><code>kubectl patch sc <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'</code></td><td>Mark a StorageClass as default;</td></tr>
+                <tr><td><code>kubectl patch sc <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'</code></td><td>Mark a StorageClass as non-default;</td></tr>
+                <br>
+                <tr><td><code>kubectl get pods -o json | grep <pvc-name></td><td>Find pods using a PVC;</td></tr>
+                    <br>
+                    kubectl get volumeattachments
+kubectl get csidrivers
+kubectl get csinodes
+            </tbody>
+        </table>
+    </div>
+
     <div class="question"><strong>kubectl get and describe</strong></div>
     <div class="answer">
         <table border="1" cellpadding="8" cellspacing="0">

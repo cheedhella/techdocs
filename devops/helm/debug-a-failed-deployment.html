@@ -122,4 +122,17 @@ helm install my-release oci://registry.example.com/charts/mychart
     </div>
 
     
+    <div class="question"><strong>4. What happens if a PVC is created but no PV exists?</strong></div>
+    <div class="answer">    
+        <ul>
+            <li>If dynamic provisioning is enabled, K8s will automatically create a PV and bind it to the PVC;</li>
+            <li>If dynamic provisioning is disabled, the PVC will stay in Pending state; Pod will stay in Pending state, Pods cannot start until the PVC is bound to a PV;;</li>
+            <li><pre>
+> kubectl describe pvc <pvc-name>
+    Events:
+      Type     Reason              Message
+      ----     ------              -------
+      Warning  ProvisioningFailed  no persistent volumes available
+            </pre></li>
+    </div>
 </body>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Storage Class</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Storage Class</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a StorageClass?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a cluster-wide resource, which defines how to dynamically provision storage;</li>
+            <li>It is defined by admin and not by developers, as part of cluster setup;</li>
+            <li>Usually, admin defines multiple StorageClasses(fast SSD, standard HDD, etc) for different purposes;</li>
+            <li>No need for admins to pre-create PVs, as it is done dynamically;</li>            
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How Static Provisioning works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Setup Storage(like NFS)</b>
+                <ul>
+                    <li>Cluster Admin must setup a NFS server and export /data via NFS; OR</li>
+                    <li>If company already has NAS/NFS server/On-prem storage, Cluster Admin exposes those disks via PV definitions;</li>
+                    <li>Ensure that K8s node must be able to reach the NFS server;</li>
+                </ul>
+            </li>
+            <li><b>Create PV</b> - Cluster Admin <b>manually</b> creates PVs in advance;</li>
+            <li> All of it is usually done as part of cluster setup;</li>
+            <li>
+<div class="yaml-container">
+<pre>
+# pv-nfs.yaml -> PV created by Admin(points to an existing storage resource such as NFS, AWS EBS etc)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nfs
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /data
+    server: 192.168.1.100
+</pre>
+</div>
+            </li>
+            <li>Developers create PVCs requesting storage;</li>
+            <li>K8s binds the PVC to a matching PV;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How Dynamic Provisioning works?</strong></div>
+    <div class="answer">
+      <ul>
+        <li>Cluster Admin creates/defines a StorageClass; Developers don't do it;</li>
+        <li>
+          <div class="yaml-container">
+          <pre>
+          # sc-demo-p1.yaml
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: fast-storage
+          provisioner: ebs.csi.aws.com
+          parameters:
+            type: gp3
+          </pre>
+          </div>
+        </li>
+        <li><b>Why Admin, why not developers?</b> Because, It is a cluster-wide resource and usually only admin has permissions/RBAC and below knowledge of underlying storage; <br>
+          <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+              <tr><th>Requirement</th><th>What it means</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Storage backend</td><td>EBS, Ceph, NFS, GCE PD, etc.</td></tr>
+              <tr><td>CSI driver installed</td><td>Kubernetes interface to storage</td></tr>
+              <tr><td>Provisioner name</td><td>Identifier of storage driver</td></tr>
+              <tr><td>Parameters</td><td>Disk type, IOPS, replication, etc.</td></tr>
+              <tr><td>Policies</td><td>Reclaim policy, binding mode</td></tr>
+            </tbody>
+          </table>
+        </li>
+        <li>User creates a PVC referencing the StorageClass;</li>
+        <li>K8s automatically provisions a PV, using provisioner specified in StorageClass and binds it to the PVC;</li>
+        <li>Pod starts using the storage via PVC;</li>
+      </ul>
+    </div>
+
+    <div class="question"><strong>4. How does Provisioner authenticates/authorizes itself with cloud provider?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Admin installs CSI driver(Eg: aws-ebs-csi-driver); It runs as a Pod in the cluster;</li>
+            <li>Admin create a IAM role/Service Account/secret to configure credentails;</li>
+            <li>Admin then setup the StorageClass;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Static VS Dynamic Provisioning</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Feature</th><th>Static Provisioning</th><th>Dynamic Provisioning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>PV creation</td><td>Manual by admin</td><td>Automatic</td></tr>
+                <tr><td>Trigger</td><td>PV created first</td><td>PVC triggers PV creation</td></tr>
+                <tr><td>StorageClass required</td><td>❌ Not required</td><td>✅ Required</td></tr>
+                <tr><td>Scalability</td><td>Low</td><td>High</td></tr>
+                <tr><td>Operational effort</td><td>High</td><td>Low</td></tr>
+                <tr><td>Typical use</td><td>Legacy / controlled environments</td><td>Cloud-native workloads</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>6. StorageClass YAML</strong></div>
+    <div class="answer">
+<div class="yaml-container">
+<pre>
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+  iopsPerGB: "10"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+</pre>
+</div>
+<br>
+        <br>
+        <ul>
+            <li>A StorageClass YAML defines the storage type, provisioner, and policies used by Kubernetes to dynamically create PersistentVolumes when a PVC requests storage;</li>
+            <li><b>Provisioner</b>
+                <ul>
+                    <li>Name of the CSI driver, as defined by the driver vendor;</li>
+                    <li>
+                      <table border="1" cellpadding="8" cellspacing="0">
+                        <thead>
+                          <tr><th>Storage system</th><th>Provisioner name</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>AWS EBS</td><td>ebs.csi.aws.com</td></tr>
+                          <tr><td>Google Persistent Disk</td><td>pd.csi.storage.gke.io</td></tr>
+                          <tr><td>Azure Disk</td><td>disk.csi.azure.com</td></tr>
+                          <tr><td>Ceph RBD</td><td>rbd.csi.ceph.com</td></tr>
+                          <tr><td>NFS CSI</td><td>nfs.csi.k8s.io</td></tr>
+                        </tbody>
+                      </table>                      
+                    </li>
+                </ul>
+            </li>
+            <li><b>Parameters</b>
+                <ul>
+                    <li>Different provisioners support different configuration options;</li>
+                    <li><b>AWS EBS</b>
+                        <ul>
+                            <table border="1" cellpadding="8" cellspacing="0">
+                                <thead>
+                                    <tr><th>Parameter</th><th>Meaning</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>type</td><td>disk type</td></tr>
+                                    <tr><td>iopsPerGB</td><td>performance</td></tr>
+                                    <tr><td>encrypted</td><td>enable encryption</td></tr>
+                                    <tr><td>fsType</td><td>filesystem on volume</td></tr>
+                                </tbody>
+                            </table>
+                        </ul>
+                    </li>
+                    <li><b>Google Persistent Disk</b>
+                        <ul>
+                            <table border="1" cellpadding="8" cellspacing="0">
+                                <thead>
+                                    <tr><th>Parameter</th><th>Meaning</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>type</td><td>SSD disk</td></tr>
+                                    <tr><td>replication-type</td><td>multi-zone replication</td></tr>
+                                </tbody>
+                            </table>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>ReclaimPolicy</b>
+                <ul>
+                    <li>What happens to PV, when PVC a deleted?
+                      <ul>
+                        <li><b>Delete</b>: PV and underlying storage are automatically deleted; Default value;</li>
+                        <li><b>Retain</b>: PV is kept after PVC deletion; Admin must manually clean up the storage; For databases, you must use this;</li>
+                      </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>AllowVolumeExpansion</b>
+                <ul>
+                    <li>It allows PVC to grow in size, after it is created; Default value is true;</li>
+                    <li>If you set it to false, you cannot grow the volume size after it is created;</li>
+                </ul>
+            </li>
+            <li><b>VolumeBindingMode</b>
+                <ul>
+                    <li>When the PV is created/bound;
+                      <ul>
+                        <li>It specifies when the PV is created, for a PVC;</li>
+                        <li><b>Immediate</b>: PV is created when PVC is created; Default value;</li>
+                        <li><b>WaitForFirstConsumer</b>: PV is created, when the pod is scheduled; For databases, you must use this;</li>
+                      </ul>
+                    </li>
+                    <li><b>What is the use of WaitForFirstConsumer?</b>
+                      <ul>
+                        <li>Most storage systems are location-dependant; For eg, in case of AWS EBS, a disk created in one zone cannot be used in another zone;</li>
+                        <li>If you use Immediate, If you PV is created in one zone and pod is scheduled in another zone, it will fail to schedule the pod;</li>
+                        <li>If you use WaitForFirstConsumer, it will create the PV in the zone of the pod, when the pod is scheduled;</li>
+                      </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+ 
+    <div class="question"><strong>7. Default StorageClass</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A StorageClass annotated with <code>storageclass.kubernetes.io/is-default-class: "true"</code>;</li>
+            <li>PVCs without a <code>storageClassName</code> will use the default;</li>
+        </ul>
+        <br>
+        <pre><code>
+# <b>List StorageClasses</b>
+kubectl get sc
+NAME                 PROVISIONER            DEFAULT
+standard             ebs.csi.aws.com        No
+fast-ssd (default)   ebs.csi.aws.com        Yes
+
+# <b>Annotate a StorageClass as default</b>
+kubectl patch storageclass <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+# <b>Annotate a StorageClass as non-default</b>
+kubectl patch storageclass <name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+</code></pre>
+    </div>
+
+</body>
+
+</html>

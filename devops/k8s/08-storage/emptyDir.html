@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>emptyDir</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>emptyDir</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a emptyDir?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a temporary directory that is created, when a Pod is assigned to a node;</li>
+            <li>It starts empty and all containers in the Pod can read and write to it;</li>
+            <li>emptyDir is deleted, when the Pod is restarted or deleted or rescheduled to a different node;</li>
+            <li>Data in the emptyDir volume survives even if the containers are restarted or deleted;</li>
+            <li>Data in the emptyDir volume is lost, when the Pod is restarted or deleted or rescheduled to a different node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Lifecycle of emptyDir?</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Behavior</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Created</td>
+                    <td>When Pod starts</td>
+                </tr>
+                <tr>
+                    <td>Deleted</td>
+                    <td>When Pod is removed</td>
+                </tr>
+                <tr>
+                    <td>Shared</td>
+                    <td>All containers in the Pod</td>
+                </tr>
+                <tr>
+                    <td>Survives container restart</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Survives Pod restart</td>
+                    <td>No</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="question"><strong>3. emptyDir YAML configuration</strong></div>
+    <div class="answer">
+        <ul>
+            <li>emptyDir: {} or emptyDir: "" -> Directory is created under /var/lib/kubele in node filesystem;</li>
+            <li>emptyDir.medium: Memory -> This creates a tmpfs (RAM-backed filesystem);</li>
+            <li>emptyDir.sizeLimit: 1Gi -> Limits the maximum storage the volume can use;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. emptyDir Demo</strong></div>
+    <div class="answer">
+        <img src="emptydir-demo.png" alt="emptyDir Demo" style="width: 60%;" />
+    </div>
+
+    <div class="question"><strong>5. Applications of emptyDir</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Sharing data between containers;</li>
+            <li>Log collection: Application container writes logs a file, sidecar container(like fluentbit) collects logs and pushes to centralized log server;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. stdout log shipper</strong></div>
+    <div class="answer">
+        <pre>
+    1. Actually, stdout logger is preferred way of shipping application logs;
+    2. There is a little chance of losing data in both cases, if log shipper is slow;
+    3. Why is better than emptyDir volume?
+        In case of emptyDir, logs are deleted when the pod is deleted/rescheduled;
+        In case of stdout logger, logs will be there somewhere on the node - /var/log/containers/stdout-demo_default_logger-<container-id>.log
+<div class="yaml-container">
+    <pre>
+# stdout-demo.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stdout-demo
+spec:
+  containers:
+  - name: logger
+    image: busybox
+    command:
+    - sh
+    - -c
+    - |
+      while true; do
+        echo "Hello from Kubernetes log $(date)"
+        sleep 5
+      done
+</pre>
+</div>
+> kubectl apply -f stdout-demo.yaml
+> kubectl logs stdout-demo
+Hello from Kubernetes log Thu Mar 12 10:12:01 UTC 2026
+Hello from Kubernetes log Thu Mar 12 10:12:06 UTC 2026
+Hello from Kubernetes log Thu Mar 12 10:12:11 UTC 2026
+</pre>
+    </div>
+
+</body>
+
+</html>
