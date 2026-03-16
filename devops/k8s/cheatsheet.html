@@ -81,6 +81,28 @@
         </table>
     </div>
 
+    <div class="question"><strong>3. Job</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl get jobs</code></td><td>List all jobs in the current namespace;</td></tr>
+                <tr><td><code>kubectl get cronjobs</code></td><td>List all cron jobs in the current namespace;</td></tr>
+                <tr><td><code>kubectl get j,cj -A</code></td><td>List all jobs and cron jobs across all namespaces;</td></tr>
+                <tr><td><code>kubectl get pods -l job-name=<job-name></code></td><td>List all pods created by a Job;</td></tr>
+                <tr><td><code>kubectl logs -l job-name=<job-name></code></td><td>Get logs of all pods created by a Job;</td></tr>
+                <tr><td><code>kubectl patch job &lt;job-name&gt; -p '{"spec":{"suspend":true}}'</code></td><td>Suspend a job;</td></tr>
+                <tr><td><code>kubectl patch job &lt;job-name&gt; -p '{"spec":{"suspend":false}}'</code></td><td>Resume a Job;</td></tr>
+                <br>
+                <tr><td><code>kubectl get cj</code></td><td>List all cron jobs in the current namespace;</td></tr>
+                <tr><td><code>kubectl get jobs | grep <cron-job-name></code></td><td>Get all Jobs created by a Cron Job; Job created by CronJob doesn't have any label with cronjob name;</td></tr>
+                <tr><td><code>kubectl get pods | grep <cron-job-name></code></td><td>Get all Pods created by a Cron Job;</td></tr>
+            </tbody>
+        </table>
+    </div>
+
     <div class="question"><strong>3. Storage</strong></div>
     <div class="answer">
         <table border="1" cellpadding="8" cellspacing="0">
@@ -117,6 +139,8 @@ kubectl get csinodes
                 <tr><td>replicasets</td><td>rs</td></tr>
                 <tr><td>nodes</td><td>no</td></tr>
                 <tr><td>namespaces</td><td>ns</td></tr>
+                <tr><td>Jobs</td><td>j</td></tr>
+                <tr><td>CronJobs</td><td>cj</td></tr>
             </tbody>
         </table>
         <br>
@@ -162,6 +186,7 @@ kubectl delete all --all --all-namespaces    # Delete all resources in all names
 kubectl delete pods,deployments,services --all --all-namespaces    # Delete all pods, deployments and services in all namespaces;   
 
 
+kubectl api-resources
 
 </body>
 

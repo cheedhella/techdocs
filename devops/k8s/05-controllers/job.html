@@ -14,11 +14,37 @@
     <div class="question"><strong>1. What is a Job?</strong></div>
     <div class="answer">
         <ul>
-            <li>A Job creates Pods that run to <strong>completion</strong> — unlike Deployments which run forever;</li>
-            <li>Once all Pods finish successfully, the Job is <strong>complete</strong>;</li>
-            <li>If a Pod fails, the Job creates a new one (based on restart policy);</li>
+            <li>It creates one or more Pods, that run a specific task, until specified number of Pods succeed;</li>
+            <li>If specified number of Pods are completed successfully, then the job is marked <b>complete</b>;</li>
+            <li>If a Pod fails, then the Job creates a new Pod(based on restart policy);</li>
+            <li>Job is marked as <b>Failed</b>, after either specified number of retrials OR specified timeout;</li>
         </ul>
     </div>
+
+    <div class="question"><strong>2. Purpose of a Job?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is useful for one time tasks, such as:
+                <ul>
+                    <li>Database migration - schema upgrade or data migration;</li>
+                    <li>Database backup;</li>
+                    <li>Delete logs older than certain number of days;</li>
+                    <li>Run set of automated tests;</li>
+                    <li><b>Batch Processing</b> - Job could creat a set of pods, that divide the task into smaller chunks and process them in parallel;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. What causes a Job to run infinitely forever?</b></div>
+    <div class="answer">
+        <ul>
+            <li>If no timeout is configured and application never exits(keeps failing internally or ran into a infinite loop), k8s thinks job is still running and it never finishes;</li>
+            <li>If no timeout is configured and with restartPolicy: OnFailure, if the container keeps failing, container may restart endlessly inside the same Pod;</li>
+            <li>A job stops only when: successful completions reached OR backoffLimit exceeded OR activeDeadlineSeconds exceeded;</li>
+        </ul>
+    </div>
+
 
     <div class="question"><strong>2. Job YAML</strong></div>
     <div class="answer">
@@ -33,7 +59,7 @@ spec:
   activeDeadlineSeconds: 300
   template:
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Never
       containers:
         - name: migrate
           image: myapp:migrate
@@ -42,40 +68,79 @@ spec:
 
     <div class="question"><strong>3. Key Fields</strong></div>
     <div class="answer">
-        <table>
-            <tr><th>Field</th><th>Description</th></tr>
-            <tr><td><strong>completions</strong></td><td>Number of Pods that must complete successfully (default: 1)</td></tr>
-            <tr><td><strong>parallelism</strong></td><td>Number of Pods to run concurrently (default: 1)</td></tr>
-            <tr><td><strong>backoffLimit</strong></td><td>Number of retries before marking Job as failed (default: 6)</td></tr>
-            <tr><td><strong>activeDeadlineSeconds</strong></td><td>Max time the Job can run before being terminated</td></tr>
-            <tr><td><strong>ttlSecondsAfterFinished</strong></td><td>Auto-delete the Job N seconds after completion</td></tr>
-        </table>
-    </div>
-
-    <div class="question"><strong>4. Job Patterns</strong></div>
-    <div class="answer">
         <ul>
-            <li><strong>Single completion:</strong> <code>completions: 1, parallelism: 1</code> — run one task;</li>
-            <li><strong>Multiple completions:</strong> <code>completions: 5, parallelism: 2</code> — process 5 items, 2 at a time;</li>
-            <li><strong>Work queue:</strong> <code>completions: null, parallelism: 3</code> — run until all work is done;</li>
+            <li><b>restartPolicy</b>: Never | OnFailure;
+                <ul>
+                    <li>For jobs, you need to explicitly set restartPolicy in pod template;</li>
+                    <li><b>OnFailure</b>: If container fails, k8s restarts the container, inside the same pod;</li>
+                    <li><b>Never</b>: If container fails, pod is considered failed and k8s keeps retrying by creating a new Pod, until pod is successful or backoffLimit is reached;</li>
+                    <li><b>Always</b>: Not allowed for jobs;</li>
+                </ul>
+            </li>
+            <li><b>backoffLimit</b> - Defaults to 6;
+                <ul>
+                    <li>It specifies how many times k8s create a new pod to retry a failed job;</li>
+                    <li>When task/container fails(If it is java application, JVM returns exit code 1), Pod is marked as Failed;</li>
+                    <li>K8s creates another retry Pod, until backoffLimit is reached;</li>
+                </ul>
+            </li>
+            <li><b>parallelism</b> - Defaults to 1;
+                <ul>
+                    <li>It specifies number of pods that can run simultaneously;</li>
+                </ul>
+            </li>
+            <li><b>completions</b> - Defaults to parallelism;
+                <ul>
+                    <li>It specifies how many successful pod executions are needed, to consider the job successful;</li>
+                    <li><b>What happens if parallelism is set but completions is NOT set?</b> It defaults to parallelism;</li>
+                    <li><b>What happens when both parallelism and completions are NOT set?</b> Both defaults to 1;</li>
+                </ul>
+            </li>
+            <li><b>activeDeadlineSeconds</b> - Defaults to infinite;
+                <ul>
+                    <li>It specifies the maximum time(like ttl) a job is allowed to run;</li>
+                    <li>If a Job runs longer than this, k8s terminates all the pods and marks the job as failed;</li>
+                    <li>If this is not specified, job has no time limit and it runs until:
+                        <ul>
+                            <li>Job is completed succesfully;</li>
+                            <li>Job fails after backoffLimit retries;</li>
+                            <li>User manully deletes the job;</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>ttlSecondsAfterFinished</b>
+                <ul>
+                    <li>Job object along with it's pods are deleted, ttlSecondsAfterFinished seconds after job is completed(succeeded/failed);</li>
+                    <li>If not set, created Job and its Pods remain in the cluster forever unless you delete them manually;</li>
+                </ul>
+            </li>
+            <li><b>completionMode</b> - Indexed | NonIndexed; Defaults to NonIndexed;
+                <ul>
+                    <li>Indexed job gives each pod a different index(0..N); It is useful to split the work b/w Pods;</li>
+                    <li>NonIndexed job is useful when tasks are stateless and all pods does same thing;</li>
+                </ul>
+            </li>
+            <li><b>suspend</b> - Defaults to false;
+                    <li>It is used pause/resume a job;</li>
+                    <li>It is useful if your cluster is under going maintanance OR experiencing resource shortages etc;</li>
+                    <li><b>Pause: </b> kubectl patch job &lt;job-name&gt; -p '{"spec":{"suspend":true}}'</li>
+                    <li><b>Resume: </b> kubectl patch job &lt;job-name&gt; -p '{"spec":{"suspend":false}}'</li>
+                    <li>What happens if job is running and if you restart node? Job controller detects the failed or missing pod and creates a new pod on another node; So, application code needs to idempotent OR maintain checkpoints;</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>5. Commands</strong></div>
+    <div class="question"><strong>4. Job Demo</strong></div>
     <div class="answer">
-        <pre><code># Create a Job imperatively
-kubectl create job test-job --image=busybox -- echo "Hello"
-
-# List Jobs
-kubectl get jobs
-
-# View logs
-kubectl logs job/data-migration
-
-# Delete
-kubectl delete job data-migration</code></pre>
+        <img src="job-demo.png" alt="Job Demo" style="width: 60%;" />
     </div>
 
+    <div class="question"><strong>5. How to use Job to split a task load b/w multiple Pods?</strong></div>
+    <div class="answer">
+        <ul><li>TODO</li></ul>
+    </div>
 </body>
 
 </html>

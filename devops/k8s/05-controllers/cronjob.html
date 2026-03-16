@@ -14,13 +14,22 @@
     <div class="question"><strong>1. What is a CronJob?</strong></div>
     <div class="answer">
         <ul>
-            <li>A CronJob creates <strong>Jobs on a schedule</strong> — like Linux cron;</li>
-            <li>Useful for periodic tasks: backups, reports, cleanup, data sync;</li>
+            <li>It creates a Job based on a cron schedule - similar to cron in linux OS;</li>
+            <li>Each scheduled execution creates a new Job;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Purpose of CronJob?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Database backup;</li>
+            <li>Log cleanup;</li>
         </ul>
     </div>
 
     <div class="question"><strong>2. CronJob YAML</strong></div>
     <div class="answer">
+        <div class="yaml-"></div>
         <pre><code>apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -41,49 +50,95 @@ spec:
               command: ["./backup.sh"]</code></pre>
     </div>
 
-    <div class="question"><strong>3. Cron Schedule Format</strong></div>
+    <div class="question"><strong>3. Cron Expression Format</strong></div>
     <div class="answer">
-        <pre><code>┌───────── minute (0–59)
-│ ┌───────── hour (0–23)
-│ │ ┌───────── day of month (1–31)
-│ │ │ ┌───────── month (1–12)
-│ │ │ │ ┌───────── day of week (0–6, Sunday=0)
-│ │ │ │ │
+        <ul>
+            <li><b>schedule</b> - It defines when to create the Job;</li>
+            <li><pre><code>
+It has 5 Fields:
+
 * * * * *
+│ │ │ │ │
+│ │ │ │ └ Day of week (0–7, Sunday=0)
+│ │ │ └── Month (1–12)
+│ │ └──── Day of month (1–31)
+│ └────── Hour (0–23)
+└──────── Minute (0–59)
+
+Field Meaning:
+
+| Field        | Range | Meaning         |
+| ------------ | ----- | --------------- |
+| Minute       | 0–59  | minute of hour  |
+| Hour         | 0–23  | hour of day     |
+| Day of month | 1–31  | date            |
+| Month        | 1–12  | month           |
+| Day of week  | 0–7   | Sunday = 0 or 7 |
+
+
+Meaning of Special Chars:
+*   Every value/minute;
+,   List of values;
+-   Range of values;
+/   step/interval;
 
 # Examples:
+* * * * *        # Every minute
 "*/5 * * * *"    # Every 5 minutes
+0 * * * *        # Every hour
+0 */2 * * *      # Every 2 hours
 "0 * * * *"      # Every hour
 "0 2 * * *"      # Daily at 2 AM
+"0 0 * * *"      # Daily midnight
 "0 0 * * 0"      # Every Sunday at midnight
-"0 0 1 * *"      # First day of every month</code></pre>
+"0 0 1 * *"      # First day of every month
+0 8,12,16 * * *     # 08:00, 12:00, 16:00 
+0 9-17 * * *        # every hour 9 AM – 5 PM
+30 14 * * 1-5       # 2:30 PM every weekday
+            </code></pre></li>
+        </ul>
     </div>
 
-    <div class="question"><strong>4. Concurrency Policy</strong></div>
+    <div class="question"><strong>4. CronJob settings</strong></div>
     <div class="answer">
-        <table>
-            <tr><th>Policy</th><th>Behavior</th></tr>
-            <tr><td><strong>Allow</strong></td><td>Multiple Jobs can run concurrently (default)</td></tr>
-            <tr><td><strong>Forbid</strong></td><td>Skip new Job if previous one is still running</td></tr>
-            <tr><td><strong>Replace</strong></td><td>Cancel the running Job and start a new one</td></tr>
-        </table>
+        <ul>
+            <li><b>timeZone</b> 
+                <ul>
+                    <li>It specifies which timezone the cron schedule should use;</li>
+                    <li>It defaults to timezone of the kube-controller-manager(often UTC);</li>
+                    <li>Timezone names follow the IANA timezone database;</li>
+                    <li>Always set timeZone, to avoid unexpected schedule shifts;</li>
+                </ul>
+            </li>
+            <li><b>concurrencyPolicy</b> 
+                <ul>
+                    <li>It controls what what happens if the previous Job is still running;</li>
+                    <li><b>Allow</b> - Multiple Jobs can run concurrently; Default;</li>
+                    <li><b>Forbid</b> - Skip new Job if previous one is still running;</li>
+                    <li><b>Replace</b> - Cancel the running Job and start a new one;</li>
+                </ul>
+            </li>
+            <li><b>startingDeadlineSeconds</b> 
+                <ul>
+                    <li>It specified max time k8s wait to start a missed scheduled job;</li>
+                    <li>For eg, if a job is scheduled at 10 AM and Controller is down until 10:02 and deadline is 60 seconds, then the job will not run;</li>
+                </ul>
+            </li>
+            <li><b>successfulJobsHistoryLimit</b> - Defaults to 3;
+                <ul>
+                    <li>It specifies the number of successful job history entires to retain;</li>
+                </ul>
+            </li>
+            <li><b>failedJobsHistoryLimit</b> - Defaults to 1;
+                <ul>
+                    <li>It specifies the number of failed job history entires to retain;</li>
+                </ul>
+            </li>
+        </ul>
     </div>
-
-    <div class="question"><strong>5. Commands</strong></div>
-    <div class="answer">
-        <pre><code># Create imperatively
-kubectl create cronjob my-cron --image=busybox --schedule="*/5 * * * *" -- echo "tick"
-
-# List CronJobs
-kubectl get cj
-
-# Manually trigger a Job from a CronJob
-kubectl create job manual-run --from=cronjob/nightly-backup
-
-# Suspend a CronJob
-kubectl patch cronjob nightly-backup -p '{"spec":{"suspend":true}}'</code></pre>
-    </div>
-
 </body>
 
 </html>
+
+
+
