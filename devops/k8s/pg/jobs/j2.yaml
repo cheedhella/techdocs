@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: j2
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: j2-c1
+          image: busybox
+          command: ["sh", "-c", "echo job && exit 1"]
