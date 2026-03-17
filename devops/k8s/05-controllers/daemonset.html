@@ -11,81 +11,128 @@
         <h2>DaemonSet</h2>
     </div>
 
-    <div class="question"><strong>1. What is a DaemonSet?</strong></div>
+    <div class="question"><b>1. What is a DaemonSet?</b></div>
     <div class="answer">
         <ul>
-            <li>Ensures that <strong>one copy of a Pod runs on every node</strong> (or a subset of nodes);</li>
-            <li>When a new node is added, the DaemonSet automatically schedules a Pod on it;</li>
-            <li>When a node is removed, the Pod is garbage collected;</li>
+            <li>It ensure that a Pod runs on every node(or subset of nodes that meet specified conditions);</li>
+            <li>When you create a DaemonSet:
+              <ul>
+                <li>K8s schedules the Pod on each node in the cluster;</li>
+                <li>If a new node joins, k8s automatically adds the Pod to that node;</li>
+                <li>If a node is removed, Pod on that node is automatically removed;</li>
+                <li>If you delete a DaemonSet, k8s deletes all the Pods created by DaemonSet;</li>
+              </ul>
+            </li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Use Cases</strong></div>
+    <div class="question"><b>2. Usecases</b></div>
     <div class="answer">
-        <ul>
-            <li><strong>Log collection:</strong> Fluentd, Filebeat on every node;</li>
-            <li><strong>Monitoring agents:</strong> Prometheus Node Exporter, Datadog agent;</li>
-            <li><strong>Network plugins:</strong> Calico, Cilium, kube-proxy;</li>
-            <li><strong>Storage daemons:</strong> GlusterFS, Ceph;</li>
+        <ul>It is used for running background services that must be present on each node, such as:
+            <ul>
+              <li>Log collectors such as fluentd;</li>
+              <li>Monitoring agents such prometheus node exporter etc;</li>
+              <li>Network plugins such calico, kube-proxy etc;</li>
+              <li>Storage daemons such as GlusterFS, Ceph;</li>
+            </ul>
         </ul>
     </div>
 
-    <div class="question"><strong>3. DaemonSet YAML</strong></div>
+    <div class="question"><b>3. DaemonSet YAML</b></div>
     <div class="answer">
-        <pre><code>apiVersion: apps/v1
+        <div class="yaml-container">
+          <pre>
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: fluentd
-  namespace: kube-system
+  name: example-daemonset
+  namespace: default
+  labels:
+    app: node-agent
+
 spec:
   selector:
     matchLabels:
-      app: fluentd
+      app: node-agent
+
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+
+  minReadySeconds: 10
+  revisionHistoryLimit: 5
+
   template:
     metadata:
       labels:
-        app: fluentd
+        app: node-agent
+
     spec:
+      nodeSelector:
+        node-type: worker
+
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-type
+                operator: In
+                values:
+                - worker
+
       containers:
-        - name: fluentd
-          image: fluentd:v1.16
-          volumeMounts:
-            - name: varlog
-              mountPath: /var/log
-      volumes:
-        - name: varlog
-          hostPath:
-            path: /var/log</code></pre>
+      - name: agent
+        image: nginx:latest
+          </pre>
+        </div>
     </div>
 
     <div class="question"><strong>4. Running on Specific Nodes</strong></div>
     <div class="answer">
-        <ul>
-            <li>Use <strong>nodeSelector</strong> or <strong>affinity</strong> to target specific nodes;</li>
-            <li>Use <strong>tolerations</strong> to run on tainted nodes (e.g., master nodes);</li>
-        </ul>
-        <pre><code>spec:
-  template:
-    spec:
-      nodeSelector:
-        disk: ssd
-      tolerations:
-        - key: node-role.kubernetes.io/control-plane
-          effect: NoSchedule</code></pre>
+      <ul>
+        <li><b>spec.selector.matchLabels</b> - It specifies which Pods belong to DaemonSet and should be managed by it; It must match with labels defined in template.metadata.labels;</li>
+        <li><b>template.metadata.labels</b> - Each Pod created by the DaemonSet gets these labels;</li>
+        <li><b>updateStrategy</b>
+          <ul>
+            <li>It controls how Pods are updated when daemonset changes;</li>
+            <li><b>RollingUpdate</b>
+              <ul>
+                <li><pre><code>
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+
+It updates each node gradually; It ensures Only 1 node down at a time; 
+                </code></pre></li>
+              </ul>
+            </li>
+            <li><b>OnDelete</b>
+              <ul>
+                <li><pre><code>
+updateStrategy:
+  type: OnDelete
+
+Pods update only when manually deleted;
+                </code></pre></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><b>minReadySeconds</b> - It specifies how long a pod must stay ready before considered available;</li>
+        <li><b>revisionHistoryLimit</b> - It specifies how many old DaemonSet versions to keep?</li>
+        <li><b>spec.nodeSelector</b> - DaemonSets usually run on specific nodes, not always all nodes;</li>
+        <li><b>spec.tolerations</b> - By default, DeamonSets runs pods only on worker nodes and if you need to run on Controlplane, we need to add tolerations;</li>
+        <li><b>spec.affinity</b> - https://devopscube.com/kubernetes-daemonset/</li>
+      </ul>
     </div>
-
-    <div class="question"><strong>5. Commands</strong></div>
-    <div class="answer">
-        <pre><code># List DaemonSets
-kubectl get ds -A
-
-# Describe
-kubectl describe ds fluentd -n kube-system
-
-# Update strategy (default: RollingUpdate)
-# Can also be OnDelete — manual pod deletion triggers update</code></pre>
-    </div>
-
 </body>
 
 </html>

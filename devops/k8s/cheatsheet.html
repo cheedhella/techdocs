@@ -103,6 +103,28 @@
         </table>
     </div>
 
+    <div class="question"><strong>4. Daemonset</strong></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>kubectl get ds</code></td><td>List all daemonsets in the current namespace;</td></tr>
+                <tr><td><code>kubectl get ds -A</code></td><td>List all daemonsets across all namespaces;</td></tr>
+                <tr><td><code>kubectl get pods -l &lt;label&gt;</code></td><td>Get all pods created dae;</td></tr>
+                <tr><td><code>kubectl get pvc</code></td><td>List all PVCs in the current namespace;</td></tr>
+                kubectl rollout status ds/<daemonset-name> -> Shows progress of update across nodes.
+                kubectl rollout undo ds/<daemonset-name> -> Reverts to previous version.
+                kubectl rollout history ds/<daemonset-name> -> View rollout history;
+                kubectl rollout restart ds/<daemonset-name> -> Restart DaemonSet; Forces pods to restart on all nodes.
+                    kubectl delete ds <daemonset-name> -> delete a daemonset;
+                        kubectl delete pod <pod-name> -> 👉 DaemonSet automatically recreates it.
+            </tbody>
+        </table>
+    </div>
+
+
     <div class="question"><strong>3. Storage</strong></div>
     <div class="answer">
         <table border="1" cellpadding="8" cellspacing="0">
@@ -187,6 +209,12 @@ kubectl delete pods,deployments,services --all --all-namespaces    # Delete all 
 
 
 kubectl api-resources
+
+kubectl drain
+kubectl drain and kubectl cordon
+kubectl drain <node-name> --ignore-daemonsets
+
+    kubectl uncordon <node-name>
 
 </body>
 
