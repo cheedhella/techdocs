@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Service</h2>
+    </div>
+
+    <div class="question"><strong>1. What is a Service?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Each Pod gets a unique IP address within the cluster, when it is created;</li>
+            <li>But, Pods are not permanent, they get recreated(for many reasons), possibly with a different IP, on same or different Node;</li>
+            <li>So, we can't depend on this IP for inter-pod communication OR external communication;</li>
+            <li>That is where Service comes into picture;</li>
+            <br>
+            <li>Service provides consistent IP address and DNS name to a group of Pods, so that other components can reliably communicate with them;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Purpose of Service?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Stable IP and DNS</b>
+                <ul>
+                    <li>It provides a stable IP and DNS to a group of Pods;</li>
+                </ul>
+            </li>
+            <li><b>Load Balancing</b>
+                <ul>
+                    <li>A Service doesn’t just forward traffic — it distributes it across Pods; It uses kube-proxy to handle routing;</li>
+                </ul>
+            </li>
+            <li><b>Service Discovery</b>
+                <ul>
+                    <li>👉 How one service (or Pod) finds and connects to another service without knowing its IP address.</li>
+                    <li>✔ Service discovery = finding services by name instead of IP</li>
+                </ul>
+            </li>
+            <service-name>.<namespace>.svc.cluster.local     
+                
+                Stable IP address: A Service gets a virtual IP (VIP) that doesn't change
+DNS name: Each Service gets a DNS name for easy discovery
+Load balancing: Traffic is distributed across healthy pods
+Service discovery: Pods can find each other using Service names
+
+
+DNS Resolution in Kubernetes
+Kubernetes provides built-in DNS service discovery. Services can be reached using:
+
+Short name (same namespace): backend-service
+Fully qualified domain name: backend-service.default.svc.cluster.local
+The DNS format is: <service-name>.<namespace>.svc.cluster.local
+
+# From any pod in the default namespace
+curl http://backend-service:8080
+
+# From a pod in a different namespace
+curl http://backend-service.default.svc.cluster.local:8080
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How it works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Pod makes a request: http://backend-service </li>
+            <li>K8s DNS (CoreDNS) resolves: backend-service → 10.96.0.10</li>
+            <li>Service takes the request and forwards it to one of the backend pods;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Service Types?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>ClusterIP</li>
+            <li></li>
+        </ul>
+    </div>
+    
+
+    CoreDNS internals
+
+Headless services (direct Pod discovery)
+
+Real debugging commands (nslookup, dig inside Pods)
+        
+</body>
+
+</html>

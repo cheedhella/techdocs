@@ -1,8 +1,43 @@
-What is Service?
+[root@netops-rl8-1576 svc]# kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   8s
+
+
+
+How it works?
+    A Service selects Pods using labels;
+    Traffic sent to the Service is automatically routed to one of the matching Pods
+    kube-proxy (or similar) handles routing;
+
+    Client calls: my-service.default.svc.cluster.local
+    DNS resolves to Service IP
+    Service routes request to one of the Pods
+    Pod processes the request
+
+    Provided by CNI plugins
+        Networking is implemented by plugins like:
+            Calico
+            Flannel
+            Cilium
+
+        These ensure:
+            IP allocation
+            Routing between nodes
+        
+        It acts as a load balancer
+        how kube-proxy actually routes traffic (iptables/IPVS)
+        or how headless services expose Pod IPs directly
+Services provide:
+    Stable IP + DNS
+    Load balancing
+    Service discovery - when a pod wants to talk to another servcie, it can use service name(which gets resolved to IP address by DNS);
+
     Each Pod in the K8s Cluster has a unique IP address; 
-    But, Pod is not permanent, it gets recreated(for many reasons), possibly with a different IP, on same or different Node;
-    So, we can't depend on this IP for inter-pod communication OR external communication;
-    That is where Service comes into picture;
+    
+    For external access, Ingress often comes into play.
+
+
+    
 
     Service exposes an always available URL(called cluster IP) to applications running in one or more pods, even when one of the pod is down OR it is being upgraded;
     It load balances the requests among all running pods;
@@ -10,12 +45,30 @@ What is Service?
     The set of Pods that Service is proxying are determined by the label selectors defined in the Service definition;
 
 Service provides access to the Pods from inside the cluster(through kube proxy) and from outside the cluster(through kube dns);
+
+how this is implemented internally (kube-proxy, iptables, IPVS)
+👉 or how this differs from Ingress / Gateway (very important in interviews)
+
+
+If you recreate the service, service IP can change; but, DNS remains the same;
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 K8s supports 4 type of Services: ClusterIP, NodePort, LoadBalancer, External IP;
 
 ClusterIP
     - You could have multiple front-end pods, multiple backend pods and multiple redis pods;
     - ClusterIP allows one pod type to communicate to another Pod type, within the cluster; // inter-pod communication
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
 
 NodePort
     - It exposes the applications running in a Pod to the external world;
@@ -35,6 +88,8 @@ LoadBalancer
 External IP
     - You can use External IP, if you want to get the full control of IP that you use;
       You can use IP that belongs to your ASN instead of a cloud provider’s ASN;
+
+There are four types of services that Kubernetes supports: ClusterIP, NodePort, LoadBalancer, and Ingress
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # NodePort Service Demo
 -----------------------

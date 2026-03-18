@@ -14,12 +14,32 @@
     <div class="question"><strong>1. What is ClusterIP?</strong></div>
     <div class="answer">
         <ul>
+
+            Exposes a group of Pods using a stable internal IP address
+👉 Makes them accessible only inside the cluster
+➡️ An internal load balancer with a fixed IP and DNS name for a set of Pods
+
+Accessible within the cluster
+
+Not reachable from the internet
+❗ Not exposed outside the cluster
+
             <li>The <strong>default Service type</strong> in Kubernetes;</li>
             <li>Exposes the Service on a <strong>cluster-internal IP</strong> — only accessible from within the cluster;</li>
             <li>Provides a stable IP and DNS name for a set of Pods;</li>
             <li>Load balances traffic across all matching Pods;</li>
         </ul>
     </div>
+
+
+    When to Use ClusterIP
+Use ClusterIP when:
+
+Communication is between services within the cluster
+You're building microservices that only need internal connectivity
+You want to keep services private and not expose them externally
+Examples: databases, internal APIs, caching layers, message queues
+
 
     <div class="question"><strong>2. ClusterIP YAML</strong></div>
     <div class="answer">
