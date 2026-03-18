@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cip1-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cip1-pod
+  template:
+    metadata:
+      labels:
+        app: cip1-pod
+    spec:
+      containers:
+      - name: cip1-c1
+        image: hashicorp/http-echo
+        args:
+          - "-text=Hello from $(POD_IP)"
+        env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        ports:
+          - containerPort: 5678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cip1-svc
+spec:
+  type: ClusterIP         # default
+  selector:
+    app: cip1-pod
+  ports:
+    - port: 80            # Service port
+      targetPort: 5678    # Pod port
