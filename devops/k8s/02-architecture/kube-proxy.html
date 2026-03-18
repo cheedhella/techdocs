@@ -14,10 +14,22 @@
     <div class="question"><strong>1. What is Kube-Proxy?</strong></div>
     <div class="answer">
         <ul>
-            
+            <li>Kube-Proxy is a k8s agent that is installed on every node in the cluster(as a DaemonSet);</li>
+            <li>It monitors changes to Service objects and their endpoints and translates them into actual network rules inside the node;</li>
+            For Service-to-Pod mapping to work, you need continuous re-mapping at the networking level. This is precisely what Kube-proxy does.
+
+Kube-proxy helps with Service to pod mapping by maintaining a network routing table that maps Service IP addresses to the IP addresses of the pods that belong to the Service. When a request is made to a Service, kube-proxy uses this mapping to forward the request to a Pod belonging to the Service.
+
         </ul>
     </div>
 
+    <div class="question"><strong>2. How it works?</strong></div>
+    <div class="answer">
+        <ul>
+        </ul>
+    </div>
+
+    https://kodekloud.com/blog/kube-proxy/
 </body>
 
 </html>

@@ -202,6 +202,9 @@ kubectl get csinodes
     </div>
 
 
+    kubectl taint nodes <node-name> <tait>-        # Remove taint 
+https://www.baeldung.com/ops/kubernetes-taints-management
+
 kubectl delete all --all    # Delete all resources in default namespace;
 kubectl delete all --all -n &lt;namespace&gt;    # Delete all resources in specified namespace;
 kubectl delete all --all --all-namespaces    # Delete all resources in all namespaces;
