@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kubectl</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>kubectl</h2>
+    </div>
+
+    <div class="question"><b>1. What is kubectl?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is command line tool, which is used to interact with k8s cluster(API Server);</li>
+            <li>Either master or worker nodes doesn't need kubectl;</li>
+            <li>You can set it up on any one of master node(most convinient place to test cluster, after setup) OR your local system OR CI/CD system;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Setup kubectl</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Install kubectl</b>: apt install kubelet</li>
+        </ul>
+    </div>
+    
+    <div class="question"><b>3. How it works?</b></div>
+    <div class="answer">
+        <ul>
+            <li>kubectl reads a <strong>kubeconfig file</strong> (default: <code>~/.kube/config</code>) to know which cluster to connect to;</li>
+            <li>Converts your command into an <strong>API request</strong> and sends it to the API Server;</li>
+            <li>The API Server authenticates, authorizes, and processes the request;</li>
+            <li>kubectl displays the result;</li>
+        </ul>
+    </div>
+    
+    <div class="question"><strong>4. What is kubeconfig?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A YAML file that stores information about clusters, users, and contexts;</li>
+            <li>Default location: <code>~/.kube/config</code>;</li>
+            <li>Can be overridden with <code>--kubeconfig</code> flag or <code>KUBECONFIG</code> environment variable;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Structure of kubeconfig</strong></div>
+    <div class="answer">
+        <pre><code>apiVersion: v1
+kind: Config
+current-context: my-context
+
+clusters:
+  - name: my-cluster
+    cluster:
+      server: https://192.168.1.100:6443
+      certificate-authority: /path/to/ca.crt
+
+users:
+  - name: my-user
+    user:
+      client-certificate: /path/to/client.crt
+      client-key: /path/to/client.key
+
+contexts:
+  - name: my-context
+    context:
+      cluster: my-cluster
+      user: my-user
+      namespace: default</code></pre>
+        <ul>
+            <li><strong>Clusters:</strong> Define the API Server endpoint and CA certificate;</li>
+            <li><strong>Users:</strong> Define authentication credentials;</li>
+            <li><strong>Contexts:</strong> Combine a cluster + user + namespace into a named context;</li>
+        </ul>
+    </div>
+
+
+    <div class="question"><b>6. Configure kubectl(on master node)</b></div>
+    <div class="answer">
+        <ul>
+            mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+> kubectl get nodes
+control-plane   Ready
+worker-1        Ready
+        </ul>
+    </div>
+
+
+    <div class="question"><b>7. Configure kubectl(on your laptop or another VM)</b></div>
+    <div class="answer">
+        <ul>
+            scp /etc/kubernetes/admin.conf user@your-laptop:~/.kube/config
+            Replace: server: https://127.0.0.1:6443 -> server: https://<control-plane-ip>:6443
+
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. Context Management</strong></div>
+    <div class="answer">
+        <pre><code># View current context
+kubectl config current-context
+
+# List all contexts
+kubectl config get-contexts
+
+# Switch context
+kubectl config use-context production-context
+
+# Set default namespace for a context
+kubectl config set-context --current --namespace=my-namespace
+
+# Merge multiple kubeconfig files
+export KUBECONFIG=~/.kube/config:~/.kube/config-cluster2
+kubectl config view --merge --flatten > ~/.kube/merged-config</code></pre>
+    </div>
+
+</body>
+
+</html>

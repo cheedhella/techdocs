@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>API Server</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>API Server</h2>
+    </div>
+
+    <div class="question"><strong>1. What is API Server?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Think of it as front door to your cluster; Every interaction with k8s goes through the API server;</li>
+            <li>It exposes REST API; All kubectl commands are converted to HTTP requests, before sending them to API Server;</li>
+            <li>Stateless (can scale horizontally);</li>
+            <li>Highly available (multiple API servers);</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How write(create/update/delete) works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you run: kubectl apply -f pod.yaml, kubectl calls underlying REST API and API Server
+                <ul>
+                    <li>Receives request;</li>
+                    <li>Authenticates;</li>
+                    <li>Authorizes;</li>
+                    <li>Validates the request, rejects the invalid requests and adds default values;</li>
+                    <li>Saves reqeust to etcd; <b>API Server is the only component that talks(read/write) to etcd;</b></li>
+                    <li>Notifies watchers(Scheduler watches for new pods, Controllers watch for changes, Kubelets watch assigned pods);</li>
+                    <li>Returns response;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How read(get/list) works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you run: kubectl get pods, API Server
+                <ul>
+                    <li>Receives request;</li>
+                    <li>Authenticates;</li>
+                    <li>Authorizes;</li>
+                    <li>Fetch data from etcd;</li>
+                    <li>Returns response;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Authentication Mechanisms?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Client certificates</li>
+            <li>Bearer tokens</li>
+            <li>HTTP Basic Authentication</li> 
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Authorization Mechanisms?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>ABAC</li>
+            <li>RBAC</li>
+            <li>The API server also supports webhook authorization (delegating decision-making to an external service), ABAC (policies in a static file), and the Node authorizer, a special-purpose authorizer that ensures kubelets can access resources only on their own node;</li>
+        </ul>
+    </div>
+ 
+    <div class="question"><strong>6. API Groups</strong></div>
+    <div class="answer">
+        <table>
+            <tr><th>Group</th><th>Resources</th><th>Example apiVersion</th></tr>
+            <tr><td>Core (v1)</td><td>Pod, Service, ConfigMap, Secret, Namespace</td><td><code>v1</code></td></tr>
+            <tr><td>apps</td><td>Deployment, StatefulSet, DaemonSet, ReplicaSet</td><td><code>apps/v1</code></td></tr>
+            <tr><td>batch</td><td>Job, CronJob</td><td><code>batch/v1</code></td></tr>
+            <tr><td>networking.k8s.io</td><td>Ingress, NetworkPolicy</td><td><code>networking.k8s.io/v1</code></td></tr>
+            <tr><td>rbac.authorization.k8s.io</td><td>Role, ClusterRole, RoleBinding</td><td><code>rbac.authorization.k8s.io/v1</code></td></tr>
+            <li>Everything in Kubernetes is an <strong>API object</strong> — Pods, Services, Deployments, etc.;</li>
+            <li>The API is <strong>RESTful</strong> — you interact with it using standard HTTP methods (GET, POST, PUT, DELETE);</li>
+            <li>kubectl is just a CLI wrapper around API calls;</li>
+            <li>API resources are organized into <strong>API Groups</strong> and <strong>versions</strong>;</li>
+        </table>
+    </div>
+
+    <div class="question"><strong>7. TODO</strong></div>
+    <div class="answer">
+        <ul>
+            <li>https://learnkube.com/kubernetes-api-explained</li>
+            <li>Secure (TLS, RBAC, admission policies)</li>
+            <li>Extensible (CRDs, webhooks)</li>
+            <li>https://devopscube.com/kubernetes-architecture-explained/</li>
+            <li>https://www.civo.com/learn/kubernetes-a-container-orchestrator-or-yet-another-api-server</li>
+            <li>https://www.redhat.com/en/blog/kubernetes-deep-dive-api-server-part-1</li>
+            <li>https://www.geeksforgeeks.org/devops/kubernetes-api/</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>8. What if you API server is down or you killed it(on leader node)?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Existing pods on the continues running;</li>
+            <li>kubelet running on that node, recreates the static pod;</li>
+            <li>Until API server is restored, that node won't accept any new pods and controllers stop reconcilation;</li>
+            <li>If it takes time to restore, that can trigger election;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

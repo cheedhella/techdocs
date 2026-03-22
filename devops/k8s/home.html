@@ -19,13 +19,41 @@
                     <ul>
                         <li><a href="./01-introduction/what.html">1.1 What is K8s?</a></li>
                         <li><a href="./01-introduction/new-terms.html">1.2 New Terms</a></li>
-                        <li><a href="./01-introduction/architecture.html">1.3 Architecture</a></li>
                         <li><a href="./01-introduction/kubectl.html">1.4 kubectl</a></li>
                         <li><a href="./01-introduction/kubeconfig.html">1.5 kubeconfig</a></li>
                     </ul>
                 </li>
 
-                <li><strong>2️⃣ Pods</strong>
+                <li><strong>2️⃣ Architecture</strong>
+                    <ul>
+                        <li><a href="./02-architecture/architecture.html">2.1 Architecture</a></li>
+                        <li><a href="./02-architecture/kubelet.html">2.2 kubelet</a></li>
+                        <li><a href="./02-architecture/kubeadm.html">2.3 kubeadm(for cluster setup)</a></li>
+                        <li><a href="./02-architecture/kubectl.html">2.4 kubectl</a></li>
+                        <li>Master or Control Plane node 
+                            <ul>
+                                <li><a href="./02-architecture/etcd.html">etcd</a></li>
+                                <li><a href="./02-architecture/raft.html">Raft Consensus Algorithm</a></li>
+                                <li><a href="./02-architecture/api-server.html">API Server</a></li>
+                                <li><a href="./02-architecture/scheduler.html">Scheduler</a></li>
+                                <li><a href="./02-architecture/controller-manager.html">Controller Manager</a></li>
+                            </ul>
+                        </li>
+                        <li>Worker node 
+                            <ul>
+                                <li>kube-proxy</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li><strong>3 Nodes</strong>
+                    <ul>
+                        <li><a href="./02-nodes/taint-toleration-affinity.html" class="href">Taint & Toleration and Affinity</a></li>
+                    </ul>
+                </li>
+
+                <li><strong>5️⃣ Pods</strong>
                     <ul>
                         <li><a href="./04-pods/what.html">4.1 What is a Pod?</a></li>
                         <li><a href="./04-pods/lifecycle.html">4.2 Pod Lifecycle and Phases</a></li>
@@ -38,7 +66,7 @@
                     </ul>
                 </li>
 
-                <li><strong>5️⃣ Controllers</strong>
+                <li><strong>6️⃣ Controllers</strong>
                     <ul>
                         <li><a href="./05-controllers/what.html">5.1 What is a Controller?</a></li>
                         <li><a href="./05-controllers/replicaset.html">5.2 ReplicaSet</a></li>
@@ -47,20 +75,6 @@
                         <li><a href="./05-controllers/daemonset.html">5.6 DaemonSet</a></li>
                         <li><a href="./05-controllers/job.html">5.7 Job</a></li>
                         <li><a href="./05-controllers/cronjob.html">5.8 CronJob</a></li>
-                    </ul>
-                </li>
-
-                <li><strong>6️⃣ Services and Networking</strong>
-                    <ul>
-                        <li><a href="./06-services-networking/networking-model.html">6.1 Kubernetes Networking Model</a></li>
-                        <li><a href="./06-services-networking/clusterip.html">6.2 Service — ClusterIP</a></li>
-                        <li><a href="./06-services-networking/nodeport.html">6.3 Service — NodePort</a></li>
-                        <li><a href="./06-services-networking/loadbalancer.html">6.4 Service — LoadBalancer</a></li>
-                        <li><a href="./06-services-networking/headless-service.html">6.5 Headless Service</a></li>
-                        <li><a href="./06-services-networking/externalname.html">6.6 ExternalName Service</a></li>
-                        <li><a href="./06-services-networking/ingress.html">6.7 Ingress and Ingress Controllers</a></li>
-                        <li><a href="./06-services-networking/network-policies.html">6.8 Network Policies</a></li>
-                        <li><a href="./06-services-networking/dns.html">6.9 DNS in Kubernetes (CoreDNS)</a></li>
                     </ul>
                 </li>
 
@@ -75,14 +89,21 @@
                     </ul>
                 </li>
 
+                 <li><strong>8️⃣ Services</strong>
+                    <ul>
+                        <li><a href="./08-services/what.html">6.1 What is a Service?</a></li>
+                        <li><a href="./08-services/clusterip.html">6.2 ClusterIP</a></li>
+                    </ul>
+                </li>
+
                 <li><strong>8️⃣ Storage</strong>
                     <ul>
-                        <li><a href="./08-storage/what.html">8.1 What is a Volume?</a></li>
-                        <li><a href="./08-storage/emptyDir.html">8.2 emptyDir</a></li>
-                        <li><a href="./08-storage/hostPath.html">8.3 hostPath</a></li>
-                        <li><a href="./08-storage/pv.html">8.4 Persistent Volume (PV)</a></li>
-                        <li><a href="./08-storage/pvc.html">8.5 Persistent Volume Claim (PVC)</a></li>
-                        <li><a href="./08-storage/sc.html">8.6 Storage Class</a></li>
+                        <li><a href="./09-storage/what.html">8.1 What is a Volume?</a></li>
+                        <li><a href="./09-storage/emptyDir.html">8.2 emptyDir</a></li>
+                        <li><a href="./09-storage/hostPath.html">8.3 hostPath</a></li>
+                        <li><a href="./09-storage/pv.html">8.4 Persistent Volume (PV)</a></li>
+                        <li><a href="./09-storage/pvc.html">8.5 Persistent Volume Claim (PVC)</a></li>
+                        <li><a href="./09-storage/sc.html">8.6 Storage Class</a></li>
                     </ul>
                 </li>
 
@@ -243,6 +264,9 @@ Understand how ExternalDNS simplifies service discovery by dynamically managing 
 
 Introduction to Node Affinity in Kubernetes
 Discover how Node Affinity works in Kubernetes to influence pod scheduling by specifying node selection preferences and ensuring efficient workload distribution.
+
+
+Lease object (in kube-system namespace)
 
         <script src="../../resources/js/codeblock.js"></script>
     </body>

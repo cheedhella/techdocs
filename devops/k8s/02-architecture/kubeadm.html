@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kubeadm</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>kubeadm</h2>
+    </div>
+
+    <div class="question"><strong>1. What is kubeadm?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a tool that helps you in setting up the k8s cluster;</li>
+            <li>It is needed only during cluster setup, once cluster is formed, kubeadm is not needed;</li>
+            <li>It is not needed in managed k8s environments; Cloud providers replace it with their own system;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Setup kubeadm(on both master and worker nodes)</strong></div>
+    <div class="answer">
+        <ol>
+            <li><b>System requirements</b>: Linux machine with minimum 2 CPU, 2GB RAM;</li>
+            <li><b>Disable swap</b>: swapoff -a</li>
+            <li><b>Install container runtime</b>: such as docker, containerd;</li>
+            <li><b>Install k8s tools</b>: apt install kubeadm kubelet</li>
+        </ol>
+    </div>
+
+    <div class="question"><b>3. Setup kubectl</b></div>
+    <div class="answer">
+        <ul>
+            <li><a href="./kubectl.html">Setup kubectl</a></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Install CNI Plugin</b></div>
+    <div class="answer">
+        <ol>
+            <li>Without CNI plugin, cluster will not form(nodes will remain in NOT READY state);</li>
+            <li>kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml - It creates a DaemonSet, that runs calico Pod on every node(both master and worker) node;</li>
+            <li>You will see one CNI pod per node, like:
+                > kubectl get pods -n kube-system
+            </li>
+        </ol>
+    </div>
+
+    <div class="question">5. What <b>kubeadm init</b> does(on master nodes)?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>CNI Plugins like calico require CIDR range: <b>kubeadm init --pod-network-cidr=192.168.0.0/16</b></li>
+            <li>It does the following:
+                <ul>
+                    <li>It sets up kubeconfig files;</li>
+                    <li>It creates certificates(for secure communication);</li>
+                    <li>These help in connecting kubelet with API server;</li>
+                    <li>It generates YAML files of static pods in /etc/kubernetes/manifests/ folder;</li>
+                    <li>It then restarts kubelet;</li>
+                    <li>Prints <b>kubeadm join</b> command that you can run manually on worker nodes: <b>kubeadm join <api-server-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash></b>
+                        <ul>
+                            <li>192.168.1.10 -> API Server IP Address;</li>
+                            <li>6443 -> API server port;</li>
+                            <li>token -> It verifies worker; One time Password for joining; Any one worker node can use that token; Run this command on controller node, if you want another token: <b>kubeadm token create --print-join-command</b></li>
+                            <li>discovery-token-ca-cert-hash -> It verifies the identify of control plane node, thus avoiding man-in-middle attack; It is the SHA256 hash of the CA cert; worker node fetches certificate of master node, hashes it and compares it provided hash;</li>
+                            <li>Compute digest manually: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question">6. What <b>kubeadm join</b> does(on worker nodes)?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>We need to SSH into each worker and run the same join command on every worker node manually;</li>
+            <li>When you run: <b>kubeadm join <api-server> --token ... --discovery-token-ca-cert-hash ...</b>, it does following:
+                <ul>
+                    <li>It sets up kubeconfig files;</li>
+                    <li>It configures /etc/kubernetes/kubelet.conf(API server endpint and authentication/token details);</li>
+                    <li>This configuration enables the communication b/w kubelet and API server;</li>
+                    <li>It then restarts the kubelet;</li>
+                </ul>
+            </li>
+            
+
+<li>Every node registers itself with cluster: ;
+                <ul>
+                    
+                    <li>Starts and enables kubelet service, wcich is ready to talk to the cluster;</li>
+                    <li>kubelet uses token to authenticate itself with API server;</li>
+                   
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

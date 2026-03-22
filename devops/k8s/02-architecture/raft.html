@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Raft Consensus Algorithm</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Raft Consensus Algorithm</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Raft Consensus Algorithm?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>etcd uses Raft consensus algorithm for leader election, replication, fault tolerance and high availability;</li>
+            <li><b>No split-brain situation</b>
+                <ul>
+                    <li>Split-brain is a dangerous situation in distributed systems where 2 or more nodes think they are the leader at the same time;</li>
+                    <li>By following Majority rule(A leader must have > 50% of votes), it ensures there is only leader at any given time;</li>
+                </ul>
+            </li>
+            <li><b>Single source of truth(Strong consistency)</b>
+                <ul>
+                    <li>It ensure that there is only one leader at any given time, which takes care of making changes to state and replicating changes to followers;</li>
+                    <li>Every write must be accepted by a majority (quorum), thus ensuring all nodes have same and correct data, even when a node is down; No stale reads!</li>
+                </ul>
+            </li>
+            <li><b>Fault tolerance & High Availability</b>
+                <ul>
+                    <li>Fault Tolerance: If a leader crashes, new leader gets elected automatically;</li>
+                    <li>High Availability: A cluster with 3 masters, can tolerate failure of 1 node; A cluster with 5 masters, can tolerate failure of 2 nodes;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How it works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Role</b> - Each node in the cluster acts as one of below 3 Roles:
+                <ul>
+                    <li><b>Leader</b> 
+                        <ul>
+                            <li>Only one leader at a time;</li>
+                            <li>API server writes always goes to the leader;</li>
+                            <li>It handles all writes and replicates data to followers;</li>
+                            <li>It keeps sending heartbeat to all followers; Heartbeat is a message sent by leader to say: "I’m still alive, stay followers, don’t start an election; Followers reset their election timer, when they receive it";</li>
+                        </ul>
+                    </li>
+                    <li><b>Follower</b>
+                        <ul>
+                            <li>Receives data from leader, stores it locally(replicates) and sends ACK to leader; Leader waits for majority ACKs before committing; Without followers, no write can succeed;</li>
+                            <li>Leader sends periodic heartbeats to all followers; Follower resets the election timer, thus preventing unnecessary election;</li>
+                            <li>If follower doesn't receive the heartbeat, then it assumes the leader is dead, converts itself into candidate and starts election;</li>
+                            <li>When a candidate asks for votes, Follower decides yes/no, based on: Log freshness and term number;</li>
+                            <li>Followers may serve read-only queries(reduces load on leader); In strict consistency mode, reads still go via leader;</li>
+                        </ul>
+                    </li>
+                    <li><b>Candidate</b> - Think of candidate as: “I think leader is gone, let me try”!
+                        <ul>
+                            <li>If follower doesn't receive the heartbeat, then it assumes the leader is dead, converts itself into candidate and starts election;</li>
+                            <li>When a candidate asks for votes, Follower decides yes/no, based on: Log freshness and term number;</li>
+                            <li>Wins majority → becomes Leader;</li>
+                            <li>Loses → goes back to Follower</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><b>Leader election</b>
+                <ul>
+                    <li>Initially, all nodes are followers;</li>
+                    <li>If no leader heartbeat is received → timeout triggers election;</li>
+                    <li>A node becomes a candidate and requests votes;</li>
+                    <li>Majority wins → becomes leader;</li>
+                    <li>This ensures only one leader at a time;</li>
+                </ul>
+            </li>
+            <li><b>How etcd uses Raft</b> - when you ran any kubectl command:
+                <ul>
+                    <li>API server receives request</li>
+                    <li>Writes new desired state to etcd</li>
+                    <li>etcd leader logs change</li>
+                    <li>Followers replicate via Raft</li>
+                    <li>Once committed → controllers act (create pods)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

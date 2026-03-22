@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>etcd</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>etcd</h2>
+    </div>
+
+    <div class="question"><strong>1. What is etcd?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is a distributed key-value database, that stores entire cluster state;</li>
+            <li>Only API Server talks to etcd directly; Other components(Scheduler, controllers) go through API server;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What does etcd store?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>All Kubernetes objects: Pods, Services, Deployments, ConfigMaps, Secrets;</li>
+            <li>Cluster configuration and state;</li>
+            <li>RBAC policies;</li>
+            <li>Service account tokens;</li>
+            <li>Lease information for leader election;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Key characterstics of etcd?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Distributed</b>
+                <ul>
+                    <li>Data is distributed and replicated across multiple nodes(only master master nodes);</li>
+                </ul>
+            </li>
+            <li><b>Highly Available</b>
+                <ul>
+                    <li>Cluster with 3/5 master nodes is always highly available;</li>
+                </ul>
+            </li>
+            <li><b>Strongly Consistent</b>
+                <ul>
+                    <li>It uses <a href="./raft.html" class="href"><b>Raft consensus algorithm</b></a>;</li>
+                    <li>It ensures that there is one leader at any given time, that is incharge of making changes to the state and replicating the changes to followers;</li>
+                    <li>State changes are committed only when replication is confirmed by majority of the nodes in the cluster;</li>
+                    <li>It guarantees latest data is always correct; No stale reads;</li>
+                </ul>
+            </li>
+            <li><b>Key-Value database</b>
+                <ul>
+                    <li>/registry/pods/nginx → pod definition</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Monitoring etcd in Production</strong></div>
+    <div class="answer">
+        <ul>
+            <li>You can expose etcd metrics and monitor via: Prometheus and Grafana;</li>
+            <li>You can set alerts on: 
+                <ul>
+                    <li>Leader not presetn;</li>
+                    <li>Too many leader changes;</li>
+                    <li>High commit latency;</li>
+                    <li>Followers lagging behind;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    etcd logs: journalctl -u etcd -f
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>kubelet</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>kubelet</h2>
+    </div>
+
+    <div class="question"><b>1. What is kubelet?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is an agent(systemd daemon) that runs on every node(both master and worker) in the cluster;</li>
+            <li>It is responsible for the following things:
+                <ul>
+                    <li>On startup, it reads the manifest files in /etc/kubernetes/manifests/ and creates those static pods; It is empty in worker node;</li>
+                    <li>It also continues monitoring the health of those static pods; If you delete a static pod, it gets recreated automatically by kubelet on that node; If you delete manifest file, then kubelet deletes that pod and it is gone permanently!</li>
+                    <li>On startup, kubelet registers the node, by creating Node object(like hostname, CPU/memory, labels like region or instance type, network info) and saving it to API server;</li>
+                    <li>It continously watches events from API server for Pods assigned to this node;</li>
+                    <li>It pulls the image and uses container rumtimes(like docker, containerd) to start/stop/restart(if they crash) containers;</li>
+                    <li>It performs health checks: Liveness, Readiness; If a container fails, it restarts it automatically;</li>
+                    <li>Reports Node health, Node metrics(CPU and Memory usage) and Pod status to master node(leader);</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Why kubelet is needed on master nodes?</b></div>
+    <div class="answer">
+        <ul>
+            <li>On master node, kubelet runs API server, scheduler, controler manager as static pods;</li>
+            <li>Ensures those pods are healthy;</li>
+            <li>Reports node status, pods status to master node(leader);</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. kubeadm join vs kubelet</b></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>kubeadm join</th><th>kubelet</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>One-time command</td><td>Long-running service</td></tr>
+                <tr><td>Sets up node</td><td>Manages node</td></tr>
+                <tr><td>Configures kubelet</td><td>Uses that config</td></tr>
+                <tr><td>Exits after execution</td><td>Runs forever</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="question"><b>3. What is a static pod?</b></div>
+    <div class="answer">
+        <ul>
+            <li>These pods are created automatically without involving API server initially;</li>
+            <li>These are defined in the manifest files(/etc/kubernetes/manifests) and managed by kubelet;</li>
+            <li>Eg: API server, Scheduler, Controller manager;</li>
+            <li><pre><code>
+> kubectl get pods -n kube-system
+kube-apiserver-<node-name>
+kube-scheduler-<node-name>
+kube-controller-manager-<node-name>
+            </code></pre></li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

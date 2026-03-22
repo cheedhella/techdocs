@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Scheduler</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Scheduler</h2>
+    </div>
+
+    <div class="question"><strong>1. What is Scheduler?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Scheduler watches API server for unscheduled Pods and assigns them to the best suitable node;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. How it works?</strong></div>
+    <div class="answer">
+        <ul>For every unscheduled Pod(API Server just saved the Pod object):
+            <li>It removes the nodes that cannot run the Pod:
+                <ul>
+                    <li>not having enough CPU/Memory</li>
+                    <li>node selector mismatch</li>
+                    <li>taints not tolerated</li>
+                    <li>port conflicts</li>
+                    <li>Output: List of eligible nodes;</li>
+                </ul>
+            </li>
+            <li>Each eligible node gets a score based on rules:
+                <ul>
+                    <li>Resource balance (least/most used);</li>
+                    <li>Pod affinity/anti-affinity;</li>
+                    <li>Topology spread;</li>
+                    <li>Image locality;</li>
+                    <li>Output: Nodes ranked from best → worst;</li>
+                </ul>
+            </li>
+            <li>It picks the highest scoring node and sends the binding request(pod.nodeName = selected-node) to API Server; API Server updates etcd;</li>
+            <li>If no node is available, scheduler can evict low-priority pods;</li>
+            <li>Kubelet on that node sees node assignment and starts creating the Pod;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How it works in a multi-master setup?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In HA(multiple control plane nodes) setup, scheduler running on leader node only is active; Others stay in stand-by mode;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

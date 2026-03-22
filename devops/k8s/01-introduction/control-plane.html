@@ -33,14 +33,6 @@
         </ul>
     </div>
 
-    <div class="question"><strong>3. kube-scheduler</strong></div>
-    <div class="answer">
-        <ul>
-            <li>Watches for newly created Pods that have <strong>no node assigned</strong>;</li>
-            <li>Selects the best node for each Pod based on: resource requirements, affinity/anti-affinity rules, taints/tolerations, data locality;</li>
-            <li>Scoring process: <strong>Filtering</strong> (eliminate unfit nodes) → <strong>Scoring</strong> (rank remaining nodes) → <strong>Binding</strong> (assign Pod to top-scored node);</li>
-        </ul>
-    </div>
 
     <div class="question"><strong>4. kube-controller-manager</strong></div>
     <div class="answer">

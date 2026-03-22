@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Controller Manager</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Controller Manager</h2>
+    </div>
+
+    <div class="question"><b>1. What is Controller Manager?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is a daemon that creates multiple controllers;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Controller Types?</b></div>
+    <div class="answer">
+        <ul>
+            <li>ReplicaSetController</li>
+            <li>DeploymentController</li>
+            <li>StatefulSetController</li>
+            <li>DaemonSetController</li>
+            <li>JobController</li>
+            <li>CronJobController</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. What is Controller?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Each controller monitors(watches events from API server) objects of specific type;</li>
+            <li>It compares desired state(from spec) with actual state(from API server);</li>
+            <li>If there is a mismatch, it takes corrective actions;</li>
+            <li>It is a continous process;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. How it works in a multi-master setup?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In HA(multiple control plane nodes) setup, controllers running on leader node are only active(Similar to scheduler); Others stay in stand-by mode;</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

@@ -14,18 +14,58 @@
     <div class="question"><strong>1. Cluster</strong></div>
     <div class="answer">
         <ul>
-            <li>A cluster is a set of nodes (machines) working together;</li>
-            <li>If one node fails, others take over the workload – ensuring high availability (HA);</li>
-            <li>When all nodes are operational, load balancing distributes the workload evenly;</li>
+            <li>Cluster consists of 1/3/5 master/control plane nodes and 1/more worker nodes;</li>
         </ul>
     </div>
 
-    <div class="question"><strong>2. Master</strong></div>
+    <div class="question"><b>2. Master OR Control plane node</b></div>
     <div class="answer">
         <ul>
-            <li>Who is responsible for managing cluster?</li>
-            <li>It stores the information about members of the cluster;</li>
-            <li>It monitors the nodes; When a node fails, it moves the workload of the failed node to another worker node;</li>
+            <li>K8s cluster usally consists of 1 or 3 or 5 master nodes;</li>
+            <li>Having 1 master is fine for dev/test environments, but not recommended for production environments, due to single point of failure;</li>
+            <li>Though it is possible to have more than 5 master nodes, consensus/quorum becomes slower with too many master nodes, thus causing performance issues;</li>
+            <li>By default, master nodes will have this taint: <b>node-role.kubernetes.io/control-plane:NoSchedule</b>, which prevents scheduler from scheduling pods on master nodes;</li>
+            <li><b>Components of Master Node:</b>
+                <ul>
+                    <li><b>API Server</b></li>
+                    <li><b>etcd</b></li>
+                    <li><b>Scheduler</b></li>
+                    <li><b>Controller Manager</b></li>
+                    <li><b>Cloud Controller Manager</b></li>
+                    <li><b>kubelet</b></li>
+                    <li><b>Container Runtime</b></li>
+                    <li><b>kube-proxy</b></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Worker node</b></div>
+    <div class="answer">
+        <ul>
+            <li>K8s cluster usally consists of 1 or more worker nodes;</li>
+            <li><b>Components of Worker Node:</b>
+                <ul>
+                    <li><b>kubelet</b></li>
+                    <li><b>Container Runtime</b></li>
+                    <li><b>kube-proxy</b></li>
+                    <li><b>Pods</b></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. How it works?</b></div>
+    <div class="answer">
+        <ul>
+            <li>When user runs a command(kubectl apply -f app.yaml), request goes to API server; <a href="./kubectl.html">How kubectl knows API server?</a></li>
+            <li>API server validates the request and stores the desired state in etcd;</li>
+            <li>Controller Manager detects new object and creates required resources;</li>
+            <li>Scheduler finds best node for each Pod, based on: CPU/memory/policies/constraints etc;</li>
+            <li>Kubelet running on each node, sees assigned Pod and talks to container runtime;</li>
+            <li>Container runtime pulls image from registry and creates/runs pods;</li>
+            <li>Kube proxy sets up networking; Enables pod to pod and service to pod communication;</li>
+            <li>Continuous monitoring - kubelet reports current status to API server; Controllers continuously comapres actual state with desire state; In case of mismatch, it restarts pods, reschedules pods, replaces failed nodes;</li>
         </ul>
     </div>
 
