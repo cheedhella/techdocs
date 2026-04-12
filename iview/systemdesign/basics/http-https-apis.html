@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>HTTP/HTTPS and APIs</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. What is HTTP and HTTPS?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>HTTP (HyperText Transfer Protocol):</strong> The foundation of data communication for the World Wide Web. It is a stateless, request-response protocol.</li>
+            <li><strong>HTTPS (HTTP Secure):</strong> An extension of HTTP that uses TLS/SSL to encrypt communication, ensuring data integrity and privacy.</li>
+            <li>Port 80 is used for HTTP, and Port 443 is used for HTTPS.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. HTTP Methods (Verbs)</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>GET:</strong> Retrieve data from the server.</li>
+            <li><strong>POST:</strong> Send data to the server to create a new resource.</li>
+            <li><strong>PUT:</strong> Update an existing resource (replaces the entire resource).</li>
+            <li><strong>PATCH:</strong> Partially update an existing resource.</li>
+            <li><strong>DELETE:</strong> Remove a resource from the server.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What are APIs?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>API (Application Programming Interface):</strong> A set of rules and definitions that allow different software applications to communicate with each other.</li>
+            <li>In system design, we mostly talk about Web APIs (REST, GraphQL, gRPC).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. REST (Representational State Transfer)</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Uses standard HTTP methods.</li>
+            <li>Stateless: Each request contains all information needed to process it.</li>
+            <li>Resource-based: URLs represent resources (e.g., `/users/123`).</li>
+            <li>Format: Usually JSON or XML.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. HTTP Status Codes</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>2xx (Success):</strong> 200 OK, 201 Created.</li>
+            <li><strong>3xx (Redirection):</strong> 301 Moved Permanently, 304 Not Modified.</li>
+            <li><strong>4xx (Client Error):</strong> 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found.</li>
+            <li><strong>5xx (Server Error):</strong> 500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable.</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

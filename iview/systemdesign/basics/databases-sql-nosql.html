@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Databases: SQL vs NoSQL</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. SQL (Relational Databases)</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Structure:</strong> Data is stored in tables with fixed rows and columns.</li>
+            <li><strong>Schema:</strong> Rigid/Predefined. You must define the structure before adding data.</li>
+            <li><strong>Relationships:</strong> Uses Joins to connect data across tables.</li>
+            <li><strong>Scaling:</strong> Vertically Scalable (increase CPU/RAM on one server).</li>
+            <li><strong>ACID Compliance:</strong> High (Atomicity, Consistency, Isolation, Durability).</li>
+            <li><strong>Examples:</strong> MySQL, PostgreSQL, Oracle, SQL Server.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. NoSQL (Non-Relational Databases)</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Structure:</strong> Document-based, Key-Value, Graph, or Wide-column.</li>
+            <li><strong>Schema:</strong> Flexible/Dynamic. Can store unstructured or semi-structured data.</li>
+            <li><strong>Scaling:</strong> Horizontally Scalable (add more servers to a cluster).</li>
+            <li><strong>BASE Properties:</strong> Basically Available, Soft state, Eventual consistency.</li>
+            <li><strong>Examples:</strong> MongoDB (Document), Redis (Key-Value), Cassandra (Wide-column), Neo4j (Graph).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. When to use SQL?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you need strict data integrity and ACID compliance (e.g., Financial systems).</li>
+            <li>When data is highly structured and relationships are complex.</li>
+            <li>When the data volume is manageable on a single powerful server.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. When to use NoSQL?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>When you have massive amounts of data (Big Data).</li>
+            <li>When data structure is changing rapidly or is unpredictable.</li>
+            <li>When high availability and horizontal scaling are more important than strict consistency.</li>
+            <li>Real-time analytics, Content Management, Social Media feeds.</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

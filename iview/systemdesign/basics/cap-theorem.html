@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CAP Theorem</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. What is CAP Theorem?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Proposed by Eric Brewer, it states that a distributed system can only provide two out of the following three guarantees:</li>
+            <li><strong>C - Consistency:</strong> Every read receives the most recent write or an error.</li>
+            <li><strong>A - Availability:</strong> Every request receives a (non-error) response, without the guarantee that it contains the most recent write.</li>
+            <li><strong>P - Partition Tolerance:</strong> The system continues to operate despite an arbitrary number of messages being dropped (or delayed) by the network between nodes.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. The Trade-off</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In a distributed system, network partitions (P) are inevitable. Therefore, you must choose between Consistency (C) and Availability (A).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. CAP Combinations</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>CP (Consistency + Partition Tolerance):</strong> The system returns an error or times out if it cannot guarantee consistency during a partition. (e.g., MongoDB, HBase, Redis).</li>
+            <li><strong>AP (Availability + Partition Tolerance):</strong> The system remains available but might return stale data. (e.g., Cassandra, DynamoDB, CouchDB).</li>
+            <li><strong>CA (Consistency + Availability):</strong> Possible only in non-distributed systems (single node) where partitions don't happen. (e.g., Traditional RDBMS like MySQL/Postgres on a single server).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. PACELC Theorem</strong></div>
+    <div class="answer">
+        <ul>
+            <li>An extension of CAP. If there is a Partition (P), choose between Availability (A) and Consistency (C); Else (E), when the system is running normally, choose between Latency (L) and Consistency (C).</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

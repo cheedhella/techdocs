@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Client–server architecture</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. What is Client-Server Architecture?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A distributed application structure that partitions tasks or workloads between the providers of a resource or service, called servers, and service requesters, called clients.</li>
+            <li>The client initiates a request, and the server provides a response.</li>
+            <li>Communication usually happens over a network (like the Internet) using protocols like HTTP/HTTPS.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Key Components</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Client:</strong> The user-facing part of the system (e.g., Web Browser, Mobile App, IoT device). It handles user interaction and presentation logic.</li>
+            <li><strong>Server:</strong> The backend part that processes requests, performs business logic, and manages data. It can be a Web Server, Application Server, or Database Server.</li>
+            <li><strong>Network:</strong> The medium through which the client and server communicate.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. How it Works?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>User performs an action on the Client (e.g., clicks a button).</li>
+            <li>Client sends a request (e.g., HTTP GET) to the Server's IP address/domain.</li>
+            <li>Server receives the request, processes it (may query a database), and prepares a response.</li>
+            <li>Server sends the response (e.g., HTML, JSON, or Image) back to the Client.</li>
+            <li>Client renders the response for the user.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Advantages</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Centralization:</strong> Data and business logic are managed in one place (the server), making it easier to update and secure.</li>
+            <li><strong>Scalability:</strong> You can upgrade the server (vertical scaling) or add more servers (horizontal scaling) to handle more clients.</li>
+            <li><strong>Security:</strong> Access control can be strictly enforced on the server side.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Common Patterns</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>2-Tier:</strong> Client directly communicates with the Database Server.</li>
+            <li><strong>3-Tier:</strong> Client -> Application Server -> Database Server (Most common).</li>
+            <li><strong>N-Tier:</strong> Multiple layers of services (Microservices).</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

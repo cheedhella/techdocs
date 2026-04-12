@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>What is System Design?</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><strong>1. What is System Design?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It is the process of defining how different parts of a software system interact to meet both functional (what it should do) and non-functional (how well it should do it) requirements;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is System Design Important?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Without a deliberate architectural strategy, an application that works for 1,000 users will likely fail under the load of 1,000,000 (a million) users.</li>
+            <li>System design is the process of defining the components, their integration, data model, API of a distributed system, that meets specified functional and non-functional requirements;</li>
+        </ul>
+    </div>
+
+    Scalability: The ability to handle massive user loads by distributing requests so no single server is overwhelmed.
+
+Availability: Ensuring the system remains operational and accessible to users even if some of its components crash.
+
+Low latency: Responding to user requests quickly, regardless of their location, to create a fast and responsive experience.
+
+Consistency: Making sure data is reliable and accurate across the entire distributed system.
+
+    <div class="question"><strong>3. System Design Process</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Requirements Gathering</b>
+                <ol>
+                    <li>Identify <b>functional requirements</b> - what the system should do;</li>
+                    <li>Identify <b>non-functional requirements</b> - scalability, availability, latency, consistency etc;</li>
+                    <li>Identify <b>stakeholders</b> - who are the users of the system, who are the developers of the system, who are the operators of the system, who are the maintainers of the system etc;</li>
+                </ol>
+            </li>
+            <li><b>Estimate Scale of the System</b>
+                <ol>
+                    <li></li>Data size (storage requirements)</li>
+                    <li>Queries per second (QPS) or requests per second (RPS)</li>
+                    <li>Bandwidth needs</li>
+                    <li>Number of servers or instances required</li>
+                </ol>
+            </li>
+            <li><b>High Level Design</b>
+                <ol>
+                    <li>Main services and their interactions;</li>
+                    <li>External dependencies;</li>
+                </ol>
+            </li>
+            <li><b>Data Design</b>
+                <ol>
+                    <li>Once the architecture is clear, move closer to the data and interfaces;</li>
+                    <li>Choose the right database type(s) — relational, NoSQL, time-series, etc;</li>  
+                    <li>Define schemas, tables, and relationships to support your use cases                </li> 
+                    <li>Design APIs for interaction between services (e.g., POST /tweet, GET /timeline).</li>
+                </ol>
+            </li>
+            What building blocks the system will use (clients, services, databases, caches, queues, CDNs).
+
+How those blocks interact (APIs, communication patterns, data flow).
+
+How the system behaves at scale (traffic spikes, failures, slow networks, regional outages).
+
+Which trade-offs do we accept (cost vs. reliability, latency vs. consistency, simplicity vs. flexibility)?
+            <li><b>Detailed Design</b>
+                Zoom into each component and define:
+
+Internal logic, caching, and concurrency handling
+Scaling strategies (horizontal vs vertical scaling)
+Replication, partitioning, and fault tolerance
+This is also where you address non-functional requirements (NFRs) like availability, reliability, and latency.
+
+In other words, you go from what the system does to how it does it.
+            </li>
+            <li><b>Scaling Strategy</b>
+                <ol>
+                    <li>Horizontal scaling;</li>
+                    <li>Vertical scaling;</li>
+                    <li>Load balancing;</li>
+                    <li>Caching;</li>
+                    <li>Replication;</li>
+                </ol>
+            </li>
+            <li><b>Bottlenecks and Trade-offs</b>
+                No system is perfect. Every choice has trade-offs.
+
+
+                <ol>
+                    <li>Identify bottlenecks;</li>
+                    <li>Identify trade-offs;</li>
+                    <li>Identify solutions;</li>
+                </ol>
+            </li>
+            <li><b>Single Point of Failure</b>
+                <ol>
+                    <li>Identify single points of failure;</li>
+                    <li>Identify solutions;</li>
+                    <li>Identify trade-offs;</li>
+                </ol>
+            </li>
+            <li><b>Latency Issues</b>
+                <ol>
+                    <li>Identify latency issues;</li>
+                    <li>Identify solutions;</li>
+                    <li>Identify trade-offs;</li>
+                </ol>
+            </li>
+            <li><b>Cost vs Performance</b>
+                <ol>
+                    <li>Identify cost vs performance;</li>
+                    <li>Identify solutions;</li>
+                    <li>Identify trade-offs;</li>
+                </ol>
+            </li>
+        </ul>
+    </div>
+
+
+    On a high level, system design revolves around answering these 10 big questions:
+
+Scalability: How will the system handle a large number of users or requests simultaneously?
+Latency and Performance: How can we reduce response time and ensure low-latency performance under load?
+Communication: How do different components of the system interact with each other?
+Data Management: How should we store, retrieve, and manage data efficiently?
+Fault Tolerance and Reliability: What happens if a part of the system crashes or becomes unreachable?
+Security: How do we protect the system against threats such as unauthorized access, data breaches, or denial-of-service attacks?
+Maintainability and Extensibility: How easy is it to maintain, monitor, debug, and evolve the system over time?
+Cost Efficiency: How can we balance performance with infrastructure cost?
+Observability and Monitoring: How do we monitor system health and diagnose issues in production?
+Compliance and Privacy: Are we complying with relevant laws and regulations (e.g., GDPR, HIPAA)?
+
+
+    When building a product or a feature there is no prize for guessing what happens if an individual or team entirely skips the design process or only design at a high level. 
+    Sooner or later, they will have to get back to the drawing board and design it again!
+
+
+    Some examples of components are Zookeeper, Redis, Kafka, Amazon S3, Azure AI service, etc.
+
+    These are high-level components of the system being designed. Again based on the system, a load-balancer may be required or not. Other examples of components can be — proxies, cache, rate limiting, databases, messaging systems, etc.
+
+
+    If you consider Instagram feed, for example, the availability of a set of feeds when a user opens the app is a key characteristic of Instagram. If the user sees a blank feed or outlines of just 2–3 entries, the engagement drops soon. Likewise, each system has a set of key characteristics and the system designer should keep these in mind when designing the system.
+
+
+
+
+    Follow a Structured Approach in Interviews
+
+Always follow a step-by-step method:
+
+🪜 Step-by-step framework
+Clarify requirements
+Functional (what system should do)
+Non-functional (scale, latency, reliability)
+Estimate scale
+Users, requests/sec, storage
+High-level design
+Draw architecture (client → server → DB)
+Deep dive
+Database schema
+API design
+Caching strategy
+Scaling strategy
+Bottlenecks & trade-offs
+Single point of failure
+Latency issues
+Cost vs performance
+
+</body>
+
+</html>

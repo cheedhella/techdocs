@@ -1,358 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Typescript</title>
-        <link rel="stylesheet" href="../../resources/css/styles.css" />
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
+        <title>System Design</title>
+        <link rel="stylesheet" href="./resources/css/styles.css" />
+        <link rel="stylesheet" href="./resources/css/codeblock.css" />
     </head>
     <body>
-        <div class="main-grid-item main-grid-item-1 grid-wide-column">
-            <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
-            <h2>Typescript</h2>
-        </div>
-
-        <div class="toc-container">
-            <ul>
-                <li>Basics
-                    <ul>
-                        <li><a href="./what.html">What is Typescript?</a></li>
-                        <li><a href="./install.html">Install Typescript</a></li>
-                        <li><a href="./create-project.html">Create a Typescript project</a></li>
-                    </ul>
-                </li>
-                <li>Datatypes
-                    <ul>
-                        <li><a href="./what.html">What is Typescript?</a></li>
-                        <li><a href="./install.html">Install Typescript</a></li>
-                        <li><a href="./create-project.html">Create a Typescript project</a></li>
-                    </ul>
-                </li>
-                <li><a href="./functions.html">Functions</a>
-                    <ul>
-                        <li>Basic Function;</li>
-                        <li>Function Expression;</li>
-                        <li>Arrow Function;</li>
-                        <li>Optional Parameters;</li>
-                        <li>Default Parameters;</li>
-                        <li>Rest Parameters;</li>
-                        <li>Function Types;</li>
-                        <li>Void Functions;</li>
-                        <li>Never Functions;</li>
-                        <li>Overload Functions;</li> 
-                    </ul>
-                </li>
-                <li>Interfaces
-                    <ul>
-                        <li><a href="./interfaces-1.html">Interfaces</a></li>
-                        <li><a href="./interfaces-2.html">Interface extending Interface</a></li>
-                        <li><a href="./interfaces-3.html">Interface vs Type</a></li>
-                        <li><a href="./interfaces-4.html">Callable Interfaces</a></li>
-                        <li><a href="./interfaces-5.html">Interfaces as Indexable Types</a></li>
-                    </ul>
-                </li>
-                <li>Type
-                    <ul>
-                        <li><a href="./type-aliases.html">Type Aliases</a></li>
-                        <li><a href="./type-assertion.html">Type Assertion</a></li>
-                    </ul>
-                </li>
-                <li>Asynchronous TypeScript
-                    <ul>
-                        <li><a href="./promise.html">Promise</a></li>
-                        <li><a href="./type-assertion.html">Type Assertion</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-                        
-
-
-
-
-
-            <br/><br/><br/><br/>
-           
-
-
-
-🔹 10. Asynchronous TypeScript
-
-Promises & async/await
-
-Typing Promise<T>
-
-async function return types
-
-Error handling with typed catch
-
-
-
-
-void vs never
-
-Callbacks and higher-order functions
+        <div class="main-grid-container">
+            <div class="main-grid-item main-grid-item-1">
+                <img src="../../resources/imgs/gears.gif" alt="" srcset="" />
+                <h2>System Design</h2>
+            </div>
             <div class="main-grid-item main-grid-item-2">
+                <ul>
+                    <li>
+                        <ul><b>Basics</b>
+                            <li><a href="./basics/what.html">What is System Design?</a></li>
+                            <li><a href="./src/basics/building-blocks.html">Building Blocks</a></li>
+                            <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
+                            <li><a href="./src/basics/deploy-aws.html">How to deploy a Microservice in AWS?</a></li>
+                            <li><a href="./src/basics/sql-nosql.html"> SQL vs NoSQL</a></li>
+                            <li><a href="./src/basics/api-gateway.html">API Gateway</a></li>
+                            <li><a href="./src/basics/proxy.html">Proxy and Reverse Proxy</a></li>
+                            <li><a href="./src/basics/communication.html">Communication</a></li>
+                        </ul>
+                    </li>
+                </ul>
                 <section>
-                    <ul>
-                        <li>Basic Concepts
+                    <ol>
+                        <li>System Design Concepts
                             <ul>
-                                <li><a href="./basics/install.html">Install Typescript</a></li>
-                                <li><a href="./datatypes.html">Datatypes</a></li>
-                                <li><a href="./basics/var-let-const.html">Declaring variables</a>: var, let, const</li>
-                                <li><a href="./basics/duck-typing.html">Duck or Structural Typing</a></li>
-                                <li><a href="./basics/type-inference.html">Type Inference</a></li>
-                                <li><a href="./basics/type-annotations.html">Type Annotations</a></li>
-                                <li><a href="./basics/union-intersection.html">Union and Intersection</a></li>
-                                <li><a href="./basics/type-guards.html">Type Guards</a></li>
-                                <li><a href="./basics/utility-types.html">Utility Types</a>: Partial<T>, Readonly<T>, Pick<T, K>, and Omit<T, K></T></li>
-                                <li><a href="./basics/interfaces.html">Interfaces: interface as Array type, Object type, function signature, constructor type, index signature type VS Record; Elvis operator(optional members), readonly members, ReadOnly, ReadonlyArray types;</a></li>
-                                <li><a href="./basics/classes.html">Classes</a>: class, constructor, new, this, get/set accessor methods, extends, super, implements; 
+                                <li><a href="./src/basics/what.html">What is System Design?</a></li>
+                                <li>
+                                    <a href="./src/basics/building-blocks.html">Building Blocks</a>
                                     <ul>
-                                        <li>Access Modifiers: private, protected, public; static methods; abstract property, abstract method, abstract class;</li>
-                                        <li></li>
-   Type Assertion;</li>
-                                <li><a href="./basics/enum.html">Enum</a></li>
-                                <li><a href="./basics/type-alias.html">Type Alias</a></li>
-                                <li><a href="./basics/generics.html">Generics</a></li>
-                                <li><a href="./basics/modules.html">Modules</a></li>
-                                <li><a href="./basics/async-await.html">Async Await</a></li>
-                                <li><a href="./basics/decorators.html">Decorators</a></li>
-                                <li><a href="./basics/tsconfig.html">tsconfig.json</a></li>
-                                <li><a href="./interfaces-3.html">Class implementing Interface</a></li>
-
-                        <li><a href="./interfaces-3.html">Class implementing Interface and Type</a></li>
+                                        <li><a href="./src/bb/dns.html">Domain Name System</a></li>
+                                        <li><a href="./src/bb/load-balancer.html">Load Balancer</a></li>
+                                        <li><a href="./src/basics/sql-nosql.html">Databases</a></li>
+                                        <li><a href="./src/basics/sql-nosql.html">Key-Value Store</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Content Delivery Network</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Sequencer</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Service Monitoring</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Distributed Caching</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Distributed Messaging Queue</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Publish-Subscribe System</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Rate Limiter</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Blob Store</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Distributed Search</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Distributed Logging</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Distributed Task Scheduling</a></li>
+                                        <li><a href="./src/basics/load-balancer.html">Sharded Counters</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
+                                <li><a href="./src/basics/deploy-aws.html">How to deploy a Microservice in AWS?</a></li>
+                                <li><a href="./src/basics/sql-nosql.html"> SQL vs NoSQL</a></li>
+                                <li><a href="./src/basics/api-gateway.html">API Gateway</a></li>
+                                <li><a href="./src/basics/proxy.html">Proxy and Reverse Proxy</a></li>
+                                <li><a href="./src/basics/communication.html">Communication</a></li>
+                                <li><a href="./src/basics/communication2.html">Communication2</a></li>
+                                <li><a href="./src/basics/messaging-streaming.html">Messaging VS Streaming</a></li>
+                                
+                                <li><a href="./src/basics/websockets.html">WebSockets</a></li>
+                                <li><a href="./src/basics/cache.html">Caching</a></li>
+                                <li><a href="./src/basics/consistent-hashing.html">Consistent Hashing</a></li>
+                                <li><a href="./src/basics/data-replication.html">Data Replication</a></li>
+                                <li><a href="./src/basics/hashing.html">Hashing</a></li>
+                                <li><a href="./src/basics/cap.html">CAP</a></li>
+                                <li><a href="https://www.educative.io/courses/grokking-modern-system-design-software-engineers-managers/N8Oo584jry6">Failure Types</a></li>
+                                
                             </ul>
                         </li>
-                    </ul>
+                        <li><a href="./src/basics.html">Basics</a></li>
+                        <li><a href="./src/rate-limiter/rate-limiter.html">Rate Limiter</a></li>
+                        <li><a href="">Consistent Hashing</a></li>
+                        <li><a href="./src/refs.html">References</a></li>
+                        Distributed counter <br>
+                        Distributed Database<br>
+                        Distributed Cache<br>
+                            - https://www.educative.io/courses/grokking-the-system-design-interview/3j6NnJrpp5p<br>
+
+Distributed Data Store - Introduction to Druid, fast distributed data store<br>
+Distributed Message Queue<br>
+https://serhatgiydiren.github.io/system-design-interview-distributed-message-queue
+
+Distributed Data Processing<br>
+https://www.youtube.com/watch?v=4OLiEzvT4e0<br>
+
+https://www.youtube.com/watch?v=bwZWi37svCY<br>
+
+https://medium.com/@jeyabalaji.subramanian/capacity-estimation-in-systems-design-89cb1d0d3a0f
+https://medium.com/@yatin.chauhan/putting-load-balancer-everywhere-scaled-distributed-systems-d10d8182c0a6
+
+<li><a href="https://www.educative.io/courses/system-design-interview-doordash" target="_blank">System Design - Doordash</a></li>
+
+                    </ol>
                 </section>
             </div>
-
-
-
-1. Basics (Core Language)
-
-What is TypeScript? Why use it?
-
-Setting up a TS project (tsc, tsconfig.json)
-
-Compilation targets (ES5, ES2015+, ESNext)
-
-Basic types
-
-string, number, boolean
-
-null, undefined, any, unknown
-
-void, never, bigint, symbol
-
-
-Type inference (implicit vs explicit typing)
-
-Union types (string | number)
-
-Intersection types (TypeA & TypeB)
-
-🔹 2. Variables & Scoping
-
-var vs let vs const
-
-Hoisting & Temporal Dead Zone
-
-readonly and immutability
-
-
-
-🔹 4. Objects & Arrays
-
-Object types ({ key: type })
-
-Optional & readonly properties
-
-Index signatures ({ [key: string]: number })
-
-Array types (number[] vs Array<number>)
-
-Tuples ([string, number])
-
-Destructuring with types
-
-
-🔹 6. Classes & OOP in TS
-
-Classes & constructors
-
-Public, private, protected
-
-readonly properties
-
-Getters & setters
-
-static properties & methods
-
-Inheritance (extends)
-
-Abstract classes
-
-Implementing interfaces
-
-🔹 7. Advanced Types
-
-Literal types ("yes" | "no")
-
-Enums (numeric & string)
-
-Discriminated unions (tagged unions)
-
-Type narrowing
-
-typeof, instanceof, in
-
-Control flow analysis
-
-Type guards (custom type predicates)
-
-Mapped types (Partial<T>, Readonly<T>, etc.)
-
-Conditional types (T extends U ? X : Y)
-
-Utility types (Pick, Omit, Record, etc.)
-
-keyof and indexed access types
-
-typeof (type queries)
-
-infer keyword
-
-Template literal types
-
-satisfies operator (TS 4.9+)
-
-🔹 8. Generics
-
-Generic functions
-
-Generic classes
-
-Generic interfaces
-
-Constraints (<T extends SomeType>)
-
-Default type parameters
-
-Generic utility patterns
-
-🔹 9. Modules & Namespaces
-
-ES Modules (import / export)
-
-Default vs named exports
-
-Type-only imports/exports (import type)
-
-Namespaces (older style, rarely used in modern TS)
-
-Ambient modules (declare module)
-
-
-🔹 11. Advanced Features
-
-Decorators (experimental)
-
-Mixins
-
-Declaration merging
-
-Type compatibility (structural typing)
-
-Excess property checks
-
-Index signatures
-
-this typing
-
-Variadic tuple types
-
-Conditional inferencing
-
-🔹 12. TypeScript with Tooling
-
-tsconfig.json options
-
-target, lib, module, outDir, rootDir
-
-strict mode (strictNullChecks, noImplicitAny, etc.)
-
-esModuleInterop
-
-Source maps (.map)
-
-Watching with tsc --watch
-
-🔹 13. TypeScript in Real Projects
-
-Using DefinitelyTyped (@types/...)
-
-Writing declaration files (.d.ts)
-
-Type narrowing in React props
-
-Typing APIs (REST, GraphQL)
-
-Working with third-party libraries
-
-🔹 14. Patterns & Best Practices
-
-Favor unknown over any
-
-Use union types + narrowing
-
-Prefer type for composition, interface for contracts
-
-Avoid overusing enums (use literal types instead if possible)
-
-Strict null checks everywhere
-
-Keep tsconfig.json strict
-
-Documenting with JSDoc + TS types
-
             <div class="main-grid-item main-grid-item-3">
                 <section>
-                    <ul>
-                        <li>Concurrency
-                            <ul>
-                                <li><a href="./concurrency/goroutine.html">GoRoutines</a></li>
-                                <li><a href="./concurrency/waitgroups.html">WaitGroups - wait for GoRoutines to finish</a></li>
-                                <li><a href="./concurrency/mutex.html">Mutex - Manage access to shared resources</a></li>
-                                <li><a href="./concurrency/rwmutex.html">RWMutex - Manage access to shared resources</a></li>
-                                <li><a href="./concurrency/once.html">Once - run initialization only once</a></li>
-                                <li><a href="./concurrency/pool.html">Pool - manage reusable objects</a></li>
-                                <li><a href="./concurrency/os-pipe.html">os.Pipe</a></li>
-                                <li><a href="./concurrency/io-pipe.html">io.Pipe</a></li>
-                                <li><a href="./concurrency/channel.html">Channel</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                    Problems
+                    <ol>
+                        <li><a href="./src/before-jumping.html">Before you design!</a></li>
+                        <li><a href="./src/distributed-cache/distributed-cache.html">Distributed Cache</a></li>
+                        <li><a href="./src/distributed-cache/distributed-cache.html">Distributed Message Queue</a></li>
+                        <li><a href="./src/basics/microservices.html">DNS</a></li>
+                        <li><a href="./src/basics/microservices.html">CDN</a></li>
+                        <li><a href="https://mecha-mind.medium.com/system-design-billing-system-844047e916ff">Billing System</a></li>
+                        <li><a href="https://leandrofranchi.medium.com/how-to-design-a-notification-system-23f381cdeb00">Notification System</a></li>
+                        <li><a href="https://medium.com/@yatin.chauhan/push-notification-system-how-does-netflix-and-uber-do-that-7db9ced5f9c9">PUSH Notification System</a></li>
+                        <li><a href="https://medium.com/@raxshah/system-design-design-a-distributed-job-scheduler-kiss-interview-series-753107c0104c">Design a distributed job scheduler</a></li>
+                        https://engineering.razorpay.com/how-razorpays-notification-service-handles-increasing-load-f787623a490f
+                        
+                        
+                    </ol>
                 </section>
             </div>
             <div class="main-grid-item main-grid-item-4">
-                The sync package gives you these main tools:
-
-
-Cond → signal and wait on conditions.
-
-            </div>
-            <div class="main-grid-item main-grid-item-5">
                 <section>
-                    Examples
+                    MicroServices
                     <ol>
-                        
+                        <li><a href="./src/basics/microservices.html">MicroServices VS Monolitic</a></li>
+                        <li><a href="./src/distributed-cache/distributed-cache.html">How to create a Microservice - different ways?</a></li>
+                        <li><a href="./src/distributed-cache/distributed-cache.html">Create Project, build, run unit/integration tests, run application locally, test API, create docker image, create docker container, run benchmark tests, run performance tests;</a></li>
+                        <li>health checks, metrics, fault tolerance, swagger, logging;</li>
+                        <li>service registration and discovery - eureka* vs zookeper;</li>
+                        <li>load balancer - spring-cloud-loadbalancer* vs ribbon;</li>
+                        <li>api gateway - spring-cloud-starter-gateway vs Netflix Zuel</li>
+                        <li>scalable services architecture</li>
+                        <li>HAL explorer</li>
+                        <li>microservices communicating with each other;</li>
+                        <li>https://confluence.oraclecorp.com/confluence/display/ARC/Spring+Boot</li>
+                        <li>https://www.baeldung.com/microservices-oracle-helidon</li>
+                        <li>EQRS</li>
+                        <li>https://confluence.oraclecorp.com/confluence/display/ARC/Microservices+Framework</li>
+                        Naming Server
+                        <li>DNS -> Load Balancer -> API gateway -> Load Balancer  -> Backend service</li>
+                        <li><a href="./src/ms/load-balancer.html">Load Balancer</a></li>
+                        <li><a href="./src/ms/api-gateway.html">API Gateway</a></li>
+<li>JWT auth - https://www.javainuse.com/spring/boot-jwt</li>
+<li>interview questions - https://www.javainuse.com/spring/SpringBootInterviewQuestions</li>
+<li>We are building a complex distributed system with: multiple microservices, naming server, api gateway, distributed tracing;</li>
+<li>How can you start multiple instances of a service, using k8s/helm? how does k8s picks ports? In local, you can start the service multiple times, with this param: -Dserver.port=8100;</li>
+<li>Is load balancer a separate service?</li>
+<li>You could use spring RestTemplate to a service from another; Feign makes it really simple to call one service calling another service! One great thing about Feign is: To call a service, you don't need to write any code;</li>
+<li>https://www.udemy.com/course/mastering-microservice-communication-with-spring-cloud-feign/</li>
+<li>Anything in jarvis which shows me all the list of services running?</li>
+<li>https://aws.amazon.com/blogs/opensource/getting-started-istio-eks/</li>
 
                     </ol>
                 </section>
             </div>
         </div>
+
+
+        <b>References:</b> 
+        <ul>
+            <li><a href="https://systemdesignthinking.thinkific.com/courses/system-design-for-interviews-and-beyond" target="_blank">System Design for Interviews and Beyond - Mikhail Smarshchok</a></li>
+            <li><a href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank">Grokking the System Design Interview</a></li>
+            <li><a href="https://www.educative.io/courses/grokking-modern-system-design-software-engineers-managers" target="_blank">Grokking Modern System Design for Software Engineers and Managers</a></li>
+            <li><a href="https://www.educative.io/path/deep-dive-into-system-design-interview" target="_blank">Deep Dive into System Design Interview</a></li>
+            <li><a href="https://www.educative.io/path/scalability-system-design" target="_blank">Scalability & System Design for Developers</a></li>
+            <li><a href="https://www.educative.io/courses/grokking-the-object-oriented-design-interview" target="_blank">Grokking the Object Oriented Design Interview</a></li>
+            <li><a href="https://www.educative.io/courses/grokking-adv-system-design-intvw" target="_blank">Grokking the Advanced System Design Interview</a></li>
+            https://github.com/donnemartin/system-design-primer
+            https://www.educative.io/courses/distributed-systems-practitioners
+            https://www.educative.io/courses/web-application-software-architecture-101
+            https://www.educative.io/courses/distributed-systems-real-world
+
+            TODO:
+            https://github.com/Jeevan-kumar-Raj/Grokking-System-Design/blob/master/README.md 
+            https://www.educative.io/blog/distributed-system-design-patterns
+            https://www.educative.io/blog/complete-guide-system-design-interview
+            https://towardsdatascience.com/80-days-to-get-into-faang-5c77f27d5224
+            https://levelup.gitconnected.com/modelling-a-trading-terminal-3761a70f8c64 
+            https://arshren.medium.com/how-to-create-and-read-a-qr-code-f44f418692ac
+        </ul>
+
+        Focus on:
+
+        “Tell me about yourself”
+        “Why should we hire you?”
+        “Strengths & weaknesses”
+        Behavioral questions
+        
+        Use the STAR method:
+        
+        Situation
+        Task
+        Action
+        Result
+        
+        👉 Keep answers short, structured, and story-based.
+        
+        
+        
+        
+        Core concepts
+        Client–server architecture
+        HTTP/HTTPS, APIs
+        Databases (SQL vs NoSQL)
+        Caching
+        Load balancing
+        CAP theorem
+        Consistency vs availability
+        
+        👉 Without these, system design answers become guesswork.
+        
+        
+        
+        
+        Learn Key Components (The “LEGO blocks”)
+        
+        Think of system design as assembling these pieces:
+        
+        🔹 Common components
+        Load balancer
+        Application servers
+        Database (RDBMS / NoSQL)
+        Cache (e.g., Redis)
+        Message queue (e.g., Apache Kafka)
+        CDN (e.g., Cloudflare)
+        
+        👉 Know:
+        
+        What they do
+        When to use them
+        Trade-offs
+        📐 3. Follow a Structured Approach in Interviews
+        
+        Always follow a step-by-step method:
+        
+        🪜 Step-by-step framework
+        Clarify requirements
+        Functional (what system should do)
+        Non-functional (scale, latency, reliability)
+        Estimate scale
+        Users, requests/sec, storage
+        High-level design
+        Draw architecture (client → server → DB)
+        Deep dive
+        Database schema
+        API design
+        Caching strategy
+        Scaling strategy
+        Bottlenecks & trade-offs
+        Single point of failure
+        Latency issues
+        Cost vs performance
+        
+        👉 Interviewers care more about your thinking process than the “perfect design”.
+        
+        🧪 4. Practice Common Questions
+        
+        Start with classic problems:
+        
+        Design URL shortener (like Bitly)
+        Design social media feed
+        Design chat system (like WhatsApp)
+        Design ride-sharing system (like Uber)
+        Design video streaming (like YouTube)
+        
+        👉 Practice explaining out loud, not just thinking.
+        
+        📊 5. Understand Trade-offs (Very Important)
+        
+        This is what separates average from strong candidates:
+        
+        Examples:
+        
+        SQL vs NoSQL
+        Strong vs eventual consistency
+        Cache vs DB reads
+        Vertical vs horizontal scaling
+        
+        👉 Always explain WHY you chose something.
+        
+        ✍️ 6. Learn to Draw & Communicate Clearly
+        Use simple diagrams (boxes + arrows)
+        Label components clearly
+        Speak while drawing
+        
+        👉 Communication = 50% of system design interview success.
+        
+        
+        Practice Like an Interview (Time-bound)
+        5–10 min → requirements
+        10–15 min → high-level design
+        15–20 min → deep dive
+        
+        
+        
+        
+        Simple Weekly Plan
+        
+        Week 1–2: Fundamentals
+        Week 3–4: Components + small designs
+        Week 5+: Full interview questions + mocks
+        
+        🧠 Final Tip
+        
+        Don’t try to be perfect. A strong answer:
+        
+        Is structured
+        Covers trade-offs
+        Shows clear thinking
+        
     </body>
 </html>
+

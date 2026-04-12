@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Consistency vs Availability</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. The Core Conflict</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In distributed systems, when data is replicated across multiple nodes, we face a choice: Do we want everyone to see the exact same data immediately (Consistency), or do we want the system to always respond even if some data is slightly old (Availability)?</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Types of Consistency</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Strong Consistency:</strong> After a write, any subsequent read will see that write. High latency, lower availability.</li>
+            <li><strong>Eventual Consistency:</strong> If no new updates are made, eventually all accesses will return the last updated value. High availability, low latency. (e.g., DNS, Social Media likes).</li>
+            <li><strong>Causal Consistency:</strong> Operations that are causally related are seen by all processes in the same order.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Availability Patterns</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Failover:</strong> Active-Passive or Active-Active setups to ensure service continues if a node fails.</li>
+            <li><strong>Replication:</strong> Master-Slave or Multi-Master replication to keep data available across regions.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. How to Choose?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Choose Consistency:</strong> For financial transactions, inventory management, or any system where stale data causes critical errors.</li>
+            <li><strong>Choose Availability:</strong> For social media feeds, search engines, or systems where a few seconds of lag in data synchronization is acceptable.</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

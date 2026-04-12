@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Load Balancing</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. What is a Load Balancer?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A device or software that acts as a reverse proxy and distributes network or application traffic across a number of servers.</li>
+            <li>Prevents any single server from becoming a bottleneck, improving reliability and availability.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Benefits</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>High Availability:</strong> If one server fails, the LB redirects traffic to healthy servers.</li>
+            <li><strong>Scalability:</strong> Allows adding or removing servers based on demand.</li>
+            <li><strong>Performance:</strong> Distributes load to prevent server overload.</li>
+            <li><strong>Security:</strong> Can provide SSL termination and DDoS protection.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Load Balancing Algorithms</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Round Robin:</strong> Requests are distributed sequentially.</li>
+            <li><strong>Least Connections:</strong> Sends traffic to the server with the fewest active connections.</li>
+            <li><strong>Least Response Time:</strong> Sends traffic to the server with the lowest latency.</li>
+            <li><strong>IP Hash:</strong> Uses client IP to determine which server receives the request (ensures session persistence).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Layer 4 vs Layer 7 Load Balancing</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Layer 4 (Transport Layer):</strong> Based on IP and TCP/UDP ports. Faster but "blind" to application data.</li>
+            <li><strong>Layer 7 (Application Layer):</strong> Based on HTTP headers, cookies, or URL paths. Allows "smart" routing (e.g., `/api` to one pool, `/images` to another).</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Common Tools</strong></div>
+    <div class="answer">
+        <ul>
+            <li>NGINX, HAProxy, AWS ELB/ALB, Google Cloud Load Balancing.</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>

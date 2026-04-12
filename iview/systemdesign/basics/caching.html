@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Caching</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+
+    <div class="question"><strong>1. What is Caching?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A technique of storing copies of data in a temporary storage location (cache) so that future requests for that data can be served faster.</li>
+            <li>Goal: Reduce latency, decrease load on the primary database, and improve system performance.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Where can we Cache?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Client-side:</strong> Browser cache (HTML, CSS, JS).</li>
+            <li><strong>CDN (Content Delivery Network):</strong> Static assets (images, videos) cached geographically close to users.</li>
+            <li><strong>API/Web Server:</strong> Caching full responses or fragments.</li>
+            <li><strong>Application/Distributed Cache:</strong> Using tools like Redis or Memcached to store frequently accessed data (e.g., user sessions, product details).</li>
+            <li><strong>Database:</strong> Internal buffers and query caches.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. Caching Strategies</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>Cache-Aside:</strong> Application checks cache first. If "miss", it reads from DB and writes to cache. (Most common).</li>
+            <li><strong>Read-Through:</strong> Cache sits in line with DB. Application always asks cache; cache fetches from DB if missing.</li>
+            <li><strong>Write-Through:</strong> Data is written to cache and DB simultaneously.</li>
+            <li><strong>Write-Behind (Write-Back):</strong> Data is written to cache first, and later asynchronously synced to DB.</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Cache Eviction Policies</strong></div>
+    <div class="answer">
+        <ul>
+            <li><strong>LRU (Least Recently Used):</strong> Discard the least recently accessed items first.</li>
+            <li><strong>LFU (Least Frequently Used):</strong> Discard items used the least often.</li>
+            <li><strong>FIFO (First In First Out):</strong> Discard the oldest items.</li>
+            <li><strong>TTL (Time To Live):</strong> Data expires after a set duration.</li>
+        </ul>
+    </div>
+
+</body>
+
+</html>
