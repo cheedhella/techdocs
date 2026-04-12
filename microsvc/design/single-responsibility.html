@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Single Responsibility Principle</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is <b>Single Responsibility Principle</b>?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>A class should have one and only one responsibility;</li>
+            <li>It means a class should have only one reason to change;</li>
+            <li>For eg, UserService is used only for managing users; You can't have sendEmail() method in UserService; It is the responsibility of EmailService to send emails;</li>
+            <li>In microservices, a service should have one and only one responsibility;</li>
+            <li>For eg, Authentication service should only be responsible for authentication; It should not be responsible for authorization;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is it important?</strong></div>
+    <div class="answer">
+        <ul>
+            <li><b>Better Maintainability</b> - Easy to understand and maintain;</li>
+            <li><b>Better Scalability</b> - Without SRP, you will have to scale everything; With SRP, you can scale only what is needed;</li>
+            <li><b>Better Resilence(or fault tolerance)</b> - Faults are inevitable; Without SRP, one failure can bring down everything; With SRP, failures are contaiend; For eg, even if notification service is down, orders service still works;</li>
+        </ul>
+    </div>
+</body>
+
+</html>
