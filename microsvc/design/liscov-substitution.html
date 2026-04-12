@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Liskov Substitution Principle</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Liskov Substitution Principle?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It says objects of a superclass should be replaceable with objects of its subclasses without breaking the application;</li>
+            <li>In other words, it says subclasses should behave like their parent classes;</li>
+            <li>For eg, in a remote, If you replace AA battery with another battery, it still should work;</li>
+            <li>In microservices, if you replace payment service A with another payment service B, it should work;</li>
+            <li><pre>
+# Bad design 
+class Payment {
+    void pay() {}
+}
+
+class FreePayment extends Payment {
+    void pay() {
+        throw new Exception("No payment needed");
+    }
+}
+
+# Better design 
+interface Payment {
+    void pay();
+}
+
+class CardPayment implements Payment {}
+class FreePayment implements Payment {}
+
+            </pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Why is it important?</b></div>
+    <div class="answer">
+        <ul>
+            <li>When you replace Payment service A with Payment service B, If you follow LSP, everything will work; Otherwise, the system breaks;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dependency Inversion Principle</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is <b>Dependency Inversion Principle</b>?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Instead of depending on specific implementations, always depend on interfaces / abstractions;</li>
+            <li>
+                <pre>
+# Bad design 
+# User service is tightly coupled to MySQLDatabase;
+# If we want to use another database, we need to change the UserService class;
+class MySQLDatabase {
+    void save(String data) {}
+}
+
+class UserService {
+    MySQLDatabase db = new MySQLDatabase();
+
+    void saveUser() {
+        db.save("user");
+    }
+}
+
+# Better design 
+interface Database {
+    void save(String data);
+}
+
+class MySQLDatabase implements Database {
+    void save(String data) {}
+}
+
+class MongoDatabase implements Database {
+    public void save(String data) {}
+}
+
+                </pre>
+            </li>
+                Instead of:
+
+depending on specific implementations ❌
+
+You depend on:
+
+interfaces / abstractions
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is it important?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It </li>
+        </ul>
+    </div>
+</body>
+
+</html>

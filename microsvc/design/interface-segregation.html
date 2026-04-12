@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Interface Segregation Principle</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is <b>Interface Segregation Principle</b>?</strong></div>
+    <div class="answer">
+        <ul>
+                <li>It is all about keeping your interfaces small, focused and relevant;</li>
+                <li>Clients should not be forced to depend on methods they do not use;</li>
+                <li>Don't create big fat interfaces; Split them into smaller, specific ones;</li>
+                <li><pre>
+     # Bad design 
+     interface Worker {
+         void work();
+         void eat();
+     }
+     
+     class Robot implements Worker {
+         void work() {
+             // ...
+         }
+         void eat() {
+             throw new UnsupportedOperationException("Robots don't eat");
+         }
+     }
+     
+     # Better design 
+     interface Worker {
+         void work();
+     }
+     interface Eatable {
+         void eat();
+     }
+     
+     class Human implements Workable, Eatable {
+         public void work() {}
+         public void eat() {}
+     }
+     
+     class Robot implements Workable {
+         public void work() {}
+     }
+     
+                </pre></li>
+                <li>
+                 Signs You’re Violating ISP
+     ❌ Interfaces with too many methods
+     ❌ Classes throwing UnsupportedOperationException
+     ❌ Methods left empty (// do nothing)
+                </li>
+                <li><pre>
+     # In microservices, design APIs and services so that consumers only depend on what they actually need;
+     
+     # Bad API design 
+     GET /user
+         Returns: User object with all properties(profile, orders, payments, notifications)
+     
+     # Better API design 
+     GET /user/profile
+     GET /user/orders
+     GET /user/payments
+     GET /user/notifications
+                </pre></li>
+                <li>
+     Without ISP:
+         Over-fetching data
+         Larger payloads
+         slower responses
+     
+     With ISP:
+         smaller responses
+         faster APIs
+         better scalability
+                </li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Why is it important?</strong></div>
+    <div class="answer">
+        <ul>
+            
+        </ul>
+    </div>
+</body>
+
+</html>
