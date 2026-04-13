@@ -16,58 +16,19 @@
                 <ul>
                     <li><b>1. Basics</b>
                         <ul>
-                            <li><a href="./basics/what.html">1.1 What are Microservices?</a></li>
+                            <li><a href="./what.html">1.1 What are Microservices?</a></li>
                         </ul>
                     </li>
                     <li><b>2. SOLID Principles</b>
                         <ul>
-                            <li><a href="./design/what.html">2.1 What are SOLID Principles?</a></li>
-                            <li><a href="./design/single-responsibility.html">2.2 Single Responsibility Principle</a></li>
-                            <li><a href="./design/open-closed.html">2.3 Open/Closed Principle</a></li>
-                            <li><a href="./design/liscov-substitution.html">2.4 Liskov Substitution Principle</a></li>
-                            <li><a href="./design/interface-segregation.html">2.5 Interface Segregation Principle</a></li>
-                            <li><a href="./design/dependency-inversion.html">2.6 Dependency Inversion Principle</a></li>
-                            <li><a href="./design/bounded-context.html">2.2 Bounded Context (from Domain-Driven Design)</a></li>
-                            <li><a href="./core-concepts/design-principles.html">2.2 Database per Service</a></li>
-                            <li><a href="./core-concepts/design-principles.html">2.3 Loose Coupling & High Cohesion</a></li>
-                            <li><a href="./core-concepts/design-principles.html">2.4 API first design</a></li>
-                            <li><a href="./core-concepts/design-principles.html">2.5 Stateless vs Stateful services</a></li>
-                            <li><a href="./core-concepts/design-principles.html">2.6 12-Factor App methodology</a></li>
+                            <li><a href="./solid/what.html">2.1 What are SOLID Principles?</a></li>
+                            <li><a href="./solid/single-responsibility.html">2.2 Single Responsibility Principle</a></li>
+                            <li><a href="./solid/open-closed.html">2.3 Open/Closed Principle</a></li>
+                            <li><a href="./solid/liscov-substitution.html">2.4 Liskov Substitution Principle</a></li>
+                            <li><a href="./solid/interface-segregation.html">2.5 Interface Segregation Principle</a></li>
+                            <li><a href="./solid/dependency-inversion.html">2.6 Dependency Inversion Principle</a></li>
                         </ul>
-
-                        
                     </li>
-
-                    | Letter | Principle                       |
-| ------ | ------------------------------- |
-| S      | Single Responsibility Principle |
-| O      | Open/Closed Principle           |
-| L      | Liskov Substitution Principle   |
-| I      | Interface Segregation Principle |
-| D      | Dependency Inversion Principle  |
-
-SRP → defines service boundaries
-OCP → extend services without breaking them
-LSP → reliable polymorphism
-ISP → clean APIs/interfaces
-DIP → decoupled services (via interfaces, APIs)
-
-S → One job
-O → Don’t modify, extend
-L → Subclasses behave properly
-I → Keep interfaces small
-D → Depend on abstractions
-
-
-Using SOLID leads to:
-
-✔ Cleaner code
-✔ Easier testing
-✔ Better scalability
-✔ Fewer bugs
-✔ Easier refactoring
-
-
                     <li><b>3. Service Communication</b>
                         <ul>
                             <li><b>Synchronous Communication</b>
@@ -185,11 +146,13 @@ Using SOLID leads to:
                             <li><a href="">13.5 Zero-downtime architecture</a></li>
                         </ul>
                     </li>
+                    a change in one of the modules can only be brought into production by bringing a new version of the entire application with all its modules into production. However, when the modules are implemented as microservices, the ordering process cannot only be changed independently of the other modules, but it can even be brought into production independently.
 
+                    This speeds up deployment and reduces the number of necessary tests since only a single module needs to be deployed. Due to this greater level of decoupling, a large project can turn into a number of smaller projects. Each project is in charge of an individual microservice.
                             <li><strong>Core Concepts</strong>
                                 <ul>
-                                    <li><a href="./microsvc/design/home.html">Design Principles</a></li>
-                                    <li><a href="./microsvc/dp/index.html">Design Principles</a></li>
+                                    <li><a href="./design/home.html">Design Principles</a></li>
+                                    <li><a href="./dp/index.html">Design Principles</a></li>
                                     <li><a href="./microsvc/patterns/home.html">Microservice Patterns</a></li>
                                     <li><a href="./microsvc/domain-driven-design/home.html">Domain-Driven Design (DDD)</a></li>
                                     <li><a href="./microsvc/event-driven/home.html">Event-Driven Architecture</a></li>
@@ -305,6 +268,13 @@ Using SOLID leads to:
                 </ul>
             </div>
         </div>
+
+        <li><a href="./design/bounded-context.html">2.2 Bounded Context (from Domain-Driven Design)</a></li>
+                            <li><a href="./core-concepts/design-principles.html">2.2 Database per Service</a></li>
+                            <li><a href="./core-concepts/design-principles.html">2.3 Loose Coupling & High Cohesion</a></li>
+                            <li><a href="./core-concepts/design-principles.html">2.4 API first design</a></li>
+                            <li><a href="./core-concepts/design-principles.html">2.5 Stateless vs Stateful services</a></li>
+                            <li><a href="./core-concepts/design-principles.html">2.6 12-Factor App methodology</a></li>
     </body>
 </html>
 
