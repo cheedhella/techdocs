@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SOLID Principles</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
+    <script src="../../resources/js/highlight.min.js"></script>
+</head>
+
+<body>
+    <div class="question"><strong>1. What are SOLID Design Principles?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>It defines rules for writing code that doesn’t break as your system grows;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. SOLID Design Principles Summary</b></div>
+    <div class="answer">
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr><th>Letter</th><th>Docker Container</th><th>Virtual Machine</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Letter</td><td>Stands For</td><td>What it states?</td><td>Why is it important?</td></tr>
+                <tr><td>S</td><td>Single Responsibility Principle</td><td>One responsibility per service;</td><td>Easy to understand and maintain;</td></tr>
+                <tr><td>O</td><td>Open for Extension, Closed for Modification</td><td></td></tr>
+                <tr><td>L</td><td>Liskov Substitution Principle</td><td>reliable polymorphism</td></tr>
+                <tr><td>I</td><td>Interface Segregation Principle</td><td>clean APIs/interfaces</td></tr>
+                <tr><td>D</td><td>Dependency Inversion Principle</td><td>decoupled services</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="question"><b>3. Bottom line</b></div>
+    <div class="answer">
+        <ul>
+            <li><pre>
+                | Letter | Principle                       |
+                | ------ | ------------------------------- |
+                | S      | Single Responsibility Principle |
+                | O      | Open/Closed Principle           |
+                | L      | Liskov Substitution Principle   |
+                | I      | Interface Segregation Principle |
+                | D      | Dependency Inversion Principle  |
+                
+                SRP → defines service boundaries
+                OCP → extend services without breaking them
+                LSP → reliable polymorphism
+                ISP → clean APIs/interfaces
+                DIP → decoupled services (via interfaces, APIs)
+                
+                S → One job
+                O → Don’t modify, extend
+                L → Subclasses behave properly
+                I → Keep interfaces small
+                D → Depend on abstractions
+                
+                
+                Using SOLID leads to:
+                
+                ✔ Cleaner code
+                ✔ Easier testing
+                ✔ Better scalability
+                ✔ Fewer bugs
+                ✔ Easier refactoring
+            </pre></li>
+        </ul>
+    </div>
+</body>
+
+</html>
