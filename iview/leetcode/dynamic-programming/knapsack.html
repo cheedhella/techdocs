@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>0/1 Knapsack Problem - Dynamic Programming</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">0/1 Knapsack Problem</div>
+        <div class="problem-description">
+            <h3>Problem Statement</h3>
+            <p>Given weights and values of <code>n</code> items, put these items in a knapsack of capacity <code>W</code> to get the maximum total value in the knapsack. In the 0/1 Knapsack problem, you are not allowed to break items; you either take the whole item or don't take it at all (0 or 1).</p>
+            
+            <h3>Algorithm (Dynamic Programming)</h3>
+            <p>The core idea is to build a 2D table <code>dp[n+1][W+1]</code> where <code>dp[i][w]</code> represents the maximum value that can be attained with weight less than or equal to <code>w</code> using items up to <code>i</code>.</p>
+            <ul>
+                <li><strong>Base Case:</strong> If <code>i = 0</code> or <code>w = 0</code>, <code>dp[i][w] = 0</code>.</li>
+                <li><strong>Recursive Step:</strong>
+                    <ul>
+                        <li>If <code>weight[i-1] <= w</code>: <code>dp[i][w] = max(val[i-1] + dp[i-1][w - weight[i-1]], dp[i-1][w])</code></li>
+                        <li>Else: <code>dp[i][w] = dp[i-1][w]</code></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Example</h3>
+            <p>Items: (Value: 60, Weight: 10), (Value: 100, Weight: 20), (Value: 120, Weight: 30)<br>
+               Knapsack Capacity: 50<br>
+               <strong>Max Value: 220</strong> (by taking items with weights 20 and 30)</p>
+        </div>
+
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class Knapsack {
+    /**
+     * Solves the 0/1 Knapsack problem using Dynamic Programming.
+     * @param W Capacity of knapsack
+     * @param wt Weights of items
+     * @param val Values of items
+     * @param n Number of items
+     * @return Maximum value that can be put in a knapsack of capacity W
+     */
+    public static int knapSack(int W, int[] wt, int[] val, int n) {
+        int[][] dp = new int[n + 1][W + 1];
+
+        // Build table dp[][] in bottom up manner
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= W; w++) {
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0;
+                } else if (wt[i - 1] <= w) {
+                    // Max of (including the item, excluding the item)
+                    dp[i][w] = Math.max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
+                } else {
+                    // Weight of item is more than capacity, exclude it
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+        return dp[n][W];
+    }
+
+    public static void main(String[] args) {
+        int[] val = {60, 100, 120};
+        int[] wt = {10, 20, 30};
+        int W = 50;
+        int n = val.length;
+        System.out.println("Maximum value in Knapsack: " + knapSack(W, wt, val, n));
+    }
+}
+
+<b>Output:</b>
+Maximum value in Knapsack: 220
+        </code></pre>
+
+        <div class="applications">
+            <h3>Real-world Applications</h3>
+            <ul>
+                <li><strong>Resource Allocation:</strong> Selecting the best combination of projects or investments given a fixed budget.</li>
+                <li><strong>Cargo Loading:</strong> Optimizing the loading of containers or trucks with weight limits.</li>
+                <li><strong>Network Routing:</strong> Selecting data packets to transmit over a bandwidth-limited connection.</li>
+                <li><strong>Cryptography:</strong> The Merkle-Hellman knapsack cryptosystem (though now largely historical).</li>
+            </ul>
+        </div>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Median of Two Sorted Arrays - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Median of Two Sorted Arrays (LeetCode #4)</div>
+        <div class="problem-description">
+            <p>Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return the median of the two sorted arrays.</p>
+            <p>The overall run time complexity should be <code>O(log (m+n))</code>.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class MedianSortedArrays {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
+        int m = nums1.length;
+        int n = nums2.length;
+        int left = 0, right = m;
+        
+        while (left <= right) {
+            int partitionX = (left + right) / 2;
+            int partitionY = (m + n + 1) / 2 - partitionX;
+            
+            int maxLeftX = (partitionX == 0) ? Integer.MIN_VALUE : nums1[partitionX - 1];
+            int minRightX = (partitionX == m) ? Integer.MAX_VALUE : nums1[partitionX];
+            
+            int maxLeftY = (partitionY == 0) ? Integer.MIN_VALUE : nums2[partitionY - 1];
+            int minRightY = (partitionY == n) ? Integer.MAX_VALUE : nums2[partitionY];
+            
+            if (maxLeftX <= minRightY && maxLeftY <= minRightX) {
+                if ((m + n) % 2 == 0) {
+                    return ((double)Math.max(maxLeftX, maxLeftY) + Math.min(minRightX, minRightY)) / 2;
+                } else {
+                    return (double)Math.max(maxLeftX, maxLeftY);
+                }
+            } else if (maxLeftX > minRightY) {
+                right = partitionX - 1;
+            } else {
+                left = partitionX + 1;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public static void main(String[] args) {
+        MedianSortedArrays solver = new MedianSortedArrays();
+        int[] nums1 = {1, 3};
+        int[] nums2 = {2};
+        System.out.println("Median: " + solver.findMedianSortedArrays(nums1, nums2));
+    }
+}
+
+<b>Output:</b>
+Median: 2.0
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

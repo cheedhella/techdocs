@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Container With Most Water - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Container With Most Water (LeetCode #11)</div>
+        <div class="problem-description">
+            <p>You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>i<sup>th</sup></code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.</p>
+            <p>Find two lines that together with the x-axis form a container, such that the container contains the most water.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class ContainerWithWater {
+    public int maxArea(int[] height) {
+        int maxArea = 0;
+        int left = 0;
+        int right = height.length - 1;
+        
+        while (left < right) {
+            int currentArea = Math.min(height[left], height[right]) * (right - left);
+            maxArea = Math.max(maxArea, currentArea);
+            
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return maxArea;
+    }
+
+    public static void main(String[] args) {
+        ContainerWithWater solver = new ContainerWithWater();
+        int[] height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+        System.out.println("Max Area: " + solver.maxArea(height));
+    }
+}
+
+<b>Output:</b>
+Max Area: 49
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

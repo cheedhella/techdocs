@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Check if a String is Palindrome</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">How to check if a String is a Palindrome?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class PalindromeString {
+    public static void main(String[] args) {
+        String str = "racecar";
+        boolean isPalindrome = checkPalindrome(str);
+        System.out.println("Is '" + str + "' a palindrome? " + isPalindrome);
+    }
+
+    public static boolean checkPalindrome(String str) {
+        int left = 0, right = str.length() - 1;
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+
+<b>Output:</b>
+Is 'racecar' a palindrome? true
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

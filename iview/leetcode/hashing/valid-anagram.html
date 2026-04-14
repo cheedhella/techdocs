@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Valid Anagram - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Valid Anagram (LeetCode #242)</div>
+        <div class="problem-description">
+            <p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> if <code>t</code> is an anagram of <code>s</code>, and <code>false</code> otherwise.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class ValidAnagram {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) return false;
+        int[] count = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            count[s.charAt(i) - 'a']++;
+            count[t.charAt(i) - 'a']--;
+        }
+        for (int c : count) {
+            if (c != 0) return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        ValidAnagram solver = new ValidAnagram();
+        String s = "anagram", t = "nagaram";
+        System.out.println("Is Anagram: " + solver.isAnagram(s, t));
+    }
+}
+
+<b>Output:</b>
+Is Anagram: true
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

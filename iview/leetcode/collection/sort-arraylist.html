@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sort ArrayList</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">How to sort an ArrayList of Objects (using Comparable and Comparator)?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.*;
+
+class Student implements Comparable&lt;Student&gt; {
+    String name;
+    int age;
+
+    Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Student other) {
+        return this.name.compareTo(other.name); // Sort by name
+    }
+
+    @Override
+    public String toString() {
+        return name + "(" + age + ")";
+    }
+}
+
+public class SortArrayList {
+    public static void main(String[] args) {
+        List&lt;Student&gt; list = new ArrayList&lt;&gt;();
+        list.add(new Student("John", 22));
+        list.add(new Student("Alice", 20));
+        list.add(new Student("Bob", 21));
+
+        // Using Comparable (Sort by Name)
+        Collections.sort(list);
+        System.out.println("Sorted by Name: " + list);
+
+        // Using Comparator (Sort by Age)
+        list.sort((s1, s2) -> s1.age - s2.age);
+        System.out.println("Sorted by Age: " + list);
+    }
+}
+
+<b>Output:</b>
+Sorted by Name: [Alice(20), Bob(21), John(22)]
+Sorted by Age: [Alice(20), Bob(21), John(22)]
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

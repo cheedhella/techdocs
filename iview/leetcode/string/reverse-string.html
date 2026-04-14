@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reverse a String</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">How to reverse a String in Java?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class ReverseString {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        
+        // Method 1: Using StringBuilder
+        String reversed = new StringBuilder(str).reverse().toString();
+        System.out.println("Reversed (StringBuilder): " + reversed);
+        
+        // Method 2: Using char array (Manual)
+        char[] chars = str.toCharArray();
+        int left = 0, right = chars.length - 1;
+        while (left < right) {
+            char temp = chars[left];
+            chars[left] = chars[right];
+            chars[right] = temp;
+            left++;
+            right--;
+        }
+        System.out.println("Reversed (Manual): " + new String(chars));
+    }
+}
+
+<b>Output:</b>
+Reversed (StringBuilder): dlroW olleH
+Reversed (Manual): dlroW olleH
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

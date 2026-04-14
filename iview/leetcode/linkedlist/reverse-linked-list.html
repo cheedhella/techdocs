@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reverse Linked List - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Reverse Linked List (LeetCode #206)</div>
+        <div class="problem-description">
+            <p>Given the <code>head</code> of a singly linked list, reverse the list, and return the reversed list.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+public class ReverseLinkedList {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode nextTemp = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+
+    public static void main(String[] args) {
+        ReverseLinkedList solver = new ReverseLinkedList();
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        ListNode reversed = solver.reverseList(head);
+        while (reversed != null) {
+            System.out.print(reversed.val + " ");
+            reversed = reversed.next;
+        }
+    }
+}
+
+<b>Output:</b>
+3 2 1
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

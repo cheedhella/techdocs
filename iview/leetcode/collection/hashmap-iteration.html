@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Iterate over HashMap</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">What are the different ways to iterate over a HashMap in Java?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.HashMap;
+import java.util.Map;
+
+public class HashMapIteration {
+    public static void main(String[] args) {
+        Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+        map.put("Apple", 10);
+        map.put("Banana", 20);
+        map.put("Cherry", 30);
+
+        // 1. Using entrySet() and for-each loop
+        System.out.println("Using entrySet():");
+        for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
+
+        // 2. Using forEach() method (Java 8+)
+        System.out.println("\nUsing forEach():");
+        map.forEach((key, value) -> System.out.println(key + " = " + value));
+
+        // 3. Iterating over keys and getting values
+        System.out.println("\nUsing keySet():");
+        for (String key : map.keySet()) {
+            System.out.println(key + " = " + map.get(key));
+        }
+    }
+}
+
+<b>Output:</b>
+Using entrySet():
+Apple = 10
+Banana = 20
+Cherry = 30
+
+Using forEach():
+Apple = 10
+Banana = 20
+Cherry = 30
+
+Using keySet():
+Apple = 10
+Banana = 20
+Cherry = 30
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Climbing Stairs - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Climbing Stairs (LeetCode #70)</div>
+        <div class="problem-description">
+            <p>You are climbing a staircase. It takes <code>n</code> steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class ClimbingStairs {
+    public int climbStairs(int n) {
+        if (n <= 2) return n;
+        int first = 1;
+        int second = 2;
+        for (int i = 3; i <= n; i++) {
+            int third = first + second;
+            first = second;
+            second = third;
+        }
+        return second;
+    }
+
+    public static void main(String[] args) {
+        ClimbingStairs solver = new ClimbingStairs();
+        System.out.println("Ways for 5 steps: " + solver.climbStairs(5));
+    }
+}
+
+<b>Output:</b>
+Ways for 5 steps: 8
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

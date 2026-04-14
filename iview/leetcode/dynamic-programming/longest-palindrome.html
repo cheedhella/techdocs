@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Longest Palindromic Substring - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Longest Palindromic Substring (LeetCode #5)</div>
+        <div class="problem-description">
+            <p>Given a string <code>s</code>, return the longest palindromic substring in <code>s</code>.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class LongestPalindrome {
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) return "";
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private int expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
+
+    public static void main(String[] args) {
+        LongestPalindrome solver = new LongestPalindrome();
+        String s = "babad";
+        System.out.println("Longest Palindrome: " + solver.longestPalindrome(s));
+    }
+}
+
+<b>Output:</b>
+Longest Palindrome: bab
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

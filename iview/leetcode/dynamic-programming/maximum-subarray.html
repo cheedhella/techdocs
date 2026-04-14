@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Maximum Subarray - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Maximum Subarray (LeetCode #53)</div>
+        <div class="problem-description">
+            <p>Given an integer array <code>nums</code>, find the subarray with the largest sum, and return its sum.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class MaximumSubarray {
+    public int maxSubArray(int[] nums) {
+        int maxSoFar = nums[0];
+        int currentMax = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            currentMax = Math.max(nums[i], currentMax + nums[i]);
+            maxSoFar = Math.max(maxSoFar, currentMax);
+        }
+        return maxSoFar;
+    }
+
+    public static void main(String[] args) {
+        MaximumSubarray solver = new MaximumSubarray();
+        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println("Max Sum: " + solver.maxSubArray(nums));
+    }
+}
+
+<b>Output:</b>
+Max Sum: 6
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

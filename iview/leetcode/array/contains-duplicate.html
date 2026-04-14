@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Contains Duplicate - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Contains Duplicate (LeetCode #217)</div>
+        <div class="problem-description">
+            <p>Given an integer array <code>nums</code>, return <code>true</code> if any value appears at least twice in the array, and return <code>false</code> if every element is distinct.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.HashSet;
+import java.util.Set;
+
+public class ContainsDuplicate {
+    public boolean containsDuplicate(int[] nums) {
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                return true;
+            }
+            set.add(num);
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        ContainsDuplicate solver = new ContainsDuplicate();
+        int[] nums = {1, 2, 3, 1};
+        System.out.println("Contains Duplicate: " + solver.containsDuplicate(nums));
+    }
+}
+
+<b>Output:</b>
+Contains Duplicate: true
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

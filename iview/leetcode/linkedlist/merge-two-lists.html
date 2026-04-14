@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Merge Two Sorted Lists - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Merge Two Sorted Lists (LeetCode #21)</div>
+        <div class="problem-description">
+            <p>You are given the heads of two sorted linked lists <code>list1</code> and <code>list2</code>.</p>
+            <p>Merge the two lists into one sorted list. The list should be made by splicing together the nodes of the first two lists.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int val) { this.val = val; }
+}
+
+public class MergeTwoLists {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+            current = current.next;
+        }
+        current.next = (l1 != null) ? l1 : l2;
+        return dummy.next;
+    }
+
+    public static void main(String[] args) {
+        MergeTwoLists solver = new MergeTwoLists();
+        ListNode l1 = new ListNode(1); l1.next = new ListNode(2); l1.next.next = new ListNode(4);
+        ListNode l2 = new ListNode(1); l2.next = new ListNode(3); l2.next.next = new ListNode(4);
+        ListNode merged = solver.mergeTwoLists(l1, l2);
+        while (merged != null) {
+            System.out.print(merged.val + " ");
+            merged = merged.next;
+        }
+    }
+}
+
+<b>Output:</b>
+1 1 2 3 4 4
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>
