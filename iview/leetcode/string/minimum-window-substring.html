@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Minimum Window Substring - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>Problem Statement</b></div>
+    <div class="answer">
+        <ul>
+            <li>Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> and <code>n</code> respectively, return the <b>minimum window substring</b> of <code>s</code> such that every character in <code>t</code> (<b>including duplicates</b>) is included in the window. If there is no such substring, return the empty string <code>""</code>.</li>
+            <li>The testcases will be generated such that the answer is unique.</li>
+            <li><pre>
+<b>Example 1:</b>
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+
+<b>Example 2:</b>
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+
+<b>Example 3:</b>
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+            </pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>Approach: Sliding Window</b></div>
+    <div class="answer">
+        <ul>
+            <li>Use two pointers, <b>left and right</b>, to represent a sliding window on string <code>s</code>.</li>
+            <li>Use a frequency map (or an array of size 128 for ASCII characters) to keep track of the characters we need from <code>t</code>.</li>
+            <li>Maintain a <code>count</code> variable representing the total number of characters from <code>t</code> that we still need to find in the current window. Initially, it's the length of <code>t</code>.</li>
+            <li>Expand the window by moving the <code>right</code> pointer:
+                <ul>
+                    <li>If the character at <code>right</code> is needed (its count in the map is > 0), decrement the <code>count</code>.</li>
+                    <li>Always decrement the character's count in the map and move <code>right</code> forward.</li>
+                </ul>
+            </li>
+            <li>When <code>count == 0</code>, it means our current window contains all characters of <code>t</code>. Now, try to <b>shrink</b> the window from the <code>left</code> to find the minimum length:
+                <ul>
+                    <li>Record the current window size and starting index if it's smaller than the minimum found so far.</li>
+                    <li>Increment the count of the character at <code>left</code> in the map.</li>
+                    <li>If the character's count becomes > 0, it means we removed a required character, so we increment the <code>count</code> variable.</li>
+                    <li>Move <code>left</code> forward to shrink the window.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>Visual Explanation</b></div>
+    <div class="answer">
+        <img src="minimum-window-substring.webp" alt="Sliding Window Execution Steps" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />
+    </div>
+
+    <div class="question"><b>Key Idea</b></div>
+    <div class="answer">
+        <pre>
+            Step 1: Expand window
+                Add characters → decrease freq
+            Step 2: Valid window found (count == 0)
+            Step 3: Shrink window
+                Remove left char → increase freq
+                If a required char is removed → window becomes invalid
+            Step 4:
+                👉 Now the window is already ready for next expansion
+                👉 No manual adjustment needed
+        </pre>
+    </div>
+
+    <div class="question"><b>Algorithm</b></div>
+    <div class="answer">
+        <ul>
+            <li><pre>
+Initialize map of size 128 with frequencies of chars in t
+left = 0, right = 0, minLen = infinity, minStart = 0
+count = length of t
+
+While right < length of s:
+    char c = s[right]
+    If map[c] > 0:
+        count--
+    map[c]--
+    right++
+    
+    While count == 0: // Window is valid
+        If right - left < minLen:
+            minLen = right - left
+            minStart = left
+            
+        char leftChar = s[left]
+        map[leftChar]++
+        If map[leftChar] > 0: // We removed a required character
+            count++
+        left++
+
+Return minLen == infinity ? "" : s.substring(minStart, minStart + minLen)
+</pre></li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Minimum Window Substring (LeetCode #76)</div>
+        <div class="problem-description">
+            <p>Given two strings <code>s</code> and <code>t</code>, return the minimum window in <code>s</code> which will contain all the characters in <code>t</code>.</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class Main {
+    public static void main(String[] args) {
+        String s1 = "ADOBECODEBANC", t1 = "ABC";
+        System.out.println("Input: s = " + s1 + ", t = " + t1 + " | Output: " + minWindow(s1, t1));
+        
+        String s2 = "a", t2 = "a";
+        System.out.println("Input: s = " + s2 + ", t = " + t2 + " | Output: " + minWindow(s2, t2));
+        
+        String s3 = "a", t3 = "aa";
+        System.out.println("Input: s = " + s3 + ", t = " + t3 + " | Output: " + minWindow(s3, t3));
+    }
+    
+    public static String minWindow(String s, String t) {
+        if (s == null || t == null || s.length() == 0 || t.length() == 0) {
+            return "";
+        }
+        
+        // Array to store the frequency of characters in t
+        int[] map = new int[128];
+        for (char c : t.toCharArray()) {
+            map[c]++;
+        }
+        
+        int left = 0, right = 0;
+        int minLen = Integer.MAX_VALUE;
+        int minStart = 0;
+        int count = t.length(); // Total characters needed to form a valid window
+        
+        while (right < s.length()) {
+            char rightChar = s.charAt(right);
+            
+            // If the character is needed, decrement the required count
+            if (map[rightChar] > 0) {
+                count--;
+            }
+            
+            // Decrease the frequency in the map and move right pointer
+            map[rightChar]--;
+            right++;
+            
+            // When count == 0, the window contains all characters from t
+            while (count == 0) {
+                // Update minimum window length and start index
+                if (right - left < minLen) {
+                    minLen = right - left;
+                    minStart = left;
+                }
+                
+                char leftChar = s.charAt(left);
+                
+                // Restore the character frequency in the map
+                map[leftChar]++;
+                
+                // If the character was required (frequency > 0), increment the required count
+                if (map[leftChar] > 0) {
+                    count++;
+                }
+                
+                // Move left pointer to shrink the window
+                left++;
+            }
+        }
+        
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+    }
+}
+
+<b>Time Complexity:</b> O(m + n), where m is the length of s and n is the length of t. Both left and right pointers traverse the string s at most once.
+<b>Space Complexity:</b> O(1) or O(128) constant space, since we use an array of size 128 to store character frequencies.
+
+<b>Output:</b>
+Input: s = ADOBECODEBANC, t = ABC | Output: BANC
+Input: s = a, t = a | Output: a
+Input: s = a, t = aa | Output: 
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

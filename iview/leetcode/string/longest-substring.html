@@ -6,6 +6,57 @@
     <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 <body>
+    <div class="question"><b>Problem Statement</b></div>
+    <div class="answer">
+        <ul>
+            <li>Given a string <code>s</code>, find the longest substring with unique characters(without duplicate/repeating characters)?</li>
+            <li><pre>
+<b>Example 1:</b>
+Input: "abcabcbb"
+Output: "abc", "bca" and "cab"
+
+<b>Example 2:</b>
+Input: "bbbbb"
+Output: b
+
+<b>Example 3:</b>
+Input: "pwwkew"
+Output: "wke" and "kew"
+            </pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>Approach: Sliding Window</b></div>
+    <div class="answer">
+        <ul>
+            <li>Take two pointers - <b>left and right</b>, both pointing to the start of the string;</li>
+            <li>Take an empty set, to store the characters in the current window(not ordered); It helps in finding if a character is already present in the window or not in O(1) time;</li>
+            <li>For each character in the string, do the following:
+                <ul>
+                    <li>If the character is not in the set, add it to the set and move right to next character;</li>
+                    <li>If the character is already in the set, keep removing the character at left from set and increasing left, until the set doesn't contain the current character;</li>
+                </ul>
+            </li>
+            <li> In the end, left points to where the longest substring starts and right points to where the longest substring ends;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>Algorithm</b></div>
+    <div class="answer">
+        <ul>
+            <li><pre>
+Take an empty set, s;
+left = 0;
+for right from 0 to len(s)-1:
+    while s[right] is in set:
+        remove s[left] from set
+        left += 1
+    add s[right] to set
+return s[left : right]
+</pre></li>
+        </ul>
+    </div>
+
     <div class="code-block">
         <div class="code-block-title">Longest Substring Without Repeating Characters (LeetCode #3)</div>
         <div class="problem-description">
@@ -13,36 +64,55 @@
         </div>
         <button class="copy-btn">Copy</button>
         <pre><code>
-import java.util.HashSet;
-import java.util.Set;
-
-public class LongestSubstring {
-    public int lengthOfLongestSubstring(String s) {
-        int n = s.length();
-        int maxLength = 0;
-        int left = 0;
-        Set&lt;Character&gt; set = new HashSet&lt;&gt;();
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+	    String input1 = "abacde";
+		System.out.println("input: " + input1 + ", ouput: " + longestUniqueSubstring(input1));
+		String input2 = "adcdeab";
+		System.out.println("input: " + input2 + ", ouput: " + longestUniqueSubstring(input2));
+		String input3 = "bbbbb";
+		System.out.println("input: " + input3 + ", ouput: " + longestUniqueSubstring(input3));
+	}
+	
+	public static String longestUniqueSubstring(String s) {
+        Set<Character> set = new HashSet<>();
         
-        for (int right = 0; right < n; right++) {
+        int left = 0;
+        String result = "";
+
+        for (int right = 0; right < s.length(); right++) {
+
+            // remove duplicates
             while (set.contains(s.charAt(right))) {
                 set.remove(s.charAt(left));
                 left++;
             }
-            set.add(s.charAt(right));
-            maxLength = Math.max(maxLength, right - left + 1);
-        }
-        return maxLength;
-    }
 
-    public static void main(String[] args) {
-        LongestSubstring solver = new LongestSubstring();
-        String s = "abcabcbb";
-        System.out.println("Length: " + solver.lengthOfLongestSubstring(s));
+            // add current character
+            set.add(s.charAt(right));
+
+            // update result directly
+            // If you remove below, you will get last window, need not be the longest window;
+            // When input is abcabcbb, you will get "b", instead of "abc";
+            String current = s.substring(left, right + 1);
+            if (current.length() > result.length()) {
+                result = current;
+            }
+        }
+
+        return result;
     }
 }
 
+<b>Time Complexity:</b> O(n), where n is the length of the string;
+<b>Space Complexity:</b> O(n), where n is the length of the string;
+
 <b>Output:</b>
-Length: 3
+input: abacde, ouput: bacde
+input: adcdeab, ouput: cdeab
+input: bbbbb, ouput: b
         </code></pre>
     </div>
     <script src="../../../resources/js/codeblock.js"></script>
