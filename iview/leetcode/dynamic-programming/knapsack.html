@@ -49,11 +49,20 @@ public class Knapsack {
             for (int w = 0; w <= W; w++) {
                 if (i == 0 || w == 0) {
                     dp[i][w] = 0;
-                } else if (wt[i - 1] <= w) {
+                } else if (wt[i - 1] <= w) { // If the weight of the item is less than or equal to the capacity of the knapsack
                     // Max of (including the item, excluding the item)
+                    // val[i - 1] + dp[i - 1][w - wt[i - 1]]
+                   // Meaning:
+                  //  Take the current item → gain its value val[i - 1]
+                  //  Reduce remaining capacity: w - wt[i - 1]
+                  //  Add best value from previous items with remaining capacity
+                    
+                     // 👉 Total value =
+                    // value of current item + best value of remaining space
                     dp[i][w] = Math.max(val[i - 1] + dp[i - 1][w - wt[i - 1]], dp[i - 1][w]);
                 } else {
-                    // Weight of item is more than capacity, exclude it
+                    // If the weight of the item is more than the capacity of the knapsack, exclude it
+                    // The current item is too heavy to fit in the knapsack, just skip it and keep the previous best result
                     dp[i][w] = dp[i - 1][w];
                 }
             }
