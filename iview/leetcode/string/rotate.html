@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Check if a String is Rotation of Another String?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">How to check if a String is a Rotation of Another String?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class RotateString {
+    public static void main(String[] args) {
+        String str1 = "abcde";
+        String str2 = "cdeab";
+        boolean isRotation = isRotation(str1, str2);
+        System.out.println("Is '" + str1 + "' a rotation of '" + str2 + "'? " + isRotation);
+    }
+
+    // Trick: check if s2 is substring of s1+s1
+    public static boolean isRotation(String str1, String str2) {
+        return (str1.length() == str2.length()) && ((str1 + str1).contains(str2));
+    }
+}
+
+<b>Output:</b>
+Is 'abcde' a rotation of 'cdeab'? true
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>
