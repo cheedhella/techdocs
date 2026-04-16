@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LCM and GCD of Two Numbers</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><strong>1. What is LCM?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>LCM stands for <b>Least Common Multiple</b>;</li>
+            <li>It is the smallest number that is a multiple of two or more numbers;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. What is GCD?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>GCD stands for <b>Greatest Common Divisor</b>;</li>
+            <li>It is the largest number that divides two or more numbers without leaving a remainder;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>3. What is the relationship between LCM and GCD?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>The relationship between LCM and GCD is: LCM(a, b) = (a * b) / GCD(a, b)</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>4. Examples of LCM and GCD</strong></div>
+    <div class="answer">
+        <ul>
+            <li>LCM(12, 18) = 36, GCD(12, 18) = 6</li>
+            <li>LCM(10, 15) = 30, GCD(10, 15) = 5</li>
+            <li>LCM(7, 14) = 14, GCD(7, 14) = 7</li>
+            <li>LCM(8, 12) = 24, GCD(8, 12) = 4</li>
+            <li>LCM(9, 12) = 36, GCD(9, 12) = 3</li>
+            <li>LCM(10, 10) = 10, GCD(10, 10) = 10</li>
+            <li>LCM(10, 20) = 20, GCD(10, 20) = 10</li>
+            <li>LCM(10, 30) = 30, GCD(10, 30) = 10</li>
+            <li>LCM(10, 40) = 40, GCD(10, 40) = 10</li>
+            <li>LCM(10, 50) = 50, GCD(10, 50) = 10</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>5. Algorithm to find LCM</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Take the larger number;</li>
+            <li>Keep adding it to itself, until it becomes divisible by the other number</li>
+            <li>Example: LCM(4, 6) = 12;</li>
+            <li>Multiples of 6 are: 6, 12, 18…</li>
+            <li>First divisible by 4 is 12;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>6. Algorithm to find GCD</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Take two numbers</li>
+            <li>If a > b, replace a = a - b</li>
+            <li>Else replace b = b - a</li>
+            <li>Repeat until a = b</li>
+            <li>That value is the GCD</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>7. Algorithm to find GCD</strong></div>
+    <div class="answer">
+        <ul>
+            <li>
+                <pre><code>
+                    int gcd3(int n1, int n2)
+                    {      
+                       int s = smaller(n1, n2); 
+                    
+                       for (int d = s; d >= 1; d--)
+                       // initialising d with either number
+                       {
+                        if(n1 % d == 0 && n2 % d == 0)
+                        {
+                           return d; 
+                        }  
+                       }
+                       return 1;  // this is to avoid warning as this instruction will never execute
+                    }
+                </pre></code>
+            </li>
+        </ul>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">LCM and GCD of Two Numbers</div>
+        <div class="problem-description">
+            <p>Given two numbers, find their Greatest Common Divisor (GCD) and Least Common Multiple (LCM).</p>
+            <p>The relationship between LCM and GCD is: <code>LCM(a, b) = (a * b) / GCD(a, b)</code></p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class LCMAndGCD {
+    // Function to find GCD using Euclidean algorithm
+    public static long findGCD(long a, long b) {
+        while (b != 0) {
+            long temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    // Function to find LCM
+    public static long findLCM(long a, long b) {
+        if (a == 0 || b == 0) return 0;
+        return Math.abs(a * b) / findGCD(a, b);
+    }
+
+    public static void main(String[] args) {
+        long num1 = 12;
+        long num2 = 18;
+
+        long gcd = findGCD(num1, num2);
+        long lcm = findLCM(num1, num2);
+
+        System.out.println("Numbers: " + num1 + " and " + num2);
+        System.out.println("GCD: " + gcd);
+        System.out.println("LCM: " + lcm);
+    }
+}
+
+<b>Output:</b>
+Numbers: 12 and 18
+GCD: 6
+LCM: 36
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

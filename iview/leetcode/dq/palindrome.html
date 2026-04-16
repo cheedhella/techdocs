@@ -8,6 +8,28 @@
 </head>
 
 <body>
+    <div class="question"><strong>1. What is Palindrome?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Palidrome is a string which reads the same forward and backward; Eg: racecar, madam;</li>
+        </ul>
+    </div>
+
+    <div class="question"><strong>2. Given a string, check if it is a palindrome or not? How to check if a string is a palindrome</strong></div>
+    <div class="answer">
+        <ul>
+            <li>Take a Deque, dq;</li>
+            <li>For each character in the string, add it to the end of the deque;</li>
+            <li>Compare the characters from the front and the back of the deque;</li>
+            <li>If the characters are not the same, return false;</li>
+            <li>If the characters are the same, remove the front and the back characters from the deque;</li>
+            <li>If the deque is empty, return true;</li>
+            <li>If the deque is not empty, return false;</li>
+            <li><b>Time Complexity: O(n)</b>; we are iterating through the string once and comparing the characters from the front and the back of the deque.</li>
+            <li><b>Space Complexity: O(n)</b>; we are using a deque to store the characters of the string.</li>
+        </ul>
+    </div>
+
     <div class="code-block">
         <div class="code-block-title">Palindrome Check with ArrayDeque</div>
         <button class="copy-btn">Copy</button>
