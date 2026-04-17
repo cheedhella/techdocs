@@ -16,12 +16,12 @@
         <pre><code>
 public class BestTimeToBuyStock {
     public int maxProfit(int[] prices) {
-        int minPrice = Integer.MAX_VALUE;
-        int maxProfit = 0;
+        int minPrice = Integer.MAX_VALUE; // lowest price seen so far
+        int maxProfit = 0; // maximum profit seen so far
         for (int price : prices) {
             if (price < minPrice) {
                 minPrice = price;
-            } else if (price - minPrice > maxProfit) {
+            } else if (price - minPrice > maxProfit) { // if the current price is higher than the minimum price, update the maximum profit
                 maxProfit = price - minPrice;
             }
         }

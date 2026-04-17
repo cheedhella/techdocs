@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Maximum Sum Subarray (Kadane's Algorithm)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Maximum Sum Subarray (Kadane's Algorithm) (#53)</h2>
+        <p>
+            <b>Problem:</b> Given an integer array <code>nums</code>, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+        </p>
+        <p>
+            <b>Algorithm (Kadane's Algorithm):</b>
+        <ul>
+            <li>We iterate through the array once.</li>
+            <li>At each element, we decide:
+                <ul>
+                    <li><b>👉 “Should I start a new subarray here OR continue the previous one?”</b></li>
+                </ul>
+            </li>
+            <li>Maintain two variables:
+                <ul>
+                    <li><code>currentSum</code>: The maximum sum ending at the current position.</li>
+                    <li><code>maxSum</code>: The overall maximum sum found so far.</li>
+                </ul>
+            </li>
+            <li>For each number:
+                <ul>
+                    <li><code>currentSum = Math.max(num, currentSum + num)</code></li>
+                    <li><code>maxSum = Math.max(maxSum, currentSum)</code></li>
+                </ul>
+            </li>
+        </ul>
+        </p>
+        <p>
+            <b>Complexity:</b>
+            <ul>
+                <li><b>Time Complexity:</b> O(n) - Single pass through the array.</li>
+                <li><b>Space Complexity:</b> O(1) - Only two variables used.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Maximum Sum Subarray (Java)</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class KadaneAlgorithm {
+    public static void main(String[] args) {
+        int[] nums = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        System.out.println("Maximum Subarray Sum: " + maxSubArray(nums));
+    }
+
+    public static int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int currentSum = nums[0];
+        int maxSum = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            // Decision: Start new subarray at nums[i] OR add nums[i] to existing subarray
+            currentSum = Math.max(nums[i], currentSum + nums[i]);
+            
+            // Update global maximum
+            maxSum = Math.max(maxSum, currentSum);
+        }
+
+        return maxSum;
+    }
+}
+
+<b>Output:</b>
+Maximum Subarray Sum: 6
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

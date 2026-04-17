@@ -9,10 +9,33 @@
 
 <body>
 
-    <ul>
-        <li>Given an array of positive numbers and a positive number K, find the maximum sum of any contiguous subarray
-            of size K?</li>
-    </ul>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Maximum Sum Subarray of Size K</h2>
+        <p>
+            <b>Problem:</b> Given an array of positive numbers and a positive number <code>K</code>, find the maximum sum of any contiguous subarray of size <code>K</code>.
+        </p>
+        <p>
+            <b>Algorithm: Sliding Window</b>
+        <ul>
+            <li><b>Brute Force Approach:</b> Iterate through each possible subarray of size <code>K</code> and calculate its sum. This takes <b>O(N*K)</b> time.</li>
+            <li><b>Sliding Window Approach:</b>
+                <ul>
+                    <li>Instead of re-calculating the sum of each subarray, we can reuse the sum of the previous subarray.</li>
+                    <li>When we move the window one step forward, we <b>add</b> the next element and <b>subtract</b> the element that is going out of the window.</li>
+                    <li>This reduces the time complexity to <b>O(N)</b>.</li>
+                </ul>
+            </li>
+        </ul>
+        </p>
+        <p>
+            <b>Complexity:</b>
+            <ul>
+                <li><b>Time Complexity:</b> O(N)</li>
+                <li><b>Space Complexity:</b> O(1)</li>
+            </ul>
+        </p>
+    </div>
+    
 
     <div class="code-block">
         <div class="code-block-title">ss</div>

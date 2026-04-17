@@ -2,30 +2,127 @@
 <html lang="en">
 
 <head>
-    <title>Permutations</title>
+    <title>Permutations (#46)</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
     <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 
 <body>
-
-    <ul>
-        <li>Given a set of distinct numbers, find all of its permutations? A set with n elements will have n!
-            permutations;</li>
-        <li>Eg: Input: {1, 2, 3}; Output: {1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2}, {3, 2, 1};</li>
-    </ul>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Permutations (#46)</h2>
+        <p>
+            <b>Problem:</b> Given an array <code>nums</code> of distinct integers, return all the possible permutations. You can return the answer in any order.
+        </p>
+        <p>
+            <b>Algorithm:</b>
+        <ul>
+            <li><b>Backtracking Approach:</b> We use recursion to build permutations one element at a time.</li>
+            <li>Maintain a <code>used</code> boolean array or a list to keep track of elements already included in the current permutation.</li>
+            <li>In each recursive step:
+                <ul>
+                    <li>If the current permutation size equals the input array size, we found a complete permutation. Add it to the result list.</li>
+                    <li>Otherwise, iterate through all numbers. If a number is not used, add it to the current permutation, mark it as used, and recurse.</li>
+                    <li><b>Backtrack:</b> After the recursive call, remove the last element and mark it as unused to explore other possibilities.</li>
+                </ul>
+            </li>
+        </ul>
+        </p>
+        <p>
+            <b>Complexity:</b>
+            <ul>
+                <li><b>Time Complexity:</b> O(n * n!) - There are n! permutations, and each takes O(n) to build.</li>
+                <li><b>Space Complexity:</b> O(n!) to store all permutations, and O(n) for the recursion stack.</li>
+            </ul>
+        </p>
+    </div>
 
     <div class="code-block">
-        <div class="code-block-title">ss</div>
+        <div class="code-block-title">Permutations (Swap method)</div>
         <button class="copy-btn">Copy</button>
         <pre><code>
-        https://www.educative.io/module/lesson/data-structures-in-java/N8x1x2oWN4N
-        
+import java.util.*;
 
-        <b>Output:</b>
-        
-                </code>
-      </pre>
+public class Main {
+
+    // When start is 0, we decide which number to put in the first position
+    // When start is 1, we decide which number to put in the second position
+    // And so on...
+    public static void permute(int[] arr, int start) {
+        // Base case
+        if (start == arr.length) {
+            System.out.println(Arrays.toString(arr));
+            return;
+        }
+
+        for (int i = start; i < arr.length; i++) {
+            // 1. Swap: Put the element at index 'i' into the 'start' position
+            swap(arr, start, i);
+
+            // 2. Recurse: Fix the next position (start + 1)
+            permute(arr, start + 1);
+
+            // 3. Backtrack (undo swap): Swap back to restore the original order for the next iteration
+            swap(arr, start, i);
+        }
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3};
+        permute(arr, 0);
+    }
+}
+
+<b>Output:</b>
+Permutations: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+</code></pre>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Permutations (Recursive Backtracking)</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.ArrayList;
+import java.util.List;
+
+public class Permutations {
+    public static void main(String[] args) {
+        int[] nums = {1, 2, 3};
+        List&lt;List&lt;Integer&gt;&gt; result = permute(nums);
+        System.out.println("Permutations: " + result);
+    }
+
+    public static List&lt;List&lt;Integer&gt;&gt; permute(int[] nums) {
+        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();
+        backtrack(result, new ArrayList&lt;&gt;(), nums);
+        return result;
+    }
+
+    private static void backtrack(List&lt;List&lt;Integer&gt;&gt; result, List&lt;Integer&gt; tempList, int[] nums) {
+        if (tempList.size() == nums.length) {
+            result.add(new ArrayList&lt;&gt;(tempList));
+        } else {
+            for (int i = 0; i &lt; nums.length; i++) {
+                if (tempList.contains(nums[i])) continue; // Element already exists, skip
+                
+                tempList.add(nums[i]);
+                backtrack(result, tempList, nums);
+                
+                // Backtrack
+                tempList.remove(tempList.size() - 1);
+            }
+        }
+    }
+}
+
+<b>Output:</b>
+Permutations: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+</code></pre>
     </div>
 
     <script src="../../../resources/js/codeblock.js"></script>
