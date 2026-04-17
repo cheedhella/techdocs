@@ -43,6 +43,23 @@
                 <li><b>Space Complexity:</b> O(1) - Only two variables used.</li>
             </ul>
         </p>
+        
+            <b>Example:</b>
+            <ul>
+                <li>Input: [-1, 5, -1, 5, -1]</li>
+                <li>Output: 9</li>
+            </ul>
+            <b>Explanation:</b>
+            <pre>
+| Index | Value | Current Sum           | Max Sum |
+| ----- | ----- | --------------------- | ------- |
+| 0     | -1    | -1                    | -1      |
+| 1     | 5     | max(5, -1 + 5) = 5    | 5       |
+| 2     | -1    | max(-1, 5 + (-1)) = 4 | 5       |
+| 3     | 5     | max(5, 4 + 5) = 9     | 9       |
+| 4     | -1    | max(-1, 9 + (-1)) = 8 | 9       |
+</pre>
+        </p>
     </div>
 
     <div class="code-block">

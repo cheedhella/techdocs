@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Container With Most Water (#11)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Container With Most Water (#11)</h2>
+        <p>
+            <b>Problem:</b> You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>i<sup>th</sup></code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.
+        </p>
+        <p>
+            Find two lines that together with the x-axis form a container, such that the container contains the most water. Return the maximum amount of water a container can store.
+        </p>
+        <p>
+            <b>Algorithm: Two Pointers</b>
+        <ul>
+            <li>We use two pointers, <code>left</code> at the beginning and <code>right</code> at the end of the array.</li>
+            <li>The area of water is determined by the shorter of the two lines: <code>Area = min(height[left], height[right]) * (right - left)</code>.</li>
+            <li>To maximize the area, we need to find taller lines. Since the width <code>(right - left)</code> will only decrease as we move the pointers, we should move the pointer that points to the <b>shorter</b> line.</li>
+            <li>If <code>height[left] < height[right]</code>, move <code>left++</code>.</li>
+            <li>Otherwise, move <code>right--</code>.</li>
+        </ul>
+        </p>
+        <p>
+            <b>Complexity:</b>
+            <ul>
+                <li><b>Time Complexity:</b> O(n) - Single pass through the array.</li>
+                <li><b>Space Complexity:</b> O(1) - Constant extra space.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Container With Most Water (Java)</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class ContainerWithMostWater {
+    public static void main(String[] args) {
+        int[] height = {1, 8, 6, 2, 5, 4, 8, 3, 7};
+        System.out.println("Maximum water: " + maxArea(height));
+    }
+
+    public static int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int maxArea = 0;
+
+        while (left < right) {
+            // Calculate current area
+            int currentHeight = Math.min(height[left], height[right]);
+            int currentWidth = right - left;
+            int currentArea = currentHeight * currentWidth;
+
+            // Update global maximum
+            maxArea = Math.max(maxArea, currentArea);
+
+            // Move the pointer pointing to the shorter line
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return maxArea;
+    }
+}
+
+<b>Output:</b>
+Maximum water: 49
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
