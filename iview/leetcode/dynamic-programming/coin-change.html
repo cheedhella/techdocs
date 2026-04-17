@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Coin Change Problem (#322)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Coin Change Problem (#322)</h2>
+        <p>
+            <b>Problem:</b> You are given an integer array <code>coins</code> representing coins of different denominations and an integer <code>amount</code> representing a total amount of money.
+        </p>
+        <p>
+            Return the <b>fewest number of coins</b> that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return <code>-1</code>.
+        </p>
+        <p>
+            <b>Algorithm: Dynamic Programming (Bottom-Up)</b>
+        <ul>
+            <li>We use an array <code>dp</code> of size <code>amount + 1</code>, where <code>dp[i]</code> stores the minimum coins needed for amount <code>i</code>.</li>
+            <li>Initialize <code>dp[0] = 0</code> and all other values to <code>amount + 1</code> (a value larger than any possible solution).</li>
+            <li>For each amount from <code>1</code> to <code>amount</code>:
+                <ul>
+                    <li>Iterate through each coin. If <code>coin <= currentAmount</code>, then:</li>
+                    <li><code>dp[currentAmount] = min(dp[currentAmount], 1 + dp[currentAmount - coin])</code></li>
+                </ul>
+            </li>
+            <li>The final answer is <code>dp[amount]</code>, unless it's still <code>amount + 1</code>, in which case return <code>-1</code>.</li>
+        </ul>
+        </p>
+        <p>
+            <b>Complexity:</b>
+            <ul>
+                <li><b>Time Complexity:</b> O(amount * n) where n is the number of coins.</li>
+                <li><b>Space Complexity:</b> O(amount) for the DP table.</li>
+            </ul>
+        </p>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Coin Change (Java)</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Arrays;
+
+public class CoinChange {
+    public static void main(String[] args) {
+        int[] coins = {1, 2, 5};
+        int amount = 11;
+        System.out.println("Minimum coins needed: " + coinChange(coins, amount));
+    }
+
+    public static int coinChange(int[] coins, int amount) {
+        // dp[i] will store the minimum coins needed for amount i
+        int[] dp = new int[amount + 1];
+        
+        // Fill dp array with a value larger than any possible answer
+        Arrays.fill(dp, amount + 1);
+        
+        // Base case: 0 coins needed for amount 0
+        dp[0] = 0;
+
+        // Iterate through all amounts from 1 to 'amount'
+        for (int i = 1; i <= amount; i++) {
+            // Try every coin denomination
+            for (int coin : coins) {
+                if (i - coin >= 0) {
+                    dp[i] = Math.min(dp[i], 1 + dp[i - coin]);
+                }
+            }
+        }
+
+        // If dp[amount] is still the initial value, it's impossible to make the amount
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+}
+
+<b>Output:</b>
+Minimum coins needed: 3 (5 + 5 + 1)
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
