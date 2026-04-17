@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Smallest Common Number in 3 Sorted Arrays</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>Smallest Common Number in 3 Sorted Arrays</h2>
+        <p>
+            <b>Problem:</b> Given three integer arrays sorted in ascending order, find the smallest number that is present in all three arrays.
+        </p>
+        <p>
+            <b>Algorithm:</b>
+        <ul>
+            <li>Maintain three pointers, <code>i</code>, <code>j</code>, and <code>k</code>, initially pointing to the first element of each array.</li>
+            <li>Compare the elements at these pointers:
+                <ul>
+                    <li>If <code>a[i] == b[j] == c[k]</code>, we found the smallest common number.</li>
+                    <li>Otherwise, increment the pointer that points to the smallest of the three current elements.</li>
+                </ul>
+            </li>
+            <li>Repeat until one of the pointers reaches the end of its array.</li>
+        </ul>
+        </p>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Smallest Common Number in 3 Sorted Arrays</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class SmallestCommonNumber {
+    public static void main(String[] args) {
+        int[] a1 = {1, 5, 10, 20, 40, 80};
+        int[] a2 = {6, 7, 20, 80, 100};
+        int[] a3 = {3, 4, 15, 20, 30, 70, 80, 120};
+
+        Integer result = findSmallestCommon(a1, a2, a3);
+        if (result != null) {
+            System.out.println("Smallest common number: " + result);
+        } else {
+            System.out.println("No common number found");
+        }
+    }
+
+    public static Integer findSmallestCommon(int[] a1, int[] a2, int[] a3) {
+        int i = 0, j = 0, k = 0;
+
+        while (i &lt; a1.length && j &lt; a2.length && k &lt; a3.length) {
+            if (a1[i] == a2[j] && a2[j] == a3[k]) {
+                return a1[i];
+            }
+
+            // Move the pointer pointing to the smallest number
+            if (a1[i] &lt;= a2[j] && a1[i] &lt;= a3[k]) {
+                i++;
+            } else if (a2[j] &lt;= a1[i] && a2[j] &lt;= a3[k]) {
+                j++;
+            } else {
+                k++;
+            }
+        }
+
+        return null;
+    }
+}
+
+<b>Output:</b>
+Smallest common number: 20
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

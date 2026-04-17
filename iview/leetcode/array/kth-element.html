@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Find K'th Smallest/Largest Element in an Unsorted Array?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Find K'th Smallest/Largest Element in an Unsorted Array?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+public class KthElement {
+    public static void main(String[] args) {
+        int[] nums = {3, 2, 3, 1, 2, 4, 5, 5, 6};
+        int k = 4;
+
+        System.out.println(k + "th Largest: " + findKthLargest(nums, k));
+        System.out.println(k + "th Smallest: " + findKthSmallest(nums, k));
+    }
+
+    // Method 1: Using Min-Heap (PriorityQueue) for Kth Largest
+    // Algorithm:
+    // 1. Create a min-heap; 
+    // 2. For each element in the array:
+    //    Add it to the heap
+    //    If heap size > k, remove the smallest element
+    // 3. The root of the heap is the k-th largest element
+    // Time Complexity: O(N log K)
+    public static int findKthLargest(int[] nums, int k) {
+        PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+        for (int num : nums) {
+            minHeap.add(num);
+            if (minHeap.size() &gt; k) {
+                minHeap.poll();
+            }
+        }
+        return minHeap.peek();
+    }
+
+    // Method 2: Using Max-Heap (PriorityQueue) for Kth Smallest
+    // Algorithm:
+    // 1. Create a max-heap;
+    // 2. For each element in the array:
+    //    Add it to the heap
+    //    If heap size > k, remove the largest element
+    // 3. The root of the heap is the k-th smallest element
+    // Time Complexity: O(N log K)
+    public static int findKthSmallest(int[] nums, int k) {
+        PriorityQueue&lt;Integer&gt; maxHeap = new PriorityQueue&lt;&gt;(Collections.reverseOrder());
+        for (int num : nums) {
+            maxHeap.add(num);
+            if (maxHeap.size() &gt; k) {
+                maxHeap.poll();
+            }
+        }
+        return maxHeap.peek();
+    }
+}
+
+<b>Output:</b>
+4th Largest: 4
+4th Smallest: 3
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

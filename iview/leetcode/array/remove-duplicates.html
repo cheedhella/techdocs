@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>How to Remove duplicate elements from an Array?</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="code-block">
+        <div class="code-block-title">How to Remove duplicate elements from an Array?</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class RemoveDuplicates {
+    public static void main(String[] args) {
+        Integer[] numbers = {1, 2, 3, 2, 1, 4, 5, 4};
+
+        // Method 1: <b>Using LinkedHashSet (Preserves Order)</b>
+        Set&lt;Integer&gt; set = new LinkedHashSet&lt;&gt;(Arrays.asList(numbers));
+        System.out.println("Using LinkedHashSet: " + set);
+
+        // Method 2: Using Java 8 Streams
+        Integer[] uniqueNumbers = Arrays.stream(numbers)
+                                        .distinct()
+                                        .toArray(Integer[]::new);
+        System.out.println("Using Streams: " + Arrays.toString(uniqueNumbers));
+    }
+}
+
+<b>Output:</b>
+Using LinkedHashSet: [1, 2, 3, 4, 5]
+Using Streams: [1, 2, 3, 4, 5]
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

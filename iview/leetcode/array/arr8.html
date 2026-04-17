@@ -11,6 +11,27 @@
 
     <ul>
         <li>Given an array, find the sum of contiguous subarray with the largest sum?</li>
+        At each index, you decide:
+
+        <li><b>👉 “Should I start a new subarray here OR continue the previous one?”</b></li>
+        nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+        [4, -1, 2, 1] is the subarray with the largest sum
+
+
+        We iterate through the array and keep track of:
+            current_sum: maximum sum ending at the current position
+            max_sum: overall maximum found so far
+
+        At each step, decide:
+            Either start a new subarray from current element
+            Or extend the previous subarray
+
+        def maxSubArray(nums):
+            current_sum = max_sum = nums[0]
+            for num in nums[1:]:
+                current_sum = max(num, current_sum + num)
+                max_sum = max(max_sum, current_sum)
+            return max_sum
     </ul>
 
     <div class="code-block">

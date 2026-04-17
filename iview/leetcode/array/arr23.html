@@ -2,28 +2,144 @@
 <html lang="en">
 
 <head>
-    <title>Given array of unsorted numbers, find Triplet whose sum is close to given Target?</title>
+    <title>3Sum Closest (#16)</title>
     <link rel="stylesheet" href="../../../resources/css/styles.css" />
     <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
 </head>
 
 <body>
+    <div class="main-grid-item-1 grid-wide-column">
+        <h2>3Sum Closest (#16)</h2>
+        <p>
+            <b>Problem:</b> Given an integer array <code>nums</code> of length <code>n</code> and an integer <code>target</code>, find three integers in <code>nums</code> such that the sum is closest to <code>target</code>. Return the sum of the three integers.
+        </p>
+        <p>
+            <b>Why Sorting is Needed:</b>
+            <ul>
+                <li><b>Enables Two-Pointer Strategy:</b> The two-pointer approach ($O(n^2)$) relies on the array being sorted. When the <code>currentSum</code> is less than the <code>target</code>, we know that incrementing the <code>left</code> pointer will increase the sum. If it's greater, decrementing the <code>right</code> pointer will decrease it. Without sorting, we wouldn't know which direction to move the pointers to get closer to the target.</li>
+                <li><b>Pruning the Search Space:</b> Sorting allows us to skip unnecessary combinations. Instead of checking every possible triplet ($O(n^3)$), we can intelligently narrow down the search in linear time for each fixed element.</li>
+            </ul>
+        </p>
 
-    <ul>
-        <li>Given an array of unsorted numbers and a target number, find a triplet in the array whose sum is as close to
-            the target number as possible, return the sum of the triplet;</li>
-    </ul>
+        <div class="main-grid-item-1 grid-wide-column" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 5px solid #ffd700; margin-bottom: 20px;">
+            <h3>Golden Rule</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #ddd; text-align: left;">
+                        <th style="padding: 8px;">Condition</th>
+                        <th style="padding: 8px;">What to do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px;"><code>sum &lt; target</code></td>
+                        <td style="padding: 8px;">move <code>left++</code> (increase sum)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px;"><code>sum &gt; target</code></td>
+                        <td style="padding: 8px;">move <code>right--</code> (decrease sum)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><b>Why this works:</b></p>
+            <p>Because the array is <b>sorted</b>:</p>
+            <ul>
+                <li>Moving <b>left &rarr; right</b> &rarr; increases sum</li>
+                <li>Moving <b>right &rarr; left</b> &rarr; decreases sum</li>
+            </ul>
+            <p>So we don’t need to try all combinations (like brute force)!</p>
+        </div>
+
+        <p>
+            <b>Algorithm:</b>
+        <ul>
+            <li><b>Brute Force Approach:</b> Use three nested loops to check every possible triplet <code>(i, j, k)</code> and calculate their sum. Keep track of the sum that has the minimum absolute difference from the <code>target</code>.
+                <ul>
+                    <li><b>Time Complexity:</b> O(n<sup>3</sup>)</li>
+                    <li><b>Space Complexity:</b> O(1)</li>
+                </ul>
+            </li>
+            <li><b>Optimized Approach (Sorting + Two Pointers):</b>
+                <ul>
+                    <li><b>We pick one element and reduce the problem:</b>
+                        <p>👉 “Find 2 numbers whose sum is closest to (target - fixed element)”</p>
+                    </li>
+                    <li><b>After fixing <code>nums[i]</code>, we do:</b>
+                        <ul>
+                            <li><code>left = i + 1</code> (next element)</li>
+                            <li><code>right = end</code></li>
+                        </ul>
+                    </li>
+                    <li><b>👉 Now we try combinations efficiently:</b>
+                        <ul>
+                            <li>Sort the input array.</li>
+                            <li>Iterate through the array, fixing one element <code>nums[i]</code>.</li>
+                            <li>Use two pointers, <code>left = i + 1</code> and <code>right = n - 1</code>, to find the sum closest to the target for the remaining two elements.</li>
+                            <li>In each step, calculate the current sum and update the <code>closestSum</code> if the difference to <code>target</code> is smaller than the current minimum difference.</li>
+                            <li>If the current sum is less than the target, move the <code>left</code> pointer forward; otherwise, move the <code>right</code> pointer backward.</li>
+                            <li><b>Time Complexity:</b> O(n<sup>2</sup>) due to the nested loop and two-pointer traversal.</li>
+                            <li><b>Space Complexity:</b> O(1) or O(log n) depending on the sorting algorithm's space requirements.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        </p>
+        <p>
+            <b>Comparison:</b> The brute force method is simple but inefficient for large arrays as it checks all combinations. The Sorting + Two Pointers approach significantly reduces the time complexity from cubic to quadratic by leveraging the sorted property of the array to prune the search space.
+        </p>
+    </div>
 
     <div class="code-block">
-        <div class="code-block-title">ss</div>
+        <div class="code-block-title">3Sum Closest (#16)</div>
         <button class="copy-btn">Copy</button>
         <pre><code>
-        https://www.educative.io/module/lesson/data-structures-in-java/RLz4PNEQEYY
+import java.util.Arrays;
 
-        <b>Output:</b>
-        
-                </code>
-      </pre>
+public class ThreeSumClosest {
+    public static void main(String[] args) {
+        int[] nums = {-1, 2, 1, -4};
+        int target = 1;
+        System.out.println("Closest sum: " + threeSumClosest(nums, target));
+    }
+
+    /**
+     * Time Complexity: O(n^2)
+     * Space Complexity: O(1) or O(log n) depending on sorting algorithm
+     */
+    public static int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int closestSum = nums[0] + nums[1] + nums[2];
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            int left = i + 1;
+            int right = nums.length - 1;
+
+            while (left < right) {
+                int currentSum = nums[i] + nums[left] + nums[right];
+                
+                if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
+                    closestSum = currentSum;
+                }
+
+                if (currentSum < target) {
+                    left++;
+                } else if (currentSum > target) {
+                    right--;
+                } else {
+                    return currentSum; // Found exact match
+                }
+            }
+        }
+
+        return closestSum;
+    }
+}
+
+<b>Output:</b>
+Closest sum: 2
+</code></pre>
     </div>
 
     <script src="../../../resources/js/codeblock.js"></script>

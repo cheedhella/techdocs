@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Longest Consecutive Sequence (#128)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Longest Consecutive Sequence (#128)</div>
+        <div class="problem-description">
+            <b>Problem:</b> Given an unsorted array of integers <code>nums</code>, return the length of the longest consecutive elements sequence;
+        </div>
+        <div class="algorithm-description">
+            <ul>
+                <li>Take a hashset and put all elements into the hashset; This allows for O(1) lookups;</li>
+                <li>For each element 'num' in the hashset:
+                    <ul>
+                        <li>Check if 'num' is the <b>start</b> of a sequence (i.e., <code>num - 1</code> does not exist in the hashset).</li>
+                        <li>If it is a start, count how many consecutive numbers exist by checking for <code>num + 1</code>, <code>num + 2</code>, etc in the hashset;</li>
+                        <li>Update the global maximum length;</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="code-block">
+        <div class="code-block-title">Longest Consecutive Sequence (#128)</div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.HashSet;
+import java.util.Set;
+
+public class LongestConsecutiveSequence {
+    public static void main(String[] args) {
+        int[] nums = {100, 4, 200, 1, 3, 2};
+        System.out.println("Longest consecutive sequence length: " + longestConsecutive(nums));
+    }
+
+    /**
+     * Time Complexity: O(n)
+     * Space Complexity: O(n)
+     */
+    public static int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        Set&lt;Integer&gt; set = new HashSet&lt;&gt;();
+        for (int num : nums) {
+            set.add(num);
+        }
+
+        int longestStreak = 0;
+
+        for (int num : set) {
+            // Check if it's the start of a sequence
+            if (!set.contains(num - 1)) {
+                int currentNum = num;
+                int currentStreak = 1;
+
+                while (set.contains(currentNum + 1)) {
+                    currentNum += 1;
+                    currentStreak += 1;
+                }
+
+                longestStreak = Math.max(longestStreak, currentStreak);
+            }
+        }
+
+        return longestStreak;
+    }
+}
+
+<b>Output:</b>
+Longest consecutive sequence length: 4
+</code></pre>
+    </div>
+
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
