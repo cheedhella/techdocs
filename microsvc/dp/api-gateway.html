@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>API Gateway</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is an API Gateway?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It sits between clients (apps, browsers) and backend services, and routes the requests to right service;</li>
+            <li>It handles authentication, authorization, rate limiting, caching, API versioning, request/response transformation and more;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Responsibilities</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Routing:</b> Routes incoming requests to appropriate microservice;</li>
+            <li><b>Authentication & Authorization:</b> Handles authentication and authorization for incoming requests;</li>
+            <li><b>Rate Limiting:</b> Controlling the number of requests from a client to prevent abuse;</li>
+            <li><b>Request/Response Transformation:</b> Modifying headers or API payloads to support backward compatibility or API versioning;</li>
+            <li><b>API Versioning:</b> Supporting multiple versions of the same API;</li>
+            <li><b>Caching:</b> Caching frequently accessed data to reduce load on backend services;</li>
+            <li><b>Aggregation:</b> Combining results from multiple services into a single response;</li>
+            <li><b>Protocol Translation:</b> Translating between client-friendly protocols (like HTTP) and internal protocols (like gRPC);</li>
+            <li><b>Load Balancing:</b> Distributes requests across multiple service instances;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. How does it work?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Imagine a food delivery app:</li>
+            <li>User opens app → requests order details</li>
+            <li>API Gateway receives request</li>
+            <li>API Gateway calls: User Service, Order Service, Payment Service</li>
+            <li>API Gateway combines responses → sends one result back</li>
+            <li>👉 Client only makes one request, not many.</li>
+        </ul>
+    </div>
+
+
+    <div class="question"><b>4. Popular API Gateway Tools</b></div>
+    <div class="answer">
+        <ul>
+            <li><pre>
+| Gateway              | Type                     | Best For                 |
+| -------------------- | ------------------------ | ------------------------ |
+| Kong                 | Open-source + Enterprise | Most popular overall     |
+| AWS API Gateway      | Cloud (Managed)          | Serverless apps          |
+| Apigee               | Enterprise SaaS          | Large-scale businesses   |
+| NGINX                | Open-source              | High performance         |
+| MuleSoft             | Enterprise               | Complex integrations     |
+| Spring Cloud Gateway | Framework-based          | Java ecosystem           |
+            </pre></li>
+        </ul>
+    </div>
+
+    
+
+
+An API Gateway is like a restaurant waiter:
+
+You (client) place one order
+Waiter (gateway) talks to kitchen sections
+Combines everything → serves you
+
+    <div class="question"><b>3. Benefits</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Simplified Client:</b> Clients only need to know one URL;</li>
+            <li><b>Security:</b> Centralized place to enforce security policies;</li>
+            <li><b>Observability:</b> Centralized logging and monitoring of all incoming traffic;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

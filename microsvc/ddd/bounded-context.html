@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bounded Context</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><strong>1. What is Bounded Context?</strong></div>
+    <div class="answer">
+        <ul>
+            <li>In large systems, the same word can mean different things in different services;</li>
+            <li>For example, in a company, HR, Finance, Engineering all use the word 'employee', each department has it's own rules; Each department is a bounded context;</li>
+            <li>Typically, each microservice can have it's own bounded context;</li>
+            <li>Each context will have it's own definition of entities; It doesn't leak internal details to other services;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

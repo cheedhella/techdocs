@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Event Sourcing - Microservices Design Patterns</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Event Sourcing?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Instead of storing only the current state of an entity, Event Sourcing stores the entire history of changes as a sequence of events;</li>
+            <li>The current state is reconstructed by replaying all events from the beginning;</li>
+            <li>This provides a complete audit log and the ability to restore state at any point in time;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Concepts</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Event Store:</b> A database that stores the sequence of events;</li>
+            <li><b>Snapshots:</b> Periodic captures of the state to speed up reconstruction by avoiding replaying thousands of events;</li>
+            <li><b>Immutability:</b> Events are never changed or deleted; new events are only appended;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Benefits</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Auditability:</b> Perfect history of everything that happened in the system;</li>
+            <li><b>Temporal Queries:</b> Ability to see what the state was at any specific time;</li>
+            <li><b>Decoupling:</b> Other services can react to events as they happen;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

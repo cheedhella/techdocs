@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Circuit Breaker Pattern - Microservices Design Patterns</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is the Circuit Breaker Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>The Circuit Breaker pattern prevents a service from repeatedly trying to execute an operation that is likely to fail;</li>
+            <li>It acts as a proxy that monitors for failures and "trips" when a threshold is reached, blocking further calls;</li>
+            <li>This allows the failing service time to recover and prevents cascading failures;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. States of a Circuit Breaker</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Closed:</b> The circuit is closed, and requests are allowed to pass through. Failures are tracked;</li>
+            <li><b>Open:</b> The threshold of failures is reached. Requests are immediately failed (short-circuited) without calling the service;</li>
+            <li><b>Half-Open:</b> After a timeout, the circuit allows a limited number of test requests to see if the service has recovered;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Benefits</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Resilience:</b> Protects the system from cascading failures;</li>
+            <li><b>Graceful Degradation:</b> Allows providing fallback responses when a service is down;</li>
+            <li><b>Faster Recovery:</b> Prevents overloading a struggling service with more requests;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

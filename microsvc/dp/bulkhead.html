@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bulkhead Pattern - Microservices Design Patterns</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is the Bulkhead Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Inspired by the compartments in a ship's hull (bulkheads), this pattern isolates elements of an application into pools;</li>
+            <li>If one pool fails, the others continue to function, preventing a total system failure;</li>
+            <li>In microservices, this often means isolating resources like thread pools, connections, or CPU for different services or components;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. How it works</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Resource Isolation:</b> Assigning a fixed number of resources (e.g., threads) to a specific service or operation;</li>
+            <li><b>Failure Containment:</b> If a service becomes slow or unresponsive, it only consumes its allocated resources, leaving others unaffected;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Benefits</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Fault Tolerance:</b> Prevents a single failing component from exhausting all system resources;</li>
+            <li><b>Predictability:</b> Ensures that critical parts of the system have guaranteed resources;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

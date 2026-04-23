@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Domain Driven Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Domain Driven Design?</b></div>
+    <div class="answer">
+        <ul>
+            <li>DDD = Model your software the way the business thinks;</li>
+            <li><b>Eg:</b>
+            <li><b>Entity:</b> Order</li>
+            <li><b>Value Object:</b> Address</li>
+            <li><b>Aggregate:</b> Order + Items</li>
+            <li><b>Domain Event:</b> OrderPlaced</li>
+            <li><b>Repository:</b> OrderRepository</li>
+            <li>Domain Driven Design (DDD) is a software development approach that focuses on modeling the domain of the application in a way that is easy to understand, maintain, and extend;</li>
+            <li>https://dev.to/leapcell/domain-driven-design-explained-a-real-world-example-581j</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. DDD works best when:</b></div>
+    <div class="answer">
+        <ul>
+            <li>Business logic is complex</li>
+            <li>Domain knowledge is critical</li>
+            <li>Frequent changes happen</li>
+        </ul>
+    </div>  
+
+    <div class="question"><b>3. Avoid if:</b></div>
+    <div class="answer">
+        <ul>
+            <li>Simple CRUD app</li>
+            <li>No complex domain rules</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Bounded Contexts, Aggregates, and Ubiquitous Language</b></div>
+    <div class="answer">
+        <ul>
+            <li>Bounded Contexts are the boundaries of the domain;</li>
+            <li>Aggregates are the clusters of domain objects that are treated as a single unit for the purpose of data changes;</li>
+            <li>Ubiquitous Language is the shared language that is used by developers (in code and documentation) and business experts, to communicate about the domain;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

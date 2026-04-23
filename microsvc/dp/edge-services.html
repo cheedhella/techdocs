@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edge Services</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is an Edge Services?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is the outermost layer that is exposed to the internet; It can be: CDN, API Gateway etc;</li>
+            <li>It is often called BFF (Backend for Frontend);</li>
+            <li>Instead of exposing many backend services directly via API Gateway, you create client-focused(mobile, web etc) edge services, so that you can customize response for each client type;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. When client makes a request, will the request goes to API Server first or edge services first?</b></div>
+    <div class="answer">
+        <ul>
+            <li>The request will go to edge services first and then to API Gateway; In many architectures, these 2 roles are combined; Tools like Kong, Nginx can play both the roles;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

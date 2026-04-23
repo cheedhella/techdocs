@@ -3,17 +3,15 @@
 
 <head>
     <title>Microservices</title>
-    <link rel="stylesheet" href="../../resources/css/styles.css" />
-    <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-    <script src="../../resources/js/highlight.min.js"></script>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
 </head>
 
 <body>
-    <div class="question"><b>1. Explain Microservices Architecture?</b></div>
+    <div class="question"><b>1. What is a Microservice?</b></div>
     <div class="answer">
         <ul>
-            <li>In case of monolithic architecture, entire application is built, deployed and scaled as a single unit; A change in one of the modules can only be brought into production, by bringing a new version of the entire application;</li>
-            <li>In case of microservices architecture, application is split into a collection of loosely coupled, independently deployable services; A change in one of the services can be brought into production, by deploying only that service;</li>
+            <li>It is a small, focused(it does only one specific business function) and independantly deployable service;</li>
         </ul>
     </div>
 
@@ -22,18 +20,19 @@
         <ul>
             <li><b>Breaks complexapplication into autonomous services</b>
                 <ul>
-                    <li>It breaks complex application into smaller and more manageable services, each responsible for a specific function;</li>
+                    <li>It breaks complex application into smaller and more manageable services, each responsible for a specific business function;</li>
                 </ul>
             </li>
             <li><b>Independent development and deployment</b>
                 <ul>
-                    <li>Teams can develop and deploy services independantly;</li>
-                    <li>This speeds up development and reduces the time to market;</li>
+                    <li>Each service can be developed and deployed independantly, without affecting the other services;</li>
+                    <li>It speeds up development and reduces the time to market;</li>
                 </ul>
             </li>
-            <li><b>Scalability</b>
+            <li><b>Loosely coupled and highly cohesive</b>
                 <ul>
-                    <li>You can scale only the services that are needed, instead of scaling the entire application;</li>
+                    <li>Services are loosely coupled, meaning they are independent of each other;</li>
+                    <li>Services are highly cohesive, meaning they are responsible for a single business capability;</li>
                 </ul>
             </li>
             <li><b>Polygot Architecture</b>
@@ -41,23 +40,63 @@
                     <li>Each service can use a different technology; One servie can use Java, another can use Python etc;</li>
                 </ul>
             </li>
-            <li><b>Improved Fault Isolation</b>
+            <li><b>Resilent and Scalable</b>
                 <ul>
                     <li>If one service fails, it does not affect the other services;</li>
+                    <li>You can scale only the services that are needed, instead of scaling the entire application;</li>
                 </ul>
             </li>
-            <li><b>Better team organization</b>
+            <li><b>Communication</b>
                 <ul>
-                    <li>Teams can work on services independantly;</li>
+                    <li>Services communicate with each other using either synchronous protocols such as HTTP/REST, gRPC or asynchronous protocols such as AMQP;</li>
                 </ul>
             </li>
         </ul>
     </div>
 
-    <div class="question"><strong>3. Bottom line</strong></div>
+    <div class="question"><b>3. Monolithic vs Microservices Architecture?</b></div>
+    <div class="answer">
+        <ul>
+            <li>In case of monolithic architecture, entire application is built, deployed and scaled as a single unit; A change in one of the modules can only be brought into production, by bringing a new version of the entire application;</li>
+            <li>In case of microservices architecture, application is split into a collection of loosely coupled, independently deployable services; A change in one of the services can be brought into production, by deploying only that service;</li>
+        </ul>
+    </div>
+
+
+    <div class="question"><strong>4. Bottom line</strong></div>
     <div class="answer">
         <ul>
             <li>Microservices are used to make large systems easier to build, scale, maintain and evolve;</li>
+            <li><b>Pros</b>
+                <ul>
+                    <li>Easier to develop, deploy and scale;</li>
+                    <li>Better team organization;</li>
+                    <li>Better fault isolation - Failure in one service does not affect the other services;</li>
+                </ul>
+            </li>
+            <li><b>Cons</b>
+                <ul>
+                    <li>It introduces additional complexicity to develop;</li>
+                    <li>With decentralized data storage, it becomes difficult to achieve data consistency with multiple services;</li>
+                    <li>With many services running, it requires advanced observability tools to monitor the health and performance of the services;</li>
+                    <li>Operational overhead - Need infrastructure to support service discovery, load balancing, API gateway, CI/CD etc;</li>
+                </ul>
+            </li>
+            <li><b>When to use Microservices?</b>
+                <ul>
+                    <li>When the application is large and complex;</li>
+                    <li>If your application needs to scale specific components independantly, based on demand;</li>
+                    <li>When the application needs to be maintainable;</li>
+                    <li>When the application needs to be testable;</li>
+                </ul>
+            </li>
+            <li><b>When not to use Microservices?</b>
+                <ul>
+                    <li>When the application is small and simple;</li>
+                    <li>If your team is small size - Managing microservices needs expertise in distributed systems and a dedicated devops team;</li>
+                </ul>
+            </li>
+            <li>Many successful systems start as monolithic and then evolve into microservices at the right time;</li>
         </ul>
     </div>
 </body>

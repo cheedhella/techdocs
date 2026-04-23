@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>CQRS Pattern - Microservices Design Patterns</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is CQRS (Command Query Responsibility Segregation)?</b></div>
+    <div class="answer">
+        <ul>
+            <li>CQRS stands for Command Query Responsibility Segregation;</li>
+            <li>It separates the models for reading data (Queries) from the models for updating data (Commands);</li>
+            <li>This allows each model to be optimized for its specific task;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. How it works</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Commands:</b> Focus on the "write" operations. They perform actions and change state;</li>
+            <li><b>Queries:</b> Focus on the "read" operations. They return data without changing state;</li>
+            <li>Often, the read and write sides use different databases or data structures to improve performance;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Benefits</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Performance:</b> Read and write operations can be scaled independently;</li>
+            <li><b>Simplicity:</b> Complex queries don't complicate the write model, and vice versa;</li>
+            <li><b>Security:</b> Easier to manage permissions for reading vs. writing data;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

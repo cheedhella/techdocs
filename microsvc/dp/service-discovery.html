@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service Discovery Pattern</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Service Discovery?</b></div>
+    <div class="answer">
+        <ul>
+            <li>In a microservices environment, containers/services are spin up/down, scaled up/down dynamically based on demand;</li>
+            <li>This means that the IP addresses of the services are not static, and they can change frequently;</li>
+            <li>Service Discovery is a mechanism that allows services to find and communicate with each other without hardcoding IP addresses;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. How does it work?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>1. Service Registry:</b> 
+                <ul>
+                    <li>Every service instance registers itself with the service registry on startup and deregister on shutdown;</li>
+                    <li>Usually, every service sends this information to service registry during registration: IP address, port, service name, health check endpoint, instanceID etc;</li>
+                    <li>Registry periodically checks if services are still alive;</li>
+                </ul>
+            </li>
+            <li><b>2. Service Discovery:</b>
+                <ul>
+                    <li>When a service A wants to call service B, it queries the service registry to get the current location of B;</li>
+                    <li>The service registry returns the list of available instances of B;</li>
+                    <li>The client then calls one of the available instances of B;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Types of Service Discovery</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Client-Side Discovery:</b>
+                <ul>
+                    <li>Client queries the service registry to find an available instance and then calls it directly;</li>
+                    <li><b>Example:</b> Netflix Ribbon;</li>
+                </ul>
+            </li>
+            <li><b>Server-Side Discovery:</b>
+                <ul>
+                    <li>The client calls a load balancer/proxy, which then queries the registry and routes the request to an instance;</li>
+                    <li><b>Example:</b> AWS Elastic Load Balancer;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Popular Service Discovery Tools</b></div>
+    <div class="answer">
+        <ul><li><pre>
+            | Registry   | Best For                        | Popularity Trend |
+            | ---------- | ------------------------------- | ---------------- |
+            | Kubernetes | Cloud-native apps               | 🔥 Highest       |
+            | Consul     | Multi-platform / hybrid systems | 🔥 High          |
+            | Eureka     | Spring Boot microservices       | ⬇️ Declining     |
+            | Zookeeper  | Legacy / infrastructure systems | ⬇️ Declining     |            
+        </pre></li></ul>
+    </div>
+
+    <div class="question"><b>5. How does services know about the service registry?</b></div>
+    <div class="answer">
+        <ul>
+            <li>1. Configuration
+                <ul>
+                    <li>Every service is explicitly configured where the service registry is located;</li>
+                    <li><pre>
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka/
+                    </pre></li>
+                    <li>When the service starts, it reads config and registers itself with the service registry;</li>
+                    <li>This configuration injected into the service via application.yml, environment variables, or configuration server;</li>
+                </ul>
+            </li>
+            <li>2. DNS
+                <ul>
+                    <li>K8s runs a cluster-wide DNS server (CoreDNS) as a Deployment in kube-system namespace; It keeps track of service names and their IP addresses;</li>
+                    <li>This Registry is exposed to services via DNS name;</li>
+                    <li>Services use a fixed DNS name such as http://consul.default.svc.cluster.local</li>
+                    <li>Service A calls http://payment-service -> CoreDNS resolves it to IP address;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>6. What if the service registry is down?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Existing services may continue working (thanks to caching);</li>
+            <li>But new registrations and updates stop;</li>
+            <li>Over time, the system becomes less reliable;</li>
+            <li><b>Best Practices:</b>
+                <ul>
+                    <li>Run multiple instances(cluster) to maintain HA;</li>
+                    <li>Use circuit breakers - to prevent cascading failures;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>

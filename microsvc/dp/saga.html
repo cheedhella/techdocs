@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Saga Pattern - Microservices Design Patterns</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is the Saga Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>A Saga is a sequence of local transactions where each transaction updates data within a single service;</li>
+            <li>If a local transaction fails, the Saga executes a series of compensating transactions to undo the changes made by the preceding local transactions;</li>
+            <li>It is used to manage distributed transactions and maintain data consistency across microservices;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Types of Sagas</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Choreography-based Saga:</b>
+                <ul>
+                    <li>Each service involved in the saga produces and listens to events;</li>
+                    <li>There is no central coordinator; services react to events from other services;</li>
+                </ul>
+            </li>
+            <li><b>Orchestration-based Saga:</b>
+                <ul>
+                    <li>A central orchestrator (coordinator) tells the participants what local transactions to execute;</li>
+                    <li>The orchestrator handles the flow and decides when to trigger compensating transactions;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Benefits and Drawbacks</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Benefits:</b> Enables long-running transactions across multiple services without locking resources;</li>
+            <li><b>Drawbacks:</b> Increased complexity in implementation and testing; requires careful design of compensating transactions;</li>
+        </ul>
+    </div>
+</body>
+
+</html>
