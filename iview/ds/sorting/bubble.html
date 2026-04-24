@@ -2,54 +2,44 @@
 <html lang="en">
     <head>
         <title>Bubble Sort</title>
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
     </head>
     <body>
-        <pre>
-            <code class="language-java">
-package com.cmr.ds.sorting;
-
-import java.util.Arrays;
-
-/*
-
-Bubble OR Sinking OR Exchange Sort
-    It compares each element  in the array  with it's next element  and 
-    swaps if they are not in order; Once you complete an iteration, the 
-    largest element in the  given array, bubbles up  towards the end of 
-    the array; So, it is called Bubble Sort;
-
-    It is also called Sinking sort, because if you change the comparison
-    a little bit, the smallest element sinks to the beginning of the array;
-    
-    Best-case Complexity:
-        If the Array is already sorted, only n-1 comparisons are needed. So, complexity is O(n);
+        <div class="question"><b>1. What is Bubble Sort?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It compares each element  in the array  with it's next element and swaps if they are not in order;</li>
+                <li>Once you complete an iteration, the largest element in the  given array, bubbles up  towards the end of the array; So, it is called Bubble Sort;</li>
+                <li>This process is repeated for n-1 passes, where n is the number of elements in the array;</li>
+                <li>At the end of the n-1 th pass, the array will be sorted;</li>
+            </ul>
+        </div>
         
-    Average-case Complexity: O(n^2);
-        
-    Worst-case Complexity:
-        If the Array is sorted in reverse, complexity is O(n^2);
-        
-    Applications:
-        It's never used because of it's average and worst case complexity is O(n^2);
+        <div class="question"><b>2. Complexity</b></div>
+        <div class="answer">
+            <ul>
+                <li>Time Complexity: Best Case: O(n) - If the array is already sorted; Worst Case: O(n^2);</li>
+                <li>Space Complexity: O(1);</li>
+            </ul>
+        </div>
 
-    Important Links:
-        https://www.interviewbit.com/tutorial/bubble-sort
+        <div class="question"><b>3. Applications</b></div>
+        <div class="answer">
+            <ul>
+                <li>It's never used because of it's average and worst case complexity is O(n^2);</li>
+            </ul>
+        </div>
 
-*/
+        <div class="question"><b>4. Implementation</b></div>
+        <div class="answer">
+            <pre>
+                <code class="language-java">
+import java.util.*;
 
 public class BubbleSort {
-    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+    private static final int[] sorted_input = new int[] { 1, 2, 3, 4  };
+    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6 };
 
     public static void main(String args[]) {
         BubbleSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
@@ -100,10 +90,34 @@ public class BubbleSort {
         System.out.println("No of iterations taken: " + (i - 1));
         System.out.println("Output: " + Arrays.toString(data));
     }
-}
-                
+}     
+                </code>
+Output:
+Input: [1, 2, 3, 4]
+No of iterations taken: 3
+Output: [1, 2, 3, 4]
+----------------------------
+Input: [10, 9, 8, 7]
+No of iterations taken: 3
+Output: [7, 8, 9, 10]
+----------------------------
+Input: [1, 2, 3, 4]
+No of iterations taken: 0
+Output: [1, 2, 3, 4]
+----------------------------
+Input: [10, 9, 8, 7]
+No of iterations taken: 3
+Output: [7, 8, 9, 10]
+            </pre>
+        </div>
 
-            </code>
-        </pre>
+        <div class="question"><b>5. What is Sinking Sort?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is same as Bubble sort, just the direction of the comparison is reversed;</li>
+                <li>In case of Bubble Sort, the largest element bubbles up towards the end of the array;</li>
+                <li>In case of Sinking Sort, the smallest element sinks down towards the start of the array;</li>
+            </ul>
+        </div>
     </body>
 </html>

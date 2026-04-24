@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VPC (Virtual Private Cloud)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>1. What is a VPC?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Amazon Virtual Private Cloud (VPC) lets you provision a logically isolated section of the AWS Cloud.</li>
+            <li>You have complete control over your virtual networking environment, including selection of IP address range, creation of subnets, and configuration of route tables and network gateways.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. What are the core components of a VPC?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Subnets:</b> A range of IP addresses in your VPC. Can be public (has route to internet) or private.</li>
+            <li><b>Route Tables:</b> A set of rules, called routes, that are used to determine where network traffic is directed.</li>
+            <li><b>Internet Gateway (IGW):</b> A gateway that allows communication between instances in your VPC and the internet.</li>
+            <li><b>NAT Gateway:</b> Enables instances in a private subnet to connect to the internet while preventing the internet from initiating connections with those instances.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Security Groups vs. NACLs?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Security Groups:</b> Act as a firewall at the instance level. They are stateful (return traffic is automatically allowed).</li>
+            <li><b>Network ACLs (NACLs):</b> Act as a firewall at the subnet level. They are stateless (return traffic must be explicitly allowed).</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AWS Global Accelerator</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>1. What is AWS Global Accelerator?</b></div>
+    <div class="answer">
+        <ul>
+            <li>AWS Global Accelerator is a networking service that improves the performance of your users' traffic by up to 60% using Amazon's global network infrastructure.</li>
+            <li>It provides two static anycast IP addresses that act as a fixed entry point to your application endpoints in a single or multiple AWS Regions.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Global Accelerator vs CloudFront?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>CloudFront:</b> Improves performance for both cacheable content (such as images and videos) and dynamic content (such as API acceleration and dynamic site delivery). Content is served at the edge.</li>
+            <li><b>Global Accelerator:</b> Improves performance for a wide range of applications over TCP or UDP by proxying packets at the edge to applications running in one or more AWS Regions. Good for non-HTTP use cases, such as gaming (UDP), IoT, or Voice over IP.</li>
+        </ul>
+    </div>
+</body>
+</html>

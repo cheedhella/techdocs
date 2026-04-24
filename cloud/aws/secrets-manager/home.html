@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AWS Secrets Manager</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>1. What is AWS Secrets Manager?</b></div>
+    <div class="answer">
+        <ul>
+            <li>AWS Secrets Manager helps you protect secrets needed to access your applications, services, and IT resources.</li>
+            <li>The service enables you to easily rotate, manage, and retrieve database credentials, API keys, and other secrets throughout their lifecycle.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Secrets Manager vs Systems Manager Parameter Store?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Secrets Manager:</b> Costs money per secret, supports automatic secret rotation (especially for RDS databases), and integrates with KMS for encryption.</li>
+            <li><b>Parameter Store:</b> Mostly free (for standard parameters), does not support automatic rotation out-of-the-box, but can also store secure strings using KMS.</li>
+        </ul>
+    </div>
+</body>
+</html>

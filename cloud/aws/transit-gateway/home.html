@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AWS Transit Gateway</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>1. What is AWS Transit Gateway?</b></div>
+    <div class="answer">
+        <ul>
+            <li>AWS Transit Gateway connects VPCs and on-premises networks through a central hub.</li>
+            <li>This simplifies your network and puts an end to complex peering relationships. It acts as a cloud router – each new connection is only made once.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Why use Transit Gateway?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Without Transit Gateway, connecting multiple VPCs requires VPC Peering, which creates a complex mesh network (n*(n-1)/2 connections).</li>
+            <li>Transit Gateway uses a hub-and-spoke model, drastically reducing the number of connections needed and simplifying network management.</li>
+        </ul>
+    </div>
+</body>
+</html>

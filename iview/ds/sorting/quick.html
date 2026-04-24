@@ -2,26 +2,22 @@
 <html lang="en">
     <head>
         <title>Quick Sort</title>
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
     </head>
     <body>
-        <pre>
-            <code class="language-java">
-                package com.cmr.ds.sorting;
+        <div class="question"><b>1. What is Quick Sort?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is a divide-and-conquer algorithm that works by partitioning the array into two sub-arrays, and then sorting each sub-array recursively;</li>
+                <li>It is most widely used sorting algorithm, especially for large data sets;</li>
+                <li>In fact, Arrays.sort() uses a variant of Quick sort for sorting array of primitives;</li>
+            </ul>
+        </div>
 
-                import java.util.Arrays;
-                
-                /*
-                
+        <div class="question"><b>2. How does it work?</b></div>
+        <div class="answer">
+            <ul>
                 Like Merge sort, Quick sort also uses divide-and-conquer strategy;
                 It is most widely used sorting algorithm, especially for large data sets;
                 In fact, Arrays.sort() uses a variant of Quick sort for sorting array of primitives;

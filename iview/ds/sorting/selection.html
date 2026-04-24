@@ -2,70 +2,89 @@
 <html lang="en">
     <head>
         <title>Selection Sort</title>
-        <link rel="stylesheet" href="../../resources/css/highlight.min.css" />
-        <script src="../../resources/js/highlight.min.js"></script>
-        <script>
-            hljs.initHighlightingOnLoad();
-        </script>
-        <style>
-            code {
-                width: 900px;
-            }
-        </style>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
     </head>
     <body>
-        <pre>
-            <code class="language-java">
-package com.cmr.ds.sorting;
+        <div class="question"><b>1. What is Selection Sort?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It works by dividing the original array into 2 sub-arrays: Sorted sub-array and unsorted sub-array;</li>
+                <li>Initially, the sorted sub-array is empty;</li>
+                <li>It then repeatedly finds the minimum element in the unsorted sub-array and appends/moves it to sorted sub-array, until unsorted sub-array is empty;</li>
+                <li>In all cases, it requires n(n-1) comparisons; So, it has a time complexity of O(n^2);</li>
+            </ul>
+        </div>
 
-import java.util.Arrays;
+        <div class="question"><b>2. Comparison with Bubble Sort?</b></div>
+        <div class="answer">
+            <ul>
+                <li>If the array is already sorted, bubble sort does it well!</li>
+                <li>Otherwise, select sort is faster, as it takes less number of swaps compared to bubble sort!</li>
+            </ul>
+        </div>
 
-/*
+        <div class="question"><b>3. Complexity</b></div>
+        <div class="answer">
+            <ul>
+                <li>Time Complexity: O(n^2) in all cases;</li>
+                <li>Space Complexity: O(1) in all cases;</li>
+            </ul>
+        </div>
 
-Selection Sort
-    It works by dividing the original array into 2 sub-arrays: Sorted sub-array and 
-    unsorted sub-array; Initially, the sorted sub-array is empty; It then repeatedly
-    finds the minimum element in the unsorted sub-array and appends/moves it to sorted
-    sub-array, until unsorted sub-array is empty;
+        <div class="question"><b>4. Applications</b></div>
+        <div class="answer">
+            <ul>
+                <li>It can be used to efficiently find first K smallest or largest elements in an array;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>3. Implementation</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+<code class="language-java">
+    public class SelectionSort {
+        private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
     
-    In all cases, it requires n(n-1) comparisons; So, it has a time complexity of O(n^2);
-    
-Selection VS Bubble Sort
-    - If the array is already sorted, bubble sort does it well!
-    - Otherwise, select sort is faster, as it takes less number of swaps compared to bubble sort!
-
-*/
-public class SelectionSort {
-    private static final int[] sorted_input = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    private static final int[] reverse_sorted_input = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
-
-    public static void main(String args[]) {
-        SelectionSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
-        System.out.println("----------------------------");
-        SelectionSort.sort(Arrays.copyOf(reverse_sorted_input, sorted_input.length));
-    }
-
-    public static void sort(int[] data) {
-        System.out.println("Input: " + Arrays.toString(data));
-        int i; // Index of unsorted sub-array!
-        for (i = 0; i < data.length - 1; i++) {
-            // Find the index of minimum element in unsorted sub-array!
-            int minElIndex = i;
-            for (int j = i + 1; j < data.length; j++) {
-                if (data[j] < data[minElIndex]) {
-                    minElIndex = j;
-                }
-            }
-            // Swap first element and minimum element in the unsorted sub-array!
-            int temp = data[i];
-            data[i] = data[minElIndex];
-            data[minElIndex] = temp;
+        public static void main(String args[]) {
+            SelectionSort.sort(Arrays.copyOf(sorted_input, sorted_input.length));
+            System.out.println("----------------------------");
+            SelectionSort.sort(Arrays.copyOf(reverse_sorted_input, sorted_input.length));
         }
-        System.out.println("No of iterations taken: " + i);
-        System.out.println("Output: " + Arrays.toString(data));
+    
+        public static void sort(int[] data) {
+            System.out.println("Input: " + Arrays.toString(data));
+            int i; // Index of unsorted sub-array!
+            for (i = 0; i < data.length - 1; i++) {
+                // Find the index of minimum element in unsorted sub-array!
+                int minElIndex = i;
+                for (int j = i + 1; j < data.length; j++) {
+                    if (data[j] < data[minElIndex]) {
+                        minElIndex = j;
+                    }
+                }
+                // Swap first element and minimum element in the unsorted sub-array!
+                int temp = data[i];
+                data[i] = data[minElIndex];
+                data[minElIndex] = temp;
+            }
+            System.out.println("No of iterations taken: " + i);
+            System.out.println("Output: " + Arrays.toString(data));
+        }
     }
-}
-            </code>
-        </pre>
+                </code>
+                </pre></li>
+                
+                <li><b>Output:</b></li>
+                <li><pre>
+                    <code class="language-java">
+                        Input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        No of iterations taken: 9
+                        Output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                    </code>
+                </pre></li>
+            </ul>
     </body>
 </html>

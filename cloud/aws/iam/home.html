@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IAM (Identity and Access Management)</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="question"><b>1. What is IAM?</b></div>
+    <div class="answer">
+        <ul>
+            <li>IAM stands for Identity and Access Management.</li>
+            <li>It allows you to manage access to AWS services and resources securely.</li>
+            <li>IAM is global, meaning it applies across all AWS regions.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. What are the core components of IAM?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Users:</b> End users (people or services).</li>
+            <li><b>Groups:</b> A collection of users. Each user in the group will inherit the permissions of the group.</li>
+            <li><b>Roles:</b> You create roles and can then assign them to AWS resources (like EC2 instances).</li>
+            <li><b>Policies:</b> Documents that define permissions (JSON format) and are attached to users, groups, or roles.</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. What is the Principle of Least Privilege?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It means giving a user only the minimum permissions necessary to perform their job.</li>
+            <li>This is a security best practice in AWS.</li>
+        </ul>
+    </div>
+</body>
+</html>
