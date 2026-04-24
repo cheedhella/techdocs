@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Twitter - System Design</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Twitter System Design?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Designing a social media platform where users can post short messages (tweets) and follow others;</li>
+            <li>The core challenge is the "Fan-out" problem: delivering a tweet to all followers in real-time;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Features</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Tweeting:</b> Posting a new tweet;</li>
+            <li><b>Timeline:</b> Home timeline (tweets from people you follow) and User timeline;</li>
+            <li><b>Following:</b> Managing relationships between users;</li>
+            <li><b>Search:</b> Real-time search for hashtags and keywords;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Technical Challenges</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Fan-out:</b> For celebrities with millions of followers, pushing tweets to every timeline is resource-intensive;</li>
+            <li><b>Caching:</b> Heavily relying on Redis to store pre-computed timelines for active users;</li>
+            <li><b>Consistency:</b> Eventual consistency is usually acceptable for timelines;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

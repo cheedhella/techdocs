@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Database Sharding - System Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Database Sharding?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Sharding is a database architecture pattern that involves breaking a large database into smaller, faster, and more easily managed parts called shards;</li>
+            <li>Each shard is a separate database that contains a subset of the total data;</li>
+            <li>It is a form of horizontal scaling for databases;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Why Shard?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Handle Large Datasets:</b> When a single database instance can no longer hold all the data or handle the traffic;</li>
+            <li><b>Improve Performance:</b> Queries run faster on smaller datasets;</li>
+            <li><b>Increase Availability:</b> If one shard fails, the other shards remain accessible;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Sharding Strategies</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Key-Based (Hash) Sharding:</b> Uses a hash of a column (like User ID) to determine the shard;</li>
+            <li><b>Range-Based Sharding:</b> Divides data based on ranges of values (e.g., A-M in Shard 1, N-Z in Shard 2);</li>
+            <li><b>Directory-Based Sharding:</b> Uses a lookup table to track which data is in which shard;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

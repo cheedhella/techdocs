@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Load Balancing - System Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Load Balancing?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Load balancing is the process of distributing network traffic across multiple servers;</li>
+            <li>It ensures that no single server bears too much demand, improving responsiveness and availability;</li>
+            <li>A load balancer sits between the client and the server instances, routing requests based on various algorithms;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Benefits of Load Balancing</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Scalability:</b> Allows adding or removing servers based on traffic demands;</li>
+            <li><b>Redundancy:</b> If one server fails, the load balancer redirects traffic to healthy servers;</li>
+            <li><b>Performance:</b> Reduces the burden on individual servers, leading to faster response times;</li>
+            <li><b>Flexibility:</b> Enables maintenance on servers without downtime;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Common Algorithms</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Round Robin:</b> Requests are distributed sequentially across the server pool;</li>
+            <li><b>Least Connections:</b> Sends requests to the server with the fewest active connections;</li>
+            <li><b>IP Hash:</b> The client's IP address determines which server receives the request, ensuring session persistence;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

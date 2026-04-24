@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Uber - System Design</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Uber System Design?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Designing a ride-hailing service that matches riders with nearby drivers in real-time;</li>
+            <li>Involves complex geospatial indexing and real-time location tracking;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Features</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Location Tracking:</b> Drivers send frequent GPS updates to the server;</li>
+            <li><b>Matching:</b> Finding the nearest available drivers for a rider's request;</li>
+            <li><b>Routing & ETA:</b> Calculating the best path and estimated time of arrival;</li>
+            <li><b>Payments:</b> Handling transactions after the ride;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Geospatial Indexing</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Quadtrees:</b> Dividing the map into quadrants to efficiently find nearby points;</li>
+            <li><b>Google S2:</b> A library for mapping the earth's surface into a hierarchy of cells;</li>
+            <li><b>Redis Geo:</b> Using Redis's built-in geospatial features for fast lookups;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

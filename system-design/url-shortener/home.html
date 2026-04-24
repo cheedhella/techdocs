@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>URL Shortener - System Design</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is a URL Shortener?</b></div>
+    <div class="answer">
+        <ul>
+            <li>A service that creates short aliases for long URLs (e.g., bit.ly/3abc);</li>
+            <li>When a user clicks the short link, the service redirects them to the original long URL;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Requirements</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Shortening:</b> Generate a unique short key for a given URL;</li>
+            <li><b>Redirection:</b> Redirect users to the original URL with minimal latency;</li>
+            <li><b>High Availability:</b> The service must be always available for redirection;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. High-Level Design</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>API:</b> POST /shorten (long_url) -> short_url; GET /{short_key} -> Redirect;</li>
+            <li><b>Storage:</b> A NoSQL database (like MongoDB or Cassandra) or a relational database with a mapping of short_key to long_url;</li>
+            <li><b>Hashing:</b> Use Base62 encoding (a-z, A-Z, 0-9) to generate short keys;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>WhatsApp - System Design</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is WhatsApp System Design?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Designing a real-time messaging service that supports one-on-one and group chats;</li>
+            <li>Must handle billions of messages daily with low latency and high reliability;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Features</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Real-time Messaging:</b> Using WebSockets or XMPP for persistent connections;</li>
+            <li><b>Message Status:</b> Sent, Delivered, Read notifications;</li>
+            <li><b>Media Sharing:</b> Handling images, videos, and documents via object storage (S3);</li>
+            <li><b>End-to-End Encryption:</b> Ensuring privacy for all messages;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Architecture Components</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Chat Service:</b> Manages active connections and message delivery;</li>
+            <li><b>Presence Service:</b> Tracks online/offline status of users;</li>
+            <li><b>Message Store:</b> Storing messages for offline users (e.g., Cassandra or HBase);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

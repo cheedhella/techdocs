@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>YouTube - System Design</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is YouTube System Design?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Designing a video-sharing platform that supports video uploads, processing, and streaming;</li>
+            <li>Must handle massive amounts of data and provide smooth playback globally;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Key Features</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Video Upload:</b> Handling large file transfers;</li>
+            <li><b>Transcoding:</b> Converting videos into multiple formats and resolutions (e.g., 1080p, 720p, 360p);</li>
+            <li><b>Streaming:</b> Delivering video content via Adaptive Bitrate Streaming (DASH/HLS);</li>
+            <li><b>Search & Recommendations:</b> Helping users find relevant content;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Architecture Components</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>CDN (Content Delivery Network):</b> Storing and serving video files from locations close to the user;</li>
+            <li><b>Object Storage:</b> Storing raw and processed video files (e.g., S3 or GCS);</li>
+            <li><b>Metadata Store:</b> Storing video info, user comments, and view counts (e.g., MySQL with Vitess);</li>
+        </ul>
+    </div>
+</body>
+
+</html>

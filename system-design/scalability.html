@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Scalability - System Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Scalability?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Scalability is the ability of a system to handle an increasing amount of work by adding resources;</li>
+            <li>A scalable system can maintain its performance levels as the load increases;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Vertical vs. Horizontal Scaling</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Vertical Scaling (Scaling Up):</b> Adding more power (CPU, RAM) to an existing server. It has a physical limit and often requires downtime;</li>
+            <li><b>Horizontal Scaling (Scaling Out):</b> Adding more servers to the pool. It is more flexible and provides better fault tolerance;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Key Considerations</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Statelessness:</b> Horizontal scaling is easier if services do not store session state locally;</li>
+            <li><b>Database Scaling:</b> Techniques like Sharding and Replication are used to scale the data layer;</li>
+            <li><b>Load Balancing:</b> Essential for distributing traffic across multiple scaled instances;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

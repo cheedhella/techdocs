@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Caching - System Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Caching?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Caching is the process of storing copies of data in a temporary storage location (cache) so that future requests for that data can be served faster;</li>
+            <li>It reduces the need to access the slower underlying storage layer (like a database or disk);</li>
+            <li>Caches can exist at various levels: Client-side, CDN, Web Server, or Database;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Caching Strategies</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Cache-Aside:</b> The application first checks the cache. If data is missing (cache miss), it fetches it from the database and updates the cache;</li>
+            <li><b>Write-Through:</b> Data is written to both the cache and the database simultaneously;</li>
+            <li><b>Write-Behind (Write-Back):</b> Data is written to the cache first, and the database is updated later asynchronously;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Cache Eviction Policies</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>LRU (Least Recently Used):</b> Discards the least recently accessed items first;</li>
+            <li><b>LFU (Least Frequently Used):</b> Discards items that are accessed the least often;</li>
+            <li><b>FIFO (First In, First Out):</b> Discards the oldest items first;</li>
+        </ul>
+    </div>
+</body>
+
+</html>
