@@ -1,0 +1,20 @@
+scalability, database design, API architecture, caching, and distributed systems.
+
+
+design a scalable URL shortener similar to Bitly, covering functional requirements, non-functional requirements, database schema design, API design, scalability strategies, and production-level optimizations used in real-world high-traffic systems.
+
+
+Non-functional requirements
+    A URL shortener like Bitly must redirect almost instantly.
+    Ability to handle growth in users/data/traffic.
+        Vertical scaling → bigger machine
+        Horizontal scaling → more machines
+    👉 Critical for systems that grow over time.
+
+
+    Availability
+    System should be up and accessible.
+        Example: 99.9% uptime (~8.7 hours downtime/year)
+        Achieved via redundancy, failover
+    👉 Users expect services to “always work.”
+

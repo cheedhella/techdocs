@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Non-Functional Requirements</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. Non-Functional Requirements</b> - Performance, Scalability, Availability, Reliability, Security, Observability, Compliance;</div>
+    <div class="answer">
+        <ul>
+            <li><b>Performance:</b> How fast the system responds and how much load it can handle?
+                <ul>
+                    <li><b>Latency:</b> How fast the system responds to a request? Time for one request (Eg: < 200 ms);</li>
+                    <li><b>Throughput:</b> Requests per second(Eg: 1000 requests/second);</li>
+                </ul>
+            </li>
+            <li><b>Scalability:</b> How easy the system can be scaled to handle more requests?
+                <ul>
+                    <li><b>Horizontal Scaling:</b> Add more servers to handle more requests;</li>
+                    <li><b>Vertical Scaling:</b> Add more resources to a single server;</li>
+                </ul>
+            </li>
+            <li><b>Availability:</b>
+                <ul>
+                    <li>Unavailability of services can cause loss of revenue and reputation; So, services should be as much UP as possible;</li>
+                    <li><pre>
+| Availability | Downtime per Year |
+| ------------ | ----------------- |
+| 90%          | 36.5 days/year    |
+| 99%          | 3.65 days/year    |
+| 99.9%        | 8.76 hours/year   | acceptable
+| 99.99%       | 52 minutes/year   | high availability
+| 99.999%      | 5 minutes/year    | mission-critical (e.g., banking, payments)
+| 99.9999%     | 31 seconds/year   |
+                    </pre></li>
+                    <li><b>Reasons behind unavailability:</b>
+                        <ul>
+                            <li>Hardware failure</li>
+                            <li>Software failure - server crashes due to cpu/memory overload, disk full, etc; database failure; DNS failure; deployment bugs;</li>
+                            <li>Network failure</li>
+                            <li>Power failure</li>
+                            <li>Natural disaster</li>
+                            <li>Human error</li>
+                            <li>Security breach</li>
+                        </ul>
+                    </li>
+                    <li><b>Achieved via:</b> Redundancy, Failover;</li>
+                </ul>
+            </li>
+            <li><b>Reliability:</b> System should be reliable and can handle failures?
+                <ul>
+                    <li><b>Fault Tolerance:</b>System works correctly under failures;</li>
+                    <li><b>Error Recovery:</b>System recovers from failures;</li>
+                    <li>Availability -> system is up; Reliability -> system is correct;</li>
+                </ul>
+            </li>
+            <li><b>Security:</b> How safe the system is from security threats?
+                <ul>
+                    <li><b>Authentication:</b> Verifying user identity before allowing them to use the system;</li>
+                    <li><b>Authorization:</b> Controlling access to resources based on user's role or permissions;</li>
+                    <li><b>Encryption:</b> Protecting data in transit and at rest;</li>
+                    <li><b>Compliance:</b> Adhering to relevant laws and regulations (Eg: GDPR, HIPAA);</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Detailed Non-Functional Requirements</b></div>
+    <div class="answer">
+        <ul>
+            <li><pre>
+| Category                        | Type               | Description                           |
+| ------------------------------- | ------------------ | ------------------------------------- |
+| **Performance**                 | Latency            | Time taken to respond to a request    |
+|                                 | Throughput         | Number of requests handled per second |
+|                                 | Resource Usage     | CPU, memory, bandwidth usage          |
+| **Scalability**                 | Horizontal Scaling | Adding more machines                  |
+|                                 | Vertical Scaling   | Increasing machine power              |
+| **Reliability**                 | Fault Handling     | System works correctly under failures |
+|                                 | Error Recovery     | Ability to recover from crashes       |
+| **Availability**                | Uptime             | % time system is operational          |
+|                                 | Failover           | Backup systems take over on failure   |
+| **Security**                    | Authentication     | Verifying user identity               |
+|                                 | Authorization      | Controlling access                    |
+|                                 | Encryption         | Protecting data                       |
+| **Usability**                   | Ease of Use        | User-friendly interface               |
+|                                 | Accessibility      | Works for all users/devices           |
+| **Maintainability**             | Modularity         | Easy to update components             |
+|                                 | Debugging          | Easy to identify/fix issues           |
+| **Portability / Compatibility** | Platform Support   | Works on different OS/devices         |
+|                                 | Interoperability   | Works with other systems              |
+| **Extensibility**               | Feature Addition   | Easy to add new features              |
+| **Testability**                 | Test Support       | Easy to test system behavior          |
+| **Observability**               | Logging            | Track system events                   |
+|                                 | Monitoring         | Measure system health                 |
+| **Compliance**                  | Legal/Regulatory   | GDPR, data laws, etc.                 |
+| **Durability**                  | Data Persistence   | Data is not lost                      |
+| **Fault Tolerance**             | Resilience         | Continues working during failures     |
+            </pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Functional vs Non-Functional Requirements</b></div>
+    <div class="answer">
+        <ul>
+            <li>Functional = features -> what a system should do;</li>
+            <li>Non-functional = quality & performance -> how well a system should perform;</li>
+        </ul>
+    </div>
+</body>
+
+</html>

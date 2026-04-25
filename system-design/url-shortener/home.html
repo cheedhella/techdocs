@@ -11,28 +11,235 @@
     <div class="question"><b>1. What is a URL Shortener?</b></div>
     <div class="answer">
         <ul>
-            <li>A service that creates short aliases for long URLs (e.g., bit.ly/3abc);</li>
+            <li>A service that creates short aliases for long URLs (Eg: bit.ly/3abc);</li>
             <li>When a user clicks the short link, the service redirects them to the original long URL;</li>
         </ul>
     </div>
 
-    <div class="question"><b>2. Key Requirements</b></div>
+    <div class="question"><b>2. Why is a URL Shortener needed?</b></div>
     <div class="answer">
         <ul>
-            <li><b>Shortening:</b> Generate a unique short key for a given URL;</li>
-            <li><b>Redirection:</b> Redirect users to the original URL with minimal latency;</li>
-            <li><b>High Availability:</b> The service must be always available for redirection;</li>
+            <li>Twitter has a limit on the number of characters in a tweet;</li>
+            <li>So, if you shorten a URL that you want to tweet, you will have more space for your tweet;</li>
         </ul>
     </div>
 
-    <div class="question"><b>3. High-Level Design</b></div>
+    <div class="question"><b>3. Functional Requirements</b></div>
     <div class="answer">
         <ul>
-            <li><b>API:</b> POST /shorten (long_url) -> short_url; GET /{short_key} -> Redirect;</li>
-            <li><b>Storage:</b> A NoSQL database (like MongoDB or Cassandra) or a relational database with a mapping of short_key to long_url;</li>
-            <li><b>Hashing:</b> Use Base62 encoding (a-z, A-Z, 0-9) to generate short keys;</li>
+            <li><b>Shortening:</b> Users can submit a long URL and receive a shortened URL;</li>
+            <li><b>Redirection:</b> When users access the short URL, redirect them to the original long URL;</li>
+            <br>
+            <li><b>Optional Features:</b>
+                <ul>
+                    <li><b>Custom Aliases:</b> Users can choose custom short URLs;</li>
+                    <li><b>Expiration Time:</b> Links can have an expiration time;</li>
+                    <li><b>User Authentication:</b> Users can authenticate themselves;</li>
+                    <li><b>Analytics Dashboard:</b> Provide a dashboard to view analytics(such as click count);</li>
+                </ul>
+            </li>
         </ul>
     </div>
+
+    <div class="question"><b>4. High-Level Architecture</b></div>
+    <div class="answer">
+        <img src="./high-level-design.png" alt="URL Shortener High-Level Architecture" style="width: 100%; max-width: 800px; margin: 20px 0;" />
+        <ul>
+            <li><b>API Gateway:</b> Single entry point for all client requests;</li>
+            <li><b>URL Shortening Service:</b> Handles POST requests to create short URLs and stores them in the NoSQL DB;</li>
+            <li><b>URL Redirection Request Handler:</b> Handles GET requests, checks the Cache first, and falls back to the NoSQL DB for redirects;</li>
+            <li><b>Analytics Service:</b> Tracks usage data and periodically flushes it from Cache to the NoSQL DB;</li>
+            <li><b>NoSQL DB:</b> Persistent storage for URL mappings and analytics;</li>
+            <li><b>Cache:</b> High-speed storage for frequent redirects and temporary analytics data;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>5. How to Generate Short URLs?</b></div>
+    <div class="answer">
+        <ul>
+            <ul>
+                <li><b>Approach #1: </b>Hashing + Collision Resolution 
+                    <ul>
+                        <li>long URL -> Hash Function such as MD5, SHA-1, SHA-256 -> fixed size string;</li>
+                        <li>Truncate: Hashes are long, but short URLs are only 7 characters long, so truncate;</li>
+                        <li>If there is a collision:
+                            <ul>
+                                <li>If it is same long URL, then it is not a collision, it is idempotent and we can reuse the short URL;</li>
+                                <li>If it is different long URL, then it is a collision, use one of below collision resolution techniques;</li>
+                            </ul>
+                        </li>
+                        <li><b>Collision Resolution Techniques</b>
+                            <ul>
+                                <li><b>Increase hash length:</b> Increase the length of the hash, until it is unique; Eg: abc123 → collision, abc1234 → unique;</li>
+                                <li><b>Rehash with salt:</b> Add a salt to input and retry, hash = H(long_url + salt); Eg: salt = 0 → collision, salt = 1 → retry, salt = 2 → retry;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><b>Approach #2: </b>Randomizer
+                    <ul>
+                        <li>Generate a random string of 7 characters;</li>
+                        <li>Check if it is unique, if not, generate a new one;</li>
+                    </ul>
+                </li>
+                <li><b>Approach #3: </b>ID generation + Base62 encoding (guarantees zero collisions) -> Systems like Bitly use this;
+                    <ul>
+                        <li>Generate a unique ID, like auto-incremented integer in database OR distributed ID generator like UUID;</li>
+                        <li>Convert it to base62; a–z (26) + A–Z (26) + 0–9 (10) = 62 characters;</li>
+                        <li>How base62 works?
+                            <ul>
+                                <li>0-9: 10 characters, A-Z: 26 characters, a-z: 26 characters; Total = 62 characters;</li>
+                                <li>To convert a number to base62, we need to divide the number by 62 and take the remainder; Repeat this process until the number is 0;</li>
+                                <li>Example:
+                                    <ul>
+                                        <li>123456 / 62 = 1991 remainder 14; 14 is encoded as e;</li>
+                                        <li>1991 / 62 = 32 remainder 7; 7 is encoded as 7;</li>
+                                        <li>32 / 62 = 0 remainder 32; 32 is encoded as w;</li>
+                                    </ul>
+                                </li>
+                                <li>So, 123456 in base62 is w7e;</li>
+                            </ul>
+                            <ul><b>How to decode base62 to number?</b>
+                                <li>w = 32, 7 = 7, e = 14</li>
+                                <li>w = 32 × 62², 7 = 7 × 62¹, e = 14</li>
+                                <li>w = 32 × 3844, 7 = 7 × 62, e = 14</li>
+                                <li>w = 32 × 3844 + 7 × 62 + 14</li>
+                                <li>w = 123456</li>
+                            </ul>
+                        </li>
+                        <li><b>How it guarantees zero collisions?</b>
+                            <ul>
+                                <li>Uniqueness is guaranteed by the unique ID generation;</li>
+                                <li>Since each ID is unique and Base62 is a one-to-one mapping, two different inputs can never produce the same short code;</li>
+                                <li>Hashing = compression → collisions possible; Base62 = conversion → collisions impossible;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </ul>
+    </div>    
+
+    <div class="question"><b>4. API Design</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>POST /shorten (long_url)</b> Takes a long URL and returns a short one;</li>
+            <li><b>GET /{short_key}</b> Redirects(HTTP 302 response code) the user to the original URL;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>5. Storage or Database Design</b></div>
+    <div class="answer">
+        <ul>
+            <li>While an in-memory hash table sounds fast, it won’t scale with 36.5 TB of URLs;</li>
+            <li>NoSQL database (like MongoDB or Cassandra) or a relational database with a mapping of short_key to long_url;</li>
+            <li>Optionally a cache (like Redis) for fast access to frequently hit short URLs;</li>
+            <li><b>Table: URL Mapping</b>
+                <ul>
+                    <li>id (PK)</li>
+                    <li>short_code (unique)</li>
+                    <li>long_url</li>
+                    <li>created_at</li>
+                    <li>expiry_date (optional)</li>
+                </ul>
+            </li>
+            <li>Use SQL (like MySQL) for consistency Or NoSQL (like Cassandra) for massive scale</li>
+            <li>Question: Can we have scale read/write replicas separately for the database? which database support it?</li>
+            <li>If your goal is to scale URL creation (write path) and URL redirection (read path) independently, the answer isn’t just “pick one database”; You need to pick two different databases;</li>
+            <li><b>For a URL shortener (like Bitly):</b>
+                <ul>
+                    <li>Write path (shorten URL) → low traffic, needs consistency</li>
+                    <li>Read path (redirect) → extremely high traffic, needs speed</li>
+                </ul>
+                <li>👉 This is a classic read-heavy system</li>
+                <li>I’d use a relational database like MySQL for writes to ensure consistency, and a read-optimized layer like Redis or Cassandra for redirects. This separates read and write paths (CQRS), allowing independent scaling;</li>
+                <li>Why to use RDBMS on write path, why not NoSQL? RDBMS supports strong consistency, but hard to scale, so it is suitable on write path; NoSQL supports eventual consistency, but easy to scale, so it is suitable on read path;</li>
+                <li>As RDBMS also supports read replicas, we can use it on read path as well? yes, we can use it, but it has some limits on scaling;</li>
+                <br>
+                <li><b>Small scale → RDBMS + replicas ✅</b></li>
+                <li><b>Medium scale → RDBMS + replicas + Redis cache ✅</b></li>
+                <li><b>Massive scale → RDBMS + Redis cache + NoSQL ✅</b></li>
+            </li>
+            <li>if write path use rdbms and read path uses nosql, how sync happens?
+                <ul>
+                    <li>Dual Write (Synchronous) - API → Write to SQL → Write to NoSQL → Success;
+                        <ul>
+                            <li>Pros: Strong consistency, easy to implement;</li>
+                            <li>Cons: Hard to maintain (distributed transaction problem);</li>
+                        </ul>
+                    </li>
+                    <li>Asynchronous Sync via Queue - API → Write to SQL → Publish event → Queue → Worker → Write to NoSQL;
+                        <ul>
+                            <li>Reliable, Scalable, Decoupled systems;</li>
+                        </ul>
+                    </li>
+                    <li>Change Data Capture (CDC) - SQL DB → binlog/transaction log → CDC tool → NoSQL
+                        <ul>
+                            
+                        </ul>
+                    </li>
+                    <li><b>Write Path</b>
+                        <ul>
+                            <li>User creates short URL</li>
+                            <li>Store in SQL</li>
+                            <li>Event sent (Kafka / CDC)</li>
+                        </ul>
+                    </li>
+                    <li><b>Sync</b>
+                        <ul>
+                            <li>Worker consumes event</li>
+                            <li>Writes mapping to NoSQL</li>
+                        </ul>
+                    </li>
+                    <li><b>Read Path</b>
+                        <ul>
+                            <li>Redirect service queries NoSQL</li>
+                            <li>Falls back to cache/DB if needed</li>
+                        </ul>
+                    </li>
+                </ul>
+                As NoSQL is eventually consistent, Right after creation, short URL might not work for a few milliseconds/seconds;
+                To mitigate this, use a write-through cache OR fallback to SQL DB, in case of miss;
+
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>6. Caching Strategy</b></div>
+    <div class="answer">
+        <ul>
+            <li>Optionally a cache (like Redis) for fast access to frequently hit short URLs;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>7. Scaling Strategy</b></div>
+    <div class="answer">
+        <ul>
+            <li>Sharded Database: Use DB sharding or partitioning to handle massive growth;</li>
+            <li>Distributed ID Generator: Critical for multi-server environments;</li>
+        </ul>
+    </div>
+
+    
+
+<pre>
+    Systems like Bitly don’t rely purely on sequential IDs:
+    <ul><b>They add randomness;</b>
+        <li>They add randomness;</li>
+    </ul>
+<ul><b>Use longer tokens;</b>
+    <li>Use longer tokens;</li>
+    <li><b></b>Apply rate limiting & abuse detection;</b></li>
+
+
+    Rate Limiter: Prevent abuse from bots or malicious users
+(see: Rate Limiter Design)
+Analytics: Track clicks, user agents, geolocation
+Security: Add expiration time for links or restrict access
+Sharded Database: Use DB sharding or partitioning to handle massive growth
+Distributed ID Generator: Critical for multi-server environments
+(see: Unique ID Generator Design)
+</pre>
 </body>
 
 </html>

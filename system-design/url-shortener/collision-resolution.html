@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Collision Resolution Techniques - System Design</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is a Hash Collision?</b></div>
+    <div class="answer">
+        <ul>
+            <li>A collision occurs when two different keys produce the same hash value (index) after passing through a hash function;</li>
+            <li>Since a hash table has a finite size but the number of possible keys is often infinite, collisions are inevitable;</li>
+            <li>Collision resolution techniques are strategies used to handle these situations and ensure data can still be stored and retrieved correctly;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Separate Chaining (Open Hashing)</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>How it works:</b> Each slot in the hash table points to a linked list (or another data structure) of all items that hash to the same index;</li>
+            <li><b>Advantages:</b> Simple to implement; the hash table never "fills up" (it just gets slower);</li>
+            <li><b>Disadvantages:</b> Uses extra memory for pointers; performance degrades to O(n) if many items hash to the same slot;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Open Addressing (Closed Hashing)</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>How it works:</b> All items are stored directly in the hash table. If a collision occurs, the algorithm "probes" for the next available slot;</li>
+            <li><b>Common Probing Methods:</b>
+                <ul>
+                    <li><b>Linear Probing:</b> Check the next slot (index + 1, index + 2, etc.); can lead to "primary clustering";</li>
+                    <li><b>Quadratic Probing:</b> Check slots at increasing intervals (index + 1^2, index + 2^2, etc.); reduces primary clustering;</li>
+                    <li><b>Double Hashing:</b> Use a second hash function to determine the step size for probing; very effective at reducing clustering;</li>
+                </ul>
+            </li>
+            <li><b>Advantages:</b> Better cache performance as data is stored contiguously; no extra memory for pointers;</li>
+            <li><b>Disadvantages:</b> Table can get full; sensitive to the "load factor";</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Comparison of Techniques</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Separate Chaining:</b> Best when the number of elements is unknown or could be much larger than the table size;</li>
+            <li><b>Open Addressing:</b> Best when the number of elements is known and fits within the table, and when memory/cache efficiency is critical;</li>
+        </ul>
+    </div>
+</body>
+
+</html>
