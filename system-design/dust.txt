@@ -18,3 +18,36 @@ Non-functional requirements
         Achieved via redundancy, failover
     👉 Users expect services to “always work.”
 
+33
+
+
+
+𝗗𝗦𝗔
+1. Implement LRU/LFU Cache
+2. Find Median from Data Stream
+3. Word Ladder problem
+4. Merge K Sorted Lists
+5. Detect Cycle in a Directed Graph
+6. Maximum Subarray Sum
+7. Kth Largest Element in a Stream
+8. Task Scheduler/Priority-based scheduling
+
+𝗝𝗮𝘃𝗮 𝗕𝗮𝗰𝗸𝗲𝗻𝗱
+9. HashMap vs ConcurrentHashMap vs Hashtable
+10. JVM memory model: Heap, Stack, GC
+11. ExecutorService, Callable, and Future
+12. How Spring Boot Dependency Injection works
+13. REST vs Kafka/RabbitMQ in Microservices
+14. Transactions in Spring Boot
+15. SQL vs NoSQL
+16. Designing scalable REST APIs
+
+𝗦𝘆𝘀𝘁𝗲𝗺 𝗗𝗲𝘀𝗶𝗴𝗻
+17. Design a Chat Application
+18. Design a URL Shortener
+19. Design a Notification System
+20. Scale a Video Streaming platform
+21. Design a Payment System
+22. Design an API Rate Limiter
+23. Design an E-commerce Checkout System
+24. Design a Ride-Hailing App

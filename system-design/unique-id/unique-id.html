@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Unique ID Generator</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is a Unique ID?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is a number or string that uniquely identifies an object;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. Why Unique ID is needed?</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Transaction ID</b> -> Unique ID for a transaction;</li>
+            <li><b>Node ID</b> -> In Kafka or etcd, each node is assigned a Unique ID;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. Functional Requirements</b></div>
+    <div class="answer">
+        <ul>
+            <li>Every ID generated should be unique across all nodes in the system;</li>
+            <li><b>Optional Features:</b>
+                <ul>
+                    <li>Do we need IDs to reflect time order? IDs increases with time;</li>
+                    <li>Format requirements - Should it be a string OR number, any cap on length etc?</li>
+                    <li>Batch ID generation - Should it be possible to generate multiple IDs at once?</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Different Unique ID Generators</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Database Auto-increment</b> -> Use MySQL/Postgres AUTO_INCREMENT; Cons: single point of failure, bottleneck, limited scalability, not scalable for distributed systems;</li>
+            <li><b>UUID - Universal Unique ID</b> -> Use UUIDv4/v7; v4 is not time-ordered, v7 is time-ordered; Pros: Each service can generate IDs independently, without any central coordination; Widely used in microservices;</li>
+            <li><b>Snowflake - Twitter's Unique ID Generator</b></li>
+            <br>
+            <li>Most of the modern systems use either Snowflake or UUIDv7;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>5. UUID - Universal Unique ID</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is a 128-bit number(32 hexadecimal digits), usually shown in 5 groups separated by hyphens; Eg: 550e8400-e29b-41d4-a716-446655440000</li>
+            <li><b>Pros:</b>
+                <ul>
+                    <li>Each service can generate IDs independently, without any central coordination;</li>
+                    <li>Built-in libraries available in most programming languages;</li>
+                    <li>UUIDv4 is not time-ordered, UUIDv7 is time-ordered;</li>
+                </ul>
+            </li>
+            <li><b>Cons:</b>
+                <ul>
+                    <li>Size - 128-bit number, which is larger than a 64-bit number;</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question"><b>6. Snowflake - Twitter's Unique ID Generator</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is a distributed unique ID generator algorithm, by Twitter;</li>
+            <li>It generates unique, time-ordered, compact(64-bit) IDs;</li>
+            <li>Snowflake ID is a 64-bit number, which is a combination of:
+                <ul>
+                    <li>41 bits for timestamp;</li>
+                    <li>10 bits for machine ID;</li>
+                    <li>12 bits for sequence number;</li>
+                </ul>
+            </li>
+            <li><b>How it works?</b>
+                <ul>
+                    <li>It gets the current timestamp in milliseconds;</li>
+                    <li>It checks last timestamp, if it is the same, it increments the sequence number; If it is not the same, it resets the sequence number to 0;</li>
+                    <li>It combines the timestamp, machine ID and sequence number to form a 64-bit ID;</li>
+                    <li>It returns the ID;</li>
+                </ul>
+            </li>
+            <li><pre><code>
+                public class SnowflakeGenerator {
+
+                    // ===== Constants =====
+                    private static final long EPOCH = 1672531200000L; // Jan 1, 2023
+                
+                    private static final long MACHINE_ID_BITS = 10L;
+                    private static final long SEQUENCE_BITS = 12L;
+                
+                    private static final long MAX_MACHINE_ID = ~(-1L << MACHINE_ID_BITS); // 1023
+                    private static final long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS);     // 4095
+                
+                    private static final long MACHINE_SHIFT = SEQUENCE_BITS;
+                    private static final long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS;
+                
+                    // ===== Instance Variables =====
+                    private final long machineId;
+                    private long sequence = 0L;
+                    private long lastTimestamp = -1L;
+                
+                    // ===== Constructor =====
+                    public SnowflakeGenerator(long machineId) {
+                        if (machineId < 0 || machineId > MAX_MACHINE_ID) {
+                            throw new IllegalArgumentException("Machine ID out of range");
+                        }
+                        this.machineId = machineId;
+                    }
+                
+                    // ===== Generate ID =====
+                    public synchronized long nextId() {
+                        long timestamp = currentTimeMillis();
+                
+                        // 🚨 Clock moved backwards
+                        if (timestamp < lastTimestamp) {
+                            throw new RuntimeException(
+                                "Clock moved backwards. Refusing to generate ID."
+                            );
+                        }
+                
+                        if (timestamp == lastTimestamp) {
+                            // Same millisecond → increment sequence
+                            sequence = (sequence + 1) & MAX_SEQUENCE;
+                
+                            // 🚨 Sequence overflow
+                            if (sequence == 0) {
+                                timestamp = waitNextMillis(lastTimestamp);
+                            }
+                        } else {
+                            // New millisecond → reset sequence
+                            sequence = 0L;
+                        }
+                
+                        lastTimestamp = timestamp;
+                
+                        // 🧠 Construct ID using bit shifting
+                        return ((timestamp - EPOCH) << TIMESTAMP_SHIFT)
+                                | (machineId << MACHINE_SHIFT)
+                                | sequence;
+                    }
+                
+                    // ===== Helpers =====
+                    private long waitNextMillis(long lastTimestamp) {
+                        long timestamp = currentTimeMillis();
+                        while (timestamp <= lastTimestamp) {
+                            timestamp = currentTimeMillis();
+                        }
+                        return timestamp;
+                    }
+                
+                    private long currentTimeMillis() {
+                        return System.currentTimeMillis();
+                    }
+                }
+
+                public class Main {
+                    public static void main(String[] args) {
+                        SnowflakeGenerator generator = new SnowflakeGenerator(1);
+                
+                        for (int i = 0; i < 5; i++) {
+                            System.out.println(generator.nextId());
+                        }
+                    }
+                }
+            </code></pre></li>
+        </ul>
+    </div>
+
+    <div class="question"><b>7. Bottom line</b></div>
+    <div class="answer">
+        <ul>
+            <li>Use UUIDv4, if ordering is not important;</li>
+            <li>Most of the modern systems use either Snowflake or UUIDv7;</li>
+            <li><pre><code>
+| Feature        | UUID v4   | UUID v7 | Snowflake |
+| -------------- | --------- | ------- | --------- |
+| Coordination   | ❌         | ❌       | Minimal   |
+| Ordering       | ❌         | ✅       | ✅         |
+| Size           | 128-bit   | 128-bit | 64-bit    |
+| DB performance | Poor      | Better  | Best      |
+| Simplicity     | Very easy | Easy    | Medium    |
+            </code></pre></li>
+        </ul>
+    </div>
+
+</pre>
+</body>
+
+</html>
