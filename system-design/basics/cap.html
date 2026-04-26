@@ -8,16 +8,40 @@
 </head>
 
 <body>
-    <div class="question"><b>1. What is Database Sharding?</b></div>
+    <div class="question"><b>1. What is Consistency?</b></div>
     <div class="answer">
         <ul>
-            <li>Sharding is a database architecture pattern that involves breaking a large database into smaller, faster, and more easily managed parts called shards;</li>
-            <li>Each shard is a separate database that contains a subset of the total data;</li>
-            <li>It is a form of horizontal scaling for databases;</li>
+            <li>All users should see the same data at a given point of time, no matter to which node they are connected to;</li>
+            <li>To achieve Consistency, whenever data is written to one node, it must be instantly replicated to all the other nodes in the system, before the write is deemed successful;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. What is Availability?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Any client making a request for data <b>gets a response, not an error</b>, even if one or more nodes are down, though it might not be the latest;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>3. What is Partition Tolerance?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Partition means communication breakdown b/w 2 nodes;</li>
+            <li>Partition Tolerance means <b>System should continue to work, despite node failures and network breakdown b/w any number of nodes in the system</b>;</li>
+            <li>Data records are sufficiently replicated across combinations of nodes and networks, to keep the system up through intermittent outages;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. What is CAP Theorem?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It says: It is impossible to build a distributed system, that guarantees all 3; It only guarantees 2 out of 3;</li>
+            <li>If you choose CP: it will gives you correct data, but it will reject requests when network partitioning occurs; Eg: MongoDB, HBase, Redis;</li>
+            <li>If you choose AP: it will gives you data, may be not correct data, but it will not reject requests when network partitioning occurs; Eg: Cassandra, DynamoDB, CouchDB;</li>
+            <li>If you choose CA: it works well only when there are no network failures; Not practical for distributed systems; Eg: Traditional RDBMS like MySQL/Postgres on a single server;</li>
+            <li>So, in distributed systems, P is not optional, you must handle network failures; So, you need to choose b/w Consistency and Availability;</li>
+            <li>If you choose CP, everyone will see the same and latest data(writes are failed when network partitioning occurs); If you choose AP, you can always send/read messages(read may not be latest);</li>
         </ul>
     </div>
 </body>
-
-
-
 </html>

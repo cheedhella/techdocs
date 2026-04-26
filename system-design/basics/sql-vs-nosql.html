@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>SQL vs NoSQL</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is SQL?</b></div>
+    <div class="answer">
+        <ul>
+            <li>SQL is a relational database management system (RDBMS) that uses the Structured Query Language (SQL) to manage and query data;</li>
+            <li>SQL is a standard language for managing relational databases;</li>
+            <li>SQL is a declarative language, which means that you describe what you want to achieve, rather than how to achieve it;</li>
+            <li>SQL is a powerful language for managing and querying data;</li>
+            <li>SQL is a mature language, with a long history of development and use;</li>
+            <li>SQL is a mature language, with a long history of development and use;</li>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. How is Consistent Hashing different from Mod function?</b></div>
+    <div class="answer">
+        <ul>
+            <li>With mod function, when a new server is added/removed, you need to rehash all the keys, but that's a time consuming operation;</li>
+            <li>With consistent hashing, when a new server is added/removed, only a fraction of keys, k/n, needs to be remapped, where k=number of keys, n = number of servers;</li>
+            <li>With consistent hashing, when a server is removed, only the keys that were mapped to the removed server need to be remapped, while the rest of the keys remain unchanged;</li>
+        </ul>
+    </div>
+    
+    <div class="question"><b>3. Example of Consistent Hashing</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Imagine a ring with 3 servers:</b></li>
+            <ul>
+                <li>A at position 10</li>
+                <li>B at position 50</li>
+                <li>C at position 80</li>
+            </ul>
+            <li><b>Key hashed to:</b></li>
+            <ul>
+                <li>45 → goes to B</li>
+                <li>70 → goes to C</li>
+                <li>90 → wraps around → goes to A</li>
+            </ul>
+            <li><b>If you add a new server at 60:</b></li>
+            <ul>
+                <li>Only keys between 50 and 60 move to the new server.</li>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Where is Consistent Hashing used?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Distributed caches (e.g., Memcached, Redis clusters)</li>
+            <li>Distributed databases (e.g., Cassandra, DynamoDB)</li>
+            <li>Load balancing systems</li>
+            <li>Content delivery networks (CDNs)</li>
+        </ul>
+    </div>
+
+</body>
+</html>

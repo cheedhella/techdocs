@@ -51,3 +51,234 @@ Non-functional requirements
 22. Design an API Rate Limiter
 23. Design an E-commerce Checkout System
 24. Design a Ride-Hailing App
+
+
+𝗥𝗼𝘂𝗻𝗱 𝟭: 𝗗𝗦 & 𝗔𝗹𝗴𝗼
+ - Design a special stack that supports: push(), pop(), and getMin() in constant time
+ - Phonebook Lookup Discussion: 
+ - Design a data structure to store a dynamic phonebook
+ - Support multiple types of lookups (e.g., by name, number, prefix, etc.)
+
+𝗥𝗼𝘂𝗻𝗱 𝟮: 𝗗𝗦 & 𝗔𝗹𝗴𝗼
+ - Design a Transit System: entry(string rider, string station)
+ - exit(string rider, string station)
+ - getAverageTransitTime(string entryStation, string exitStation)
+ - Must handle: Efficient tracking of rider times
+ - Aggregation of transit durations
+ - Time complexity analysis of each method
+
+𝗥𝗼𝘂𝗻𝗱 𝟯: 𝗛𝗶𝗴𝗵 𝗟𝗲𝘃𝗲𝗹 𝗗𝗲𝘀𝗶𝗴𝗻 (𝗛𝗟𝗗)
+ - Problem: Design a Rules Management System
+ - Key Features: Users can Create / Modify / View rules
+ - Rules have conditions like: A = B + C AND B * C > 1000
+ - B * C > 1000
+ - A and B = True
+ - Actions and events are associated with rules
+ - System should evaluate rules on events and trigger appropriate actions
+ - https://lnkd.in/dte69Z5N
+
+𝗥𝗼𝘂𝗻𝗱 𝟰: 𝗧𝗲𝗮𝗺 𝗟𝗲𝗮𝗱 𝗥𝗼𝘂𝗻𝗱
+ - Deep dive into resume and project experiences
+ - Day-to-day responsibilities and ownership
+ - Technical decision-making scenarios
+ - Standard behavioral questions:
+ - How do you prioritize tasks?
+ - How do you handle production incidents?
+ - How do you ensure code quality across the team?
+
+𝗥𝗼𝘂𝗻𝗱 𝟱: 𝗠𝗮𝗻𝗮𝗴𝗲𝗿𝗶𝗮𝗹 𝗥𝗼𝘂𝗻𝗱
+ - Describe a time you had a conflict with a team member and how you resolved it.
+ - A situation where you took the initiative outside your core responsibility
+Managing deadlines and pressure in a release cycle
+ - How your work aligns with business outcomes
+ - A mistake you made and what you learned from it
+ - Why Bloomberg?
+
+𝗞𝗲𝗲𝗽𝗶𝗻𝗴 𝘁𝗵𝗶𝘀 𝗶𝗻 𝗺𝗶𝗻𝗱, 𝗜 𝘄𝗲𝗻𝘁 𝗱𝗲𝗲𝗽 𝗮𝗻𝗱 𝗱𝗼𝗰𝘂𝗺𝗲𝗻𝘁𝗲𝗱 𝗲𝘃𝗲𝗿𝘆𝘁𝗵𝗶𝗻𝗴 𝗶𝗻𝘁𝗼 𝗮 𝗝𝗮𝘃𝗮 𝗕𝗮𝗰𝗸𝗲𝗻𝗱 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗿 𝗚𝘂𝗶𝗱𝗲.
+
+
+
+
+🧠 Round 1 (DSA + Behavioral)
+- Construct a BST from preorder traversal (without using inorder)
+- Array-based problem using prefix/suffix (Follow-up: Optimize to O(1) space
+
+⚙️ Round 2 (DSA + Behavioral)
+- Binary search on answer (similar to Allocate Pages problem)
+- Graph problem based on topological sort (similar to Course Schedule)
+
+🤖 Round 3 (DSA + GenAI + Behavioral)
+- Problem combining strings + deque
+- Designed a function to shuffle a playlist for a music player
+
+💡 Key Takeaways
+- Follow-ups decide the outcome, not the initial solution
+- Interviewers expect you to optimize beyond the initial solution
+- Clear communication and reasoning matter as much as coding
+- You need to think out loud, not just think fast
+- GenAI-related discussions are becoming increasingly relevant
+
+
+
+Your stress response is killing your potential. 
+
+12 signals you're sending without realizing:
+
+Slow down enough to notice how these patterns show up in your day:
+
+The nervous pen tapping in meetings
+The late night email checks
+The 'let me do this one more thing' (a personal fav 🙄)
+
+We've normalized these stress responses, but they're quietly limiting your success.
+
+12 Patterns to Break Now:
+
+1. Overthinking Decisions
+↳ You're seen as indecisive and miss key opportunities 
+↳ Take a 15-minute walk outside, decide when you return
+
+2. Physical Tension
+↳ Your body language is contagious - be mindful of it
+↳ Take movement breaks between calls
+
+3. Busy Without Results
+↳ You're burning energy on low-impact work 
+↳ Done by one - daily priorities done by 1 pm 
+
+4. Over-Explaining
+↳ You're diluting your message and losing influence 
+↳ Lead with your conclusion, stop after three key points
+
+5. Defensive Responses
+↳ You're blocking valuable feedback and growth 
+↳ Ask one question before defending your position
+
+6. Constant Task-Switching
+↳ You're killing your focus and credibility 
+↳ Close all tabs except one, batch small tasks after 3pm
+
+7. Fear of Imperfection
+↳ You're missing deadlines waiting for "perfect" 
+↳ Share after second draft, move on after three rounds
+
+8. Creating False Urgency
+↳ You're training people to ignore real priorities 
+↳ Question any deadline under 24 hours
+
+9. Avoiding Hard Conversations
+↳ Problems grow while your influence shrinks 
+↳ Schedule while confident, lead with data not drama
+
+10. Skipping Recovery Time
+↳ Your decisions get worse as the day goes on 
+↳ Take real breaks after intense meetings
+
+11. Seeking Constant Validation
+↳ You're undermining your authority and expertise 
+↳ Wait one hour before seeking feedback
+
+12. Ignoring Energy Limits
+↳ Your peak hours are wasted on low-value work 
+↳ Book tough meetings when you're energy is strongest
+
+The patterns you notice are the patterns you can change ✨
+
+What's one you're ready to shift?
+
+
+
+Here's what top companies actually test:
+Google — 85% DSA + System Design
+Amazon — 70% DSA + System Design
+Microsoft — 75% DSA + System Design
+Atlassian — 80% DSA + System Design
+
+The formula is simple. Master these two. 
+
+DSA  8 must-solve questions
+
+1.  LRU Cache — Medium → https://lnkd.in/ghR84W73
+2.  Find Median from Data Stream — Hard → https://lnkd.in/gR7M6u7U
+3.  Word Ladder — Hard → https://lnkd.in/gFZctsw2
+4.  Merge K Sorted Lists — Hard → https://lnkd.in/gcuziWC2
+5.  Number of Islands — Medium → https://lnkd.in/gJztzCyU
+6.  Maximum Subarray (Kadane's) — Medium → https://lnkd.in/g68StqrH
+7.  Kth Largest Element in a Stream — Medium → https://lnkd.in/gwTYskdA
+8.  Course Schedule (Cycle Detection) — Medium → https://lnkd.in/gWu5yR7i
+
+
+System Design — 8 must-know questions
+
+9. Design WhatsApp / Slack (Chat App)
+10. Design a URL Shortener (like bit.ly)
+11. Design a Notification System
+12. Design YouTube (Video Streaming)
+13. Design a Payment System (Razorpay / Stripe)
+14. Design an API Rate Limiter
+15. Design Amazon Checkout (E-commerce)
+16. Design Uber / Ola (Ride Hailing)
+
+If you haven't touched these yet  start today.
+Even one problem a day puts you ahead of most.
+
+Save this and follow Sweta Soni.
+Share it with someone preparing right now.
+
+Join Whatsapp group to get regular updates 👇
+https://lnkd.in/gauGnV-U
+
+
+
+Here are the 3 things that actually moved the needle:
+
+1. I stopped chasing new Leetcode problems. Instead of solving a fresh question every day, I repeated the ones that actually show up in interviews every 90 days. Pattern recognition beats problem count every single time. I put together a question bank for you here → https://lnkd.in/gG4q8aHs
+
+2. I studied system design early. Most people think design questions are reserved for senior rounds. They're showing up in new grad and intern loops now too. Most people find out the hard way, mid-interview. I wrote a guide to help with that → https://lnkd.in/gx6vR_Gc
+
+3. I started posting on LinkedIn once a week. I'd share what I was learning, what I was building, what wasn't working. Within a few months, recruiters were reaching out to me instead of me cold-applying into the void.
+
+The people who land offers at top tech companies aren't always the ones who work the hardest. They're the ones who figure out what actually matters and go all in on that.
+
+
+
+
+  Distributed News Feed System Design
+
+---
+When you open LinkedIn and your feed loads in under a second, we are seeing one of the hardest problems in distributed systems — assembling a personalised, ranked feed within 100 milliseconds for one billion simultaneous users.
+
+---
+**The Fan-out Problem**
+A celebrity with 500M followers publishing one post generates 500M Cassandra writes under a naive model, saturating the storage cluster for over 8 minutes. The hybrid fan-out model solves this. Regular users receive write-time fan-out, pre-populating feed caches for instant reads. Accounts above a dynamically adjustable threshold receive read-time fan-out, storing a single event record. The threshold adjusts in real time based on load with no deployment required.
+
+**The Ranking Problem**
+A personalised ranked feed within 100ms requires two pre-computed signals: relationship strength scores from months of interaction history with time-decay weighting, and engagement velocity scores reflecting current momentum. The ranking computation (300-500ms) never runs in the reader's critical path — it runs proactively before any request is made.
+
+**The Stack**
+Kafka (4 topics), Cassandra (5 purpose-built tables), Redis (4 key spaces — ranked feed 15min TTL, post content 1hr, relationship strength 6hr, engagement velocity 1hr). Spring Boot with WebFlux, Spring Data Cassandra, Spring Data Redis with Lettuce, Spring Kafka, Spring Cloud Config, ShedLock, and Micrometer with OpenTelemetry.
+
+**Back-of-Envelope Numbers**
+5,780 posts per second average, 58K at peak. Celebrity fan-out reduced from 500M Cassandra writes to 1 write per post. 47GB Redis working memory at 100M active users. 54TB Cassandra storage across both tables with replication factor 3. 14-20 node Cassandra cluster. Single Ranking Engine instance at 150 computations per second is sufficient for steady-state 100M active users on 15-minute TTL cycles.
+
+**The Trade-offs**
+The 15-minute TTL means a reader may see content up to 15 minutes old — acceptable for social engagement, not for financial systems. The significance threshold creates asymmetric timing: strong connections get near-real-time updates, weak connections wait for TTL expiry. Deliberate product decision.
+
+**What the Diagram Does Not Show**
+Four production-essential components omitted due to space but fully expandable: Redis primary-replica clusters with Sentinel failover, Cassandra multi-node replication with LOCAL_QUORUM consistency, Kafka per-topic dead letter queues with exponential backoff, and the proactive WebSocket path where FeedUpdateWorker publishes through Redis pub/sub to notify connected readers of new content without disrupting their scroll.
+
+
+
+
+Having 12 years of experience in Networking L2/L3 protocols, Linux.
+
+->Hands-on experiance in Layer2 switching features such as STP, VLAN, LAG, MLAG, Static MAC Filtering, Port MAC Locking, LLDP, FDB, MFDB, IGMP snooping, MLD snooping.
+->Experience in L2/L3 Protocols, TCP/IP standards
+->Hands on Experiance  in Layer3 Routing features such as static Routing, RIP, OSPF, OSPF LSA flood blocking.
+->Experience in data center features such as DCBX, PFC, ETS , ISCSI.
+->Strong problem solving and debugging skills.
+->Hands on experiance in Network Management Systems:
+                      • Simple Network Management Protocol (SNMP),
+                      •Command Line Interface (CLI). 
+                      •Web interface.
+->Expertise in working on Ixia traffic generator Tool, SNMP tools : MG-Soft, Mib Browser, NetSNMP and Other tools Cisco ACS Server,RAR.

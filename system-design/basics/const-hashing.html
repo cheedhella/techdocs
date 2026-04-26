@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Consistent Hashing</title>
+    <link rel="stylesheet" href="../resources/css/styles.css" />
+    <link rel="stylesheet" href="../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Consistent Hashing?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Consistent hashing is a technique used in distributed systems to evenly distribute data across multiple nodes in a way that minimizes disruption, when nodes are added or removed;</li>
+            <li>The goal of consistent hashing is to map a key to same server, even if the number of servers change;</li>
+            <li>With consistent hashing, when a new node is added/removed, only a fraction of keys, k/n, needs to be remapped, where k=number of keys, n = number of servers;</li>
+            <br>
+            <li>It places all the nodes in virtual ring structure, called hash-ring, by using hash function on node name OR IP address;</li>
+            <li>Theoretically, each node owns a range of the hash-ring, and any requests mapped to that range, will be served by the underlying node;</li>
+            <br>
+            <li>How to map a request to a Node?</li>
+            <ul>
+                <li>We hash each request, using the same hash function that we used to hash nodes and map it to the same range of values;</li>
+                <li>Identify that location on the ring and go clockwise from that location until a server is found;</li>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="question"><b>2. How is Consistent Hashing different from Mod function?</b></div>
+    <div class="answer">
+        <ul>
+            <li>With mod function, when a new server is added/removed, you need to rehash all the keys, but that's a time consuming operation;</li>
+            <li>With consistent hashing, when a new server is added/removed, only a fraction of keys, k/n, needs to be remapped, where k=number of keys, n = number of servers;</li>
+            <li>With consistent hashing, when a server is removed, only the keys that were mapped to the removed server need to be remapped, while the rest of the keys remain unchanged;</li>
+        </ul>
+    </div>
+    
+    <div class="question"><b>3. Example of Consistent Hashing</b></div>
+    <div class="answer">
+        <ul>
+            <li><b>Imagine a ring with 3 servers:</b></li>
+            <ul>
+                <li>A at position 10</li>
+                <li>B at position 50</li>
+                <li>C at position 80</li>
+            </ul>
+            <li><b>Key hashed to:</b></li>
+            <ul>
+                <li>45 → goes to B</li>
+                <li>70 → goes to C</li>
+                <li>90 → wraps around → goes to A</li>
+            </ul>
+            <li><b>If you add a new server at 60:</b></li>
+            <ul>
+                <li>Only keys between 50 and 60 move to the new server.</li>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="question"><b>4. Where is Consistent Hashing used?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Distributed caches (e.g., Memcached, Redis clusters)</li>
+            <li>Distributed databases (e.g., Cassandra, DynamoDB)</li>
+            <li>Load balancing systems</li>
+            <li>Content delivery networks (CDNs)</li>
+        </ul>
+    </div>
+
+</body>
+</html>
