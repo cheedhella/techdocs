@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Organization Structure</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">Build an in-memory system for a company hierarchy:</div>
+    <div class="answer">
+        <ul>
+            <li><pre><code>
+<b>Requirements:</b>
+Add Department
+Add Sub-department
+Add Employee
+Get common department of two employees (like LCA – Lowest Common Ancestor)
+
+A Department can have:
+    sub-departments (children)
+    employees
+    a parent department
+
+An Employee can have:
+    a department
+    a name
+            </code></pre></li>
+        </ul>
+        <pre><code>
+import java.util.*;
+
+// Employee class
+class Employee {
+    private final String name;
+    private Department department;
+
+    public Employee(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+}
+
+// Department class
+class Department {
+    private final String name;
+    private final Department parent;
+    private final List<Department> subDepartments = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
+
+    public Department(String name, Department parent) {
+        this.name = name;
+        this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Department getParent() {
+        return parent;
+    }
+
+    public List<Department> getSubDepartments() {
+        return subDepartments;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void addSubDepartment(Department dept) {
+        subDepartments.add(dept);
+    }
+
+    public void addEmployee(Employee emp) {
+        employees.add(emp);
+        emp.setDepartment(this);
+    }
+}
+
+// Organization system
+class Organization {
+    private final Map<String, Department> departments = new HashMap<>();
+    private final Map<String, Employee> employees = new HashMap<>();
+
+    // Add department
+    public void addDepartment(String name, String parentName) {
+        Department parent = parentName == null ? null : departments.get(parentName);
+        Department dept = new Department(name, parent);
+
+        if (parent != null) {
+            parent.addSubDepartment(dept);
+        }
+
+        departments.put(name, dept);
+    }
+
+    // Add employee
+    public void addEmployee(String empName, String deptName) {
+        Department dept = departments.get(deptName);
+        if (dept == null) {
+            throw new IllegalArgumentException("Department not found");
+        }
+
+        Employee emp = new Employee(empName);
+        dept.addEmployee(emp);
+        employees.put(empName, emp);
+    }
+
+    // Get common department (LCA)
+    public Department getCommonDepartment(String emp1, String emp2) {
+        Employee e1 = employees.get(emp1);
+        Employee e2 = employees.get(emp2);
+
+        if (e1 == null || e2 == null) return null;
+
+        Set<Department> ancestors = new HashSet<>();
+
+        // Collect ancestors of emp1
+        Department d1 = e1.getDepartment();
+        while (d1 != null) {
+            ancestors.add(d1);
+            d1 = d1.getParent();
+        }
+
+        // Traverse emp2's chain
+        Department d2 = e2.getDepartment();
+        while (d2 != null) {
+            if (ancestors.contains(d2)) {
+                return d2;
+            }
+            d2 = d2.getParent();
+        }
+
+        return null;
+    }
+}
+
+// Main class
+public class Main {
+    public static void main(String[] args) {
+        Organization org = new Organization();
+
+        // Build hierarchy
+        org.addDepartment("Company", null);
+        org.addDepartment("Engineering", "Company");
+        org.addDepartment("HR", "Company");
+        org.addDepartment("Backend", "Engineering");
+        org.addDepartment("Frontend", "Engineering");
+
+        // Add employees
+        org.addEmployee("Alice", "Backend");
+        org.addEmployee("Bob", "Frontend");
+        org.addEmployee("Charlie", "HR");
+
+        // Find common department
+        Department common = org.getCommonDepartment("Alice", "Bob");
+        System.out.println("Common Dept (Alice & Bob): " +
+                (common != null ? common.getName() : "None"));
+
+        common = org.getCommonDepartment("Alice", "Charlie");
+        System.out.println("Common Dept (Alice & Charlie): " +
+                (common != null ? common.getName() : "None"));
+    }
+}
+
+Add operations → O(1)
+Get common department → O(h) (height of tree)
+        </code></pre>
+
+        <br><br>
+        <pre><code>
+
+
+// Thread-safe implementation
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+
+// Employee
+class Employee {
+    private final String name;
+    private volatile Department department;
+
+    public Employee(String name) {
+        this.name = name;
+    }
+
+    public String getName() { return name; }
+
+    public Department getDepartment() { return department; }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+}
+
+// Department
+class Department {
+    private final String name;
+    private final Department parent;
+
+    // Thread-safe lists
+    private final List<Department> subDepartments = new CopyOnWriteArrayList<>();
+    private final List<Employee> employees = new CopyOnWriteArrayList<>();
+
+    public Department(String name, Department parent) {
+        this.name = name;
+        this.parent = parent;
+    }
+
+    public String getName() { return name; }
+    public Department getParent() { return parent; }
+
+    public List<Department> getSubDepartments() { return subDepartments; }
+    public List<Employee> getEmployees() { return employees; }
+
+    public void addSubDepartment(Department dept) {
+        subDepartments.add(dept);
+    }
+
+    public void addEmployee(Employee emp) {
+        employees.add(emp);
+        emp.setDepartment(this);
+    }
+}
+
+// Organization (thread-safe)
+class Organization {
+    private final ConcurrentMap<String, Department> departments = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Employee> employees = new ConcurrentHashMap<>();
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    // Add department
+    public void addDepartment(String name, String parentName) {
+        lock.writeLock().lock();
+        try {
+            Department parent = parentName == null ? null : departments.get(parentName);
+            Department dept = new Department(name, parent);
+
+            if (parent != null) {
+                parent.addSubDepartment(dept);
+            }
+
+            departments.put(name, dept);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    // Add employee
+    public void addEmployee(String empName, String deptName) {
+        lock.writeLock().lock();
+        try {
+            Department dept = departments.get(deptName);
+            if (dept == null) {
+                throw new IllegalArgumentException("Department not found");
+            }
+
+            Employee emp = new Employee(empName);
+            dept.addEmployee(emp);
+            employees.put(empName, emp);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    // Read-heavy operation
+    // If many writes → use: Collections.synchronizedList(new ArrayList<>())
+    public Department getCommonDepartment(String emp1, String emp2) {
+        lock.readLock().lock();
+        try {
+            Employee e1 = employees.get(emp1);
+            Employee e2 = employees.get(emp2);
+
+            if (e1 == null || e2 == null) return null;
+
+            Set<Department> ancestors = new HashSet<>();
+
+            Department d1 = e1.getDepartment();
+            while (d1 != null) {
+                ancestors.add(d1);
+                d1 = d1.getParent();
+            }
+
+            Department d2 = e2.getDepartment();
+            while (d2 != null) {
+                if (ancestors.contains(d2)) return d2;
+                d2 = d2.getParent();
+            }
+
+            return null;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+}
+
+// Main
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Organization org = new Organization();
+
+        org.addDepartment("Company", null);
+        org.addDepartment("Engineering", "Company");
+        org.addDepartment("Backend", "Engineering");
+
+        Runnable task = () -> {
+            for (int i = 0; i < 100; i++) {
+                org.addEmployee("Emp-" + Thread.currentThread().getId() + "-" + i, "Backend");
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Employees added safely!");
+    }
+}
+
+
+<br><br>
+// Why this is thread-safe?
+✅ ConcurrentHashMap
+Safe concurrent access for employees & departments
+✅ ReadWriteLock
+Multiple reads → allowed
+Writes → exclusive (prevents structural corruption)
+✅ CopyOnWriteArrayList
+Safe iteration without locking
+Good for read-heavy workloads
+        </code></pre>
+    </div>
+</body>
+</html>

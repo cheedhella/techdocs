@@ -61,139 +61,100 @@
     </div>
 
     <div class="code-block">
-        <div class="code-block-title">Hell World 2</div>
+        <div class="code-block-title">Trie Implementation with ConcurrentHashMap</div>
         <button class="copy-btn">Copy</button>
-        <pre><code>class Node {
-      // If your charset contains just lower OR upper case chars, you can replace the map with array of 26 chars;
-      private HashMap<Character, Node> children;
-      private boolean isWord;
+// This approach allows multiple threads to read/write with minimal blocking.
 
-      public Node() {
-          this.isWord = false;
-          this.children = new HashMap<>();
-      }
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-      public HashMap<Character, Node> getChildren() {
-          return children;
-      }
-
-      public void setChildren(HashMap<Character, Node> children) {
-          this.children = children;
-      }
-
-      public boolean isWord() {
-          return isWord;
-      }
-
-      public void setWord(boolean isWord) {
-          this.isWord = isWord;
-      }
-  }
-  
-  public class Trie {
-  private Node root;
-
-  public Trie() {
-      root = new Node();
-  }
-
-  // Start with root node, current = root;
-  // For each character in the given word,
-  //      if current node maps a node for the current character, then simply advance to that node;
-  //      else create a new node, add it to children, set it's character equal to current character, and advance to new node;
-  // Mark the current node as a node that completes the word;
-  // Time Complexity: O(N), where N represents the word size;
-  public void insert(String word) {
-      Node current = root;
-      for (char ch : word.toCharArray()) {
-          current = current.getChildren().computeIfAbsent(ch, c -> new Node());
-      }
-      current.setWord(true);
-  }
-
-  // Start with root node, current = root;
-  // For each character in the given word,
-  //      if current node maps a node for the current character, then simply advance to that node;
-  //      else stop the search and return false;
-  // If the current node is word, return true; else, return false;
-  // Time Complexity: O(N), where N represents the word size;
-  public boolean contains(String word) {
-      Node current = root;
-      for (char ch : word.toCharArray()) {
-          current = current.getChildren().get(ch);
-          if (current == null) {
-              return false;
-          }
-      }
-      return current.isWord();
-  }
-
-  // Case 1: If the word to deleted is not in the trie, nothing to do;
-  // Case 2: If the word to deleted has no common subsequence with other words, then all delete all nodes of that word;
-  // Case 3: If the word to deleted is a prefix of another longer word, then set leaf node flag to false;
-  // Case 4: If the word to deleted and another word has a common prefix, then that node is deleted along with all the 
-  // higher-up nodes until you find a node that has any children OR a node whose isEndWord is false;
-
-  public boolean delete(String word) {
-      return deleteHelper(word, root, 0);
-  }
-
-  private boolean deleteHelper(String word, Node currentNode, int index) {
-      //Base Case: If we have reached at the node which points to the alphabet at the end of the key.
-      if (index == word.length()) {
-          // If the given word is not in the trie, nothing to do;
-          if (!currentNode.isWord()) {
-              return false;
-          }
-
-          // If the given word is in the trie, mark it as deleted!
-          currentNode.setWord(false);
-          // If this node doesn't have any children, we can delete this node in the path;
-          return currentNode.getChildren().isEmpty();
-      }
-
-      char ch = word.charAt(index);
-      Node childNode = currentNode.getChildren().get(ch);
-      if (childNode == null) {
-          return false; // If the given word is not in the trie, nothing to do;
-      }
-      boolean childDeleted = deleteHelper(word, childNode, index + 1);
-      if (childDeleted && !childNode.isWord()) {
-          currentNode.getChildren().remove(ch);
-          return currentNode.getChildren().isEmpty();
-      }
-      return false;
-  }
-
-  public List<String> suggest(String prefix) {
-      List<String> list = new ArrayList<>();
-      Node current = root;
-      StringBuffer curr = new StringBuffer();
-      for (char c : prefix.toCharArray()) {
-          current = current.getChildren().get(c);
-          if (current == null)
-              return list;
-          curr.append(c);
-      }
-      suggestHelper(current, list, new String(curr));
-      return list;
-  }
-
-  private void suggestHelper(Node root, List<String> list, String curr) {
-      if (root.isWord()) {
-          list.add(curr.toString());
-      }
-
-      if (root.getChildren() == null || root.getChildren().isEmpty())
-          return;
-
-      root.getChildren().forEach((ch, node) -> {
-          String newCurr = curr + Character.toString(ch);
-          suggestHelper(node, list, newCurr);
-      });
-  }
+class TrieNode {
+    ConcurrentHashMap<Character, TrieNode> children = new ConcurrentHashMap<>();
+    volatile boolean isEndOfWord = false;
 }
 
+public class ConcurrentTrie {
+
+    private final TrieNode root = new TrieNode();
+
+    // 🔹 INSERT
+    public void insert(String word) {
+        TrieNode node = root;
+        for (char ch : word.toCharArray()) {
+            node = node.children.computeIfAbsent(ch, c -> new TrieNode());
+        }
+        node.isEndOfWord = true;
+    }
+
+    // 🔹 SEARCH
+    public boolean search(String word) {
+        TrieNode node = traverse(word);
+        return node != null && node.isEndOfWord;
+    }
+
+    // 🔹 DELETE (thread-safe, eventual cleanup)
+    public void delete(String word) {
+        delete(root, word, 0);
+    }
+
+    // Case 1: If the word to deleted is not in the trie, nothing to do;
+    // Case 2: If the word to deleted has no common subsequence with other words, then all delete all nodes of that word;
+    // Case 3: If the word to deleted is a prefix of another longer word, then set leaf node flag to false;
+    // Case 4: If the word to deleted and another word has a common prefix, then that node is deleted along with all the 
+    // higher-up nodes until you find a node that has any children OR a node whose isEndWord is false;
+    // [apple, app, apply], [car, card, cat]
+    private boolean delete(TrieNode node, String word, int index) {
+        if (index == word.length()) {
+            if (!node.isEndOfWord) return false;
+            node.isEndOfWord = false;
+            return node.children.isEmpty(); // If no children, then it tells parent to delete the node;
+        }
+
+        char ch = word.charAt(index);
+        TrieNode child = node.children.get(ch);
+        if (child == null) return false;
+
+        boolean shouldDeleteChild = delete(child, word, index + 1);
+
+        if (shouldDeleteChild) {
+            //node.children.remove(ch); // not thread-safe, blind remove;
+            node.children.remove(ch, child); // Compare-And-Swap (CAS), thread-safe remove: Remove the key ch, BUT ONLY IF the value currently mapped to ch is still exactly equal to my specific child object.
+            return node.children.isEmpty() && !node.isEndOfWord;
+        }
+        return false;
+    }
+
+    // 🔹 GET WORDS WITH PREFIX
+    public List<String> getWordsWithPrefix(String prefix) {
+        TrieNode node = traverse(prefix);
+        List<String> result = new ArrayList<>();
+        if (node == null) return result;
+
+        dfs(node, new StringBuilder(prefix), result);
+        return result;
+    }
+
+    private void dfs(TrieNode node, StringBuilder path, List<String> result) {
+        if (node.isEndOfWord) {
+            result.add(path.toString());
+        }
+
+        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+            path.append(entry.getKey());
+            dfs(entry.getValue(), path, result);
+            path.deleteCharAt(path.length() - 1);
+        }
+    }
+
+    private TrieNode traverse(String str) {
+        TrieNode node = root;
+        for (char ch : str.toCharArray()) {
+            node = node.children.get(ch);
+            if (node == null) return null;
+        }
+        return node;
+    }
+}
 
 public class TrieApp {
   public static void main(String[] args) {
@@ -245,6 +206,96 @@ second
 
 
 
+    // Mostly reads, few writes.
+<pre><code>
+    
+// Multiple readers allowed
+// Writers exclusive
+    import java.util.*;
+    import java.util.concurrent.ConcurrentHashMap;
+    import java.util.concurrent.locks.ReentrantReadWriteLock;
+    
+    class TrieRW {
+    
+        static class Node {
+            ConcurrentHashMap<Character, Node> children = new ConcurrentHashMap<>();
+            boolean isEnd;
+        }
+    
+        private final Node root = new Node();
+        private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+    
+        public void insert(String word) {
+            lock.writeLock().lock();
+            try {
+                Node node = root;
+                for (char c : word.toCharArray()) {
+                    node = node.children.computeIfAbsent(c, k -> new Node());
+                }
+                node.isEnd = true;
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+    
+        public void delete(String word) {
+            lock.writeLock().lock();
+            try {
+                delete(root, word, 0);
+            } finally {
+                lock.writeLock().unlock();
+            }
+        }
+    
+        private boolean delete(Node node, String word, int index) {
+            if (index == word.length()) {
+                if (!node.isEnd) return false;
+                node.isEnd = false;
+                return node.children.isEmpty();
+            }
+    
+            char c = word.charAt(index);
+            Node child = node.children.get(c);
+            if (child == null) return false;
+    
+            boolean shouldDelete = delete(child, word, index + 1);
+    
+            if (shouldDelete) {
+                node.children.remove(c);
+                return node.children.isEmpty() && !node.isEnd;
+            }
+            return false;
+        }
+    
+        public List<String> getWordsWithPrefix(String prefix) {
+            lock.readLock().lock();
+            try {
+                List<String> result = new ArrayList<>();
+                Node node = root;
+    
+                for (char c : prefix.toCharArray()) {
+                    node = node.children.get(c);
+                    if (node == null) return result;
+                }
+    
+                dfs(node, new StringBuilder(prefix), result);
+                return result;
+            } finally {
+                lock.readLock().unlock();
+            }
+        }
+    
+        private void dfs(Node node, StringBuilder path, List<String> result) {
+            if (node.isEnd) result.add(path.toString());
+    
+            for (Map.Entry<Character, Node> entry : node.children.entrySet()) {
+                path.append(entry.getKey());
+                dfs(entry.getValue(), path, result);
+                path.deleteCharAt(path.length() - 1);
+            }
+        }
+    }
+</code></pre>
     <script src="../../../resources/js/codeblock.js"></script>
 
 </body>

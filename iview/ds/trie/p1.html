@@ -28,6 +28,35 @@
 import java.util.List;
 
 public class LookAheadApp {
+
+    public List suggest(String prefix) {
+        List list = new ArrayList<>();
+        Node current = root;
+        StringBuffer curr = new StringBuffer();
+        for (char c : prefix.toCharArray()) {
+            current = current.getChildren().get(c);
+            if (current == null)
+                return list;
+            curr.append(c);
+        }
+        suggestHelper(current, list, new String(curr));
+        return list;
+    }
+  
+    private void suggestHelper(Node root, List list, String curr) {
+        if (root.isWord()) {
+            list.add(curr.toString());
+        }
+  
+        if (root.getChildren() == null || root.getChildren().isEmpty())
+            return;
+  
+        root.getChildren().forEach((ch, node) -> {
+            String newCurr = curr + Character.toString(ch);
+            suggestHelper(node, list, newCurr);
+        });
+    }
+    
     public static void main(String[] args) {
         Trie d1 = getTrie();
         List<String> suggestions = d1.suggest("th");

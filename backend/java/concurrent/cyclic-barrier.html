@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CyclicBarrier - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is CyclicBarrier?</div>
+    <div class="answer">
+        CyclicBarrier is a synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point. It's called "cyclic" because it can be re-used after the waiting threads are released.
+    </div>
+
+    <div class="question">How does CyclicBarrier work?</div>
+    <div class="answer">
+        <ul>
+            <li>It is initialized with the number of participating threads.</li>
+            <li>Each thread calls the <code>await()</code> method when it reaches the barrier.</li>
+            <li>The thread is blocked until all threads have called <code>await()</code>.</li>
+            <li>Once the last thread arrives, the barrier is broken, an optional <code>Runnable</code> (barrier action) is executed, and all threads proceed.</li>
+            <li>The barrier automatically resets for the next cycle.</li>
+        </ul>
+    </div>
+
+    <div class="question">CountDownLatch vs CyclicBarrier</div>
+    <div class="answer">
+        <ul>
+            <li><strong>CountDownLatch</strong>: One or more threads wait for a number of <em>events</em> to occur. Once the count reaches 0, it cannot be reused.</li>
+            <li><strong>CyclicBarrier</strong>: A fixed number of <em>threads</em> wait for each other to reach a common point. Once all threads arrive, the barrier trips and resets, allowing reuse.</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple CyclicBarrier example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.BrokenBarrierException;
+
+public class Example {
+    public static void main(String[] args) {
+        int threads = 3;
+        Runnable barrierAction = () -&gt; System.out.println("All parties have arrived. Proceeding to next phase!");
+        CyclicBarrier barrier = new CyclicBarrier(threads, barrierAction);
+
+        for (int i = 0; i &lt; threads; i++) {
+            new Thread(() -&gt; {
+                try {
+                    System.out.println(Thread.currentThread().getName() + " is doing phase 1 work...");
+                    Thread.sleep(1000);
+                    
+                    System.out.println(Thread.currentThread().getName() + " reached barrier.");
+                    barrier.await(); // Wait for others
+                    
+                    System.out.println(Thread.currentThread().getName() + " is doing phase 2 work...");
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use CyclicBarrier?</div>
+    <div class="answer">
+        It is useful in programs involving a fixed sized party of threads that must occasionally wait for each other, such as parallel iterative algorithms, multiplayer games, or multi-phase concurrent tasks.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

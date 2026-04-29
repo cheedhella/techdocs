@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Records - Java 17</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Records in Java?</div>
+    <div class="answer">
+        Records, introduced in Java 14 as a preview and finalized in Java 16 (standard in Java 17 LTS), provide a compact syntax for declaring classes that are transparent carriers for shallowly immutable data. They drastically reduce the boilerplate code required to create Data Transfer Objects (DTOs) or simple POJOs.
+    </div>
+
+    <div class="question">Why use Records?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Less Boilerplate</strong>: Automatically generates constructors, <code>getters</code>, <code>equals()</code>, <code>hashCode()</code>, and <code>toString()</code>.</li>
+            <li><strong>Immutability</strong>: Fields in a record are implicitly <code>final</code>, ensuring thread safety and a functional programming style.</li>
+            <li><strong>Intent</strong>: Clearly communicates that a type is just a data carrier, making code more readable.</li>
+        </ul>
+    </div>
+
+    <div class="question">How do Records differ from standard classes?</div>
+    <div class="answer">
+        <ul>
+            <li>They cannot extend any other class (they implicitly extend <code>java.lang.Record</code>).</li>
+            <li>They are implicitly <code>final</code> (cannot be extended).</li>
+            <li>Instance fields are implicitly <code>private final</code>.</li>
+            <li>Getter methods do not have the <code>get</code> prefix (e.g., <code>name()</code> instead of <code>getName()</code>).</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple Record example?</div>
+    <div class="answer">
+        <pre><code>// Before Records
+public class Person {
+    private final String name;
+    private final int age;
+    
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    // + equals(), hashCode(), toString()
+}
+
+// With Records
+public record Person(String name, int age) {
+    // You can still add custom behavior or validation!
+    public Person {
+        if (age &lt; 0) {
+            throw new IllegalArgumentException("Age cannot be negative");
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use Records?</div>
+    <div class="answer">
+        Records are perfect for DTOs, API responses, configuration objects, compound map keys, and holding multiple return values from a method.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ConcurrentSkipListMap - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is ConcurrentSkipListMap?</div>
+    <div class="answer">
+        ConcurrentSkipListMap is a scalable concurrent NavigableMap implementation in Java. It is essentially a thread-safe version of TreeMap. Elements are sorted according to their natural ordering or by a provided Comparator.
+    </div>
+
+    <div class="question">Why use ConcurrentSkipListMap instead of TreeMap?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Thread Safety</strong>: TreeMap is not thread-safe. ConcurrentSkipListMap allows concurrent access without requiring external synchronization.</li>
+            <li><strong>High Concurrency</strong>: Unlike a synchronized wrapper (e.g., Collections.synchronizedSortedMap), it does not lock the entire map for read or write operations, providing much better scalability under concurrent load.</li>
+        </ul>
+    </div>
+
+    <div class="question">How does ConcurrentSkipListMap work internally?</div>
+    <div class="answer">
+        <ul>
+            <li>It uses a Skip List data structure rather than a Red-Black tree (which TreeMap uses).</li>
+            <li>A Skip List is a probabilistic data structure that allows fast search within an ordered sequence of elements. It achieves this by maintaining a hierarchy of linked lists.</li>
+            <li>It uses lock-free algorithms (Compare-And-Swap or CAS operations) for insertions and deletions, ensuring high concurrency.</li>
+            <li>Average time complexity for search, insert, and remove operations is O(log n).</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple ConcurrentSkipListMap example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.ConcurrentSkipListMap;
+
+public class Example {
+    public static void main(String[] args) {
+        ConcurrentSkipListMap&lt;Integer, String&gt; map = new ConcurrentSkipListMap&lt;&gt;();
+        
+        map.put(3, "C");
+        map.put(1, "A");
+        map.put(2, "B");
+        
+        // Iterating prints elements in sorted order: 1, 2, 3
+        map.forEach((key, value) -&gt; {
+            System.out.println(key + " : " + value);
+        });
+        
+        // Retrieves the first entry (lowest key) safely
+        System.out.println("First Entry: " + map.firstEntry().getValue());
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use ConcurrentSkipListMap?</div>
+    <div class="answer">
+        Use it when you need a sorted map (like TreeMap) but require high concurrency and thread safety. It's often used in applications requiring range queries or ordered iteration under heavy multi-threaded access.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

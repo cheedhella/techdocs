@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ConcurrentHashMap - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is ConcurrentHashMap?</div>
+    <div class="answer">
+        <ul>
+            <li>Normal HashMap is not thread-safe, if 2 threads try to modify the map at the same time, it will throw ConcurrentModificationException;</li>
+            <li>ConcurrentHashMap is a thread-safe implementation of the Map interface;</li>
+        </ul>
+    </div>
+
+    <div class="question">Why use ConcurrentHashMap instead of Hashtable or synchronizedMap?</div>
+    <div class="answer">
+        <ul>
+            <li>Hashtable is also thread-safe, but it locks the entire map for every operation, which is very inefficient;</li>
+            <li>In case of ConcurrentHashMap, gets/reads are lock-free; writes use fine-grained locking(acquire a lock on only that particular key);</li>
+        </ul>
+    </div>
+
+    <div class="question">ConcurrentHashMap API</div>
+    <div class="answer"></div>
+        <ul>
+            <li>putIfAbsent(key, value): atomic operation(prevents race condition) that Inserts the specified key-value pair into the map, if the key is not already present, otherwise returns the current value;
+                <pre><code>
+            if (!map.containsKey("Apple")) {
+                map.put("Apple", new Item("Apple", 1));
+            }
+
+If two threads:
+Thread A → checks → not present
+Thread B → checks → not present
+Thread A → inserts → success
+Thread B → inserts → failure (returns current value)
+        
+                </code></pre>
+            </li>
+            <li><b>map.merge(key, newValue, (oldValue, newValue) -> result);</b>: Insert if absent, otherwise combine the old value and new value — atomically;
+                <br>
+                <b>merge(key, value, remappingFunction)</b>: atomically merges the specified value with the current value of the specified key;
+                <br>
+                <pre><code>
+// Without merge
+int q = map.get("Apple").getQuantity();
+map.get("Apple").setQuantity(q + 1);
+Two threads can read same value
+Both write back → lost update
+
+// With merge(thread-safe)
+map.merge("Apple", new Item("Apple", 1), (existing, incoming) -> {
+    existing.addQuantity(incoming.getQuantity());
+    return existing;
+});
+
+                </code></pre>
+            </li>
+            <li>map.compute(key, (key, oldValue) -> newValue);
+                <br>
+                <b>merge() -> If exists → combine old + new. If not → insert new.</b>
+                <br>
+                <b>compute() -> Give me the current value (or null), I’ll decide everything(insert/combine/remove). If null, insert new.</b>
+                <br>
+                <pre><code>
+                    // Merge passes both old and new values to the function
+                    map.merge("Apple", new Item("Apple", 1), (oldItem, newItem) -> {
+                        oldItem.addQuantity(newItem.getQuantity());
+                        return oldItem;
+                    });
+                    <br>
+                    // Compute passes key and only the current value to the function
+                    map.compute("Apple", (k, item) -> {
+                        if (item == null) return new Item("Apple", 1);
+                        item.addQuantity(1);
+                        return item;
+                    });
+                </code></pre>
+            </li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple ConcurrentHashMap example?</div>
+    <div class="answer">
+        <div><b>Build an in-memory store inventory system:</b>
+            <ul>
+                <li>Store items with quantity;</li>
+                <li>Add items to the store;</li>
+                <li>Remove items from the store;</li>
+                <li>Update items in the store;</li>
+                <li>Get items from the store;</li>
+            </ul>
+        </div>
+        <pre><code>
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+// Item class (thread-safe using AtomicInteger)
+import java.util.concurrent.atomic.AtomicInteger;
+
+class Item {
+    private final String name;
+    // ConcurrentHashMap only guarantees atomicity for the map structure(put/get/remove);
+    // It doesn't make object's internal state thread-safe; AtomicInteger is used to make the quantity thread-safe;
+    private final AtomicInteger quantity;
+
+    public Item(String name, int quantity) {
+        this.name = name;
+        this.quantity = new AtomicInteger(quantity);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity.get();
+    }
+
+    public void addQuantity(int delta) {
+        quantity.addAndGet(delta);
+    }
+
+    public void setQuantity(int value) {
+        quantity.set(value);
+    }
+}
+
+// Inventory class
+class Inventory {
+    private final ConcurrentMap<String, Item> items = new ConcurrentHashMap<>();
+
+    // ✅ Add item (atomic insert or increment)
+    public void addItem(String name, int quantity) {
+        items.merge(name,
+            new Item(name, quantity),
+            (existing, incoming) -> {
+                existing.addQuantity(incoming.getQuantity());
+                return existing;
+            }
+        );
+    }
+
+    // ✅ Update quantity (set exact value)
+    public void updateQuantity(String name, int quantity) {
+        items.computeIfPresent(name, (k, item) -> {
+            item.setQuantity(quantity);
+            return item;
+        });
+    }
+
+    // ✅ Remove item
+    public void removeItem(String name) {
+        items.remove(name);
+    }
+
+    // ✅ List items
+    public void listItems() {
+        if (items.isEmpty()) {
+            System.out.println("Inventory is empty.");
+            return;
+        }
+
+        items.forEach((name, item) ->
+            System.out.println(name + " - Quantity: " + item.getQuantity())
+        );
+    }
+
+    // ✅ Check availability
+    public boolean checkAvailability(String name) {
+        Item item = items.get(name);
+        return item != null && item.getQuantity() > 0;
+    }
+
+    // ✅ Get quantity safely
+    public int getQuantity(String name) {
+        Item item = items.get(name);
+        return item == null ? 0 : item.getQuantity();
+    }
+}
+
+// Main class (concurrency demo)
+public class StoreInventoryApp {
+    public static void main(String[] args) throws InterruptedException {
+        Inventory inventory = new Inventory();
+
+        // Simulate concurrent updates
+        Runnable task = () -> {
+            for (int i = 0; i < 1000; i++) {
+                inventory.addItem("Apple", 1);
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start(); // starts the t1 thread;
+        t2.start(); // starts the t2 thread;
+
+        t1.join(); // pauses the main thread until t1 is done;
+        t2.join(); // pauses the main thread until t2 is done;
+
+        // Final state
+        inventory.listItems(); // Apple should be 2000
+
+        System.out.println("Apple available? " +
+            inventory.checkAvailability("Apple"));
+    }
+}
+        </code></pre>
+    </div>
+
+    <div class="question">When should you use ConcurrentHashMap?</div>
+    <div class="answer">
+        It is ideal for high-concurrency environments where multiple threads need to read and write to a shared map frequently, such as caching, shared configuration registries, or counters.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

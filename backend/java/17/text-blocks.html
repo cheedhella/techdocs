@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Text Blocks - Java 17</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Text Blocks?</div>
+    <div class="answer">
+        Finalized in Java 15, a Text Block is a multi-line string literal that avoids the need for most escape sequences. It automatically formats the string in a predictable way, and gives developers control over the format when desired.
+    </div>
+
+    <div class="question">Why use Text Blocks?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Readability</strong>: Huge improvement for writing embedded JSON, XML, HTML, or SQL queries directly in Java code.</li>
+            <li><strong>No Escaping Quotes</strong>: Double quotes inside a text block do not need to be escaped (<code>\"</code>).</li>
+            <li><strong>Automatic Indentation Management</strong>: The compiler automatically strips away the incidental indentation (whitespace) added to align the text block with the surrounding Java code.</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you write a Text Block?</div>
+    <div class="answer">
+        A text block is opened with three double quotes (<code>"""</code>) followed by a newline, and closed with three double quotes.
+    </div>
+
+    <div class="question">Can you show a simple example?</div>
+    <div class="answer">
+        <pre><code>// Before Text Blocks
+String json = "{\n" +
+              "  \"name\": \"John Doe\",\n" +
+              "  \"age\": 30\n" +
+              "}";
+
+// With Text Blocks
+String jsonBlock = """
+        {
+          "name": "John Doe",
+          "age": 30
+        }
+        """; // Notice quotes are not escaped!
+
+// Using with formatted()
+String query = """
+        SELECT id, name
+        FROM users
+        WHERE status = '%s'
+        """.formatted("ACTIVE");</code></pre>
+    </div>
+
+    <div class="question">When should you use Text Blocks?</div>
+    <div class="answer">
+        Use text blocks anytime you have string literals spanning more than one line, particularly when representing code or data from other languages (like JSON or SQL).
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

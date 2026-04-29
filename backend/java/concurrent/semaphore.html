@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Semaphore - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Semaphore?</div>
+    <div class="answer">
+        A Semaphore is a synchronization tool that maintains a set of permits. It is used to restrict the number of threads than can access some (physical or logical) resource.
+    </div>
+
+    <div class="question">How does Semaphore work?</div>
+    <div class="answer">
+        <ul>
+            <li>It is initialized with a given number of permits.</li>
+            <li>A thread must call <code>acquire()</code> to get a permit. If no permit is available, it blocks until one is released.</li>
+            <li>When the thread is done with the resource, it calls <code>release()</code>, which returns the permit to the semaphore and potentially unblocks a waiting thread.</li>
+            <li>A semaphore with exactly one permit is often called a binary semaphore and can be used as a mutually exclusive lock (mutex).</li>
+        </ul>
+    </div>
+
+    <div class="question">What is Fairness in Semaphore?</div>
+    <div class="answer">
+        The constructor accepts an optional <code>fairness</code> parameter. When set to true, the semaphore guarantees that threads invoking <code>acquire()</code> are granted permits in the order in which they requested them (FIFO). If false (default), barge-in is permitted, which can be more efficient but risks thread starvation.
+    </div>
+
+    <div class="question">Can you show a simple Semaphore example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.Semaphore;
+
+public class Example {
+    public static void main(String[] args) {
+        // Only 2 permits available
+        Semaphore semaphore = new Semaphore(2);
+
+        for (int i = 0; i &lt; 5; i++) {
+            new Thread(() -&gt; {
+                try {
+                    System.out.println(Thread.currentThread().getName() + " attempting to acquire permit.");
+                    semaphore.acquire();
+                    System.out.println(Thread.currentThread().getName() + " acquired permit!");
+                    
+                    // Simulate work with resource
+                    Thread.sleep(2000); 
+                    
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    System.out.println(Thread.currentThread().getName() + " releasing permit.");
+                    semaphore.release();
+                }
+            }, "Thread-" + i).start();
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use Semaphore?</div>
+    <div class="answer">
+        Semaphores are highly useful for resource pooling scenarios, such as connection pools, restricting the number of concurrent database connections, or rate limiting incoming requests in an application.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

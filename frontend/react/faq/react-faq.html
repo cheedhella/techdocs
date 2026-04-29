@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>React FAQ</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+</head>
+<body>
+    <pre>
+----
+Why React? 
+    - Component-based architecture;
+    - Virtual DOM
+
+What is Component?
+    React lets you build UI using small reusable pieces called components(like header, footer, navbar, button etc);
+    Your component is a template, and props are the inputs that customize it.
+
+Virtual DOM
+    - It is a lightweight copy of the real DOM;
+    - When something changes, react updates the virtual DOM, and then compares the virtual DOM with the real DOM, and then updates only the changed parts in the real DOM;
+    - This is called reconciliation;
+    - This is why React is fast;
+
+Declarative UI
+    - You just describe what the UI should look like, not how to change it step by step;
+    - React automatically updates the UI when data changes.
+    - Eg: if (isLoggedIn) { showDashboard(); } else { showLogin(); }
+
+hooks 
+    - Hooks are used to manager state and lifecycle of a component;
+    - lifecycle - If you want to do something when the component is initialized, mounted, updated, or unmounted, you can use useEffect hook;
+useState
+    - Used to add state to a functional component; 
+    - State = data that changes over time and affects UI;
+    - useState returns a tuple/pair containing current value of state and a function to update the state;
+
+useEffect
+    - Used to render code after the component is mounted(rendered to DOM);
+    - For eg, add event listeners, fetch data from API, etc;
+    - useEffect returns a cleanup function, that is called when the component is unmounted(removed from DOM);
+    
+    -- Generally, it is executed only once after the component is inital rendered; 
+    -- But, If you specify a dependency array, it is executed again when the dependency changes;
+            // When the component is rendered and state changes, the effect is executed;
+            useEffect(() => {
+                console.log("Effect ran");
+            }, [count]);
+
+            // Only once after the component is inital rendered;
+            useEffect(() => {
+                console.log("Effect ran");
+              }, []);
+
+              // Runs on every render (every state change, any state)
+              useEffect(() => {
+                console.log("Effect ran");
+              });
+
+              // Cleanup function is called when the component is unmounted; like hiding the component or navigaitng to another page etc;
+              useEffect(() => {
+                console.log("Mounted");
+              
+                // cleanup function
+                return () => {
+                  console.log("Component unmounted");
+                };
+              }, []);
+
+useCallback 
+    - useCallback is one of those hooks that seems unnecessary—until you hit performance issues or weird re-renders.
+    - It remembers (memoizes) a function so React doesn’t recreate it on every render.
+    - Why this matters?
+        - In React, functions are recreated on every render:
+        - function App() {
+            const handleClick = () => {
+              console.log("Clicked");
+            };
+          }
+        - Most of the time, that’s fine.
+        - But it becomes a problem when you pass that function to child components.
+        - For eg,
+            function Parent() {
+                const [count, setCount] = useState(0);
+            
+                const handleClick = () => {
+                console.log("Clicked");
+                };
+            
+                return <Child onClick={handleClick} />;
+            }
+        - WHen count changes, the parent component re-renders, and the handleClick function is recreated.
+        - Child thinks props changed and it re-renders unnecessarily;
+        - Solution is useCallback;
+            // handleClick is created only once and is memoized;
+            import { useCallback } from "react";
+            const handleClick = useCallback(() => {
+            console.log("Clicked");
+            }, []);
+        
+            // When the count changes, the handleClick function is recreated;
+            const handleClick = useCallback(() => {
+                console.log(count);
+              }, [count]);
+        
+        - Without useCallback → new function every render
+          With useCallback → same function unless dependencies change
+
+useContext
+    - useContext is a hook that allows you to access the context object;
+    - passing the same data through many components (prop drilling);
+    - It lets you share data across components without passing props manually at every level;
+    - It is used to pass data to components, without using props, no matter how deep they are in the component tree;
+    - Usually, it is used to hold application-wide data: such as theme, locale/language preferences, user/authentication info etc;
+    - You can have as many consumers as you want for a single context;
+    - Any component in the component tree can change the context;
+    - In case of any changes to context, all consumers are immediately notified and re-rendered;
+    - If a consumer is not wrapped  inside the provider, but still tries to access the context value, then it gets the default value argument supplied to createContext();
+
+    // Now all children can access user
+    function App() {
+        const user = { name: "Sai" };
+      
+        return (
+          <UserContext.Provider value={user}>
+            <Navbar />
+          </UserContext.Provider>
+        );
+      }
+
+      // consume it anywhere in the component tree
+      import { useContext } from "react";
+      function UserMenu() {
+        const user = useContext(UserContext);
+        return <p>{user.name}</p>;
+      }
+
+Functional vs Class Components
+    - Functional components = simple functions + hooks;
+    - Class components = ES6 classes with lifecycle methods;
+    - Functional components are the standard. Class components are mostly legacy.
+
+Tanstack Router
+      // Because every other route in your app (like /login, /home, /systemStatus) is a "child" of this rootRoute, whatever component those routes are tied to will be injected exactly where the <Outlet /> is.
+    const rootRoute = createRootRoute({
+        component: () => <Outlet />,
+        notFoundComponent: NotFound,
+    });
+    const indexRoute = createRoute({
+        getParentRoute: () => rootRoute,
+        path: "/",
+        loader: () => {
+            throw redirect({ to: "/login" });
+        },
+    });
+    const loginRoute = createRoute({
+        getParentRoute: () => rootRoute,
+        path: "/login",
+        component: LoginPage,
+    });
+
+    function DashboardLayout() {
+        return (
+          <div>
+            <Sidebar />          {/* This stays on the screen */}
+            <TopNavigation />    {/* This stays on the screen */}
+            
+            <main>
+              {/* The specific page content is injected right here! */}
+              <Outlet />         
+            </main>
+          </div>
+        );
+      }
+
+
+      I have worked on customization of layout(like hierarchial, organic, radial, etc) using yFiles, with custom configuration(like spacing, edge routing, node types, etc);
+
+      We have zustand based global state;
+      It is a big xml  with main 2 parts - metadata and data;
+      Metadata - is the data that describes the data;
+      Data - is the data that is stored in the nodes;
+      on user changes, we update xml and based on that graph container is re-rerendered;
+      
+                ----</pre>
+    <div class="question">1. What is the Virtual DOM and how does it work?</div>
+    <div class="answer">
+        The Virtual DOM (VDOM) is a programming concept where an ideal, or "virtual", representation of a UI is kept in memory and synced with the "real" DOM by a library such as ReactDOM. This process is called <strong>reconciliation</strong>.
+        <br><br>
+        <strong>How it works:</strong>
+        <ul>
+            <li>When state or props change, React creates a new Virtual DOM tree.</li>
+            <li>React compares this new tree against the previous Virtual DOM tree (a process called "diffing").</li>
+            <li>React calculates the most efficient way to update the real DOM based on these differences.</li>
+            <li>Finally, it applies only those specific changes to the real DOM, minimizing expensive DOM manipulations.</li>
+        </ul>
+    </div>
+
+    <div class="question">2. What is the difference between a Functional Component and a Class Component?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Syntax:</strong> Class components require you to extend from <code>React.Component</code> and create a <code>render</code> function. Functional components are simply JavaScript functions that return JSX.</li>
+            <li><strong>State & Lifecycle:</strong> Previously, only Class components could hold state and use lifecycle methods. With the introduction of React Hooks in v16.8, Functional components can now use state (via <code>useState</code>) and handle side effects (via <code>useEffect</code>).</li>
+            <li><strong>Performance & Readability:</strong> Functional components are generally easier to read, write, and test. They also encourage better separation of concerns and logic reuse through custom hooks.</li>
+        </ul>
+    </div>
+
+    <div class="question">3. What are React Hooks? Can you name a few common ones?</div>
+    <div class="answer">
+        Hooks are functions that let you "hook into" React state and lifecycle features from functional components. They do not work inside classes.
+        <br><br>
+        <strong>Common Hooks:</strong>
+        <ul>
+            <li><code>useState</code>: Manages local state in a component.</li>
+            <li><code>useEffect</code>: Performs side effects (data fetching, subscriptions).</li>
+            <li><code>useContext</code>: Allows you to subscribe to React context without introducing nesting.</li>
+            <li><code>useRef</code>: Returns a mutable ref object whose <code>.current</code> property is initialized to the passed argument.</li>
+            <li><code>useMemo</code> & <code>useCallback</code>: Used for performance optimization.</li>
+        </ul>
+    </div>
+
+    <div class="question">4. Why do we need the 'key' prop when rendering lists in React?</div>
+    <div class="answer">
+        Keys help React identify which items in a list have changed, been added, or been removed. They play a crucial role in the reconciliation process.
+        <ul>
+            <li>When items in a list change, React uses keys to match children in the original tree with children in the subsequent tree.</li>
+            <li>Without keys, React might unnecessarily re-render entire lists.</li>
+            <li>Keys should be unique and stable (like an ID from your data). Using array indices as keys is an anti-pattern.</li>
+        </ul>
+    </div>
+
+    <div class="question">5. What is the difference between Controlled and Uncontrolled Components?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Controlled Components:</strong> The form data is handled by the state within the React component. The input's value is driven by React state, and changes are handled by updating that state via an <code>onChange</code> event handler.</li>
+            <li><strong>Uncontrolled Components:</strong> The form data is handled by the DOM itself. You use a <code>ref</code> (like <code>useRef</code>) to access the input's current value directly from the DOM when needed.</li>
+        </ul>
+    </div>
+
+    <div class="question">6. What is Prop Drilling and how can you avoid it?</div>
+    <div class="answer">
+        <strong>Prop Drilling</strong> is the process of passing data from a parent component down to a deeply nested child component, passing it through several intermediate components that don't actually need the data themselves.
+        <br><br>
+        <strong>How to avoid it:</strong>
+        <ul>
+            <li><strong>Context API:</strong> Create a context at the top level and consume it directly in the deeply nested component using <code>useContext</code>.</li>
+            <li><strong>State Management Libraries:</strong> Use tools like Redux, Zustand, or Recoil.</li>
+            <li><strong>Component Composition:</strong> Pass the child component itself as a prop to the intermediate components.</li>
+        </ul>
+    </div>
+
+    <div class="question">7. What is JSX?</div>
+    <div class="answer">
+        JSX stands for JavaScript XML. It is a syntax extension for JavaScript that allows you to write HTML-like code inside JavaScript/React files. It makes writing React components easier and more expressive. Under the hood, Babel compiles JSX into standard JavaScript <code>React.createElement()</code> calls.
+    </div>
+
+    <div class="question">8. What is the difference between an Element and a Component in React?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Element:</strong> A plain JavaScript object that describes what you want to see on the screen in terms of the DOM nodes or other components. Elements are immutable. (e.g., <code>&lt;div&gt;Hello&lt;/div&gt;</code>)</li>
+            <li><strong>Component:</strong> A function or a class that optionally accepts inputs (props) and returns a React element. Components are the building blocks of a React application.</li>
+        </ul>
+    </div>
+
+    <div class="question">9. What is State in React?</div>
+    <div class="answer">
+        State is a built-in React object that is used to contain data or information about the component. A component's state can change over time, and whenever it changes, the component re-renders to reflect the new data in the UI.
+    </div>
+
+    <div class="question">10. What are Props in React?</div>
+    <div class="answer">
+        Props (short for properties) are read-only components that are used to pass data from one component to another, usually from parent to child. They are immutable, meaning a child component cannot modify the props it receives.
+    </div>
+
+    <div class="question">11. What is the difference between State and Props?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Props:</strong> Passed to a component from its parent. They are read-only (immutable) and allow components to be reusable.</li>
+            <li><strong>State:</strong> Managed within the component itself. It is mutable and causes the component to re-render when updated.</li>
+        </ul>
+    </div>
+
+    <div class="question">12. What is React Fiber?</div>
+    <div class="answer">
+        React Fiber is the core reconciliation algorithm introduced in React 16. Its main goal is to improve the suitability of React for areas like animation, layout, and gestures. Its headline feature is incremental rendering: the ability to split rendering work into chunks and spread it out over multiple frames, prioritizing important updates over less important ones.
+    </div>
+
+    <div class="question">13. How does React handle events?</div>
+    <div class="answer">
+        React handles events using its own synthetic event system. It attaches a single event listener to the root of the document (event delegation) rather than attaching individual event listeners to each DOM node. When an event is triggered, React maps it to the correct component and invokes the provided handler.
+    </div>
+
+    <div class="question">14. What are Synthetic Events in React?</div>
+    <div class="answer">
+        A Synthetic Event is a cross-browser wrapper around the browser's native event. It provides the same API as the native event (like <code>stopPropagation()</code> and <code>preventDefault()</code>) but works identically across all browsers.
+    </div>
+
+    <div class="question">15. What are Higher-Order Components (HOC)?</div>
+    <div class="answer">
+        A Higher-Order Component is an advanced technique in React for reusing component logic. It is a function that takes a component and returns a new component with added data or functionality. Example: <code>const EnhancedComponent = higherOrderComponent(WrappedComponent);</code>.
+    </div>
+
+    <div class="question">16. What is a Render Prop?</div>
+    <div class="answer">
+        The term "render prop" refers to a technique for sharing code between React components using a prop whose value is a function. A component with a render prop takes a function that returns a React element and calls it instead of implementing its own render logic.
+    </div>
+
+    <div class="question">17. What is the purpose of React.memo()?</div>
+    <div class="answer">
+        <code>React.memo()</code> is a higher-order component that optimizes performance by memoizing the result of a functional component. If the component's props have not changed, React will skip rendering the component and reuse the last rendered result.
+    </div>
+
+    <div class="question">18. What is useMemo and when should you use it?</div>
+    <div class="answer">
+        <code>useMemo</code> is a hook that memoizes a calculated value. It only recalculates the value when one of its dependencies changes. You should use it to optimize expensive calculations that do not need to run on every single render.
+    </div>
+
+    <div class="question">19. What is useCallback and when should you use it?</div>
+    <div class="answer">
+        <code>useCallback</code> is a hook that returns a memoized version of a callback function. It only changes if one of the dependencies has changed. It is primarily used when passing callbacks to optimized child components (like those wrapped in <code>React.memo</code>) to prevent them from re-rendering unnecessarily.
+    </div>
+
+    <div class="question">20. What are Error Boundaries in React?</div>
+    <div class="answer">
+        Error boundaries are React components that catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI instead of crashing the whole component tree. Currently, error boundaries can only be created using Class Components (implementing <code>componentDidCatch</code> or <code>static getDerivedStateFromError</code>).
+    </div>
+
+    <div class="question">21. What is the Context API?</div>
+    <div class="answer">
+        The Context API is a built-in React feature that provides a way to share values (like themes, user data, or localization) between components without having to explicitly pass a prop through every level of the tree.
+    </div>
+
+    <div class="question">22. How does the Context API differ from Redux?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Context API:</strong> Built into React, simple to set up, good for low-frequency updates like themes or auth state. Not ideal for high-frequency state changes because any context change triggers a re-render of all consuming components.</li>
+            <li><strong>Redux:</strong> A robust, external state management library. It uses a single store, reducers, and actions. It is heavily optimized for high-frequency updates and complex state architectures.</li>
+        </ul>
+    </div>
+
+    <div class="question">23. What are Portals in React?</div>
+    <div class="answer">
+        Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component. They are commonly used for modals, tooltips, and popovers to avoid z-index and CSS overflow clipping issues. Created using <code>ReactDOM.createPortal(child, container)</code>.
+    </div>
+
+    <div class="question">24. What is StrictMode in React?</div>
+    <div class="answer">
+        <code>&lt;React.StrictMode&gt;</code> is a tool for highlighting potential problems in an application. It does not render any visible UI. It activates additional checks and warnings for its descendants, such as identifying components with unsafe lifecycles, warning about legacy string ref API usage, and detecting unexpected side effects (by double-invoking render methods in development).
+    </div>
+
+    <div class="question">25. What is the useReducer hook?</div>
+    <div class="answer">
+        <code>useReducer</code> is an alternative to <code>useState</code>. It is preferable when you have complex state logic that involves multiple sub-values or when the next state depends on the previous one. It accepts a reducer function of type <code>(state, action) =&gt; newState</code>, and returns the current state paired with a <code>dispatch</code> method.
+    </div>
+
+    <div class="question">26. What are the differences between useState and useReducer?</div>
+    <div class="answer">
+        <ul>
+            <li><code>useState</code> is ideal for simple, independent pieces of state (like booleans or strings).</li>
+            <li><code>useReducer</code> is better for complex state objects or when state transitions follow specific rules or depend on previous state. It moves the state transition logic out of the component and into a pure reducer function.</li>
+        </ul>
+    </div>
+
+    <div class="question">27. How do you pass data from a child to a parent component?</div>
+    <div class="answer">
+        Since React enforces a one-way data flow (parent to child), passing data upwards is achieved by passing a callback function from the parent to the child as a prop. The child component can then call this function, passing the required data as an argument.
+    </div>
+
+    <div class="question">28. What are React Fragments?</div>
+    <div class="answer">
+        React Fragments (<code>&lt;React.Fragment&gt;</code> or the shorthand <code>&lt;&gt;&lt;/&gt;</code>) allow you to group a list of children without adding extra nodes (like a wrapper <code>div</code>) to the DOM.
+    </div>
+
+    <div class="question">29. Why can't browsers read JSX directly?</div>
+    <div class="answer">
+        Browsers can only understand standard JavaScript objects and functions. JSX is a syntax extension that is not part of standard JavaScript. Before it runs in the browser, JSX must be compiled (usually by Babel) into standard <code>React.createElement()</code> calls.
+    </div>
+
+    <div class="question">30. What is the significance of the 'children' prop?</div>
+    <div class="answer">
+        The <code>children</code> prop is a special prop that allows you to pass components as data to other components, just like you would pass plain text or variables. It is used to create wrapper components (like layouts or dialogs) where the parent doesn't need to know what children it is wrapping.
+    </div>
+
+    <div class="question">31. What is the difference between default export and named export in React?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Default Export:</strong> Allows you to export exactly one main value from a file. When importing, you can name it whatever you want. (<code>import MyComp from './Component'</code>)</li>
+            <li><strong>Named Export:</strong> Allows you to export multiple values from a file. When importing, you must use the exact same name inside curly braces. (<code>import { MyComp, OtherComp } from './Component'</code>)</li>
+        </ul>
+    </div>
+
+    <div class="question">32. What is reconciliation in React?</div>
+    <div class="answer">
+        Reconciliation is the process through which React updates the DOM. When a component's state changes, React has to calculate if it is necessary to update the DOM. It does this by creating a virtual DOM and comparing it with the current DOM (diffing algorithm).
+    </div>
+
+    <div class="question">33. How do you optimize a React application's performance?</div>
+    <div class="answer">
+        Common optimization techniques include:
+        <ul>
+            <li>Using <code>React.memo</code>, <code>useMemo</code>, and <code>useCallback</code> to prevent unnecessary re-renders.</li>
+            <li>Code-splitting and Lazy Loading components using <code>React.lazy</code> and <code>Suspense</code>.</li>
+            <li>Virtualizing long lists (using libraries like <code>react-window</code>).</li>
+            <li>Using stable and unique keys for list items.</li>
+            <li>Avoiding inline functions and object literals in JSX if they cause child re-renders.</li>
+        </ul>
+    </div>
+
+    <div class="question">34. What is lazy loading in React?</div>
+    <div class="answer">
+        Lazy loading is a technique that delays the loading of a component until it is actually needed. In React, this is achieved using <code>React.lazy()</code> combined with dynamic <code>import()</code>. It drastically reduces the initial bundle size of the application.
+    </div>
+
+    <div class="question">35. What is React Suspense?</div>
+    <div class="answer">
+        <code>&lt;Suspense&gt;</code> is a component that lets you specify a fallback UI (like a loading spinner) while its child components are waiting for something to load, such as a lazily loaded component or data fetching (in modern React).
+    </div>
+
+    <div class="question">36. What is the significance of the useEffect dependency array?</div>
+    <div class="answer">
+        The dependency array tells React when to re-run the <code>useEffect</code> block.
+        <ul>
+            <li>No array: Runs after every render.</li>
+            <li>Empty array <code>[]</code>: Runs only once after the initial render (similar to componentDidMount).</li>
+            <li>Array with variables <code>[var1, var2]</code>: Runs initially, and whenever any of the specified variables change.</li>
+        </ul>
+    </div>
+
+    <div class="question">37. What are the rules of Hooks?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Only call Hooks at the top level:</strong> Don't call Hooks inside loops, conditions, or nested functions.</li>
+            <li><strong>Only call Hooks from React functions:</strong> Call them from within React functional components or custom Hooks (not regular JavaScript functions).</li>
+        </ul>
+    </div>
+
+    <div class="question">38. What is a custom hook?</div>
+    <div class="answer">
+        A custom hook is a JavaScript function whose name starts with "use" and that may call other Hooks. It is a mechanism to extract and reuse stateful logic between different components without changing the component hierarchy.
+    </div>
+
+    <div class="question">39. What replaces componentDidMount, componentDidUpdate, and componentWillUnmount in functional components?</div>
+    <div class="answer">
+        The <code>useEffect</code> hook replaces all three.
+        <ul>
+            <li><code>componentDidMount</code>: <code>useEffect(() =&gt; {}, [])</code></li>
+            <li><code>componentDidUpdate</code>: <code>useEffect(() =&gt; {}, [dependency])</code></li>
+            <li><code>componentWillUnmount</code>: Achieved by returning a cleanup function from the <code>useEffect</code> callback.</li>
+        </ul>
+    </div>
+
+    <div class="question">40. What is the difference between useLayoutEffect and useEffect?</div>
+    <div class="answer">
+        <ul>
+            <li><code>useEffect</code> runs asynchronously <em>after</em> the browser has painted the screen. Good for most side effects (data fetching, subscriptions).</li>
+            <li><code>useLayoutEffect</code> runs synchronously immediately after React has performed all DOM mutations, but <em>before</em> the browser paints. Good for reading layout from the DOM and synchronously re-rendering to prevent flickering.</li>
+        </ul>
+    </div>
+
+    <div class="question">41. What is the difference between React and ReactDOM?</div>
+    <div class="answer">
+        React is a library for defining components and calculating UI updates (the core logic). ReactDOM is a separate library responsible for taking those calculations and actually manipulating the browser's Document Object Model (DOM).
+    </div>
+
+    <div class="question">42. What is Concurrent Mode / Concurrent Rendering in React 18?</div>
+    <div class="answer">
+        Concurrent Rendering is an under-the-hood mechanism introduced in React 18. It allows React to pause, abort, or resume rendering work. This means urgent tasks (like user typing) can interrupt non-urgent tasks (like rendering a large data chart), making the application feel much more responsive.
+    </div>
+
+    <div class="question">43. What is automatic batching in React 18?</div>
+    <div class="answer">
+        Batching is when React groups multiple state updates into a single re-render for better performance. Before React 18, React only batched updates inside React event handlers. In React 18, automatic batching applies everywhere, including inside promises, setTimeout, and native event handlers.
+    </div>
+
+    <div class="question">44. What is useTransition in React 18?</div>
+    <div class="answer">
+        <code>useTransition</code> is a hook that lets you mark state updates as "transitions" (non-urgent). React will prioritize urgent updates (like typing in an input) over transitions (like filtering a massive list), keeping the UI responsive.
+    </div>
+
+    <div class="question">45. What is useDeferredValue in React 18?</div>
+    <div class="answer">
+        <code>useDeferredValue</code> is a hook that lets you defer updating a part of the UI. It is similar to debouncing or throttling, but integrated with React's concurrent rendering. It tells React to show the old value while calculating the new value in the background.
+    </div>
+
+    <div class="question">46. What are forwardRefs in React?</div>
+    <div class="answer">
+        <code>React.forwardRef</code> is a method that allows a component to take a <code>ref</code> they received from above and pass it (or "forward" it) further down to a child component (usually a native DOM element). This is commonly used in reusable UI component libraries.
+    </div>
+
+    <div class="question">47. What is useImperativeHandle?</div>
+    <div class="answer">
+        <code>useImperativeHandle</code> is a hook used in conjunction with <code>forwardRef</code>. It allows you to customize the instance value that is exposed to parent components when using refs. Instead of exposing an entire DOM node, you can expose only specific functions (like <code>focus()</code> or <code>play()</code>).
+    </div>
+
+    <div class="question">48. What is Server-Side Rendering (SSR)?</div>
+    <div class="answer">
+        SSR is the process of rendering React components to HTML on the server and sending the fully populated HTML page to the client. This improves SEO and initial page load speed, as the browser can display the UI before downloading and executing the JavaScript bundle. Usually achieved with frameworks like Next.js.
+    </div>
+
+    <div class="question">49. What is Static Site Generation (SSG)?</div>
+    <div class="answer">
+        SSG generates HTML pages at build time rather than on each request. When a user requests a page, the pre-built HTML is served instantly via a CDN. It provides the absolute fastest performance and is ideal for blogs, documentation, and e-commerce product pages. Supported heavily by Next.js.
+    </div>
+
+    <div class="question">50. How do you handle routing in React?</div>
+    <div class="answer">
+        React does not have built-in routing. The industry standard is to use <code>React Router</code> (or rely on file-system routing if using Next.js). React Router allows you to define routes that map URLs to specific components, enabling single-page applications (SPAs) to have multiple logical pages without reloading the browser.
+    </div>
+
+    <div class="question">51. What are the benefits of using TypeScript with React?</div>
+    <div class="answer">
+        TypeScript adds static typing to React. Benefits include: catching type errors at compile time rather than runtime, enforcing strict structures for component props and state, providing better IDE autocompletion and intellisense, and making large codebases easier to maintain and refactor.
+    </div>
+
+    <div class="question">52. How do you test React components?</div>
+    <div class="answer">
+        React applications are typically tested using:
+        <ul>
+            <li><strong>Jest:</strong> A JavaScript testing framework used as the test runner and assertion library.</li>
+            <li><strong>React Testing Library (RTL):</strong> A library for testing React components in a way that resembles how users interact with the app (querying by text, roles, labels) rather than testing implementation details.</li>
+        </ul>
+    </div>
+
+    <div class="question">53. What is hydration in React?</div>
+    <div class="answer">
+        Hydration is the process that occurs after Server-Side Rendering (SSR). The server sends static HTML to the browser, which the browser renders immediately. Then, React downloads the JavaScript bundle, attaches event listeners to the existing HTML elements, and makes the page fully interactive. This process of attaching functionality to static HTML is called hydration.
+    </div>
+</body>
+</html>

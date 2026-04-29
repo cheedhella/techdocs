@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CountDownLatch - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is CountDownLatch?</div>
+    <div class="answer">
+        CountDownLatch is a concurrency utility class in the java.util.concurrent package that allows one or more threads to wait until a set of operations being performed in other threads completes.
+    </div>
+
+    <div class="question">How does CountDownLatch work?</div>
+    <div class="answer">
+        <ul>
+            <li>It is initialized with a given count.</li>
+            <li>The <code>await()</code> method blocks until the current count reaches zero due to invocations of the <code>countDown()</code> method.</li>
+            <li>Once the count reaches zero, all waiting threads are released, and any subsequent invocations of <code>await()</code> return immediately.</li>
+            <li><strong>Important:</strong> The count cannot be reset. If you need a version that resets the count, consider using a CyclicBarrier.</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple CountDownLatch example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.CountDownLatch;
+
+public class Example {
+    public static void main(String[] args) throws InterruptedException {
+        int workerCount = 3;
+        CountDownLatch latch = new CountDownLatch(workerCount);
+
+        for (int i = 0; i &lt; workerCount; i++) {
+            new Thread(() -&gt; {
+                try {
+                    System.out.println("Worker thread performing task...");
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    latch.countDown(); // Decrement the count
+                }
+            }).start();
+        }
+
+        System.out.println("Main thread waiting for workers to finish...");
+        latch.await(); // Block until count reaches 0
+        System.out.println("All workers finished. Main thread proceeding.");
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use CountDownLatch?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Waiting for initialization:</strong> A main thread waits for multiple services to start before proceeding.</li>
+            <li><strong>Dividing a problem:</strong> Splitting a large task into smaller chunks, giving each chunk to a worker thread, and waiting for all workers to complete before combining the results.</li>
+        </ul>
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

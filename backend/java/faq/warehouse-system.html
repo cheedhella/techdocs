@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Warehouse System</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">Warehouse System</div>
+    <div class="answer">
+        <ul>
+            <li><pre><code>
+<b>Requirements:</b>
+
+Create an in-memory Java class for stock management (no DB).
+
+Required Methods:
+addProduct()
+updateStock()
+deleteProduct()
+listProducts()
+setThreshold()
+alertLowStock()
+
+We’ll design:
+
+Product → holds stock + threshold
+Warehouse → manages all products
+Use:
+ConcurrentHashMap → thread-safe storage
+AtomicInteger → safe stock updates
+
+            </code></pre></li>
+        </ul>
+        <pre><code>
+import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+// Product class
+class Product {
+    private final String id;
+    private final String name;
+    private final AtomicInteger stock;
+    private final AtomicInteger threshold;
+
+    public Product(String id, String name, int stock, int threshold) {
+        this.id = id;
+        this.name = name;
+        this.stock = new AtomicInteger(stock);
+        this.threshold = new AtomicInteger(threshold);
+    }
+
+    public String getId() { return id; }
+    public String getName() { return name; }
+
+    public int getStock() { return stock.get(); }
+    public void addStock(int delta) { stock.addAndGet(delta); }
+    public void setStock(int value) { stock.set(value); }
+
+    public int getThreshold() { return threshold.get(); }
+    public void setThreshold(int value) { threshold.set(value); }
+
+    public boolean isLowStock() {
+        return stock.get() <= threshold.get();
+    }
+}
+
+// Warehouse system
+class Warehouse {
+    private final ConcurrentMap<String, Product> products = new ConcurrentHashMap<>();
+
+    // Add product
+    public void addProduct(String id, String name, int stock, int threshold) {
+        products.putIfAbsent(id, new Product(id, name, stock, threshold));
+    }
+
+    // Update stock (increment/decrement)
+    public void updateStock(String id, int delta) {
+        products.computeIfPresent(id, (k, product) -> {
+            product.addStock(delta);
+            return product;
+        });
+    }
+
+    // Delete product
+    public void deleteProduct(String id) {
+        products.remove(id);
+    }
+
+    // List all products
+    public void listProducts() {
+        products.values().forEach(p ->
+            System.out.println(p.getId() + " | " + p.getName() +
+                " | Stock: " + p.getStock() +
+                " | Threshold: " + p.getThreshold())
+        );
+    }
+
+    // Set threshold
+    public void setThreshold(String id, int threshold) {
+        products.computeIfPresent(id, (k, product) -> {
+            product.setThreshold(threshold);
+            return product;
+        });
+    }
+
+    // Alert low stock
+    public List<Product> alertLowStock() {
+        List<Product> lowStock = new ArrayList<>();
+
+        products.values().forEach(p -> {
+            if (p.isLowStock()) {
+                lowStock.add(p);
+            }
+        });
+
+        return lowStock;
+    }
+}
+
+// Main (demo)
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Warehouse warehouse = new Warehouse();
+
+        warehouse.addProduct("P1", "Laptop", 10, 5);
+        warehouse.addProduct("P2", "Phone", 20, 10);
+
+        // Simulate concurrent stock updates
+        Runnable task = () -> {
+            for (int i = 0; i < 100; i++) {
+                warehouse.updateStock("P1", -1);
+            }
+        };
+
+        Thread t1 = new Thread(task);
+        Thread t2 = new Thread(task);
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        warehouse.listProducts();
+
+        System.out.println("\nLow Stock Products:");
+        for (Product p : warehouse.alertLowStock()) {
+            System.out.println(p.getName());
+        }
+    }
+}
+        </code></pre>
+
+        <br><br>
+        <pre><code>
+
+
+<br><br>
+Even with multiple threads updating stock → no lost updates
+        </code></pre>
+    </div>
+</body>
+</html>

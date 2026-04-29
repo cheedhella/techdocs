@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CopyOnWriteArrayList - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is CopyOnWriteArrayList?</div>
+    <div class="answer">
+        <ul>
+            <li>It is a thread-safe variant of ArrayList in Java where all mutative operations (add, set, remove, etc.) are implemented by making a fresh copy of the underlying array;</li>
+            <li>It’s designed for concurrent environments where reads happen much more frequently than writes.;</li>
+            <li><b>Whenever you modify the list (add, remove, set):</b></li>
+            <ul>
+                <li>👉 It creates a new copy of the underlying array</li>
+                <li>👉 Applies the change to that new copy</li>
+                <li>👉 Replaces the old array reference</li>
+            </ul>
+            <li><b> Whereas:</b></li>
+            <ul>
+                <li>👉 Readers continue using the old array safely without locks</li>
+            </ul>
+            <li><b>Key characteristics:</b></li>
+            <ul>
+                <li>✔ Thread-safe without explicit locks</li>
+                <li>No need for synchronized</li>
+                <li>Safe for multi-threaded reads</li>
+                <li>✔ Iterators are safe (no ConcurrentModificationException)</li>
+                <li>Iterators work on a snapshot</li>
+                <li>They don’t see changes made after creation</li>
+                <li>✔ Great for read-heavy scenarios</li>
+                <li>Many reads, few writes = ideal use case</li>
+                <li>❌ Downsides (important)</li>   
+                <ul>
+                    <li>🚫 Expensive writes</li>
+                    <li>Every modification = full array copy</li>
+                    <li>Bad for frequent updates</li>
+                </ul>
+                <li>🚫 Memory overhead</li>
+                <li>Temporary copies consume extra memory</li>
+                <li>🚫 Iterators are not “live”</li>
+                <li>They don’t reflect latest updates</li>
+
+        </ul>
+    </div>
+
+    <div class="question">Why use CopyOnWriteArrayList?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Thread Safety Without Locking Readers</strong>: Read operations (get, iterator) do not require any synchronization and are extremely fast.</li>
+            <li><strong>Fail-Safe Iterators</strong>: Iterators operate on a snapshot of the array taken at the time the iterator was created. It will never throw ConcurrentModificationException.</li>
+        </ul>
+    </div>
+
+    <div class="question">How does CopyOnWriteArrayList work internally?</div>
+    <div class="answer">
+        <ul>
+            <li>An internal reentrant lock is used to synchronize mutative operations.</li>
+            <li>When a modification is made, a lock is acquired, the existing array is copied into a new array, the modification is applied to the new array, and finally, the internal reference is swapped to point to the new array.</li>
+            <li>This means writes are expensive but reads are cheap and lock-free.</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple CopyOnWriteArrayList example?</div>
+    <div class="answer">
+        <pre><code>
+            import java.util.concurrent.CopyOnWriteArrayList;
+
+            public class Example {
+                public static void main(String[] args) {
+                    CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+            
+                    list.add("A");
+                    list.add("B");
+            
+                    // Iterator will only see "A" and "B" (snapshot from creation)
+                    for (String item : list) {
+                        list.add("C"); // No ConcurrentModificationException, // Modifying while iterating
+                        System.out.println(item);
+                    }
+            
+                    System.out.println(list);
+                }
+            }
+
+            output:
+A
+B
+[A, B, C, C]
+
+
+import java.util.Iterator;
+
+public class Example {
+    public static void main(String[] args) {
+        CopyOnWriteArrayList&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();
+        
+        list.add("A");
+        list.add("B");
+        
+        Iterator&lt;String&gt; iterator = list.iterator();
+        
+        // Modifying while iterating
+        list.add("C"); 
+        
+        // Iterator will only see "A" and "B" (snapshot from creation)
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use CopyOnWriteArrayList?</div>
+    <div class="answer">
+        It is best suited for scenarios where reads vastly outnumber writes and where thread-safe traversal is critical. A classic example is maintaining a list of event listeners or observers in an application.
+    </div>
+
+    <div class="question">What are the trade-offs?</div>
+    <div class="answer">
+        <strong>Cons:</strong>
+        <ul>
+            <li><strong>Memory Overhead</strong>: Every write operation copies the entire array, which can lead to high memory consumption and GC overhead for large lists.</li>
+            <li><strong>Stale Data</strong>: Iterators provide a snapshot, so they might not reflect the most recent modifications made by other threads.</li>
+        </ul>
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

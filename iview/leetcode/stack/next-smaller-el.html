@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Next Smaller Element - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Next Smaller Element (Classical Stack Problem)</div>
+        <div class="problem-description">
+            <p>Given an array of positive integers, for each array element output the <strong>nearest smaller element</strong>, i.e., the first smaller element that comes after the element in the array. If no such element exists, output <code>-1</code>.</p>
+            <p><strong>Example:</strong><br>
+            Input: <code>[3, 2, 4, 5, 1, 6]</code><br>
+            Output: <code>[2, 1, 1, 1, -1, -1]</code></p>
+            <p><strong>Approach 1: Brute Force (O(N^2) Time, O(1) Space)</strong><br>
+            The simplest approach is to use two nested loops. For every element at index <code>i</code>, we iterate from <code>j = i + 1</code> to the end of the array to find the first element that is smaller than <code>arr[i]</code>. If found, we store it; if we reach the end without finding any, we store <code>-1</code>. This results in a Time Limit Exceeded (TLE) for large inputs.</p>
+            <p><strong>Approach 2: Monotonic Stack (O(N) Time, O(N) Space)</strong><br>
+            Using a Monotonic Stack. We iterate through the array backwards (from right to left). For each element, we pop elements from the stack that are greater than or equal to the current element. The top of the stack will then be the nearest smaller element. Finally, we push the current element onto the stack. This gives us an O(N) time complexity.</p>
+            <p><em>Source: <a href="https://blog.garybricks.com/nearest-smallest-element-classical-stack-problem" target="_blank">Gary's Blog</a></em></p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+import java.util.Arrays;
+import java.util.Stack;
+
+public class NextSmallerElement {
+    
+    // Approach 1: Brute Force O(N^2)
+    public int[] nextSmallerElementBruteForce(int[] arr) {
+        int n = arr.length;
+        int[] result = new int[n];
+        
+        for (int i = 0; i &lt; n; i++) {
+            int current = arr[i];
+            boolean found = false;
+            for (int j = i + 1; j &lt; n; j++) {
+                if (arr[j] &lt; current) {
+                    result[i] = arr[j];
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                result[i] = -1;
+            }
+        }
+        return result;
+    }
+
+    // Approach 2: Monotonic Stack O(N)
+    public int[] nextSmallerElement(int[] arr) {
+        int n = arr.length;
+        int[] result = new int[n];
+        Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+
+        // Traverse from right to left
+        for (int i = n - 1; i &gt;= 0; i--) {
+            // Remove all elements from stack that are greater than or equal to current element
+            // because they can never be the "Next Smaller Element" for any element to the left
+            while (!stack.isEmpty() && stack.peek() &gt;= arr[i]) {
+                stack.pop();
+            }
+
+            // If stack is empty, there is no smaller element to the right
+            if (stack.isEmpty()) {
+                result[i] = -1;
+            } else {
+                // The top element is the nearest smaller element
+                result[i] = stack.peek();
+            }
+
+            // Push current element to stack for future elements to compare against
+            stack.push(arr[i]);
+        }
+        
+        return result;
+    }
+
+    public static void main(String[] args) {
+        NextSmallerElement solver = new NextSmallerElement();
+        
+        int[] arr1 = {3, 2, 4, 5, 1, 6};
+        System.out.println("Input:  " + Arrays.toString(arr1));
+        System.out.println("Output (Brute Force): " + Arrays.toString(solver.nextSmallerElementBruteForce(arr1)));
+        System.out.println("Output (Stack):       " + Arrays.toString(solver.nextSmallerElement(arr1)));
+        
+        System.out.println();
+        
+        int[] arr2 = {3, 1, 2};
+        System.out.println("Input:  " + Arrays.toString(arr2));
+        System.out.println("Output (Brute Force): " + Arrays.toString(solver.nextSmallerElementBruteForce(arr2)));
+        System.out.println("Output (Stack):       " + Arrays.toString(solver.nextSmallerElement(arr2)));
+    }
+}
+
+<b>Output:</b>
+Input:  [3, 2, 4, 5, 1, 6]
+Output (Brute Force): [2, 1, 1, 1, -1, -1]
+Output (Stack):       [2, 1, 1, 1, -1, -1]
+
+Input:  [3, 1, 2]
+Output (Brute Force): [1, -1, -1]
+Output (Stack):       [1, -1, -1]
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>

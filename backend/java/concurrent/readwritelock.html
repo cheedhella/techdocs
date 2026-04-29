@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ReadWriteLock</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is ReadWriteLock?</div>
+    <div class="answer">
+        <ul>
+            <li>A lock ensures that only one thread (or a controlled number) can access a critical section at a time;</li>
+        </ul>
+    </div>
+
+    <div class="question">Why we need Locks?</div>
+    <div class="answer">
+        <ul><li>
+        <pre><code>
+# Configuration Service 
+Your app reads config values thousands of times per second
+Config updates happen rarely (e.g., feature flag change)
+
+<br><br>
+<b>Why ReadWriteLock fits perfectly?</b>
+✅ Many threads can read config simultaneously
+❌ Only one thread can write config at a time
+<br><br>
+
+import java.util.*;
+import java.util.concurrent.locks.*;
+
+class ConfigService {
+    private final Map<String, String> config = new HashMap<>();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    // Read config (very frequent)
+    public String get(String key) {
+        lock.readLock().lock();
+        try {
+            return config.get(key);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    // Update config (rare)
+    public void update(String key, String value) {
+        lock.writeLock().lock();
+        try {
+            config.put(key, value);
+            System.out.println("Updated config: " + key);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        ConfigService configService = new ConfigService();
+
+        // Initial config
+        configService.update("featureFlag", "OFF");
+
+        // Reader task
+        Runnable reader = () -> {
+            for (int i = 0; i < 5; i++) {
+                String value = configService.get("featureFlag");
+                System.out.println(Thread.currentThread().getName() +
+                        " got value: " + value);
+                try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+            }
+        };
+
+        // Writer task
+        Runnable writer = () -> {
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+
+            configService.update("featureFlag", "ON");
+
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+
+            configService.update("featureFlag", "OFF");
+        };
+
+        // Start threads
+        new Thread(reader, "Reader-1").start();
+        new Thread(reader, "Reader-2").start();
+        new Thread(reader, "Reader-3").start();
+
+        new Thread(writer, "Writer").start();
+    }
+}
+        </code></pre>
+        <b>👉 This is not atomic:</b>
+        <pre><code>
+            Read
+            Modify
+            Write
+        </code></pre>
+        👉 Two threads can interfere → wrong result
+        </li>
+        <li>
+            To prevent race conditions and ensure data consistency, we need Locks.
+        </li>
+    </ul>
+    </div>
+
+    <div class="question">What is synchronized?</div>
+    <div class="answer">
+        <ul><li>
+    synchronized
+    <pre><code>
+        synchronized (lock) {
+            count++;
+        }
+    </code></pre>
+    How it works? It acquires a lock on the object and release it when the block is executed; 
+    Cons: It blocks the calling thread, if another thread already in the critical section;
+    </li></ul>
+    </div>
+
+
+    <div class="question">What is ReentrantLock?</div>
+    <div class="answer">
+        <ul><li>
+    ReentrantLock
+    <pre><code>
+        import java.util.concurrent.locks.ReentrantLock;
+
+        # Blocking - Same as synchronized
+        ReentrantLock lock = new ReentrantLock();
+        lock.lock(); // It acquires a lock on the object and release it when the block is executed;
+        try {
+            // critical section
+        } finally {
+            lock.unlock(); // MUST always be in finally
+        }
+
+        <br><br>
+        # Non-blocking - TryLock
+        ReentrantLock lock = new ReentrantLock();
+        if (lock.tryLock()) {
+            try {
+                // critical section
+            } finally {
+                lock.unlock();
+            }
+        } else {
+            // couldn't acquire lock → do something else
+        }
+        <br><br>
+        # Non-blocking - TryLock with timeout(Waits for limited time → avoids deadlock situations)
+        ReentrantLock lock = new ReentrantLock();
+        if (lock.tryLock(5, TimeUnit.SECONDS)) {
+            try {
+                // critical section
+            } finally {
+                lock.unlock();
+            }
+        } else {
+            // couldn't acquire lock → do something else
+        }
+
+        <br><br>
+        # The same thread can acquire the same lock multiple times without deadlocking.
+        lock.lock();
+        try {
+            lock.lock(); // ✅ allowed (same thread)
+            try {
+                // critical section
+            } finally {
+                lock.unlock();
+            }
+        } finally {
+            lock.unlock();
+        }
+    </code></pre>
+    How it works? It acquires a lock on the object and release it when the block is executed;
+    Cons: It blocks the calling thread, if another thread already in the critical section;
+    </li></ul>
+    </div>
+
+
+
+    import java.util.concurrent.locks.ReentrantLock;
+
+ReentrantLock lock = new ReentrantLock();
+
+lock.lock();
+try {
+    count++;
+} finally {
+    lock.unlock();
+}
+
+    
+
+    Lock
+    <pre><code>
+        lock.lock();
+    </code></pre>
+
+    <div class="question">Why use Locks instead of synchronized blocks?</div>
+    <div class="answer">
+        While <code>synchronized</code> is easier to use, <code>Lock</code> provides several advanced features:
+        <ul>
+            <li><strong>Fairness</strong>: You can configure a lock to grant access to the longest-waiting thread (fairness policy), whereas <code>synchronized</code> makes no such guarantees (thread starvation is possible).</li>
+            <li><strong>Non-blocking Attempts</strong>: You can try to acquire a lock using <code>tryLock()</code>. If it's already held by another thread, you can do something else instead of blocking indefinitely.</li>
+            <li><strong>Interruptible Waiting</strong>: You can use <code>lockInterruptibly()</code>, which allows a waiting thread to be interrupted and stop waiting for the lock.</li>
+            <li><strong>Multiple Conditions</strong>: A lock can be associated with multiple <code>Condition</code> objects (similar to <code>wait()</code> and <code>notify()</code>), allowing for finer-grained thread communication.</li>
+        </ul>
+    </div>
+
+    <div class="question">What is ReentrantLock?</div>
+    <div class="answer">
+        <code>ReentrantLock</code> is the most widely used implementation of the <code>Lock</code> interface. "Reentrant" means that a thread that currently holds the lock can acquire it again multiple times without deadlocking itself. It must release the lock the exact same number of times it acquired it.
+    </div>
+
+    <div class="question">What is ReadWriteLock?</div>
+    <div class="answer">
+        <code>ReadWriteLock</code> (with its implementation <code>ReentrantReadWriteLock</code>) maintains a pair of associated locks: one for read-only operations and one for writing. 
+        <ul>
+            <li><strong>Read Lock</strong>: Can be held simultaneously by multiple reader threads, as long as there are no writers.</li>
+            <li><strong>Write Lock</strong>: Is exclusive. Only one thread can hold it, and no other thread can hold the read lock at the same time.</li>
+        </ul>
+        This is incredibly useful for data structures that are read frequently but modified rarely, significantly improving concurrency.
+    </div>
+
+    <div class="question">Can you show a ReentrantLock example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Counter {
+    private int count = 0;
+    // Create a lock (can pass 'true' for a fair lock)
+    private final Lock lock = new ReentrantLock();
+
+    public void increment() {
+        lock.lock(); // Acquire the lock
+        try {
+            count++; // Critical section
+        } finally {
+            // ALWAYS release the lock in a finally block!
+            // Otherwise, if an exception occurs, the lock is never released.
+            lock.unlock(); 
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use Locks?</div>
+    <div class="answer">
+        Stick to <code>synchronized</code> blocks by default as they are simpler and less prone to errors (like forgetting to call <code>unlock()</code>). Use the <code>Lock</code> API when you specifically need its advanced features: fair locks, interruptible lock acquisition, non-blocking <code>tryLock</code>, or when you need separate read vs. write locks (<code>ReadWriteLock</code>).
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

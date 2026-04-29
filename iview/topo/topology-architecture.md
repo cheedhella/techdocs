@@ -2,6 +2,10 @@ What problems Global Topology solves?
     As a network administrator, there is no single place to visualize the entire topology and manage the network;
     https://academy.broadcom.com/blog/network-observability/network-monitoring/broadcom-unveils-dx-netops-global-topology
 
+    DA/DC - CDP, LLDP, SAT 
+    VNA - SD-WAN(like vipitela, dnac, aci, silverpeak etc);
+    Spectrum - Alarms/Faults;
+
 How it works?
     Initial Full Sync(One time)
         - What it does?
@@ -149,3 +153,59 @@ public void setFullSyncStatus(FullSyncStatus fsStatus) {
       unlock(metaCache, FULL_SYNC_STATUS);
   }
 }
+
+
+------------------------------------------------
+Keycloak:
+1. It supports multiple ways of authentication:
+    Username/password
+    OTP / MFA
+    Social login (Google, GitHub)
+    SSO (Single Sign-On)
+2. Realm = Company
+   Group = Department
+   Each group will have it's set of users; Permissions are usally defined at the group level;
+3. It has it's own dashboard to manage users;
+
+User logs in via web/mobile;
+Request is redirected to Keycloak;
+If successful, keycloak issues a JWT token to client; JWT token has userId, roles, expiry etc;
+
+DOes client store cookies somewhere?
+    - Server usually sends a HTTP-only cookie: Set-Cookie: sessionId=abc123; HttpOnly; Secure; SameSite=Strict
+    - Browser takes care of storing them securly;
+    - JS code can't access these cookies(using docuemnt.cookies etc);
+    - But, for every request to server, clients add the cookie is added to request; // Authorization: Bearer <access_token>
+    - 
+
+How microservices validate the token?
+    JWT token is signed using Keycloak’s private key;
+    Microservice first get the keycloak's public key: /realms/{realm}/protocol/openid-connect/certs
+    Then, they use the pubic key to verify it;
+    It signature fails -> token is fake -> reject;
+
+
+
+
+
+
+
+
+ (web/mobile)
+Request is redirected to Authorization Server
+
+👉 Example: login via Keycloak/Auth0
+
+2. Token Issuance
+
+After successful authentication:
+
+Authorization server returns:
+Access Token (JWT)
+Refresh Token
+
+The JWT contains:
+
+user ID
+roles/permissions (claims)
+expiry

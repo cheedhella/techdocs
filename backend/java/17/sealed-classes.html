@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sealed Classes - Java 17</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Sealed Classes?</div>
+    <div class="answer">
+        Sealed Classes, finalized in Java 17, restrict which other classes or interfaces may extend or implement them. They allow the author of a class or interface to control the inheritance hierarchy.
+    </div>
+
+    <div class="question">Why use Sealed Classes?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Domain Modeling</strong>: Allows exhaustive modeling of business domains (Algebraic Data Types) by restricting the valid subtypes.</li>
+            <li><strong>Security/Maintainability</strong>: Prevents unauthorized or unexpected extensions of an API.</li>
+            <li><strong>Enhanced Switch</strong>: Enables exhaustive pattern matching in <code>switch</code> expressions without needing a <code>default</code> clause, because the compiler knows all possible subtypes.</li>
+        </ul>
+    </div>
+
+    <div class="question">How do you declare a Sealed Class?</div>
+    <div class="answer">
+        Use the <code>sealed</code> modifier and specify allowed subclasses using the <code>permits</code> clause. The allowed subclasses must be either:
+        <ul>
+            <li><code>final</code> (cannot be extended further)</li>
+            <li><code>sealed</code> (allows further controlled extension)</li>
+            <li><code>non-sealed</code> (opens the hierarchy back up to any subclass)</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple Sealed Class example?</div>
+    <div class="answer">
+        <pre><code>public abstract sealed class Shape 
+    permits Circle, Rectangle, Square {
+}
+
+// Must declare as final, sealed, or non-sealed
+public final class Circle extends Shape {
+    public double radius;
+}
+
+public sealed class Rectangle extends Shape permits TransparentRectangle {
+    public double width, height;
+}
+
+public non-sealed class Square extends Shape {
+    public double side;
+}
+
+public final class TransparentRectangle extends Rectangle {
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use Sealed Classes?</div>
+    <div class="answer">
+        Use them when you have a known, closed set of implementations for an interface or abstract class. For example, representing states in a state machine, abstract syntax trees (ASTs), or representing a specific type of event in an event-driven system.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Locks - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">Producer Consumer Problem with Bounded Buffer</div>
+    <div class="answer">
+        <ul>
+            <li>Producer Consumer Problem is a classic concurrency problem where multiple producers produce items and multiple consumers consume them. The problem is to ensure that the producers produce items at a rate that is not greater than the rate at which the consumers can consume them.</li>
+            <li>The solution is to use a bounded buffer to store the items. The producer produces items and puts them in the buffer. The consumer consumes items from the buffer.</li>
+            <li>The buffer is a fixed size and the producer and consumer must synchronize their actions to ensure that the buffer is not overflowed or underflowed.</li>
+            <li>The producer and consumer must use a mutex to synchronize their actions.</li>
+            <li>The producer and consumer must use a condition variable to signal each other when the buffer is empty or full.</li>
+            <li>The producer and consumer must use a condition variable to signal each other when the buffer is empty or full.</li>
+        </ul>
+    </div>
+
+    <div class="question">How to solve Producer Consumer Problem with Bounded Buffer?</div>
+    <div class="answer">
+        <ul><li>
+            <pre><code>
+import java.util.*;
+import java.util.concurrent.locks.*;
+
+class BoundedBuffer {
+    private final Queue<Integer> queue = new LinkedList<>();
+    private final int capacity = 5;
+
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition notFull = lock.newCondition();
+    private final Condition notEmpty = lock.newCondition();
+
+    // Producer
+    public void produce(int value) throws InterruptedException {
+        lock.lock();
+        try {
+            while (queue.size() == capacity) {
+                System.out.println("Buffer full, producer waiting...");
+                notFull.await(); // 🔴 WAIT here - “I cannot proceed. I’ll release the lock and sleep until someone signals me
+            }
+
+            queue.add(value);
+            System.out.println("Produced: " + value);
+
+            notEmpty.signal(); // 🟢 wake up consumer
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    // Consumer
+    public void consume() throws InterruptedException {
+        lock.lock();
+        try {
+            while (queue.isEmpty()) {
+                System.out.println("Buffer empty, consumer waiting...");
+                notEmpty.await(); // 🔴 WAIT here 
+            }
+
+            int value = queue.poll();
+            System.out.println("Consumed: " + value);
+
+            notFull.signal(); // 🟢 wake up producer
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+
+// MAIN CLASS
+public class Main {
+    public static void main(String[] args) {
+
+        BoundedBuffer buffer = new BoundedBuffer();
+
+        // Producer thread
+        Runnable producer = () -> {
+            int value = 1;
+            while (true) {
+                try {
+                    buffer.produce(value++);
+                    Thread.sleep(500); // simulate work
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        };
+
+        // Consumer thread
+        Runnable consumer = () -> {
+            while (true) {
+                try {
+                    buffer.consume();
+                    Thread.sleep(800); // slower than producer
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        };
+
+        new Thread(producer).start();
+        new Thread(consumer).start();
+    }
+}
+
+
+<br><br>
+Without await():
+
+You’d need busy waiting (wastes CPU)
+Or complex manual coordination
+
+With await():
+
+Threads sleep efficiently
+Wake up only when needed
+
+            </code></pre>
+    </li></ul>
+    </div>
+</body>
+</html>

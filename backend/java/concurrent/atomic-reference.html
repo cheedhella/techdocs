@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>AtomicReference - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is AtomicReference?</div>
+    <div class="answer">
+        <ul><li>
+            <li>AtomicReference = lock-free, thread-safe updates to object references using CAS</li>
+            <li>Why use AtomicReference?</li>
+            <ul>
+                <li>✅ Thread-safe without locks</li>
+                <li>No blocking</li>
+                <li>Better performance under contention</li>
+                <li>✅ Fine-grained control</li>
+                <li>You control when updates happen</li>
+                <li>✅ Useful for immutable objects</li>
+            </ul>
+        </li>
+    <li><pre><code>
+        | Feature        | `volatile` | `AtomicReference` |
+        | -------------- | ---------- | ----------------- |
+        | Visibility     | ✅          | ✅              |
+        | Atomic updates | ❌          | ✅              |
+        | CAS support    | ❌          | ✅              |
+        
+    </code></pre></li></ul>
+    </div>
+
+
+    <div class="question">Can you show a simple CountDownLatch example?</div>
+    <div class="answer">
+        <pre><code>
+            import java.util.concurrent.atomic.AtomicReference;
+
+public class Example {
+    public static void main(String[] args) {
+        AtomicReference<String> ref = new AtomicReference<>("Hello");
+
+        boolean updated = ref.compareAndSet("Hello", "World");
+
+        System.out.println(updated); // true
+        System.out.println(ref.get()); // World
+    }
+}
+        </code></pre>
+    </div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Switch Expressions - Java 17</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What are Switch Expressions?</div>
+    <div class="answer">
+        Finalized in Java 14, Switch Expressions allow the <code>switch</code> statement to be used as an expression (meaning it evaluates to a single value) or as a statement. They introduce a new arrow (<code>-&gt;</code>) syntax and remove the need for <code>break</code> statements, eliminating fall-through bugs.
+    </div>
+
+    <div class="question">Why use Switch Expressions?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>No Fall-Through</strong>: The arrow syntax (<code>-&gt;</code>) only executes the code to its right. No <code>break</code> needed!</li>
+            <li><strong>Concise Code</strong>: Multiple case labels can be combined on a single line.</li>
+            <li><strong>Value Return</strong>: Directly assign the result of the switch block to a variable without mutating external state.</li>
+            <li><strong>Exhaustiveness</strong>: The compiler ensures all possible cases are covered (especially useful with Enums and Sealed Classes).</li>
+        </ul>
+    </div>
+
+    <div class="question">What is the <code>yield</code> keyword?</div>
+    <div class="answer">
+        If a case block requires multiple lines of logic before returning a value, the <code>yield</code> keyword is used to return a value from the switch expression.
+    </div>
+
+    <div class="question">Can you show a simple Switch Expression example?</div>
+    <div class="answer">
+        <pre><code>// Traditional Switch Statement
+int numLetters;
+switch (day) {
+    case MONDAY:
+    case FRIDAY:
+    case SUNDAY:
+        numLetters = 6;
+        break;
+    case TUESDAY:
+        numLetters = 7;
+        break;
+    default:
+        numLetters = 0;
+}
+
+// Switch Expression
+int numLetters = switch (day) {
+    case MONDAY, FRIDAY, SUNDAY -&gt; 6;
+    case TUESDAY                -&gt; 7;
+    case THURSDAY, SATURDAY     -&gt; 8;
+    case WEDNESDAY              -&gt; 9;
+    default                     -&gt; {
+        System.out.println("Invalid day");
+        yield 0; // Using yield for multi-line block
+    }
+};</code></pre>
+    </div>
+
+    <div class="question">When should you use Switch Expressions?</div>
+    <div class="answer">
+        Use them whenever you are writing a <code>switch</code> block, especially when mapping an input value to an output value. They provide safer, cleaner, and more robust code than traditional switch statements.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

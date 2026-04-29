@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BlockingQueue - Java</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is BlockingQueue?</div>
+    <div class="answer">
+        BlockingQueue is an interface in the java.util.concurrent package that extends the Queue interface. It supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in the queue when storing an element.
+    </div>
+
+    <div class="question">Why use BlockingQueue?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Thread Safety</strong>: Built-in thread safety for adding and removing elements.</li>
+            <li><strong>Simplifies Producer-Consumer Patterns</strong>: Automatically handles the blocking mechanisms required when a queue is full (producers wait) or empty (consumers wait), eliminating the need for manual wait()/notify() logic.</li>
+        </ul>
+    </div>
+
+    <div class="question">What are common implementations of BlockingQueue?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>ArrayBlockingQueue</strong>: A bounded blocking queue backed by an array. Requires a fixed capacity. Uses a single lock for both producers and consumers.</li>
+            <li><strong>LinkedBlockingQueue</strong>: An optionally-bounded blocking queue based on linked nodes. Typically offers higher throughput as it uses separate locks for reading and writing.</li>
+            <li><strong>PriorityBlockingQueue</strong>: An unbounded blocking queue that uses the same ordering rules as PriorityQueue.</li>
+            <li><strong>SynchronousQueue</strong>: A queue where each insert operation must wait for a corresponding remove operation by another thread. It essentially has a capacity of zero.</li>
+        </ul>
+    </div>
+
+    <div class="question">Can you show a simple BlockingQueue example?</div>
+    <div class="answer">
+        <pre><code>import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class Example {
+    public static void main(String[] args) {
+        BlockingQueue&lt;Integer&gt; queue = new ArrayBlockingQueue&lt;&gt;(5);
+        
+        // Producer thread
+        new Thread(() -&gt; {
+            try {
+                queue.put(1); // Blocks if queue is full
+                System.out.println("Produced 1");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+        
+        // Consumer thread
+        new Thread(() -&gt; {
+            try {
+                Integer item = queue.take(); // Blocks if queue is empty
+                System.out.println("Consumed " + item);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+    }
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use BlockingQueue?</div>
+    <div class="answer">
+        It is perfect for the classic Producer-Consumer problem, task scheduling, asynchronous processing, and passing data between threads safely without explicit synchronization overhead.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

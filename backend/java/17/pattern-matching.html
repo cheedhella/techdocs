@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pattern Matching for instanceof - Java 17</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+</head>
+<body>
+    <div class="question">What is Pattern Matching for instanceof?</div>
+    <div class="answer">
+        Finalized in Java 16 (and standard in Java 17), Pattern Matching for <code>instanceof</code> removes the need for explicit casting after an <code>instanceof</code> check. It introduces a binding variable that automatically holds the casted value if the check passes.
+    </div>
+
+    <div class="question">Why use it?</div>
+    <div class="answer">
+        <ul>
+            <li><strong>Less Boilerplate</strong>: Eliminates the tedious and redundant type casting.</li>
+            <li><strong>Safer Code</strong>: Reduces the risk of a <code>ClassCastException</code>.</li>
+            <li><strong>Readability</strong>: Makes code cleaner and more focused on the actual logic.</li>
+        </ul>
+    </div>
+
+    <div class="question">How does scoping work for the binding variable?</div>
+    <div class="answer">
+        The binding variable is only in scope where the compiler can guarantee the pattern has matched. This means it is available inside the <code>if</code> block, or even in the right-hand side of a short-circuiting <code>&&</code> operator.
+    </div>
+
+    <div class="question">Can you show a simple example?</div>
+    <div class="answer">
+        <pre><code>// Before Java 16
+if (obj instanceof String) {
+    String s = (String) obj; // Explicit cast
+    System.out.println(s.length());
+}
+
+// With Pattern Matching
+if (obj instanceof String s) {
+    // 's' is automatically casted and in scope
+    System.out.println(s.length());
+}
+
+// Scope rules with &&
+if (obj instanceof String s && s.length() &gt; 5) {
+    System.out.println(s.toUpperCase());
+}</code></pre>
+    </div>
+
+    <div class="question">When should you use Pattern Matching?</div>
+    <div class="answer">
+        Whenever you are checking the type of an object using <code>instanceof</code> and subsequently using it as that type. It should become the standard way to perform type checks in your codebase.
+    </div>
+
+    <br/><br/>
+    <a href="../home.html">← Back to Java Home</a>
+</body>
+</html>

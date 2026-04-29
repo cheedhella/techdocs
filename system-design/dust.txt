@@ -282,3 +282,118 @@ Having 12 years of experience in Networking L2/L3 protocols, Linux.
                       •Command Line Interface (CLI). 
                       •Web interface.
 ->Expertise in working on Ixia traffic generator Tool, SNMP tools : MG-Soft, Mib Browser, NetSNMP and Other tools Cisco ACS Server,RAR.
+
+
+
+🚩 Interview Trap: "We'll just add more replicas."
+Read replicas solve read scaling.
+But they don't solve write scaling.
+At all.
+
+𝐄𝐯𝐞𝐫𝐲 𝐫𝐞𝐩𝐥𝐢𝐜𝐚 𝐬𝐭𝐢𝐥𝐥 𝐫𝐞𝐜𝐞𝐢𝐯𝐞𝐬 𝐞𝐯𝐞𝐫𝐲 𝐰𝐫𝐢𝐭𝐞 𝐟𝐫𝐨𝐦 𝐭𝐡𝐞 𝐩𝐫𝐢𝐦𝐚𝐫𝐲.
+10 replicas means 10 copies of every write.
+The write load on your primary stays exactly the same.
+
+If your bottleneck is writes, replicas won't help.
+You need sharding.
+If your bottleneck is reads, replicas are perfect.
+
+Confusing these two is one of the most common mistakes in system design interviews.
+And interviewers catch it instantly.
+
+𝐐𝐮𝐢𝐜𝐤 𝐜𝐡𝐞𝐜𝐤: You're designing a logging system that ingests 500,000 events per second but only queries data once per hour. Replicas or sharding? 
+
+
+📌 Projects:
+Multi-threaded Chat Server (Sockets + Concurrency)
+Backend systems focused on performance and scalability
+I believe in learning by building and sharing. I regularly document my journey, insights, and lessons from real-world development.
+
+
+
+
+𝗕𝘂𝗶𝗹𝘁 𝗮 𝗗𝗶𝘀𝘁𝗿𝗶𝗯𝘂𝘁𝗲𝗱 𝗥𝗮𝘁𝗲 𝗟𝗶𝗺𝗶𝘁𝗲𝗿 𝗳𝗿𝗼𝗺 𝘀𝗰𝗿𝗮𝘁𝗰𝗵 🚀
+
+Designed a horizontally scalable system to handle high traffic and enforce fair API usage using the Token Bucket algorithm. The core idea was to keep APIs stateless while ensuring consistent and atomic rate-limit decisions.
+
+🔹 Go-based API services behind nginx (load balanced)
+🔹 Redis used as the state store with Lua scripts for atomic operations (no race conditions)
+🔹 Kafka integrated for streaming rate-limit events (analytics & auditing)
+🔹 Prometheus for monitoring and observability
+
+Each request is processed in constant time, with Redis handling concurrency efficiently. The rate-limit decision path is fully synchronous, while analytics is decoupled via Kafka to avoid impacting performance.
+
+💡 Key learning: Separating real-time decision making from event processing is critical for building reliable distributed systems.
+
+Would love feedback from folks working on high-scale backend systems 🙌
+https://www.linkedin.com/safety/go/?url=https%3A%2F%2Flnkd.in%2Fg4EH8akw&urlhash=8RON&mt=Nhl70Ejrdcch-MuQ6b8kGY8Vq-h2prQP2ywU4zVthq-n9ti1TjZT1oLGH0o-e8xvFdQ1ZmB3qvPNRabI_WbHQnUvbDkAgPpthPoje8ORx0Pc5sg_KNx_2YCT1Q&isSdui=true&lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3BdDE07jZ0RkWVDTeqnhi9ww%3D%3D
+
+
+
+
+
+
+Here are some scenario-based DevOps interview questions every hiring manager should ask:
+
+1. Production Went Down During Peak Traffic
+What would be your first 30-minute action plan?
+
+2. Deployment Failed After Release to Production
+How would you handle rollback, communication, and root cause analysis?
+
+3. AWS Monthly Cost Increased by 40%
+How would you investigate and optimize cloud spend?
+
+4. Engineering Team Complains CI/CD is Slow
+How would you improve pipeline speed without compromising quality?
+
+5. Security Team Found Critical Vulnerabilities
+How would you prioritize remediation across live systems?
+
+6. Application Works in Dev but Fails in Production
+How would you troubleshoot environment inconsistencies?
+
+7. Team Wants to Migrate Monolith to Microservices
+What factors would you evaluate before approving the move?
+
+8. Database Performance Degraded After Release
+How would you identify whether the issue is infra, code, or queries?
+
+9. Multi-Region Disaster Recovery Test Failed
+What would be your next steps?
+
+10. Developers Need Faster Releases but Compliance is Strict
+How would you balance speed with governance?
+
+11. Logs Show Errors, But Monitoring Shows Green
+How would you improve observability maturity?
+
+12. A Senior Engineer Resigns Mid-Critical Project
+How would you ensure continuity and delivery?
+
+13. Kubernetes Cluster Keeps Restarting Pods Randomly
+How would you investigate systematically?
+
+14. Leadership Wants 99.99% Uptime
+What roadmap would you create to achieve it?
+
+15. Multiple Teams Blame Each Other During Incident
+How would you lead incident response and postmortem culture?
+
+What these questions really test:
+→ System Design Thinking
+→ Incident Management
+→ Automation Mindset
+→ Cloud & Infrastructure Expertise
+→ Security Awareness
+→ Cost Optimization
+→ Leadership & Ownership
+→ Communication Under Pressure
+
+A true DevOps leader doesn’t just manage servers.
+They build reliable systems, resilient teams, and scalable delivery culture.
+
+Which question would you ask first?
+
+
+

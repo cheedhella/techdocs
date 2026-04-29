@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Climbing Stairs (3 Steps) - LeetCode</title>
+    <link rel="stylesheet" href="../../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+</head>
+<body>
+    <div class="code-block">
+        <div class="code-block-title">Climbing Stairs - 3 Steps Variation (Dynamic Programming)</div>
+        <div class="problem-description">
+            <p><strong>Problem:</strong> A fox wants to reach step <code>N</code>. It can jump either <code>1 step</code>, <code>2 steps</code>, or <code>3 steps</code> at a time. How many different ways (combinations) can it reach step <code>N</code>?</p>
+            <p><strong>Example:</strong><br>
+            Input: <code>N = 4</code><br>
+            Output: <code>7</code><br>
+            <em>Explanation: The combinations are: (1,1,1,1), (1,1,2), (1,2,1), (2,1,1), (2,2), (1,3), (3,1)</em></p>
+            
+            <p><strong>Approach 1: Recursion with Memoization (Top-Down DP) - O(N) Time, O(N) Space</strong><br>
+            To reach step <code>N</code>, the fox could have jumped from step <code>N-1</code> (by taking 1 step), from step <code>N-2</code> (by taking 2 steps), or from step <code>N-3</code> (by taking 3 steps). Therefore, the total ways to reach <code>N</code> is the sum of the ways to reach <code>N-1</code>, <code>N-2</code>, and <code>N-3</code>. We use an array to store previously calculated answers to avoid redundant calculations.</p>
+            
+            <p><strong>Approach 2: Tabulation (Bottom-Up DP) - O(N) Time, O(N) Space</strong><br>
+            We build an array <code>dp</code> from size 0 to N. <code>dp[i]</code> stores the number of ways to reach step <code>i</code>. We set the base cases: <code>dp[0] = 1</code>, <code>dp[1] = 1</code>, <code>dp[2] = 2</code>. Then we iterate from step 3 to N, calculating <code>dp[i] = dp[i-1] + dp[i-2] + dp[i-3]</code>.</p>
+            
+            <p><strong>Approach 3: Space Optimization - O(N) Time, O(1) Space</strong><br>
+            Since we only ever need the results of the <em>last 3 steps</em> to calculate the current step, we don't need a full array of size N. We can just keep three variables to store the last three results, dropping the space complexity to O(1).</p>
+        </div>
+        <button class="copy-btn">Copy</button>
+        <pre><code>
+public class FoxStairs {
+    
+    // Approach 1: Recursion with Memoization (Top-Down) O(N) Time, O(N) Space
+    public int climbStairsMemo(int n) {
+        if (n &lt; 0) return 0;
+        int[] memo = new int[n + 1];
+        return climbStairsMemoHelper(n, memo);
+    }
+    
+    private int climbStairsMemoHelper(int n, int[] memo) {
+        if (n &lt; 0) return 0;
+        if (n == 0 || n == 1) return 1;
+        if (n == 2) return 2;
+        
+        if (memo[n] != 0) return memo[n];
+        
+        memo[n] = climbStairsMemoHelper(n - 1, memo) + 
+                  climbStairsMemoHelper(n - 2, memo) + 
+                  climbStairsMemoHelper(n - 3, memo);
+                  
+        return memo[n];
+    }
+
+    // Approach 2: Tabulation (Bottom-Up) O(N) Time, O(N) Space
+    public int climbStairsTabulation(int n) {
+        if (n &lt; 0) return 0;
+        if (n == 0 || n == 1) return 1;
+        if (n == 2) return 2;
+        
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        
+        for (int i = 3; i &lt;= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+        }
+        
+        return dp[n];
+    }
+    
+    // Approach 3: Space Optimization O(N) Time, O(1) Space
+    // To reach step N, the fox could have come from:
+    // N - 1 (then jumped 1)
+    // N - 2 (then jumped 2)
+    // N - 3 (then jumped 3)
+    // So the recurrence is:
+    // f(n) = f(n-1) + f(n-2) + f(n-3)
+
+    // Intuition for the recurrence:
+    // Imagine the fox is standing on the final step 'N'. What was the *very last* jump it made?
+    // There are only 3 possibilities:
+    // 1. It was at step N-1, and made a 1-step jump.
+    // 2. It was at step N-2, and made a 2-step jump.
+    // 3. It was at step N-3, and made a 3-step jump.
+    // 
+    // Because these are the ONLY ways to arrive at step N, the total number of unique paths 
+    // to reach step N is exactly the sum of the paths to reach N-1, N-2, and N-3.
+    // 
+    // Recurrence Formula: f(n) = f(n-1) + f(n-2) + f(n-3)
+    // 
+    // Since calculating the current step only requires knowledge of the PREVIOUS 3 steps, 
+    // we do not need to store the entire array of size N. We can optimize memory to O(1) 
+    // by only keeping track of the last 3 results in variables.
+    public int climbStairsOptimized(int n) {
+        if (n &lt; 0) return 0;
+        if (n == 0) return 1; // one way: stay where you are (0 steps)
+        if (n == 1) return 1; // one way: jump 1 step
+        if (n == 2) return 2; // two ways: jump 1 step, or jump 2 steps
+        
+        int stepMinus3 = 1; // Represents ways to reach step 0
+        int stepMinus2 = 1; // Represents ways to reach step 1
+        int stepMinus1 = 2; // Represents ways to reach step 2
+        int current = 0;
+        
+        for (int i = 3; i &lt;= n; i++) {
+            current = stepMinus1 + stepMinus2 + stepMinus3;
+            
+            // Shift values forward for the next iteration
+            stepMinus3 = stepMinus2;
+            stepMinus2 = stepMinus1;
+            stepMinus1 = current;
+        }
+        
+        return current;
+    }
+
+    public static void main(String[] args) {
+        FoxStairs solver = new FoxStairs();
+        
+        int[] testCases = {3, 4, 5, 10};
+        
+        for (int n : testCases) {
+            System.out.println("Input: N = " + n);
+            System.out.println("Output (Memoization):  " + solver.climbStairsMemo(n));
+            System.out.println("Output (Tabulation):   " + solver.climbStairsTabulation(n));
+            System.out.println("Output (Optimized):    " + solver.climbStairsOptimized(n));
+            System.out.println("-".repeat(20));
+        }
+    }
+}
+
+<b>Output:</b>
+Input: N = 3
+Output (Memoization):  4
+Output (Tabulation):   4
+Output (Optimized):    4
+--------------------
+Input: N = 4
+Output (Memoization):  7
+Output (Tabulation):   7
+Output (Optimized):    7
+--------------------
+Input: N = 5
+Output (Memoization):  13
+Output (Tabulation):   13
+Output (Optimized):    13
+--------------------
+Input: N = 10
+Output (Memoization):  274
+Output (Tabulation):   274
+Output (Optimized):    274
+--------------------
+        </code></pre>
+    </div>
+    <script src="../../../resources/js/codeblock.js"></script>
+</body>
+</html>
