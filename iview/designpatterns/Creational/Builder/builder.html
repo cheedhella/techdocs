@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Builder</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Builder Design Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to create complex objects step by step, especially when the object has too many optional parameters;</li>
+            <li><b>Eg:</b> User user = User.builder().name("Alice").email("alice@mail.com").build();</li>
+            <li><b>Eg:</b> WebClient client = WebClient.builder().baseUrl("https://api.example.com").defaultHeader("Content-Type", "application/json").build();</li>
+            <li><b>Eg:</b> String query = new SQLQueryBuilder().select("*").from("users").where("age > 25").orderBy("name").build();</li>
+        </ul>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

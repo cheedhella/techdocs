@@ -179,11 +179,12 @@ DOes client store cookies somewhere?
     - 
 
 How microservices validate the token?
-    JWT token is signed using Keycloak’s private key;
-    Microservice first get the keycloak's public key: /realms/{realm}/protocol/openid-connect/certs
-    Then, they use the pubic key to verify it;
-    It signature fails -> token is fake -> reject;
-
+    1. First it checks signature of the token:
+           JWT token is signed using Keycloak’s private key;
+           Microservice first get the keycloak's public key: /realms/{realm}/protocol/openid-connect/certs
+           Then, they use the pubic key to verify it;
+           It signature fails -> token is fake -> reject;
+    2. 
 
 
 
@@ -209,3 +210,8 @@ The JWT contains:
 user ID
 roles/permissions (claims)
 expiry
+
+
+dq 
+ This helps us efficiently maintain and access the current maximum in O(1) time per window.
+     deque will store indices of useful elements in decreasing order of values.

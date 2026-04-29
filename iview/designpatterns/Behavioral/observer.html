@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Observerable Observer Design Pattern</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Observerable Observer Design Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            👉 One Subject (Observable)
+👉 Many Observers (Subscribers)
+
+When subject changes → all observers are notified
+
+
+<pre><code>
+# Publisher 
+import java.util.*;
+
+class WeatherStation {
+    private List<Observer> observers = new ArrayList<>();
+    private int temperature;
+
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
+        notifyObservers();
+    }
+
+    private void notifyObservers() {
+        for (Observer o : observers) {
+            o.update(temperature);
+        }
+    }
+}
+
+
+# Subscriber 
+interface Observer {
+    void update(int temperature);
+}
+class PhoneDisplay implements Observer {
+    public void update(int temp) {
+        System.out.println("Phone shows temp: " + temp);
+    }
+}
+
+class TVDisplay implements Observer {
+    public void update(int temp) {
+        System.out.println("TV shows temp: " + temp);
+    }
+}
+
+# Temperature changes → WeatherStation notifies → Phone + TV update
+
+| Concept   | Example            |
+| --------- | ------------------ |
+| Subject   | WeatherStation     |
+| Observers | Phone, TV          |
+| Event     | Temperature change |
+
+</code></pre>
+                       
+        </ul>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

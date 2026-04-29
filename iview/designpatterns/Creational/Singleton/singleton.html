@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Singleton</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Singleton Design Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It ensures that a class has only one instance and provides a global access point to it;</li>
+            <li>Eg: Runtime.getRuntime();</li>
+            <li><pre><code>
+# Double-Checked Locking - thread-safe and efficient;
+class Singleton {
+    private static volatile Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+
+# Bill Pugh Singleton(uses class loading) - thread-safe and lazy
+class Singleton {
+    private Singleton() {}
+
+    private static class Holder {
+        private static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return Holder.INSTANCE;
+    }
+}
+
+            </code></pre></li>            
+        </ul>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

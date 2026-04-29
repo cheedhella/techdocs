@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Factory</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Factory Design Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>Instead of writing new Something() everywhere, you can delegate object creation to a factory method;</li>
+            <li>Main advantage with this pattern is: Client code stays unchanged, when you add a new type;</li>
+            <li><pre><code>
+interface Vehicle {
+    void drive();
+}
+class Car implements Vehicle {
+    public void drive() {
+        System.out.println("Driving a car");
+    }
+}
+class Bike implements Vehicle {
+    public void drive() {
+        System.out.println("Riding a bike");
+    }
+}
+// Without Factory
+Vehicle v;
+if (type.equals("car")) {
+    v = new Car();
+} else if (type.equals("bike")) {
+    v = new Bike();
+} 
+
+// With Factory - No if-else scattered everywhere
+class VehicleFactory {
+    public static Vehicle getVehicle(String type) {
+        if (type.equalsIgnoreCase("car")) {
+            return new Car();
+        } else if (type.equalsIgnoreCase("bike")) {
+            return new Bike();
+        }
+        return null;
+    }
+}
+
+Vehicle v = VehicleFactory.getVehicle("car");
+v.drive();
+            </code></pre></li>
+            
+        </ul>
+    </div>
+
+    <div class="question"><b>2. What is Factory Method Design Pattern?</b></div>
+        The objective of factory method pattern is:
+
+There might be scenarios where object creation is scattered and repetitive in various parts of the code. This pattern avoids that.
+Client need to know/worry about the object creation logic.
+Client should access the objects through a common interface.
+
+public abstract class Person {
+    protected final String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+}
+public class Male extends Person {
+    public Male(String name) {
+        super(name);
+    }
+}
+public class Female extends Person {
+    public Female(String name) {
+        super(name);
+    }
+}
+public class PersonFactory {
+    public static Person makePerson(String gender, String name) {
+        if (gender.equals("male")) {
+            Male man = new Male(name);
+            return man;
+        } else {
+            Female woman = new Female(name);
+            return woman;
+        }
+    }
+}
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>

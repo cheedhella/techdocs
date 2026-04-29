@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Prototype</title>
+    <link rel="stylesheet" href="../../resources/css/styles.css" />
+    <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+</head>
+
+<body>
+    <div class="question"><b>1. What is Prototype Design Pattern?</b></div>
+    <div class="answer">
+        <ul>
+            <li>It is used to create new objects by copying (cloning) an existing object, instead of building it from scratch;</li>
+            <li>It is especially useful when the object creation is complex or powerful;</li> 
+            <li><pre><code>
+# Shallow copy (by default)
+List<String> skills = new ArrayList<>();
+    skills.add("Java");
+    
+    Employee e1 = new Employee("John", "IT", skills);
+    Employee e2 = (Employee) e1.clone();
+    
+    e2.skills.add("Python");
+    
+    System.out.println(e1.skills); // [Java, Python] ❌ (shared!)
+
+
+<br>
+<br>
+# Deep Copy 
+@Override
+protected Object clone() throws CloneNotSupportedException {
+    Employee copy = (Employee) super.clone();
+    copy.skills = new ArrayList<>(this.skills); // deep copy
+    return copy;
+}
+            </code></pre></li>         
+        </ul>
+    </div>
+
+    <script src="../../resources/js/codeblock.js"></script>
+</body>
+
+</html>
