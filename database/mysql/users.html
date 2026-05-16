@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>User Management</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>User</b></div>
+        <div class="answer">
+            <ul>
+                <li>In MySQL, user is uniquely identified by: 'username'@'host'</li>
+                <li>MySQL uses host part for security and access control;</li>
+                <li>Same username can have different permisssions depending on where the connection comes from;</li>
+                <li>CREATE USER 'username'@'host' IDENTIFIED BY 'password';</li>
+                <li>When a connection request comes, MySQL tries to find the best matching host;</li>
+                <li><b>Host matching priority</b>: Exact host match, specific wildcard patterns, % wildcard;</li>
+            </ul>
+        </div>
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

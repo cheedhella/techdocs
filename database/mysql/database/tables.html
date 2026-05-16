@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Managing Tables</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Managing Tables</b></div>
+        <div class="answer">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>CREATE TABLE employees (column1 datatype, column2 datatype, ...);</code></td><td>Creates table; Throws error, if already exists;</td></tr>
+                    <tr><td><code>CREATE TABLE IF NOT EXISTS employees (column1 datatype, column2 datatype, ...);</code></td><td>Creates table, if doesn't exist; Ignores, if already exists;</td></tr>
+                    <tr><td><code>SHOW TABLES;</code></td><td>List all tables in current database;</td></tr>
+                    <tr><td><code>DESC tablename;</code></td><td>Describe table structure;</td></tr>
+                    <tr><td><code>RENAME TABLE employees TO staff;</code></td><td>Rename a table;</td></tr>
+                    <tr><td><code>DROP TABLE tablename;</code></td><td>Deletes table; Throws error, if doesn't exist;</td></tr>
+                    <tr><td><code>DROP TABLE IF EXISTS tablename;</code></td><td>Deletes table, if exists; Ignores, if doesn't exist;</td></tr>
+                    <tr><td><code>TRUNCATE tablename; DELETE FROM tablename;</code></td><td>Remove all rows but keep structure;</td></tr>
+                    <br>
+                    <tr><td><code>ALTER TABLE tablename ADD column1 VARCHAR(50) ADD column2 VARCHAR(50);</code></td><td>Add columns to existing table;</td></tr>
+                    <tr><td><code>ALTER TABLE tablename RENAME COLUMN mobile_number TO phone;</code></td><td>Rename column;</td></tr>
+                    <tr><td><code>ALTER TABLE tablename MODIFY salary DECIMAL(12,2);</code></td><td>Modify column datatype;</td></tr>
+                    <tr><td><code>ALTER TABLE tablename DROP COLUMN department;</code></td><td>Drop column;</td></tr>
+                    <br>
+                    <tr><td><code>ALTER TABLE tablename ADD PRIMARY KEY (id);</code></td><td>Add primary key constraint;</td></tr>
+                    <tr><td><code>ALTER TABLE tablename DROP PRIMARY KEY;</code></td><td>Drop primary key constraint;</td></tr>
+                    <tr><td><code>ALTER TABLE orders ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(id);</code></td><td>Add foreign key constraint;</td></tr>
+                    <tr><td><code>ALTER TABLE orders DROP FOREIGN KEY fk_customer</code><td>Drop foreign key constraint;</td></tr>
+                    <br>
+                    <tr><td><code>CREATE TABLE employees_backup LIKE employees;</code></td><td>Copy structure only;</td></tr>
+                    <tr><td><code>CREATE TABLE employees_backup AS SELECT * FROM employees;</code></td><td>Copy structure and data;</td></tr>
+                    <br>
+                    
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

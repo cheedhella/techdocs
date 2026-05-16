@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>MySQL Commands Reference</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Privilage Management</b></p>
+        <div class="answer">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>SHOW PRIVILEGES</code></td><td>It displays all privileges supported; Privilage -> Privilage name; Context -> shows where the privilege can be applied like tables, databases, server admin, functions etc;</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Role Management</b></p>
+        <div class="answer">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>CREATE ROLE role1,role2</code></td><td>Create Roles;</td></tr>
+                    <tr><td><code>SELECT DISTINCT FROM_USER AS role_name FROM mysql.role_edges;</code></td><td>role_edges table in mysql database has Role-to-user and Role-to-role mappings; FROM_USER column contains the role being granted;</td></tr>
+                    <tr><td><code>GRANT priv1,priv2 ON object TO role1,role2,user1,user2</code></td><td>Granting Privileges on specified objects to Roles; You can also assign direct privileges to users;</td></tr>
+                    <tr><td><code>GRANT role1 TO role2</code></td><td>Granting Privileges on specified objects to Roles; You can also assign direct privileges to users;</td></tr>
+                    <tr><td><code>GRANT priv1,priv2 ON object TO role1,role2,user1,user2</code></td><td>Granting Privileges on specified objects to Roles; You can also assign direct privileges to users;</td></tr>
+                    <tr><td><code>REVOKE priv1,priv2 FROM role1,role2</code></td><td>Revoking Privileges from Roles/Users; Revoke roles from roles/users;</td></tr>
+                    <tr><td><code>DROP ROLE role1,role2</code></td><td>Delete Roles;</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>User Management</b></p>
+        <div class="answer">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>CREATE USER 'username'@'host' IDENTIFIED BY 'password';</code></td><td>Create user;</td></tr>
+                    <tr><td><code>SELECT user, host FROM mysql.user;</code></td><td>List all users;</td></tr>
+                    <tr><td><code>GRANT priv1 ON database.table TO 'username'@'host';</code></td><td>Assign role to user;</td></tr>
+                    <tr><td><code>FLUSH PRIVILEGES;</code></td><td>Sometimes privilege changes require reload of grant tables;</td></tr>
+                    <tr><td><code>SHOW GRANTS FOR 'john'@'localhost';</code></td><td>Check user privileges;</td></tr>
+                    <tr><td><code>ALTER USER 'john'@'localhost' IDENTIFIED BY 'newpassword';</code></td><td>Change password</td></tr>
+                    <tr><td><code>ALTER USER 'john'@'localhost' ACCOUNT LOCK;</code></td><td>Lock user</td></tr>
+                    <tr><td><code>ALTER USER 'john'@'localhost' ACCOUNT UNLOCK;</code></td><td>Unlock user</td></tr>
+                    <tr><td><code>DROP USER 'john'@'localhost';</code></td><td>Delete user</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Data Definition Language (DDL)</b></p>
+        <div class="answer">
+            <p>Commands used to define, modify, or drop the structure of database objects like tables and indexes.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>CREATE</code></td><td>Creates a new database, table, index, or view.</td></tr>
+                    <tr><td><code>ALTER</code></td><td>Modifies an existing database object (e.g., adding a column).</td></tr>
+                    <tr><td><code>DROP</code></td><td>Deletes a database, table, index, or view permanently.</td></tr>
+                    <tr><td><code>TRUNCATE</code></td><td>Removes all records from a table and resets auto-increment values.</td></tr>
+                    <tr><td><code>RENAME</code></td><td>Renames a table or database object.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Data Manipulation Language (DML)</b></p>
+        <div class="answer">
+            <p>Commands used for managing and manipulating data within existing tables.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>SELECT</code></td><td>Retrieves data from one or more tables.</td></tr>
+                    <tr><td><code>INSERT</code></td><td>Adds new rows of data into a table.</td></tr>
+                    <tr><td><code>UPDATE</code></td><td>Modifies existing data within a table.</td></tr>
+                    <tr><td><code>DELETE</code></td><td>Removes specific rows from a table.</td></tr>
+                    <tr><td><code>REPLACE</code></td><td>Inserts a row, or deletes and re-inserts if a duplicate key exists.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Data Control Language (DCL)</b></p>
+        <div class="answer">
+            <p>Commands used to control access and permissions for database users.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>GRANT</code></td><td>Gives specific privileges/permissions to a user or role.</td></tr>
+                    <tr><td><code>REVOKE</code></td><td>Withdraws previously granted privileges from a user or role.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Transaction Control Language (TCL)</b></div>
+        <div class="answer">
+            <p>Commands used to manage transactions and ensure data integrity.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>COMMIT</code></td><td>Saves all changes made during the current transaction permanently.</td></tr>
+                    <tr><td><code>ROLLBACK</code></td><td>Undoes all changes made since the last commit or savepoint.</td></tr>
+                    <tr><td><code>SAVEPOINT</code></td><td>Sets a point within a transaction to which you can later roll back.</td></tr>
+                    <tr><td><code>SET TRANSACTION</code></td><td>Configures the isolation level or read/write mode for transactions.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Administrative & Utility Commands</b></div>
+        <div class="answer">
+            <p>General commands for database inspection and session management.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Command</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>DESCRIBE</code></td><td>Displays the structure of a specific table (columns, types, keys).</td></tr>
+                    <tr><td><code>SHOW</code></td><td>Lists various metadata (e.g., <code>SHOW TABLES</code>, <code>SHOW DATABASES</code>).</td></tr>
+                    <tr><td><code>USE</code></td><td>Selects the default database for subsequent queries.</td></tr>
+                    <tr><td><code>EXPLAIN</code></td><td>Provides information about how MySQL executes a specific query.</td></tr>
+                    <tr><td><code>SET</code></td><td>Assigns a value to a system or user-defined variable.</td></tr>
+                    <tr><td><code>STATUS</code></td><td>Displays current server status and connection information.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="question"><b>Basic Example Usage</b></p>
+        <div class="code-block">
+            <div class="code-block-title">Common Workflow</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Create a table (DDL)
+CREATE TABLE logs (id INT PRIMARY KEY, msg TEXT);
+
+-- Insert data (DML)
+INSERT INTO logs VALUES (1, 'System Started');
+
+-- View data (DML)
+SELECT * FROM logs;
+
+-- View structure (Utility)
+DESCRIBE logs;</code></pre>
+        </div>
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

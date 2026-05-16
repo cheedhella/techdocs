@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>String Functions</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>String Functions</b></div>
+        <div class="answer">
+            <ul><li><pre>
+
+| Function                             | Purpose                        | Example                                         |
+| ------------------------------------ | ------------------------------ | ----------------------------------------------- |
+| `LENGTH(str)`                        | Length in bytes                | `SELECT LENGTH('Hello');`                       |
+| `CHAR_LENGTH(str)`                   | Number of characters           | `SELECT CHAR_LENGTH('Hello');`                  |
+| `UPPER(str)`                         | Convert to uppercase           | `SELECT UPPER('mysql');`                        |
+| `LOWER(str)`                         | Convert to lowercase           | `SELECT LOWER('MYSQL');`                        |
+| `CONCAT(str1, str2, ...)`            | Join strings                   | `SELECT CONCAT('Hello',' World');`              |
+| `CONCAT_WS(sep, str1, str2)`         | Concatenate with separator     | `SELECT CONCAT_WS('-', '2026','05','10');`      |
+| `SUBSTRING(str, pos, len)`           | Extract substring              | `SELECT SUBSTRING('OpenAI',1,4);`               |
+| `LEFT(str, n)`                       | Leftmost characters            | `SELECT LEFT('Database',4);`                    |
+| `RIGHT(str, n)`                      | Rightmost characters           | `SELECT RIGHT('Database',4);`                   |
+| `INSTR(str, sub)`                    | Find substring position        | `SELECT INSTR('Hello World','World');`          |
+| `LOCATE(sub, str)`                   | Locate substring               | `SELECT LOCATE('SQL','MySQL');`                 |
+| `REPLACE(str, old, new)`             | Replace text                   | `SELECT REPLACE('I like Java','Java','MySQL');` |
+| `TRIM(str)`                          | Remove spaces                  | `SELECT TRIM('  MySQL  ');`                     |
+| `LTRIM(str)`                         | Remove left spaces             | `SELECT LTRIM('  MySQL');`                      |
+| `RTRIM(str)`                         | Remove right spaces            | `SELECT RTRIM('MySQL  ');`                      |
+| `LPAD(str, len, pad)`                | Pad left side                  | `SELECT LPAD('123',5,'0');`                     |
+| `RPAD(str, len, pad)`                | Pad right side                 | `SELECT RPAD('SQL',6,'*');`                     |
+| `REVERSE(str)`                       | Reverse string                 | `SELECT REVERSE('MySQL');`                      |
+| `REPEAT(str, n)`                     | Repeat string                  | `SELECT REPEAT('Hi ',3);`                       |
+| `ASCII(str)`                         | ASCII value of first character | `SELECT ASCII('A');`                            |
+| `STRCMP(str1, str2)`                 | Compare strings                | `SELECT STRCMP('abc','xyz');`                   |
+| `FORMAT(num, d)`                     | Format number                  | `SELECT FORMAT(12345.678,2);`                   |
+| `SUBSTRING_INDEX(str, delim, count)` | Extract part using delimiter   | `SELECT SUBSTRING_INDEX('a@b.com','@',1);`      |
+
+<br><br>
+SELECT name, UPPER(name) FROM users;
+| name  | UPPER(name) |
+| ----- | ----------- |
+| ravi  | RAVI        |
+| priya | PRIYA       |
+| john  | JOHN        |
+
+            </pre></li></ul>
+        </div>
+
+
+
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

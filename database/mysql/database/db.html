@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Managing Databases</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Managing Databases</b></div>
+        <div class="answer">
+            <ul><li><pre>
+
+| Command         | Purpose                |
+| --------------- | ---------------------- |
+| CREATE DATABASE name | Creates database; Throws error, if already exists; |
+| CREATE DATABASE IF NOT EXISTS name | Creates database, if doesn't exist; Ignores, if already exists; |
+| USE name            | Selects database; All tables will be created inside this database;      |
+| SELECT DATABASE(); | Show currently selected database;
+| SHOW DATABASES  | Lists databases        |
+| DROP DATABASE name  | Deletes database; Throws error, if doesn't exist; |
+| DROP DATABASE IF EXISTS name | Deletes database, if exists; Ignores, if doesn't exist;     |
+| RENAME DATABASE old_name TO new_name | Renames database; Throws error, if doesn't exist; |
+
+</pre></li>
+                
+            </ul>
+        </div>
+    </body>
+</html>

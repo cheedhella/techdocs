@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Database Operations - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>What is CREATE DATABASE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>CREATE DATABASE</code> statement is used to create a new SQL database.</li>
+                <li>It initializes the storage structure where tables, views, and other objects will reside.</li>
+                <li>In most systems, you must have administrative privileges to execute this command.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Creating a New Database</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE DATABASE shop_db;</code></pre>
+        </div>
+
+        <p class="question"><strong>What is DROP DATABASE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>DROP DATABASE</code> statement is used to delete an existing SQL database.</li>
+                <li><strong>Warning:</strong> Dropping a database will result in the loss of all tables and data stored within it.</li>
+                <li>It is a permanent action and cannot be undone easily without a backup.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Deleting a Database</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- This removes the database and everything inside it
+DROP DATABASE shop_db;
+
+-- Safer way to drop
+DROP DATABASE IF EXISTS shop_db;</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

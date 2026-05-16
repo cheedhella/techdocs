@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Managing Constraints</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Managing Constraints</b></div>
+        <div class="answer">
+            <ul>
+                <li>Constraints are rules enforced on table data;</li>
+                <li><pre>
+| Constraint       | Purpose                               |
+| ---------------- | ------------------------------------- |
+| `NOT NULL`       | Prevents NULL values                  |
+| `UNIQUE`         | Ensures all values are different      |
+| `PRIMARY KEY`    | Unique identifier for each row        |
+| `FOREIGN KEY`    | Maintains relationship between tables |
+| `CHECK`          | Validates values against a condition  |
+| `DEFAULT`        | Sets a default value                  |
+| `AUTO_INCREMENT` | Automatically generates numbers       |
+
+<br>
+<b>Primary Key</b> - Uniquely identifies each row; NOT NULL + UNIQUE; Primary key can be composed of multiple columns;
+<b>Foreign Key</b> - It is is a column (or group of columns) in one table that refers to the PRIMARY KEY of another table; It is used to create relationships between tables and maintain referential integrity;
+A foreign key ensures that:
+    child table values must exist in the parent table
+    invalid references are not allowed
+Foregin key can be: NULL, duplicates are allowed; 
+<br>
+Eg:
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY AUTO_INCREMENT,
+    dept_name VARCHAR(50)
+);
+
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    dept_id INT,
+    age INT CHECK (age >= 18),
+    created_dt DATE DEFAULT (CURRENT_DATE),
+    CONSTRAINT uq_employee_name UNIQUE(first_name, last_name),
+    CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+<br>
+Syntax:
+    ON DELETE option
+    ON UPDATE option
+Options: CASCADE, SET NULL, RESTRICT, NO ACTION
+These options are used with a FOREIGN KEY to define what happens to child table rows when the parent table row is updated or deleted;
+
+ON DELETE CASCADE -> If a parent row is deleted, all corresponding child rows are also deleted;
+ON UPDATE CASCADE -> If a parent row is updated(say, updated primary key from 1 to 10), all corresponding child rows are also updated;
+
+ON DELETE SET NULL -> If a parent row is deleted, the corresponding child column is set to NULL;
+ON UPDATE SET NULL -> If a parent row is updated, the corresponding child column is set to NULL;
+
+RESTRICT -> MySQL throws error, if you try to deleting/updating parent row if matching child rows exist; So, you must first delete child rows or update them;
+NO ACTION -> Same as RESTRICT;
+
+            </pre></li>
+        <li><pre>
+# Adding constraints after table creation 
+Add UNIQUE -> ALTER TABLE employees ADD CONSTRAINT uq_employee_name UNIQUE(first_name, last_name);
+Add PRIMARY KEY -> ALTER TABLE employees ADD CONSTRAINT uq_employee_name PRIMARY KEY (emp_id);
+Add Foregin KEY -> ALTER TABLE employees ADD CONSTRAINT fk_dept FOREIGN KEY(dept_id) REFERENCES departments(dept_id);
+Add Check -> ALTER TABLE students ADD CONSTRAINT age_check CHECK(age >= 18);
+
+# Dropping Constraints
+Drop Unique -> ALTER TABLE employees DROP CONSTRAINT uq_employee_name;
+Drop Primary Key -> ALTER TABLE employees DROP CONSTRAINT uq_employee_name;
+Drop Foregin KEY -> ALTER TABLE employees DROP CONSTRAINT fk_dept;
+Drop Check -> ALTER TABLE students DROP CONSTRAINT age_check;
+
+        </pre></li>
+
+        </ul>
+        </div>
+    </body>
+</html>

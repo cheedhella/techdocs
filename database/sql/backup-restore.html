@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Backup & Restore - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>Backup & Restore</h2>
+        </div>
+
+        <p class="question"><strong>What is a Database Backup?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>A backup is a copy of data from a database that can be used to reconstruct that data in case of loss or corruption.</li>
+                <li><strong>Logical Backups:</strong> Store data as SQL statements (CREATE TABLE, INSERT). Flexible but can be slower for very large DBs. Example: <code>mysqldump</code>.</li>
+                <li><strong>Physical Backups:</strong> Copy the actual data files. Very fast for large DBs but usually tied to a specific database version/engine.</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>How do you use mysqldump?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><code>mysqldump</code> is the most common command-line utility for logical backups in MySQL.</li>
+                <li>It exports the database structure and data into a single <code>.sql</code> file.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Backing up with mysqldump</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code># Backup a single database
+mysqldump -u username -p database_name > backup_file.sql
+
+# Backup all databases
+mysqldump -u username -p --all-databases > full_backup.sql
+
+# Backup only specific tables
+mysqldump -u username -p database_name table1 table2 > tables_backup.sql</code></pre>
+        </div>
+
+        <p class="question"><strong>How do you restore a database?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Restoring is done by piping the <code>.sql</code> backup file back into the <code>mysql</code> client.</li>
+                <li>The target database must usually exist before running the restore command.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Restoring Data</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code># Restore to a specific database
+mysql -u username -p database_name < backup_file.sql
+
+# Restore from an all-databases dump
+mysql -u username -p < full_backup.sql</code></pre>
+        </div>
+
+        <p class="question"><strong>Best Practices for Backups</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>Automation:</strong> Use tools like <code>cron</code> (Linux) or Task Scheduler (Windows) to run backups daily.</li>
+                <li><strong>Offsite Storage:</strong> Always keep a copy of your backups on a different server or cloud storage.</li>
+                <li><strong>Verification:</strong> Periodically test your backups by performing a restore to a test environment to ensure they work.</li>
+            </ul>
+        </p>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

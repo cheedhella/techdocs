@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Filtering & Searching - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>Filtering & Searching Data</h2>
+        </div>
+
+        <p class="question"><strong>What are Logical Operators (AND, OR, NOT)?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Used to combine multiple conditions in a <code>WHERE</code> clause.</li>
+                <li><strong>AND:</strong> Returns true if all conditions are true.</li>
+                <li><strong>OR:</strong> Returns true if at least one condition is true.</li>
+                <li><strong>NOT:</strong> Reverses the result of a condition.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Logical Operators Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>SELECT * FROM products 
+WHERE category = 'Electronics' AND price < 500;
+
+SELECT * FROM users 
+WHERE city = 'London' OR city = 'Paris';
+
+SELECT * FROM orders 
+WHERE NOT status = 'Cancelled';</code></pre>
+        </div>
+
+        <p class="question"><strong>How do IN and BETWEEN work?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>IN:</strong> Checks if a value matches any value in a list or subquery.</li>
+                <li><strong>BETWEEN:</strong> Filters values within a inclusive range (numbers, text, or dates).</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">IN & BETWEEN Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Using IN for multiple values
+SELECT * FROM offices 
+WHERE country IN ('USA', 'UK', 'Japan');
+
+-- Using BETWEEN for a range
+SELECT * FROM products 
+WHERE price BETWEEN 10 AND 50;</code></pre>
+        </div>
+
+        <p class="question"><strong>How to use LIKE and Wildcards?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Used for pattern matching in string columns.</li>
+                <li><strong>% (Percent):</strong> Represents zero, one, or multiple characters.</li>
+                <li><strong>_ (Underscore):</strong> Represents a single character.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Pattern Matching Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Finds any values that start with 'a'
+SELECT * FROM customers WHERE name LIKE 'a%';
+
+-- Finds any values that have 'or' in any position
+SELECT * FROM customers WHERE name LIKE '%or%';
+
+-- Finds any values that have 'r' in the second position
+SELECT * FROM customers WHERE name LIKE '_r%';</code></pre>
+        </div>
+
+        <p class="question"><strong>How to check for NULL values?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>You cannot use <code>= NULL</code> because NULL represents an unknown value.</li>
+                <li>Use <code>IS NULL</code> to find empty fields and <code>IS NOT NULL</code> to find fields with data.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">NULL Comparison</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>SELECT * FROM employees 
+WHERE reports_to IS NULL;
+
+SELECT * FROM customers 
+WHERE email IS NOT NULL;</code></pre>
+        </div>
+
+        <p class="question"><strong>What about Regular Expressions?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Regular expressions provide more powerful search patterns than <code>LIKE</code>.</li>
+                <li>In MySQL, the <code>REGEXP</code> or <code>RLIKE</code> operator is used.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">REGEXP Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Find names starting with A, B, or C
+SELECT * FROM products WHERE name REGEXP '^[ABC]';
+
+-- Find names ending with 'shop'
+SELECT * FROM vendors WHERE name REGEXP 'shop$';
+
+-- Find names containing exactly 5 characters
+SELECT * FROM categories WHERE name REGEXP '^.{5}$';</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

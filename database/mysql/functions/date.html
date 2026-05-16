@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Date and Time Functions</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Date and Time Functions</b></div>
+        <div class="answer">
+            <ul><li><pre>
+| Function                          | Purpose                    | Example                                            |
+| --------------------------------- | -------------------------- | -------------------------------------------------- |
+| `NOW()`                           | Current date & time        | `SELECT NOW();`                                    |
+| `CURDATE()`                       | Current date only          | `SELECT CURDATE();`                                |
+| `CURTIME()`                       | Current time only          | `SELECT CURTIME();`                                |
+| `SYSDATE()`                       | Current system date & time | `SELECT SYSDATE();`                                |
+| `DATE()`                          | Extract date part          | `SELECT DATE(NOW());`                              |
+| `TIME()`                          | Extract time part          | `SELECT TIME(NOW());`                              |
+| `YEAR(date)`                      | Extract year               | `SELECT YEAR('2026-05-10');`                       |
+| `MONTH(date)`                     | Extract month              | `SELECT MONTH('2026-05-10');`                      |
+| `DAY(date)`                       | Extract day                | `SELECT DAY('2026-05-10');`                        |
+| `HOUR(time)`                      | Extract hour               | `SELECT HOUR(NOW());`                              |
+| `MINUTE(time)`                    | Extract minute             | `SELECT MINUTE(NOW());`                            |
+| `SECOND(time)`                    | Extract seconds            | `SELECT SECOND(NOW());`                            |
+| `DAYNAME(date)`                   | Returns weekday name       | `SELECT DAYNAME('2026-05-10');`                    |
+| `MONTHNAME(date)`                 | Returns month name         | `SELECT MONTHNAME('2026-05-10');`                  |
+| `DATEDIFF(date1,date2)`           | Difference in days         | `SELECT DATEDIFF('2026-05-10','2026-05-01');`      |
+| `DATE_ADD(date, INTERVAL n unit)` | Add date/time              | `SELECT DATE_ADD('2026-05-10', INTERVAL 5 DAY);`   |
+| `DATE_SUB(date, INTERVAL n unit)` | Subtract date/time         | `SELECT DATE_SUB('2026-05-10', INTERVAL 2 MONTH);` |
+| `ADDTIME(time1,time2)`            | Add time values            | `SELECT ADDTIME('10:00:00','02:30:00');`           |
+| `SUBTIME(time1,time2)`            | Subtract time values       | `SELECT SUBTIME('10:00:00','01:00:00');`           |
+| `STR_TO_DATE(str,format)`         | Convert string to date     | `SELECT STR_TO_DATE('10-05-2026','%d-%m-%Y');`     |
+| `DATE_FORMAT(date,format)`        | Format date                | `SELECT DATE_FORMAT(NOW(),'%d-%m-%Y');`            |
+                
+<br><br>
+<b>Common Format SPecifiers</b>
+| Specifier | Meaning        |
+| --------- | -------------- |
+| `%Y`      | 4-digit year   |
+| `%y`      | 2-digit year   |
+| `%m`      | Month number   |
+| `%M`      | Month name     |
+| `%d`      | Day number     |
+| `%W`      | Weekday name   |
+| `%H`      | Hour (24-hour) |
+| `%h`      | Hour (12-hour) |
+| `%i`      | Minutes        |
+| `%s`      | Seconds        |
+
+            </pre></li></ul>
+        </div>
+
+
+
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>User Management & Security - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>User Management & Security</h2>
+        </div>
+
+        <p class="question"><strong>How do you create a User?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>CREATE USER</code> statement creates a new account in the database.</li>
+                <li>Users are typically identified by a username and a host (e.g., 'localhost' or '%').</li>
+                <li>It is a best practice to use strong passwords and restrict host access to specific IP ranges where possible.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Creating a New User</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Syntax: CREATE USER 'username'@'hostname' IDENTIFIED BY 'password';
+CREATE USER 'dev_user'@'localhost' IDENTIFIED BY 'StrongPass123!';
+
+-- Create a user that can connect from any host
+CREATE USER 'reporting_app'@'%' IDENTIFIED BY 'AppPassword!456';</code></pre>
+        </div>
+
+        <p class="question"><strong>What is GRANT and REVOKE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>GRANT:</strong> Assigns specific permissions (privileges) to a user or role. These can range from <code>SELECT</code> on a single table to <code>ALL PRIVILEGES</code> on the entire server.</li>
+                <li><strong>REVOKE:</strong> Removes previously granted permissions.</li>
+                <li>Common privileges include: <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>CREATE</code>, and <code>DROP</code>.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Managing Privileges</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Grant read-only access to a specific database
+GRANT SELECT ON shop_db.* TO 'dev_user'@'localhost';
+
+-- Grant multiple privileges on a specific table
+GRANT SELECT, INSERT, UPDATE ON shop_db.orders TO 'dev_user'@'localhost';
+
+-- Revoke a specific permission
+REVOKE UPDATE ON shop_db.orders FROM 'dev_user'@'localhost';
+
+-- Apply changes (often required in MySQL)
+FLUSH PRIVILEGES;</code></pre>
+        </div>
+
+        <p class="question"><strong>How do Roles work?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Roles are collections of privileges that can be assigned to multiple users.</li>
+                <li>They simplify user management: instead of granting permissions to 50 individual users, you grant them to one role and assign the role to those users.</li>
+                <li>Users can have multiple roles, allowing for modular permission structures.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Implementing Roles</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- 1. Create the role
+CREATE ROLE 'app_read_only';
+
+-- 2. Assign privileges to the role
+GRANT SELECT ON shop_db.* TO 'app_read_only';
+
+-- 3. Assign the role to a user
+GRANT 'app_read_only' TO 'dev_user'@'localhost';
+
+-- 4. Set the default role for the user (MySQL specific)
+SET DEFAULT ROLE 'app_read_only' TO 'dev_user'@'localhost';</code></pre>
+        </div>
+
+        <p class="question"><strong>Best Practices for Security</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>Principle of Least Privilege:</strong> Only give users the minimum level of access they need to perform their jobs.</li>
+                <li><strong>Never use 'root' for applications:</strong> Create dedicated application users with limited scope.</li>
+                <li><strong>Audit Permissions:</strong> Periodically review <code>SHOW GRANTS FOR 'user'@'host';</code> to ensure no unnecessary privileges exist.</li>
+            </ul>
+        </p>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

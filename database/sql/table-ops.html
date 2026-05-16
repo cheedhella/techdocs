@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Table Operations - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><strong>What is CREATE TABLE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>CREATE TABLE</code> statement is used to create a new table in a database.</li>
+                <li>You must specify column names and their associated data types.</li>
+                <li>Constraints (like PRIMARY KEY or NOT NULL) are often defined during this step.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Create Table Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+        </div>
+
+        <p class="question"><strong>What is ALTER TABLE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>ALTER TABLE</code> statement is used to add, delete, or modify columns in an existing table.</li>
+                <li>It can also be used to add or drop various constraints.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Modifying Table Structure</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Add a new column
+ALTER TABLE users ADD phone_number VARCHAR(15);
+
+-- Modify an existing column data type
+ALTER TABLE users MODIFY COLUMN username VARCHAR(100);
+
+-- Drop a column
+ALTER TABLE users DROP COLUMN email;</code></pre>
+        </div>
+
+        <p class="question"><strong>What is DROP TABLE vs TRUNCATE TABLE?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>DROP TABLE:</strong> Deletes the table definition and all its data. The table no longer exists.</li>
+                <li><strong>TRUNCATE TABLE:</strong> Deletes all data inside the table, but keeps the table structure for future use. It is faster than <code>DELETE FROM</code> because it doesn't log individual row deletions.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Table Deletion Operations</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Deletes all data but keeps the table
+TRUNCATE TABLE users;
+
+-- Deletes the entire table structure
+DROP TABLE users;</code></pre>
+        </div>
+
+        <p class="question"><strong>How to Rename Tables and Columns?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Renaming helps maintain clarity as the database schema evolves.</li>
+                <li>Syntax can vary slightly between MySQL, PostgreSQL, and SQL Server.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Renaming Examples (MySQL)</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Rename a table
+RENAME TABLE users TO app_users;
+
+-- Rename a column (MySQL 8.0+)
+ALTER TABLE app_users RENAME COLUMN username TO full_name;</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

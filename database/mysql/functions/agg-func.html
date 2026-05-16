@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Aggregate Functions</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Aggregate Functions</b></div>
+        <div class="answer">
+            <ul>
+                <li>Aggregate functions return single value;</li>
+                <li>They ignore null values;</li>
+                <li>They are frequently used with: GROUP BY, HAVING, ORDER BY;</li>
+                <li><pre>
+| Function         | Purpose                         | Example                                             |
+| ---------------- | ------------------------------- | --------------------------------------------------- |
+| `COUNT()`        | Counts rows                     | `SELECT COUNT(*) FROM employees;`                   |
+| `SUM()`          | Total sum                       | `SELECT SUM(salary) FROM employees;`                |
+| `AVG()`          | Average value                   | `SELECT AVG(salary) FROM employees;`                |
+| `MIN()`          | Minimum value                   | `SELECT MIN(salary) FROM employees;`                |
+| `MAX()`          | Maximum value                   | `SELECT MAX(salary) FROM employees;`                |
+| `DISTINCT`       | Removes duplicate values        | `SELECT COUNT(DISTINCT department) FROM employees;` |
+| `GROUP_CONCAT()` | Combines values into one string | `SELECT GROUP_CONCAT(name) FROM employees;`         |
+| `STDDEV()`       | Standard deviation              | `SELECT STDDEV(salary) FROM employees;`             |
+| `VARIANCE()`     | Variance value                  | `SELECT VARIANCE(salary) FROM employees;`           |
+           
+<br><br>
+            </pre></li></ul>
+        </div>
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

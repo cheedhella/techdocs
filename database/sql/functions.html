@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Functions in MySQL - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>Functions in MySQL</h2>
+        </div>
+
+        <!-- Aggregate Functions -->
+        <p class="question"><strong>What are Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Aggregate functions perform a calculation on a set of values and return a single value.</li>
+                <li><strong>COUNT():</strong> Returns the number of rows.</li>
+                <li><strong>SUM():</strong> Returns the total sum of a numeric column.</li>
+                <li><strong>AVG():</strong> Returns the average value of a numeric column.</li>
+                <li><strong>MIN() / MAX():</strong> Returns the smallest and largest value.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Aggregate Functions Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Count total orders
+SELECT COUNT(order_id) FROM orders;
+
+-- Get total revenue and average price
+SELECT SUM(total_amount), AVG(total_amount) FROM orders;
+
+-- Find the cheapest and most expensive product
+SELECT MIN(price), MAX(price) FROM products;</code></pre>
+        </div>
+
+        <!-- String Functions -->
+        <p class="question"><strong>Common String Functions</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>CONCAT(str1, str2):</strong> Joins two or more strings together.</li>
+                <li><strong>UPPER() / LOWER():</strong> Converts text to uppercase or lowercase.</li>
+                <li><strong>LENGTH():</strong> Returns the length of a string in bytes.</li>
+                <li><strong>SUBSTRING(str, start, len):</strong> Extracts a portion of a string.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">String Manipulation Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Combine first and last name
+SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM users;
+
+-- Format email to lowercase
+SELECT LOWER(email) FROM employees;
+
+-- Get first 3 characters of a product code
+SELECT SUBSTRING(product_code, 1, 3) FROM inventory;</code></pre>
+        </div>
+
+        <!-- Numeric Functions -->
+        <p class="question"><strong>Common Numeric Functions</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>ABS():</strong> Returns the absolute (positive) value of a number.</li>
+                <li><strong>ROUND(val, decimals):</strong> Rounds a number to a specified number of decimal places.</li>
+                <li><strong>CEIL() / FLOOR():</strong> Rounds a number up or down to the nearest integer.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Numeric Calculation Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Round tax calculations to 2 decimals
+SELECT ROUND(price * 0.15, 2) FROM invoices;
+
+-- Always round up to the next whole dollar
+SELECT CEIL(shipping_fee) FROM orders;</code></pre>
+        </div>
+
+        <!-- Date & Time Functions -->
+        <p class="question"><strong>Common Date & Time Functions</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>NOW():</strong> Returns the current date and time.</li>
+                <li><strong>CURDATE():</strong> Returns the current date only.</li>
+                <li><strong>DATEDIFF(d1, d2):</strong> Returns the number of days between two dates.</li>
+                <li><strong>DATE_FORMAT():</strong> Formats a date as specified.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Date & Time Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Find how many days ago an order was placed
+SELECT DATEDIFF(NOW(), order_date) AS days_since_order FROM orders;
+
+-- Format date as 'Month Day, Year'
+SELECT DATE_FORMAT(created_at, '%M %d, %Y') FROM users;</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

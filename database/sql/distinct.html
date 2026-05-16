@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DISTINCT Keyword - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+        <script src="../../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>The DISTINCT Keyword</h2>
+        </div>
+        <div class="content-container" style="padding: 20px;">
+            <p class="question"><strong>What is DISTINCT?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>The <code>DISTINCT</code> keyword is used in conjunction with <code>SELECT</code> to return only unique values.</li>
+                    <li>It eliminates duplicate rows from the result set.</li>
+                </ul>
+            </p>
+
+            <pre><code class="sql">
+-- Select all unique countries from the Customers table
+SELECT DISTINCT Country FROM Customers;
+
+-- Select unique combinations of Country and City
+SELECT DISTINCT Country, City FROM Customers;
+            </code></pre>
+        </div>
+        <script>hljs.highlightAll();</script>
+    </body>
+</html>

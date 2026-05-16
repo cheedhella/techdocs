@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Data Types</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Data Types</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>Numeric Types</b>
+                <br><pre>
+| Type           | Use                           |
+| -------------- | ----------------------------- |
+| TINYINT        | Small integers                |
+| SMALLINT       | Medium-small integers         |
+| INT            | Normal integers               |
+| BIGINT         | Very large integers           |
+| FLOAT / DOUBLE | Approximate decimals          |
+| DECIMAL(p,s)   | Exact decimals (money values) |
+
+<br>
+p -> stands for Precision, total number of digits(on both sides of the decimal point) in the value;
+<br>
+s -> stands for Scale, number of digits after decimal point;
+<br>
+Eg:
+Height -> decimal (3,2) -> 6.10, 5.80;
+Weight -> decimal (5,2) -> 80.40, 190.20;
+
+                </pre>
+                </li>
+                <li><b>String Types</b><br><pre>
+| Type       | Use                  |
+| ---------- | -------------------- |
+| CHAR(n)    | Fixed-length text    |
+| VARCHAR(n) | Variable-length text |
+| TEXT       | Large text           |
+                </pre>
+                </li>
+                <li><b>Date & Time Types</b><br><pre>
+| Type      | Use                    |
+| --------- | ---------------------- |
+| DATE      | Date only              |
+| TIME      | Time only              |
+| DATETIME  | Date + time            |
+| TIMESTAMP | Auto-tracked timestamp |
+| YEAR      | Year only              |
+
+                </pre></li>
+                <li><b>Binary Types</b> - useful for files/images/raw data;<br><pre>
+| Type      | Use               |
+| --------- | ----------------- |
+| BINARY    | Fixed binary      |
+| VARBINARY | Variable binary   |
+| BLOB      | Large binary data |
+
+                </pre></li>
+                <li><b>Binary Type</b><br><pre>
+| Type      | Use               |
+| --------- | ----------------- |
+| BOOLEAN   | Stores TRUE/FALSE values |
+                </pre></li>
+                <li><b>Enum Type</b> one value; Eg: status ENUM('pending','approved'); </li>
+                <li><b>Set Type</b> multiple values; Eg: roles SET('admin','editor');</li>
+                <li><b>Best Practices:</b><br>
+                    <ul>
+                        <li>INT → normal numbers</li>
+                        <li>VARCHAR → most text fields</li>
+                        <li>DECIMAL → money</li>
+                        <li>TIMESTAMP → created/updated time</li>
+                        <li>TEXT → large text such as JSON data etc;</li>
+                        <li>BLOB → raw binary data such as audio, video, images, PDFs etc;</li>
+                    </ul>
+                </li>
+                <li><pre>
+| TEXT Types | Max Size |
+| ---------- | -------- |
+| TINYTEXT   | 255 B    |
+| TEXT       | 65 KB    |
+| MEDIUMTEXT | 16 MB    |
+| LONGTEXT   | 4 GB     |
+
+| BLOB Types | Max Size |
+| ---------- | -------- |
+| TINYBLOB   | 255 B    |
+| BLOB       | 65 KB    |
+| MEDIUMBLOB | 16 MB    |
+| LONGBLOB   | 4 GB     |
+
+                </pre></li>
+            </ul>
+        </div>
+    </body>
+</html>

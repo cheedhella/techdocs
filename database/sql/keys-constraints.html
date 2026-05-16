@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Constraints & Keys - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>SQL Constraints & Keys</h2>
+        </div>
+
+        <p class="question"><strong>What are SQL Constraints?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Constraints are rules applied to table columns to limit the type of data that can go into a table.</li>
+                <li>They ensure the accuracy and reliability of the data in the database.</li>
+                <li>If there is any violation between the constraint and the data action, the action is aborted.</li>
+            </ul>
+        </p>
+
+        <p class="question"><strong>NOT NULL and UNIQUE</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>NOT NULL:</strong> Ensures that a column cannot have a NULL value.</li>
+                <li><strong>UNIQUE:</strong> Ensures that all values in a column are different.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">NOT NULL and UNIQUE Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE TABLE Employees (
+    ID int NOT NULL UNIQUE,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Email varchar(255) UNIQUE
+);</code></pre>
+        </div>
+
+        <p class="question"><strong>PRIMARY KEY and FOREIGN KEY</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>PRIMARY KEY:</strong> Uniquely identifies each record in a table. It must contain unique values and cannot contain NULLs. A table can have only one primary key.</li>
+                <li><strong>FOREIGN KEY:</strong> A field in one table that refers to the PRIMARY KEY in another table. It is used to prevent actions that would destroy links between tables.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Key Relationships</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE TABLE Orders (
+    OrderID int NOT NULL,
+    OrderNumber int NOT NULL,
+    EmployeeID int,
+    PRIMARY KEY (OrderID),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(ID)
+);</code></pre>
+        </div>
+
+        <p class="question"><strong>CHECK and DEFAULT</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>CHECK:</strong> Ensures that the values in a column satisfy a specific condition (e.g., Age >= 18).</li>
+                <li><strong>DEFAULT:</strong> Provides a default value for a column when no value is specified during an INSERT.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Check and Default Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE TABLE Products (
+    ID int NOT NULL,
+    Price decimal(10,2) CHECK (Price > 0),
+    Status varchar(20) DEFAULT 'Available',
+    CreatedDate datetime DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+        </div>
+
+        <p class="question"><strong>AUTO_INCREMENT</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>AUTO_INCREMENT:</strong> Allows a unique number to be generated automatically when a new record is inserted into a table.</li>
+                <li>Often used for the Primary Key field so the user doesn't have to manually track IDs.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Auto Increment Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>CREATE TABLE Users (
+    UserID int NOT NULL AUTO_INCREMENT,
+    Username varchar(50) NOT NULL,
+    PRIMARY KEY (UserID)
+);</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

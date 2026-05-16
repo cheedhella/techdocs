@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>INSERT Statement - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+        <script src="../../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>The INSERT INTO Statement</h2>
+        </div>
+        <div class="content-container" style="padding: 20px;">
+            <p class="question"><strong>What is INSERT INTO?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>The <code>INSERT INTO</code> statement is used to add new records (rows) to an existing table in a database.</li>
+                    <li>You can insert data into all columns or specific columns.</li>
+                </ul>
+            </p>
+
+            <pre><code class="sql">
+-- Insert into all columns (values must be in the order of columns in the table)
+INSERT INTO Customers (CustomerID, CustomerName, ContactName, Address, City, PostalCode, Country)
+VALUES (1, 'Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+
+-- Insert into specific columns
+INSERT INTO Customers (CustomerName, City, Country)
+VALUES ('Alfreds Futterkiste', 'Berlin', 'Germany');
+            </code></pre>
+        </div>
+        <script>hljs.highlightAll();</script>
+    </body>
+</html>

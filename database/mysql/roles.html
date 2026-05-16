@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Role Management</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <p class="question"><b>What is a Role?</b></p>
+        <p class="answer">
+            <ul>
+                <li>It is a named collection of privileges, that can be assigned to users;</li>
+                <li>Instead of granting privileges directly to each user, you grant them to a role and then assign the role to users;</li>
+            </ul>
+        </p>
+
+        <p class="question"><b>Purpose of Roles?</b></p>
+        <p class="answer">
+            <ul>
+                <li><b>Without Roles</b>, you need to assign permissions directly to users; Hard to manage users and their permissions;</li>
+                <li><b>With Roles</b>, you can assign permissions to a role and then assign the role to users; Eg: Developer Role → SELECT, INSERT, UPDATE; Analyst Role → SELECT; DBA Role → ALL PRIVILEGES</li>
+            </ul>
+        </p>
+
+        <div class="question"><b>List of Priviliges</b></p>
+        <div class="answer">
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr><th>Privilege</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>ALL PRIVILEGES</code></td><td>Gives all available privileges</td></tr>
+                    <tr><td><code>SELECT</code></td><td>Read data from tables</td></tr>
+                    <tr><td><code>INSERT</code></td><td>Add new rows</td></tr>
+                    <tr><td><code>UPDATE</code></td><td>Modify existing rows</td></tr>
+                    <tr><td><code>DELETE</code></td><td>Remove rows</td></tr>
+                    <tr><td><code>CREATE</code></td><td>Create databases/tables</td></tr>
+                    <tr><td><code>DROP</code></td><td>Delete databases/tables</td></tr>
+                    <tr><td><code>ALTER</code></td><td>Modify table structure</td></tr>
+                    <tr><td><code>INDEX</code></td><td>Create/drop indexes</td></tr>
+                    <tr><td><code>CREATE VIEW</code></td><td>Create views</td></tr>
+                    <tr><td><code>SHOW VIEW</code></td><td>View view definitions</td></tr>
+                    <tr><td><code>CREATE ROUTINE</code></td><td>Create stored procedures/functions</td></tr>
+                    <tr><td><code>ALTER ROUTINE</code></td><td>Modify stored procedures/functions</td></tr>
+                    <tr><td><code>EXECUTE</code></td><td>Execute stored procedures/functions</td></tr>
+                    <tr><td><code>TRIGGER</code></td><td>Create triggers</td></tr>
+                    <tr><td><code>EVENT</code></td><td>Create/manage scheduled events</td></tr>
+                    <tr><td><code>REFERENCES</code></td><td>Create foreign keys</td></tr>
+                    <tr><td><code>LOCK TABLES</code></td><td>Lock tables manually</td></tr>
+                    <tr><td><code>CREATE TEMPORARY TABLES</code></td><td>Create temporary tables</td></tr>
+                    <tr><td><code>SHOW DATABASES</code></td><td>View database list</td></tr>
+                    <tr><td><code>PROCESS</code></td><td>View running processes/threads</td></tr>
+                    <tr><td><code>RELOAD</code></td><td>Reload server settings/privileges</td></tr>
+                    <tr><td><code>SHUTDOWN</code></td><td>Shut down MySQL server</td></tr>
+                    <tr><td><code>SUPER</code></td><td>Administrative operations (older versions)</td></tr>
+                    <tr><td><code>FILE</code></td><td>Read/write server files</td></tr>
+                    <tr><td><code>REPLICATION SLAVE</code></td><td>Replication permissions</td></tr>
+                    <tr><td><code>REPLICATION CLIENT</code></td><td>Replication status access</td></tr>
+                    <tr><td><code>CREATE USER</code></td><td>Create/manage users</td></tr>
+                    <tr><td><code>GRANT OPTION</code></td><td>Allow granting privileges to others</td></tr>
+                    <tr><td><code>XA_RECOVER_ADMIN</code></td><td>XA transaction recovery</td></tr>
+                    <tr><td><code>CONNECTION_ADMIN</code></td><td>Manage connections</td></tr>
+                    <tr><td><code>ROLE_ADMIN</code></td><td>Manage roles</td></tr>
+                    <tr><td><code>SYSTEM_VARIABLES_ADMIN</code></td><td>Change global system variables</td></tr>
+                    <tr><td><code>BACKUP_ADMIN</code></td><td>Backup-related operations</td></tr>
+                    <tr><td><code>BINLOG_ADMIN</code></td><td>Binary log administration</td></tr>
+                    <tr><td><code>PERSIST_RO_VARIABLES_ADMIN</code></td><td>Persist read-only variables</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>GRANT</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>Grant privilieges on specified object to a Role</b> - GRANT priv1,priv2 ON object TO role1,role2;</li>
+                <li><b>Grant one role to another role</b> - GRANT role1 TO role2;</li>
+                <li><b>Grant role to user</b> - GRANT role1 TO user1,user2;</li>
+                <li><b>GRANT priv ON object TO user WITH GRANT OPTION</b> - Allows recipient to further grant privileges to others;</li>
+                <li><b>GRANT role1 TO role2 WITH ADMIN OPTION;</b> - Receiver can assign/remove this role to others;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>ON Clause</b></div>
+        <div class="answer">
+            <ul>
+                <li>ON can be: entire server, database, table, column, stored procedure, function;</li>
+                <li>
+                    <pre>
+| Format              | Meaning                     |
+| ------------------- | --------------------------- |
+| `*.*`               | All databases and tables    |
+| `database.*`        | All tables in one database  |
+| `database.table`    | Specific table              |
+| `table`             | Specific table (current DB) |
+| SELECT(column)      | Specific column             |
+| `FUNCTION db.func`  | Specific function           |
+| `PROCEDURE db.proc` | Specific procedure          |
+                    </pre>
+                </li>
+            </ul>
+        </div>
+
+        <div class="question"><b>REVOKE</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>REVOKE priv1,priv2 ON object FROM role/user;</b> - Used to revoke privileges;</li>
+                <li><b>REVOKE role1 FROM user;</b> - Used to revoke role from user;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Inspecting a Role</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>SHOW GRANTS FOR role/user;</b> - View all priviliges/roles granted to a role/user;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Activating Roles</b></div>
+        <div class="answer">
+            <ul>
+                <li>User may have multiple roles assigned to him, but only default roles are active, when he login;</li>
+                <li>You can't specify a default role using GRANT; So, user doesn't have any roles active, until he specifies a default role;</li>
+                <li>SET DEFAULT ROLE role1 TO user1,user2; -> Changes are saved and applies to future sessions as well;</li>
+                <li>SET ROLE role1 TO user1,user2; -> Current session only; not saved;</li>
+                <li>SET DEFAULT ROLE NONE TO user1,user2; -> Remove default roles; User still have that role, but not activated by default;</li>
+                <li>SELECT CURRENT_ROLE() -> Displays currently active roles for the logged in user;</li>
+                <li><b>SET GLOBAL activate_all_roles_on_login = ON;</b> -> If you set this global variable, all assigned roles automatically activate at login;</li>
+            </ul>
+        </div>
+
+        <p class="question"><strong>Assigning Roles to Users</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Once a role is configured, it can be "granted" to one or more user accounts.</li>
+                <li>A user can have multiple roles assigned to them.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Linking Users and Roles</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Assign the role to a specific user
+GRANT 'app_read_only' TO 'analyst_user'@'localhost';
+
+-- Assign multiple roles to a user
+GRANT 'app_developer', 'app_read_only' TO 'dev_lead'@'%';</code></pre>
+        </div>
+
+        <p class="question"><strong>Activating Roles</strong></p>
+        <p class="answer">
+            <ul>
+                <li>By default, granted roles are not active when a user logs in.</li>
+                <li>Users must use <code>SET ROLE</code> to activate them, or the administrator can set a <strong>default role</strong>.</li>
+            </ul>
+        </p>
+        <div class="code-block">
+            <div class="code-block-title">Role Activation Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Set default role so it's active on login
+SET DEFAULT ROLE 'app_read_only' TO 'analyst_user'@'localhost';
+
+-- Manually activate all granted roles in current session
+SET ROLE ALL;</code></pre>
+        </div>
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

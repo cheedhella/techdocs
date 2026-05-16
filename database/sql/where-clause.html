@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>WHERE Clause - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+        <script src="../../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>The WHERE Clause</h2>
+        </div>
+        <div class="content-container" style="padding: 20px;">
+            <p class="question"><strong>What is the WHERE Clause?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>The <code>WHERE</code> clause is used to filter records.</li>
+                    <li>It is used to extract only those records that fulfill a specified condition.</li>
+                    <li>It can be used with <code>SELECT</code>, <code>UPDATE</code>, and <code>DELETE</code> statements.</li>
+                </ul>
+            </p>
+
+            <pre><code class="sql">
+-- Select customers from a specific country
+SELECT * FROM Customers WHERE Country = 'Mexico';
+
+-- Update records based on a condition
+UPDATE Products SET Price = Price * 1.10 WHERE CategoryID = 1;
+            </code></pre>
+        </div>
+        <script>hljs.highlightAll();</script>
+    </body>
+</html>

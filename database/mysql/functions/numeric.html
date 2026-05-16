@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Numeric Functions</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Numeric Functions</b></div>
+        <div class="answer">
+            <ul><li><pre>
+| Function                  | Purpose                        | Example                      |
+| ------------------------- | ------------------------------ | ---------------------------- |
+| `ABS(n)`                  | Returns absolute value         | `SELECT ABS(-15);`           |
+| `CEIL(n)` / `CEILING(n)`  | Rounds up to nearest integer   | `SELECT CEIL(4.2);`          |
+| `FLOOR(n)`                | Rounds down to nearest integer | `SELECT FLOOR(4.9);`         |
+| `ROUND(n,d)`              | Rounds number                  | `SELECT ROUND(15.678,2);`    |
+| `TRUNCATE(n,d)`           | Truncates decimals             | `SELECT TRUNCATE(15.678,2);` |
+| `MOD(a,b)`                | Remainder of division          | `SELECT MOD(10,3);`          |
+| `POWER(a,b)` / `POW(a,b)` | Raises power                   | `SELECT POWER(2,3);`         |
+| `SQRT(n)`                 | Square root                    | `SELECT SQRT(64);`           |
+| `RAND()`                  | Random number                  | `SELECT RAND();`             |
+| `SIGN(n)`                 | Returns sign (-1,0,1)          | `SELECT SIGN(-25);`          |
+| `GREATEST(a,b,...)`       | Largest value                  | `SELECT GREATEST(10,25,7);`  |
+| `LEAST(a,b,...)`          | Smallest value                 | `SELECT LEAST(10,25,7);`     |
+
+<br><br>
+SELECT salary, salary * 0.10 AS bonus FROM employees;
+
+            </pre></li></ul>
+        </div>
+
+
+
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

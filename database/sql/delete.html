@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DELETE Statement - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/highlight.min.css" />
+        <script src="../../../resources/js/highlight.min.js"></script>
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>The DELETE Statement</h2>
+        </div>
+        <div class="content-container" style="padding: 20px;">
+            <p class="question"><strong>What is DELETE?</strong></p>
+            <p class="answer">
+                <ul>
+                    <li>The <code>DELETE</code> statement is used to remove existing records (rows) from a table.</li>
+                    <li>Similar to <code>UPDATE</code>, the <code>WHERE</code> clause is essential to specify which records to delete. Without it, all records will be deleted.</li>
+                </ul>
+            </p>
+
+            <pre><code class="sql">
+-- Delete a single record
+DELETE FROM Customers WHERE CustomerID = 1;
+
+-- Delete all records from a table (similar to TRUNCATE but logs individual row deletions)
+DELETE FROM Customers;
+            </code></pre>
+        </div>
+        <script>hljs.highlightAll();</script>
+    </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Grouping Data - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>Grouping Data</h2>
+        </div>
+
+        <p class="question"><strong>What is the GROUP BY Clause?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>GROUP BY</code> statement groups rows that have the same values into summary rows.</li>
+                <li>It is often used with aggregate functions (<code>COUNT()</code>, <code>MAX()</code>, <code>MIN()</code>, <code>SUM()</code>, <code>AVG()</code>) to group the result-set by one or more columns.</li>
+                <li>Any column in the <code>SELECT</code> list that is not part of an aggregate function must be included in the <code>GROUP BY</code> clause.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Basic GROUP BY Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Find the number of customers in each country
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country;
+
+-- Calculate total sales per category
+SELECT CategoryID, SUM(Price) as TotalRevenue
+FROM Products
+GROUP BY CategoryID;</code></pre>
+        </div>
+
+        <p class="question"><strong>What is the HAVING Clause?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>HAVING</code> clause was added to SQL because the <code>WHERE</code> keyword cannot be used with aggregate functions.</li>
+                <li><code>WHERE</code> filters individual rows <strong>before</strong> grouping occurs.</li>
+                <li><code>HAVING</code> filters groups <strong>after</strong> the <code>GROUP BY</code> clause has been applied.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">GROUP BY with HAVING</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Find countries with more than 5 customers
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country
+HAVING COUNT(CustomerID) > 5;
+
+-- Find categories with average price higher than $50
+SELECT CategoryID, AVG(Price)
+FROM Products
+GROUP BY CategoryID
+HAVING AVG(Price) > 50;</code></pre>
+        </div>
+
+        <p class="question"><strong>Understanding Aggregation Logic</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>Phase 1 (FROM/WHERE):</strong> The engine identifies the source tables and filters raw rows.</li>
+                <li><strong>Phase 2 (GROUP BY):</strong> The remaining rows are organized into "buckets" based on the grouping columns.</li>
+                <li><strong>Phase 3 (Aggregation):</strong> The aggregate functions (SUM, COUNT, etc.) are calculated for each individual bucket.</li>
+                <li><strong>Phase 4 (HAVING):</strong> The engine discards buckets that do not meet the group-level criteria.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Complex Grouping Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- Order of operations: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY
+SELECT CategoryID, COUNT(*) as ProductCount
+FROM Products
+WHERE SupplierID != 1
+GROUP BY CategoryID
+HAVING COUNT(*) > 2
+ORDER BY ProductCount DESC;</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>SQL Joins - SQL Guide</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="main-grid-item main-grid-item-1 grid-wide-column">
+            <h2>SQL Joins Explained</h2>
+        </div>
+
+        <p class="question"><strong>What is an INNER JOIN?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>The <code>INNER JOIN</code> keyword selects records that have matching values in both tables.</li>
+                <li>It is the most common type of join and effectively finds the intersection of two tables.</li>
+                <li>If a row exists in one table but has no matching ID in the other, it will be excluded from the results.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">INNER JOIN Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;</code></pre>
+        </div>
+
+        <p class="question"><strong>What are LEFT and RIGHT JOINs?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>LEFT JOIN:</strong> Returns all records from the left table, and matched records from the right. If no match, right-side columns contain <code>NULL</code>.</li>
+                <li><strong>RIGHT JOIN:</strong> Returns all records from the right table, and matched records from the left. If no match, left-side columns contain <code>NULL</code>.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Outer Join Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- All customers and any orders they might have (Left Join)
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
+
+-- All orders and the customer details for each order (Right Join)
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+RIGHT JOIN Customers ON Orders.CustomerID = Customers.CustomerID;</code></pre>
+        </div>
+
+        <p class="question"><strong>What is the FULL OUTER JOIN concept?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>Returns all records when there is a match in either the left or the right table.</li>
+                <li><strong>Note:</strong> MySQL does not support <code>FULL JOIN</code> directly. You can emulate it using a <code>UNION</code> of a <code>LEFT JOIN</code> and a <code>RIGHT JOIN</code>.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Emulating FULL JOIN in MySQL</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>SELECT * FROM t1 LEFT JOIN t2 ON t1.id = t2.id
+UNION
+SELECT * FROM t1 RIGHT JOIN t2 ON t1.id = t2.id;</code></pre>
+        </div>
+
+        <p class="question"><strong>What are SELF and CROSS JOINs?</strong></p>
+        <p class="answer">
+            <ul>
+                <li><strong>SELF JOIN:</strong> A regular join where a table is joined with itself. This is useful for hierarchical data like employee/manager relationships.</li>
+                <li><strong>CROSS JOIN:</strong> Returns the Cartesian product of the two tables (every row from table A paired with every row from table B).</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Self & Cross Join Examples</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>-- SELF JOIN: Finding managers
+SELECT e1.name AS Employee, e2.name AS Manager
+FROM employees e1
+INNER JOIN employees e2 ON e1.manager_id = e2.employee_id;
+
+-- CROSS JOIN: Generating all combinations
+SELECT * FROM Products
+CROSS JOIN Colors;</code></pre>
+        </div>
+
+        <p class="question"><strong>How do Multi-table joins work?</strong></p>
+        <p class="answer">
+            <ul>
+                <li>You can join three or more tables by simply adding more <code>JOIN</code> clauses.</li>
+                <li>The database engine processes these sequentially to build the final result set.</li>
+            </ul>
+        </p>
+
+        <div class="code-block">
+            <div class="code-block-title">Multi-table Join Example</div>
+            <button class="copy-btn">Copy</button>
+            <pre><code>SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID;</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

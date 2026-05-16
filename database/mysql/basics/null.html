@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>NULL value</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>NULL value</b></div>
+        <div class="answer">
+            <ul>
+                <li>NULL means No value / unknown / missing data;</li>
+                <li>It is different from: 0, empty string, false;</li>
+                <li>Checking for NULL: IS NULL, IS NOT NULL;</li>
+                <li>NOT NULL constraint -> Prevents NULL values; These columns must contain a value;</li>
+                <li>DEFAULT -> If no value is specified, it defaults to specified value; Eg: status VARCHAR(20) DEFAULT 'active'; </li>
+                <li>SELECT IFNULL(phone, 'No Number') FROM users; -> Replace NULL with another value;</li>
+            </ul>
+        </div>
+    </body>
+</html>
