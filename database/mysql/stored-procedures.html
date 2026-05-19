@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Stored Procedures</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>What is a Stored Procedure?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is a block of SQL that you can save in the database and execute whenever needed;</li>
+                <li>It can accept input parameters, return output parameters and include error-handling mechanisms;</li>
+                <li>It supports control structures like if, loop etc;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Benefit of Stored Procedures?</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>Faster execution</b> - precompiled;</li>
+                <li><b>Reusable</b></li>
+                <li><b>Better Security</b> - we can limit direct table access and provide permission to execute stored procedures;</li>
+                <li><b>Centralized logic</b> - Reduces network traffic(with just 1 query);</li>
+                <li><b>Transaction Management</b> - It is used to run multiple SQL statements in a single transaction and rolling back modifications as needed;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Why DELIMITER $$ is used?</b></div>
+        <div class="answer">
+            <ul>
+                <li>By default, MySQL uses ; as delimiter(end of procedure);</li>
+                <li>A stored procedure contains many SQL statements, and each statement already ends with ;</li>
+                <li>DELIMITER $$ is used to change the delimiter to $$; Otherwise, It thinks the procedure ends at the first ;</li>
+                <li>After procedure creation, we usually restore normal delimiter to semicolon;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>CRUD Operations using stored procedures</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+> cat emp_procedures.sql
+CREATE TABLE emp (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    gender VARCHAR(10)
+);
+
+# ----------- Create Employee ----------------------
+DELIMITER $$
+
+CREATE PROCEDURE InsertEmployee(
+    IN emp_name VARCHAR(100),
+    IN emp_age INT,
+    IN emp_gender VARCHAR(10)
+)
+BEGIN
+    INSERT INTO emp(name, age, gender)
+    VALUES(emp_name, emp_age, emp_gender);
+END $$
+
+# ----------- Get All Employees --------------------
+CREATE PROCEDURE GetEmployees()
+BEGIN
+    SELECT * FROM emp;
+END $$
+
+# ----------- Get Employee By ID --------------------
+CREATE PROCEDURE GetEmployeeById(
+    IN emp_id INT
+)
+BEGIN
+    SELECT * FROM emp
+    WHERE id = emp_id;
+END $$
+
+
+# ----------- Update Employee --------------------
+CREATE PROCEDURE UpdateEmployee(
+    IN emp_id INT,
+    IN emp_name VARCHAR(100),
+    IN emp_age INT,
+    IN emp_gender VARCHAR(10)
+)
+BEGIN
+    UPDATE emp
+    SET
+        name = emp_name,
+        age = emp_age,
+        gender = emp_gender
+    WHERE id = emp_id;
+END $$
+
+# ----------- Delete Employee --------------------
+CREATE PROCEDURE DeleteEmployee(
+    IN emp_id INT
+)
+BEGIN
+    DELETE FROM emp
+    WHERE id = emp_id;
+END $$
+
+DELIMITER ;
+# ------ OUT parameters ---------------------------
+DELIMITER //
+
+CREATE PROCEDURE GetEmployeeNameById(
+    IN emp_id INT,
+    OUT emp_name VARCHAR(50)
+)
+BEGIN
+    SELECT name INTO emp_name
+    FROM emp
+    WHERE id = emp_id;
+END //
+
+DELIMITER ;
+
+# ------ INOUT parameters ---------------------------
+# Same variable is used for both input and output;
+
+DELIMITER $$
+CREATE PROCEDURE IncreaseSalary(
+    INOUT salary INT,
+    IN inc INT
+)
+BEGIN
+    SET salary = salary + inc;
+END $$
+DELIMITER ;
+
+# ------ Create stored procedures ---------------------------
+mysql -u root -p company_db < emp_procedures.sql
+
+# Calling stored procedures
+CALL InsertEmployee('Alice', 24, 'Female');
+CALL InsertEmployee('Bob', 30, 'Male');
+CALL GetEmployees();
+CALL UpdateEmployee(2, 'Bob Smith', 31, 'Male');
+CALL DeleteEmployee(1);
+
+SET @EmpName = '';
+CALL GetEmployeeNameById(1, @EmpName);
+SELECT @EmpName;
+
+SET @salary = 20000;
+CALL IncreaseSalary(@salary, 1000); # 21000
+CALL IncreaseSalary(@salary, 2000); # 23000
+SELECT @salary; # 23000
+
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>OUT vs INOUT variables</b></div>
+        <div class="answer">
+            <ul>
+                <li>In case of OUT variable, procedure can't read from OUT variable, procedure can only write to it;</li>
+                <li>In case of INOUT variable, procedure can read from and write to it;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>What happens if you WRITE to an IN variable?</b></div>
+        <div class="answer">
+            <ul>
+                <li>MySQL allows modification of IN parameters inside the procedure;</li>
+                <li>However, the modifications are local to the procedure; Caller doesn't receive the updated value;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>What happens if you READ an OUT variable?</b></div>
+        <div class="answer">
+            <ul>
+                <li>OUT variable is initialized to NULL inside the procedure, even if the caller initializes it to a value outside the procedure;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Drop Procedure</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>DROP PROCEDURE sp_name </b> - It is used to delete the stored procedure; It throws error, if it doesn't exist;</li>
+                <li><b>DROP PROCEDURE IF EXISTS sp_name </b> - It is used to delete the stored procedure; It doesn't throw error, rather it throws a WARNING, if it doesn't exist;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Alter Procedure</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is used to modify certain properties of existing stored procedure, like: comments, SQL security code, procedure characterstics;</li>
+                <li>Note that, you can't change the body of the procedure; To change the body, you must recreate it;</li>
+                <li><b>What is SQL Security?</b> It controls what permissions are used during execution:
+                    <ul>
+                        <li><b>DEFINER</b> - Run with creator's permissions; ALTER PROCEDURE InsertEmployee SQL SECURITY DEFINER;</li>
+                        <li><b>INVOKER</b> - Run with caller's permissions; ALTER PROCEDURE InsertEmployee SQL SECURITY INVOKER;</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="question"><b>List all Procedures</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>SHOW PROCEDURE STATUS;</b> - lists all procedures in the server(across all databases);</li>
+                <li><b>SHOW PROCEDURE STATUS WHERE db = 'classicmodels';</b> - list all procedures in the specified database;</li>
+                <li><b>SHOW PROCEDURE STATUS LIKE '%pattern%'</b> - list all procedures matching the pattern;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Stored Procedure Variables</b></div>
+        <div class="answer">
+            <ul>
+                <li>To declare variables which are local to stored procedure: <b>DECLARE variable_name datatype(size) [DEFAULT default_value];</b></li>
+                <li>To assign a value to a variable: <b>SET variable_name = value;</b></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>if statement</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+# if-then 
+IF condition THEN 
+   statements;
+END IF;
+
+# if-then-else
+IF condition THEN 
+   statements;
+ELSE
+   statements;
+END IF;
+
+# if-then-elseif-else
+IF condition1 THEN 
+   statements;
+ELSEIF condition2 THEN 
+   statements;
+ELSEIF conditionN THEN 
+   statements;
+ELSE 
+   statements;
+END IF;
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>CASE statement</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+# If you remove ELSE and if CASE can't find any matches, it throws this error: Case not found for CASE statement
+CASE case_value
+   WHEN when_value1 THEN statements
+   WHEN when_value2 THEN statements
+   ...
+   [ELSE else-statements] 
+END CASE;
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>LOOP statement</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+# Simple loop
+LOOP
+    statements;
+END LOOP 
+
+# Named loop 
+label_name: LOOP
+    statements;
+    IF condition THEN
+        LEAVE label_name;       # LEAVE is used to break/exit the loop;
+    END IF;
+END LOOP label_name;
+
+
+# WHILE loop 
+WHILE condition DO
+    statements;
+END WHILE;
+
+# REPEAT or do-while loop 
+REPEAT
+    statements;
+UNTIL condition
+END REPEAT;
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>max_error_count system variable</b></div>
+        <div class="answer">
+            <ul>
+                <li>It controls the maximum number of warnings, errors and notes that the server can store;</li>
+                <li>To view it's value: SHOW VARIABLES LIKE 'max_error_count';</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>DECLARE HANDLER</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is used for <b>error/exception handling</b>;</li>
+                <li>It is used to tell MySQL: <b>If a specific condition/error happens, run this block of code</b>;</li>
+                <li>Handlers must be declared: after variables and before executable statements;</li>
+                <li><b>Without handler</b>, procedure stops immediately, in case of any error;</li>
+                <li><b>With handler</b>, you can: catch error and show custom message, rollback transaction, continue execution;</li>
+                <li><b>With EXIT handler</b>, handler get executed and procedure stops gracefully, in case of any error;</li>
+                <li><pre>
+DECLARE handler_type HANDLER
+FOR condition1[, condition2...]
+handler_action;
+                </pre></li>
+                <li><b>handler_type</b>
+                    <ul>
+                        <li><b>EXIT</b> -> stored procedure will terminate;</li>
+                        <li><b>CONTINUE</b> -> stored procedure will continue executing;</li>
+                    </ul>
+                </li>
+                <li><b>condition</b> - It specifies 1 or more conditions that activate the handler;
+                    <ul>
+                        <li>MySQL error often have either error code OR SQLSTATE code;</li>
+                        <li><b>mysql_error_code</b> - any MySQL error code such as 1051;</li>
+                        <li><b>SQLWARNING</b> - any SQLSTATE that begins with 01;</li>
+                        <li><b>NOT FOUND</b> - any SQLSTATE that begins with 02;</li>
+                        <li><b>SQLEXCEPTION</b> - any SQLSTATE that doesn't begin with 00, 01, 02;</li>
+                        <li><b>SQLSTATE sqlstate</b>
+                            <ul>
+                                <li>SQLSTATE is a five-character that provides information about the result of an SQL operation;</li>
+                                <li><b>First 2 chars</b> - indicate the general category of the error;</li>
+                                <li><b>Next 3 chars</b> - It provides more specific information about the error within general category;</li>
+                                <li><b>42000</b> - Syntax error;</li>
+                                <li><b>42S01</b> - Table already exist;</li>
+                                <li><b>42S02</b> - Table doesn't exist;</li>
+                                <li><b>23000</b> - Constraint violation;</li>
+                                <li><b>45000</b> - User defined exceptin(using SIGNAL);</li>
+                                <li><b>28000</b> - Access denied error;</li>
+                                <li><b>02000</b> - No data found/cursor no rows error;</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><pre>
+# Rollback Example
+DELIMITER $$
+CREATE PROCEDURE TransferMoney()
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SELECT 'Transaction failed';
+    END;
+    START TRANSACTION;
+    UPDATE accounts SET balance = balance - 100
+    WHERE id = 1;
+    UPDATE accounts SET balance = balance + 100
+    WHERE id = 2;
+    COMMIT;
+END $$
+DELIMITER ;
+
+
+# Catch-all handler 
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+BEGIN
+    ROLLBACK;
+END;
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Named error handler - DECLARE CONDITION</b></div>
+        <div class="answer">
+            <ul>
+                <li>error or SQLSTATE codes in condition are not human-readble;</li>
+                <li>So, instead of handling error or SQLSTATE code directly, we can give them a human readable name;</li>
+                <li>Syntax: DECLARE condition_name CONDITION FOR condition_value;</li>
+                <li><pre><code>
+DECLARE duplicate_key CONDITION FOR SQLSTATE '23000';
+
+DECLARE EXIT HANDLER FOR duplicate_key
+BEGIN
+    SELECT 'Duplicate entry';
+END;
+                </code></pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>SIGNAL</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is used to manually throw an error/exception(similar throw in java);</li>
+                <li><pre>
+# Custom exception example
+DELIMITER $$
+CREATE PROCEDURE AddEmployee(
+    IN emp_name VARCHAR(100),
+    IN emp_age INT
+)
+BEGIN
+    IF emp_age < 18 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Age must be 18 or above';
+    END IF;
+    INSERT INTO emp(name, age)
+    VALUES(emp_name, emp_age);
+END $$
+DELIMITER ;
+
+# If there is a handler, then underlying handler gets executed, in case of custom exception;
+                </pre></li>
+                <li><pre>
+| SELECT                 | SIGNAL                  |
+| ---------------------- | ----------------------- |
+| Just displays text     | Throws actual exception |
+| Procedure may continue | Stops execution         |
+| Not real error         | Real SQL exception      |
+                </pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>RESIGNAL</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is used to re-throw an error/exception;</li>
+            </ul>
+        </div>
+
+How to handle errors or warnings encountered in a stored Procedure?
+
+DECLARE { EXIT | CONTINUE } HANDLER                 # EXIT  CONTINUE -> stored procedure will continue executing;
+    FOR condition_value [, condition_value] ...     # 
+    statement
+
+# Condition can be:
+mysql_error_code  -> MySQL error code such as 1051;
+
+
+
+
+
+        SHOW ERRORS;        // It shows only ERRORS(not warnings)
+        SHOW WARNINGS;      
+        SHOW STATUS;
+
+
+
+
+        A variable whose name begins with the @ sign is a session variable, available and accessible until the session ends.
+
+
+
+
+Exception Handling 
+
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Handle the error
+        SET Message = 'An error occurred. Please try again.';
+    END;
+
+
+CREATE PROCEDURE UpdateEmployeeSalary(
+    IN EmployeeID INT,
+    IN NewSalary DECIMAL(10, 2),
+    OUT Message VARCHAR(255)
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Handle the error
+        SET Message = 'An error occurred. Please try again.'; # This defines an error handler for SQL exceptions. If an error occurs, it sets the Message output parameter to an error message.
+    END;
+
+    UPDATE Employees
+    SET Salary = NewSalary
+    WHERE EmployeeID = EmployeeID;
+
+    IF ROW_COUNT() = 0 THEN
+        SET Message = 'Employee not found.';
+    ELSE
+        SET Message = 'Salary updated successfully.';
+    END IF;
+END //
+
+DELIMITER ;
+
+
+
+SET @ResultMessage = '';
+
+CALL UpdateEmployeeSalary(1, 75000, @ResultMessage);
+
+SELECT @ResultMessage;
+
+
+
+
+
+
+
+        <div class="question"><b>What is a Trigger?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is a named collection of privileges, that can be assigned to users;</li>
+                <li>Instead of granting privileges directly to each user, you grant them to a role and then assign the role to users;</li>
+            </ul>
+        </div>
+
+        Why Use Stored Procedures?
+Simplicity: Instead of writing complex SQL queries repeatedly, you write them once and save them as a stored procedure.
+Efficiency: Stored procedures are precompiled, which means they run faster than executing the same SQL statements separately.
+Security: You can restrict access to the data by granting permissions to execute the stored procedure without allowing direct access to the tables.
+Consistency: Stored procedures ensure that the same operations are performed consistently across different parts of an application.
+
+https://medium.com/javarevisited/gaps-and-islands-interview-question-problem-in-sql-fe4e29954c50?source=post_page---read_next_recirc--699a0f3c4005----0---------------------95eb64ed_91dd_4d9f_bc68_fbd02769cf46--------------
+
+
+Support loops, conditions (IF, CASE)
+Can handle transactions
+Allow error handling
+Can return multiple result sets
+
+USE classicmodels;
+DROP PROCEDURE IF EXISTS InsertEmployee;
+
+
+
+INOUT parameters
+An INOUT  parameter is a combination of IN and OUT parameters. This means that the calling program may pass the argument, and the stored procedure can modify the INOUT parameter and pass the new value back to the calling program.
+
+
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

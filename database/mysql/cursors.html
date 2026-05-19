@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cursor</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>What is a Cursor?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is a database object, which is used for iterating the result of a SELECT query;</li>
+                <li>Note: Cursors are <b>Read-only</b>, <b>Forward-only</b>, <b>Non-scrollable</b>;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Purpose of Cursors?</b></div>
+        <div class="answer">
+            <ul>
+                <li>Generally, we use cursor inside a stored procedure, trigger, function to <b>process the individual rows returned by SELECT query</b>;</li>
+                <li>It can used for migrating data with custom logic;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>How to use a Cursor?</b></div>
+        <div class="answer">
+            <ul>
+                <li>There are 4 steps in the lifecycle of a Cursor: <b>DECLARE</b>, <b>OPEN</b>, <b>FETCH</b>, <b>CLOSE</b>;</li>
+                <li><pre><code>
+# Syntax 
+DECLARE cursor_name CURSOR FOR
+SELECT column1, column2 FROM table_name;
+
+OPEN cursor_name;
+
+FETCH cursor_name INTO variable1, variable2;
+
+CLOSE cursor_name;
+                </code></pre></li>
+                <li><pre><code>
+# Example 
+# Employee table 
+| id | name  | salary |
+| -- | ----- | ------ |
+| 1  | Ravi  | 30000  |
+| 2  | Priya | 40000  |
+| 3  | Arun  | 50000  |
+
+# Increase Salary
+DELIMITER $$
+
+CREATE PROCEDURE increase_salary()
+BEGIN
+
+    -- Variable declarations
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE emp_id INT;
+    DECLARE emp_name VARCHAR(100);
+    DECLARE emp_salary DECIMAL(10,2);
+
+    -- Declare cursor
+    DECLARE emp_cursor CURSOR FOR
+        SELECT id, name, salary FROM employees;
+
+    -- Handler for end of rows
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+        SET done = TRUE;
+
+    -- Open cursor
+    OPEN emp_cursor;
+
+    read_loop: LOOP
+
+        -- Fetch row into variables
+        FETCH emp_cursor INTO emp_id, emp_name, emp_salary;
+
+        -- Exit loop when no more rows
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Increase salary by 10%
+        SET emp_salary = emp_salary * 1.10;
+
+        -- Display result
+        SELECT emp_id, emp_name, emp_salary;
+
+    END LOOP;
+
+    -- Close cursor
+    CLOSE emp_cursor;
+
+END$$
+
+DELIMITER ;
+
+
+
+# Output:
+| emp_id | emp_name | updated_salary |
+| ------ | -------- | -------------- |
+| 1      | Ravi     | 33000          |
+| 2      | Priya    | 44000          |
+| 3      | Arun     | 55000          |
+
+                </code></pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>When to use Cursors?</b></div>
+        <div class="answer">
+            <ul>
+                <li>Avoid cursors when a simple UPDATE does the work, as <b>cursor is slower than a normal SQL query and consume more memory</b>;</li>
+                <li>Use cursor only when there is <b>complex row by row processing is required</b>, <b>processing of each row depends on previous row</b>;</li>
+            </ul>
+        </div>
+        
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

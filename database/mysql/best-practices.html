@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Best Practices</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Best Practices</b></div>
+        <div class="answer">
+            <ol>
+                <li><b>Design schema carefully</b>
+                    <ul>
+                        <li>Start with normalized tables(split the tables into multiple tables to prevent redundancy), denormalize later after measuring bottlenecks(normalized tables often require many joins, complex queries, extra lookups);</li>
+                        <li>Every table should have a primary key: indexed integer or UUID;</li>
+                        <li>Prefer smaller datatype, wherever possible; Eg: INT instead of BIGINT, VARCHAR(100) instead of TEXT, DECIMAL for money values(never float);</li>
+                    </ul>
+                </li>
+                <li><b>Index intelligently</b>
+                    <ul>
+                        <li>Index columns used in: WHERE, JOIN, ORDER BY, GROUP BY; Avoid over indexing, too many indexes take disk space and can slow insert/updates;</li>
+                        <li>Order matters in a composite index; Eg: (customer_id, status)</li>
+                    </ul>
+                </li>
+                <li><b>Optimize queries</b>
+                    <ul>
+                        <li>Never use <b>select *</b> in production, fetch only required columns;</li>
+                        <li>Use EXPLAIN and analyze query plan regularly; Look for full table scans, missing indexes, temporary tables etc;</li>
+                        <li><b>Avoid N+1 queries</b>: Rather than querying users and then querying posts for each user separately, use joins;</li>
+                    </ul>
+                </li>
+                <li><b>Use transactions properly</b>
+                    <u>
+                        <li>Transactions protect data consistency; Keep transactions short; Long transactions hold locks for longer, increases contention and reduces throughput;</li>
+                    </u>
+                </li>
+                <li><b>Use right storage engine</b>
+                    <ul>
+                        <li><b>MyISAM</b> - older;</li>
+                        <li><b>InnoDB</b> - newer; It supports row-level locking, transactions, better concurrency;</li>
+                    </ul>
+                </li>
+                <li><b>Use Connection Pooling</b>
+                    <ul>
+                        <li>It is expensive to open DB connections repeatedly;</li>
+                        <li>Use HikariCP (Java), SQLAlchemy pooling (Python), mysql2 pools (Node.js);</li>
+                        <li>Set connection limits; It protects database from overload; Monitor for max connections, slow queries;</li>
+                    </ul>
+                </li>
+                <li><b>Secure the database</b>
+                    <ul>
+                        <li>Use prepared statements, they prevent SQL injection;</li>
+                        <li><b>Bad: </b>SELECT * FROM users WHERE email = '" + email + "'</li>
+                        <li><b>Good: </b>SELECT * FROM users WHERE email = ?</li>
+                        <br>
+                        <li><b>Principle of least privilege</b> - Users should only have required permissions; Eg: app user → SELECT/INSERT/UPDATE, admin user → schema changes;</li>
+                        <li><b>Encrypt sensitive data</b> - hash passwords/API tokens with bcrypt/argon2;</li>
+                        <li>Enable TLS for production connections;</li>
+                    </ul>
+                </li>
+                <li><b>Backup and Restore</b></li>
+                <li><b>Monitor Performance</b>
+                    <ul>
+                        <li>Track <b>Slow Queries</b>, <b>CPU usage</b>, <b>buffer pool hit rate</b>, <b>Replication Lag</b>, <b>Lock waits</b> etc;</li>
+                        <li>Use tools like: Percona Monitoring and Management, Grafana, Prometheus;</li>
+                    </ul>
+                </li>
+                <li><b>Plan for scalability</b> - Use read replicas for analytics and other read-heavy workloads;</li>
+                <li><b>Partition large tables carefully</b> - Helpful for time-series data;</li>
+                <li><b>Maintain application level Cache </b> - Don't hit database for every request, use cache like Redis;</li>
+                <li><b>Use migrations</b> - Never manually edit production schemas; Use tools like Flyway, liquibase;</li>
+                <li><b>ORM best practices</b> - If you are using ORM, understand the generated SQL; They don't replace SQL knowledge;</li>
+                <li><b>Character set</b> - use either utf8mb4 or utf8mb4_unicode_ci;</li>
+            </ol>
+        </div>
+
+
+
+
+Monitor:
+
+max connections
+slow queries
+thread usage
+
+        slow query logs
+EXPLAIN
+profiling
+
+
+
+“Normalize until it hurts, then denormalize carefully.”
+
+Because:
+
+fixing bad data is harder than fixing slow queries
+correctness is usually more important early on
+scaling problems are easier once the data model is clean
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>
