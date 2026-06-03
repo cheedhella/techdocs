@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Angular CLI</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>What is Angular CLI?</b></div>
+        <div class="answer">
+            <ul>
+                <li>Angular CLI is the command-line tool for creating, developing, building, and testing Angular applications.</li>
+                <li>It automates repetitive setup tasks and applies Angular best-practice defaults.</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>What Angular CLI does?</b></div>
+        <div class="answer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>What it does</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ng new my-angular-app</code></td>
+                        <td>It creates a new project with default project structure, installs dependencies, configures TypeScript, sets up routing, configures build tools, adds testing setup;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate component my-component | ng g c my-component</code></td>
+                        <td>Component is reusable UI building block; It generates a new component;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng generate service my-service | ng g s my-service</code></td>
+                        <td>Service is used for Authentication, API calls and shared data;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng g module my-module</code></td>
+                        <td>It is used for feature separation, lazy loading, and organizing related components, services, and other code into cohesive units;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng g pipe my-pipe</code></td>
+                        <td>It is used to transform data in templates; Eg: uppercase text, date formatting;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng g guard my-guard</code></td>
+                        <td>It is used to protect routes and control access based on conditions; Eg: authentication, role-based access;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng serve</code></td>
+                        <td>It starts the local development server at http://localhost:4200 with these features: fast rebuild, live reloading, auto-refresh on file save, error display in browser;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng build</code></td>
+                        <td>Builds the app into deployable bundles.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng build --configuration production</code></td>
+                        <td>Builds an optimized production bundle (minified, tree-shaken, ahead-of-time compilation, deadcode removal, compression optimized etc);</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng test</code></td>
+                        <td>Runs unit tests for the application(components, services, pipes, etc) using the configured test runner; Usually, uses karma or jasmine;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng e2e</code></td>
+                        <td>Runs end-to-end tests(like open page, click button, test output) when an e2e framework is configured in the workspace;</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng lint</code></td>
+                        <td>Checks code quality and style issues using the configured linter.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ng update</code></td>
+                        <td>Angular CLI helps upgrade Angular safely; It updates Angular packages and applies migration schematics when available.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Summary of Angular CLI commands</b></div>
+        <div class="answer">
+            <ul>
+                <li>Creates project</li>
+                <li>Generates UI pieces</li>
+                <li>Adds reusable services</li>
+                <li>Protects routes</li>
+                <li>Runs locally</li>
+                <li>Tests app</li>
+                <li>Builds deployable version</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Best practices for Angular CLI usage</b></div>
+        <div class="answer">
+            <ul>
+                <li>Use CLI generators to maintain consistency and follow Angular conventions.</li>
+                <li>Leverage build configurations for different environments (dev, staging, prod).</li>
+                <li>Integrate linting and testing into CLI workflows for code quality.</li>
+                <li>Adopt a consistent project structure for scalability and team collaboration.</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Angular CLI vs Manual Setup</b></div>
+        <div class="answer">
+            <ul>
+                <li>Angular CLI provides a streamlined, consistent approach to project setup and development.</li>
+                <li>Manual setup offers more flexibility but requires more configuration and maintenance.</li>
+                <li>CLI ensures best practices and conventions are followed automatically.</li>
+                <li>Manual setup may be necessary for highly customized or legacy projects.</li>
+            </ul>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

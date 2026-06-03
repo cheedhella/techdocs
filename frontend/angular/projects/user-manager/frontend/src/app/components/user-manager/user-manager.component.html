@@ -1,0 +1,29 @@
+<section class="page-shell">
+  <header class="hero">
+    <p class="kicker">User Manager</p>
+    <h1>Manage users in mcdemo.users</h1>
+    <p class="subtitle">Create, edit, and remove user records synced with Spring Boot REST APIs.</p>
+  </header>
+
+  <section class="panel form-panel">
+    <app-user-form
+      [formModel]="formModel"
+      [editingUserId]="editingUserId"
+      [submitting]="submitting"
+      (formModelChange)="updateFormModel($event)"
+      (save)="saveUser()"
+      (reset)="resetForm()"
+    />
+  </section>
+
+  <section class="panel list-panel">
+    <app-user-grid
+      [users]="users"
+      [loading]="loading"
+      [errorMessage]="errorMessage"
+      (refresh)="loadUsers()"
+      (edit)="editUser($event)"
+      (delete)="deleteUser($event)"
+    />
+  </section>
+</section>

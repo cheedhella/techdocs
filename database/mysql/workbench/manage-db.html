@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Manage Databases</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Managing Databases?</b></div>
+        <div class="answer">
+            <ul>
+                <li>In MySQL, both database and schema are same;</li>    
+                <li><b>Create Schema</b> - Left panel -> Schemas -> Right-click -> Create Schema;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Charset and Collation</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>Charset</b> - It specifies what characters you are planning to store in database; Eg: English/Hindi/Chinese chars, emojis etc;</li>
+                <li>
+                    <ul>
+                        <li>lantin1 - basic english characters;</li>
+                        <li>utf8 - unicode characters;</li>
+                        <li>utf8mb4 - unicode characters + emojis;</li>
+                    </ul>
+                </li>
+                <li><b>Why charset is important?</b> Without proper charset: emojis may fail, Hindi text may break, special symbols become ????, multilingual apps fail;</li>
+                <li><b>Collation</b> - It defines how string comparison is performed in the database; Eg: case sensitivity, accent sensitivity etc;</li>
+                <li><b>Why collation is important?</b> Collation effects searching and sorting; </li>
+                <li>Searching(WHERE name = 'rahul'); Case insensitive collation finds 'Rahul', 'RAHUL', 'rahul' etc;</li>
+                <li>Sorting(ORDER BY name);  Different collations produce different sorting orders;</li>
+                <li>
+                    <ul>
+                        <li>utf8mb4_general_ci - case-insensitive;</li>
+                        <li>utf8mb4_unicode_ci - case-insensitive, accent-insensitive;</li>
+                        <li>utf8mb4_bin - case-sensitive;</li>
+                    </ul>
+                </li>
+
+                <li>MySQL allows charset settings at multiple levels: Server -> Database -> Table -> Column; Lower levels can override higher levels;</li>
+                <li>Default values depends on mysql version; In MySQL 8.0, default charset is utf8mb4 and default collation is utf8mb4_0900_ai_ci;</li>
+            </ul>
+        </div>
+
+        charset, collation
+Creating and Managing Databases
+
+4.1 Creating a schema
+4.2 Renaming schemas
+4.3 Deleting schemas
+4.4 Refreshing schemas
+
+database vs schema 
+Connecting to a Database
+
+3.1 Creating a new connection
+3.2 Configuring hostname, port, username
+3.3 Testing the connection
+3.4 Troubleshooting connection issues
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

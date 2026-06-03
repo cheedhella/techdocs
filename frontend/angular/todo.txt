@@ -1,0 +1,35 @@
+Install Latest Angular
+    Prerequisites: node, npm;
+    npm install -g @angular/cli
+    npm install -g @angular/cli@7.0.3
+
+Angular CLI 
+    npm install -g @angular/cli 
+    ng new my-dream-app 
+    cd my-dream-app 
+    ng serve 
+    ng version
+
+ng new 
+
+ng generate is used to create components, routes, services, pipes etc;
+ng serve is used to test your app locally while developing;
+
+Test 
+    Run unit or integration tests;
+
+Lint 
+    Run official angular linter;
+
+Format 
+    Make your code shine;
+
+https://www.udemy.com/course/full-stack-angular-spring-boot-tutorial/?couponCode=IND21PM
+https://www.udemy.com/course/full-stack-health-care-telemed-app-spring-boot-angular/?couponCode=IND21PM
+
+ng new todo
+
+
+
+ like components, Directives, Forms, Pipes, HTTP Services, Dependency Injection, 
+ 

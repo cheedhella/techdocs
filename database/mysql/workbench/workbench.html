@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Workbench</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Workbench</b></div>
+        <div class="answer">
+            <ul>
+                <li>MySQL Workbench is a GUI tool for database development, administration, data modeling and migration;</li>
+                <li>You can manage multiple MySQL servers from one place by creating multiple saved connections;</li>
+                <li>Each connection can target a different host, version, environment or account;</li>
+                <li><a href="./features.html">Feature-wise guide</a> - Open dedicated pages for each major Workbench capability;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>How to manage multiple databases in Workbench?</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>Create connections</b> - In Home screen click <b>+</b> in <b>MySQL Connections</b>, define host, port, username, password and save;</li>
+                <li><b>Name clearly</b> - Use names like <b>local-dev</b>, <b>staging-readonly</b>, <b>prod-admin</b> to avoid mistakes;</li>
+                <li><b>Test before saving</b> - Use <b>Test Connection</b> so invalid credentials or firewall issues are caught early;</li>
+                <li><b>Open multiple tabs</b> - You can open several SQL editor tabs, each for a different connection/server;</li>
+                <li><b>Use default schema carefully</b> - Set the active schema in each tab to avoid running queries in the wrong database;</li>
+                <li><b>Color-code connections</b> - Assign connection colors (for example red for production) as a visual safety check;</li>
+                <li><b>Use separate users</b> - Keep different accounts for dev/stage/prod with minimal required privileges;</li>
+                <li><b>Group routine work</b> - Keep reusable SQL snippets for each environment in snippets panel or versioned SQL files;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Typical workflow with many databases</b></div>
+        <div class="answer">
+            <ul>
+                <li>Connect to <b>dev</b> and build schema or query changes first;</li>
+                <li>Validate using query results, explain plans and row counts;</li>
+                <li>Export change script and review it;</li>
+                <li>Apply same script to <b>staging</b> and run verification queries;</li>
+                <li>Run production changes only with controlled account and backup plan;</li>
+                <li>Use server status and logs to monitor impact after deployment;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>What all you can do with MySQL Workbench?</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>SQL Development</b> - Write, run and save SQL scripts; format queries and inspect result sets;</li>
+                <li><b>Schema Design</b> - Create tables, indexes, foreign keys, views, stored procedures, functions and triggers;</li>
+                <li><b>Data Modeling</b> - Build ER diagrams; forward engineer model to SQL; reverse engineer existing database;</li>
+                <li><b>Administration</b> - Start/stop server, inspect server variables, monitor performance dashboards and logs;</li>
+                <li><b>User and Privilege Management</b> - Create users/roles and grant/revoke permissions;</li>
+                <li><b>Backup and Restore</b> - Perform export/import with Data Export and Data Import/Restore;</li>
+                <li><b>Data Migration</b> - Migrate from other systems (or older MySQL) using migration wizard;</li>
+                <li><b>Performance Tuning</b> - Use <b>EXPLAIN</b>, visual explain and index analysis for slow queries;</li>
+                <li><b>Server Health Checks</b> - Review connections, memory use, thread activity and InnoDB metrics;</li>
+                <li><b>Automation Support</b> - Save SQL scripts and integrate with scheduled execution outside Workbench;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Best practices while using Workbench with multiple environments</b></div>
+        <div class="answer">
+            <ul>
+                <li>Never use one shared admin user for all environments;</li>
+                <li>Enable SSL/TLS for remote or production connections;</li>
+                <li>Keep read-only users for analysis/reporting tasks;</li>
+                <li>Always confirm active connection and schema before running <b>UPDATE</b> or <b>DELETE</b>;</li>
+                <li>Use transactions for critical updates and validate with <b>SELECT</b> before <b>COMMIT</b>;</li>
+                <li>Keep backups before schema/data changes in production;</li>
+            </ul>
+        </div>
+
+        Working with Tables
+
+5.1 Creating tables using GUI
+5.2 Creating tables using SQL
+5.3 Modifying table structure
+5.4 Deleting tables
+5.5 Understanding data types
+
+SQL Editor Basics
+CRUD Operations in Workbench
+6.1 Writing SQL queries
+6.2 Running queries
+6.3 Executing selected statements
+6.4 Saving SQL scripts
+6.5 Opening SQL files
+
+
+8. Importing and Exporting Data
+
+8.1 Importing CSV files
+8.2 Exporting tables to CSV
+8.3 Database backup
+8.4 Restore database dump
+
+
+Database Modeling
+
+9.1 Creating ER diagrams
+9.2 Adding tables visually
+9.3 Defining relationships
+9.4 Forward engineering
+9.5 Reverse engineering
+
+User Administration
+
+10.1 Creating users
+10.2 Setting passwords
+10.3 Assigning privileges
+10.4 Managing roles
+
+
+Server Administration
+
+11.1 Server status
+11.2 Startup & shutdown
+11.3 Logs and monitoring
+11.4 Configuration settings
+
+
+Performance Tools
+
+12.1 Query execution plan
+12.2 Performance dashboard
+12.3 Query optimization tips
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

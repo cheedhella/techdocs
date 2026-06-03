@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Project Structure</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>Project Structure</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+ecommerce-app/
+│
+├── .angular/
+├── .vscode/
+├── node_modules/
+├── dist/
+│
+├── src/
+│   │
+│   ├── app/
+│   │   │
+│   │   ├── core/
+│   │   │   ├── guards/
+│   │   │   │   ├── auth.guard.ts
+│   │   │   │   └── admin.guard.ts
+│   │   │   │
+│   │   │   ├── interceptors/
+│   │   │   │   ├── auth.interceptor.ts
+│   │   │   │   └── error.interceptor.ts
+│   │   │   │
+│   │   │   ├── services/
+│   │   │   │   ├── api.service.ts
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   └── storage.service.ts
+│   │   │   │
+│   │   │   ├── models/
+│   │   │   │   ├── user.model.ts
+│   │   │   │   └── product.model.ts
+│   │   │   │
+│   │   │   └── core.module.ts
+│   │   │
+│   │   ├── shared/
+│   │   │   ├── components/
+│   │   │   │   ├── navbar/
+│   │   │   │   │   ├── navbar.component.ts
+│   │   │   │   │   ├── navbar.component.html
+│   │   │   │   │   ├── navbar.component.css
+│   │   │   │   │   └── navbar.component.spec.ts
+│   │   │   │   │
+│   │   │   │   └── footer/
+│   │   │   │       ├── footer.component.ts
+│   │   │   │       ├── footer.component.html
+│   │   │   │       ├── footer.component.css
+│   │   │   │       └── footer.component.spec.ts
+│   │   │   │
+│   │   │   ├── directives/
+│   │   │   │   └── highlight.directive.ts
+│   │   │   │
+│   │   │   ├── pipes/
+│   │   │   │   └── currency-format.pipe.ts
+│   │   │   │
+│   │   │   └── shared.module.ts
+│   │   │
+│   │   ├── features/
+│   │   │   │
+│   │   │   ├── auth/
+│   │   │   │   ├── login/
+│   │   │   │   │   ├── login.component.ts
+│   │   │   │   │   ├── login.component.html
+│   │   │   │   │   ├── login.component.css
+│   │   │   │   │   └── login.component.spec.ts
+│   │   │   │   │
+│   │   │   │   ├── register/
+│   │   │   │   ├── auth-routing.module.ts
+│   │   │   │   └── auth.module.ts
+│   │   │   │
+│   │   │   ├── products/
+│   │   │   │   ├── product-list/
+│   │   │   │   ├── product-details/
+│   │   │   │   ├── product-routing.module.ts
+│   │   │   │   └── product.module.ts
+│   │   │   │
+│   │   │   ├── cart/
+│   │   │   ├── orders/
+│   │   │   └── dashboard/
+│   │   │
+│   │   ├── app-routing.module.ts           # Root routing module; It defines application routes and lazy loading;
+│   │   ├── app.component.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.css
+│   │   ├── app.component.spec.ts
+│   │   └── app.module.ts                   # Root module; It registers components, services, modules etc;
+│   │
+│   ├── assets/
+│   │   ├── images/
+│   │   ├── icons/
+│   │   ├── fonts/
+│   │   └── i18n/
+│   │
+│   ├── environments/
+│   │   ├── environment.ts
+│   │   └── environment.prod.ts
+│   │
+│   ├── styles/
+│   │   ├── variables.css
+│   │   ├── themes.css
+│   │   └── global.css
+│   │
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── main.ts
+│   ├── polyfills.ts
+│   ├── styles.css
+│   └── test.ts
+│
+├── .editorconfig
+├── .gitignore
+├── angular.json
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.spec.json
+├── karma.conf.js
+├── README.md
+└── tslint.json
+
+<br><br>
+Larget applications may include below:
+├── state/
+│   ├── actions/
+│   ├── reducers/
+│   ├── effects/
+│   └── selectors/
+│
+├── graphql/
+├── websocket/
+├── microfrontends/
+├── themes/
+├── localization/
+├── analytics/
+└── feature-flags/
+
+                </pre></li>
+            </ul>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

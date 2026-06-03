@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Joins</title>
+        <link rel="stylesheet" href="../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>What are Joins?</b></div>
+        <div class="answer">
+            <ul>
+                <li>Databases often store related information in separate tables to avoid duplication;</li>
+                <li>Joins are used to combine rows from two or more tables based on a related column between them;</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Types of Joins?</b></div>
+        <div class="answer">
+            <ul>
+                <li><b>INNER JOIN:</b> → intersection only;</li>
+                <li><b>LEFT JOIN:</b> → left + intersection;</li>
+                <li><b>RIGHT JOIN:</b> → right + intersection;</li>
+                <li><b>FULL JOIN:</b> → everything;</li>
+                <li><b>CROSS JOIN:</b> → Cartesian product;</li>
+                <li><b>SELF JOIN:</b> → table joined with itself; Used for hierarchical relationships(like employee-manager);</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Joins with 2 tables</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+Users table 
+| user_id | name    |
+| ------- | ------- |
+| 1       | Alice   |
+| 2       | Bob     |
+| 3       | Charlie |
+| 4       | David   |
+
+
+Orders table
+| order_id | user_id | product  |
+| -------- | ------- | -------- |
+| 101      | 1       | Laptop   |
+| 102      | 1       | Mouse    |
+| 103      | 2       | Keyboard |
+| 104      | 2       | Laptop   |
+| 105      | 3       | Mouse    |
+| 106      | 5       | Monitor  |
+
+Notice:
+1. User 4 (David) has no orders;
+2. Order 106 is associated with user_id 5, which does not exist in the Users table.
+3. Laptop is ordered by multiple users (Alice and Bob)
+4. Mouse is ordered by multiple users (Alice and Charlie)
+
+--------------------------------------------------------------------------------------
+# INNER JOIN
+SELECT Users.name, Orders.product
+FROM Users
+INNER JOIN Orders
+ON Users.user_id = Orders.user_id;
+
+OR
+SELECT Users.name, Orders.product
+FROM Users
+JOIN Orders
+ON Users.user_id = Orders.user_id;
+
+Output:
+| name    | product  |
+| ------- | -------- |
+| Alice   | Laptop   |
+| Alice   | Mouse    |
+| Bob     | Keyboard |
+| Bob     | Laptop   |
+| Charlie | Mouse    |
+
+Explanation:
+    Only matching user_id values are included.
+    Excluded:
+        David → no order(Only users with matching orders are included)
+        Order 106 → no matching user
+--------------------------------------------------------------------------------------
+# LEFT JOIN
+SELECT Users.name, Orders.product
+FROM Users
+LEFT JOIN Orders
+ON Users.user_id = Orders.user_id;
+
+It returns:
+    - all rows from left table
+    - matching rows from right table
+    - If no match → NULL
+
+Output:
+| name    | product  |
+| ------- | -------- |
+| Alice   | Laptop   |
+| Alice   | Mouse    |
+| Bob     | Keyboard |
+| Bob     | Laptop   |
+| Charlie | Mouse    |
+| David   | NULL     |
+
+Explanation:
+    - All users appear. David has no order, so product becomes NULL.
+--------------------------------------------------------------------------------------
+# RIGHT JOIN
+SELECT Users.name, Orders.product
+FROM Users
+RIGHT JOIN Orders
+ON Users.user_id = Orders.user_id;
+
+It returns:
+    - all rows from right table
+    - matching rows from left table
+    - If no match → NULL
+
+Output:
+| name    | product  |
+| ------- | -------- |
+| Alice   | Laptop   |
+| Alice   | Mouse    |
+| Bob     | Keyboard |
+| Bob     | Laptop   |
+| Charlie | Mouse    |
+| NULL    | Monitor  |
+
+Explanation:
+    - All orders appear. Order 106 has no matching user, so name becomes NULL.
+--------------------------------------------------------------------------------------
+# FULL JOIN - Not supported in MySQL, but can be simulated using UNION of LEFT and RIGHT JOINs.
+SELECT Users.name, Orders.product
+FROM Users
+LEFT JOIN Orders
+ON Users.user_id = Orders.user_id
+
+UNION
+
+SELECT Users.name, Orders.product
+FROM Users
+RIGHT JOIN Orders
+ON Users.user_id = Orders.user_id;
+
+It returns:
+    - matching rows
+    - unmatched rows from both tables
+
+Output:
+| name    | product  |
+| ------- | -------- |
+| Alice   | Laptop   |
+| Alice   | Mouse    |
+| Bob     | Keyboard |
+| Bob     | Laptop   |
+| Charlie | Mouse    |
+| David   | NULL     |
+| NULL    | Monitor  |
+
+Explanation:
+    - All users and all orders are included. 
+    - David has no order, so product is NULL
+    - Order 106 has no matching user, so name is NULL
+    - Union removes duplicates, so if there were any rows that appeared in both the LEFT and RIGHT JOIN results, they would only appear once in the final output.
+--------------------------------------------------------------------------------------
+# CROSS JOIN
+It doesn't require a join condition or common column;
+It returns the Cartesian product of the two tables, meaning it combines every row from the first table with every row from the second table;
+
+Example:
+Colors table
+| color |
+| ----- |
+| Red   |
+| Blue  |
+
+Sizes table
+| size |
+| ---- |
+| S    |
+| M    |
+
+Query:
+# Both queries produce the same result
+SELECT Colors.color, Sizes.size
+FROM Colors
+CROSS JOIN Sizes;
+
+SELECT Colors.color, Sizes.size
+FROM Colors, Sizes;
+
+Output:
+| color | size |
+| ----- | ---- |
+| Red   | S    |
+| Red   | M    |
+| Blue  | S    |
+| Blue  | M    |
+--------------------------------------------------------------------------------------
+# SELF JOIN
+It useful when a row in a table is related to another row in the same table, like employee-manager relationships;;
+
+Query:
+SELECT 
+    E.name AS employee,
+    M.name AS manager       # Same table is used twice, once as Employee and another as Manager;
+FROM Employees E
+JOIN Employees M
+ON E.manager_id = M.id;
+
+
+Employees table
+| id | name    | manager_id |
+| -- | ------- | ---------- |
+| 1  | John    | NULL       |
+| 2  | Alice   | 1          |
+| 3  | Bob     | 1          |
+| 4  | Charlie | 2          |
+
+Output:
+| employee | manager |
+| -------- | ------- |
+| Alice    | John    |
+| Bob      | John    |
+| Charlie  | Alice   |
+
+                </pre></li>
+            </ul>
+        </div>
+
+
+        User table 
+        Product table 
+        Order table 
+
+
+        <div class="question"><b>What is a Trigger?</b></div>
+        <div class="answer">
+            <ul>
+                <li>It is a named collection of privileges, that can be assigned to users;</li>
+                <li>Instead of granting privileges directly to each user, you grant them to a role and then assign the role to users;</li>
+            </ul>
+        </div>
+
+
+        MUltiple tables can be joined in a single query by chaining JOIN clauses together. 
+        The order of the joins and the type of join used will affect the results returned by the query. It's important to understand the relationships between the tables and choose the appropriate join type to get the desired results.
+        <script src="../../resources/js/codeblock.js"></script>
+    </body>
+</html>

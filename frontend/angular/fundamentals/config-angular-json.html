@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>angular.json</title>
+        <link rel="stylesheet" href="../../../resources/css/styles.css" />
+        <link rel="stylesheet" href="../../../resources/css/codeblock.css" />
+    </head>
+    <body>
+        <div class="question"><b>What is angular.json?</b></div>
+        <div class="answer">
+            <ul>
+                <li><code>angular.json</code> is the workspace configuration file used by Angular CLI.</li>
+                <li>It defines projects, build options, serve settings, test options, and named configurations (like development or production).</li>
+                <li>Angular CLI reads this file when running commands such as <code>ng build</code> and <code>ng serve</code>.</li>
+            </ul>
+        </div>
+
+        <div class="question"><b>angular.json</b></div>
+        <div class="answer">
+            <ul>
+                <li><pre>
+
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "projects": {
+    "my-app": {
+      "projectType": "application",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/my-app",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "my-app:build:production"
+            },
+            "development": {
+              "buildTarget": "my-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}
+
+angular.json is the Angular workspace configuration file. It tells the Angular CLI how to build, serve, test, lint, and generate code for your project.
+
+Main sections:
+
+$schema: Points to the JSON schema for validation and editor autocomplete.
+version: Config format version.
+newProjectRoot: Default folder where new projects are created.
+projects: The most important section. Contains one or more apps/libraries in the workspace.
+Inside each project:
+
+projectType: application or library
+root: Project root path
+sourceRoot: Source files path, often src
+prefix: Default selector prefix for generated components
+architect or targets: Defines CLI tasks
+Common targets under architect / targets:
+
+build: Build configuration
+serve: Dev server configuration
+test: Unit test configuration
+lint: Lint task
+extract-i18n: Translation extraction
+Typical build.options fields:
+
+outputPath: Where build files go
+index: HTML entry file
+main or browser: Main TS entry
+polyfills: Polyfills file(s)
+tsConfig: TypeScript config file
+assets: Static files copied as-is
+styles: Global style files
+scripts: Global JS files
+allowedCommonJsDependencies: Suppress CommonJS warnings for listed packages
+Configurations:
+
+Usually under build.configurations and serve.configurations
+  Examples: production, development
+  Override base options for specific environments
+  Can set:
+    optimization
+    sourceMap
+    fileReplacements
+    budgets
+    outputHashing
+
+How it is used:
+  ng serve reads the serve target
+  ng build reads the build target
+  ng test reads the test target
+  ng generate component my-cmp uses project defaults like prefix
+
+Common customizations:
+  Add global SCSS/CSS in styles
+  Add static files in assets
+  Set environment replacements in fileReplacements
+  Tune production bundle size in budgets
+  Change output folder with outputPath
+
+
+</pre></li>
+            </ul>
+        </div>
+
+        <div class="question"><b>Important configuration sections</b></div>
+        <div class="answer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>What it controls</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>projects</code></td>
+                        <td>All apps/libraries in the workspace.</td>
+                    </tr>
+                    <tr>
+                        <td><code>architect.build.options</code></td>
+                        <td>Base build settings: output path, index, assets, styles, scripts.</td>
+                    </tr>
+                    <tr>
+                        <td><code>architect.build.configurations</code></td>
+                        <td>Named build profiles such as production and development.</td>
+                    </tr>
+                    <tr>
+                        <td><code>architect.serve</code></td>
+                        <td>Dev server behavior and which build configuration to use.</td>
+                    </tr>
+                    <tr>
+                        <td><code>architect.test</code></td>
+                        <td>Unit test runner options and test-specific assets/styles.</td>
+                    </tr>
+                    <tr>
+                        <td><code>fileReplacements</code></td>
+                        <td>Swaps files per environment (for example, environment.ts).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="question"><b>Example angular.json snippet</b></div>
+        <div class="answer">
+<pre><code class="language-json">{
+  "projects": {
+    "demo-app": {
+      "architect": {
+        "build": {
+          "options": {
+            "outputPath": "dist/demo-app",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "sourceMap": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true
+            }
+          }
+        },
+        "serve": {
+          "configurations": {
+            "production": {
+              "buildTarget": "demo-app:build:production"
+            },
+            "development": {
+              "buildTarget": "demo-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}
+</code></pre>
+        </div>
+
+        <script src="../../../resources/js/codeblock.js"></script>
+    </body>
+</html>

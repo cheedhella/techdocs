@@ -1,0 +1,52 @@
+<h2>{{ editingUserId === null ? 'Create User' : 'Edit User' }}</h2>
+
+<form (ngSubmit)="submitForm()" class="user-form" autocomplete="off">
+  <label>
+    Name
+    <input
+      name="name"
+      [ngModel]="formModel.name"
+      (ngModelChange)="updateField('name', $event)"
+      type="text"
+      minlength="2"
+      required
+      placeholder="Enter full name"
+    />
+  </label>
+
+  <label>
+    Age
+    <input
+      name="age"
+      [ngModel]="formModel.age"
+      (ngModelChange)="updateField('age', $event)"
+      type="number"
+      min="1"
+      max="120"
+      required
+    />
+  </label>
+
+  <label>
+    Gender
+    <select
+      name="gender"
+      [ngModel]="formModel.gender"
+      (ngModelChange)="updateField('gender', $event)"
+      required
+    >
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+  </label>
+
+  <div class="actions">
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Saving...' : (editingUserId === null ? 'Add User' : 'Update User') }}
+    </button>
+    <button type="button" class="ghost" (click)="resetForm()" [disabled]="submitting">
+      Reset
+    </button>
+  </div>
+</form>

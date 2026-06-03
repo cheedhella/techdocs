@@ -1,0 +1,44 @@
+<div class="list-head">
+  <h2>Users</h2>
+  <button class="ghost" (click)="refreshUsers()" [disabled]="loading">
+    {{ loading ? 'Refreshing...' : 'Refresh' }}
+  </button>
+</div>
+
+@if (errorMessage) {
+  <p class="error">{{ errorMessage }}</p>
+}
+
+@if (loading) {
+  <p class="muted">Loading users...</p>
+} @else if (users.length === 0) {
+  <p class="muted">No users found in the table yet.</p>
+} @else {
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.gender }}</td>
+            <td class="row-actions">
+              <button class="small" (click)="editUser(user)">Edit</button>
+              <button class="small danger" (click)="deleteUser(user.id)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
